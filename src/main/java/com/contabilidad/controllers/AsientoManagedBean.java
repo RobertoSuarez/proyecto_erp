@@ -135,6 +135,8 @@ public class AsientoManagedBean implements Serializable {
 
     public void openNewAsiento() {
         currentAsiento = new Asiento();
+        subCuentas = asientoDAO.getCuentasContables();
+        diarios = diarioAccess.getDiariosContables();
         currentAsiento.setNumero(generateNumeroAsiento());
         currentAsiento.setMovimientos(new ArrayList<>());
         totalDebe = 0;
