@@ -94,6 +94,27 @@ public class FacturaDAO {
         return listaFacturas;
     }
 
+    public List<Factura> llenarCuentas() {
+
+        System.err.println("LLENAR CUENTAS XD");
+        listaFacturas.clear();
+        if (conexion.isEstado()) {
+            try {
+                String sentencia = "select nombre from subcuenta where tiposaldo = 'Deudor';";
+                result = conexion.ejecutarConsulta(sentencia);
+                while (result.next()) {
+                    listaFacturas.add(new Factura(result.getString("nombre")));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        System.err.println("LLENAR CUENTA: " + listaFacturas.size());
+        return listaFacturas;
+    }
+
     public List<Factura> llenarDetalle(String n) {
         listaFacturas.clear();
         if (conexion.isEstado()) {
@@ -120,7 +141,7 @@ public class FacturaDAO {
             try {
                 String cadena = "select registrarfactura('" + factura.getNfactura() + "','"
                         + factura.getDescripcion() + "'," + factura.getImporte() + ","
-                        + factura.getPagado() + ",'" + factura.getFecha() + "','"
+                        + 0 + ",'" + factura.getFecha() + "','"
                         + factura.getVencimiento() + "',(Select idproveedor from proveedor p "
                         + " where p.ruc = '" + factura.getRuc() + "'))";
                 result = conexion.ejecutarConsulta(cadena);
@@ -153,7 +174,6 @@ public class FacturaDAO {
                 conexion.cerrarConexion();
             }
         }
-
     }
 
     //Actualizar factura
