@@ -179,7 +179,7 @@
                                                                  rows="5" paginator="true" selectionMode="single"
                                                                  selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
                                                         <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
-        oncomplete="PF('moviePicker').hide()" update=":formnuevoDepreciable:panelnuevodepreciable,:formnuevoDepreciable:listaproveedor" 
+                                                                oncomplete="PF('moviePicker').hide()" update=":formnuevoDepreciable:panelnuevodepreciable,:formnuevoDepreciable:listaproveedor" 
                                                                 />
 
                                                         <p:column headerText="Proveedor">

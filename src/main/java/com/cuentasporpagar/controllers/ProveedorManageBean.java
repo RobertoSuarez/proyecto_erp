@@ -15,7 +15,6 @@ import com.cuentasporpagar.models.Condiciones;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
@@ -33,6 +32,20 @@ public class ProveedorManageBean implements Serializable {
      private Condiciones condiciones;
      private ProveedorDAO proveedorDAO;
      private CondicionesDAO condicionesDAO;
+     private List<Proveedor> listaProveedor;
+     private List<Proveedor> Proveedores;
+     private Proveedor selectedProveedor;
+     private String msj;
+     private String nom;
+     private String cod;
+
+     public ProveedorManageBean() {
+          condiciones = new Condiciones();
+          condicionesDAO = new CondicionesDAO();
+          listaProveedor = new ArrayList<>();
+          proveedorDAO = new ProveedorDAO();
+          proveedor = new Proveedor();
+     }
 
      public Condiciones getCondiciones() {
           return condiciones;
@@ -48,20 +61,6 @@ public class ProveedorManageBean implements Serializable {
 
      public void setCondicionesDAO(CondicionesDAO condicionesDAO) {
           this.condicionesDAO = condicionesDAO;
-     }
-     private List<Proveedor> listaProveedor;
-     private List<Proveedor> Proveedores;
-     private Proveedor selectedProveedor;
-     private String msj;
-     private String nom;
-     private String cod;
-
-     public ProveedorManageBean() {
-          condiciones = new Condiciones();
-          condicionesDAO = new CondicionesDAO();
-          listaProveedor = new ArrayList<>();
-          proveedorDAO = new ProveedorDAO();
-          proveedor = new Proveedor();
      }
 
      public List<Proveedor> getProveedores() {
@@ -79,19 +78,8 @@ public class ProveedorManageBean implements Serializable {
      public void setSelectedProveedor(Proveedor selectedProveedor) {
           this.selectedProveedor = selectedProveedor;
      }
-
-     public void saveProduct() {
-          if (this.selectedProveedor.getCodigo() == null) {
-               this.selectedProveedor.setCodigo(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
-               this.listaProveedor.add(this.selectedProveedor);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Added"));
-          } else {
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Updated"));
-          }
-
-          PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
-          PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
-     }
+//cargarEditar permite cargar la infomracion del proveedor en los campos correspondientes
+     //para asi porder visializar y  editar algun dato
 
      public void cargarEditar(Proveedor p, Condiciones c) {
           //proveedores datos
@@ -117,12 +105,12 @@ public class ProveedorManageBean implements Serializable {
      public void editar() {
           try {
 
-               System.out.print(this.proveedor.getIdProveedor()+"---BEIVCO");
+               System.out.print(this.proveedor.getIdProveedor() + "---BEIVCO");
                System.out.println("ENTRANDO A  EDITAR PROVEEDOR: ");
                this.proveedorDAO.update(proveedor, proveedor.getIdProveedor());
                System.out.println("SALIENDO PROVEEDOR: ");
                this.condiciones.setProveedor(this.proveedor);
-               this.condicionesDAO.updateCondiciones(condiciones,proveedor.getIdProveedor());
+               this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
                FacesContext.getCurrentInstance().
                        addMessage(null, new FacesMessage("Proveedor Guardado"));
 
