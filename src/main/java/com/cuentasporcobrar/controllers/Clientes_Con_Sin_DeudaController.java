@@ -129,4 +129,23 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
     }
 
     //Fin 
+    
+     public void cargarClientesConDeudas(){
+        try{
+            lista_Clientes_con_sin_deudas=lista_Clientes_Con_Deudas;
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void cargarClientesSinDeudas(){
+        try{
+            lista_Clientes_con_sin_deudas=lista_Clientes_Sin_Deudas;
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
 }
