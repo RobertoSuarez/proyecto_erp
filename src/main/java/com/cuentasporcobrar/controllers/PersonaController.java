@@ -193,7 +193,7 @@ public class PersonaController implements Serializable {
             System.out.println("Error: " + ex.getMessage());
         }
         PrimeFaces.current().executeScript("PF('clienteJuridicoNew').hide()");
-        PrimeFaces.current().executeScript("location.reload()");
+        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     /*
