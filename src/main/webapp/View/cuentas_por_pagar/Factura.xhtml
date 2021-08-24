@@ -186,7 +186,7 @@
                                             <f:facet name="output"><h:outputText value="#{detalle.detalle}"/></f:facet>
                                             <f:facet name="input">
                                                 <p:selectOneMenu id="group" value="#{facturaMB.datoDetalle}">
-                                                    <f:selectItem itemLabel="Select One" itemValue=""/>
+                                                    <f:selectItem itemLabel="Seleccionar" itemValue=""/>
                                                     <f:selectItems value="#{facturaMB.listaCuentas}"/>
                                                 </p:selectOneMenu>
                                             </f:facet>
@@ -407,7 +407,7 @@
                                      message="Desea #{facturaMB.value} la factura ##{facturaMB.factura.nfactura}?" header="Confirmar" severity="warn">
                         <p:inputText value="#{facturaMB.factura.nfactura}" type="hidden"/>
 
-                        <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{facturaMB.dhFactura}"
+                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{facturaMB.dhFactura}"
                                          process="confirmDHab @this" oncomplete="PF('DHFactura').hide()"/>
                         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                          onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset}"/>
