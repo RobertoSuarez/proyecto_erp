@@ -162,6 +162,7 @@ public class FacturaManagedBean {
                     if (facturaDAO.Insertar(factura) == 0) {
                         System.out.println("YA INSERTE, AHORA EL DETALLE");
                         facturaDAO.insertdetalle(detalleFactura, factura);
+                        facturaDAO.insertasiento(detalleFactura, factura);
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
                         PrimeFaces.current().executeScript("PF('newFactura').hide()");
                         listaFactura.clear();
