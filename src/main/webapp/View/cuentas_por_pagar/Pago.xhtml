@@ -237,7 +237,7 @@
                                                  process="pago-content @this" styleClass="ui-button-success"/>
                             </div>
                             <div class="col-md-2">
-                                <p:commandButton value="Cerrar" onclick="PF('managePagoDialog').hide()"
+                                <p:commandButton value="Cancelar" onclick="PF('managePagoDialog').hide()"
                                                  actionListener="#{abonoProveedorMB.reset}"
                                                  icon="pi pi-times"
                                                  styleClass="ui-button-danger" process="@this"/>
@@ -254,7 +254,7 @@
                                 <div class="p-field p-col">
                                     <p:outputLabel for="provee-edit">Proveedor</p:outputLabel>
                                     <p:inputText id="provee-edit" type="button" 
-                                                 value="#{abonoProveedorMB.nom}" required="true"/>
+                                                 value="#{abonoProveedorMB.nom}" disabled="true"/>
                                 </div>
                                 <div class="p-field p-col">
                                     <p:inputText id="cod-edit" value="#{abonoProveedorMB.cod}" style="visibility: hidden"/>
@@ -269,7 +269,7 @@
                                     </label>
                                     <p:selectOneMenu  placeholder="Seleccione" id="detallePago-edit"
                                                       value="#{abonoProveedorMB.tipoPago.descripcion}" 
-                                                      required="true">
+                                                      disabled="true">
                                         <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
                                         <f:selectItem itemLabel="Caja" 
                                                       itemValue="Caja"/>
@@ -282,15 +282,15 @@
                                 <div class="p-field p-col">
                                     <p:outputLabel value="Referencia" />
                                     <p:inputText id="Referencia-edit" type="text" 
-                                                 value="#{abonoProveedorMB.abonoproveedor.referencia}" />
+                                                 value="#{abonoProveedorMB.abonoproveedor.referencia}" disabled="true"/>
                                 </div>
                                 <div class="p-field p-col">
                                     Datos del Banco 
                                     <label for="Banco-edit" >
                                         Banco:</label>
                                     <p:selectOneMenu placeholder="Seleccione" 
-                                                     value="#{abonoProveedorMB.tipoBanco.descrpcion}">
-                                        <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
+                                                     value="#{abonoProveedorMB.tipoBanco.descrpcion}" disabled="true">
+                                        <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="Banco Pichincha" 
                                                       itemValue="Banco Pichincha"/>
                                         <f:selectItem itemLabel="Banco Machala" 
@@ -304,10 +304,10 @@
 
                             <div class="p-formgrid p-grid">
                                 <div class="p-field p-col">
-                                    <p:outputLabel for="fecha-edit" value="Fecha:"/>
+                                    <p:outputLabel for="fecha-edit" value="Fecha:" />
                                     <p:datePicker id="fecha-edit" 
                                                   value="#{abonoProveedorMB.abonoproveedor.fecha}"
-                                                  required="true"/>
+                                                  disabled="true"/>
                                 </div>
                                 <div class="p-field p-col">
                                     <label for="periodo-edit" >
@@ -315,7 +315,7 @@
                                     </label>
                                     <p:inputText id="peri-edit" type="text"
                                                  value="#{abonoProveedorMB.abonoproveedor.periodo}"
-                                                 required="true"/>
+                                                 disabled="true"/>
                                     <div class="p-field p-col"></div>
                                 </div>
                             </div>
@@ -351,37 +351,37 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                            <p:commandButton value="Aceptar" icon="pi pi-check" actionListener="#{abonoProveedorMB.deshabilitar(detalleFactura)}"
+                            <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{abonoProveedorMB.deshabilitar(detalleFactura)}"
                                              update=":form:proveedortabla,:form:pago-content-edit" process="@this"
-                                             onclick="PF('managePagoDialog').hide()"
+                                             onclick="PF('managePagoDialog-edit').hide()"
                                              styleClass="ui-button-success" />
-                            <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
-                                             onclick="PF('managePagoDialog').hide()"
-                                             class="ui-button-secondary" styleClass="ui-button-danger"
-                                             update=":form:pago-content-edit"
-                                             onsuccess="location.reload()" process="@this"/>
+
+                            <p:commandButton value="Cancelar" onclick="PF('managePagoDialog-edit').hide()"
+                                             actionListener="#{abonoProveedorMB.reset}"
+                                             icon="pi pi-times"
+                                             styleClass="ui-button-danger" process="@this"/>
                         </f:facet>
 
                     </p:dialog>
 
                     <p:confirmDialog widgetVar="deleteFactura" showEffect="fade" width="300"
-                                     message="Seguro que quiere borrar este pago?" header="Confirm" severity="warn" >
-                        <p:commandButton value="Ok" icon="pi pi-check" 
+                                     message="Seguro que quiere borrar este pago?" header="Advertencia" severity="warn" >
+                        <p:commandButton value="Si" icon="pi pi-check" 
                                          onclick="PF('deleteFactura').hide()"
                                          oncomplete="PF('dataPagoDialog').show()"
                                          styleClass="ui-button-success" process="@this">
                         </p:commandButton>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
+                        <p:commandButton value="No" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
                                          onclick="PF('deleteFactura').hide()"
                                          class="ui-button-secondary" styleClass="ui-button-danger"
                                          onsuccess="location.reload()" process="@this"/>
                     </p:confirmDialog>
                     <p:confirmDialog widgetVar="deleteFactDialog" showEffect="fade" width="300"
-                                     message="Delete the product?" header="Confirm" severity="warn">
-                        <p:commandButton value="Ok" icon="pi pi-check" actionListener="#{abonoProveedorMB.deleteFactura}"
-                                         process="@this" oncomplete="PF('deleteFactDialog').hide()"
+                                     message="Seguro de querer borrar la factura?" header="Advertencia" severity="warn">
+                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{abonoProveedorMB.deleteFactura}"
+                                         process="@this" onclick="PF('deleteFactDialog').hide()"
                                          styleClass="ui-button-success"/>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
+                        <p:commandButton value="No" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
                                          onclick="PF('deleteFactDialog').hide()"
                                          class="ui-button-secondary" styleClass="ui-button-danger"
                                          process="@this"/>
@@ -392,30 +392,32 @@
                                      Para deshacer un pago despues de registrarlo, debe 'revertirlo'(ingresarlo otra vez con el importe opuesto).
 
                                      Crear Pago de Reversion ahora?" 
-                                     header="Confirm" severity="warn">
-                        <p:commandButton value="Aceptar" icon="pi pi-check" 
+                                     header="Advertencia" severity="warn">
+                        <p:commandButton value="Si" icon="pi pi-check" 
                                          process="@this" oncomplete="PF('managePagoDialog-edit').show()" 
-                                         update=":form:pago-content-edit"/>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
+                                         update=":form:pago-content-edit"
+                                         styleClass="ui-button-success"
+                                         onclick="PF('dataPagoDialog').hide()"/>
+                        <p:commandButton value="No" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
                                          onclick="PF('dataPagoDialog').hide()"
                                          class="ui-button-secondary" styleClass="ui-button-danger"
                                          onsuccess="location.reload()" process="@this"/>
                     </p:confirmDialog>
 
                     <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
                         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
                                          icon="pi pi-times"/>
                     </p:confirmDialog>
 
                     <p:confirmDialog widgetVar="deleteFactuDialog" showEffect="fade" width="300"
-                                     message="Seguro que quiere borrar este pago?" header="Confirm" severity="warn" >
-                        <p:commandButton value="Ok" icon="pi pi-check" 
+                                     message="Seguro que quiere borrar este pago?" header="Advertencia" severity="warn" >
+                        <p:commandButton value="Si" icon="pi pi-check" 
                                          onclick="PF('deleteFactura').hide()"
                                          oncomplete="PF('dataPagoDialog').show()"
                                          styleClass="ui-button-success" process="@this">
                         </p:commandButton>
-                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
+                        <p:commandButton value="No" icon="pi pi-times" actionListener="#{abonoProveedorMB.reset}"
                                          onclick="PF('deleteFactura').hide()"
                                          class="ui-button-secondary" styleClass="ui-button-danger"
                                          onsuccess="location.reload()" process="@this"/>
