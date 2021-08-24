@@ -26,7 +26,12 @@
                                                     style="margin-right: .5rem">
                                         <p:resetInput target=":form:manage-product-content"/>                                             
                                    </p:commandButton>                                    
-                              </p:toolbarGroup>                   
+                              </p:toolbarGroup>               
+                              <p:toolbarGroup align="right">
+                                   <p:selectBooleanButton id="slcbtn" value="#{condicionesMB.check}" onLabel="Habilitado" offLabel="Deshabilitado" >
+                                        <p:ajax listener="#{condicionesMB.habTabla()}"/>
+                                   </p:selectBooleanButton>
+                              </p:toolbarGroup>
                          </p:toolbar>
 
                          <!--- Lista de Tabal de datos  !-->
@@ -82,8 +87,7 @@
                               </p:column>
                               <!--  Columna códigoProveedor!-->
                               <p:column headerText="Código"
-                                        sortBy="#{provee.proveedor.codigo}" 
-                                        filterBy="#{provee.proveedor.codigo}">
+                                        >
                                    <h:outputText 
                                         value="#{provee.proveedor.codigo}"/>
                               </p:column>
@@ -105,15 +109,13 @@
                               </p:column>
                               <!--  Columna nombre proveedor !-->
                               <p:column headerText="Nombre" 
-                                        sortBy="#{provee.proveedor.nombre}" 
-                                        filterBy="#{provee.proveedor.nombre}">
+                                        >
                                    <h:outputText 
                                         value="#{provee.proveedor.nombre}"/>
                               </p:column>
                               <!--  Columna contacto proveedor !-->
                               <p:column headerText="Contacto" 
-                                        sortBy="#{provee.proveedor.contacto}" 
-                                        filterBy="#{provee.proveedor.contacto}">
+                                       >
                                    <h:outputText 
                                         value="#{provee.proveedor.contacto}"/>
                               </p:column>
@@ -189,6 +191,18 @@
                                         <p:resetInput 
                                              target=":form:manage-product-content-edit" />
                                    </p:commandButton>
+                                   <p:commandButton 
+                                        class="#{condicionesMB.cl}"
+                                        icon="#{condicionesMB.ic}"
+                                        process="@this"
+                                        update=":form:confirmDHab"
+                                        disabled="true"
+                                        oncomplete="PF('DHProveedor').show"
+                                        action="#{condicionesMB.cargarDhab(provee.proveedor)}"
+                                        >
+                                      
+                                   </p:commandButton>
+                                  
                               </p:column>
                          </p:dataTable>
                          <!--- FIN TABLA DE DATOS  !-->
@@ -451,7 +465,7 @@
                                                        id ="idProveedor" 
                                                        style="visibility: hidden" 
                                                        required="True"
-                                                       value="#{proveedorDAO.proveedor.idProveedor}"/>//ojo
+                                                       value="#{proveedorDAO.proveedor.idProveedor}"/>
                                                   <!---Text código proveedor-->
                                                   <p:outputLabel 
                                                        for="cod_Proveedor">
@@ -673,6 +687,16 @@
                               </f:facet>
                          </p:dialog>
                          <!--- FIN DIALOG EDITAR PROVEEDOR DE DATOS  !-->
+                         
+                         <p:confirmDialog id="confirmDHab" widgetVar="DHProveedor" showEffect="fade" width="300"
+                                          message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre}?" header="Confirmar" severity="warn">
+                              <p:inputText value="#{proveedorDAO.proveedor.nombre}" type="hidden"/>
+
+                              <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{condicionesMB.dhProveedor()}"
+                                             process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('DHProveedor').hide()" actionListener="#{condicionesMB.resetE()}"/>
+                    </p:confirmDialog> 
                     </h:form>
                </ui:define>
           </ui:composition>
