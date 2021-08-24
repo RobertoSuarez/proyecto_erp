@@ -9,23 +9,27 @@ import com.cuentasporcobrar.daos.Cartera_X_EdadesDAO;
 import com.cuentasporcobrar.daos.PersonaDAO;
 import com.cuentasporcobrar.models.Cartera_X_Edades;
 import com.cuentasporcobrar.models.Persona;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import org.primefaces.component.export.ExcelOptions;
-import org.primefaces.component.export.PDFOptions;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Named(value = "cartera_X_EdadesController")
 @ViewScoped
 public class Cartera_X_EdadesController implements Serializable {
-
-    //Componentes para tener estilos en las exportaciones
-    ExcelOptions excelOpt;
-    PDFOptions pdfOpt;
-
+    
     //Se Declaran las clases Cartera_X_Edades y Cartera_X_EdadesDAO
     Cartera_X_Edades cartera_X_Edades;
     Cartera_X_EdadesDAO cartera_X_EdadesDAO;
@@ -56,8 +60,6 @@ public class Cartera_X_EdadesController implements Serializable {
         //Recibe un parámetros que será el id del cliente, en caso de ser -1 (Predeterminado)
         //Se carga la suma de todos los clientes.
         listaSum_Cartera_X_Edades = cartera_X_EdadesDAO.obtenerSumCarteraxEdades(-1);
-        Design();
-
     }
 
     public List<SelectItem> getListaCliente() {
@@ -72,23 +74,45 @@ public class Cartera_X_EdadesController implements Serializable {
         return listaCliente;
     }
 
-    public void Design() {
-        excelOpt = new ExcelOptions();
-        excelOpt.setFacetBgColor("#2E8BE4");
-        excelOpt.setFacetFontSize("12");
-        excelOpt.setFacetFontColor("#FFFFFF");
-        excelOpt.setFacetFontStyle("BOLD");
-        excelOpt.setCellFontSize("11");
-        excelOpt.setAutoSizeColumn(true);
-        excelOpt.setFontName("Roboto");
+    public void exportarPDF() throws IOException, JRException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
 
-        pdfOpt = new PDFOptions();
-        pdfOpt.setFacetBgColor("#2E8BE4");
-        pdfOpt.setFacetFontSize("14");
-        pdfOpt.setFacetFontColor("#FFFFFF");
-        pdfOpt.setFacetFontStyle("BOLD");
-        pdfOpt.setCellFontSize("12");
-        pdfOpt.setFontName("Roboto");
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; "
+                + "filename=ReporteCarteraxEdadesDeVencimiento.pdf");
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+            
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/CarteraxEdades.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    null,
+                    new JRBeanCollectionDataSource(this.lista_Cartera_X_Edades)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+
+            System.out.println("fin proccess");
+        }
     }
 
     //Getters y Setters de las Listas
@@ -107,22 +131,6 @@ public class Cartera_X_EdadesController implements Serializable {
 
     public void setListaSum_Cartera_X_Edades(List<Cartera_X_Edades> listaSum_Cartera_X_Edades) {
         this.listaSum_Cartera_X_Edades = listaSum_Cartera_X_Edades;
-    }
-
-    public ExcelOptions getExcelOpt() {
-        return excelOpt;
-    }
-
-    public void setExcelOpt(ExcelOptions excelOpt) {
-        this.excelOpt = excelOpt;
-    }
-
-    public PDFOptions getPdfOpt() {
-        return pdfOpt;
-    }
-
-    public void setPdfOpt(PDFOptions pdfOpt) {
-        this.pdfOpt = pdfOpt;
     }
 
     //FIN

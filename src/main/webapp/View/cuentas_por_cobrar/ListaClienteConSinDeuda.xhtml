@@ -18,17 +18,24 @@
                 <p:panel>
                     <h:form id="formListaClienteDeudas">
                         <p:toolbar>
-                        <p:toolbarGroup>
-                            <p:commandButton value="Clientes Con Deuda" icon="fa fa-group"
-                                             styleClass="ui-button-secondary"
-                                             update="tblListaDeudas"
-                                             actionListener="#{clientes_Con_Sin_DeudaController.cargarClientesConDeudas()}"/>
-                            <p:commandButton value="Clientes Sin Deuda" icon="fa fa-group"
-                                             styleClass="ui-button-secondary"
-                                             update="tblListaDeudas"
-                                             actionListener="#{clientes_Con_Sin_DeudaController.cargarClientesSinDeudas()}"/>
-                        </p:toolbarGroup>
-                    </p:toolbar>
+                            <p:toolbarGroup>
+                                <p:commandButton value="Clientes Con Deuda" icon="fa fa-group"
+                                                 styleClass="ui-button-secondary"
+                                                 update="tblListaDeudas"
+                                                 actionListener="#{clientes_Con_Sin_DeudaController.cargarClientesConDeudas()}"/>
+                                <p:commandButton value="Clientes Sin Deuda" icon="fa fa-group"
+                                                 styleClass="ui-button-secondary"
+                                                 update="tblListaDeudas"
+                                                 actionListener="#{clientes_Con_Sin_DeudaController.cargarClientesSinDeudas()}"/>
+                                <div style="margin-left: 365px;">  
+                                    <p:commandButton id="btnPdf" ajax="false"
+                                                     actionListener="#{clientes_Con_Sin_DeudaController.exportarPDF()}"
+                                                     value="GENERAR PDF" icon="pi pi-file-pdf"
+                                                     style="background: red;">
+                                    </p:commandButton>
+                                </div>
+                            </p:toolbarGroup>
+                        </p:toolbar>
                         <p:dataTable id="tblListaDeudas" var="varListaDeuda"
                                      value="#{clientes_Con_Sin_DeudaController.lista_Clientes_con_sin_deudas}"
                                      emptyMessage="No existen Registros." 
@@ -69,26 +76,8 @@
                                 </h:outputText>
                             </p:column>
                         </p:dataTable>
-                        <div class="alinearBotones">  
-                            <p:commandButton id="btnExcel" ajax="false"
-                                             value="EXCEL" icon="pi pi-file-excel"
-                                             style="background: green;">
-                                <p:dataExporter type="xls" 
-                                                target="tblListaDeudas"
-                                                fileName="ListaClienteConSinDeuda"/>
-                            </p:commandButton>
-                            &nbsp;
-                            <p:commandButton id="btnPdf" 
-                                             value="PDF" icon="pi pi-file-pdf"
-                                             style="background: red;">
-                                <p:dataExporter type="pdf" 
-                                                target="tblListaDeudas"
-                                                fileName="ListaClienteConSinDeuda"
-                                                options="#{clientes_Con_Sin_DeudaController.pdfOpt}"/>
-                            </p:commandButton>
-                        </div>
                     </h:form>
-                    
+
                 </p:panel>
             </ui:define>
 

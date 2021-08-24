@@ -126,12 +126,12 @@ and open the template in the editor.
 
                             <div  style="display: flex;justify-content: center">
                                 <h:panelGrid columns="4"  >
-                                    <p:outputLabel value="Descripción: "/>
-                                    <p:inputText value="#{activosintangilesMB.activosFijos.detalle_de_activo}">
+                                    <p:outputLabel for="@next" value="Descripción: "/>
+                                    <p:inputText value="#{activosintangilesMB.activosFijos.detalle_de_activo}" required="true" >
 
                                     </p:inputText>
 
-                                    <p:outputLabel value="Costo Adquisición: "/>
+                                    <p:outputLabel for="@next" value="Costo Adquisición: "/>
                                     <p:inputText type="number" value="#{activosintangilesMB.activosFijos.valor_adquisicion}" required="true">
                                         <p:keyFilter regEx="/[0-9]/i"/>
                                     </p:inputText>
@@ -142,8 +142,8 @@ and open the template in the editor.
                                     <p:outputLabel value="N° Factura"/>
                                     <p:inputText  value="#{activosintangilesMB.activosFijos.numero_factura}"  />                                                            
 
-                                    <p:outputLabel value="Proveedor"/>
-                                    <p:inputText value="#{activosintangilesMB.activosFijos.idproveedor}"  /> 
+                                    <p:outputLabel for="@next" value="Proveedor"/>
+                                    <p:inputText value="#{activosintangilesMB.activosFijos.idproveedor}" required="true"  /> 
                                 </h:panelGrid>
                                 <div>   
                                     <f:facet name="footer">
@@ -168,10 +168,10 @@ and open the template in the editor.
 
                             <div  style="display: flex;justify-content: center">
                                 <h:panelGrid columns="4"  >
-                                    <p:outputLabel value="Descripción: "/>
+                                    <p:outputLabel for="@next" value="Descripción: " />
                                     <p:inputText value="#{activosintangilesMB.listaintangible.detalle_de_activo}" required="true" />
 
-                                    <p:outputLabel value="Costo Adquisición: "/>
+                                    <p:outputLabel for="@next" value="Costo Adquisición: "/>
                                     <p:inputText type="number" value="#{activosintangilesMB.listaintangible.valor_adquisicion}" required="true" >
                                         <p:keyFilter regEx="/[0-9]/i"/>
                                     </p:inputText>
@@ -183,8 +183,8 @@ and open the template in the editor.
                                     <p:outputLabel value="N° Factura"/>
                                     <p:inputText  value="#{activosintangilesMB.listaintangible.numero_factura}"  />                                                            
 
-                                    <p:outputLabel value="Proveedor"/>
-                                    <p:inputText value="#{activosintangilesMB.listaintangible.proveedor}"  /> 
+                                    <p:outputLabel for="@next" value="Proveedor"/>
+                                    <p:inputText value="#{activosintangilesMB.listaintangible.proveedor}" required="true" /> 
                                 </h:panelGrid>
                                 <div>   
                                     <f:facet name="footer">

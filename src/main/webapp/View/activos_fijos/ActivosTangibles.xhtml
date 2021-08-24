@@ -217,8 +217,8 @@
                                                         <p:outputLabel value="Número de Factura: "/>
                                                         <p:inputText   value="#{activosFijosMB.activosFijos.numero_factura}" />
 
-                                                        <p:outputLabel for="proveedor" value="Proveedor: "/>
-                                                        <p:inputText   id="proveedor" value="#{activosFijosMB.activosFijos.proveedor}"  />
+                                                        <p:outputLabel for="@next"  value="Proveedor: "/>
+                                                        <p:inputText   id="proveedor" value="#{activosFijosMB.activosFijos.proveedor}" required="true" />
                                                       
                                                         <p:outputLabel value="Fecha de Adquisición:    " />
                                                         <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
@@ -277,8 +277,8 @@
                                                             <p:keyFilter regEx="/[0-9]/i"/>
                                                         </p:inputText>
 
-                                                        <p:outputLabel value="Tiempo de depreciación en Meses: "/>
-                                                        <p:inputText type="number" value="#{activosFijosMB.listadepreciable.depreciacion_meses}" >
+                                                        <p:outputLabel for="@next" value="Tiempo de depreciación en Meses: "/>
+                                                        <p:inputText type="number" value="#{activosFijosMB.listadepreciable.depreciacion_meses}" required="true" >
                                                             <p:keyFilter regEx="/[0-9]/i"/>
                                                         </p:inputText>
 
@@ -290,8 +290,8 @@
                                                         <p:outputLabel value="Número de Factura: "/>
                                                         <p:inputText   value="#{activosFijosMB.listadepreciable.numero_factura}" />
 
-                                                        <p:outputLabel for="listaproveedoreditar" value="Proveedor: "/>
-                                                        <p:inputText  id="listaproveedoreditar" type="button" value="#{activosFijosMB.listadepreciable.proveedor}"  />
+                                                        <p:outputLabel for="@next"  value="Proveedor: "/>
+                                                        <p:inputText  id="listaproveedoreditar" type="button" value="#{activosFijosMB.listadepreciable.proveedor}" required="true"  />
 
                                                         <p:outputLabel value="Fecha de Adquisición:    " />
                                                         <p:datePicker  value="#{activosFijosMB.listadepreciable.fecha_adquisicion}" showIcon="true"/>
@@ -488,8 +488,8 @@
                                                     <p:outputLabel value="N° Factura"/>
                                                     <p:inputText  value="#{activosFijosMB.activosFijos.numero_factura}"  />                                                            
 
-                                                    <p:outputLabel value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}"  />                                                            
+                                                    <p:outputLabel for="@next" value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}" required="true" />                                                            
 
                                                 </h:panelGrid>
 
@@ -534,8 +534,8 @@
                                                     <p:outputLabel value="N° Factura"/>
                                                     <p:inputText  value="#{activosFijosMB.listanodepreciable.numero_factura}"  />                                                            
 
-                                                    <p:outputLabel value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.listanodepreciable.proveedor}"  />                                                            
+                                                    <p:outputLabel for="@next" value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.listanodepreciable.proveedor}"  required="true" />                                                            
 
                                                 </h:panelGrid>
                                                 <div > 
@@ -699,8 +699,8 @@
                                                         <p:keyFilter regEx="/[0-9]/i"/>
                                                     </p:inputText>
 
-                                                    <p:outputLabel value="Cantidad en Stock: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.activosagotables.stock}" >
+                                                    <p:outputLabel for="@next" value="Cantidad en Stock: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activosagotables.stock}" required="true"  >
                                                         <p:keyFilter regEx="/[0-9]/i"/>
                                                     </p:inputText>
 
@@ -710,8 +710,8 @@
                                                     <p:outputLabel value="N° Factura"/>
                                                     <p:inputText  value="#{activosFijosMB.activosFijos.numero_factura}"  />                                                            
 
-                                                    <p:outputLabel value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}"  /> 
+                                                    <p:outputLabel for="@next" value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}" required="true"  /> 
                                                 </h:panelGrid>
                                                 <div > 
                                                     <f:facet name="footer">
@@ -744,8 +744,8 @@
                                                         <p:keyFilter regEx="/[0-9]/i"/>
                                                     </p:inputText>
 
-                                                    <p:outputLabel value="Cantidad en Stock: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.listaragotables.stock}" >
+                                                    <p:outputLabel for="@next" value="Cantidad en Stock: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listaragotables.stock}" required="true">
                                                         <p:keyFilter regEx="/[0-9]/i"/>
                                                     </p:inputText>
 
@@ -756,8 +756,8 @@
                                                     <p:outputLabel value="N° Factura"/>
                                                     <p:inputText  value="#{activosFijosMB.listaragotables.numero_factura}"  />                                                            
 
-                                                    <p:outputLabel value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.listaragotables.proveedor}"  />                                                            
+                                                    <p:outputLabel for="@next" value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.listaragotables.proveedor}" required="true" />                                                            
 
                                                 </h:panelGrid> 
 
