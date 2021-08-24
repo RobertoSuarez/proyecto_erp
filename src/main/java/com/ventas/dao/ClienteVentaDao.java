@@ -21,10 +21,10 @@ public class ClienteVentaDao implements Serializable {
     }
 
     public ClienteVenta BuscarCliente(String id) {
-        ResultSet rs;
+        ResultSet rs = null;
         ClienteVenta temp = new ClienteVenta();
 
-        System.out.print("Consultando " + id);
+        System.out.println("Consultando " + id);
 
         try {
             con.abrirConexion();
@@ -39,9 +39,8 @@ public class ClienteVentaDao implements Serializable {
             if (rs == null) {
                 System.out.println("No existen registros");
             } else {
-                System.out.println("Existen registros ");
-
                 while (rs.next()) {
+                    System.out.println(rs.getInt(1));
                     temp.setIdCliente(rs.getInt(1));
                     temp.setIdentificacion(rs.getString(2));
                     temp.setNombre(rs.getString(3));
@@ -52,15 +51,16 @@ public class ClienteVentaDao implements Serializable {
                 }
             }
             con.cerrarConexion();
-            
+
             return temp;
         } catch (Exception e) {
             System.out.println(e.toString());
-            if(con.isEstado())
+            if (con.isEstado()) {
                 con.cerrarConexion();
+            }
             con.cerrarConexion();
             return null;
-            
+
             //colocar FINALLY
         }
     }

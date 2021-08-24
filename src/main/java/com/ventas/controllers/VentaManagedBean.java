@@ -89,10 +89,11 @@ public class VentaManagedBean implements Serializable {
     @Asynchronous
     public void BuscarClienteVenta() {
         this.cliente = clienteDAO.BuscarCliente(this.clienteIdNum);
-        if (this.cliente != null) {
+        if (this.cliente.getNombre() != null) {
             this.clienteNombre = this.cliente.getNombre();
         } else {
             System.out.print("No hay cliente");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe");
         }
 
         if (this.cliente.getNombre() != null) {
@@ -112,9 +113,9 @@ public class VentaManagedBean implements Serializable {
 
         this.producto = this.productoDao.ObtenerProducto(this.codigoProducto);
 
-        if (this.producto.getDescripcion() == null || this.producto.getDescripcion() == "") {
+        if (this.producto.getDescripcion() == null) {
             System.out.println("Producto nulo");
-            addMessage(FacesMessage.SEVERITY_ERROR, "El producto no existe", "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto no existe");
         } else {
             System.out.println("Existe el producto" + this.nombreProducto);
             this.nombreProducto = this.producto.getDescripcion();
@@ -163,7 +164,7 @@ public class VentaManagedBean implements Serializable {
                 System.out.println("No hay producto seleccionado");
             }
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
 
     }
@@ -190,7 +191,7 @@ public class VentaManagedBean implements Serializable {
             PrimeFaces.current().ajax().update("ventaForm");
             System.out.println("Eliminado");
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
 
