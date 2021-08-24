@@ -19,6 +19,7 @@ import com.lowagie.text.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,9 +92,10 @@ public class LibroManagedBean implements Serializable {
         return totalSaldoDebe - totalSaldoHaber;
     }
 
-    public Date getDateNow() {
+    public LocalDate getDateNow() {
+        LocalDate date = LocalDate.now();
         Date fecha = new Date();
-        return fecha;
+        return date;
     }
 
     public void filtrateLibroMayor() {
