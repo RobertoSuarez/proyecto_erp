@@ -6,28 +6,16 @@
 package com.cuentasporpagar.daos;
 
 import com.global.config.Conexion;
-import com.cuentasporpagar.models.Condiciones;
 import com.cuentasporpagar.models.Proveedor;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author ebert
  */
 public class ProveedorDAO extends Conexion {
 
-     Connection con;
      Conexion conexion = new Conexion();
-     private List<Proveedor> listaProveedor;
      private Proveedor proveedor;
-     private ResultSet result;
-     private Condiciones condiciones;
-     private CondicionesDAO condicionesDAO;
 
      public Proveedor getProveedor() {
           return proveedor;
@@ -39,8 +27,6 @@ public class ProveedorDAO extends Conexion {
 
      public ProveedorDAO() {
           conexion = new Conexion();
-          listaProveedor = new ArrayList<>();
-          condiciones = new Condiciones();
           proveedor = new Proveedor();
      }
 

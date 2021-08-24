@@ -57,7 +57,6 @@ public class CondicionesDAO implements Serializable {
                     p.setEstado(result.getBoolean("estado"));
                     c.setProveedor(p);
                     lista.add(c);
-
                }
           } catch (SQLException e) {
                throw e;
@@ -67,6 +66,7 @@ public class CondicionesDAO implements Serializable {
           }
           return lista;
      }
+     
      public void insertarCondiciones(Condiciones c) throws Exception {
           try {this.conexion.Conectar();
                String sentencia = "INSERT INTO public.condiciones(descuento,"
@@ -108,43 +108,4 @@ public class CondicionesDAO implements Serializable {
                this.conexion.cerrarConexion();
           }
      }
-
-  /*    public void updateCondiciones(Condiciones c) throws Exception {
-        
-          try {
-               String sentencia = "UPDATE public.condiciones\n"
-                       + "	SET descuento =?, diasneto =?, diasdescuento =?, cantdiasvencidos =?, descripcion =?\n"
-                       + "	WHERE idproveedor =?;";
-               this.conexion.Conectar();
-
-               System.out.println("´´´´´´´´´´´´´´´´´´´´´´´´´´jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjkkkkkkkk");
-               System.out.println(sentencia);
-               PreparedStatement pst = this.conexion.conex.prepareStatement(sentencia);
-               pst.setDouble(1, c.getDescuento());
-               System.out.println(c.getDescuento());
-               pst.setInt(2, c.getDiasNeto());
-               System.out.println(c.getDiasNeto());
-               pst.setInt(3, c.getDiasDescuento());
-               pst.setInt(4, c.getCantDiasVencidos());
-               System.out.println(c.getDescripcion());
-               pst.setString(5, c.getDescripcion());
-               System.out.println(proveedor.getIdProveedor() + "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-               System.out.println("´´´´´´´´´´´´´´´´´´´´´´´´´´jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjkkkkkkkk");
-               pst.setInt(6, c.getProveedor().getIdProveedor());
-               System.out.println(c.getProveedor().getIdProveedor());
-               pst.executeUpdate();
-               System.out.println("saliendo de update condicionesdao");
-               conexion.ejecutar(sentencia);
-               System.out.println(sentencia);
-
-          } catch (Exception e) {
-               throw e;
-
-          } finally {
-               this.conexion.cerrarConexion();
-          }
-
-     }*/
-     
-
 }
