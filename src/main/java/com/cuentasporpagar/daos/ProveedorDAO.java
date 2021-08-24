@@ -29,7 +29,7 @@ public class ProveedorDAO extends Conexion {
           conexion = new Conexion();
           proveedor = new Proveedor();
      }
-
+   
      public void insertarp(Proveedor p) {
           try {
                this.conexion.Conectar();
