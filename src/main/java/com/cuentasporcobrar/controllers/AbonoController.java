@@ -7,15 +7,26 @@ import com.cuentasporcobrar.daos.RetencionDAO;
 import com.cuentasporcobrar.models.Abono;
 import com.cuentasporcobrar.models.Persona;
 import com.cuentasporcobrar.models.Retencion;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.PrimeFaces;
 
 @Named(value = "abonoController")
@@ -259,14 +270,73 @@ public class AbonoController implements Serializable {
                 mostrarMensajeInformacion("Se Registró Correctamente");
                 PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
                 this.list_Abonos = abonoDAO.obtenerAbonos(idCliente);
+                
             } else {
                 mostrarMensajeError("No se Registró Correctamente");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        
 //        PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
 //        PrimeFaces.current().executeScript("location.reload()");
+    }
+    
+    public void exportarPDF() throws IOException, JRException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; "
+                + "filename=ReciboDePago.pdf");
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+
+            // Parametros para el reporte.
+//            Map<String, Object> parametros = new HashMap<String, Object>();
+//            parametros.put("titulo", "Reporte desde java");
+//            parametros.put("fecha", LocalDate.now().toString());
+
+            Map<String, Object> parametros= new HashMap<String, Object>();
+            parametros.put("nomCliente", persona.getRazonNombre());
+            parametros.put("monto",abono.getValorAbonado());
+            parametros.put("tipoPago","EFECTIVO");
+            parametros.put("fechaPago",abono.getFechaAbono());
+            
+            System.out.println(persona.getRazonNombre());
+            System.out.println(abono.getValorAbonado());
+            System.out.println(abono.getDescrFormaPago());
+            System.out.println(abono.getFechaAbono());
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/ReciboCobro.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    parametros
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+
+            System.out.println("fin proccess");
+        }
     }
 
     //Metodos para mostrar mensajes de Información y Error

@@ -9,9 +9,14 @@ import com.activosfijos.dao.IntangibleDAO;
 import com.activosfijos.model.ActivoIntangible;
 import com.activosfijos.model.ActivosFijos;
 import com.activosfijos.model.ListarIntangible;
+import com.cuentasporpagar.models.Proveedor;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -26,6 +31,24 @@ public class ActivosInTangiblesMB implements Serializable {
     ActivoIntangible activoingantible = new ActivoIntangible();
     ActivosFijos activosFijos = new ActivosFijos();
     int idactivofijo;
+     int id_proveedor;
+    String nombre = "";
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public int getId_proveedor() {
+        return id_proveedor;
+    }
+
+    public void setId_proveedor(int id_proveedor) {
+        this.id_proveedor = id_proveedor;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     public ActivosInTangiblesMB() {
     }
@@ -68,12 +91,14 @@ public class ActivosInTangiblesMB implements Serializable {
         try {
             intangibledao.guardar3(activosFijos, activoingantible);
             System.out.println("Registrado correctamente");
+            PrimeFaces.current().executeScript("PF('NuevoIntangible').hide()");
 
+            PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
-        
+
     }
 
     public void obtenerdatosIntangibles(ListarIntangible listaIntan) {
@@ -81,21 +106,27 @@ public class ActivosInTangiblesMB implements Serializable {
         idactivofijo = listaIntan.getId_activo_fijo();
         System.out.println("Id obtenido de activo: " + listaIntan.getId_activo_fijo());
         System.out.println("Id obtenido de empresa: " + listaIntan.getId_empresa());
+        System.out.println("Id obtenido de idproveedor: " + listaIntan.getIdproveedor());
+        
 
     }
+
     public void setEditar3() {
         String data = "";
         try {
             activoingantible.setId_activo_fijo(idactivofijo);
             intangibledao.editar2(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
+            PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
 
+            PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
-        
+
     }
+
     public void setDeshabilitarintangible() {
         String data = "";
         IntangibleDAO intangibledao = new IntangibleDAO();
@@ -103,12 +134,13 @@ public class ActivosInTangiblesMB implements Serializable {
             activoingantible.setId_activo_fijo(idactivofijo);
             intangibledao.deshabilitarintangible(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
+            PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
 
+            PrimeFaces.current().ajax().update(":formintangible");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
-       
     }
     public void setHabilitarintangible(int id) {
         String data = "";
@@ -116,11 +148,29 @@ public class ActivosInTangiblesMB implements Serializable {
             activoingantible.setId_activo_fijo(id);
             intangibledao.habilitarintangible(activoingantible);
             System.out.println("activos_fijos/Actualizado correctamente");
+            PrimeFaces.current().executeScript("PF('deshabilitadosintangible').hide()");
 
+            PrimeFaces.current().ajax().update(":formintangible");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
-        
+
+    }
+
+    public void onRowSelect(SelectEvent<Proveedor> event) {
+        try {
+
+            this.activosFijos.setProveedor(event.getObject().getNombre());
+            this.activosFijos.setIdproveedor(event.getObject().getIdProveedor());
+            setNombre(event.getObject().getNombre());
+            setId_proveedor(event.getObject().getIdProveedor());
+            System.out.println("Nombre del proveedor seleccionado:  " + activosFijos.getProveedor());
+            System.out.println("Nombre del proveedor seleccionado variable :  " + getNombre());
+
+            this.listaintangible.setIdproveedor(event.getObject().getIdProveedor());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }

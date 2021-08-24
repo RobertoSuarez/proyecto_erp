@@ -11,11 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -74,12 +71,7 @@ public class Facturas_PendientesController implements Serializable {
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
-
-            // Parametros para el reporte.
-//            Map<String, Object> parametros = new HashMap<String, Object>();
-//            parametros.put("titulo", "Reporte desde java");
-//            parametros.put("fecha", LocalDate.now().toString());
-            // leemos la plantilla para el reporte.
+            
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()

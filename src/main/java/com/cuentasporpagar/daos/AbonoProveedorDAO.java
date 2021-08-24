@@ -169,7 +169,8 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 System.out.println(importe);
-                String sentencia = String.format("select search_date_payment('%1$s') as idabono;", importe);
+                String sentencia ="select search_date_payment("+importe+") as idabono;";
+                System.out.println(sentencia);
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     abonoProveedor.setIdAbonoProveedor(result.getInt("idabono"));

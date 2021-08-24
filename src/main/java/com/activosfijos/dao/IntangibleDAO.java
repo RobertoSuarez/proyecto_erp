@@ -26,7 +26,7 @@ public class IntangibleDAO {
 
         Conexion conexion = new Conexion();
        String consulta = String.format("INSERT INTO activos_fijos(\n"
-                + "	detalle_de_activo,  valor_adquisicion, fecha_adquisicion,proveedor,numero_factura,estado)\n"
+                + "	detalle_de_activo,  valor_adquisicion, fecha_adquisicion,idproveedor,numero_factura,estado)\n"
                 + "	VALUES ('%s', '%s', '%s', '%s', '%s','habilitado')returning id_activo_fijo;", activosFijos.getDetalle_de_activo(),
                 activosFijos.getValor_adquisicion(), activosFijos.getFecha_adquisicion(), activosFijos.getIdproveedor(), activosFijos.getNumero_factura());
         String idactivofijo = conexion.obtenerValor(consulta, 1);
@@ -46,8 +46,10 @@ public class IntangibleDAO {
             conexion.abrirConexion();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
-                    "Select *from activos_fijos inner join fijo_intangible \n"
-                    + "on fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo where estado='habilitado';");
+                    "select *from activos_fijos, fijo_intangible, proveedor\n" +
+"where fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
+"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
+"and activos_fijos.estado='habilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
 
@@ -60,7 +62,7 @@ public class IntangibleDAO {
                 listaintangible.setId_empresa(rs.getInt("id_empresa"));
                 listaintangible.setId_intangible(rs.getInt("id_intangible"));
                 listaintangible.setIdproveedor(rs.getInt("idproveedor"));
-                //listaintangible.setProveedor(rs.getString("proveedor"));
+                listaintangible.setProveedor(rs.getString("nombre"));
                 listaintangible.setNumero_factura(rs.getString("numero_factura"));
                 listInta.add(listaintangible);
             }
@@ -82,8 +84,10 @@ public class IntangibleDAO {
             conexion.abrirConexion();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
-                    "Select *from activos_fijos inner join fijo_intangible \n"
-                    + "on fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo where estado='deshabilitado';");
+                    "select *from activos_fijos, fijo_intangible, proveedor\n" +
+"where fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
+"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
+"and activos_fijos.estado='deshabilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
 
@@ -96,7 +100,7 @@ public class IntangibleDAO {
                 listaintangible.setId_empresa(rs.getInt("id_empresa"));
                 listaintangible.setId_intangible(rs.getInt("id_intangible"));
                 listaintangible.setIdproveedor(rs.getInt("idproveedor"));
-                //listaintangible.setProveedor(rs.getString("proveedor"));
+                listaintangible.setProveedor(rs.getString("nombre"));
                 listaintangible.setNumero_factura(rs.getString("numero_factura"));
                 listInta.add(listaintangible);
             }
@@ -114,9 +118,9 @@ public class IntangibleDAO {
 
         Conexion conexion = new Conexion();
         String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET detalle_de_activo='%s', valor_adquisicion='%s', fecha_adquisicion='%s',   proveedor='%s', numero_factura='%s'\n"
+                + "	SET detalle_de_activo='%s', valor_adquisicion='%s', fecha_adquisicion='%s',   idproveedor='%s', numero_factura='%s'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
-                li.getFecha_adquisicion(), li.getProveedor(), li.getNumero_factura(), li.getId_activo_fijo());
+                li.getFecha_adquisicion(), li.getIdproveedor(), li.getNumero_factura(), li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
         conexion.ejecutar(consulta);
         System.out.println("update 1: " + consulta);

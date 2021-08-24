@@ -5,16 +5,22 @@
  */
 package com.ventas.controllers;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.ProductoDAO;
+import com.ventas.dao.VentaDAO;
 import com.ventas.models.ClienteVenta;
 import com.ventas.models.DetalleVenta;
 import com.ventas.models.Producto;
+import com.ventas.models.Venta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
@@ -60,6 +66,9 @@ public class VentaManagedBean implements Serializable {
     private double iva;
     private double total;
 
+    private Venta venta;
+    private VentaDAO ventaDao;
+
     //Constructor
     @PostConstruct
     public void VentaManagedBean() {
@@ -83,16 +92,20 @@ public class VentaManagedBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
+        
+        this.venta = new Venta();
+        this.ventaDao = new VentaDAO();
     }
 
     //Buscar cliente
     @Asynchronous
     public void BuscarClienteVenta() {
         this.cliente = clienteDAO.BuscarCliente(this.clienteIdNum);
-        if (this.cliente != null) {
+        if (this.cliente.getNombre() != null) {
             this.clienteNombre = this.cliente.getNombre();
         } else {
             System.out.print("No hay cliente");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe");
         }
 
         if (this.cliente.getNombre() != null) {
@@ -112,9 +125,9 @@ public class VentaManagedBean implements Serializable {
 
         this.producto = this.productoDao.ObtenerProducto(this.codigoProducto);
 
-        if (this.producto.getDescripcion() == null || this.producto.getDescripcion() == "") {
+        if (this.producto.getDescripcion() == null) {
             System.out.println("Producto nulo");
-            addMessage(FacesMessage.SEVERITY_ERROR, "El producto no existe", "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto no existe");
         } else {
             System.out.println("Existe el producto" + this.nombreProducto);
             this.nombreProducto = this.producto.getDescripcion();
@@ -163,7 +176,7 @@ public class VentaManagedBean implements Serializable {
                 System.out.println("No hay producto seleccionado");
             }
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
 
     }
@@ -190,7 +203,7 @@ public class VentaManagedBean implements Serializable {
             PrimeFaces.current().ajax().update("ventaForm");
             System.out.println("Eliminado");
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
 
@@ -205,17 +218,44 @@ public class VentaManagedBean implements Serializable {
     public void RegistrarVenta() {
         try {
             int listSize = 0;
-            if(this.listaDetalle.isEmpty())
+            if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una venta nula", "Message Content");
-            else{
+            } else {
                 System.out.println("Registrando venta . . .");
-                while(listSize < this.listaDetalle.size()){
+
+                while (listSize < this.listaDetalle.size()) {
                     System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
                     listSize += 1;
                 }
+                
+                Venta ventaActual = new Venta();
+                
+                ventaActual.setCliente(this.cliente);
+                ventaActual.setIdCliente(this.cliente.getIdCliente());
+                ventaActual.setIdEmpleado(1);
+                ventaActual.setIdFormaPago(1);
+                ventaActual.setIdDocumento(0);
+                ventaActual.setSucursal(1);
+                ventaActual.setFechaVenta(new Timestamp(System.currentTimeMillis()));
+                ventaActual.setPuntoEmision(1);
+                ventaActual.setSecuencia(0);
+                ventaActual.setAutorizacion("849730964");
+                ventaActual.setFechaEmision(new Timestamp(System.currentTimeMillis()));
+                ventaActual.setFechaAutorizacion(new Timestamp(System.currentTimeMillis()));
+                ventaActual.setBase12(this.subtotal12);
+                ventaActual.setBase0(this.subtotal0);
+                ventaActual.setIva(this.iva);
+                ventaActual.setIce(this.ice);
+                ventaActual.setTotalFactura(this.total);
+
+                System.out.println(ventaActual.getCliente().getIdCliente());
+                System.out.println(ventaActual.getTotalFactura());
+                
+                VentaDAO vdao = new VentaDAO();
+                vdao.GuardarVenta(ventaActual);
             }
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            
         }
     }
 
@@ -382,6 +422,22 @@ public class VentaManagedBean implements Serializable {
 
     public void setProductoSeleccionado(DetalleVenta productoSeleccionado) {
         this.productoSeleccionado = productoSeleccionado;
+    }
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
+    public VentaDAO getVentaDao() {
+        return ventaDao;
+    }
+
+    public void setVentaDao(VentaDAO ventaDao) {
+        this.ventaDao = ventaDao;
     }
 
 }

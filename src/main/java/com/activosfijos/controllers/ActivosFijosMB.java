@@ -18,15 +18,25 @@ import com.activosfijos.model.ListaAgotable;
 import com.activosfijos.model.ListaDepreciable;
 import com.activosfijos.model.ListaNoDepreciable;
 import com.cuentasporpagar.models.Proveedor;
-import javax.faces.bean.ViewScoped;
-import javax.faces.bean.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+//import javax.faces.bean.ViewScoped;
+//import javax.faces.bean.SessionScoped;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author desta
  */
-@ManagedBean(name = "activosFijosMB")
+@Named ( value = "activosFijosMB")
+//@ManagedBean(name = "activosFijosMB")
 @ViewScoped
 //@SessionScoped
 public class ActivosFijosMB implements Serializable {
@@ -42,7 +52,38 @@ public class ActivosFijosMB implements Serializable {
     ListaNoDepreciable listanodepreciable = new ListaNoDepreciable();
     ListaAgotable listaragotables = new ListaAgotable();
     int idactivofijo;
+    int id_proveedor=0;
+    String nombre="";
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+
+
+
+
+    public int getId_proveedor() {
+        return id_proveedor;
+    }
+
+    public void setId_proveedor(int id_proveedor) {
+        this.id_proveedor = id_proveedor;
+    }
+    
+    
+    public ActivosFijos getActivosFijos() {
+        return activosFijos;
+    }
+
+    public void setActivosFijos(ActivosFijos activosFijos) {
+        this.activosFijos = activosFijos;
+    }
+    
     public ListaAgotable getListaragotables() {
         return listaragotables;
     }
@@ -83,9 +124,6 @@ public class ActivosFijosMB implements Serializable {
         this.nodepreciabledao = nodepreciabledao;
     }
 
-    public ActivosFijos getActivos() {
-        return activosFijos;
-    }
 
     public ListaDepreciable getListadepreciable() {
         return listadepreciable;
@@ -119,9 +157,7 @@ public class ActivosFijosMB implements Serializable {
         this.activodepreciable = activodepreciable;
     }
 
-    public void setActivos(ActivosFijos activos) {
-        this.activosFijos = activos;
-    }
+
 
     public void setRegistrar() {
         String data = "";
@@ -343,11 +379,53 @@ public class ActivosFijosMB implements Serializable {
 
     public void onRowSelect(SelectEvent<Proveedor> event) {
         try {
+            
             this.activosFijos.setProveedor(event.getObject().getNombre());
             this.activosFijos.setIdproveedor(event.getObject().getIdProveedor());
+            setNombre(event.getObject().getNombre()) ;
+                        System.out.println("Nombre del proveedor seleccionado:  "+activosFijos.getProveedor());
+                        System.out.println("Nombre del proveedor seleccionado variable :  "+getNombre());
+                        mostrarMensajeInformacion(activosFijos.getProveedor());
             this.listadepreciable.setIdproveedor(event.getObject().getIdProveedor());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+    public void mostrarMensajeInformacion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Exito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void getDataApi() {
+        String data = "";
+        data = "{\"detalle_de_activo\":\"" + activosFijos.getDetalle_de_activo()
+                + "\",\"valor_adquisicion\":\"" + activosFijos.getValor_adquisicion() 
+                + "\",\"fecha_adquisicion\":\"" + activosFijos.getFecha_adquisicion()
+                + "\",\"idproveedor\":\"" + activosFijos.getIdproveedor()
+                + "\",\"numero_factura\":\"" + activosFijos.getNumero_factura() 
+                + "\",\"depreciacion_meses\":\"" + activodepreciable.getDepreciacion_meses()
+                + "\",\"porcentaje_depreciacion\":\"" + activodepreciable.getPorcentaje_depreciacion()+ "\"}";
+        System.out.println(data);
+        consumirapi(data);
+    }
+
+    public static void consumirapi(String data){
+        
+        WebTarget webTarget;
+        Client client;
+       //url para dirigir el proyecto llegando al administrador de web services
+        String BASE_URI = "http://localhost:8080/proyecto_erp/webresources";
+        //String BASE_URI = "https://restapipurchase.azurewebsites.net/webresources";
+        
+        // dirige a la clase de web service
+        client = javax.ws.rs.client.ClientBuilder.newClient();
+        webTarget = client.target(BASE_URI).path("depreciable");
+        // dirige a la ruta del web service al metodo api post
+        Response r = webTarget.path("insertdepreciable").request(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                .post(javax.ws.rs.client.Entity.entity(data, javax.ws.rs.core.MediaType.APPLICATION_JSON), Response.class);
+        String result = r.readEntity(String.class);
+        System.out.println(r.getStatus());
+        System.out.println(result);
     }
 }
