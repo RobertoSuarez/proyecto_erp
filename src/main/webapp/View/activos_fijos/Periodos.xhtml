@@ -14,11 +14,12 @@
 
             <ui:define name="content">
                 <h:form id="periodos">
+                    <p:growl id="growl" showDetail="true" />
                     <div >
                         <p:panel >
                             <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
                             <p:dataTable id="listarperiodo"
-                                         value="#{periodosactivosfijosMB.periodosactivosfijosdao.listarperiodosactivofijo()}" 
+                                         value="#{periodosactivosfijosMB.listaPeriodosActivosFijos}" 
                                          var="periodoactivofijo"
                                          rowKey="#{periodoactivofijo.anio}" editable="true" 
                                          rowIndexVar="row" >
@@ -40,7 +41,7 @@
                                     <p:commandButton
                                         value="Exportar PDF" 
                                         ajax="false"
-                                        actionListener="#{periodosactivosfijosMB.exportpdf(row)}"
+                                        actionListener="#{periodosactivosfijosMB.exportpdf(periodoactivofijo.anio)}"
                                         icon="pi pi-file-pdf" 
                                         styleClass="ui-button-raised" />
                                 </p:column>
