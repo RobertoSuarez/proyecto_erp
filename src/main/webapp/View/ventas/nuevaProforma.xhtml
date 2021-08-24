@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="ventaForm">
+                    <p:growl id="growl" showDetail="true" />
+                    <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+                    <div style="font-weight: bold; background-color: #036fab; 
+                         color: white; text-align: center; height: 25px;">
+                        <h2>Nueva Proforma</h2>
+                    </div>
+                    <br/>
+                    <div>
+                        <p:panel header="Cliente" >
+                            <h:panelGrid columns="4" width="50%" >
+                                <p:outputLabel value="Identificación: "/>
+                                <p:inputText id="IdNumCliente" value="#{ProformaMB.clienteIdNum}" />
+                                <p:outputLabel value="Nombre: "/>
+                                <p:inputText id="NombreCliente" value="#{ProformaMB.clienteNombre}" disabled="true" />
+                                <p:commandButton actionListener="#{ProformaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm" />
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="widht: 45%; position: relative" >
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="Codigo: "/>
+                                <p:inputText id="ItemCodigo" value="#{ProformaMB.codigoProducto}" />
+                                <p:commandButton value="Buscar" actionListener="#{ProformaMB.BuscarProducto}" update="detalleProducto"/>
+                            </h:panelGrid>
+                            <p:divider/>
+                            <h:panelGrid id="detalleProducto" columns="3" >
+                                <p:outputLabel value="Producto"/>
+                                <p:inputText id="NombreProducto" value="#{ProformaMB.nombreProducto}" disabled="true" />
+                                <div/>
+                                <p:outputLabel value="Precio: "/>
+                                <p:inputNumber id="priceTextBox" value="#{ProformaMB.precioProducto}" modifyValueOnWheel="false" disabled="false" />
+                                <div/>
+                                <p:outputLabel value="Cantidad: "/>
+                                <p:inputNumber value="#{ProformaMB.cantidad}" modifyValueOnWheel="true" />
+                                <div/>
+                                <p:commandButton value="Agregar" actionListener="#{ProformaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData growl" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+
+
+                    <div style="height: 30px" />
+
+                    <p:dataTable var="ListaItems" id="itemsTable" value="#{ProformaMB.listaDetalle}" selection="#{ProformaMB.productoSeleccionado}" 
+                                 rowKey="#{ListaItems.producto.codigoAux}" selectionMode="single" >
+
+                        <f:facet name="header">
+                            Items
+                        </f:facet>
+
+                        <p:column headerText="Eliminar" >
+                            <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger" process="@this" actionListener="#{ProformaMB.EliminarProducto(ListaItems)}" 
+                                             update="subtotalVenta FactData" />
+                        </p:column>
+
+                        <p:column headerText="Cod">
+                            <h:outputText value="#{ListaItems.producto.codigoAux}" />
+                        </p:column>
+
+                        <p:column headerText="Producto" >
+                            <h:outputText value="#{ListaItems.producto.descripcion}" />
+                        </p:column>
+
+                        <p:column headerText="Precio Unitario">
+                            <h:outputText value="#{ListaItems.producto.precioUnitario}" >
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Descuento">
+                            <h:outputText value="#{ListaItems.producto.descuento}" >
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{ListaItems.cantidad}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Subtotal">
+                            <h:outputText value="#{ListaItems.subTotal}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:columnGroup type="footer" id="colgrp">
+                            <p:row id="rowfoot">
+                                <p:column colspan="6" style="text-align:right" footerText="Total:"/>
+                                <p:column style="text-align:left" footerText="#{ProformaMB.subTotalVenta}" id="subtotalVenta" />
+                            </p:row>
+                        </p:columnGroup>
+                    </p:dataTable>
+                    <h:panelGrid columns="2">
+                        <p:button value="Detalle impuestos" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
+                        <p:commandButton value="Enviar Proforma" />
+                    </h:panelGrid>
+                    <div style="margin-top:50px" />
+                </h:form>
+
+
+                <!--Datos de facturacion-->
+                <p:dialog id="FactData" header="Datos de facturacion" widgetVar="NewSale"
+                          height="100%" width="70%" showEffect="fade">
+                    <h:form>
+                        <p:panel header="Valor de venta" style="text-align: left; width: 100%; float: right">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Subtotal 12%"/>
+                                <p:inputText value="#{ProformaMB.subtotal12}" disabled="true" />
+                                <p:outputLabel value="Subtotal 0%"/>
+                                <p:inputText value="#{ProformaMB.subtotal0}" disabled="true"/>
+                                <p:outputLabel value="DESCUENTO"/>
+                                <p:inputText value="#{ProformaMB.descuento}" disabled="true"/>
+                                <p:outputLabel value="ICE"/>
+                                <p:inputText value="#{ProformaMB.ice}" disabled="true"/>
+                                <p:outputLabel value="IVA 12%"/>
+                                <p:inputText value="#{ProformaMB.iva}" disabled="true"/>
+                                <p:outputLabel value="TOTAL"/>
+                                <p:inputText value="#{ProformaMB.total}" disabled="true"/>
+                                <div/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form >
+                </p:dialog>
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form id="ventaForm">
+                    <p:growl id="growl" showDetail="true" />
+                    <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+                    <div style="font-weight: bold; background-color: #036fab; 
+                         color: white; text-align: center; height: 25px;">
+                        <h2>Nueva Venta</h2>
+                    </div>
+                    <br/>
+                    <div>
+                        <p:panel header="Cliente" >
+                            <h:panelGrid columns="4" width="50%" >
+                                <p:outputLabel value="Identificación: "/>
+                                <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
+                                <p:outputLabel value="Nombre: "/>
+                                <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
+                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm" />
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="widht: 45%; position: relative" >
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="Codigo: "/>
+                                <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" />
+                                <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto"/>
+                            </h:panelGrid>
+                            <p:divider/>
+                            <h:panelGrid id="detalleProducto" columns="3" >
+                                <p:outputLabel value="Producto"/>
+                                <p:inputText id="NombreProducto" value="#{VentaMB.nombreProducto}" disabled="true" />
+                                <div/>
+                                <p:outputLabel value="Precio: "/>
+                                <p:inputNumber id="priceTextBox" value="#{VentaMB.precioProducto}" modifyValueOnWheel="false" disabled="true" />
+                                <div/>
+                                <p:outputLabel value="Cantidad: "/>
+                                <p:inputNumber value="#{VentaMB.cantidad}" modifyValueOnWheel="true" />
+                                <div/>
+                                <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+
+
+                    <div style="height: 30px" />
+
+                    <p:dataTable var="ListaItems" id="itemsTable" value="#{VentaMB.listaDetalle}" selection="#{VentaMB.productoSeleccionado}" 
+                                 rowKey="#{ListaItems.producto.codigoAux}" selectionMode="single" >
+
+                        <f:facet name="header">
+                            Items
+                        </f:facet>
+
+                        <p:column headerText="Eliminar" >
+                            <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger" process="@this" actionListener="#{VentaMB.EliminarProducto(ListaItems)}" 
+                                             update="subtotalVenta FactData Pagos" />
+                        </p:column>
+
+                        <p:column headerText="Cod">
+                            <h:outputText value="#{ListaItems.producto.codigoAux}" />
+                        </p:column>
+
+                        <p:column headerText="Producto" >
+                            <h:outputText value="#{ListaItems.producto.descripcion}" />
+                        </p:column>
+
+                        <p:column headerText="Precio Unitario">
+                            <h:outputText value="#{ListaItems.producto.precioUnitario}" >
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Descuento">
+                            <h:outputText value="#{ListaItems.producto.descuento}" >
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{ListaItems.cantidad}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Subtotal">
+                            <h:outputText value="#{ListaItems.subTotal}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:columnGroup type="footer" id="colgrp">
+                            <p:row id="rowfoot">
+                                <p:column colspan="6" style="text-align:right" footerText="Total:"/>
+                                <p:column style="text-align:left" footerText="#{VentaMB.subTotalVenta}" id="subtotalVenta" />
+                            </p:row>
+                        </p:columnGroup>
+                    </p:dataTable>
+                    <p:button value="Generar Factura" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
+                    <div style="margin-top:50px" />
+                </h:form>
+
+
+                <!--Datos de facturacion-->
+                <p:dialog id="FactData" header="Datos de facturacion" widgetVar="NewSale"
+                          height="100%" width="70%" showEffect="fade">
+                    <h:form>
+                        <p:panel header="Valor de venta" style="text-align: left; width: 100%; float: right">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Subtotal 12%"/>
+                                <p:inputText value="#{VentaMB.subtotal12}" disabled="true" />
+                                <p:outputLabel value="Subtotal 0%"/>
+                                <p:inputText value="#{VentaMB.subtotal0}" disabled="true"/>
+                                <p:outputLabel value="DESCUENTO"/>
+                                <p:inputText value="#{VentaMB.descuento}" disabled="true"/>
+                                <p:outputLabel value="ICE"/>
+                                <p:inputText value="#{VentaMB.ice}" disabled="true"/>
+                                <p:outputLabel value="IVA 12%"/>
+                                <p:inputText value="#{VentaMB.iva}" disabled="true"/>
+                                <p:outputLabel value="TOTAL"/>
+                                <p:inputText value="#{VentaMB.total}" disabled="true"/>
+                                <div/>
+                                <p:commandButton value="Efectuar Pago" update="Pagos" type="button" onclick="PF('RealizarPago').show()"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form >
+                </p:dialog>
+
+
+                <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
+                          minHeight="600" width="70%" showEffect="fade" id="Pagos">
+                    <h:form>
+                        <p:panel class="card">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Total a pagar: "/>
+                                <p:inputText value="#{VentaMB.total}" disabled="true"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:accordionPanel>
+                            <p:tab title="Efectivo">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Efectivo: "/>
+                                    <p:inputText value="00.00"/>                                    
+                                    <p:outputLabel value="Cambio: "/>
+                                    <p:inputText value="00.00"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Tarjeta">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Banco: "/>
+                                    <p:inputText value="XXXXXXXXXXXXXXXX"/>
+                                    <p:outputLabel value="Propietario: "/>
+                                    <p:inputText value="Juan Luis Quesada Luna"/>
+                                    <p:outputLabel value="Tipo de pago: "/>
+                                    <p:selectOneRadio id="console" unselectable="true">
+                                        <f:selectItem itemLabel="Corrriente" itemValue="Corriente"/>
+                                        <f:selectItem itemLabel="Diferido" itemValue="Corriente"/>
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
+                        <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta}" style="margin-top: 20px"/>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

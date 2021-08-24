@@ -13,7 +13,11 @@ import com.cuentasporpagar.models.TipoPago;
 import com.cuentasporpagar.models.TipoBanco;
 import com.cuentasporpagar.models.Factura;
 import com.cuentasporpagar.models.Proveedor;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -50,6 +54,9 @@ public final class AbonoProveedorManagedBean {
     private String cod;
     private boolean bandera;
     private int dateMofid = 0;
+    private LocalDate fecha;
+    private String descrPago;
+    private String perio;
 
     public AbonoProveedorManagedBean() {
         abonoproveedor = new AbonoProveedor();
@@ -65,6 +72,11 @@ public final class AbonoProveedorManagedBean {
         buscarprovDAO = new BuscarProvDAO();
         listaProveedor = buscarprovDAO.llenar();
         detalleFactura = new ArrayList<>();
+        setFecha(LocalDate.now());
+        DateFormat dateFormat = new SimpleDateFormat("MM-yyyy");
+        Date date = new Date();
+        perio = dateFormat.format(date);
+        
     }
 
     //Metodos 
@@ -122,18 +134,39 @@ public final class AbonoProveedorManagedBean {
             if (this.listaFactura.size() == dateMofid) {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
                 abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
-                abonoDAO.Insertar(abonoproveedor);
-                bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
-                if (bandera) {
-                    showInfo("Abono proveedor ingresado");
-                    dateMofid=0;
+                descrPago = tipoPago.getDescripcion();
+                System.out.println(descrPago);
+                if (descrPago == "Caja") {
+                    abonoDAO.Insertar(abonoproveedor);
+                    bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                    if (bandera) {
+                        PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
+                        showInfo("Abono proveedor ingresado");
+                        dateMofid = 0;
+                    } else {
+                        showWarn("Error en registrar el abono");
+                    }
                 } else {
-                    showWarn("Error en registrar el abono");
+                    if ("".equals(abonoproveedor.getReferencia())) {
+                        showWarn("Error: Ingrese referencia");
+                    } else if ("".equals(tipoBanco.getDescrpcion())) {
+                        showWarn("Error: Ingrese Banco");
+                    } else {
+                        abonoDAO.Insertar(abonoproveedor);
+                        bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                    }
+                    if (bandera) {
+                        PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
+                        showInfo("Abono proveedor ingresado");
+                        dateMofid = 0;
+                    } else {
+                        showWarn("Error en registrar el abono");
+                    }
                 }
+
+            } else {
+                showWarn("Error ingrese datos en Pago");
             }
-            else {
-                    showWarn("Error ingrese datos en Pago");
-                }
 
         } else {
 
@@ -168,19 +201,17 @@ public final class AbonoProveedorManagedBean {
         if (n1 < n2) {
             showWarn("Importe es menor que pagado");
             pago = 0;
-        } else if(pago!=0) {
+        } else if (pago != 0) {
             Factura f = (Factura) event.getObject();
             f.setPagado(pago);
             f.setPor_pagar(pago);
             dateMofid = dateMofid + 1;
-            System.out.println(dateMofid);
             showInfo("Ingreso de pago correctamente");
-        }
-        else{
+        } else {
             showWarn("El pago a registrar debe ser mayor a 0");
         }
     }
-
+    
     public void onRowCancel(RowEditEvent<Factura> event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelada"));
     }
@@ -189,17 +220,17 @@ public final class AbonoProveedorManagedBean {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
-    
+
     //Funcion para mostrar mensaje de informacion correcta
     public void showInfo(String message) {
         addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
     }
-    
+
     //Funcion para mostrar mensaje de informacion incorrecta
     public void showWarn(String message) {
         addMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", message);
     }
-    
+
     //Limpia los imputext
     public void reset() {
         PrimeFaces.current().resetInputs(":form:pago-content,:form:table-factura, "
@@ -210,7 +241,7 @@ public final class AbonoProveedorManagedBean {
         tipoPago = new TipoPago();
         listaFactura.clear();
     }
-    
+
     //Elimina una factura que no desea
     public void deleteFactura() {
         this.listaFactura.remove(this.factura);
@@ -355,5 +386,30 @@ public final class AbonoProveedorManagedBean {
     public void setDetalleFactura(List<Factura> detalleFactura) {
         this.detalleFactura = detalleFactura;
     }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getDescrPago() {
+        return descrPago;
+    }
+
+    public void setDescrPago(String descrPago) {
+        this.descrPago = descrPago;
+    }
+
+    public String getPerio() {
+        return perio;
+    }
+
+    public void setPerio(String perio) {
+        this.perio = perio;
+    }
+
 
 }

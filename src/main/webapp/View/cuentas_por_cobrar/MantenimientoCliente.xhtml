@@ -18,23 +18,6 @@
                     <p:growl id="growl" showDetail="true" life="1500"/> 
                     <!--Tabla que muestra el listado de clientes-->
                     <h:form id="frmtblClientes">
-                        <!-- Botones para agregar cliente natural y juridico  !-->
-                        <p:toolbar>
-                            <p:toolbarGroup style="margin: auto;">
-                                <div>
-                                    <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
-                                                     actionListener="#{personaController.nuevoClienteN()}"
-                                                     icon="fa fa-fw fa-user" 
-                                                     value="Agregar Cliente Natural" 
-                                                     styleClass="ui-button-success"/>
-                                    <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
-                                                     actionListener="#{personaController.nuevoClienteJ()}"
-                                                     value="Agregar Cliente Jurídico" 
-                                                     icon="fa fa-fw fa-building" 
-                                                     styleClass="ui-button-success"/>
-                                </div>
-                            </p:toolbarGroup>
-                        </p:toolbar>
 
                         <p:dataTable id="tblClientes" var="varClientes" 
                                      widgetVar="dtClientes"
@@ -44,10 +27,37 @@
                                      paginator="true" rows="5" rowSelectMode="add"
                                      paginatorPosition="bottom" 
                                      style="font-size: 14px;">
-                            
+
+                            <f:facet name="header">
+                                <!-- Botones para agregar cliente natural y juridico  !-->
+                                <div style="float: left;">
+                                    <span>
+                                        <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
+                                                         actionListener="#{personaController.nuevoClienteN()}"
+                                                         icon="fa fa-fw fa-user" 
+                                                         value="Agregar Cliente Natural" 
+                                                         styleClass="ui-button-success"/>
+                                        <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
+                                                         actionListener="#{personaController.nuevoClienteJ()}"
+                                                         value="Agregar Cliente Jurídico" 
+                                                         icon="fa fa-fw fa-building" 
+                                                         styleClass="ui-button-success"/>
+                                    </span>
+                                </div>
+                                <div style="float: right;">
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" 
+                                                     onkeyup="PF('dtClientes').filter()" 
+                                                     placeholder="Buscar"/>
+                                    </span>
+                                </div>
+                            <br/><br/>
+                            </f:facet>
                             <p:column class="tamanoInput" style="text-align: center;"
                                       headerText="Identificación"
                                       filterBy="#{varClientes.identificacion}"
+                                      filterStyle="display : none"
                                       sortBy="#{varClientes.identificacion}">
                                 <h:outputText value="#{varClientes.identificacion}"/>
                             </p:column>
@@ -55,6 +65,7 @@
                             <p:column class="tamanoInput" style="text-align: center;"
                                       headerText="Tipo de Identificación"
                                       filterBy="#{varClientes.descrIdentificacion}"
+                                      filterStyle="display : none"
                                       sortBy="#{varClientes.descrIdentificacion}">
                                 <h:outputText value="#{varClientes.descrIdentificacion}"/>
                             </p:column>
@@ -62,41 +73,37 @@
                             <p:column class="tamanoInput" style="text-align: center;"    
                                       headerText="Cliente"
                                       filterBy="#{varClientes.razonNombre}" 
+                                      filterStyle="display : none"
                                       sortBy="#{varClientes.razonNombre}">
                                 <h:outputText value="#{varClientes.razonNombre}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center;" 
                                       headerText="Dirección" 
-                                      filterBy="#{varClientes.direccion}"
                                       sortBy="#{varClientes.direccion}" >
                                 <h:outputText value="#{varClientes.direccion}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center;"  
                                       headerText="Teléfono"
-                                      filterBy="#{varClientes.tlf1}"
                                       sortBy="#{varClientes.tlf1}">
                                 <h:outputText value="#{varClientes.tlf1}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center;"  
                                       headerText="Correo"
-                                      filterBy="#{varClientes.correo}"
                                       sortBy="#{varClientes.correo}">
                                 <h:outputText value="#{varClientes.correo}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center;"  
                                       headerText="Tipo de Cliente"
-                                      filterBy="#{varClientes.descrTipoCliente}"
                                       sortBy="#{varClientes.descrTipoCliente}" >
                                 <h:outputText value="#{varClientes.descrTipoCliente}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center;" 
                                       headerText="Estado"
-                                      filterBy="#{varClientes.estado}"
                                       sortBy="#{varClientes.estado}">
                                 <h:outputText value="#{varClientes.descrEstado}"
                                               styleClass="#{varClientes.createLabel()}"/>
@@ -106,10 +113,11 @@
                                       headerText="Acciones">
                                 <p:commandButton actionListener="#{personaController.cargarClientes(varClientes)}" 
                                                  class="tamanoButtonActions"
-                                                 icon="pi pi-pencil"/> 
+                                                 icon="pi pi-pencil"
+                                                 styleClass="rounded-button"/> 
                                 <p:commandButton actionListener="#{personaController.inactivarCliente(varClientes.idCliente)}" 
                                                  class="tamanoButtonActions" 
-                                                 styleClass="ui-button-danger" 
+                                                 styleClass="rounded-button ui-button-danger" 
                                                  icon="pi pi-times-circle"
                                                  update=":growl tblClientes">
                                     <p:confirm header="Advertencia" 
@@ -118,7 +126,7 @@
                                 </p:commandButton>
                                 <p:commandButton actionListener="#{personaController.activarCliente(varClientes.idCliente)}"
                                                  class="tamanoButtonActions" 
-                                                 styleClass="ui-button-success" 
+                                                 styleClass="rounded-button ui-button-success" 
                                                  icon="pi pi-check-circle"
                                                  update=":growl tblClientes">
                                     <p:confirm header="Advertencia" 
@@ -141,10 +149,10 @@
                                                style="font-weight: bold;">
                                 </p:outputLabel>                                            
                                 <p:inputText id="identificaNatural"
-                                               class="tamanoInputClienteNJ"
-                                               required="true"
-                                               maxlength="13"
-                                               value="#{personaController.persona_Natural.identificacion}"/>
+                                             class="tamanoInputClienteNJ"
+                                             required="true"
+                                             maxlength="13"
+                                             value="#{personaController.persona_Natural.identificacion}"/>
 
                                 <p:outputLabel for="optionNatural" 
                                                value="Tipo de Identificación:"

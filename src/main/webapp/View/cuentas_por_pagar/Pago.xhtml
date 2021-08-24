@@ -40,7 +40,8 @@
                                      value="#{abonoProveedorMB.listaAbonos}"
                                      reflow="true" styleClass="products-table" 
                                      id="proveedortabla"  rowKey="#{pago.fecha}"
-                                     rows="5" paginator="true" paginatorPosition="bottom">
+                                     rows="5" paginator="true" paginatorPosition="bottom"
+                                     style="font-size:13px">
 
                             <p:column headerText="Fecha" >
                                 <h:outputText value="#{pago.fecha}"/>
@@ -131,7 +132,8 @@
 
                             <div class="p-formgrid p-grid">
                                 <div class="p-field p-col">
-                                    <p:outputLabel for="fecha" value="Fecha:"/>
+                                    <p:outputLabel for="fecha" value="Fecha:" style="width: 100px"/>
+                                    <p:outputLabel value="#{abonoProveedorMB.abonoproveedor.fecha=abonoProveedorMB.fecha}" style="visibility: hidden"/>
                                     <p:datePicker id="fecha" 
                                                   value="#{abonoProveedorMB.abonoproveedor.fecha}" required="true"/>
                                 </div>
@@ -139,9 +141,10 @@
                                     <label for="periodo" >
                                         Periodo: 
                                     </label>
-                                    <p:inputText id="peri" type="text"
-                                                 value="#{abonoProveedorMB.abonoproveedor.periodo}" required="true"/>
+                                    <p:outputLabel value="#{abonoProveedorMB.abonoproveedor.periodo=abonoProveedorMB.perio}" style="visibility: hidden"/>
+                                    <p:inputText value="#{abonoProveedorMB.abonoproveedor.periodo}" disabled="true"/>
                                     <div class="p-field p-col"></div>
+                                    
                                 </div>
                             </div>
                             <div class="p-formgrid p-grid">
@@ -196,15 +199,6 @@
                                                 <f:setPropertyActionListener value="#{pagoFactura}" target="#{abonoProveedorMB.factura}"/>
                                             </p:commandButton>
                                         </p:column>
-                                        <p:columnGroup type="footer">
-                                            <p:row>
-                                                <p:column colspan="5" style="text-align:right" footerText="Total:"/>
-                                                <p:column style="text-align:left" footerText="$"/>
-                                                <p:column style="text-align:left" />
-                                                <p:column style="text-align:left" />
-                                            </p:row>
-                                        </p:columnGroup>
-
                                     </p:dataTable>
                                 </div>
                             </div>
@@ -237,14 +231,13 @@
                             <div class="col-md-2">
                                 <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.enviar(pagoFactura)}" 
                                                  icon="pi pi-check" update=":form:proveedortabla, msgs"
-                                                 process="pago-content @this" styleClass="ui-button-success"
-                                                 oncomplete="PF('managePagoDialog').show()"/>
+                                                 process="pago-content @this" styleClass="ui-button-success"/>
                             </div>
                             <div class="col-md-2">
-                                <p:commandButton value="Cerrar" actionListener="#{abonoProveedorMB.reset}"
+                                <p:commandButton value="Cerrar" onclick="PF('managePagoDialog').hide()"
+                                                 actionListener="#{abonoProveedorMB.reset}"
                                                  icon="pi pi-times"
-                                                 styleClass="ui-button-danger" process="@this"
-                                                 oncomplete="PF('managePagoDialog').show(),location.reload()"/>
+                                                 styleClass="ui-button-danger" process="@this"/>
                             </div>
                         </div>
 
