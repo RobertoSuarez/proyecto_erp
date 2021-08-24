@@ -90,13 +90,13 @@
                                         <h4>Saldo total</h4>
                                     </div>
                                     <div class="col-md-2 col-sm-12" style="margin-left: 2%">
-                                        <h:outputText value="#{libroManagedBean.totalSaldoDebe}"></h:outputText>
+                                        <h:outputText value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.totalSaldoDebe)}"></h:outputText>
                                     </div>
                                     <div class="col-md-2 col-sm-12" style="margin-left: 2%">
-                                        <h:outputText value="#{libroManagedBean.totalSaldoHaber}"></h:outputText>
+                                        <h:outputText value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.totalSaldoHaber)}"></h:outputText>
                                     </div>
                                     <div class="col-md-1 col-sm-12" style="margin-left: 2%">
-                                        <h:outputText value="#{libroManagedBean.saldoTotal}"></h:outputText>
+                                        <h:outputText value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.saldoTotal)}"></h:outputText>
                                     </div>
                                 </div>
                             </f:facet>
