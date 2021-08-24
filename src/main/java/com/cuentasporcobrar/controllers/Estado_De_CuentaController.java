@@ -4,6 +4,7 @@ package com.cuentasporcobrar.controllers;
 import com.cuentasporcobrar.daos.Estado_De_CuentaDAO;
 import com.cuentasporcobrar.models.Estado_De_Cuenta;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,12 +13,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.primefaces.component.export.ExcelOptions;
-import org.primefaces.component.export.PDFOptions;
 
 @Named(value = "estado_De_CuentaController")
 @ViewScoped
@@ -49,14 +49,15 @@ public class Estado_De_CuentaController implements Serializable {
         }        
     }
     
-    public void exportarPDF() {
+    public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
 
         // Cabecera de la respuesta.
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
-        ec.setResponseHeader("Content-disposition", "attachment; filename=ReporteEstadoDeCuenta.pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; "
+                + "filename=ReporteEstadoDeCuenta.pdf");
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
@@ -70,7 +71,7 @@ public class Estado_De_CuentaController implements Serializable {
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/EstadoDeCuenta.jasper"));
+                    .getRealPath("/PlantillasReportes/estado_cuenta.jasper"));
 
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(

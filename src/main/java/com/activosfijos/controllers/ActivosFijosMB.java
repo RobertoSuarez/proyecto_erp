@@ -27,8 +27,8 @@ import org.primefaces.event.SelectEvent;
  * @author desta
  */
 @ManagedBean(name = "activosFijosMB")
-//@ViewScoped
-@SessionScoped
+@ViewScoped
+//@SessionScoped
 public class ActivosFijosMB implements Serializable {
 
     ActivosFijos activosFijos = new ActivosFijos();

@@ -57,10 +57,7 @@
                                 </p:column>
                                 <p:column class="tamanoInput" style="text-align: center;"
                                           headerText="Dias de Credito ">
-                                    <h:outputText value="#{facPendientes.diasCredito}">
-                                        <f:convertNumber type="currency" 
-                                                         currencySymbol="$"/>
-                                    </h:outputText>
+                                    <h:outputText value="#{facPendientes.diasCredito}"/>
                                 </p:column>
                                 <p:column class="tamanoInput" style="text-align: center;"
                                           headerText="Fecha Vencimiento">
@@ -109,8 +106,7 @@
                                              style="background: green;">
                                 <p:dataExporter type="xls" 
                                                 target="tblFacturasPendientes"
-                                                fileName="FacturaPendiente"
-                                                options="#{facturas_PendientesController.excelOpt}"/>
+                                                fileName="FacturaPendiente"/>
                             </p:commandButton>
                             &nbsp;
                             <p:commandButton id="btnPdf" 
@@ -119,7 +115,7 @@
                                 <p:dataExporter type="pdf" 
                                                 target="tblFacturasPendientes"
                                                 fileName="FacturaPendiente"
-                                                options="#{facturas_PendientesController.pdfOpt}"/>
+                                                options="#{facturas_PendientesController.exportarPDF()}"/>
                             </p:commandButton>
                         </div>
                     </h:form>
