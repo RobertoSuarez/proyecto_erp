@@ -92,6 +92,9 @@ public class VentaManagedBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
+        
+        this.venta = new Venta();
+        this.ventaDao = new VentaDAO();
     }
 
     //Buscar cliente
@@ -245,11 +248,14 @@ public class VentaManagedBean implements Serializable {
                 ventaActual.setIce(this.ice);
                 ventaActual.setTotalFactura(this.total);
 
-                this.ventaDao.GuardarVenta(ventaActual);
+                System.out.println(ventaActual.getCliente().getIdCliente());
+                System.out.println(ventaActual.getTotalFactura());
+                
+                VentaDAO vdao = new VentaDAO();
+                vdao.GuardarVenta(ventaActual);
             }
         } catch (Exception e) {
-            //addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
-            System.out.println(e.getMessage().toString());
+            
         }
     }
 

@@ -69,9 +69,9 @@ public class VentaDAO {
             }
             
             idNuevo += 1;
-                    
+            
             if(idNuevo <= 0){
-                System.out.println("No se obtivo el id de venta");
+                System.out.println("No se obtuvo el id de venta");
             }
             else{
                 rs = null;
