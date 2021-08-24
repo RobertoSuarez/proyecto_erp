@@ -14,13 +14,25 @@
                 <div class="titleView">
                     <h4>ESTADO DE CUENTA</h4>
                 </div>
-                <br/>
                 <p:panel>
                     <h:form id="formEstadoCuenta">
                         <p:dataTable id="tblEstadoDeCuenta" var="varEstadoDeCuenta"
                                      emptyMessage="No existen Registros." 
                                      value="#{estado_De_CuentaController.lista_Estado_De_Cuenta}"
                                      style="font-size: 14px;">
+
+                            <f:facet name="header">
+                                <div style="float: right;">
+                                    <span>
+                                        <p:commandButton id="btnPdf" ajax="false"
+                                                         actionListener="#{estado_De_CuentaController.exportarPDF()}"
+                                                         value="GENERAR PDF" icon="pi pi-file-pdf"
+                                                         style="background: red;">
+                                        </p:commandButton>
+                                    </span>
+                                </div>
+                                <br/><br/>
+                            </f:facet>
 
                             <p:column class="tamanoInput" 
                                       style="text-align: center;"
@@ -58,24 +70,6 @@
                                 </h:outputText>
                             </p:column>
                         </p:dataTable>
-                        <div class="alinearBotones">  
-                            <p:commandButton id="btnExcel" ajax="false"
-                                             value="EXCEL" icon="pi pi-file-excel"
-                                             style="background: green;">
-                                <p:dataExporter type="xls" 
-                                                target="tblEstadoDeCuenta" 
-                                                fileName="EstadodeCuenta"/>
-                            </p:commandButton>
-                            &nbsp;
-                            <p:commandButton id="btnPdf" ajax="false"
-                                             value="PDF" icon="pi pi-file-pdf"
-                                             style="background: red;">
-                                <p:dataExporter type="pdf" 
-                                                target="tblEstadoDeCuenta" 
-                                                fileName="EstadodeCuenta"
-                                                options="#{estado_De_CuentaController.exportarPDF()}"/>
-                            </p:commandButton>
-                        </div>
                     </h:form>
                 </p:panel>
             </ui:define>

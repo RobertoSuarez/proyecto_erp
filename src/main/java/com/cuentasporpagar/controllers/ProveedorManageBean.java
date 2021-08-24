@@ -35,9 +35,11 @@ public class ProveedorManageBean implements Serializable {
      private List<Proveedor> listaProveedor;
      private List<Proveedor> Proveedores;
      private Proveedor selectedProveedor;
+   
      private String msj;
      private String nom;
      private String cod;
+     
 
      public ProveedorManageBean() {
           condiciones = new Condiciones();
@@ -45,8 +47,11 @@ public class ProveedorManageBean implements Serializable {
           listaProveedor = new ArrayList<>();
           proveedorDAO = new ProveedorDAO();
           proveedor = new Proveedor();
+         
      }
 
+    
+   
      public Condiciones getCondiciones() {
           return condiciones;
      }
@@ -73,6 +78,9 @@ public class ProveedorManageBean implements Serializable {
 
      public Proveedor getSelectedProveedor() {
           return selectedProveedor;
+     }
+     public void cargarProveedor( Condiciones condiciones ){
+          this.proveedor.setIdProveedor(condiciones.getProveedor().getIdProveedor());
      }
 
      public void setSelectedProveedor(Proveedor selectedProveedor) {
@@ -139,6 +147,7 @@ public class ProveedorManageBean implements Serializable {
           PrimeFaces.current().executeScript("location.reload()");
 
      }
+    
 
      public Proveedor getProveedor() {
           return proveedor;
@@ -197,7 +206,7 @@ public class ProveedorManageBean implements Serializable {
      public void aleatorioCod() {
           String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
           String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
-          this.proveedor.setCodigo("ERP-" + uuid + uuid2);
+          this.proveedor.setCodigo("PR-" + uuid + uuid2);
 
      }
 

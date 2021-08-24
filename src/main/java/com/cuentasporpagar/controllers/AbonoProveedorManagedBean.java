@@ -135,8 +135,8 @@ public final class AbonoProveedorManagedBean {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
                 abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
                 descrPago = tipoPago.getDescripcion();
-                System.out.println(descrPago);
-                if (descrPago == "Caja") {
+                System.out.println(descrPago+"*");
+                if ("Caja".equals(descrPago)) {
                     abonoDAO.Insertar(abonoproveedor);
                     bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
                     if (bandera) {

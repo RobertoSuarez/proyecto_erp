@@ -140,10 +140,10 @@
                     </p:dialog>
 
                     <p:confirmDialog id="confirmAut" widgetVar="AutorizarPago" showEffect="fade" width="300"
-                                     message="Desea autorizar el pago de la factura ##{autorizarPagorMB.factura.nfactura}?" header="Confirmar" severity="warn">
+                                     message="Desea autorizar el pago de la factura ##{autorizarPagorMB.factura.nfactura}?" header="Advertencia" severity="warn">
                             <p:inputText value="#{autorizarPagorMB.factura.nfactura}" type="hidden"/>
 
-                            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{autorizarPagorMB.autorizarPago}"
+                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{autorizarPagorMB.autorizarPago}"
                                              process="confirmAut @this" oncomplete="PF('AutorizarPago').hide()"/>
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('AutorizarPago').hide()"/>

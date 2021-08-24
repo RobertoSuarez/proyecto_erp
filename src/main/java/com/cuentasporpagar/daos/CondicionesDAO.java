@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,9 +23,15 @@ public class CondicionesDAO implements Serializable {
 
      Conexion conexion = new Conexion();
      private Proveedor proveedor;
+     List<Condiciones> lista;
 
-     public ArrayList<Condiciones> llenarCondiciones() throws Exception {
-          ArrayList<Condiciones> lista = new ArrayList<Condiciones>();
+     public CondicionesDAO() {
+          proveedor = new Proveedor();
+          lista =  new ArrayList<>();
+     }
+
+     public List<Condiciones> llenarCondiciones() throws Exception {
+       
           try {
                this.conexion.Conectar();
 
@@ -65,6 +72,67 @@ public class CondicionesDAO implements Serializable {
                this.conexion.cerrarConexion();
           }
           return lista;
+     }
+     public List<Condiciones> llenarP(boolean n) throws SQLException {
+          System.err.println("entrando a sentencia");
+       
+           this.conexion.Conectar();
+          if (conexion.isEstado()) {
+               try {
+                    String sentencia = "SELECT c.descuento,c.diasneto,c.diasdescuento,\n"
+                            + "c.cantdiasvencidos,c.descripcion,\n"
+                            + "p.idproveedor, p.codigo,p.razonsocial,p.ruc,p.nombre,\n"
+                            + "p.direccion,p.email,p.webpage,p.contacto,\n"
+                            + "p.telefono,p.estado FROM condiciones c \n"
+                            + "INNER JOIN proveedor p ON p.idproveedor = c.idproveedor "
+                            + "where p.estado = "+n+" order by p.idproveedor";
+                    PreparedStatement prs = conexion.getCnx().prepareStatement(sentencia);
+                    ResultSet result = prs.executeQuery();
+                    while (result.next()) {
+                         Proveedor p = new Proveedor();
+                         Condiciones c = new Condiciones();
+                         c.setDescuento(result.getDouble("descuento"));
+                         c.setDiasNeto(result.getInt("diasneto"));
+                         c.setDiasDescuento(result.getInt("diasdescuento"));
+                         c.setCantDiasVencidos(result.getInt("cantdiasvencidos"));
+                         c.setDescripcion(result.getString("descripcion"));
+                         p.setIdProveedor(result.getInt("idproveedor"));
+                         p.setCodigo(result.getString("codigo"));
+                         p.setRazonSocial(result.getString("razonsocial"));
+                         p.setRuc(result.getString("ruc"));
+                         p.setNombre(result.getString("nombre"));
+                         p.setDireccion(result.getString("direccion"));
+                         p.setEmail(result.getString("email"));
+                         p.setWebPage(result.getString("webpage"));
+                         p.setContacto(result.getString("contacto"));
+                         p.setTelefono(result.getString("telefono"));
+                         p.setEstado(result.getBoolean("estado"));
+                         c.setProveedor(p);
+                         lista.add(c);
+                    }
+                    System.out.println("com.cuentasporpagar.daos.CondicionesDAO.llenarP()"+sentencia);
+               } catch (SQLException e) {
+
+               } finally {
+                    conexion.cerrarConexion();
+               }
+          }
+
+          return lista;
+     }
+     public void deshabilitar(String d, boolean n) {
+          if (conexion.isEstado()) {
+               try {
+                    String cadena = "select habilitarproveedor("+n+",'"+ d +"')";
+                    conexion.ejecutar(cadena);
+                    System.out.println(cadena);
+               } catch (Exception e) {
+
+               } finally {
+                    conexion.cerrarConexion();
+               }
+
+          }
      }
      
      public void insertarCondiciones(Condiciones c) throws Exception {

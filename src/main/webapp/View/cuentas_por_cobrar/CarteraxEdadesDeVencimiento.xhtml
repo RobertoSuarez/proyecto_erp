@@ -37,7 +37,7 @@
                                 <h:outputText value="#{varCarteraVencimiento.numFactura}" />
                             </p:column>
                             <p:column class="tamanoInput" style="text-align: center;"
-                                      headerText="Cliente">
+                                      headerText="Razón Social/Nombres y Apellidos">
                                 <h:outputText value="#{varCarteraVencimiento.nombreClientes}" />
                             </p:column>
                             <p:column headerText="Dias de Credito"
@@ -134,22 +134,10 @@
                             </p:column>
                         </p:dataTable>
                         <div class="alinearBotones">  
-                            <p:commandButton id="btnExcel" ajax="false" 
-                                             value="EXCEL" icon="pi pi-file-excel"
-                                             style="background: green;">
-                                <p:dataExporter type="xls" 
-                                                target=":formCarteraVencida:tblCarteraVencimiento"
-                                                fileName="CarteraDeVencimiento"
-                                                options="#{cartera_X_EdadesController.excelOpt}"/>
-                            </p:commandButton>
-                            &nbsp;
                             <p:commandButton id="btnPdf" ajax="false" 
-                                             value="PDF" icon="pi pi-file-pdf"
+                                             value="GENERAR PDF" icon="pi pi-file-pdf"
+                                             actionListener="#{cartera_X_EdadesController.exportarPDF()}"
                                              style="background: red;">
-                                <p:dataExporter type="pdf" 
-                                                target=":formCarteraVencida:tblCarteraVencimiento"
-                                                fileName="CarteraDeVencimiento"
-                                                options="#{cartera_X_EdadesController.pdfOpt}"/>
                             </p:commandButton>
                         </div>
                     </h:form>

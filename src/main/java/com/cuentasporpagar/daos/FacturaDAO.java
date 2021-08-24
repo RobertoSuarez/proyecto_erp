@@ -12,9 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.primefaces.shaded.json.JSONObject;
 /**
  *
  * @author ninat
@@ -25,6 +26,7 @@ public class FacturaDAO {
     private Factura factura;
     private ResultSet result;
     private List<Factura> listaFacturas;
+    private List auxlista = new ArrayList<>();
 
     public FacturaDAO() {
         factura = new Factura();
@@ -94,6 +96,27 @@ public class FacturaDAO {
         return listaFacturas;
     }
 
+    public List<Factura> llenarCuentas() {
+
+        System.err.println("LLENAR CUENTAS XD");
+        listaFacturas.clear();
+        if (conexion.isEstado()) {
+            try {
+                String sentencia = "select nombre from subcuenta where tiposaldo = 'Deudor';";
+                result = conexion.ejecutarConsulta(sentencia);
+                while (result.next()) {
+                    listaFacturas.add(new Factura(result.getString("nombre")));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        System.err.println("LLENAR CUENTA: " + listaFacturas.size());
+        return listaFacturas;
+    }
+
     public List<Factura> llenarDetalle(String n) {
         listaFacturas.clear();
         if (conexion.isEstado()) {
@@ -120,7 +143,7 @@ public class FacturaDAO {
             try {
                 String cadena = "select registrarfactura('" + factura.getNfactura() + "','"
                         + factura.getDescripcion() + "'," + factura.getImporte() + ","
-                        + factura.getPagado() + ",'" + factura.getFecha() + "','"
+                        + 0 + ",'" + factura.getFecha() + "','"
                         + factura.getVencimiento() + "',(Select idproveedor from proveedor p "
                         + " where p.ruc = '" + factura.getRuc() + "'))";
                 result = conexion.ejecutarConsulta(cadena);
@@ -153,7 +176,85 @@ public class FacturaDAO {
                 conexion.cerrarConexion();
             }
         }
+    }
 
+    //asiento contable
+    public void insertasiento(List<Factura> selectedFactura, Factura factura) {
+        System.out.print("SI ENTREEEEEEE");
+        if (conexion.isEstado()) {
+            try {
+                int iddiario = 0, idSubcuenta = 0;
+                String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
+                result = conexion.ejecutarConsulta(cadena);
+                while (result.next()) {
+                    iddiario = result.getInt("iddiario");
+                }
+
+                String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + factura.getImporte()
+                        + ",\"documento\": \"FAC-" + factura.getNfactura() + "\",\"detalle\": \""
+                        + factura.getDescripcion() + "\",\"fechaCreacion\": \"" 
+                        + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\"" 
+                        + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
+                System.out.println(sentencia);
+                if (selectedFactura.size() == 1) {
+                    sentencia1 = "[{\"idSubcuenta\":\"" 
+                            + Listaids(selectedFactura.get(0).getDetalle()) + "\",\"debe\":\"" 
+                            + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},"
+                            + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura\"}]";
+                    System.out.println(sentencia1);
+                } else {
+                    sentencia1 = "[";
+                    for (int i = 0; i < selectedFactura.size(); i++) {
+                            sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getDetalle()) + "\",\"debe\":\""
+                                    + selectedFactura.get(i).getImporteD() +"\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},";
+                        System.out.println(sentencia1);
+                    }
+                    sentencia1 +="{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura\"}]";
+                }
+                intJson(sentencia,sentencia1);
+
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+    }
+    
+    public void intJson(String a, String b){
+        if (conexion.isEstado()) {
+            try {
+                String cadena = "SELECT public.generateasientocotableexternal('"
+                +a+"','"+b+"')";
+                System.out.println(cadena);
+                conexion.ejecutarConsulta(cadena);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+    }
+
+    public int Listaids(String g) {
+        int n = 0;
+        if (conexion.isEstado()) {
+            try {
+                String cadena = "select idsubcuenta from subcuenta where nombre = '" + g + "'";
+                result = conexion.ejecutarConsulta(cadena);
+                while (result.next()) {
+                    n = result.getInt("idsubcuenta");
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return n;
     }
 
     //Actualizar factura
@@ -162,7 +263,7 @@ public class FacturaDAO {
             try {
                 String cadena = "select actualizarfactura('" + factura.getNfactura()
                         + "','" + factura.getDescripcion() + "'," + factura.getImporte()
-                        + "," + factura.getPagado()
+                        + "," + 0
                         + ",'" + factura.getFecha()
                         + "','" + factura.getVencimiento()
                         + "','" + factura.getRuc() + "')";

@@ -50,6 +50,7 @@
                                         <br/><br/><br/>
                                     </div>
                                 </f:facet>
+
                                 <p:column class="tamanoInput" style="text-align: center;"
                                           headerText="Fecha Factura">
                                     <h:outputText value="#{facPendientes.fechaFacturacion}" />
@@ -64,7 +65,7 @@
                                     <h:outputText value="#{facPendientes.fechaVencimiento}" />
                                 </p:column>
                                 <p:column class="tamanoInput" style="text-align: center;"
-                                          headerText="Nombre de Cliente">
+                                          headerText="Razón Social/Nombres y Apellidos">
                                     <h:outputText value="#{facPendientes.nombreDelCliente}" />
                                 </p:column>
                                 <p:column class="tamanoInput" style="text-align: center;"
@@ -100,23 +101,14 @@
                                 </p:column>
                             </p:dataTable>
                         </div>
-                        <div class="alinearBotones">  
-                            <p:commandButton id="btnExcel" 
-                                             value="EXCEL" icon="pi pi-file-excel"
-                                             style="background: green;">
-                                <p:dataExporter type="xls" 
-                                                target="tblFacturasPendientes"
-                                                fileName="FacturaPendiente"/>
-                            </p:commandButton>
-                            &nbsp;
-                            <p:commandButton id="btnPdf" 
-                                             value="PDF" icon="pi pi-file-pdf"
-                                             style="background: red;">
-                                <p:dataExporter type="pdf" 
-                                                target="tblFacturasPendientes"
-                                                fileName="FacturaPendiente"
-                                                options="#{facturas_PendientesController.exportarPDF()}"/>
-                            </p:commandButton>
+                        <div class="alinearBotones">
+                            <span>
+                                <p:commandButton id="btnPdf" ajax="false"
+                                                 actionListener="#{facturas_PendientesController.exportarPDF()}"
+                                                 value="GENERAR PDF" icon="pi pi-file-pdf"
+                                                 style="background: red;">
+                                </p:commandButton>
+                            </span>
                         </div>
                     </h:form>
                 </p:panel>
