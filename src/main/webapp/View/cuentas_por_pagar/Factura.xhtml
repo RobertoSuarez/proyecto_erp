@@ -22,8 +22,8 @@
                         <p:toolbarGroup>
                             <p:commandButton id="new" value="Nuevo" icon="pi pi-plus" 
                                              actionListener="#{facturaMB.abrirNuevo}"
-                                             update=":form:outputnuevo"
-                                             onclick="PF('newFactura').show()" process="@this"
+                                             update=":form:outputnuevo" process="@this"
+                                             onclick="PF('newFactura').show()" 
                                              styleClass="ui-button-success"
                                              style="margin-right: .5rem"
                                              >
@@ -281,7 +281,7 @@
                                         <p:outputLabel id="editruc" value="#{facturaMB.factura.ruc=BuscarMB.cod}" style="visibility: hidden"/>
                                         <p:outputLabel id="editaux" value="--#{BuscarMB.nvenc=facturaMB.factura.aux}" style="visibility: hidden"/>
                                         <p:inputText value="#{facturaMB.factura.nfactura}" style="visibility: hidden"/>
-                                        <p:inputText id="editR" value="#{facturaMB.factura.ruc}" />
+                                        <p:inputText id="editR" value="#{facturaMB.factura.ruc}" style="visibility: hidden"/>
                                     </div>
                                 </div>
 
