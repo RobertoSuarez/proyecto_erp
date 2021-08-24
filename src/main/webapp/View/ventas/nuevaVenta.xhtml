@@ -16,7 +16,7 @@
 
                     <div style="font-weight: bold; background-color: #036fab; 
                          color: white; text-align: center; height: 25px;">
-                        <h2>Nueva Venta</h2>
+                        <h5>Nueva Venta</h5>
                     </div>
                     <br/>
                     <div>
@@ -26,7 +26,7 @@
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
                                 <p:outputLabel value="Nombre: "/>
                                 <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
-                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm" />
+                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm growl growl-sticky" />
                             </h:panelGrid>
                         </p:panel>
 
@@ -35,7 +35,7 @@
                             <h:panelGrid columns="3">
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" />
-                                <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto"/>
+                                <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky"/>
                             </h:panelGrid>
                             <p:divider/>
                             <h:panelGrid id="detalleProducto" columns="3" >
