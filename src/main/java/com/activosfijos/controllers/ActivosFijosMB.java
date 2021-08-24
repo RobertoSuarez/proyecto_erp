@@ -53,6 +53,15 @@ public class ActivosFijosMB implements Serializable {
     ListaAgotable listaragotables = new ListaAgotable();
     int idactivofijo;
     int id_proveedor=0;
+    String nombre="";
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
 
 
@@ -373,8 +382,9 @@ public class ActivosFijosMB implements Serializable {
             
             this.activosFijos.setProveedor(event.getObject().getNombre());
             this.activosFijos.setIdproveedor(event.getObject().getIdProveedor());
-            
+            setNombre(event.getObject().getNombre()) ;
                         System.out.println("Nombre del proveedor seleccionado:  "+activosFijos.getProveedor());
+                        System.out.println("Nombre del proveedor seleccionado variable :  "+getNombre());
                         mostrarMensajeInformacion(activosFijos.getProveedor());
             this.listadepreciable.setIdproveedor(event.getObject().getIdProveedor());
         } catch (Exception ex) {

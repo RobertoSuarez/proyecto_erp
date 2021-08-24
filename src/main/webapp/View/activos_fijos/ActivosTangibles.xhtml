@@ -180,7 +180,7 @@
                                                                       selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
                                                              <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
                                                                      oncomplete="PF('moviePicker').hide()" 
-                                                                     update=":formnuevoDepreciable : panelnuevodepreciable" 
+                                                                     update="@formnuevoDepreciable" 
                                                                      />
  
                                                              <p:column headerText="Proveedor">
@@ -217,8 +217,8 @@
                                                         <p:outputLabel value="Número de Factura: "/>
                                                         <p:inputText   value="#{activosFijosMB.activosFijos.numero_factura}" />
 
-                                                        <p:outputLabel for="@next"  value="Proveedor: "/>
-                                                        <p:inputText   id="proveedor" value="#{activosFijosMB.activosFijos.proveedor}" required="true" />
+                                                        <p:outputLabel for="proveedor"  value="Proveedor: "/>
+                                                        <p:inputText   id="proveedor" type="button" value="#{activosFijosMB.activosFijos.proveedor}" required="true" />
                                                       
                                                         <p:outputLabel value="Fecha de Adquisición:    " />
                                                         <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
