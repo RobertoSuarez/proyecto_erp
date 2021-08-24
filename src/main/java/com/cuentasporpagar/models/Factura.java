@@ -4,14 +4,8 @@
  * and open the template in the editor.
  */
 package com.cuentasporpagar.models;
-import com.global.config.Conexion;
-import java.io.Serializable;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  *
@@ -40,9 +34,14 @@ public class Factura{
     private String id_detalle;
     private Float importeD;
     private String detalle;
+    private String cuenta;
     private int aux;
     
     public Factura() {
+    }
+    
+    public Factura(String cuenta){
+        this.cuenta = cuenta;
     }
 
     //Paola: Usa este Constructor
@@ -272,6 +271,14 @@ public class Factura{
 
     public void setAux(int aux) {
         this.aux = aux;
+    }
+
+    public String getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(String cuenta) {
+        this.cuenta = cuenta;
     }
     
     
