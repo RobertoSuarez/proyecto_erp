@@ -14,6 +14,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
@@ -29,6 +31,7 @@ public class FacturaManagedBean {
     private FacturaDAO facturaDAO = new FacturaDAO();
     private List<Factura> listaFactura;
     private List<Factura> detalleFactura;
+    private List<SelectItem> listaCuentas;
     private boolean check;
     private String value;
     private String cl;
@@ -40,6 +43,7 @@ public class FacturaManagedBean {
     public FacturaManagedBean() {
         factura = new Factura();
         listaFactura = new ArrayList<>();
+        listaCuentas = new ArrayList<>();
         detalleFactura = new ArrayList<>();
         check = true;
         value = "habilitar";
@@ -82,6 +86,14 @@ public class FacturaManagedBean {
         this.detalleFactura = detalleFactura;
     }
 
+    public List<SelectItem> getListaCuentas() {
+        return listaCuentas;
+    }
+
+    public void setListaCuentas(List<SelectItem> listaCuentas) {
+        this.listaCuentas = listaCuentas;
+    }
+
     public boolean isCheck() {
         return check;
     }
@@ -114,7 +126,22 @@ public class FacturaManagedBean {
         this.ic = ic;
     }
     
-    
+        //DETALLE FACTURA
+    public float getDatoImporte() {
+        return datoImporte;
+    }
+
+    public void setDatoImporte(float datoImporte) {
+        this.datoImporte = datoImporte;
+    }
+
+    public String getDatoDetalle() {
+        return datoDetalle;
+    }
+
+    public void setDatoDetalle(String datoDetalle) {
+        this.datoDetalle = datoDetalle;
+    }
 
     //Diana: insertar nueva Factura
     public void insertarfactura() {
@@ -130,10 +157,9 @@ public class FacturaManagedBean {
         } else {
             try {
                 if ("".equals(factura.getRuc())) {
-                } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al guardar"));
+                } else {
                     if (facturaDAO.Insertar(factura) == 0) {
-                        facturaDAO.Insertar(factura);
                         System.out.println("YA INSERTE, AHORA EL DETALLE");
                         facturaDAO.insertdetalle(detalleFactura, factura);
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
@@ -210,7 +236,8 @@ public class FacturaManagedBean {
         detalleFactura = facturaDAO.llenarDetalle(dato);
         System.out.println("CANTIDAD DETALLE EDITAR2: " + detalleFactura.size());
     }
-    
+
+    //cargar dato para deshabilitar y habilitar
     public void cargarDHab(Factura factura) {
         this.factura.setNfactura(factura.getNfactura());
     }
@@ -229,7 +256,7 @@ public class FacturaManagedBean {
             listaFactura.clear();
             listaFactura = facturaDAO.llenarP("0");
         }
-        PrimeFaces.current().ajax().update("form:dt-factura","form:messages");
+        PrimeFaces.current().ajax().update("form:dt-factura", "form:messages");
     }
 
     //Mostrar tablas habilitadas y deshabilitadas
@@ -254,12 +281,7 @@ public class FacturaManagedBean {
         this.factura = new Factura();
     }
 
-    public void hola() {
-        System.out.println("hola");
-    }
-
     public void reset() {
-        System.out.println("sie ntre al reset");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelado"));
         PrimeFaces.current().resetInputs("form:outputnuevo, form:dt-detalle");
         removeSessionScopedBean("facturaMB");
@@ -267,7 +289,6 @@ public class FacturaManagedBean {
     }
 
     public void resetE() {
-        System.out.println("sie ntre al reset");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelado"));
         PrimeFaces.current().resetInputs("form:outputedit, form:dt-detalle");
         removeSessionScopedBean("facturaMB");
@@ -318,25 +339,9 @@ public class FacturaManagedBean {
         return dia;
     }
 
-    //DETALLE FACTURA
-    public float getDatoImporte() {
-        return datoImporte;
-    }
-
-    public void setDatoImporte(float datoImporte) {
-        this.datoImporte = datoImporte;
-    }
-
-    public String getDatoDetalle() {
-        return datoDetalle;
-    }
-
-    public void setDatoDetalle(String datoDetalle) {
-        this.datoDetalle = datoDetalle;
-    }
-
     public void onRowEdit(RowEditEvent<Factura> event) {
         Factura f = (Factura) event.getObject();
+        System.out.println("RowEdit: " + listaCuentas.size());
         f.setImporteD(datoImporte);
         f.setDetalle(datoDetalle);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle Editado"));
@@ -348,12 +353,22 @@ public class FacturaManagedBean {
 
     public void onAddNew() {
         // Add one new product to the table:
-        System.out.println("Cantidad detalle: " + detalleFactura.size());
-        Factura newFactura = new Factura(0, "Detalle factura", "code");
+        System.out.println("Cantidad detalle: " + listaCuentas.size());
+        Factura newFactura = new Factura(0, "Cuenta contable", "code");
         detalleFactura.add(newFactura);
-        System.out.println("Cantidad detalle 2: " + detalleFactura.size());
+        listaCuentas.clear();
+        llenarCuenta();
+        System.out.println("Cantidad detalle 2: " + listaCuentas.size());
         FacesMessage msg = new FacesMessage("New Product added");
         FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void llenarCuenta() {
+        List<Factura> auxiliar = facturaDAO.llenarCuentas();
+        for (int i = 0; i < auxiliar.size(); i++) { 
+            SelectItem Cuentas = new SelectItem(auxiliar.get(i).getCuenta(),auxiliar.get(i).getCuenta());
+            listaCuentas.add(Cuentas);
+        } 
     }
 
     public void llenar() {
