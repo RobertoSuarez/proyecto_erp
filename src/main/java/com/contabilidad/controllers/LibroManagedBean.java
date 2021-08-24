@@ -5,20 +5,16 @@ import com.contabilidad.dao.ImformeContableDAO;
 import com.contabilidad.models.Diario;
 import com.contabilidad.models.Libro;
 import com.lowagie.text.BadElementException;
-import com.lowagie.text.Chapter;
-import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
-import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,9 +87,10 @@ public class LibroManagedBean implements Serializable {
         return totalSaldoDebe - totalSaldoHaber;
     }
 
-    public Date getDateNow() {
+    public LocalDate getDateNow() {
+        LocalDate date = LocalDate.now();
         Date fecha = new Date();
-        return fecha;
+        return date;
     }
 
     public void filtrateLibroMayor() {
