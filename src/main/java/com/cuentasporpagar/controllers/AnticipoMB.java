@@ -98,6 +98,16 @@ public class AnticipoMB  {
     
     
     // metodos aux
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void msgHabilitado() {
+        String resumen = this.selected_anticipo.isHabilitado() ? "Habilitado" : "Desabilitado";
+        addMessage(FacesMessage.SEVERITY_WARN, "Cambio de estado", "El anticipo cambio a " + resumen);
+        PrimeFaces.current().ajax().update(":form:growl");
+    }
     
     public void open_new() {
         this.selected_anticipo = new Anticipo();
@@ -111,11 +121,11 @@ public class AnticipoMB  {
             
             if (this.selected_anticipo.getId_anticipo().isEmpty()) {
                 this.selected_anticipo.InsertDB();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Anticipo guardado"));
+                addMessage(FacesMessage.SEVERITY_INFO, "Anticipo creado", "El anticipo fue creado correctamente");
             } else {
                 this.selected_anticipo.UpdateDB();
                 System.out.println("update registro: " + this.selected_anticipo.getId_anticipo());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Anticipo actualizado"));
+                addMessage(FacesMessage.SEVERITY_INFO, "Anticipo actualizado", "El anticipo fue actualizado correctamente");
             }
             
             
@@ -133,6 +143,7 @@ public class AnticipoMB  {
         
         PrimeFaces.current().executeScript("PF('manageAnticipoDialog').hide()");
         PrimeFaces.current().ajax().update(":form:dt_anticipos");
+        PrimeFaces.current().ajax().update(":form:growl");
         //PrimeFaces.current().executeScript("location.reload()");
     }
     
@@ -158,8 +169,9 @@ public class AnticipoMB  {
         PrimeFaces.current().ajax().update(":form:dt_anticipos");
         
         PrimeFaces.current().executeScript("PF('delete_anticipo_dialog').hide()");
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Anticipo Eliminado"));
+        addMessage(FacesMessage.SEVERITY_WARN, "Anticipo eliminado", "El anticipo se elimino");
         
+        PrimeFaces.current().ajax().update(":form:growl");
     }
     
     // FormatoFecha da el formato a la fecha que se presentara en la tabla.

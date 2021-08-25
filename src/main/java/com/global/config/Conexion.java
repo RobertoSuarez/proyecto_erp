@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.global.config;
 
 import java.sql.Connection;
@@ -14,7 +9,9 @@ import javax.faces.application.FacesMessage;
 
 /**
  *
- * @author PAOLA
+ * Coexion a la db por line command
+ * $ psql -U appweb -h 190.15.134.7 -p 8080 erpcontableappweb
+ * password: @Aplicaciones@Web@2021
  */
 public class Conexion {
 

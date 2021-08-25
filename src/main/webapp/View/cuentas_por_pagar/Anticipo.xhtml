@@ -11,7 +11,7 @@
             <ui:define name="content">
                 <h:form class="p-p-3" id="form">
 
-                    <p:growl id="messages" showDetail="true"/>
+                    <p:growl id="growl" showDetail="true"/>
 
                     <div class="p-d-flex p-jc-between p-ai-center">
 
@@ -30,7 +30,7 @@
 
                     <p:dataTable 
                         class="p-mt-3" 
-                        id="dt_anticipos" 
+                        id="dt_anticipos" widgetVar="dtanticipos" 
                         reflow="true"
                         size="small"
                         value="#{anticipoMB.anticipos}" 
@@ -43,7 +43,7 @@
 
                                 <span class="filter-container ui-input-icon-left">
                                     <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" placeholder="Buscar"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtanticipos').filter()" placeholder="Buscar"/>
                                 </span>
 
                             </div>
@@ -51,27 +51,24 @@
 
 
 
-                        <p:column headerText="Fecha Registro" sortBy="#{anticipo.fecha}">
+                        <p:column headerText="Fecha Registro" width="100px" sortBy="#{anticipo.fecha}" filterBy="#{anticipo.fecha}" filterStyle="display : none">
                             <h:outputText value="#{anticipoMB.FormatoFecha(anticipo.fecha)}"/>
                         </p:column>
 
-                        <p:column headerText="ID" sortBy="#{anticipo.id_anticipo}">
-                            <h:outputText value="#{anticipo.id_anticipo.substring(0, 5)}"/>
-                        </p:column>
 
-                        <p:column headerText="Descripción" sortBy="#{anticipo.descripcion}">
+                        <p:column headerText="Descripción" sortBy="#{anticipo.descripcion}" filterBy="#{anticipo.descripcion}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.descripcion}"/>
                         </p:column>
 
-                        <p:column headerText="Importe" sortBy="#{anticipo.importe}">
+                        <p:column headerText="Importe" width="70px" sortBy="#{anticipo.importe}" filterBy="#{anticipo.importe}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.importe}"/>
                         </p:column>
 
-                        <p:column headerText="Proveedor" sortBy="#{anticipo.proveedor.nombre}">
+                        <p:column headerText="Proveedor" sortBy="#{anticipo.proveedor.nombre}" filterBy="#{anticipo.proveedor.nombre}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.proveedor.nombre}"/>
                         </p:column>
 
-                        <p:column headerText="Ruc" sortBy="#{anticipo.proveedor.ruc}">
+                        <p:column headerText="Ruc" sortBy="#{anticipo.proveedor.ruc}" filterBy="#{anticipo.proveedor.ruc}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.proveedor.ruc}"/>
                         </p:column>
 
@@ -174,11 +171,17 @@
                                         id="descripcion" 
                                         value="#{anticipoMB.selected_anticipo.descripcion}" />
                                 </div>
+                                <div class="p-field">
+                                    <p:selectBooleanCheckbox 
+                                        value="#{anticipoMB.selected_anticipo.habilitado}" itemLabel="Habilitado" >
+                                        <p:ajax listener="#{anticipoMB.msgHabilitado()}"/>
+                                    </p:selectBooleanCheckbox>
+                                </div>
 
                                 <!-- dialogo busqueda de proveedor-->
                                 <p:overlayPanel for="buscar" dynamic="true" style="width:600px" widgetVar="selecionProveedor">
                                     <p:dataTable var="pro" 
-                                                 value="#{anticipoMB.list_proveedor}" selectionMode="single" paginator="true"
+                                                 value="#{anticipoMB.list_proveedor}" selectionMode="single" rows="3" paginator="true"
                                                  selection="#{anticipoMB.selected_Proveedor}"
                                                  rowKey="#{pro.idProveedor}">
 

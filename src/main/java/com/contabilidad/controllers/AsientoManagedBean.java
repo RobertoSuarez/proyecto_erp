@@ -89,7 +89,8 @@ public class AsientoManagedBean implements Serializable {
         if (currentAsiento.getIdAsiento() == 0) {
             if (!currentAsiento.getDocumento().isEmpty() && !currentAsiento.getDetalle().isEmpty()
                     && currentAsiento.getFechaCreacion() != null && currentAsiento.getFechaCierre() != null
-                    && currentAsiento.getMovimientos().size() > 1) {
+                    && currentAsiento.getMovimientos().size() > 1 && currentAsiento.getIdDiario() != 0 
+                    && !verifyMovimientos(currentAsiento.getMovimientos())) {
                 if (totalDebe == totalHaber && totalDebe != 0 && totalHaber != 0) {
                     currentAsiento.setTotal(Double.toString(totalDebe));
                     asientoDAO.addAsientoContable(currentAsiento);
@@ -200,6 +201,7 @@ public class AsientoManagedBean implements Serializable {
 
     public void addNewFila() {
         Movimiento movimiento = new Movimiento();
+        movimiento.setIdSubcuenta(0);
         movimiento.setIdMovimiento(0);
         currentAsiento.getMovimientos().add(movimiento);
         updateTotalDebe();
@@ -234,6 +236,16 @@ public class AsientoManagedBean implements Serializable {
         } else {
             return true;
         }
+    }
+
+    public boolean verifyMovimientos(List<Movimiento> movimientos) {
+        int counter = 0;
+        for (int i = 0; i < movimientos.size(); i++) {
+            if (movimientos.get(i).getTipoMovimiento() == null || movimientos.get(i).getIdSubcuenta() == 0) {
+                counter++;
+            }
+        }
+        return counter >0;
     }
 
     public boolean compareMovimientos(List<Movimiento> movimientos) {

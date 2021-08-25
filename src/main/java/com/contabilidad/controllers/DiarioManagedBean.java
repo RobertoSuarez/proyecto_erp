@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -52,7 +51,7 @@ public class DiarioManagedBean implements Serializable {
                         && onSelectedDiaio.getFechaCierre() == null && onSelectedDiaio.getDescripcion().isEmpty() || onSelectedDiaio.getDescripcion() == "") {
                     showWarn("Uno o mas datos no han sido ingresados");
                 } else {
-                    boolean result = false; //diarioAccess.addNewDiario(onSelectedDiaio);
+                    boolean result = diarioAccess.addNewDiario(onSelectedDiaio);
                     if (result) {
                         showInfo("Registro exitoso");
                         diariosContables = diarioAccess.getDiariosContables();

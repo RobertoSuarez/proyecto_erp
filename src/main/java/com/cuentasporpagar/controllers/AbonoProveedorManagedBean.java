@@ -57,7 +57,8 @@ public final class AbonoProveedorManagedBean {
     private LocalDate fecha;
     private String descrPago;
     private String perio;
-    private float total = 0;
+    private float total;
+    private float auxTotal = 0;
 
     public AbonoProveedorManagedBean() {
         abonoproveedor = new AbonoProveedor();
@@ -77,6 +78,8 @@ public final class AbonoProveedorManagedBean {
         DateFormat dateFormat = new SimpleDateFormat("MM-yyyy");
         Date date = new Date();
         perio = dateFormat.format(date);
+        total = 0;
+        pago = 0;
 
     }
 
@@ -207,8 +210,14 @@ public final class AbonoProveedorManagedBean {
             Factura f = (Factura) event.getObject();
             f.setPagado(pago);
             f.setPor_pagar(pago);
-            dateMofid = dateMofid + 1;
-            setTotal(total + pago);
+            auxTotal = 0;
+            abonoproveedor.setImporte(0);
+            System.out.println(this.listaFactura.size());
+            for (int i = 0; i < this.listaFactura.size(); i++) {
+                auxTotal += this.listaFactura.get(i).getPagado();
+            }
+            abonoproveedor.setImporte(auxTotal);
+            setPago(0);
             showInfo("Ingreso de pago correctamente");
         } else {
             showWarn("El pago a registrar debe ser mayor a 0");
@@ -243,15 +252,23 @@ public final class AbonoProveedorManagedBean {
         tipoBanco = new TipoBanco();
         tipoPago = new TipoPago();
         listaFactura.clear();
+        this.setPago(0);
+        this.setTotal(0);
     }
 
     //Elimina una factura que no desea
     public void deleteFactura() {
         this.listaFactura.remove(this.factura);
         this.factura = null;
-        setTotal(total + pago);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
+        auxTotal = 0;
+        abonoproveedor.setImporte(0);
+        for (int i = 0; i < this.listaFactura.size(); i++) {
+            auxTotal += this.listaFactura.get(i).getPagado();
+        }
+        abonoproveedor.setImporte(auxTotal);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Factura removida"));
         PrimeFaces.current().ajax().update("form:msgs", "form:table-factura");
+        setPago(0);
     }
 
     public List<AbonoProveedor> getListaAbonos() {
@@ -421,6 +438,14 @@ public final class AbonoProveedorManagedBean {
 
     public void setTotal(float total) {
         this.total = total;
+    }
+
+    public float getAuxTotal() {
+        return auxTotal;
+    }
+
+    public void setAuxTotal(float auxTotal) {
+        this.auxTotal = auxTotal;
     }
 
 }

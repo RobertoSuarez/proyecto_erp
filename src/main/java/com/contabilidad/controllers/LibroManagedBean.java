@@ -14,6 +14,7 @@ import com.lowagie.text.PageSize;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +34,7 @@ public class LibroManagedBean implements Serializable {
     private List<Libro> libros = new ArrayList<>();
     private ImformeContableDAO imformes = new ImformeContableDAO();
     private DiarioDAO diarioDAO = new DiarioDAO();
+    private static DecimalFormat toTwoDecimal = new DecimalFormat("#.##");
 
     private double totalSaldoDebe;
     private double totalSaldoHaber;
@@ -73,6 +75,10 @@ public class LibroManagedBean implements Serializable {
             }
         }
         return saldoDeudor + saldoAcreedor;
+    }
+    
+    public String ConverTwoDecimal(double value){
+        return toTwoDecimal.format(value);
     }
 
     public double getSaldoTotal(List<Libro> libro) {

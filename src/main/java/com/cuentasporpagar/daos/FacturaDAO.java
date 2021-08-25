@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.primefaces.shaded.json.JSONObject;
 /**
  *
@@ -125,6 +127,7 @@ public class FacturaDAO {
                 result = conexion.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     listaFacturas.add(new Factura(result.getFloat("importe"),
+                            result.getString("subcuenta"),
                             result.getString("detalle"), result.getString("iddetallecompra")));
                 }
             } catch (SQLException ex) {
@@ -167,7 +170,8 @@ public class FacturaDAO {
                     String cadena = "SELECT public.insertdetallefac('"
                             + factura.getNfactura() + "',"
                             + selectedFactura.get(i).getImporteD() + ", '"
-                            + selectedFactura.get(i).getDetalle() + "')";
+                            + selectedFactura.get(i).getDetalle() + "','"+
+                            selectedFactura.get(i).getCuenta()+")";
                     conexion.Ejecutar2(cadena);
                 }
             } catch (Exception ex) {
@@ -183,7 +187,7 @@ public class FacturaDAO {
         System.out.print("SI ENTREEEEEEE");
         if (conexion.isEstado()) {
             try {
-                int iddiario = 0, idSubcuenta = 0;
+                int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
                 result = conexion.ejecutarConsulta(cadena);
                 while (result.next()) {
@@ -199,16 +203,17 @@ public class FacturaDAO {
                 System.out.println(sentencia);
                 if (selectedFactura.size() == 1) {
                     sentencia1 = "[{\"idSubcuenta\":\"" 
-                            + Listaids(selectedFactura.get(0).getDetalle()) + "\",\"debe\":\"" 
+                            + Listaids(selectedFactura.get(0).getCuenta()) + "\",\"debe\":\"" 
                             + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},"
                             + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
-                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura\"}]";
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\""+selectedFactura.get(0).getDetalle()+"\"}]";
                     System.out.println(sentencia1);
                 } else {
                     sentencia1 = "[";
                     for (int i = 0; i < selectedFactura.size(); i++) {
-                            sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getDetalle()) + "\",\"debe\":\""
-                                    + selectedFactura.get(i).getImporteD() +"\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},";
+                            sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getCuenta()) + "\",\"debe\":\""
+                                    + selectedFactura.get(i).getImporteD() +"\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                                    +selectedFactura.get(0).getDetalle()+"\"},";
                         System.out.println(sentencia1);
                     }
                     sentencia1 +="{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
@@ -223,6 +228,7 @@ public class FacturaDAO {
             }
         }
     }
+
     
     public void intJson(String a, String b){
         if (conexion.isEstado()) {
@@ -393,11 +399,17 @@ public class FacturaDAO {
                 fac.setIdproveedor(rs.getInt("idproveedor"));
                 fac.setIdasiento(rs.getInt("idasiento"));
             }
-            conn.conex.close();
+            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return null;
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return fac;
@@ -448,11 +460,17 @@ public class FacturaDAO {
 
                 lista.add(fac);
             }
-            conn.conex.close();
+            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return null;
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return lista;
