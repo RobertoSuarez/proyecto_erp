@@ -92,6 +92,7 @@ public class RetencionController implements Serializable {
     }
     //Fin
     
+    
     //Metodo que nos carga las facturas de un determinado cliente.
     public void cargarFacturas() {
         try {
@@ -181,10 +182,6 @@ public class RetencionController implements Serializable {
         PrimeFaces.current().executeScript("location.reload()");
     }
 
-    //Metodo que me carga el dialog para agregar una retencion
-    public void nuevaRetencion() {
-        this.retencion = new Retencion();
-    }
 
     //Metodo que actualiza/modifica una retencion
     public void actualizarRetencion() {

@@ -171,6 +171,12 @@
                                         id="descripcion" 
                                         value="#{anticipoMB.selected_anticipo.descripcion}" />
                                 </div>
+                                <div class="p-field">
+                                    <p:selectBooleanCheckbox 
+                                        value="#{anticipoMB.selected_anticipo.habilitado}" itemLabel="Habilitado" >
+                                        <p:ajax listener="#{anticipoMB.msgHabilitado()}"/>
+                                    </p:selectBooleanCheckbox>
+                                </div>
 
                                 <!-- dialogo busqueda de proveedor-->
                                 <p:overlayPanel for="buscar" dynamic="true" style="width:600px" widgetVar="selecionProveedor">
