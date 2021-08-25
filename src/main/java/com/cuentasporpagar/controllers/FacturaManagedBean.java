@@ -38,6 +38,7 @@ public class FacturaManagedBean {
     private String ic;
     private float datoImporte;
     private String datoDetalle;
+    private String datoCuenta;
 
     //Constructor
     public FacturaManagedBean() {
@@ -142,6 +143,16 @@ public class FacturaManagedBean {
     public void setDatoDetalle(String datoDetalle) {
         this.datoDetalle = datoDetalle;
     }
+
+    public String getDatoCuenta() {
+        return datoCuenta;
+    }
+
+    public void setDatoCuenta(String datoCuenta) {
+        this.datoCuenta = datoCuenta;
+    }
+    
+    
 
     //Diana: insertar nueva Factura
     public void insertarfactura() {
@@ -345,6 +356,7 @@ public class FacturaManagedBean {
         System.out.println("RowEdit: " + listaCuentas.size());
         f.setImporteD(datoImporte);
         f.setDetalle(datoDetalle);
+        f.setCuenta(datoCuenta);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle Editado"));
     }
 
