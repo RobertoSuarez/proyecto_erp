@@ -127,6 +127,7 @@ public class FacturaDAO {
                 result = conexion.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     listaFacturas.add(new Factura(result.getFloat("importe"),
+                            result.getString("subcuenta"),
                             result.getString("detalle"), result.getString("iddetallecompra")));
                 }
             } catch (SQLException ex) {
@@ -169,7 +170,8 @@ public class FacturaDAO {
                     String cadena = "SELECT public.insertdetallefac('"
                             + factura.getNfactura() + "',"
                             + selectedFactura.get(i).getImporteD() + ", '"
-                            + selectedFactura.get(i).getDetalle() + "')";
+                            + selectedFactura.get(i).getDetalle() + "','"+
+                            selectedFactura.get(i).getCuenta()+")";
                     conexion.Ejecutar2(cadena);
                 }
             } catch (Exception ex) {

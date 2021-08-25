@@ -367,7 +367,7 @@ public class FacturaManagedBean {
     public void onAddNew() {
         // Add one new product to the table:
         System.out.println("Cantidad detalle: " + listaCuentas.size());
-        Factura newFactura = new Factura(0, "Cuenta contable", "code");
+        Factura newFactura = new Factura(0,"Detalle","Cuenta contable", "code");
         detalleFactura.add(newFactura);
         listaCuentas.clear();
         llenarCuenta();
