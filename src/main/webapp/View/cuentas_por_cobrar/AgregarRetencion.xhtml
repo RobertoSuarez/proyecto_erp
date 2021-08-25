@@ -68,7 +68,6 @@
                         <div style="text-align: center;">
                             <p:toolbarGroup>
                                 <div>
-                                    <h:form>
                                         <p:commandButton icon="pi pi-replay " 
                                                          value="Cargar Retención" 
                                                          ajax="false"
@@ -80,10 +79,8 @@
                                         <p:commandButton icon="pi pi-plus " 
                                                          value="Añadir Nueva Retención" 
                                                          oncomplete="PF('RetencionNew').show();"
-                                                         actionListener="#{retencionController.nuevaRetencion()}"
                                                          styleClass=" ui-button-success" 
                                                          style="margin:.3rem;"/>
-                                    </h:form>
                                 </div>
                             </p:toolbarGroup>
                         </div>
@@ -147,7 +144,6 @@
                                              style="width: 80px;"
                                              required="true"
                                              value="#{retencionController.retencion.baseImponible}">
-                                    <f:convertNumber type="currency" currencySymbol="$"/>
                                 </p:inputText>
 
                                 <p:outputLabel for="descrImpuestoAdd" 
