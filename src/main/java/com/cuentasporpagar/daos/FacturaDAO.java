@@ -204,9 +204,10 @@ public class FacturaDAO {
                 if (selectedFactura.size() == 1) {
                     sentencia1 = "[{\"idSubcuenta\":\"" 
                             + Listaids(selectedFactura.get(0).getCuenta()) + "\",\"debe\":\"" 
-                            + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},"
+                            + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                            +selectedFactura.get(0).getDetalle()+"\"},"
                             + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
-                            + factura.getImporte() + "\",\"tipoMovimiento\":\""+selectedFactura.get(0).getDetalle()+"\"}]";
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
                     System.out.println(sentencia1);
                 } else {
                     sentencia1 = "[";
@@ -217,7 +218,7 @@ public class FacturaDAO {
                         System.out.println(sentencia1);
                     }
                     sentencia1 +="{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
-                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura\"}]";
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
                 }
                 intJson(sentencia,sentencia1);
 
