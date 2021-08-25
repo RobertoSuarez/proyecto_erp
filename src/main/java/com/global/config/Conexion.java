@@ -31,9 +31,9 @@ public class Conexion {
     private ResultSet result;
 
     //Credenciales para la conexion
-    private String url = "jdbc:postgresql://ec2-44-196-170-156.compute-1.amazonaws.com:5432/dehvnainad9pt5";
-    private String usuario = "tzorpkxhvzjqzc";
-    private String clave = "5a2419e3803bc7e7b136fcc9ac527b171973f8bcea456c5c55ccb4a1f90cba3d";
+    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
+    private String usuario = "appweb";
+    private String clave = "@Aplicaciones@Web@2021";
     private String classForName = "org.postgresql.Driver";
 
     public Conexion() {

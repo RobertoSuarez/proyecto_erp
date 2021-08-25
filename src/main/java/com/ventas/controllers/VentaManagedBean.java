@@ -18,6 +18,7 @@ import com.ventas.models.Venta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -68,6 +69,9 @@ public class VentaManagedBean implements Serializable {
 
     private Venta venta;
     private VentaDAO ventaDao;
+    
+    private double efectivo;
+    private double cambio;
 
     //Constructor
     @PostConstruct
@@ -95,6 +99,9 @@ public class VentaManagedBean implements Serializable {
         
         this.venta = new Venta();
         this.ventaDao = new VentaDAO();
+        
+        this.efectivo = 0;
+        this.cambio = 0;
     }
 
     //Buscar cliente
@@ -248,14 +255,20 @@ public class VentaManagedBean implements Serializable {
                 ventaActual.setIce(this.ice);
                 ventaActual.setTotalFactura(this.total);
 
-                System.out.println(ventaActual.getCliente().getIdCliente());
+                System.out.println(ventaActual.getCliente().getNombre());
                 System.out.println(ventaActual.getTotalFactura());
                 
-                VentaDAO vdao = new VentaDAO();
-                vdao.GuardarVenta(ventaActual);
+                this.ventaDao.GuardarVenta(ventaActual);
             }
         } catch (Exception e) {
             
+        }
+    }
+    
+    @Asynchronous
+    public void ActualizarCambio(){
+        if(this.total > 0){
+            this.cambio = this.total - this.efectivo;
         }
     }
 
@@ -439,5 +452,23 @@ public class VentaManagedBean implements Serializable {
     public void setVentaDao(VentaDAO ventaDao) {
         this.ventaDao = ventaDao;
     }
+
+    public double getEfectivo() {
+        return efectivo;
+    }
+
+    public void setEfectivo(double efectivo) {
+        this.efectivo = efectivo;
+    }
+
+    public double getCambio() {
+        return cambio;
+    }
+
+    public void setCambio(double cambio) {
+        this.cambio = cambio;
+    }
+    
+    
 
 }
