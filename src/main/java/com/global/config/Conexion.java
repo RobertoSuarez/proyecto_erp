@@ -9,7 +9,9 @@ import javax.faces.application.FacesMessage;
 
 /**
  *
- * @author PAOLA
+ * Coexion a la db por line command
+ * $ psql -U appweb -h 190.15.134.7 -p 8080 erpcontableappweb
+ * password: @Aplicaciones@Web@2021
  */
 public class Conexion {
 

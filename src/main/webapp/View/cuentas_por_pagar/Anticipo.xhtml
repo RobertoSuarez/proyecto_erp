@@ -11,7 +11,7 @@
             <ui:define name="content">
                 <h:form class="p-p-3" id="form">
 
-                    <p:growl id="messages" showDetail="true"/>
+                    <p:growl id="growl" showDetail="true"/>
 
                     <div class="p-d-flex p-jc-between p-ai-center">
 
@@ -170,6 +170,12 @@
                                     <p:inputTextarea 
                                         id="descripcion" 
                                         value="#{anticipoMB.selected_anticipo.descripcion}" />
+                                </div>
+                                <div class="p-field">
+                                    <p:selectBooleanCheckbox 
+                                        value="#{anticipoMB.selected_anticipo.habilitado}" itemLabel="Habilitado" >
+                                        <p:ajax listener="#{anticipoMB.msgHabilitado()}"/>
+                                    </p:selectBooleanCheckbox>
                                 </div>
 
                                 <!-- dialogo busqueda de proveedor-->
