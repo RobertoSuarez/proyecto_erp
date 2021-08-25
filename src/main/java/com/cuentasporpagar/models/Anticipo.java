@@ -20,6 +20,7 @@ public class Anticipo {
     private String descripcion;
     private int id_proveedor;
     private Proveedor proveedor;
+    private boolean habilitado;
 
     public Anticipo() {
         this.id_anticipo = "";
@@ -28,6 +29,7 @@ public class Anticipo {
         this.descripcion = "";
         this.id_proveedor = 0;
         this.proveedor = new Proveedor();
+        this.habilitado = true;
     }
 
     public String getId_anticipo() {
@@ -78,6 +80,15 @@ public class Anticipo {
         this.id_proveedor = id_proveedor;
     }
 
+    public boolean isHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
+    
     // Metodo aux para comunicación con db
     public Anticipo GetDBProveedor() {
         if (this.id_proveedor == 0) {
@@ -99,7 +110,7 @@ public class Anticipo {
         System.out.println(this.id_proveedor);
         
         Conexion conn = new Conexion();
-        String query =  "select insert_anticipo(?, ?, ?, ?);";
+        String query =  "select insert_anticipo(?, ?, ?, ?, ?);";
         try {
             conn.abrirConexion();
             
@@ -108,6 +119,7 @@ public class Anticipo {
             stmt.setDouble(2, this.importe);
             stmt.setObject(3, new java.sql.Date(this.fecha.getTime()));
             stmt.setString(4, this.descripcion);
+            stmt.setBoolean(5, this.habilitado);
             
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);

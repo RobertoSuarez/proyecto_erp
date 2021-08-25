@@ -103,6 +103,12 @@ public class AnticipoMB  {
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
     
+    public void msgHabilitado() {
+        String resumen = this.selected_anticipo.isHabilitado() ? "Habilitado" : "Desabilitado";
+        addMessage(FacesMessage.SEVERITY_WARN, "Cambio de estado", "El anticipo cambio a " + resumen);
+        PrimeFaces.current().ajax().update(":form:growl");
+    }
+    
     public void open_new() {
         this.selected_anticipo = new Anticipo();
     }
