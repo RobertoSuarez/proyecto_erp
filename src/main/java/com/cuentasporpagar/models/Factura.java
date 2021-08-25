@@ -298,6 +298,5 @@ public class Factura{
         this.setProveedor(Proveedor.getOneProveedor(this.idproveedor));
         return this;
     }
-    
-    
+
 }

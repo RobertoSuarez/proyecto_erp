@@ -26,6 +26,7 @@ public class AbonoProveedor {
     private String nombreProveedor;
     private String detalletipoBanco;
     private String ruc;
+    private float Importe;
 
     public AbonoProveedor() {
     }
@@ -167,6 +168,14 @@ public class AbonoProveedor {
 
     public void setRuc(String ruc) {
         this.ruc = ruc;
+    }
+
+    public float getImporte() {
+        return Importe;
+    }
+
+    public void setImporte(float Importe) {
+        this.Importe = Importe;
     }
 
     public String getSentencia(String descripcionPago, String descripcionBanco, String proveedor, LocalDate fecha) {
