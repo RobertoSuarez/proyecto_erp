@@ -185,7 +185,7 @@ public class FacturaDAO {
         System.out.print("SI ENTREEEEEEE");
         if (conexion.isEstado()) {
             try {
-                int iddiario = 0, idSubcuenta = 0;
+                int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
                 result = conexion.ejecutarConsulta(cadena);
                 while (result.next()) {
@@ -201,16 +201,17 @@ public class FacturaDAO {
                 System.out.println(sentencia);
                 if (selectedFactura.size() == 1) {
                     sentencia1 = "[{\"idSubcuenta\":\"" 
-                            + Listaids(selectedFactura.get(0).getDetalle()) + "\",\"debe\":\"" 
+                            + Listaids(selectedFactura.get(0).getCuenta()) + "\",\"debe\":\"" 
                             + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},"
                             + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
-                            + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura\"}]";
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\""+selectedFactura.get(0).getDetalle()+"\"}]";
                     System.out.println(sentencia1);
                 } else {
                     sentencia1 = "[";
                     for (int i = 0; i < selectedFactura.size(); i++) {
-                            sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getDetalle()) + "\",\"debe\":\""
-                                    + selectedFactura.get(i).getImporteD() +"\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura\"},";
+                            sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getCuenta()) + "\",\"debe\":\""
+                                    + selectedFactura.get(i).getImporteD() +"\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                                    +selectedFactura.get(0).getDetalle()+"\"},";
                         System.out.println(sentencia1);
                     }
                     sentencia1 +="{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\"" 
@@ -225,6 +226,7 @@ public class FacturaDAO {
             }
         }
     }
+
     
     public void intJson(String a, String b){
         if (conexion.isEstado()) {
