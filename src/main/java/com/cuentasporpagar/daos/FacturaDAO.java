@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.primefaces.shaded.json.JSONObject;
 /**
  *
@@ -393,11 +395,17 @@ public class FacturaDAO {
                 fac.setIdproveedor(rs.getInt("idproveedor"));
                 fac.setIdasiento(rs.getInt("idasiento"));
             }
-            conn.conex.close();
+            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return null;
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return fac;
@@ -448,11 +456,17 @@ public class FacturaDAO {
 
                 lista.add(fac);
             }
-            conn.conex.close();
+            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return null;
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return lista;
