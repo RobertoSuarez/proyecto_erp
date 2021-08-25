@@ -11,7 +11,9 @@
         <ui:composition template="../../Plantilla/Plantilla.xhtml">
             <ui:define name="content">
                 <h:form class="p-m-3 " id="form">
-
+                    
+                    <p:growl id="growl" showDetail="true"/>
+                    
                     <div class="p-d-flex p-ai-center p-mb-3">
                         <p class="titulo">Reporte de cuentas por pagar</p>
                     </div>
@@ -71,7 +73,7 @@
                                 actionListener="#{beanGenerarCalendario.generar()}" />
 
                             <p:commandButton 
-                                ajax="false" 
+                                ajax="false"
                                 styleClass="ui-button-raised"
                                 actionListener="#{beanGenerarCalendario.exportpdf()}" 
                                 icon="pi pi-file-excel" 

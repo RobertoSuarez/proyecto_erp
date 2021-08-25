@@ -266,23 +266,29 @@ public class BeanGenerarCalendario  {
         return totalPorPagar;
     }
     
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
     public void generar() {
         System.out.println(this.desde);
         System.out.println(this.hasta);
         System.out.println(this.tipo);
         
         if (!this.desde.isBefore(this.hasta)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Fechas mal selecionadas"));
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error en la fechas", "Fechas mal seleccionadas");
+            PrimeFaces.current().ajax().update(":form:growl");
             return;
         }
+        
         // Tremos los datos desde la base de datos
         this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Operación exitosa"));
+        addMessage(FacesMessage.SEVERITY_INFO, "Reporte generado", "El reporte fue generado exitosamente");
+        
         // Actulizamos la tabla, para ver los resultados.
         PrimeFaces.current().ajax().update(":form:tablafacturas");
-        
-        // Antualizamos los datoa para el reporte
-        //exportar2();
+        PrimeFaces.current().ajax().update(":form:growl");
     }
     
     public void on_cambio() {
