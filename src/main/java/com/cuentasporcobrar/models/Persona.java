@@ -60,7 +60,9 @@ public class Persona implements Serializable {
     }
 
     //Constructor para la lista de clientes con y sin adeudo
-    public Persona(int idCliente, String descrIdentificacion, String razonNombre,String direccion, String tlf1, String tlf2, String correo) {
+    public Persona(int idCliente, String descrIdentificacion, 
+            String razonNombre,String direccion, String tlf1, String tlf2, 
+            String correo) {
         this.idCliente = idCliente;
         this.descrIdentificacion = descrIdentificacion;
         this.razonNombre = razonNombre;
