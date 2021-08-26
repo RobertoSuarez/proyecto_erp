@@ -152,11 +152,16 @@ public class RetencionController implements Serializable {
             listaRetenciones = new ArrayList<>();
             System.out.println(this.idFactura);
             listaRetenciones = retencionDAO.obtenerRetenciones(this.idFactura);
-            if (this.idFactura > 0 && !listaRetenciones.isEmpty()) {
-                mostrarMensajeInformacion("Se Cargaron las Retenciones");
+            if (this.idFactura > 0) {
+                if (!listaRetenciones.isEmpty()) {
+                    mostrarMensajeInformacion("Se Cargaron las Retenciones.");
+                } else {
+                    mostrarMensajeAdvertencia("No existen Retenciones");
+                }
             } else {
-                mostrarMensajeError("No existen Retenciones");
+                mostrarMensajeAdvertencia("Por favor seleccione una factura.");
             }
+
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -212,7 +217,7 @@ public class RetencionController implements Serializable {
 
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "Advertencia", mensaje);
+                "Error", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

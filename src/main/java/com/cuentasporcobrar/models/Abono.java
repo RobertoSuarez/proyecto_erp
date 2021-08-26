@@ -37,6 +37,7 @@ public class Abono implements Serializable{
         this.descrFormaPago = descrFormaPago;
     }
     
+    
 
     //Constructor para llenar una lista de abonos, solo con datos informativos.
 
