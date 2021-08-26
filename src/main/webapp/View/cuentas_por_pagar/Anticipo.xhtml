@@ -19,7 +19,7 @@
 
                         <p:commandButton value="Nuevo" icon="pi pi-plus" 
                                          actionListener="#{anticipoMB.open_new}"
-                                         
+
                                          oncomplete="PF('manageAnticipoDialog').show()"
                                          styleClass="ui-button-raised ui-button-success" >
 
@@ -80,7 +80,7 @@
                                 oncomplete="PF('manageAnticipoDialog').show()"
                                 styleClass="edit-button rounded-button ui-button-warning" actionListener="#{anticipoMB.anticipo_editar(anticipo)}"
                                 update=":form:manage-anticipo-content">
-                                
+
                                 <p:resetInput target=":form:manage-anticipo-content"/>
                             </p:commandButton>
 
@@ -90,7 +90,7 @@
                                 oncomplete="PF('delete_anticipo_dialog').show()"
                                 styleClass="ui-button-danger rounded-button" 
                                 update=":form:delete_dialog">
-                                
+
                                 <f:setPropertyActionListener value="#{anticipo}" target="#{anticipoMB.selected_anticipo}"/>
                             </p:commandButton>
 
@@ -149,7 +149,7 @@
                                     <div class="p-field p-col-12 p-md-12 p-lg-6">
                                         <p:outputLabel for="importe" >Importe</p:outputLabel>
                                         <p:inputNumber 
-                                            id="importe" readonly="#{anticipoMB.es_editar()}" 
+                                            id="importe" readonly="#{anticipoMB.es_editar()}" symbol=" $" symbolPosition="s" decimalSeparator="," thousandSeparator="."  
                                             value="#{anticipoMB.selected_anticipo.importe}" 
                                             required="true" />
                                     </div>
@@ -163,7 +163,7 @@
                                             required="true" />
                                     </div>
                                 </div>
-                                
+
                                 <div class="p-field">
                                     <p:outputLabel 
                                         for="descripcion" >Descripción</p:outputLabel>
@@ -226,36 +226,29 @@
 
                     </p:dialog>
 
-                    <!-- Dialogo de confirmación para eliminar el registro(anticipo) -->
-                    <p:dialog id="delete_dialog" width="400px"
-                              modal="true" 
-                              widgetVar="delete_anticipo_dialog" 
-                              showEffect="fade" 
-                              responsive="true"
-                              header="Confirmar" >
-
-                        <p class="p-text-center p-mb-3">¿Desea dehabilitar el anticipo?</p>
-
-                        <p>#{anticipoMB.selected_anticipo.id_anticipo}</p>
-
-
-
-                        <f:facet name="footer">
-                            <p:commandButton 
-                                value="Si" process="@this" 
-                                icon="pi pi-check"
-                                styleClass="ui-button-raised ui-button-success"
-                                actionListener="#{anticipoMB.delete()}" 
-                                oncomplete="PF('delete_anticipo_dialog').hide()" />
-
-                            <p:commandButton 
-                                value="No" 
-                                type="button" 
-                                styleClass="ui-button-secondary" 
-                                icon="pi pi-times"
-                                onclick="PF('delete_anticipo_dialog').hide()"/>
+                    <p:confirmDialog id="delete_dialog"  widgetVar="delete_anticipo_dialog" showEffect="fade" width="700"
+                                       header="Confirmar" severity="warn">
+                        
+                        <f:facet name="message">
+                            <h4>¿Desea dehabilitar el anticipo?</h4>
                         </f:facet>
-                    </p:dialog>
+                        
+                        <p:commandButton 
+                            value="Si" process="@this" 
+                            icon="pi pi-check"
+                            styleClass="ui-button-raised"
+                            actionListener="#{anticipoMB.delete()}" 
+                            oncomplete="PF('delete_anticipo_dialog').hide()" />
+
+                        <p:commandButton 
+                            value="No" 
+                            type="button" 
+                            styleClass="ui-button-secondary" 
+                            icon="pi pi-times"
+                            onclick="PF('delete_anticipo_dialog').hide()"/>
+                    </p:confirmDialog>
+
+                   
 
                 </h:form>
             </ui:define>
