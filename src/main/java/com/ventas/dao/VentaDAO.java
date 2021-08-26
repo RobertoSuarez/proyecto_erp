@@ -33,7 +33,7 @@ public class VentaDAO {
             ResultSet rs = null;
 
             this.con.abrirConexion();
-            rs = this.con.consultar("select * from public.venta order by idventa desc limit 1");
+            rs = this.con.consultar("select idventa, secuencia from public.venta order by idventa desc limit 1;");
 
             int idVenta = 1;
             int secuenciaActual = 1;

@@ -44,6 +44,16 @@ public class DetalleVentaDAO {
             System.out.println(query);
             this.con.consultar(query);
 
+            int cantidadActual = 0;
+            query = "select cantidad from public.productos where codprincipal = " + idVenta + ";";
+            rs = this.con.consultar(query);
+            while (rs.next()) {
+                cantidadActual = rs.getInt(1);
+            }
+
+            query = "update public.productos set cantidad = " + (cantidadActual - cantidad) + " where codprincipal = " + idProducto + ";";
+            this.con.ejecutar(query);
+
             this.con.cerrarConexion();
         } catch (Exception e) {
             System.out.println(e.getMessage().toString());
