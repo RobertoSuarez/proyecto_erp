@@ -35,10 +35,12 @@ public class VentaDAO {
             rs = this.con.consultar("select * from public.venta order by idventa desc limit 1");
 
             int idVenta = 1;
+            int secuenciaActual = 1;
             while (rs.next()) {
                 idVenta = rs.getInt(1) + 1;
-                ventaActual.setSecuencia(rs.getInt(2));
+                secuenciaActual = rs.getInt(2) + 1;
             }
+            ventaActual.setSecuencia(secuenciaActual);
             ventaActual.setIdVenta(idVenta);
 
             System.out.println(ventaActual.getIdVenta());
@@ -46,14 +48,23 @@ public class VentaDAO {
             String query = "INSERT INTO public.venta("
                     + "idventa, idcliente, id_empleado, idformasdepago, idestadodocumento, id_sucursal, fechaventa, puntoemision, secuencia,"
                     + "autorizacion, fechaemision, fechaautorizacion, base12, base0, baseexcentoiva, iva12, ice, totalfactura) "
-                    + "VALUES(" + ventaActual.getIdVenta() + ", " + ventaActual.getIdCliente() + ", " + ventaActual.getIdEmpleado() + ", 1, 1, 1, '" + ventaActual.getFechaVenta()
+                    + "VALUES(" + ventaActual.getIdVenta() + ", " + ventaActual.getIdCliente() + ", " + ventaActual.getIdEmpleado() + ", " + ventaActual.getIdFormaPago() + ", 1, 1, '" + ventaActual.getFechaVenta()
                     + "', 1, " + ventaActual.getSecuencia() + ", " + ventaActual.getAutorizacion() + ", '" + ventaActual.getFechaEmision() + "', '" + ventaActual.getFechaAutorizacion()
                     + "', " + ventaActual.getBase12() + ", " + ventaActual.getBase0() + ", 0, " + ventaActual.getIva() + ", " + ventaActual.getIce() + ", " + ventaActual.getTotalFactura() + ")";
             System.out.println(query);
+
             this.con.consultar(query);
+
+            if (ventaActual.getIdFormaPago() == 1) {
+                query = "select ingresar_plan_de_pago(" + ventaActual.getIdVenta() + ", " + ventaActual.getDiasCredito() + ", '" + ventaActual.getFechaVenta() + "', " 
+                        + ventaActual.getTotalFactura() + ", 0.1)";
+                System.out.println(query);
+                this.con.consultar(query);
+            }
+            
             
             this.con.cerrarConexion();
-            
+
             System.out.println("Venta Guardada exitosamente");
 
             return ventaActual.getIdVenta();

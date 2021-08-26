@@ -29,6 +29,7 @@ public class Venta {
     private double ice;
     private double iva;
     private double totalFactura;
+    private int diasCredito;
     
     private ClienteVenta cliente;
     private DetalleVenta productoActual;
@@ -38,7 +39,8 @@ public class Venta {
         
     }
 
-    public Venta(int idVenta, int idCliente, int idEmpleado, int idFormaPago, int idDocumento, int sucursal, String fechaVenta, int puntoEmision, int secuencia, String autorizacion, String fechaEmision, String fechaAutorizacion, double base12, double base0, double iva, double ice, double totalFactura, ClienteVenta cliente, List<DetalleVenta> productos) {
+    public Venta(int idVenta, int idCliente, int idEmpleado, int idFormaPago, int idDocumento, int sucursal, String fechaVenta, int puntoEmision, int secuencia, String autorizacion, 
+            String fechaEmision, String fechaAutorizacion, double base12, double base0, double iva, double ice, double totalFactura, ClienteVenta cliente, List<DetalleVenta> productos, int diasCred) {
         this.idVenta = idVenta;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
@@ -58,6 +60,7 @@ public class Venta {
         this.totalFactura = totalFactura;
         this.cliente = cliente;
         this.productos = productos;
+        this.diasCredito = diasCred;
     }
 
     public int getIdVenta() {
@@ -221,8 +224,13 @@ public class Venta {
     public void setProductos(List<DetalleVenta> productos) {
         this.productos = productos;
     }
-    
-    
-    
+
+    public int getDiasCredito() {
+        return diasCredito;
+    }
+
+    public void setDiasCredito(int diasCredito) {
+        this.diasCredito = diasCredito;
+    }  
     
 }

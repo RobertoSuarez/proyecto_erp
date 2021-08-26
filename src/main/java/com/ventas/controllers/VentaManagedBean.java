@@ -75,6 +75,8 @@ public class VentaManagedBean implements Serializable {
 
     private double efectivo;
     private double cambio;
+    private int diasPago;
+    
 
     //Constructor
     @PostConstruct
@@ -105,6 +107,8 @@ public class VentaManagedBean implements Serializable {
 
         this.efectivo = 0;
         this.cambio = 0;
+        this.diasPago = 0;
+        
     }
 
     //Buscar cliente
@@ -115,7 +119,7 @@ public class VentaManagedBean implements Serializable {
             this.clienteNombre = this.cliente.getNombre();
         } else {
             System.out.print("No hay cliente");
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe o se encuentra inactivo.");
         }
 
         if (this.cliente.getNombre() != null) {
@@ -223,9 +227,9 @@ public class VentaManagedBean implements Serializable {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
-
+    
     @Asynchronous
-    public void RegistrarVenta() {
+    public void RegistrarVenta(int formaPago) {
         try {
             int listSize = 0;
             if (this.listaDetalle.isEmpty()) {
@@ -245,7 +249,7 @@ public class VentaManagedBean implements Serializable {
                 ventaActual.setCliente(this.cliente);
                 ventaActual.setIdCliente(this.cliente.getIdCliente());
                 ventaActual.setIdEmpleado(1);
-                ventaActual.setIdFormaPago(1);
+                ventaActual.setIdFormaPago(formaPago);
                 ventaActual.setIdDocumento(0);
                 ventaActual.setSucursal(1);
                 ventaActual.setFechaVenta(currentDate);
@@ -259,11 +263,19 @@ public class VentaManagedBean implements Serializable {
                 ventaActual.setIva(this.iva);
                 ventaActual.setIce(this.ice);
                 ventaActual.setTotalFactura(this.total);
+                ventaActual.setDiasCredito(this.diasPago);
 
                 System.out.println(ventaActual.getCliente().getNombre());
                 System.out.println(ventaActual.getTotalFactura());
 
-                this.ventaDao.GuardarVenta(ventaActual);
+                int ventaRealizada = this.ventaDao.GuardarVenta(ventaActual);
+
+                if (ventaRealizada == 0) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo realizar la venta. Revise los datos ingresados");
+                } else {
+                    System.out.println("Venta realizada con Factura #" + ventaRealizada);
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/faces/View/ventas/nuevaVenta.xhtml");
+                }
             }
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
@@ -474,4 +486,14 @@ public class VentaManagedBean implements Serializable {
         this.cambio = cambio;
     }
 
+    public int getDiasPago() {
+        return diasPago;
+    }
+
+    public void setDiasPago(int diasPago) {
+        this.diasPago = diasPago;
+    }
+    
+    
+    
 }
