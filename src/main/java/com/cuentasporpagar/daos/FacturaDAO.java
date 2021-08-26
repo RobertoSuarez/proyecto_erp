@@ -234,8 +234,8 @@ public class FacturaDAO {
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
                 //JSON un solo movimiento
-                
-                 if (selectedFactura.size() == 1)
+
+                if (selectedFactura.size() == 1)
                 {
                     sentencia1 = "[{\"idSubcuenta\":\""
                             + Listaids(selectedFactura.get(0).getCuenta()) + "\",\"debe\":\""
@@ -290,7 +290,7 @@ public class FacturaDAO {
                         + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
-               if (selectedFactura.size() == 1)
+                if (selectedFactura.size() == 1)
                 {
                     sentencia1 = "[{\"idSubcuenta\":\""
                             + Listaids(selectedFactura.get(0).getCuenta()) + "\",\"debe\":\"0\",\"haber\":\""
@@ -314,7 +314,7 @@ public class FacturaDAO {
                             + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de compra\"}]";
                 }
                 intJson(sentencia, sentencia1);
-
+                dhabilitar(factura.getNfactura(), 0);
             } catch (SQLException ex)
             {
                 System.out.println(ex.getMessage() + " error en conectarse");
@@ -353,7 +353,7 @@ public class FacturaDAO {
             {
                 String cadena = "update factura set idasiento = "
                         + "(select idasiento from asiento where documento = 'FAC-" + n + "') "
-                        + "where factura = '" + n + "'";
+                        + "where nfactura = '" + n + "'";
                 System.out.println(cadena);
                 conexion.Ejecutar2(cadena);
             } catch (Exception ex)
