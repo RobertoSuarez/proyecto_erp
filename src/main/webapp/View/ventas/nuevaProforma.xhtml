@@ -110,7 +110,7 @@
                     </p:dataTable>
                     <h:panelGrid columns="2">
                         <p:button value="Detalle impuestos" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
-                        <p:commandButton value="Enviar Proforma" />
+                        <p:commandButton value="Enviar Proforma" actionListener="#{ProformaMB.RegistrarProforma}" />
                     </h:panelGrid>
                     <div style="margin-top:50px" />
                 </h:form>

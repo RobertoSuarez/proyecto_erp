@@ -187,7 +187,7 @@ public class BeanGenerarCalendario  {
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/practica_reporte.jasper"));
+                    .getRealPath("/PlantillasReportes/reporte_cuentas_pagar.jasper"));
 
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(

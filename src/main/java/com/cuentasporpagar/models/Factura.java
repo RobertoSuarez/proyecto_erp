@@ -292,9 +292,7 @@ public class Factura{
         this.por_pagar = por_pagar;
     }
     
-    
-    
-    
+
     public Factura GetdbProveedor() {
         this.setProveedor(Proveedor.getOneProveedor(this.idproveedor));
         return this;

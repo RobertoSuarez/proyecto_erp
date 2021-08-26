@@ -32,12 +32,12 @@
 
                         </p:toolbarGroup>
 
-                        <p:toolbarGroup align="right">
-
-                            <p:selectBooleanButton id="slcbtn" value="#{facturaMB.check}" onLabel="Habilitado" offLabel="Deshabilitado" style="width:8rem">
-                                <p:ajax listener="#{facturaMB.habTabla}"/>
-                            </p:selectBooleanButton>
-                        </p:toolbarGroup>
+                        <!--                        <p:toolbarGroup align="right">
+                        
+                                                    <p:selectBooleanButton id="slcbtn" value="{facturaMB.check}" onLabel="Habilitado" offLabel="Deshabilitado" style="width:8rem">
+                                                        <p:ajax listener="{facturaMB.habTabla}"/>
+                                                    </p:selectBooleanButton>
+                                                </p:toolbarGroup>-->
                     </p:toolbar>
 
                     <p:dataTable  id="dt-factura" widgetVar="dtFactura" var="factura"
@@ -93,7 +93,7 @@
                                              icon="#{facturaMB.ic}" process="@this"
                                              update=":form:confirmDHab"
                                              oncomplete="PF('DHFactura').show()"
-                                             action="#{facturaMB.cargarDHab(factura)}"/>
+                                             action="#{facturaMB.cargarEditar(factura)}"/>
                         </p:column>
                     </p:dataTable>
                     <!-- DIALOG 1 NUEVA FACTURA-->
@@ -249,7 +249,7 @@
                                              actionListener="#{facturaMB.insertarfactura}"
                                              process="outputnuevo @this" update=":form:messages"/>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('newFactura').hide()"
-                                             class="ui-button-secondary" actionListener="#{facturaMB.reset}" 
+                                             class="ui-button-secondary" actionListener="#{facturaMB.reset('outputnuevo')}" 
                                              process="@this"/>
                         </f:facet>
                     </p:dialog>
@@ -411,23 +411,145 @@
                                              actionListener="#{facturaMB.editarfactura}"
                                              process="outputedit @this"/>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editFactura').hide()"
-                                             class="ui-button-secondary" actionListener="#{facturaMB.resetE}" 
+                                             class="ui-button-secondary" action="#{facturaMB.reset('outputedit')}" 
                                              process="@this"/>
                         </f:facet>
                     </p:dialog>
 
                     <!-- FINAL DIALOG 2 -->
+
+                    <!--DIALOG 2 REVERTIR FACTURA -->
+
+                    <p:dialog header="Revertir Factura" widgetVar="revFactura" 
+                              showEffect="fade" modal="true" closable="false"
+                              maximizable="true" height="300" width="70%">
+                        <p:outputPanel id="outputrev" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty facturaMB.factura}">
+
+                                <!-- CAMPOS DEL DIALOG-->
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editprov">Proveedor: *</p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.nombre}" style="visibility: hidden"/>
+                                        <p:inputText type="button" value="#{facturaMB.factura.nombre}"/>
+                                    </div>
+
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editnfactura">No. Factura:</p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.nfactura}" style="visibility: hidden"/>
+                                        <p:inputText value="#{facturaMB.factura.nfactura}" required="true"
+                                                     disabled="true"/>
+                                    </div>
+                                </div>
+
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editdescripcion" >Descripción:</p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.descripcion}" style="visibility: hidden"/>
+                                        <p:inputTextarea value="#{facturaMB.factura.descripcion}"/>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <p:inputText value="#{facturaMB.factura.nfactura}" style="visibility: hidden"/>
+                                        <p:inputText value="#{facturaMB.factura.ruc}" style="visibility: hidden"/>
+                                    </div>
+                                </div>
+
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editimporte">Importe:</p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.importe}" style="visibility: hidden"/>
+                                        <p:inputText type="number" value="#{facturaMB.factura.importe}" 
+                                                     />
+                                    </div>
+                                </div>
+
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editimporte">Anticipo: </p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.pagado}" style="visibility: hidden"/>
+                                        <p:inputText type="number" value="#{facturaMB.factura.pagado}" 
+                                                     />
+                                    </div>
+                                </div>
+
+                                <p:panel id="grouprev" header="Dias plazo del proveedor: #{facturaMB.factura.aux}">
+
+                                    <div class="p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <p:outputLabel for="editfecha" >Fecha factura:</p:outputLabel>
+                                            <p:outputLabel value="#{facturaMB.factura.fecha}" style="visibility: hidden"/>
+                                            <p:datePicker value="#{facturaMB.factura.fecha}" />
+                                        </div> 
+
+                                        <div class="p-field p-col">
+                                            <p:outputLabel for="editvencimiento">Vencimiento:</p:outputLabel>
+                                            <p:outputLabel value="#{facturaMB.factura.vencimiento}" style="visibility: hidden"/>
+                                            <p:datePicker value="#{facturaMB.factura.vencimiento}"
+                                                          />
+                                        </div>
+                                    </div>
+                                </p:panel>
+
+                                <!-- FINAL CAMPOS DEL DIALOG-->
+
+                                <!--TABLA DIALOG 2-->
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+
+                                        <p:dataTable id="dt-rev" widgetVar="dtrev" 
+                                                     var="detalle" value="#{facturaMB.detalleFactura}"
+                                                     class="p-mt-3">
+
+                                            <p:column headerText="Detalle">
+                                                <h:outputText value="#{detalle.detalle}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Cuenta contable">
+                                                <h:outputText value="#{detalle.cuenta}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Importe">
+                                                <h:outputText value="#{detalle.importeD}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+                                </div>
+
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">                            
+                            <p:commandButton value="Guardar" icon="pi pi-check" 
+                                             actionListener="#{facturaMB.revertirfactura}"
+                                             process="outputrev @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('revFactura').hide()"
+                                             class="ui-button-secondary" action="#{facturaMB.reset('outputrev')}" 
+                                             process="@this"/>
+                        </f:facet>
+                    </p:dialog>
+
+                    <!-- FINAL DIALOG3 -->
+
                     <!--DIALOG 3 Habilitar FACTURA-->
 
-                    <p:confirmDialog id="confirmDHab" widgetVar="DHFactura" showEffect="fade" width="300"
-                                     message="Desea #{facturaMB.value} la factura ##{facturaMB.factura.nfactura}?" header="Confirmar" severity="warn">
+                    <p:confirmDialog id="confirmDHab" widgetVar="DHFactura" showEffect="fade" width="700"
+                                     header="Confirmar" severity="warn">
+
+                        <f:facet name="message">
+                            <h:outputText value="Desea eliminar la factura ##{facturaMB.factura.nfactura}?"/><br/><br/>
+                            <h:outputText value="Las facturas registrados no pueden borrarse.."/><br/>
+                            <h:outputText value="Para deshacer una factura despues de registrarla, debe 'revertirla'
+                                          (ingresarlo otra vez con el importe opuesto)."/><br/><br/>
+                            <h:outputText value="Crear Factura de Reversión ahora?"/>
+                        </f:facet>
                         <p:inputText value="#{facturaMB.factura.nfactura}" type="hidden"/>
 
-                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{facturaMB.dhFactura}"
-                                         process="confirmDHab @this" oncomplete="PF('DHFactura').hide()"/>
+                        <p:commandButton value="Si" icon="pi pi-check" update=":form:outputrev"
+                                         process="confirmDHab @this" oncomplete="PF('revFactura').show()" onsuccess="PF('DHFactura').hide()"/>
                         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                         onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset}"/>
+                                         onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset('DHFactura')}"/>
                     </p:confirmDialog> 
+
                 </h:form>
             </ui:define>
         </ui:composition>
