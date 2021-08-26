@@ -34,14 +34,15 @@ public class Factura{
     private String id_detalle;
     private Float importeD;
     private String detalle;
+    private String cuentadetalle;
     private String cuenta;
     private int aux;
     
     public Factura() {
     }
     
-    public Factura(String cuenta){
-        this.cuenta = cuenta;
+    public Factura(String cuentadetalle){
+        this.cuentadetalle = cuentadetalle;
     }
 
     //Paola: Usa este Constructor
@@ -281,6 +282,16 @@ public class Factura{
     public void setCuenta(String cuenta) {
         this.cuenta = cuenta;
     }
+
+    public String getCuentadetalle() {
+        return cuentadetalle;
+    }
+
+    public void setCuentadetalle(String cuentadetalle) {
+        this.cuentadetalle = cuentadetalle;
+    }
+    
+    
     
     
 
