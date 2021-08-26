@@ -14,9 +14,8 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -32,8 +31,6 @@ public class AbonoProveedorDAO {
     private List<AbonoProveedor> listaAbono;
     private List<Factura> listafactura;
     private List<Proveedor> listaProveedor;
-    private Statement statement;
-    private Connection connection;
     private boolean bandera;
 
     public AbonoProveedorDAO() {
@@ -130,8 +127,8 @@ public class AbonoProveedorDAO {
                 String sentencia = String.format("select insert_abono('%1$s','%2$s',"
                         + "'%3$s','%4$s','%5$s','%6$s') as registro",
                         abonoProveedor.getDetalletipoPago(), abonoProveedor.getDetalletipoBanco(),
-                        abonoProveedor.getRuc(), abonoProveedor.getReferencia(), 
-                        abonoProveedor.getFecha(),abonoProveedor.getPeriodo());
+                        abonoProveedor.getRuc(), abonoProveedor.getReferencia(),
+                        abonoProveedor.getFecha(), abonoProveedor.getPeriodo());
                 result = conex.ejecutarConsulta(sentencia);
                 System.out.println(sentencia);
                 while (result.next()) {
@@ -165,11 +162,127 @@ public class AbonoProveedorDAO {
         return bandera;
     }
 
+    public int getCountPago() {
+        String sql = String.format("select count(idabonoproveedor) from public.abonoproveedor");
+        int numero = 0;
+        try {
+            conex.conectar();
+            result = conex.ejecutarSql(sql);
+            //Llena la lista de los datos
+            while (result.next()) {
+                numero = result.getInt("count");
+            }
+        } catch (Exception e) {
+            numero = -1;
+            return numero;
+        } finally {
+            conex.desconectar();
+        }
+        return numero;
+    }
+
+    private String generateNumeroPago() {
+        int num = getCountPago();
+        if (num > 8) {
+            return "PAGO-0" + (num + 1);
+        } else {
+            return "PAGO-00" + (num + 1);
+        }
+    }
+
+    public LocalDate sumfechas(LocalDate fecha) {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+        fecha = fecha.plusDays(30);
+
+        return fecha;
+    }
+
+    //asiento contable
+    public void insertasiento(int idSubcuenta, AbonoProveedor abono) {
+        System.out.print("SI ENTREEEEEEE");
+        if (conex.isEstado()) {
+            try {
+                int iddiario = 0;
+                String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
+                result = conex.ejecutarConsulta(cadena);
+                while (result.next()) {
+                    iddiario = result.getInt("iddiario");
+                }
+                String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + abono.getImporte()
+                        + ",\"documento\": \"" + generateNumeroPago() + "\",\"detalle\": \"Pago AP:"
+                        + abono.getDetalletipoPago() + "\",\"fechaCreacion\": \""
+                        + abono.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
+                        + abono.getFecha().plusDays(30).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
+                System.out.println(sentencia);
+                sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
+                        + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
+                        + "{\"idSubcuenta\":\"" + idSubcuenta + "\",\"debe\":\"0\",\"haber\":\""
+                        + abono.getImporte() + "\",\"tipoMovimiento\":\"Pago\"}]";
+                System.out.println(sentencia1);
+                intJson(sentencia, sentencia1);
+
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+    }
+
+    public void update_abono() {
+        if (conex.isEstado()) {
+            try {
+                String sentencia = "update abonoproveedor as ap	"
+                        + "SET  idasiento= (Select max(idasiento) from asiento)"
+                        + "WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
+                conex.Ejecutar2(sentencia);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+    }
+
+    public void intJson(String a, String b) {
+        if (conex.isEstado()) {
+            try {
+                String cadena = "SELECT public.generateasientocotableexternal('"
+                        + a + "','" + b + "')";
+                System.out.println(cadena);
+                conex.ejecutarConsulta(cadena);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+    }
+
+    public int Listaids(String g) {
+        int n = 0;
+        if (conex.isEstado()) {
+            try {
+                String cadena = "select idsubcuenta from subcuenta where nombre = '" + g + "'";
+                result = conex.ejecutarConsulta(cadena);
+                while (result.next()) {
+                    n = result.getInt("idsubcuenta");
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+        return n;
+    }
+
     public void search_date_payment(float importe, AbonoProveedor abonoProveedor) {
         if (conex.isEstado()) {
             try {
                 System.out.println(importe);
-                String sentencia ="select search_date_payment("+importe+") as idabono;";
+                String sentencia = "select search_date_payment(" + importe + ") as idabono;";
                 System.out.println(sentencia);
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
