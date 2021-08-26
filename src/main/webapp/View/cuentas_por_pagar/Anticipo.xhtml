@@ -19,7 +19,7 @@
 
                         <p:commandButton value="Nuevo" icon="pi pi-plus" 
                                          actionListener="#{anticipoMB.open_new}"
-                                         update=":form:manage-anticipo-content"
+                                         
                                          oncomplete="PF('manageAnticipoDialog').show()"
                                          styleClass="ui-button-raised ui-button-success" >
 
@@ -29,7 +29,7 @@
                     </div>
 
                     <p:dataTable 
-                        class="p-mt-3" 
+                        class="p-mt-3" paginator="true" rows="10" paginatorPosition="bottom" 
                         id="dt_anticipos" widgetVar="dtanticipos" 
                         reflow="true"
                         size="small"
@@ -78,9 +78,9 @@
                             <p:commandButton 
                                 icon="pi pi-pencil" 
                                 oncomplete="PF('manageAnticipoDialog').show()"
-                                styleClass="edit-button rounded-button ui-button-warning" actionListener="#{anticipoMB.setSelected_anticipo(anticipo)}"
+                                styleClass="edit-button rounded-button ui-button-warning" actionListener="#{anticipoMB.anticipo_editar(anticipo)}"
                                 update=":form:manage-anticipo-content">
-
+                                
                                 <p:resetInput target=":form:manage-anticipo-content"/>
                             </p:commandButton>
 
@@ -101,10 +101,10 @@
 
                     <p:dialog 
                         class="p-m-3" 
-                        header="Anticipo" 
+                        header="Anticipo - #{anticipoMB.anticipo_modo}" 
                         showEffect="fade" 
                         modal="true" 
-                        responsive="true" 
+                        responsive="true" id="dialogo_anticipo" 
                         widgetVar="manageAnticipoDialog">
 
                         <p:outputPanel 
@@ -125,7 +125,7 @@
                                     <div class="p-field p-col-12 p-md-12 p-lg-6">
                                         <p:outputLabel for="id_proveedor" >Proveedor</p:outputLabel>
                                         <div class="ui-inputgroup">
-                                            <p:commandButton value="Buscar" id="buscar"/>
+                                            <p:commandButton value="Buscar" id="buscar" disabled="#{anticipoMB.es_editar()}"/>
                                             <p:inputText 
                                                 id="id_proveedor" 
                                                 type="input" readonly="true"
@@ -149,7 +149,7 @@
                                     <div class="p-field p-col-12 p-md-12 p-lg-6">
                                         <p:outputLabel for="importe" >Importe</p:outputLabel>
                                         <p:inputNumber 
-                                            id="importe" 
+                                            id="importe" readonly="#{anticipoMB.es_editar()}" 
                                             value="#{anticipoMB.selected_anticipo.importe}" 
                                             required="true" />
                                     </div>

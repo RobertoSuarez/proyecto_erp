@@ -33,10 +33,14 @@ import org.primefaces.event.SelectEvent;
 @SessionScoped
 public class AnticipoMB  {
 
+    static final String NUEVO = "NUEVO" ;
+    static final String EDITAR = "EDITAR";
+    
     private List<Anticipo> anticipos;
     private Anticipo selected_anticipo;
     private List<Proveedor> list_proveedor; // se mostrar en el dialogo para selecionar el proveedor
     private Proveedor selected_Proveedor;
+    private String anticipo_modo;
     
     public AnticipoMB() {
         //this.anticipos = Anticipo.getAll(); // trae solo los datos de los anticipos
@@ -61,6 +65,8 @@ public class AnticipoMB  {
         
         BuscarProvDAO BP = new BuscarProvDAO();
         this.list_proveedor = BP.llenar();
+        
+        this.anticipo_modo = NUEVO;
     }
 
     public List<Anticipo> getAnticipos() {
@@ -95,6 +101,14 @@ public class AnticipoMB  {
         this.selected_Proveedor = selected_Proveedor;
     }
 
+    public String getAnticipo_modo() {
+        return anticipo_modo;
+    }
+
+    public void setAnticipo_modo(String anticipo_modo) {
+        this.anticipo_modo = anticipo_modo;
+    }
+
     
     
     // metodos aux
@@ -110,7 +124,17 @@ public class AnticipoMB  {
     }
     
     public void open_new() {
+        this.anticipo_modo = NUEVO;
         this.selected_anticipo = new Anticipo();
+        
+        PrimeFaces.current().ajax().update(":form:dialogo_anticipo");
+    }
+    
+    public void anticipo_editar(Anticipo anticipo) {
+        this.setSelected_anticipo(anticipo);
+        this.anticipo_modo = EDITAR;
+        
+        PrimeFaces.current().ajax().update(":form:dialogo_anticipo");
     }
     
     public void guardar_anticipo() {
@@ -119,10 +143,12 @@ public class AnticipoMB  {
             System.out.println(this.selected_anticipo.getId_anticipo());
             System.out.println(this.selected_anticipo.getDescripcion());
             
-            if (this.selected_anticipo.getId_anticipo().isEmpty()) {
+            if (this.anticipo_modo.equals(NUEVO)) {
                 this.selected_anticipo.InsertDB();
                 addMessage(FacesMessage.SEVERITY_INFO, "Anticipo creado", "El anticipo fue creado correctamente");
-            } else {
+            } 
+            
+            if (this.anticipo_modo.equals(EDITAR)){
                 this.selected_anticipo.UpdateDB();
                 System.out.println("update registro: " + this.selected_anticipo.getId_anticipo());
                 addMessage(FacesMessage.SEVERITY_INFO, "Anticipo actualizado", "El anticipo fue actualizado correctamente");
@@ -145,6 +171,10 @@ public class AnticipoMB  {
         PrimeFaces.current().ajax().update(":form:dt_anticipos");
         PrimeFaces.current().ajax().update(":form:growl");
         //PrimeFaces.current().executeScript("location.reload()");
+    }
+    
+    public boolean es_editar() {
+        return this.anticipo_modo.equals(EDITAR);
     }
     
     public void delete() {
