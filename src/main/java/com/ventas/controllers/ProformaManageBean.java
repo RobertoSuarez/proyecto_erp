@@ -56,6 +56,7 @@ public class ProformaManageBean implements Serializable {
     private double subTotalVenta;
 
     private Proforma proformas;
+    private ProformaDAO profDao;
     private DetalleVenta detalleVenta;
     private DetalleVentaDAO detalleDAO;
     private List<DetalleVenta> listaDetalle;
@@ -71,13 +72,14 @@ public class ProformaManageBean implements Serializable {
 
     //Constructor
     @PostConstruct
-    public void VentaManagedBean() {
+    public void ProformaManagedBean() {
         this.cliente = new ClienteVenta();
         this.clienteDAO = new ClienteVentaDao();
 
         this.producto = new Producto();
         this.productoDao = new ProductoDAO();
         this.proformas = new Proforma();
+        
         this.codigoProducto = 0;
         this.nombreProducto = "XXXXXX";
         this.subTotalVenta = 0;
@@ -270,10 +272,14 @@ public class ProformaManageBean implements Serializable {
 
     @Asynchronous
     public void listarProformas() {
+        Proforma prf = new Proforma();
         ProformaDAO profoDao = new ProformaDAO();
-        listaProformas = new ArrayList<>();
+        int listsize=0;
+        this.listaProformas = new ArrayList<>();
         try {
+            System.out.println("Llenando lista de proforma");
             this.listaProformas = profoDao.retornarProformas();
+            System.out.println("Lista llenada");
             if (listaProformas.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
             }
@@ -482,6 +488,15 @@ public class ProformaManageBean implements Serializable {
         this.productoSeleccionado = productoSeleccionado;
     }
 
+    public ProformaDAO getProfDao() {
+        return profDao;
+    }
+
+    public void setProfDao(ProformaDAO profDao) {
+        this.profDao = profDao;
+    }
+
+    
     //Agregar producto a la lista de detalle
     public void AgregarProductoLista2() {
         if (this.producto.getCodigo() > 0) {

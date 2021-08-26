@@ -11,22 +11,23 @@
         <ui:composition template="../../Plantilla/Plantilla.xhtml">
 
             <ui:define name="content">
+                <p:commandButton value="Cargar Proforma" actionListener="#{ProformaMB.listarProformas()}" />
                 <h:form>
-                    <p:dataTable var="ListaItems" id="itemsTable" value="#{ProformaMB.listaProformas}" rowKey="#{ListaItems.id_proforma}" selectionMode="single">
+                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}">
                         <p:column headerText="Codigo proforma" width="5%">
-                            <h:outputText value="#{ListaItems.id_proforma}" />
+                            <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
                         <p:column headerText="Cliente" width="5%">
-                            <h:outputText value="#{ListaItems.id_cliente}" />
+                            <h:outputText value="#{Lista.id_cliente}" />
                         </p:column>
                         <p:column headerText="Estado" width="10%">
-                            <h:outputText value="#{ListaItems.estado}" />
+                            <h:outputText value="#{Lista.estado}" />
                         </p:column>
                         <p:column headerText="Fecha creacion" width="10%" >
-                            <h:outputText value="#{ListaItems.fecha_creacion}"/>
+                            <h:outputText value="#{Lista.fecha_creacion}"/>
                         </p:column>
                         <p:column headerText="Total" width="10%" >
-                            <h:outputText value="#{ListaItems.totalproforma}" />
+                            <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="25%">
                             <p:commandButton icon="pi pi-pencil" value="Aceptar" style="float: right; margin: 20px 0px;" />

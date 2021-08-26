@@ -100,7 +100,7 @@ public class ProformaDAO {
         }
     }
 
-    public List retornarProformas() throws SQLException {
+    public List<Proforma> retornarProformas() throws SQLException {
         ResultSet rs;
         String consulta;
         con.abrirConexion();
@@ -132,6 +132,7 @@ public class ProformaDAO {
                     prof.setIce(rs.getFloat(15));
                     prof.setTotalproforma(rs.getFloat(16));
                     listadocs.add(prof);
+                    System.out.println("Proforma en lista");
                 }
             }
         } catch (Exception e) {
