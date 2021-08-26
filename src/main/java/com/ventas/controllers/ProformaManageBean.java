@@ -36,11 +36,11 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
-@Named(value="ProformaMB")
+@Named(value = "ProformaMB")
 @ViewScoped
 
 public class ProformaManageBean implements Serializable {
-    
+
     private ClienteVenta cliente;
     private ClienteVentaDao clienteDAO;
     private String clienteIdNum;
@@ -55,9 +55,11 @@ public class ProformaManageBean implements Serializable {
     private float precioProducto;
     private double subTotalVenta;
 
+    private Proforma proformas;
     private DetalleVenta detalleVenta;
     private DetalleVentaDAO detalleDAO;
     private List<DetalleVenta> listaDetalle;
+    private List<Proforma> listaProformas;
     private double cantidad;
 
     private double subtotal12;
@@ -75,6 +77,7 @@ public class ProformaManageBean implements Serializable {
 
         this.producto = new Producto();
         this.productoDao = new ProductoDAO();
+        this.proformas = new Proforma();
         this.codigoProducto = 0;
         this.nombreProducto = "XXXXXX";
         this.subTotalVenta = 0;
@@ -87,6 +90,7 @@ public class ProformaManageBean implements Serializable {
         this.total = 0;
 
         this.listaDetalle = new ArrayList<>();
+        this.listaProformas = new ArrayList<>();
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
@@ -213,34 +217,34 @@ public class ProformaManageBean implements Serializable {
     public void RegistrarProforma() {
         try {
             int listSize = 0;
-            int codigo=0;
-            boolean estado=true;
+            int codigo = 0;
+            boolean estado = true;
             Proforma profor = new Proforma();
             ProformaDAO profordao = new ProformaDAO();
-            DetalleVenta temp=new DetalleVenta();
-            if(this.listaDetalle.isEmpty())
+            DetalleVenta temp = new DetalleVenta();
+            if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una proforma nula", "Message Content");
-            else{
+            } else {
                 System.out.println("Registrando proforma . . .");
                 profor.setId_cliente(this.cliente.getIdCliente());
-                System.out.println("Proforma registrada con cliente:"+ this.cliente.getIdCliente());
+                System.out.println("Proforma registrada con cliente:" + this.cliente.getIdCliente());
                 profor.setId_empleado(1);
                 System.out.println("Proforma registrada con empleado 1");
-                codigo=profordao.codigoproforma();
+                codigo = profordao.codigoproforma();
                 profor.setId_proforma(codigo);
-                System.out.println("Proforma registrada con codigo:"+ profor.getId_proforma());
+                System.out.println("Proforma registrada con codigo:" + profor.getId_proforma());
                 profor.setFecha_actualizacion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:"+ ObtenerFecha());
+                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setFecha_creacion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:"+ ObtenerFecha());
+                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setFecha_expiracion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:"+ ObtenerFecha());
+                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setFecha_autorizacion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:"+ ObtenerFecha());
+                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setProforma_terminada(estado);
-                System.out.println("Proforma registrada con estado:"+ estado);
+                System.out.println("Proforma registrada con estado:" + estado);
                 profor.setAceptacion_cliente(estado);
-                System.out.println("Proforma registrada con estado:"+ estado);
+                System.out.println("Proforma registrada con estado:" + estado);
                 profor.setEstado("P");
                 System.out.println("Proforma registrada con estado pendiente");
                 profor.setBase12((float) this.subtotal12);
@@ -251,8 +255,8 @@ public class ProformaManageBean implements Serializable {
                 profor.setTotalproforma((float) this.total);
                 profordao.IngresarProforma(profor);
                 System.out.println("Proforma Registrada");
-                while(listSize < this.listaDetalle.size()){
-                    temp=this.listaDetalle.get(listSize);
+                while (listSize < this.listaDetalle.size()) {
+                    temp = this.listaDetalle.get(listSize);
 //                    this.proformaDAO.ingresarDetalleProforma(temp, profor);
 //                    System.out.println("Detalle Proforma ingresada");
                     listSize += 1;
@@ -261,28 +265,41 @@ public class ProformaManageBean implements Serializable {
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
         }
+
     }
-    public String ObtenerFecha(){
-        String fecha ="";
+
+    @Asynchronous
+    public void listarProformas() {
+        ProformaDAO profoDao = new ProformaDAO();
+        listaProformas = new ArrayList<>();
+        try {
+            this.listaProformas = profoDao.retornarProformas();
+            if (listaProformas.isEmpty()) {
+                addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
+            }
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+        }
+    }
+
+    public String ObtenerFecha() {
+        String fecha = "";
         String dia;
         String mes;
         Calendar c1 = Calendar.getInstance();
-        if(Integer.parseInt(Integer.toString(c1.get(Calendar.DATE)))<10){
-            dia="0"+Integer.toString(c1.get(Calendar.DATE)).toString();    
+        if (Integer.parseInt(Integer.toString(c1.get(Calendar.DATE))) < 10) {
+            dia = "0" + Integer.toString(c1.get(Calendar.DATE)).toString();
+        } else {
+            dia = Integer.toString(c1.get(Calendar.DATE)).toString();
         }
-        else{
-            dia=Integer.toString(c1.get(Calendar.DATE)).toString();
+        if (Integer.parseInt(Integer.toString(c1.get(Calendar.MONTH))) < 10) {
+            mes = "0" + Integer.toString(c1.get(Calendar.MONTH) + 1).toString();
+        } else {
+            mes = Integer.toString(c1.get(Calendar.MONTH)).toString();
         }
-        if(Integer.parseInt(Integer.toString(c1.get(Calendar.MONTH)))<10){
-            mes="0"+Integer.toString(c1.get(Calendar.MONTH)+1 ).toString();    
-        }
-        else{
-            mes=Integer.toString(c1.get(Calendar.MONTH)).toString();
-        }
-        fecha= Integer.toString(c1.get(Calendar.YEAR)).toString()+"/"+mes+"/"+dia;
+        fecha = Integer.toString(c1.get(Calendar.YEAR)).toString() + "/" + mes + "/" + dia;
         return fecha;
     }
-    
 
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
@@ -373,6 +390,22 @@ public class ProformaManageBean implements Serializable {
         return listaDetalle;
     }
 
+    public Proforma getProformas() {
+        return proformas;
+    }
+
+    public void setProformas(Proforma proformas) {
+        this.proformas = proformas;
+    }
+
+    public List<Proforma> getListaProformas() {
+        return listaProformas;
+    }
+
+    public void setListaProformas(List<Proforma> listaProformas) {
+        this.listaProformas = listaProformas;
+    }
+
     public void setListaDetalle(List<DetalleVenta> listaDetalle) {
         this.listaDetalle = listaDetalle;
     }
@@ -448,8 +481,7 @@ public class ProformaManageBean implements Serializable {
     public void setProductoSeleccionado(DetalleVenta productoSeleccionado) {
         this.productoSeleccionado = productoSeleccionado;
     }
-    
-    
+
     //Agregar producto a la lista de detalle
     public void AgregarProductoLista2() {
         if (this.producto.getCodigo() > 0) {
@@ -459,7 +491,7 @@ public class ProformaManageBean implements Serializable {
             detalle.setDescuento(this.producto.getDescuento());
             detalle.setPrecio(this.precioProducto);
             detalle.setProducto(this.producto);
-            
+
             BigDecimal controldecimal = new BigDecimal((this.cantidad * this.precioProducto)).setScale(2, RoundingMode.UP);
             detalle.setSubTotal(controldecimal.doubleValue());
             this.subTotalVenta = this.subTotalVenta + controldecimal.doubleValue();
@@ -474,19 +506,17 @@ public class ProformaManageBean implements Serializable {
             } else {
                 this.subtotal0 += this.precioProducto * detalle.getCantidad();
             }
-            this.subtotal12=Math.round(this.subtotal12*100.0)/100.0;
-            this.subtotal0=Math.round(this.subtotal0*100.0)/100.0;
-            this.iva = Math.round(((this.iva + this.producto.getIva())*detalle.getCantidad())*100.0)/100.0;
-            this.ice = Math.round(((this.ice + this.producto.getIce())*detalle.getCantidad())*100.0)/100.0;
+            this.subtotal12 = Math.round(this.subtotal12 * 100.0) / 100.0;
+            this.subtotal0 = Math.round(this.subtotal0 * 100.0) / 100.0;
+            this.iva = Math.round(((this.iva + this.producto.getIva()) * detalle.getCantidad()) * 100.0) / 100.0;
+            this.ice = Math.round(((this.ice + this.producto.getIce()) * detalle.getCantidad()) * 100.0) / 100.0;
 
             this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-            this.precioProducto=0;
+            this.precioProducto = 0;
             this.producto = null;
         } else {
             System.out.println("No hay producto seleccionado");
         }
     }
-    
-    
-    
+
 }
