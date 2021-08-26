@@ -11,6 +11,7 @@ import com.ventas.models.Venta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VentaDAO {
@@ -56,13 +57,12 @@ public class VentaDAO {
             this.con.consultar(query);
 
             if (ventaActual.getIdFormaPago() == 1) {
-                query = "select ingresar_plan_de_pago(" + ventaActual.getIdVenta() + ", " + ventaActual.getDiasCredito() + ", '" + ventaActual.getFechaVenta() + "', " 
+                query = "select ingresar_plan_de_pago(" + ventaActual.getIdVenta() + ", " + ventaActual.getDiasCredito() + ", '" + ventaActual.getFechaVenta() + "', "
                         + ventaActual.getTotalFactura() + ", 0.1)";
                 System.out.println(query);
                 this.con.consultar(query);
             }
-            
-            
+
             this.con.cerrarConexion();
 
             System.out.println("Venta Guardada exitosamente");
@@ -74,6 +74,45 @@ public class VentaDAO {
             this.con.cerrarConexion();
         }
         return 0;
+    }
+
+    //Obtener Todas las ventas
+    public List<Venta> TodasVentas() throws SQLException {
+        List<Venta> ventas = new ArrayList<>();
+
+        this.con.abrirConexion();
+        ResultSet rs = this.con.consultar("select * from public.venta order by fechaventa desc;");
+
+        Venta venta = new Venta();
+
+        while (rs.next()) {
+            venta.setIdVenta(rs.getInt(1));
+            venta.setIdCliente(rs.getInt(2));
+            venta.setIdEmpleado(rs.getInt(3));
+            venta.setIdFormaPago(rs.getInt(4));
+            venta.setIdDocumento(rs.getInt(5));
+            venta.setSucursal(rs.getInt(6));
+            venta.setFechaVenta(rs.getDate(7).toString());
+            venta.setPuntoEmision(rs.getInt(8));
+            venta.setSecuencia(rs.getInt(9));
+            venta.setAutorizacion(rs.getString(10));
+            venta.setFechaEmision(rs.getDate(11).toString());
+            venta.setFechaAutorizacion(rs.getDate(12).toString());
+            venta.setBase12(rs.getDouble(13));
+            venta.setBase0(rs.getDouble(14));
+            venta.setIva(rs.getDouble(16));
+            venta.setIce(rs.getDouble(17));
+            venta.setTotalFactura(rs.getFloat(18));
+            
+            String fact;
+            //if(venta.getSucursal().)
+            
+            ventas.add(venta);
+        }
+
+        this.con.cerrarConexion();
+
+        return ventas;
     }
 
 }

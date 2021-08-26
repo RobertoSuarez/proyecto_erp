@@ -30,6 +30,7 @@ public class Venta {
     private double iva;
     private double totalFactura;
     private int diasCredito;
+    private String factura;
     
     private ClienteVenta cliente;
     private DetalleVenta productoActual;
@@ -232,5 +233,15 @@ public class Venta {
     public void setDiasCredito(int diasCredito) {
         this.diasCredito = diasCredito;
     }  
+
+    public String getFactura() {
+        return factura;
+    }
+
+    public void setFactura(String factura) {
+        this.factura = factura;
+    }
+    
+    
     
 }

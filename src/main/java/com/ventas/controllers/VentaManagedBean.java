@@ -76,7 +76,6 @@ public class VentaManagedBean implements Serializable {
     private double efectivo;
     private double cambio;
     private int diasPago;
-    
 
     //Constructor
     @PostConstruct
@@ -108,7 +107,8 @@ public class VentaManagedBean implements Serializable {
         this.efectivo = 0;
         this.cambio = 0;
         this.diasPago = 0;
-        
+
+        this.detalleDAO = new DetalleVentaDAO();
     }
 
     //Buscar cliente
@@ -227,24 +227,17 @@ public class VentaManagedBean implements Serializable {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
-    
+
     @Asynchronous
     public void RegistrarVenta(int formaPago) {
         try {
+            Venta ventaActual = new Venta();
             int listSize = 0;
             if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una venta nula", "Message Content");
             } else {
-
-                while (listSize < this.listaDetalle.size()) {
-                    System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
-                    listSize += 1;
-                }
-
                 DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
                 String currentDate = df.format(new Date());
-
-                Venta ventaActual = new Venta();
 
                 ventaActual.setCliente(this.cliente);
                 ventaActual.setIdCliente(this.cliente.getIdCliente());
@@ -274,6 +267,20 @@ public class VentaManagedBean implements Serializable {
                     addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo realizar la venta. Revise los datos ingresados");
                 } else {
                     System.out.println("Venta realizada con Factura #" + ventaRealizada);
+
+                    DetalleVentaDAO daoDetail = new DetalleVentaDAO();
+                    
+                    while (listSize < this.listaDetalle.size()) {
+                        int codProd = this.listaDetalle.get(listSize).getProducto().getCodigo();
+                        double qty = this.listaDetalle.get(listSize).getCantidad();
+                        double dsc = this.listaDetalle.get(listSize).getDescuento();
+                        double price = this.listaDetalle.get(listSize).getPrecio();
+
+                        System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
+                        System.out.println(ventaRealizada + "-" + codProd + "-" + qty + "-" + dsc + "-" + price);
+                        daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
+                        listSize += 1;
+                    }
                     FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/faces/View/ventas/nuevaVenta.xhtml");
                 }
             }
@@ -493,7 +500,5 @@ public class VentaManagedBean implements Serializable {
     public void setDiasPago(int diasPago) {
         this.diasPago = diasPago;
     }
-    
-    
-    
+
 }
