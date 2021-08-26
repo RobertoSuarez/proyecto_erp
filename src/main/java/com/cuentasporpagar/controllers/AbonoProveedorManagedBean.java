@@ -135,7 +135,7 @@ public final class AbonoProveedorManagedBean {
 
     public void enviar() {
         if (this.listaFactura.size() > 0) {
-            if (this.listaFactura.size() <= dateMofid) {
+            if (dateMofid >=this.listaFactura.size() ) {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
                 abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
                 descrPago = tipoPago.getDescripcion();

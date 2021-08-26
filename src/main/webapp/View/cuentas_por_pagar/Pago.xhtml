@@ -86,7 +86,8 @@
                                 <div class="p-field p-col">
                                     <p:outputLabel for="name">Proveedor</p:outputLabel>
                                     <p:inputText id="name" type="button" 
-                                                 value="#{abonoProveedorMB.nom}" required="true"/>
+                                                 value="#{abonoProveedorMB.nom}" required="true"
+                                                 validatorMessage="Ingrese proveedor"/>
                                 </div>
                                 <div class="p-field p-col">
                                     <p:inputText id="hola" value="#{abonoProveedorMB.cod}" style="visibility: hidden"/>
@@ -97,10 +98,11 @@
                             </div>
                             <div class="p-formgrid p-grid">
                                 <div class="p-field p-col">
-                                    <label for="pagopor" >Pago por
+                                    <label for="pagopor" >Pago por *
                                     </label>
                                     <p:selectOneMenu  placeholder="Seleccione" id="detallePago"
-                                                      value="#{abonoProveedorMB.tipoPago.descripcion}" required="true">
+                                                      value="#{abonoProveedorMB.tipoPago.descripcion}" required="true"
+                                                      validatorMessage="Ingrese tipo de pago">
                                         <f:selectItem itemLabel="Seleccione" itemValue="" noSelectionOption="true"/>
                                         <f:selectItem itemLabel="Caja" 
                                                       itemValue="Caja"/>
@@ -138,7 +140,8 @@
                                     <p:outputLabel for="fecha" value="Fecha:" style="width: 100px"/>
                                     <p:outputLabel value="#{abonoProveedorMB.abonoproveedor.fecha=abonoProveedorMB.fecha}" style="visibility: hidden"/>
                                     <p:datePicker id="fecha" 
-                                                  value="#{abonoProveedorMB.abonoproveedor.fecha}" required="true"/>
+                                                  value="#{abonoProveedorMB.abonoproveedor.fecha}" required="true"
+                                                  validatorMessage="Ingrese una fecha valida"/>
                                 </div>
                                 <div class="p-field p-col">
                                     <label for="periodo" >
