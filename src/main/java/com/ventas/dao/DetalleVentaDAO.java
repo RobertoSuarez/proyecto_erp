@@ -45,7 +45,7 @@ public class DetalleVentaDAO {
             this.con.consultar(query);
 
             int cantidadActual = 0;
-            query = "select cantidad from public.productos where codprincipal = " + idVenta + ";";
+            query = "select cantidad from public.productos where codprincipal = " + idProducto + ";";
             rs = this.con.consultar(query);
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);

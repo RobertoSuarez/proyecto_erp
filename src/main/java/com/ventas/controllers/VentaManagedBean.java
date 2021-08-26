@@ -297,12 +297,6 @@ public class VentaManagedBean implements Serializable {
         }
     }
 
-    @Asynchronous
-    public void ActualizarCambio() {
-        if (this.total > 0) {
-            this.cambio = this.total - this.efectivo;
-        }
-    }
 
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
