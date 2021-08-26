@@ -7,6 +7,7 @@ package com.ventas.models;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 
@@ -17,12 +18,12 @@ public class Venta {
     private int idFormaPago;
     private int idDocumento;
     private int sucursal;
-    private Timestamp fechaVenta;
+    private String fechaVenta;
     private int puntoEmision;
     private int secuencia;
     private String autorizacion;
-    private Timestamp fechaEmision;
-    private Timestamp fechaAutorizacion;
+    private String fechaEmision;
+    private String fechaAutorizacion;
     private double base12;
     private double base0;
     private double ice;
@@ -37,7 +38,7 @@ public class Venta {
         
     }
 
-    public Venta(int idVenta, int idCliente, int idEmpleado, int idFormaPago, int idDocumento, int sucursal, Timestamp fechaVenta, int puntoEmision, int secuencia, String autorizacion, Timestamp fechaEmision, Timestamp fechaAutorizacion, double base12, double base0, double iva, double ice, double totalFactura, ClienteVenta cliente, List<DetalleVenta> productos) {
+    public Venta(int idVenta, int idCliente, int idEmpleado, int idFormaPago, int idDocumento, int sucursal, String fechaVenta, int puntoEmision, int secuencia, String autorizacion, String fechaEmision, String fechaAutorizacion, double base12, double base0, double iva, double ice, double totalFactura, ClienteVenta cliente, List<DetalleVenta> productos) {
         this.idVenta = idVenta;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
@@ -107,11 +108,11 @@ public class Venta {
         this.sucursal = sucursal;
     }
 
-    public Timestamp getFechaVenta() {
+    public String getFechaVenta() {
         return fechaVenta;
     }
 
-    public void setFechaVenta(Timestamp fechaVenta) {
+    public void setFechaVenta(String fechaVenta) {
         this.fechaVenta = fechaVenta;
     }
 
@@ -139,19 +140,19 @@ public class Venta {
         this.autorizacion = autorizacion;
     }
 
-    public Timestamp getFechaEmision() {
+    public String getFechaEmision() {
         return fechaEmision;
     }
 
-    public void setFechaEmision(Timestamp fechaEmision) {
+    public void setFechaEmision(String fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
 
-    public Timestamp getFechaAutorizacion() {
+    public String getFechaAutorizacion() {
         return fechaAutorizacion;
     }
 
-    public void setFechaAutorizacion(Timestamp fechaAutorizacion) {
+    public void setFechaAutorizacion(String fechaAutorizacion) {
         this.fechaAutorizacion = fechaAutorizacion;
     }
 

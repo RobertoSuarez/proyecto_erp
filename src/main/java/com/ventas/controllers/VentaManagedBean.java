@@ -20,9 +20,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import javax.annotation.ManagedBean;
@@ -69,7 +72,7 @@ public class VentaManagedBean implements Serializable {
 
     private Venta venta;
     private VentaDAO ventaDao;
-    
+
     private double efectivo;
     private double cambio;
 
@@ -96,10 +99,10 @@ public class VentaManagedBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
-        
+
         this.venta = new Venta();
         this.ventaDao = new VentaDAO();
-        
+
         this.efectivo = 0;
         this.cambio = 0;
     }
@@ -228,27 +231,29 @@ public class VentaManagedBean implements Serializable {
             if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una venta nula", "Message Content");
             } else {
-                System.out.println("Registrando venta . . .");
 
                 while (listSize < this.listaDetalle.size()) {
                     System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
                     listSize += 1;
                 }
-                
+
+                DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                String currentDate = df.format(new Date());
+
                 Venta ventaActual = new Venta();
-                
+
                 ventaActual.setCliente(this.cliente);
                 ventaActual.setIdCliente(this.cliente.getIdCliente());
                 ventaActual.setIdEmpleado(1);
                 ventaActual.setIdFormaPago(1);
                 ventaActual.setIdDocumento(0);
                 ventaActual.setSucursal(1);
-                ventaActual.setFechaVenta(new Timestamp(System.currentTimeMillis()));
+                ventaActual.setFechaVenta(currentDate);
                 ventaActual.setPuntoEmision(1);
                 ventaActual.setSecuencia(0);
                 ventaActual.setAutorizacion("849730964");
-                ventaActual.setFechaEmision(new Timestamp(System.currentTimeMillis()));
-                ventaActual.setFechaAutorizacion(new Timestamp(System.currentTimeMillis()));
+                ventaActual.setFechaEmision(currentDate);
+                ventaActual.setFechaAutorizacion(currentDate);
                 ventaActual.setBase12(this.subtotal12);
                 ventaActual.setBase0(this.subtotal0);
                 ventaActual.setIva(this.iva);
@@ -257,17 +262,17 @@ public class VentaManagedBean implements Serializable {
 
                 System.out.println(ventaActual.getCliente().getNombre());
                 System.out.println(ventaActual.getTotalFactura());
-                
+
                 this.ventaDao.GuardarVenta(ventaActual);
             }
         } catch (Exception e) {
-            
+
         }
     }
-    
+
     @Asynchronous
-    public void ActualizarCambio(){
-        if(this.total > 0){
+    public void ActualizarCambio() {
+        if (this.total > 0) {
             this.cambio = this.total - this.efectivo;
         }
     }
@@ -468,7 +473,5 @@ public class VentaManagedBean implements Serializable {
     public void setCambio(double cambio) {
         this.cambio = cambio;
     }
-    
-    
 
 }
