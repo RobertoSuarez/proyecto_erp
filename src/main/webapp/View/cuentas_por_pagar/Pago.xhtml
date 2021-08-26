@@ -236,7 +236,7 @@
                         </p:outputPanel>
                         <div class="row justify-content-end">
                             <div class="col-md-2">
-                                <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.enviar()}" 
+                                <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.enviar(1)}" 
                                                  icon="pi pi-check" update=":form:proveedortabla, msgs"
                                                  process="pago-content @this" styleClass="ui-button-success"/>
                             </div>
@@ -286,7 +286,7 @@
                                 <div class="p-field p-col">
                                     <p:outputLabel value="Referencia" />
                                     <p:inputText id="Referencia-edit" type="text" 
-                                                 value="#{abonoProveedorMB.abonoproveedor.referencia}" disabled="true"/>
+                                                 value="#{abonoProveedorMB.abonoproveedor.referencia}R" disabled="true"/>
                                 </div>
                                 <div class="p-field p-col">
                                     Datos del Banco 
@@ -353,19 +353,20 @@
                             </div>
 
                         </p:outputPanel>
-
-                        <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{abonoProveedorMB.deshabilitar(detalleFactura)}"
-                                             update=":form:proveedortabla,:form:pago-content-edit" process="@this"
-                                             onclick="PF('managePagoDialog-edit').hide()"
-                                             styleClass="ui-button-success" />
-
-                            <p:commandButton value="Cancelar" onclick="PF('managePagoDialog-edit').hide()"
-                                             actionListener="#{abonoProveedorMB.reset}"
-                                             icon="pi pi-times"
-                                             styleClass="ui-button-danger" process="@this"/>
-                        </f:facet>
-
+                        <div class="row justify-content-end">
+                            <div class="col-md-2">
+                                <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.enviar(0)}" 
+                                                 onclick="PF('managePagoDialog-edit').hide()"
+                                                 icon="pi pi-check" update=":form:proveedortabla,:form:pago-content-edit"
+                                                 process="@this" styleClass="ui-button-success"/>
+                            </div>
+                            <div class="col-md-2">
+                                <p:commandButton value="Cancelar" onclick="PF('managePagoDialog-edit').hide()"
+                                                 actionListener="#{abonoProveedorMB.reset}"
+                                                 icon="pi pi-times"
+                                                 styleClass="ui-button-danger" process="@this"/>
+                            </div>
+                        </div>
                     </p:dialog>
 
                     <p:confirmDialog widgetVar="deleteFactura" showEffect="fade" width="300"

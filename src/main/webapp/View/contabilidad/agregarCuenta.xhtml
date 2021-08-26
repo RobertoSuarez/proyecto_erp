@@ -127,13 +127,6 @@
                                              detail="Una vez registrada una subcuenta solo se puede modificar el nombre" 
                                              style="width: 100%; margin-bottom: 3%;"/>
                             <div class="p-field p-md-4 p-col-12">
-                                <p:outputLabel for="@next" value="Código:"/>
-                                <p:inputText id="codigo" 
-                                             value="#{planCuentas.codigo}" 
-                                             readonly="true" />
-                            </div>
-
-                            <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Grupo: *"/>
                                 <div class="ui-inputgroup">
                                     <p:inputText rendered="#{planCuentas.action eq 'update'}" value="#{planCuentas.onSeletedGrupo}"
@@ -191,7 +184,7 @@
                             </div>
 
                             <div class="p-field p-md-4 p-col-12">
-                                <p:outputLabel for="@next" value="Cuentas: *"/>
+                                <p:outputLabel for="@next" value="Cuenta: *"/>
                                 <div class="ui-inputgroup">
                                     <p:inputText rendered="#{planCuentas.action eq 'update'}" value="#{planCuentas.onSeletedCuenta}"
                                                  disabled="true" />
@@ -216,6 +209,13 @@
                                                      rendered="#{planCuentas.action eq 'create'}">
                                     </p:commandButton>
                                 </div>
+                            </div>
+                            
+                            <div class="p-field p-md-4 p-col-12">
+                                <p:outputLabel for="@next" value="Código:"/>
+                                <p:inputText id="codigo" 
+                                             value="#{planCuentas.codigo}" 
+                                             readonly="true" />
                             </div>
 
                             <div class="p-field p-md-4 p-col-12">

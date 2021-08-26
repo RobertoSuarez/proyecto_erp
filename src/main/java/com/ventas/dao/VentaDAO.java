@@ -53,7 +53,7 @@ public class VentaDAO {
             this.con.consultar(query);
             
             this.con.cerrarConexion();
-
+            
             System.out.println("Venta Guardada exitosamente");
 
             return ventaActual.getIdVenta();

@@ -48,8 +48,8 @@
                             </p:column>
 
                             <p:column exportable="false" width="10%">
-                                <p:commandButton icon="pi pi-pencil" update=":cuenta-form:manage-cuenta-form"
-                                                 oncomplete="PF('cuentaFormDialog').show()"
+                                <p:commandButton icon="pi pi-pencil" update=":cuenta-form:manage-cuenta-form, :cuenta-form:growl"
+                                                 action="#{cuentaMB.form()}"
                                                  styleClass="edit-button rounded-button ui-button-info" process="@this">
                                     <f:setPropertyActionListener value="#{cuenta}" target="#{cuentaMB.onselectedCuenta}"/>
                                     <p:resetInput target=":cuenta-form:manage-cuenta-form"/>

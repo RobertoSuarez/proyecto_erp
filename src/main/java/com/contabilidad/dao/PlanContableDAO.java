@@ -217,4 +217,18 @@ public class PlanContableDAO {
         }
         return false;
     }
+    
+    public boolean isReferenceSubCuenta(int id) {
+        result = conexion.consultar("select is_reference_subcuenta('"+id+"')");
+        try {
+            if (result.next()) {
+                return result.getBoolean("is_reference_subcuenta");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error is_reference_subcuenta: " + ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return false;
+    }
 }
