@@ -86,6 +86,7 @@ public class VentaDAO {
         Venta venta = new Venta();
 
         while (rs.next()) {
+            venta = new Venta();
             venta.setIdVenta(rs.getInt(1));
             venta.setIdCliente(rs.getInt(2));
             venta.setIdEmpleado(rs.getInt(3));
@@ -103,11 +104,30 @@ public class VentaDAO {
             venta.setIva(rs.getDouble(16));
             venta.setIce(rs.getDouble(17));
             venta.setTotalFactura(rs.getFloat(18));
-            
-            String fact;
-            //if(venta.getSucursal().)
-            
+
+            String fact = "";
+            int lon = String.valueOf(venta.getSucursal()).length();
+            while (lon < 3) {
+                fact += "0";
+                lon += 1;
+            }
+            fact += String.valueOf(venta.getSucursal()) + "-";
+            lon = String.valueOf(venta.getPuntoEmision()).length();
+            while (lon < 3) {
+                fact += "0";
+                lon += 1;
+            }
+            fact += String.valueOf(venta.getPuntoEmision()) + "-";
+            lon = String.valueOf(venta.getSecuencia()).length();
+            while (lon < 10) {
+                fact += "0";
+                lon += 1;
+            }
+            fact += String.valueOf(venta.getSecuencia());
+            venta.setFactura(fact);
+
             ventas.add(venta);
+            
         }
 
         this.con.cerrarConexion();
