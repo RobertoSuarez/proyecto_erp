@@ -3,27 +3,28 @@ package com.contabilidad.controllers;
 
 import com.contabilidad.dao.BalanceGeneralDAO;
 import com.contabilidad.models.BalanceGeneral;
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import org.primefaces.component.export.PDFOptions;
-import org.primefaces.component.export.PDFOrientationType;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Named(value = "balanceGeneralMB")
 @ViewScoped
@@ -33,10 +34,7 @@ public class BalanceGeneralManagedBean implements Serializable {
     private SimpleDateFormat dateFormat;
     private Date fecha;
     private double pasivoPatrimonio;
-    
-    private PDFOptions pdfOpt;
-    
-    
+  
     public BalanceGeneralManagedBean() {
         balanceGeneral = new ArrayList<>();
         balanceGeneralDAO = new BalanceGeneralDAO();
@@ -55,39 +53,56 @@ public class BalanceGeneralManagedBean implements Serializable {
         pasivoPatrimonio = balanceGeneralDAO.sumaPasivoPatrimonio(dateFormat.format(fecha));
     }
     
-    public void customizeLibroMayor() {
-        pdfOpt = new PDFOptions();
-        pdfOpt.setFacetBgColor("#CFFFFF");
-        pdfOpt.setFacetFontStyle("BOLD");
-        pdfOpt.setCellFontSize("12");
-        pdfOpt.setOrientation(PDFOrientationType.PORTRAIT);
-    }
-
-    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-        Document pdf = (Document) document;
-        pdf.open();
-
-        pdf.addTitle("Informe Balance General: ");
-        pdf.setPageSize(PageSize.A4);
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "headerbalance.png";
-
-        Image img = Image.getInstance(logo);
-        img.scalePercent(30);
+    public void exportpdf() throws IOException, JRException {
+        System.out.println("metodo Export");
+                
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
         
-        pdf.add(img);
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; "
+                + "filename=balance-general-" + LocalDateTime.now().toString() + ".pdf");
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+            
+            // Parametros para el reporte.
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy", new Locale("es_ES"));
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("titulo", "Reporte desde java");
+            parametros.put("fecha", dateFormat.format(fecha));
+            parametros.put("sumPasivoPatrimonio", pasivoPatrimonio+"");
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/BalanceGeneral.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.balanceGeneral)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+            System.out.println("fin proccess");
+        }
     }
 
-    public PDFOptions getPdfOpt() {
-        return pdfOpt;
-    }
-
-    public void setPdfOpt(PDFOptions pdfOpt) {
-        this.pdfOpt = pdfOpt;
-    }
-    
-    
     public boolean getBold(String cuenta) {
         return cuenta.split(" ")[0].length() <= 5;
     }

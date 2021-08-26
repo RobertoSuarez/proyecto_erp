@@ -34,6 +34,8 @@ public class CondicionesManageBean implements Serializable {
      String msj;
      private boolean check;
      private String value;
+     private String cl;
+     private String ic;
 
      public CondicionesManageBean() {
           value = "HABILITAR";
@@ -42,6 +44,12 @@ public class CondicionesManageBean implements Serializable {
           setIc("pi pi-trash");
           listaCondiciones = new ArrayList<>();
           proveedor = new Proveedor();
+     }
+
+     @PostConstruct
+     public void init() {
+          this.condiciones = new Condiciones();
+          this.proveedor = new Proveedor();
      }
 
      public boolean isCheck() {
@@ -58,13 +66,6 @@ public class CondicionesManageBean implements Serializable {
 
      public void setValue(String value) {
           this.value = value;
-     }
-
-     @PostConstruct
-     public void init() {
-          this.condiciones = new Condiciones();
-          this.proveedor = new Proveedor();
-
      }
 
      public void setListaCondiciones(List<Condiciones> listaCondiciones) {
@@ -95,82 +96,6 @@ public class CondicionesManageBean implements Serializable {
           this.proveedor = proveedor;
      }
 
-     public void editaCondiciones() {
-          try {
-               this.condiciones.setProveedor(proveedor);
-               this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
-          } catch (SQLException e) {
-
-          }
-     }
-
-     public void dhProveedor() throws SQLException {
-
-          if (check) {
-               this.condicionesDAO.deshabilitar(proveedor.getNombre(), false);
-               FacesContext.getCurrentInstance().addMessage(null, 
-                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
-               listaCondiciones.clear();
-               listaCondiciones = condicionesDAO.llenarP(true);
-          } else {
-               this.condicionesDAO.deshabilitar(proveedor.getNombre(), true);
-               FacesContext.getCurrentInstance().addMessage(null, 
-                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
-               listaCondiciones.clear();
-               listaCondiciones = condicionesDAO.llenarP(false);
-
-          }
-          PrimeFaces.current().ajax().update("form:manageProductDialog", "form:messages");
-     }
-
-     public List<Condiciones> getListaCondiciones() throws Exception {
-          try {
-               this.condicionesDAO = new CondicionesDAO();
-               habTabla();              
-          } catch (Exception e) {
-             throw e;
-          }
-          return listaCondiciones;
-     }
-
-     public static void removeSessionScopedBean(String beanName) {
-          FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
-     }
-
-     public void habTabla() throws SQLException {
-          
-          this.listaCondiciones.clear();
-
-          if (check) {
-               System.out.println(check);
-               this.condicionesDAO = new CondicionesDAO();
-               this.listaCondiciones = this.condicionesDAO.llenarP(true);
-               setValue("Deshabilitar");
-               setCl("ui-button-danger rounded-button");
-               setIc("pi pi-trash");
-
-          } else {
-               this.listaCondiciones = condicionesDAO.llenarP(false);
-               setValue("Habilitar");
-               setCl("ui-button-primary rounded-button");
-               setIc("pi pi-check");
-          }
-          PrimeFaces.current().ajax().update("form:dt-products");
-     }
-
-     public void cargarDhab(Proveedor p) {
-          
-          this.proveedor.setNombre(p.getNombre());
-         
-          PrimeFaces.current().ajax().update(":form:confirmDHab");
-          //   System.out.println("com.cuentasporpagar.controllers.CondicionesManageBean.cargarDhab()" + p.getNombre());
-          //  this.proveedor.setIdProveedor(condiciones.getProveedor().getIdProveedor());
-          //this.proveedor.setNombre(condiciones.getProveedor().getNombre());
-
-     }
-     private String cl;
-     private String ic;
-
      public String getCl() {
           return cl;
      }
@@ -187,10 +112,101 @@ public class CondicionesManageBean implements Serializable {
           this.ic = ic;
      }
 
+     public void editaCondiciones() {
+          try {
+               this.condiciones.setProveedor(proveedor);
+               this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
+          } catch (SQLException e) {
+
+          }
+     }
+
+     //los proveedores en la tabla se : deshabilitados o habilitados
+     public void dhProveedor() throws SQLException {
+
+          if (check) {
+               //si nuestro check es vrd, entonces mandamos los parametros
+               //nombre del proveedor junto con un parametro false, 
+               //dichos parámetros son necesarios para la connsulta sql
+               this.condicionesDAO.deshabilitar(proveedor.getNombre(), false);
+               //Se manda un msj 
+               FacesContext.getCurrentInstance().addMessage(null,
+                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
+               //limpiamos la lista
+               listaCondiciones.clear();
+               //llenamos la lista con los provedeores habilitados
+               listaCondiciones = condicionesDAO.llenarP(true);
+          } else {
+               //si nuestro check es falso, entonces mandamos los parametros
+               //nombre del proveedor junto con un parametro false, 
+               //dichos parámetros son necesarios para la connsulta sql
+               this.condicionesDAO.deshabilitar(proveedor.getNombre(), true);
+               //Se manda un msj 
+               FacesContext.getCurrentInstance().addMessage(null,
+                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
+               //se limpia  la lista
+               listaCondiciones.clear();
+               //se llena la lista con los provedeores deshabilitados
+               listaCondiciones = condicionesDAO.llenarP(false);
+
+          }
+          //actualizamos el dialog y enviamos un msj
+          PrimeFaces.current().ajax().update(":form:manageProductDialog", ":form:messages");
+     }
+
+     //listamos a los proveedores
+     public List<Condiciones> getListaCondiciones() throws Exception {
+          try {
+               habTabla();
+          } catch (SQLException e) {
+               throw e;
+          }
+          return listaCondiciones;
+     }
+
+     public static void removeSessionScopedBean(String beanName) {
+          FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
+     }
+
+     //Listamos segun sean habilitados o deshabilitados
+     public void habTabla() throws SQLException {
+
+          this.listaCondiciones.clear();
+          if (check) {
+               //si el check es verdadero...
+               this.condicionesDAO = new CondicionesDAO();
+               //llenamos la tabla segun nuestra consulta en este caso los habilitados
+               this.listaCondiciones = this.condicionesDAO.llenarP(true);
+               //asignamos el nombre al btn
+               setValue("Deshabilitar");
+               //asignamos el color al btn
+               setCl("ui-button-danger rounded-button");
+               //asignamos el icono al btn
+               setIc("pi pi-trash");
+
+          } else {
+               //si el check es falso...
+               //llenamos la tabla segun nuestra consulta en este caso los deshabilitados
+               this.listaCondiciones = condicionesDAO.llenarP(false);
+               //asignamos el nombre al btn
+               setValue("Habilitar");
+               //asignamos el color al btn
+               setCl("ui-button-primary rounded-button");
+               //asignamos el icono al btn
+               setIc("pi pi-check");
+          }
+          PrimeFaces.current().ajax().update("form:dt-products");
+     }
+
+     public void cargarDhab(Proveedor p) {
+          //obtengo el nombre del proveedor para cargarlo en la ventana
+          this.proveedor.setNombre(p.getNombre());
+          PrimeFaces.current().ajax().update(":form:confirmDHab");
+     }
+
      public void resetE() {
           System.out.println("Entrandoa rest");
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelado"));
           PrimeFaces.current().resetInputs("form:manage-product-content", "form:dt-products");
-
      }
 }

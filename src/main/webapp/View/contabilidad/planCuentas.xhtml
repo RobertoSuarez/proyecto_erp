@@ -61,6 +61,7 @@
                                 <p:commandButton icon="pi pi-pencil"
                                                  styleClass="edit-button rounded-button ui-button-primary"
                                                  action="#{planCuentas.editarCuentaContable(pc)}"
+                                                 update=":form:messages"
                                                  >
                                     <f:setPropertyActionListener value="update" target="#{planCuentas.action}" />
                                 </p:commandButton>

@@ -122,7 +122,7 @@
                                 <p:commandButton icon="pi pi-pencil"
                                                  styleClass="edit-button rounded-button ui-button-primary" 
                                                  action="#{subGrupoMB.form(true)}"
-                                                 update=":form-subgrupos:dialog-form-subgrupo"
+                                                 update=":form-subgrupos:dialog-form-subgrupo, :form-subgrupos:messages"
                                                  process="@this">
                                     <f:setPropertyActionListener value="#{subgrupo}" target="#{subGrupoMB.subGrupo}" />
                                     <f:setPropertyActionListener value="update" target="#{subGrupoMB.action}" />

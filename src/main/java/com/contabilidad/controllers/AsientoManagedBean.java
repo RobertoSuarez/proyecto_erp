@@ -131,8 +131,14 @@ public class AsientoManagedBean implements Serializable {
 
     public String nombreCuenta(Movimiento movimiento) {
         SubCuenta cuenta = asientoDAO.getCuentaByID(movimiento.getIdSubcuenta());
+
         String codigo = cuenta.getCodigo();
         String nombre = cuenta.getNombre();
+
+        if (cuenta.getCodigo() == null) {
+            codigo = "Seleccione";
+            nombre = "una Subcuenta";
+        }
         return codigo + " " + nombre;
     }
 

@@ -12,9 +12,8 @@
                 <h:form>
                     <p:toolbar>
                         <p:toolbarGroup>
-                            <p:commandButton value="Guardar" icon="pi pi-download" ajax="true" styleClass="ui-button-primary p-mr-2">
-                                <p:dataExporter preProcessor="#{balanceGeneralMB.preProcessPDF}" options="#{balanceGeneralMB.pdfOpt}" type="pdf" target="dt-libros" fileName="Balance General"/>
-                            </p:commandButton>
+                            <p:commandButton actionListener="#{balanceGeneralMB.exportpdf}" ajax="false"
+                                             value="Guardar PDF" icon="pi pi-download" styleClass="ui-button-primary p-mr-2" />
                         </p:toolbarGroup>
                         <p:toolbarGroup>
                             <h5 class="mr-2">Fecha Al:</h5>
