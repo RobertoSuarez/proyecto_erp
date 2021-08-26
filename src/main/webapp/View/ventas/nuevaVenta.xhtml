@@ -26,7 +26,7 @@
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
                                 <p:outputLabel value="Nombre: "/>
                                 <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
-                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm growl growl-sticky" />
+                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm growl growl-sticky Pagos" />
                             </h:panelGrid>
                         </p:panel>
 
@@ -151,9 +151,7 @@
                             <p:tab title="Efectivo">
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Efectivo: "/>
-                                    <p:inputText value="00.00"/>                                    
-                                    <p:outputLabel value="Cambio: "/>
-                                    <p:inputText value="00.00"/>
+                                    <p:inputText value="#{VentaMB.total}" disabled="true" /> 
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Tarjeta">
@@ -161,12 +159,8 @@
                                     <p:outputLabel value="Banco: "/>
                                     <p:inputText value="XXXXXXXXXXXXXXXX"/>
                                     <p:outputLabel value="Propietario: "/>
-                                    <p:inputText value="Juan Luis Quesada Luna"/>
+                                    <p:inputText value="#{VentaMB.cliente.nombre}"/>
                                     <p:outputLabel value="Tipo de pago: "/>
-                                    <p:selectOneRadio id="console" unselectable="true">
-                                        <f:selectItem itemLabel="Corrriente" itemValue="Corriente"/>
-                                        <f:selectItem itemLabel="Diferido" itemValue="Corriente"/>
-                                    </p:selectOneRadio>
                                 </h:panelGrid>
                             </p:tab>
                         </p:accordionPanel>

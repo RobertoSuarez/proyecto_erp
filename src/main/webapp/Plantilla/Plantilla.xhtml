@@ -21,18 +21,30 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
     </h:head>
     <h:body>
-        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
-        <p:dialog width="0%" widgetVar="statusDialog" modal="true" 
-                  draggable="false" closable="false" resizable="false" showHeader="false">
-            <div class="spinner"></div>
-        </p:dialog>
+
+
+
+
+
         <div>
             <ui:insert name="top">
-                <div class="navbar-principal p-d-flex p-ai-center" >
-                    <a href="/proyecto_erp">
-                        <h:graphicImage name="images/erpLogo.png"  height="60px" class="p-mr-3"/>
-                    </a>
-                    <h2>ERP CONTABLE</h2> 
+                <div class="navbar-principal p-d-flex p-ai-center p-jc-between" >
+                    <div class="p-d-flex p-ai-center p-jc-start">
+                        <a href="/proyecto_erp">
+                            <h:graphicImage name="images/erpLogo.png"  height="60px" class="p-mr-1"/>
+                        </a>
+                        <h2>ERP CONTABLE</h2> 
+                    </div>
+                    
+                    
+                    <div>
+                        <p:ajaxStatus style="position: relative;">
+                            <f:facet name="start">
+                                <div class="spinner p-mr-3" style="position: relative;"></div>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </div>
+                    
                 </div>
             </ui:insert>
 
@@ -41,7 +53,7 @@
                     <ui:insert name="left"> 
                         <h:form>
                             <p:panelMenu stateful="true">
-                                <p:submenu label="Contabilidad">
+                                <p:submenu label="Contabilidad" expanded="false">
                                     <p:menuitem value="Inicio" action="/View/contabilidad/home"/>
                                     <p:menuitem value="Asientos" action="/View/contabilidad/asientos"/>
                                     <p:menuitem value="Diarios" action="/View/contabilidad/diarios"></p:menuitem>
@@ -56,7 +68,7 @@
                                         <p:menuitem value="Libro Mayor" action="/View/contabilidad/libroMayor"></p:menuitem>
                                     </p:submenu>
                                 </p:submenu>
-                                <p:submenu label ="Cuentas por pagar" expanded="true">
+                                <p:submenu label ="Cuentas por pagar" expanded="false">
                                     <p:menuitem value="Proveedores"
                                                 icon="pi pi-refresh"
                                                 outcome="/View/cuentas_por_pagar/Proveedor"/>
@@ -85,7 +97,7 @@
                                                 outcome="/View/cuentas_por_pagar/Anticipo"/>
 
                                 </p:submenu> 
-                                <p:submenu label ="Activos Fijos" expanded="true">
+                                <p:submenu label ="Activos Fijos" expanded="false">
                                     <p:menuitem value="Tangibles"
                                                 icon="pi pi-file-o"
                                                 outcome="/View/activos_fijos/ActivosTangibles"/>
@@ -97,7 +109,7 @@
                                                 outcome="/View/activos_fijos/Periodos"/>
 
                                 </p:submenu>    
-                                <p:submenu label ="Cuentas por cobrar" expanded="true">
+                                <p:submenu label ="Cuentas por cobrar" expanded="false">
                                     <p:menuitem value="Mantenimiento de Clientes"
                                                 icon="pi pi-briefcase"
                                                 outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
@@ -124,7 +136,7 @@
                                                     outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
                                     </p:submenu>
                                 </p:submenu>
-                                <p:submenu label="Ventas" >
+                                <p:submenu label="Ventas" expanded="false" >
                                     <p:menuitem value="Nueva venta" outcome="/View/ventas/nuevaVenta.xhtml" icon="pi pi-shopping-cart" />
                                     <p:menuitem value="Nueva proforma" outcome="/View/ventas/nuevaProforma.xhtml" icon="pi pi-file-o" />
                                 </p:submenu>

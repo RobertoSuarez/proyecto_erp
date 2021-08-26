@@ -3,6 +3,7 @@ package com.cuentasporpagar.daos;
 import com.global.config.Conexion;
 import com.cuentasporpagar.models.Anticipo;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
@@ -11,6 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,11 +44,16 @@ public class AnticipoDAO {
 
                 anticipos.add(anticipo);
             }
-            conn.conex.close();
+            
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            return null;
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AnticipoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return anticipos;
@@ -80,7 +88,7 @@ public class AnticipoDAO {
 
             
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
             conn.conex.close();
@@ -99,7 +107,7 @@ public class AnticipoDAO {
             System.out.println("Llegaron los datos correctamente.");
             System.out.println(datos);
 
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException ex) {
             System.out.println("Error gson: " + ex.getMessage());
         }
 

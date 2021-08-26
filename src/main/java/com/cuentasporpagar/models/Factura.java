@@ -106,8 +106,9 @@ public class Factura{
     }
 
     //detalle factura
-    public Factura(float importeD, String detalle, String id_detalle) {
+    public Factura(float importeD, String detalle, String cuenta, String id_detalle) {
         this.id_detalle = id_detalle;
+        this.cuenta = cuenta;
         this.importeD = importeD;
         this.detalle = detalle;
     }
@@ -298,6 +299,5 @@ public class Factura{
         this.setProveedor(Proveedor.getOneProveedor(this.idproveedor));
         return this;
     }
-    
-    
+
 }

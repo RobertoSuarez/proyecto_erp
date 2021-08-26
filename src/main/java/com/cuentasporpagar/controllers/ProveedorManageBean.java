@@ -35,11 +35,10 @@ public class ProveedorManageBean implements Serializable {
      private List<Proveedor> listaProveedor;
      private List<Proveedor> Proveedores;
      private Proveedor selectedProveedor;
-   
+
      private String msj;
      private String nom;
      private String cod;
-     
 
      public ProveedorManageBean() {
           condiciones = new Condiciones();
@@ -47,11 +46,9 @@ public class ProveedorManageBean implements Serializable {
           listaProveedor = new ArrayList<>();
           proveedorDAO = new ProveedorDAO();
           proveedor = new Proveedor();
-         
+
      }
 
-    
-   
      public Condiciones getCondiciones() {
           return condiciones;
      }
@@ -79,7 +76,8 @@ public class ProveedorManageBean implements Serializable {
      public Proveedor getSelectedProveedor() {
           return selectedProveedor;
      }
-     public void cargarProveedor( Condiciones condiciones ){
+
+     public void cargarProveedor(Condiciones condiciones) {
           this.proveedor.setIdProveedor(condiciones.getProveedor().getIdProveedor());
      }
 
@@ -113,10 +111,8 @@ public class ProveedorManageBean implements Serializable {
      public void editar() {
           try {
 
-               System.out.print(this.proveedor.getIdProveedor() + "---BEIVCO");
-               System.out.println("ENTRANDO A  EDITAR PROVEEDOR: ");
                this.proveedorDAO.update(proveedor, proveedor.getIdProveedor());
-               System.out.println("SALIENDO PROVEEDOR: ");
+
                this.condiciones.setProveedor(this.proveedor);
                this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
                FacesContext.getCurrentInstance().
@@ -136,18 +132,20 @@ public class ProveedorManageBean implements Serializable {
           try {
                this.proveedorDAO.insertarp(proveedor);
                condicionesDAO.insertarCondiciones(condiciones);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Proveedor agg"));
+               FacesContext.getCurrentInstance().
+                       addMessage(null,
+                               new FacesMessage("Proveedor Agregado"));
 
           } catch (Exception e) {
                FacesContext.getCurrentInstance().
-                       addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al guardar"));
+                       addMessage(null,
+                               new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al guardar"));
 
           }
           PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
           PrimeFaces.current().executeScript("location.reload()");
 
      }
-    
 
      public Proveedor getProveedor() {
           return proveedor;

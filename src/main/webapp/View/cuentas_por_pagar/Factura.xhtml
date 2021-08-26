@@ -181,11 +181,19 @@
                                     <p:ajax event="rowEdit" listener="#{facturaMB.onRowEdit}" update=":form:messages"/>
                                     <p:ajax event="rowEditCancel" listener="#{facturaMB.onRowCancel}" update=":form:messages"/>
 
-                                    <p:column headerText="Cuenta contable">
+                                    <p:column headerText="Detalle">
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{detalle.detalle}"/></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{facturaMB.datoDetalle}" style="width:100%"
+                                                                               label="Importe"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column headerText="Cuenta contable">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{detalle.cuenta}"/></f:facet>
                                             <f:facet name="input">
-                                                <p:selectOneMenu id="group" value="#{facturaMB.datoDetalle}">
+                                                <p:selectOneMenu id="group" value="#{facturaMB.datoCuenta}">
                                                     <f:selectItem itemLabel="Seleccionar" itemValue=""/>
                                                     <f:selectItems value="#{facturaMB.listaCuentas}"/>
                                                 </p:selectOneMenu>
@@ -327,12 +335,20 @@
                                             <p:ajax event="rowEdit" listener="#{facturaMB.onRowEdit}" update=":form:messages"/>
                                             <p:ajax event="rowEditCancel" listener="#{facturaMB.onRowCancel}" update=":form:messages"/>
 
-                                            <p:column headerText="Cuenta contable">
+                                            <p:column headerText="Detalle">
                                                 <p:cellEditor>
                                                     <f:facet name="output"><h:outputText value="#{detalle.detalle}"/></f:facet>
+                                                    <f:facet name="input"><p:inputText value="#{facturaMB.datoDetalle}" style="width:100%"
+                                                                                       label="Importe"/></f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+
+                                            <p:column headerText="Cuenta contable">
+                                                <p:cellEditor>
+                                                    <f:facet name="output"><h:outputText value="#{detalle.cuenta}"/></f:facet>
                                                     <f:facet name="input">
-                                                        <p:selectOneMenu id="group" value="#{facturaMB.datoDetalle}">
-                                                            <f:selectItem itemLabel="Select One" itemValue=""/>
+                                                        <p:selectOneMenu id="group" value="#{facturaMB.datoCuenta}">
+                                                            <f:selectItem itemLabel="Seleccionar" itemValue=""/>
                                                             <f:selectItems value="#{facturaMB.listaCuentas}"/>
                                                         </p:selectOneMenu>
                                                     </f:facet>

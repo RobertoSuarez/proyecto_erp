@@ -1,9 +1,11 @@
-
 package com.cuentasporpagar.models;
 
 import com.global.config.Conexion;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +20,7 @@ public class Anticipo {
     private String descripcion;
     private int id_proveedor;
     private Proveedor proveedor;
+    private boolean habilitado;
 
     public Anticipo() {
         this.id_anticipo = "";
@@ -26,6 +29,7 @@ public class Anticipo {
         this.descripcion = "";
         this.id_proveedor = 0;
         this.proveedor = new Proveedor();
+        this.habilitado = true;
     }
 
     public String getId_anticipo() {
@@ -35,8 +39,6 @@ public class Anticipo {
     public void setId_anticipo(String id_anticipo) {
         this.id_anticipo = id_anticipo;
     }
-
-    
 
     public Double getImporte() {
         return importe;
@@ -53,9 +55,7 @@ public class Anticipo {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
     
-
     public Proveedor getProveedor() {
         return proveedor;
     }
@@ -63,8 +63,6 @@ public class Anticipo {
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
-
-    
 
     public String getDescripcion() {
         return descripcion;
@@ -82,7 +80,14 @@ public class Anticipo {
         this.id_proveedor = id_proveedor;
     }
 
-  
+    public boolean isHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
     
     // Metodo aux para comunicación con db
     public Anticipo GetDBProveedor() {
@@ -92,10 +97,7 @@ public class Anticipo {
         this.proveedor = Proveedor.getOneProveedor(this.id_proveedor);
         return this;
     }
-    
 
- 
-    
     
     // el metodo InsertDB, inserta el objeto anticipo a la base de datos
     // mediante la funcion en postgres "insert_anticipo()" la cual se le pasa
@@ -108,7 +110,7 @@ public class Anticipo {
         System.out.println(this.id_proveedor);
         
         Conexion conn = new Conexion();
-        String query =  "select insert_anticipo(?, ?, ?, ?);";
+        String query =  "select insert_anticipo(?, ?, ?, ?, ?);";
         try {
             conn.abrirConexion();
             
@@ -117,14 +119,23 @@ public class Anticipo {
             stmt.setDouble(2, this.importe);
             stmt.setObject(3, new java.sql.Date(this.fecha.getTime()));
             stmt.setString(4, this.descripcion);
+            stmt.setBoolean(5, this.habilitado);
             
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);
           
-            conn.conex.close();
+            
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+            
+            
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
     }
     
@@ -157,10 +168,16 @@ public class Anticipo {
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);
           
-            conn.conex.close();
+            
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -181,10 +198,16 @@ public class Anticipo {
             
             stmt.execute();
             
-            conn.conex.close();
+            
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        } finally {
+            try {
+                conn.conex.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

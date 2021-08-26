@@ -41,6 +41,7 @@ public class PersonaController implements Serializable {
 
     //Declaro mi listaCliente que van hacer cargadas en el datatable
     List<Persona> listaCliente;
+    List<Persona> listaClienteInactivos;
 
     int idCliente = 0;
 
@@ -59,15 +60,6 @@ public class PersonaController implements Serializable {
             //@return Retorna una lista, la cual será cargada en la tabla clientes.
             listaCliente = personaDAO.obtenerTodosLosClientes();
 
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
-        }
-
-    }
-
-    public void mostrar() {
-        try {
-            listaCliente = personaDAO.obtenerTodosLosClientes();
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -170,30 +162,38 @@ public class PersonaController implements Serializable {
         try {
             persona_JuridicaDAO = new Persona_JuridicaDAO(persona_Juridica);
 
-            if (validarIdentificacion(persona_Juridica.getIdentificacion(),
-                    personaDAO.obtenerTodosLosClientes())) {
+            //Validando de que la identificacion ingresada corresponda al tipo
+            // de identificacion.
+            if (persona_Juridica.getIdentificacion().length() == 13) {
 
-                if (persona_JuridicaDAO.insertarClienteJuridico() > 0) {
+                //Validando que no exista la identificación ingresada.
+                if (validarIdentificacion(persona_Juridica.getIdentificacion(),
+                        personaDAO.obtenerTodosLosClientes())) {
 
-                    mostrarMensajeInformacion("Se Registró Correctamente");
-                    this.listaCliente = personaDAO.obtenerTodosLosClientes();
+                    if (persona_JuridicaDAO.insertarClienteJuridico() > 0) {
+
+                        mostrarMensajeInformacion("Se Registró Correctamente");
+                        this.listaCliente = personaDAO.obtenerTodosLosClientes();
+                        PrimeFaces.current().executeScript("PF('clienteJuridicoNew').hide()");
+                        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
+                    } else {
+
+                        System.out.println("No se Ingresó el Cliente Juridico.");
+                        mostrarMensajeError("No se Registró Correctamente");
+
+                    }
 
                 } else {
-
-                    System.out.println("No se Ingresó el Cliente Juridico.");
-                    mostrarMensajeError("No se Registró Correctamente");
-
+                    System.out.println("La identificación del cliente ya Existe.!");
+                    mostrarMensajeAdvertencia("La identificación del cliente ya Existe.!");
                 }
-
             } else {
-                System.out.println("La identificación del cliente ya Existe.!");
-                mostrarMensajeError("La identificación del cliente ya Existe.!");
+                mostrarMensajeAdvertencia("Por favor digite un número de"
+                        + " Identificación correspondiente a un RUC.");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-        PrimeFaces.current().executeScript("PF('clienteJuridicoNew').hide()");
-        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     /*
@@ -223,30 +223,58 @@ public class PersonaController implements Serializable {
         try {
             persona_NaturalDAO = new Persona_NaturalDAO(persona_Natural);
 
-            if (validarIdentificacion(persona_Natural.getIdentificacion(),
-                    personaDAO.obtenerTodosLosClientes())) {
+            //Validando que la longitud de la identificacion ingresada sea mayor a
+            //7
+            if (persona_Natural.getIdentificacion().length() > 7) {
 
-                if (persona_NaturalDAO.insertarClienteNatural() > 0) {
-                    
-                    mostrarMensajeInformacion("Se Registró Correctamente");
-                    this.listaCliente = personaDAO.obtenerTodosLosClientes();
-                    
+                //Validando de que la identificacion ingresada corresponda al tipo
+                // de identificacion.
+                if ((persona_Natural.getIdentificacion().length() == 10
+                        && persona_Natural.getIdTipoIdenficacion() == 1)
+                        || (persona_Natural.getIdentificacion().length() == 13
+                        && persona_Natural.getIdTipoIdenficacion() == 2)
+                        || (persona_Natural.getIdentificacion().length() == 13
+                        && persona_Natural.getIdTipoIdenficacion() == 3)) {
+
+                    //Validando que no exista la identificación ingresada.
+                    if (validarIdentificacion(persona_Natural.getIdentificacion(),
+                            personaDAO.obtenerTodosLosClientes())) {
+
+                        if (persona_NaturalDAO.insertarClienteNatural() > 0) {
+
+                            mostrarMensajeInformacion("Se Registró Correctamente");
+                            this.listaCliente = personaDAO.obtenerTodosLosClientes();
+                            PrimeFaces.current().executeScript("PF('clienteNaturalNew').hide()");
+                            PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
+                        } else {
+
+                            System.out.println("No se Ingresó el Cliente Natural.");
+                            mostrarMensajeError("No se Registró Correctamente");
+
+                        }
+                    } else {
+                        System.out.println("La identificación del cliente ya Existe.!");
+                        mostrarMensajeAdvertencia("La identificación del cliente ya Existe.!");
+                    }
                 } else {
-                    
-                    System.out.println("No se Ingresó el Cliente Natural.");
-                    mostrarMensajeError("No se Registró Correctamente");
-                    
+                    mostrarMensajeAdvertencia("Por favor digite un número de"
+                            + " Identificación correspondiente al tipo de "
+                            + "identificacion elegido.");
+                    System.out.println("Por favor digite un número de"
+                            + " Identificación correspondiente al tipo de "
+                            + "identificacion elegido.");
                 }
-            }else {
-                System.out.println("La identificación del cliente ya Existe.!");
-                mostrarMensajeError("La identificación del cliente ya Existe.!");
+
+            } else {
+                mostrarMensajeAdvertencia("Por favor digite un número de"
+                        + " Identificación Correcto.");
+                System.out.println("Por favor digite un número de"
+                        + " Identificación Correcto.");
             }
-            
+
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-        PrimeFaces.current().executeScript("PF('clienteNaturalNew').hide()");
-        PrimeFaces.current().executeScript("location.reload()");
     }
 
     //Actualizar Objeto de Nuevo Cliente Natural
@@ -302,38 +330,73 @@ public class PersonaController implements Serializable {
 
     public void actualizarClienteJuridico() {
         try {
-            if (persona_JuridicaDAO.actualizarClienteJuridico() > 0) {
-                System.out.println("Se Editó Correctamente");
-                mostrarMensajeInformacion("Se Editó Correctamente");
-                listaCliente = personaDAO.obtenerTodosLosClientes();
+            //Validando de que la identificacion ingresada corresponda al tipo
+            // de identificacion.
+            if (persona_Juridica.getIdentificacion().length() == 13) {
+                if (persona_JuridicaDAO.actualizarClienteJuridico() > 0) {
+                    System.out.println("Se Editó Correctamente");
+                    mostrarMensajeInformacion("Se Editó Correctamente");
+                    listaCliente = personaDAO.obtenerTodosLosClientes();
+                } else {
+                    System.out.println("No se Editó");
+                    mostrarMensajeError("No se Editó Correctamente");
+                }
             } else {
-                System.out.println("No se Editó");
-                mostrarMensajeError("No se Editó Correctamente");
+                mostrarMensajeAdvertencia("Por favor digite un número de"
+                        + " Identificación correspondiente a un RUC.");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        PrimeFaces.current().executeScript("PF('ClienteJuridicoEdit').hide()");
+        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     public void actualizarClienteNatural() {
         try {
-            if (persona_NaturalDAO.actualizarClienteNatural() > 0) {
-                System.out.println("Se Editó Correctamente");
-                mostrarMensajeInformacion("Se Editó Correctamente");
-                listaCliente = personaDAO.obtenerTodosLosClientes();
+
+            //Validando de que la identificacion ingresada corresponda al tipo
+            // de identificacion.
+            if ((persona_Natural.getIdentificacion().length() == 10
+                    && persona_Natural.getIdTipoIdenficacion() == 1)
+                    || (persona_Natural.getIdentificacion().length() == 13
+                    && persona_Natural.getIdTipoIdenficacion() == 2)
+                    || (persona_Natural.getIdentificacion().length() == 13
+                    && persona_Natural.getIdTipoIdenficacion() == 2)) {
+
+                if (persona_NaturalDAO.actualizarClienteNatural() > 0) {
+                    System.out.println("Se Editó Correctamente");
+                    mostrarMensajeInformacion("Se Editó Correctamente");
+                    listaCliente = personaDAO.obtenerTodosLosClientes();
+                } else {
+                    System.out.println("No se Editó");
+                    mostrarMensajeError("No se Editó Correctamente");
+                }
             } else {
-                System.out.println("No se Editó");
-                mostrarMensajeError("No se Editó Correctamente");
+                mostrarMensajeAdvertencia("Por favor digite un número de"
+                        + " Identificación correspondiente al tipo de "
+                        + "identificacion elegido.");
+                System.out.println("Por favor digite un número de"
+                        + " Identificación correspondiente al tipo de "
+                        + "identificacion elegido.");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        PrimeFaces.current().executeScript("PF('ClienteNaturalEdit').hide()");
+        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     //Metodos para mostrar mensajes de Información y Error
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Exito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void mostrarMensajeAdvertencia(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Error", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

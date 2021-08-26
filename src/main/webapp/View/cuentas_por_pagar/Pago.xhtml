@@ -163,8 +163,12 @@
                                                  resizableColumns="true">
 
                                         <!--Nos ayuda en poder ingresar dato en Pago-->
-                                        <p:ajax event="rowEdit" listener="#{abonoProveedorMB.onRowEdit}" update=":form:table-factura,:form:msgs"/>
-                                        <p:ajax event="rowEditCancel" listener="#{abonoProveedorMB.onRowCancel}" update=":form:table-factura,:form:msgs"/>
+                                        <p:ajax event="rowEdit" listener="#{abonoProveedorMB.onRowEdit}" 
+                                                update=":form:table-factura,:form:msgs"
+                                                process="@this"/>
+                                        <p:ajax event="rowEditCancel" listener="#{abonoProveedorMB.onRowCancel}" 
+                                                update=":form:table-factura,:form:msgs"
+                                                process="@this"/>
 
                                         <p:column headerText="Factura No." >
                                             <h:outputText value="#{pagoFactura.nfactura}"/>
@@ -194,7 +198,7 @@
                                             </p:cellEditor>
                                         </p:column>
                                         <p:column exportable="false" style="width: 70px">
-                                            <p:rowEditor styleClass="rounded-button ui-button-warning"/>
+                                            <p:rowEditor styleClass="ui-button-success"/>
                                         </p:column >
                                         <p:column style="width: 50px">
                                             <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash" process="@this"
@@ -232,7 +236,7 @@
                         </p:outputPanel>
                         <div class="row justify-content-end">
                             <div class="col-md-2">
-                                <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.enviar(pagoFactura)}" 
+                                <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.enviar()}" 
                                                  icon="pi pi-check" update=":form:proveedortabla, msgs"
                                                  process="pago-content @this" styleClass="ui-button-success"/>
                             </div>
