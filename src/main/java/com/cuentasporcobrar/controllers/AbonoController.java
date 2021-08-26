@@ -1,4 +1,3 @@
-
 package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.AbonoDAO;
@@ -11,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +27,8 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.primefaces.PrimeFaces;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 
 @Named(value = "abonoController")
 @ViewScoped
@@ -62,6 +64,9 @@ public class AbonoController implements Serializable {
 
     //Declaramos una lista que tendra la lista de facturas de un cliente.
     List<SelectItem> listaVenta;
+
+    //Para mostrar un salida de datos determinado
+    DecimalFormat df = new DecimalFormat("#.##");
 
     public AbonoController() {
         abono = new Abono();
@@ -220,6 +225,7 @@ public class AbonoController implements Serializable {
                 //Cargamos las fechas
                 fechasPlan = abonoDAO.obtenerFechaCreditoVencimiento(idFactura);
                 System.out.println(fechasPlan[0]);
+                
 
                 //Cargamos el total de los abonos y el total pendiente de una factura
                 totalAbonos = abonoDAO.obtenerSumAbonos(idFactura);
@@ -228,8 +234,7 @@ public class AbonoController implements Serializable {
                 if (list_Abonos.isEmpty()) {
                     mostrarMensajeAdvertencia("Esa factura no tiene ningun abono.");
                 } else {
-                    mostrarMensajeInformacion("Se Cargaron los abonos de la Factura:"
-                            + idFactura);
+                    mostrarMensajeInformacion("Se Cargaron los abonos.");
                 }
             }
         } catch (Exception ex) {
@@ -241,7 +246,24 @@ public class AbonoController implements Serializable {
     //Este procedimiento valida e inicia la interfaz para guardar un nuevo abono
     public void nuevoAbono() {
         this.abono = new Abono();
+
         try {
+
+            //@return diasDeCredito Retorna los dias de credito
+            int diasDeCredito = (int) ChronoUnit.DAYS.between(fechasPlan[0], fechasPlan[1]);
+
+            //@return valor Retorna el valor mensual a pagar del plan de pago.
+            double valorMensual = ((totalPendiente + totalAbonos) / (diasDeCredito / 30));
+            valorMensual = Double.valueOf(df.format(valorMensual).replace(',', '.'));
+
+            //Si el totalPendiente es menor al valor mensual
+            //Retorno el valor pendiente, caso contrario se devuelve el valor Mensual
+            if (totalPendiente <= valorMensual) {
+                abono.setValorAbonado(totalPendiente);
+            } else {
+                abono.setValorAbonado(Double.valueOf(df.format(valorMensual).replace(',', '.')));
+            }
+
             PrimeFaces current = PrimeFaces.current();
             if (idFactura == 0) {
                 mostrarMensajeAdvertencia("Antes de agregar un Abono. Elija una Factura.");
@@ -265,22 +287,26 @@ public class AbonoController implements Serializable {
                 mostrarMensajeAdvertencia("Por Favor. Elija una forma de Pago..");
             } else if (abono.getValorAbonado() <= 0) {
                 mostrarMensajeAdvertencia("El abono no puede ser menor o igual a 0.");
+            }
+            if (abono.getValorAbonado() > totalPendiente) {
+                mostrarMensajeAdvertencia("El valor a Abonar no debe exceder al"
+                        + " valor pendiente.");
             } else if (abonoDAO.insertarNuevoAbono(idFactura, idPlanDePago) > 0) {
                 mostrarMensajeInformacion("Se Registró Correctamente");
                 PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
                 this.list_Abonos = abonoDAO.obtenerAbonos(idCliente);
-                
+
             } else {
                 mostrarMensajeError("No se Registró Correctamente");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-        
+
 //        PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
 //        PrimeFaces.current().executeScript("location.reload()");
     }
-    
+
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -298,13 +324,12 @@ public class AbonoController implements Serializable {
 //            Map<String, Object> parametros = new HashMap<String, Object>();
 //            parametros.put("titulo", "Reporte desde java");
 //            parametros.put("fecha", LocalDate.now().toString());
-
-            Map<String, Object> parametros= new HashMap<String, Object>();
+            Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("nomCliente", persona.getRazonNombre());
-            parametros.put("monto",abono.getValorAbonado());
-            parametros.put("tipoPago","EFECTIVO");
-            parametros.put("fechaPago",abono.getFechaAbono());
-            
+            parametros.put("monto", abono.getValorAbonado());
+            parametros.put("tipoPago", "EFECTIVO");
+            parametros.put("fechaPago", abono.getFechaAbono());
+
             System.out.println(persona.getRazonNombre());
             System.out.println(abono.getValorAbonado());
             System.out.println(abono.getDescrFormaPago());
@@ -328,7 +353,7 @@ public class AbonoController implements Serializable {
 
             stream.flush();
             stream.close();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {
             // enviamos la respuesta.
@@ -344,10 +369,9 @@ public class AbonoController implements Serializable {
                 "Exitó", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void mostrarMensajeAdvertencia(String mensaje) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN
-                ,
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
                 "Advertencia", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -359,4 +383,3 @@ public class AbonoController implements Serializable {
     }
 
 }
-

@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 import com.cuentasporpagar.models.Condiciones;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import com.cuentasporpagar.daos.CondicionesDAO;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.SQLException;
@@ -98,7 +97,6 @@ public class CondicionesManageBean implements Serializable {
 
      public void editaCondiciones() {
           try {
-               System.out.println("ENTRANDO A  EDITAR condiciones: ");
                this.condiciones.setProveedor(proveedor);
                this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
           } catch (SQLException e) {
@@ -107,15 +105,17 @@ public class CondicionesManageBean implements Serializable {
      }
 
      public void dhProveedor() throws SQLException {
-          System.out.println("Entrando a dhProveedor");
+
           if (check) {
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), false);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, 
+                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
                listaCondiciones.clear();
                listaCondiciones = condicionesDAO.llenarP(true);
           } else {
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), true);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, 
+                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
                listaCondiciones.clear();
                listaCondiciones = condicionesDAO.llenarP(false);
 
@@ -123,13 +123,12 @@ public class CondicionesManageBean implements Serializable {
           PrimeFaces.current().ajax().update("form:manageProductDialog", "form:messages");
      }
 
-     public List<Condiciones> getListaCondiciones() {
+     public List<Condiciones> getListaCondiciones() throws Exception {
           try {
                this.condicionesDAO = new CondicionesDAO();
-               habTabla();
-               System.out.println("SE LLENO CORRECTAMENTE");
+               habTabla();              
           } catch (Exception e) {
-               System.out.println("--ERROR AL LLENAR");
+             throw e;
           }
           return listaCondiciones;
      }
@@ -139,7 +138,7 @@ public class CondicionesManageBean implements Serializable {
      }
 
      public void habTabla() throws SQLException {
-          System.out.println("Entranod a habTabla");
+          
           this.listaCondiciones.clear();
 
           if (check) {
@@ -160,10 +159,9 @@ public class CondicionesManageBean implements Serializable {
      }
 
      public void cargarDhab(Proveedor p) {
-          System.out.println("entrando a cargarDhab");
-          System.out.println("Entra a cargarDhab");
+          
           this.proveedor.setNombre(p.getNombre());
-          System.out.println("saliendo a cargarDhab");
+         
           PrimeFaces.current().ajax().update(":form:confirmDHab");
           //   System.out.println("com.cuentasporpagar.controllers.CondicionesManageBean.cargarDhab()" + p.getNombre());
           //  this.proveedor.setIdProveedor(condiciones.getProveedor().getIdProveedor());
@@ -193,7 +191,6 @@ public class CondicionesManageBean implements Serializable {
           System.out.println("Entrandoa rest");
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelado"));
           PrimeFaces.current().resetInputs("form:manage-product-content", "form:dt-products");
-       
 
      }
 }

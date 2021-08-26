@@ -74,9 +74,7 @@ public class CondicionesDAO implements Serializable {
           return lista;
      }
      public List<Condiciones> llenarP(boolean n) throws SQLException {
-          System.err.println("entrando a sentencia");
-       
-           this.conexion.Conectar();
+          this.conexion.Conectar();
           if (conexion.isEstado()) {
                try {
                     String sentencia = "SELECT c.descuento,c.diasneto,c.diasdescuento,\n"
@@ -110,7 +108,7 @@ public class CondicionesDAO implements Serializable {
                          c.setProveedor(p);
                          lista.add(c);
                     }
-                    System.out.println("com.cuentasporpagar.daos.CondicionesDAO.llenarP()"+sentencia);
+                   
                } catch (SQLException e) {
 
                } finally {
@@ -156,7 +154,7 @@ public class CondicionesDAO implements Serializable {
 
      }
      public void updateCondiciones(Condiciones c, int codigo) throws SQLException{
-           System.out.println("ENTRANDO A EDITAR CONDICIONES");
+          
           try{
                this.conexion.Conectar();
                String cadena = "UPDATE public.condiciones set "

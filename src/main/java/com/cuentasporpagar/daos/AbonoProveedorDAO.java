@@ -198,8 +198,8 @@ public class AbonoProveedorDAO {
     }
 
     //asiento contable
-    public void insertasiento(int idSubcuenta, AbonoProveedor abono) {
-        System.out.print("SI ENTREEEEEEE");
+    public void insertasiento(int idSubcuenta, AbonoProveedor abono, int accion) {
+        System.out.println("si entro");
         if (conex.isEstado()) {
             try {
                 int iddiario = 0;
@@ -215,12 +215,22 @@ public class AbonoProveedorDAO {
                         + abono.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + abono.getFecha().plusDays(30).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
-                sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
-                        + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
-                        + "{\"idSubcuenta\":\"" + idSubcuenta + "\",\"debe\":\"0\",\"haber\":\""
-                        + abono.getImporte() + "\",\"tipoMovimiento\":\"Pago\"}]";
-                System.out.println(sentencia1);
-                intJson(sentencia, sentencia1);
+                if (accion == 1) {
+                    sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
+                            + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
+                            + "{\"idSubcuenta\":\"" + idSubcuenta + "\",\"debe\":\"0\",\"haber\":\""
+                            + abono.getImporte() + "\",\"tipoMovimiento\":\"Pago\"}]";
+                    System.out.println(sentencia1);
+                }else{
+                    System.out.println("si entro");
+                    sentencia1 = "[{\"idSubcuenta\":\""+idSubcuenta+"\",\"debe\":\""
+                            + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
+                            + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
+                            + abono.getImporte() + "\",\"tipoMovimiento\":\"Pago\"}]";
+                    System.out.println(sentencia1);
+                }
+                
+//                intJson(sentencia, sentencia1);
 
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");

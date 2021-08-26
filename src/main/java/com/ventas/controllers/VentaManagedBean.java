@@ -266,7 +266,7 @@ public class VentaManagedBean implements Serializable {
                 this.ventaDao.GuardarVenta(ventaActual);
             }
         } catch (Exception e) {
-
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
 
