@@ -13,17 +13,25 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.component.export.PDFOptions;
 import org.primefaces.component.export.PDFOrientationType;
 
@@ -76,8 +84,8 @@ public class LibroManagedBean implements Serializable {
         }
         return saldoDeudor + saldoAcreedor;
     }
-    
-    public String ConverTwoDecimal(double value){
+
+    public String ConverTwoDecimal(double value) {
         return toTwoDecimal.format(value);
     }
 
@@ -130,8 +138,54 @@ public class LibroManagedBean implements Serializable {
 
         Image img = Image.getInstance(logo);
         img.scalePercent(30);
-        
+
         pdf.add(img);
+    }
+
+    public void exportpdf() throws IOException, JRException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=Libro-%1$s.pdf",getDateNow()));
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+            
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("titulo", "Reporte desde java");
+            parametros.put("fecha", LocalDate.now().toString());
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/LibroMayor.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.libros)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+
+            System.out.println("fin proccess");
+        }
     }
 
     public PDFOptions getPdfOpt() {

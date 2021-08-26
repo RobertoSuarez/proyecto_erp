@@ -13,8 +13,7 @@
                 <h:form id="form">
                     <p:toolbar>
                         <p:toolbarGroup>
-                            <p:commandButton value="Guardar" icon="pi pi-download" styleClass="ui-button-primary p-mr-2">
-                                <p:dataExporter preProcessor="#{libroManagedBean.preProcessPDF}" options="#{libroManagedBean.pdfOpt}" type="pdf" target="dt-libros" fileName="LibroMayor-#{libroManagedBean.dateNow}"/>
+                            <p:commandButton value="Guardar PDF" ajax="false" icon="pi pi-download" styleClass="ui-button-primary p-mr-2" actionListener="#{libroManagedBean.exportpdf()}">
                             </p:commandButton>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right" style="width: 27%;">
