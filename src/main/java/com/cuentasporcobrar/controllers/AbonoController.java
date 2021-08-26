@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.PrimeFaces;
 
 @Named(value = "abonoController")
@@ -168,7 +167,7 @@ public class AbonoController implements Serializable {
 
             //Este if nos permite verificar si existe o no un cliente.
             if (persona.getIdCliente() == 0) {
-                mostrarMensajeInformacion("El Cliente No Existe o esta Inactivo");
+                mostrarMensajeAdvertencia("El Cliente No Existe o esta Inactivo");
 
             } else {
                 // En caso de que exista cargamos sus ventas
@@ -191,7 +190,7 @@ public class AbonoController implements Serializable {
                 }
                 //Este if valida si el cliente tiene o no cobros.
                 if (listaVenta.isEmpty()) {
-                    mostrarMensajeInformacion("Ese cliente no tiene facturas");
+                    mostrarMensajeAdvertencia("Ese cliente no tiene facturas");
                 } else {
                     mostrarMensajeInformacion("Se Cargaron las Facturas de " + persona.getRazonNombre());
 
@@ -213,7 +212,7 @@ public class AbonoController implements Serializable {
 
             idPlanDePago = abonoDAO.obtenerIdPlanPago(idFactura);
             if (idPlanDePago == 0) {
-                mostrarMensajeInformacion("Esa factura no pertenece a un plan de pago.");
+                mostrarMensajeAdvertencia("Esa factura no pertenece a un plan de pago.");
             } else {
                 //Cargamos los abonos de un determinado Cliente.
                 list_Abonos = abonoDAO.obtenerAbonos(idFactura);
@@ -227,7 +226,7 @@ public class AbonoController implements Serializable {
                 totalPendiente = abonoDAO.obtenerValorPendiente(idFactura);
 
                 if (list_Abonos.isEmpty()) {
-                    mostrarMensajeInformacion("Esa factura no tiene ningun abono.");
+                    mostrarMensajeAdvertencia("Esa factura no tiene ningun abono.");
                 } else {
                     mostrarMensajeInformacion("Se Cargaron los abonos de la Factura:"
                             + idFactura);
@@ -245,9 +244,9 @@ public class AbonoController implements Serializable {
         try {
             PrimeFaces current = PrimeFaces.current();
             if (idFactura == 0) {
-                mostrarMensajeError("Antes de agregar un Abono. Elija una Factura.");
+                mostrarMensajeAdvertencia("Antes de agregar un Abono. Elija una Factura.");
             } else if (idPlanDePago == 0) {
-                mostrarMensajeError("No se puede ingresar un abono a una Factura que"
+                mostrarMensajeAdvertencia("No se puede ingresar un abono a una Factura que"
                         + "no corresponda a un crédito.");
             } else {
                 current.executeScript("PF('nuevoCobro').show();");
@@ -263,9 +262,9 @@ public class AbonoController implements Serializable {
             abonoDAO = new AbonoDAO(abono);
 
             if (abono.getIdFormaDePago() == -1) {
-                mostrarMensajeError("Porfavor. Elija una forma de Pago");
+                mostrarMensajeAdvertencia("Por Favor. Elija una forma de Pago..");
             } else if (abono.getValorAbonado() <= 0) {
-                mostrarMensajeError("El abono no puede ser menor o igual a 0.");
+                mostrarMensajeAdvertencia("El abono no puede ser menor o igual a 0.");
             } else if (abonoDAO.insertarNuevoAbono(idFactura, idPlanDePago) > 0) {
                 mostrarMensajeInformacion("Se Registró Correctamente");
                 PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
@@ -342,7 +341,14 @@ public class AbonoController implements Serializable {
     //Metodos para mostrar mensajes de Información y Error
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Exito", mensaje);
+                "Exitó", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void mostrarMensajeAdvertencia(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN
+                ,
+                "Advertencia", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

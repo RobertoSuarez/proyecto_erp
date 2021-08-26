@@ -41,6 +41,7 @@ public class PersonaController implements Serializable {
 
     //Declaro mi listaCliente que van hacer cargadas en el datatable
     List<Persona> listaCliente;
+    List<Persona> listaClienteInactivos;
 
     int idCliente = 0;
 
@@ -59,15 +60,6 @@ public class PersonaController implements Serializable {
             //@return Retorna una lista, la cual será cargada en la tabla clientes.
             listaCliente = personaDAO.obtenerTodosLosClientes();
 
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
-        }
-
-    }
-
-    public void mostrar() {
-        try {
-            listaCliente = personaDAO.obtenerTodosLosClientes();
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -182,7 +174,8 @@ public class PersonaController implements Serializable {
 
                         mostrarMensajeInformacion("Se Registró Correctamente");
                         this.listaCliente = personaDAO.obtenerTodosLosClientes();
-
+                        PrimeFaces.current().executeScript("PF('clienteJuridicoNew').hide()");
+                        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
                     } else {
 
                         System.out.println("No se Ingresó el Cliente Juridico.");
@@ -192,17 +185,15 @@ public class PersonaController implements Serializable {
 
                 } else {
                     System.out.println("La identificación del cliente ya Existe.!");
-                    mostrarMensajeError("La identificación del cliente ya Existe.!");
+                    mostrarMensajeAdvertencia("La identificación del cliente ya Existe.!");
                 }
             } else {
-                mostrarMensajeInformacion("Por favor digite un número de"
+                mostrarMensajeAdvertencia("Por favor digite un número de"
                         + " Identificación correspondiente a un RUC.");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-        PrimeFaces.current().executeScript("PF('clienteJuridicoNew').hide()");
-        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     /*
@@ -243,7 +234,7 @@ public class PersonaController implements Serializable {
                         || (persona_Natural.getIdentificacion().length() == 13
                         && persona_Natural.getIdTipoIdenficacion() == 2)
                         || (persona_Natural.getIdentificacion().length() == 13
-                        && persona_Natural.getIdTipoIdenficacion() == 2)) {
+                        && persona_Natural.getIdTipoIdenficacion() == 3)) {
 
                     //Validando que no exista la identificación ingresada.
                     if (validarIdentificacion(persona_Natural.getIdentificacion(),
@@ -253,7 +244,8 @@ public class PersonaController implements Serializable {
 
                             mostrarMensajeInformacion("Se Registró Correctamente");
                             this.listaCliente = personaDAO.obtenerTodosLosClientes();
-
+                            PrimeFaces.current().executeScript("PF('clienteNaturalNew').hide()");
+                            PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
                         } else {
 
                             System.out.println("No se Ingresó el Cliente Natural.");
@@ -262,10 +254,10 @@ public class PersonaController implements Serializable {
                         }
                     } else {
                         System.out.println("La identificación del cliente ya Existe.!");
-                        mostrarMensajeError("La identificación del cliente ya Existe.!");
+                        mostrarMensajeAdvertencia("La identificación del cliente ya Existe.!");
                     }
                 } else {
-                    mostrarMensajeInformacion("Por favor digite un número de"
+                    mostrarMensajeAdvertencia("Por favor digite un número de"
                             + " Identificación correspondiente al tipo de "
                             + "identificacion elegido.");
                     System.out.println("Por favor digite un número de"
@@ -274,7 +266,7 @@ public class PersonaController implements Serializable {
                 }
 
             } else {
-                mostrarMensajeInformacion("Por favor digite un número de"
+                mostrarMensajeAdvertencia("Por favor digite un número de"
                         + " Identificación Correcto.");
                 System.out.println("Por favor digite un número de"
                         + " Identificación Correcto.");
@@ -283,8 +275,6 @@ public class PersonaController implements Serializable {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-        PrimeFaces.current().executeScript("PF('clienteNaturalNew').hide()");
-        PrimeFaces.current().executeScript("location.reload()");
     }
 
     //Actualizar Objeto de Nuevo Cliente Natural
@@ -352,12 +342,14 @@ public class PersonaController implements Serializable {
                     mostrarMensajeError("No se Editó Correctamente");
                 }
             } else {
-                mostrarMensajeInformacion("Por favor digite un número de"
+                mostrarMensajeAdvertencia("Por favor digite un número de"
                         + " Identificación correspondiente a un RUC.");
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        PrimeFaces.current().executeScript("PF('ClienteJuridicoEdit').hide()");
+        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     public void actualizarClienteNatural() {
@@ -381,7 +373,7 @@ public class PersonaController implements Serializable {
                     mostrarMensajeError("No se Editó Correctamente");
                 }
             } else {
-                mostrarMensajeInformacion("Por favor digite un número de"
+                mostrarMensajeAdvertencia("Por favor digite un número de"
                         + " Identificación correspondiente al tipo de "
                         + "identificacion elegido.");
                 System.out.println("Por favor digite un número de"
@@ -391,12 +383,20 @@ public class PersonaController implements Serializable {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
+        PrimeFaces.current().executeScript("PF('ClienteNaturalEdit').hide()");
+        PrimeFaces.current().ajax().update(":frmtblClientes:tblClientes");
     }
 
     //Metodos para mostrar mensajes de Información y Error
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Exito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void mostrarMensajeAdvertencia(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Error", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

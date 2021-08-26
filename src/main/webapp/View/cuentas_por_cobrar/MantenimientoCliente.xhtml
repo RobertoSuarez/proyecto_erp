@@ -29,7 +29,7 @@
                                      style="font-size: 14px;">
 
                             <f:facet name="header">
-                                <!-- Botones para agregar cliente natural y juridico  !-->
+                                <!-- Botones para agregar cliente natural y juridico!-->
                                 <div style="float: left;">
                                     <span>
                                         <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
@@ -52,7 +52,7 @@
                                                      placeholder="Buscar"/>
                                     </span>
                                 </div>
-                            <br/><br/>
+                                <br/><br/>
                             </f:facet>
                             <p:column class="tamanoInput" style="text-align: center;"
                                       headerText="Identificación"
@@ -124,13 +124,13 @@
                                                message="¿Seguro que desea inactivar este cliente?" 
                                                icon="pi pi-info-circle"/>
                                 </p:commandButton>
-                                <p:commandButton actionListener="#{personaController.activarCliente(varClientes.idCliente)}"
+                                <p:commandButton actionListener="#{personaController.activarCliente(varClientes.idCliente)}" 
                                                  class="tamanoButtonActions" 
                                                  styleClass="rounded-button ui-button-success" 
                                                  icon="pi pi-check-circle"
                                                  update=":growl tblClientes">
                                     <p:confirm header="Advertencia" 
-                                               message="¿Seguro que desea activar este cliente?" 
+                                               message="¿Seguro que desea Activar este Cliente?" 
                                                icon="pi pi-info-circle"/>
                                 </p:commandButton>
                             </p:column>
@@ -143,17 +143,7 @@
                               modal="true" widgetVar="clienteNaturalNew"
                               responsive="true" id="dialogNN">
                         <h:form>
-                            <p:panelGrid columns="4" layout="grid">
-                                <p:outputLabel for="identificaNatural" 
-                                               value="Identificación:"
-                                               style="font-weight: bold;">
-                                </p:outputLabel>                                            
-                                <p:inputText id="identificaNatural"
-                                             class="tamanoInputClienteNJ"
-                                             required="true"
-                                             maxlength="13"
-                                             value="#{personaController.persona_Natural.identificacion}"/>
-
+                            <p:panelGrid columns="4" layout="grid" id="pgNN">
                                 <p:outputLabel for="optionNatural" 
                                                value="Tipo de Identificación:"
                                                style="font-weight: bold;">
@@ -161,16 +151,28 @@
                                 <p:selectOneMenu id="optionNatural" 
                                                  value="#{personaController.persona_Natural.idTipoIdenficacion}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Tipo de Identificación">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                    <f:selectItem itemLabel="Ruc" itemValue="2"/>
-                                    <f:selectItem itemLabel="Cédula" itemValue="1"/>
-                                    <f:selectItem itemLabel="Pasaporte" itemValue="3"/>
+                                    <f:selectItem itemLabel="RUC" itemValue="2"/>
+                                    <f:selectItem itemLabel="CÉDULA" itemValue="1"/>
+                                    <f:selectItem itemLabel="PASAPORTE" itemValue="3"/>
                                     <f:facet name="footer">
                                         <p:divider styleClass="p-mt-0" />
                                         <h:outputText value="3 Resultados" style="font-weight:bold;"/>
                                     </f:facet>
                                 </p:selectOneMenu>  
+
+                                <p:outputLabel for="identificaNatural" 
+                                               value="Identificación:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>                                            
+                                <p:inputText id="identificaNatural"
+                                             class="tamanoInputClienteNJ"
+                                             required="true"
+                                             requiredMessage="Ingrese su Identificación"
+                                             maxlength="13"
+                                             value="#{personaController.persona_Natural.identificacion}"/>
 
                                 <p:outputLabel for="prinombreClienteNatural"
                                                value="Primer Nombre:"
@@ -179,6 +181,7 @@
                                 <p:inputText id="prinombreClienteNatural"
                                              class="tamanoInputClienteNJ"
                                              required="true"
+                                             requiredMessage="Ingrese su Primer Nombre"
                                              value="#{personaController.persona_Natural.nombre1}"/> 
 
                                 <p:outputLabel for="segnombreClienteNatural" 
@@ -197,6 +200,7 @@
                                 <p:inputText id="priapellidoClienteNatural"
                                              class="tamanoInputClienteNJ"
                                              required="true"
+                                             requiredMessage="Ingrese su Primer Apellido"
                                              value="#{personaController.persona_Natural.apellido1}"/> 
 
                                 <p:outputLabel for="sedapellidoClienteNatural" 
@@ -209,20 +213,21 @@
                                              value="#{personaController.persona_Natural.apellidos2}"/> 
 
                                 <p:outputLabel for="pritelefonoClienteNatural"
-                                               value="Teléfono 1:"
+                                               value="Teléfono Móvil:"
                                                style="font-weight: bold;"> 
                                 </p:outputLabel>
                                 <p:inputText id="pritelefonoClienteNatural"
                                              class="tamanoInputClienteNJ"
                                              maxlength="10"
                                              required="true"
+                                             requiredMessage="Ingrese su Teléfono Móvil"
                                              placeholder="09########"
                                              value="#{personaController.persona_Natural.tlf1}">
                                     <p:keyFilter mask="num" />
                                 </p:inputText> 
 
                                 <p:outputLabel for="segtelefonoCliente" 
-                                               value="Télefono 2:"
+                                               value="Télefono Convencional:"
                                                style="font-weight: bold;">
                                 </p:outputLabel>
                                 <p:inputText id="segtelefonoCliente"
@@ -240,7 +245,8 @@
                                 <p:selectOneMenu id="generoNaturalOption" 
                                                  value="#{personaController.persona_Natural.genero}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Género">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="Heterosexual" itemValue="Heterosexual"/>
                                     <f:selectItem itemLabel="Bisexual" itemValue="Bisexual"/>
@@ -254,7 +260,8 @@
                                 <p:selectOneMenu id="sexoNaturalOption" 
                                                  value="#{personaController.persona_Natural.sexo}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Sexo">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="M" itemValue="M"/>
                                     <f:selectItem itemLabel="F" itemValue="F"/>
@@ -267,11 +274,10 @@
                                 <p:inputText id="emailNatural" 
                                              type="email" 
                                              required="true"
+                                             requiredMessage="Ingrese su Correo"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Natural.correo}"
-                                             placeholder="example@hotmail.com">
-                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
-                                </p:inputText> 
+                                             placeholder="example@hotmail.com"/>
 
                                 <p:outputLabel for="tipoClienteNaturalOption" 
                                                value="Tipo de Cliente:"
@@ -279,7 +285,9 @@
                                 </p:outputLabel>
                                 <p:selectOneMenu id="tipoClienteNaturalOption" 
                                                  value="#{personaController.persona_Natural.idTipoCliente}" 
-                                                 class="tamanoInputClienteNJ">                            
+                                                 class="tamanoInputClienteNJ"
+                                                 required="true"
+                                                 requiredMessage="Ingrese el Tipo de Cliente">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="Mayoritario" itemValue="1"/>
                                     <f:selectItem itemLabel="Minoritario" itemValue="2"/>
@@ -291,6 +299,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="direccionClienteNatural" 
                                              required="true"
+                                             requiredMessage="Ingrese su Dirección"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Natural.direccion}"/> 
 
@@ -300,9 +309,12 @@
                                 </p:outputLabel>
                                 <p:datePicker monthNavigator="true" yearNavigator="true"
                                               id="fechaNacimientoNatural"
-                                              style="width: 100px;"
+                                              style="width: 100px !important;"
                                               yearRange="1800:2050"
                                               placeholder="aaaa-mm-dd"
+                                              readonlyInput="true"
+                                              required="true"
+                                              requiredMessage="Ingrese su Fecha de Nacimiento"
                                               value="#{personaController.persona_Natural.fechaNacimiento}"/>
                             </p:panelGrid>
                             <br/>
@@ -310,12 +322,12 @@
                                 <p:commandButton value="Cancel"
                                                  icon="pi pi-times" 
                                                  onclick="PF('clienteNaturalNew').hide();"
-                                                 immediate="true"
+                                                 oncomplete="location.reload()"
                                                  styleClass=" ui-button-danger"/>
                                 &nbsp; 
                                 <p:commandButton value="Guardar" ajax="true"
                                                  icon="pi pi-save"
-                                                 update=":growl"
+                                                 update=":growl, pgNN"
                                                  actionListener="#{personaController.registrarClienteNatural()}"
                                                  styleClass=" ui-button-success"/>
                             </div>
@@ -328,29 +340,30 @@
                               modal="true" widgetVar="clienteJuridicoNew"
                               responsive="true" id="dialogClienteJN">
                         <h:form>
-                            <p:panelGrid columns="4" layout="grid" id="dialogJN">
-                                <p:outputLabel for="identificaJuridico" 
-                                               value="Identificación:"
-                                               style="font-weight: bold;">
-                                </p:outputLabel>                                            
-                                <p:inputText id="identificaJuridico" 
-                                             required="true"
-                                             class="tamanoInputClienteNJ"
-                                             maxlength="13"
-                                             value="#{personaController.persona_Juridica.identificacion}"/>
-
+                            <p:panelGrid columns="4" layout="grid" id="pgJN">
                                 <p:outputLabel for="optionJuridico" 
                                                value="Tipo de Identificación:"
                                                style="font-weight: bold;">
                                 </p:outputLabel>
 
-                                <p:selectOneMenu id="optionJuridico" value="#{personaController.persona_Juridica.idTipoIdenficacion}" 
+                                <p:selectOneMenu id="optionJuridico" 
+                                                 value="#{personaController.persona_Juridica.idTipoIdenficacion}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
-                                    <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Tipo de Identificación">
+                                    <f:selectItem itemLabel="RUC" itemValue="2"/>
+                                </p:selectOneMenu> 
 
-                                    <f:selectItem itemLabel="Ruc" itemValue="2"/>
-                                </p:selectOneMenu>  
+                                <p:outputLabel for="identificaJuridico" 
+                                               value="Identificación:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>                                            
+                                <p:inputText id="identificaJuridico"
+                                             maxlength="13"
+                                             required="true"
+                                             requiredMessage="Ingrese su Identificación"
+                                             class="tamanoInputClienteNJ"
+                                             value="#{personaController.persona_Juridica.identificacion}"/>
 
                                 <p:outputLabel for="razonClienteJuridico" 
                                                value="Razón Social:"
@@ -358,6 +371,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="razonClienteJuridico"
                                              required="true"
+                                             requiredMessage="Ingrese su Razón Social"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Juridica.razonSocial}"/> 
 
@@ -368,19 +382,39 @@
                                 <p:inputText id="emailClienteJuridico"
                                              type="email"
                                              required="true"
+                                             requiredMessage="Ingrese su Correo"
                                              class="tamanoInputClienteNJ"
                                              placeholder="example@hotmail.com"
-                                             value="#{personaController.persona_Juridica.correo}">
-                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
-                                </p:inputText> 
+                                             value="#{personaController.persona_Juridica.correo}"/>
+
+                                <p:outputLabel for="nomContactoClienteJ"
+                                               value="Nombre de Contacto:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:inputText id="nomContactoClienteJ"
+                                             required="true"
+                                             requiredMessage="Ingrese Nombre de Contacto"
+                                             class="tamanoInputClienteNJ"
+                                             value="#{personaController.persona_Juridica.nomContacto}"/>
+
+                                <p:outputLabel for="cargoContactoClienteJ"
+                                               value="Cargo de Contacto:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:inputText id="cargoContactoClienteJ"
+                                             required="true"
+                                             requiredMessage="Ingrese Cargo de Contacto"
+                                             class="tamanoInputClienteNJ"
+                                             value="#{personaController.persona_Juridica.cargoContacto}"/>
 
                                 <p:outputLabel for="telef1Cliente"
-                                               value="Teléfono 1:"
+                                               value="Teléfono Móvil"
                                                style="font-weight: bold;">
                                 </p:outputLabel>
                                 <p:inputText id="telef1Cliente"
                                              class="tamanoInputClienteNJ"
                                              required="true"
+                                             requiredMessage="Ingrese su Teléfono Móvil"
                                              maxlength="10"
                                              placeholder="09########"
                                              value="#{personaController.persona_Juridica.tlf1}">
@@ -388,7 +422,7 @@
                                 </p:inputText> 
 
                                 <p:outputLabel for="telef2Cliente" 
-                                               value="Teléfono 2:"
+                                               value="Teléfono Convencional:"
                                                style="font-weight: bold;">
                                 </p:outputLabel>
                                 <p:inputText id="telef2Cliente"
@@ -405,6 +439,7 @@
                                 <p:inputText id="direccionCliente"
                                              class="tamanoInputClienteNJ"
                                              required="true"
+                                             requiredMessage="Ingrese su dirección"
                                              value="#{personaController.persona_Juridica.direccion}">
                                 </p:inputText> 
 
@@ -415,23 +450,33 @@
                                 <p:selectOneMenu id="tipoClienteOption" 
                                                  value="#{personaController.persona_Juridica.idTipoCliente}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese el Tipo de Cliente">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="Mayoritario" itemValue="1"/>
                                     <f:selectItem itemLabel="Minoritario" itemValue="2"/>
                                 </p:selectOneMenu>
+
+                                <p:outputLabel for="pagWebClienteJ" 
+                                               value="Página Web:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:inputText id="pagWebClienteJ"
+                                             class="tamanoInputClienteNJ"
+                                             placeholder="Opcional"
+                                             value="#{personaController.persona_Juridica.paginaWeb}"/>
                             </p:panelGrid>
                             <br/>
                             <div style="float: right;">
                                 <p:commandButton value="Cancel"
                                                  icon="pi pi-times" 
                                                  onclick="PF('clienteJuridicoNew').hide();"
-                                                 immediate="true"
+                                                 oncomplete="location.reload()"
                                                  styleClass=" ui-button-danger"/>
                                 &nbsp;
                                 <p:commandButton value="Guardar" ajax="true"
                                                  icon="pi pi-save"
-                                                 update=":growl"
+                                                 update=":growl, pgJN"
                                                  actionListener="#{personaController.registrarClienteJuridico()}"
                                                  styleClass=" ui-button-success"/>
                             </div>
@@ -443,18 +488,8 @@
                               height="auto" width="900px" showEffect="fade"
                               modal="true" widgetVar="ClienteNaturalEdit"
                               id="dialogEditarClienteN" responsive="true">
-                        <h:form id="frmdialogNE">
+                        <h:form>
                             <p:panelGrid columns="4" layout="grid">
-                                <p:outputLabel for="identificaNatural" 
-                                               value="Identificación:"
-                                               style="font-weight: bold;">
-                                </p:outputLabel>                                            
-                                <p:inputText id="identificaNatural" 
-                                             class="tamanoInputClienteNJ"
-                                             required="true"
-                                             maxlength="13"
-                                             value="#{personaController.persona_Natural.identificacion}"/>
-
                                 <p:outputLabel for="optionNatural" 
                                                value="Tipo de Identificación:"
                                                style="font-weight: bold;">
@@ -462,16 +497,28 @@
                                 <p:selectOneMenu id="optionNatural" 
                                                  value="#{personaController.persona_Natural.idTipoIdenficacion}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Tipo de Identificación">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                    <f:selectItem itemLabel="Ruc" itemValue="2"/>
-                                    <f:selectItem itemLabel="Cedula" itemValue="1"/>
-                                    <f:selectItem itemLabel="Pasaporte" itemValue="3"/>
+                                    <f:selectItem itemLabel="RUC" itemValue="2"/>
+                                    <f:selectItem itemLabel="CÉDULA" itemValue="1"/>
+                                    <f:selectItem itemLabel="PASAPORTE" itemValue="3"/>
                                     <f:facet name="footer">
                                         <p:divider styleClass="p-mt-0" />
                                         <h:outputText value="3 Resultados" style="font-weight:bold;"/>
                                     </f:facet>
                                 </p:selectOneMenu>  
+
+                                <p:outputLabel for="identificaNatural" 
+                                               value="Identificación:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>                                            
+                                <p:inputText id="identificaNatural" 
+                                             class="tamanoInputClienteNJ"
+                                             required="true"
+                                             requiredMessage="Ingrese su Identificación"
+                                             maxlength="13"
+                                             value="#{personaController.persona_Natural.identificacion}"/>
 
                                 <p:outputLabel for="prinombreClienteNatural"
                                                value="Primer Nombre:"
@@ -479,6 +526,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="prinombreClienteNatural"
                                              required="true"
+                                             requiredMessage="ingrese su Primer Nombre"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Natural.nombre1}"/> 
 
@@ -497,6 +545,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="priapellidoClienteNatural"
                                              required="true"
+                                             requiredMessage="Ingrese su Primer Apellido"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Natural.apellido1}"/>
 
@@ -510,12 +559,13 @@
                                              value="#{personaController.persona_Natural.apellidos2}"/> 
 
                                 <p:outputLabel for="pritelefonoClienteNatural"
-                                               value="Teléfono 1:"
+                                               value="Teléfono Móvil:"
                                                style="font-weight: bold;"> 
                                 </p:outputLabel>
                                 <p:inputText id="pritelefonoClienteNatural"
                                              class="tamanoInputClienteNJ"
                                              required="true"
+                                             requiredMessage="Ingrese su Teléfono Móvil"
                                              maxlength="10"
                                              placeholder="09########"
                                              value="#{personaController.persona_Natural.tlf1}">
@@ -541,7 +591,8 @@
                                 <p:selectOneMenu id="generoNaturalOption" 
                                                  value="#{personaController.persona_Natural.genero}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Género">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="Heterosexual" itemValue="Heterosexual"/>
                                     <f:selectItem itemLabel="Bisexual" itemValue="Bisexual"/>
@@ -555,7 +606,8 @@
                                 <p:selectOneMenu id="sexoNaturalOption" 
                                                  value="#{personaController.persona_Natural.sexo}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Sexo">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="M" itemValue="M"/>
                                     <f:selectItem itemLabel="F" itemValue="F"/>
@@ -567,11 +619,10 @@
                                 </p:outputLabel>
                                 <p:inputText id="emailNatural" 
                                              required="true"
+                                             requiredMessage="Ingrese su Correo"
                                              class="tamanoInputClienteNJ"
                                              placeholder="example@hotmail.com"
-                                             value="#{personaController.persona_Natural.correo}">
-                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
-                                </p:inputText> 
+                                             value="#{personaController.persona_Natural.correo}"/>
 
                                 <p:outputLabel for="tipoClienteNaturalOption" 
                                                value="Tipo de Cliente:"
@@ -580,7 +631,8 @@
                                 <p:selectOneMenu id="tipoClienteNaturalOption" 
                                                  value="#{personaController.persona_Natural.idTipoCliente}" 
                                                  style="width: 150px; height: 40px;"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese el Tipo de Cliente">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="Mayoritario" itemValue="1"/>
                                     <f:selectItem itemLabel="Minoritario" itemValue="2"/>
@@ -592,6 +644,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="direccionClienteNatural" 
                                              required="true"
+                                             requiredMessage="Ingrese su Dirección"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Natural.direccion}"/> 
 
@@ -602,7 +655,9 @@
                                 <p:datePicker monthNavigator="true" yearNavigator="true"
                                               id="fechaNacimientoNatural"
                                               yearRange="1800:2050"
+                                              readonly="true"
                                               required="true"
+                                              requiredMessage="Ingrese su Fecha de Nacimiento"
                                               placeholder="aaaa-mm-dd"
                                               value="#{personaController.persona_Natural.fechaNacimiento}"/>
                             </p:panelGrid>
@@ -616,7 +671,7 @@
                                 &nbsp;
                                 <p:commandButton value="Guardar Cambios" 
                                                  icon="pi pi-save"
-                                                 ajax="false"
+                                                 ajax="true"
                                                  update=":growl"
                                                  actionListener="#{personaController.actualizarClienteNatural()}"
                                                  styleClass=" ui-button-success"/>
@@ -629,8 +684,20 @@
                               height="auto" width="900px" showEffect="fade"
                               modal="true" widgetVar="ClienteJuridicoEdit"
                               id="dialogEditarClienteJ" responsive="true">
-                        <h:form id="frmClienteJE">
+                        <h:form>
                             <p:panelGrid columns="4" layout="grid">
+                                <p:outputLabel for="optionJuridico" 
+                                               value="Tipo de Identificación:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:selectOneMenu id="optionJuridico" 
+                                                 value="#{personaController.persona_Juridica.idTipoIdenficacion}" 
+                                                 class="tamanoInputClienteNJ"
+                                                 required="true"
+                                                 requiredMessage="Ingrese su Tipo de Identificación"> 
+                                    <f:selectItem itemLabel="RUC" itemValue="2"/>
+                                </p:selectOneMenu>  
+
                                 <p:outputLabel for="identificaJuridico" 
                                                value="Identificación:"
                                                style="font-weight: bold;">
@@ -638,19 +705,9 @@
                                 <p:inputText id="identificaJuridico" 
                                              class="tamanoInputClienteNJ"
                                              required="true"
+                                             requiredMessage="Ingrese su Identificación"
                                              maxlength="13"
                                              value="#{personaController.persona_Juridica.identificacion}"/>
-
-                                <p:outputLabel for="optionJuridico" 
-                                               value="Tipo de Identificación:"
-                                               style="font-weight: bold;">
-                                </p:outputLabel>
-                                <p:selectOneMenu id="optionJuridico" value="#{personaController.persona_Juridica.idTipoIdenficacion}" 
-                                                 class="tamanoInputClienteNJ"
-                                                 required="true">                            
-                                    <f:selectItem itemLabel="Seleccione..." itemValue=""/>
-                                    <f:selectItem itemLabel="Ruc" itemValue="2"/>
-                                </p:selectOneMenu>  
 
                                 <p:outputLabel for="razonClienteJuridico" 
                                                value="Razón Social:"
@@ -658,6 +715,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="razonClienteJuridico"
                                              required="true"
+                                             requiredMessage="Ingrese su Razón Social"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Juridica.razonSocial}"/> 
 
@@ -668,20 +726,39 @@
                                 <p:inputText id="emailClienteJuridico"
                                              type="email" 
                                              required="true"
-                                             placeholder="09########"
+                                             requiredMessage="Ingrese su Correo"
+                                             placeholder="example@hotmail.com"
                                              class="tamanoInputClienteNJ"
-                                             value="#{personaController.persona_Juridica.correo}">
-                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
-                                </p:inputText> 
+                                             value="#{personaController.persona_Juridica.correo}"/>
+
+                                <p:outputLabel for="nomContactoClienteJ"
+                                               value="Nombre de Contacto:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:inputText id="nomContactoClienteJ"
+                                             required="true"
+                                             requiredMessage="Ingrese Nombre de Contacto"
+                                             class="tamanoInputClienteNJ"
+                                             value="#{personaController.persona_Juridica.nomContacto}"/>
+
+                                <p:outputLabel for="cargoContactoClienteJ"
+                                               value="Cargo de Contacto:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:inputText id="cargoContactoClienteJ"
+                                             required="true"
+                                             requiredMessage="Ingrese Cargo de Contacto"
+                                             class="tamanoInputClienteNJ"
+                                             value="#{personaController.persona_Juridica.cargoContacto}"/>
 
                                 <p:outputLabel for="telef1Cliente"
-                                               value="Teléfono 1:"
+                                               value="Teléfono Móvil:"
                                                style="font-weight: bold;">
                                 </p:outputLabel>
                                 <p:inputText id="telef1Cliente"
                                              class="tamanoInputClienteNJ"
                                              required="true"
-                                             placeholder="example@hotmail.com"
+                                             placeholder="09########"
                                              maxlength="10"
                                              value="#{personaController.persona_Juridica.tlf1}">
                                     <p:keyFilter mask="num" />
@@ -705,6 +782,7 @@
                                 </p:outputLabel>
                                 <p:inputText id="direccionCliente"
                                              required="true"
+                                             requiredMessage="Ingrese su Dirección"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Juridica.direccion}"/> 
 
@@ -715,11 +793,21 @@
                                 <p:selectOneMenu id="tipoClienteOption" 
                                                  value="#{personaController.persona_Juridica.idTipoCliente}" 
                                                  class="tamanoInputClienteNJ"
-                                                 required="true">                            
+                                                 required="true"
+                                                 requiredMessage="Ingrese el Tipo de Cliente">                            
                                     <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                     <f:selectItem itemLabel="Mayoritario" itemValue="1"/>
                                     <f:selectItem itemLabel="Minoritario" itemValue="2"/>
                                 </p:selectOneMenu>
+
+                                <p:outputLabel for="pagWebClienteJ" 
+                                               value="Página Web:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:inputText id="pagWebClienteJ"
+                                             class="tamanoInputClienteNJ"
+                                             placeholder="Opcional"
+                                             value="#{personaController.persona_Juridica.paginaWeb}"/>
                             </p:panelGrid>
                             <br/>
                             <div style="float: right;">
@@ -731,7 +819,7 @@
                                 &nbsp;
                                 <p:commandButton value="Guardar Cambios"
                                                  icon="pi pi-save"
-                                                 ajax="false"
+                                                 ajax="true"
                                                  update=":growl"
                                                  actionListener="#{personaController.actualizarClienteJuridico()}"
                                                  styleClass=" ui-button-success"/>
@@ -739,7 +827,7 @@
                         </h:form>
                     </p:dialog>
 
-                    <!-- DIALOG Inactivar Cliente-->
+                    <!-- DIALOG Confirmación-->
                     <p:dialog modal="true" height="400" 
                               width="400" widgetVar="inactivaCliente">
                         <h:form>
@@ -756,22 +844,6 @@
                         </h:form>
                     </p:dialog>
 
-                    <!-- DIALOG  Activar Cliente-->
-                    <p:dialog modal="true" height="400" 
-                              width="400" widgetVar="activaCliente">
-                        <h:form>
-                            <p:confirmDialog global="true" showEffect="fade" 
-                                             hideEffect="fade" 
-                                             responsive="true" 
-                                             width="350">
-
-                                <p:commandButton value="Cancelar" 
-                                                 styleClass="ui-confirmdialog-no ui-button-flat" />
-                                <p:commandButton value="Aceptar" 
-                                                 styleClass="ui-confirmdialog-yes"/>
-                            </p:confirmDialog>
-                        </h:form>
-                    </p:dialog>
                 </p:panel>
             </ui:define>
         </ui:composition>
