@@ -9,6 +9,8 @@ import com.global.config.Conexion;
 import com.ventas.models.DetalleVenta;
 import com.ventas.models.Venta;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class VentaDAO {
@@ -17,75 +19,50 @@ public class VentaDAO {
     private Conexion con;
 
     public VentaDAO() {
+        this.con = new Conexion();
     }
 
     public VentaDAO(Venta venta) {
         this.venta = venta;
+        this.con = new Conexion();
     }
 
-    public Venta BuscarVenta(int id) {
-        ResultSet rs;
-        Venta venta = new Venta();
+    public int GuardarVenta(Venta ventaActual) {
         try {
-            rs = con.ejecutarConsulta("select * from public.venta where idVenta = " + id + " LIMIT 1;");
+            ResultSet rs = null;
 
-            if (rs != null) {
-                System.out.println("Venta nula");
-            } else {
-                while (rs.next()) {
-                    venta.setIdVenta(rs.getInt(1));
-                    venta.setIdCliente(rs.getInt(2));
-                    venta.setIdEmpleado(rs.getInt(3));
-                    venta.setIdFormaPago(rs.getInt(4));
-                    venta.setIdDocumento(rs.getInt(5));
-                    venta.setSucursal(rs.getInt(6));
-                    venta.setFechaVenta(rs.getTimestamp(7));
-                    venta.setPuntoEmision(rs.getInt(8));
-                    venta.setSecuencia(rs.getInt(9));
-                    venta.setAutorizacion(rs.getString(10));
-                    venta.setFechaEmision(rs.getTimestamp(11));
-                    venta.setFechaAutorizacion(rs.getTimestamp(12));
-                    venta.setBase12(rs.getDouble(13));
-                    venta.setBase0(rs.getDouble(14));
-                    venta.setIce(rs.getDouble(17));
-                    venta.setTotalFactura(rs.getDouble(18));
-                }
-                return venta;
+            this.con.abrirConexion();
+            rs = this.con.consultar("select * from public.venta order by idventa desc limit 1");
+
+            int idVenta = 1;
+            while (rs.next()) {
+                idVenta = rs.getInt(1) + 1;
+                ventaActual.setSecuencia(rs.getInt(2));
             }
+            ventaActual.setIdVenta(idVenta);
+
+            System.out.println(ventaActual.getIdVenta());
+
+            String query = "INSERT INTO public.venta("
+                    + "idventa, idcliente, id_empleado, idformasdepago, idestadodocumento, id_sucursal, fechaventa, puntoemision, secuencia,"
+                    + "autorizacion, fechaemision, fechaautorizacion, base12, base0, baseexcentoiva, iva12, ice, totalfactura) "
+                    + "VALUES(" + ventaActual.getIdVenta() + ", " + ventaActual.getIdCliente() + ", " + ventaActual.getIdEmpleado() + ", 1, 1, 1, '" + ventaActual.getFechaVenta()
+                    + "', 1, " + ventaActual.getSecuencia() + ", " + ventaActual.getAutorizacion() + ", '" + ventaActual.getFechaEmision() + "', '" + ventaActual.getFechaAutorizacion()
+                    + "', " + ventaActual.getBase12() + ", " + ventaActual.getBase0() + ", 0, " + ventaActual.getIva() + ", " + ventaActual.getIce() + ", " + ventaActual.getTotalFactura() + ")";
+            System.out.println(query);
+            this.con.consultar(query);
+            
+            this.con.cerrarConexion();
+
+            System.out.println("Venta Guardada exitosamente");
+
+            return ventaActual.getIdVenta();
         } catch (Exception e) {
-            
-        }
-        return null;
-    }
-    
-    public void GuardarVenta(Venta v){
-        try{
-            int idNuevo = 0;
-            ResultSet rs;
-            
-            rs = con.ejecutarConsulta("select idventa from public.venta order by idventa desc limit 1");
-            while(rs.next()){
-                idNuevo = rs.getInt(1);
-            }
-            
-            idNuevo += 1;
-            
-            if(idNuevo <= 0){
-                System.out.println("No se obtuvo el id de venta");
-            }
-            else{
-                rs = null;
-                String sql1 = "INSERT INTO public.venta(idventa, idcliente, id_empleado, idformasdepago, idestadodocumento, id_sucursal, fechaventa, puntoemision, secuencia,autorizacion, fechaemision, fechaautorizacion, base12, base0, iva12, ice, totalfactura)";
-                String sql2 = String.format(" VALUES (%s, %2s, %3s, %4s, %5s, %6s, '%7s', %8s, %9s, '%10s', '%11s', '%12s', %13s, %14s, %15s, %16s, %17s;", idNuevo, venta.getCliente().getIdCliente(),
-                v.getIdEmpleado(), v.getIdFormaPago(), v.getIdDocumento(), v.getSucursal(), v.getFechaVenta().toLocalDateTime().toLocalDate().toString(),
-                v.getPuntoEmision(), v.getSecuencia(), v.getAutorizacion(), v.getFechaEmision().toLocalDateTime().toLocalDate().toString(),
-                v.getFechaAutorizacion().toLocalDateTime().toLocalDate().toString(), v.getBase12(), v.getBase0(), v.getIva(), v.getIce(), v.getTotalFactura());
-                System.out.println(sql1 + sql2);
-                //rs = con.ejecutarConsulta(sql1 + sql2);
-            }
-        }catch(Exception e){
             System.out.println(e.getMessage().toString());
+        } finally {
+            this.con.cerrarConexion();
         }
+        return 0;
     }
 
 }
