@@ -20,10 +20,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
-/**
- *
- * @author ebert
- */
+
 @ManagedBean(name = "proveedorDAO")
 @ViewScoped
 public class ProveedorManageBean implements Serializable {
@@ -36,7 +33,6 @@ public class ProveedorManageBean implements Serializable {
      private List<Proveedor> Proveedores;
      private Proveedor selectedProveedor;
 
-     private String msj;
      private String nom;
      private String cod;
 
@@ -164,15 +160,20 @@ public class ProveedorManageBean implements Serializable {
 
      }
 
+     //Insertamos un proveedor
      public void insertar() {
           try {
+               //mandamos el metodo insertar un proveedor
                this.proveedorDAO.insertarp(proveedor);
+               //mandamos a insertar las condiciones
                condicionesDAO.insertarCondiciones(condiciones);
+               //msj
                FacesContext.getCurrentInstance().
                        addMessage(null,
                                new FacesMessage("Proveedor Agregado"));
 
           } catch (Exception e) {
+               //msj
                FacesContext.getCurrentInstance().
                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                                "Error al guardar"));
@@ -196,11 +197,12 @@ public class ProveedorManageBean implements Serializable {
           this.listaProveedor = listaProveedor;
      }
 
+     //seleccionar proveedor
      public void onRowSelect(SelectEvent<Proveedor> event) {
+          //obtencion de datos segun el proveedor
           String msg2 = event.getObject().getNombre();
           String msg3 = event.getObject().getCodigo();
-          System.out.print("Nombre: " + msg2);
-          System.out.print("Codigo: " + msg3);
+         //envio de los nuevos datos 
           setNom(msg2);
           setCod(msg3);
      }
@@ -211,7 +213,7 @@ public class ProveedorManageBean implements Serializable {
           this.proveedor.setCodigo("PR-" + uuid + uuid2);
      }
 
-     //Metodos primeFaces
+     //Metodo para crear nuevo proveedor
      public void openNew() {
           this.selectedProveedor = new Proveedor();
           aleatorioCod();

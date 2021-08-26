@@ -15,7 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
@@ -87,7 +86,7 @@ public class FacturaManagedBean {
         this.listaCuentas = listaCuentas;
     }
 
-    //DETALLE FACTURA
+    //GETTER AND SETTER DETALLE FACTURA
     public float getDatoImporte() {
         return datoImporte;
     }
@@ -112,15 +111,13 @@ public class FacturaManagedBean {
         this.datoCuenta = datoCuenta;
     }
 
-    //Diana: insertar nueva Factura
+    //DIANA: INSERTAR FACTURA
     public void insertarfactura() {
         float comp = 0;
         for (int i = 0; i < detalleFactura.size(); i++)
         {
             comp += detalleFactura.get(i).getImporteD();
-            System.out.println("Importe comp: " + comp);
         }
-        System.out.println("Importe comp: " + this.factura.getImporte());
         if (factura.getImporte() != comp)
         {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Importe debe ser igual al total del detalle"));
@@ -161,9 +158,11 @@ public class FacturaManagedBean {
         try
         {
             facturaDAO.revasiento(detalleFactura, factura);
-            //listaFactura.clear();
-            //        listaFactura = facturaDAO.llenarP("1");
-            //       PrimeFaces.current().ajax().update("form:dt-factura");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Revertida"));
+            PrimeFaces.current().executeScript("PF('revFactura').hide()");
+            listaFactura.clear();
+            listaFactura = facturaDAO.llenarP("1");
+            PrimeFaces.current().ajax().update("form:dt-factura");
         } catch (Exception e)
         {
             System.out.println("ERROR DAO: " + e);
@@ -173,14 +172,10 @@ public class FacturaManagedBean {
 
     //Diana Actualizar factura
     public void editarfactura() {
-        System.out.println("ESTOY AQUI EN EL MANAGED ACTUALIZAR");
-        System.out.println("DETALLE: " + detalleFactura.get(0).getId_detalle());
-        System.out.println("ruc: " + factura.getRuc());
         float comp = 0;
         for (int i = 0; i < detalleFactura.size(); i++)
         {
             comp += detalleFactura.get(i).getImporteD();
-            System.out.println("Importe comp: " + comp);
         }
         if (factura.getImporte() != comp)
         {

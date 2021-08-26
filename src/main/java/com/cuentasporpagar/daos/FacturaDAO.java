@@ -213,7 +213,6 @@ public class FacturaDAO {
 
     //asiento contable
     public void insertasiento(List<Factura> selectedFactura, Factura factura) {
-        System.out.print("SI ENTREEEEEEE");
         if (conexion.isEstado())
         {
             try
@@ -270,7 +269,6 @@ public class FacturaDAO {
     }
 
     public void revasiento(List<Factura> selectedFactura, Factura factura) {
-        System.out.print("SI ENTREEEEEEE2");
         if (conexion.isEstado())
         {
             try
@@ -345,8 +343,6 @@ public class FacturaDAO {
     }
 
     public void updateAsiento(String n) {
-        System.out.println("SI ENTRE UPDATE");
-        System.out.println(n);
         if (conexion.isEstado())
         {
             try
