@@ -15,64 +15,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author ebert
- */
+
 public class CondicionesDAO implements Serializable {
 
      Conexion conexion = new Conexion();
-     private Proveedor proveedor;
+     private final Proveedor proveedor;
      List<Condiciones> lista;
 
      public CondicionesDAO() {
           proveedor = new Proveedor();
-          lista =  new ArrayList<>();
+          lista = new ArrayList<>();
      }
 
-     public List<Condiciones> llenarCondiciones() throws Exception {
-       
-          try {
-               this.conexion.Conectar();
-
-               String sentencia = "SELECT c.descuento,c.diasneto,c.diasdescuento,"
-                       + "c.cantdiasvencidos,c.descripcion,"
-                       + "p.idproveedor, p.codigo,p.razonsocial,p.ruc,p.nombre,"
-                       + "p.direccion,p.email,p.webpage,p.contacto,"
-                       + "p.telefono,p.estado FROM condiciones c "
-                       + "INNER JOIN proveedor p ON p.idproveedor = c.idproveedor order by p.idproveedor";
-               PreparedStatement prs = conexion.getCnx().prepareStatement(sentencia);
-               ResultSet result = prs.executeQuery();
-               while (result.next()) {
-                    Proveedor p = new Proveedor();
-                    Condiciones c = new Condiciones();
-                    c.setDescuento(result.getDouble("descuento"));
-                    c.setDiasNeto(result.getInt("diasneto"));
-                    c.setDiasDescuento(result.getInt("diasdescuento"));
-                    c.setCantDiasVencidos(result.getInt("cantdiasvencidos"));
-                    c.setDescripcion(result.getString("descripcion"));
-                    p.setIdProveedor(result.getInt("idproveedor"));
-                    p.setCodigo(result.getString("codigo"));
-                    p.setRazonSocial(result.getString("razonsocial"));
-                    p.setRuc(result.getString("ruc"));
-                    p.setNombre(result.getString("nombre"));
-                    p.setDireccion(result.getString("direccion"));
-                    p.setEmail(result.getString("email"));
-                    p.setWebPage(result.getString("webpage"));
-                    p.setContacto(result.getString("contacto"));
-                    p.setTelefono(result.getString("telefono"));
-                    p.setEstado(result.getBoolean("estado"));
-                    c.setProveedor(p);
-                    lista.add(c);
-               }
-          } catch (SQLException e) {
-               throw e;
-
-          } finally {
-               this.conexion.cerrarConexion();
-          }
-          return lista;
-     }
+     //llenar lista segun el estado
      public List<Condiciones> llenarP(boolean n) throws SQLException {
           this.conexion.Conectar();
           if (conexion.isEstado()) {
@@ -83,7 +38,7 @@ public class CondicionesDAO implements Serializable {
                             + "p.direccion,p.email,p.webpage,p.contacto,\n"
                             + "p.telefono,p.estado FROM condiciones c \n"
                             + "INNER JOIN proveedor p ON p.idproveedor = c.idproveedor "
-                            + "where p.estado = "+n+" order by p.idproveedor";
+                            + "where p.estado = " + n + " order by p.idproveedor";
                     PreparedStatement prs = conexion.getCnx().prepareStatement(sentencia);
                     ResultSet result = prs.executeQuery();
                     while (result.next()) {
@@ -108,9 +63,9 @@ public class CondicionesDAO implements Serializable {
                          c.setProveedor(p);
                          lista.add(c);
                     }
-                   
-               } catch (SQLException e) {
 
+               } catch (SQLException e) {
+                    throw e;
                } finally {
                     conexion.cerrarConexion();
                }
@@ -118,13 +73,16 @@ public class CondicionesDAO implements Serializable {
 
           return lista;
      }
+
+     //habilitamos o deschabilitamos un proveedor segun el estado 
      public void deshabilitar(String d, boolean n) {
           if (conexion.isEstado()) {
                try {
-                    String cadena = "select habilitarproveedor("+n+",'"+ d +"')";
+                    String cadena = "select habilitarproveedor(" + n + ",'" + d + "')";
                     conexion.ejecutar(cadena);
                     System.out.println(cadena);
                } catch (Exception e) {
+                    throw e;
 
                } finally {
                     conexion.cerrarConexion();
@@ -132,18 +90,19 @@ public class CondicionesDAO implements Serializable {
 
           }
      }
-     
+
+     //insertamos las condiciones
      public void insertarCondiciones(Condiciones c) throws Exception {
-          try {this.conexion.Conectar();
+          try {
+               this.conexion.Conectar();
                String sentencia = "INSERT INTO public.condiciones(descuento,"
                        + " diasneto, diasdescuento, cantdiasvencidos,"
                        + " descripcion, idproveedor)\n"
-                       + " VALUES ("+c.getDescuento()+","+c.getDiasNeto()+","+c.getDiasDescuento()+","
-                       + ""+c.getCantDiasVencidos()+",'"+c.getDescripcion()+"',"
+                       + " VALUES (" + c.getDescuento() + "," + c.getDiasNeto() + "," + c.getDiasDescuento() + ","
+                       + "" + c.getCantDiasVencidos() + ",'" + c.getDescripcion() + "',"
                        + "(SELECT idproveedor FROM proveedor ORDER BY idproveedor DESC LIMIT 1));";
-               
+
                conexion.insertar(sentencia);
-               System.out.print(sentencia);
 
           } catch (SQLException e) {
                throw e;
@@ -153,24 +112,25 @@ public class CondicionesDAO implements Serializable {
           }
 
      }
-     public void updateCondiciones(Condiciones c, int codigo) throws SQLException{
-          
-          try{
+
+     //acualizamos las ocndiciones 
+     public void updateCondiciones(Condiciones c, int codigo) throws SQLException {
+
+          try {
                this.conexion.Conectar();
                String cadena = "UPDATE public.condiciones set "
-                       + "descuento = "+c.getDescuento()+", "
-                       + "diasneto = "+c.getDiasNeto()+", "
-                       +"diasdescuento = "+c.getDiasDescuento()+","
-                       + "cantdiasvencidos = "+c.getCantDiasVencidos()+", "
-                       + "descripcion = '"+c.getDescripcion()+"' "
-                       + "WHERE idproveedor = "+codigo+"";
+                       + "descuento = " + c.getDescuento() + ", "
+                       + "diasneto = " + c.getDiasNeto() + ", "
+                       + "diasdescuento = " + c.getDiasDescuento() + ","
+                       + "cantdiasvencidos = " + c.getCantDiasVencidos() + ", "
+                       + "descripcion = '" + c.getDescripcion() + "' "
+                       + "WHERE idproveedor = " + codigo + "";
                conexion.ejecutar(cadena);
                System.out.print(cadena);
-          }catch( SQLException e){
-             
+          } catch (SQLException e) {
+
                System.err.print(e);
-          }
-          finally{
+          } finally {
                this.conexion.cerrarConexion();
           }
      }

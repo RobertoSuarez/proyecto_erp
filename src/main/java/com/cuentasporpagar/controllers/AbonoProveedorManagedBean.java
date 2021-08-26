@@ -101,6 +101,7 @@ public final class AbonoProveedorManagedBean {
         String msg2 = event.getObject().getNombre();
         String msg3 = event.getObject().getRuc();
         setCod(msg3);
+        setNom(msg2);
         this.listaFactura.clear();
         this.listaFactura = abonoDAO.llenarFacturas(abonoproveedor.BuscarSentenciaFactura(msg3));
     }
@@ -135,15 +136,15 @@ public final class AbonoProveedorManagedBean {
 
     public void enviar() {
         if (this.listaFactura.size() > 0) {
-            if (this.listaFactura.size() <= dateMofid) {
+            if (dateMofid >=this.listaFactura.size() ) {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
                 abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
                 descrPago = tipoPago.getDescripcion();
                 if ("Caja".equals(descrPago)) {
-                    abonoDAO.Insertar(abonoproveedor);
+                    abonoDAO.Insertar(abonoproveedor,1);
                     bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
                     abonoDAO.insertasiento(1, abonoproveedor, 1);
-                    abonoDAO.update_abono();
+                    abonoDAO.update_abono(1);
                     if (bandera) {
                         PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                         showInfo("Abono proveedor ingresado");
@@ -157,10 +158,10 @@ public final class AbonoProveedorManagedBean {
                     } else if ("".equals(tipoBanco.getDescrpcion())) {
                         showWarn("Error: Ingrese Banco");
                     } else {
-                        abonoDAO.Insertar(abonoproveedor);
+                        abonoDAO.Insertar(abonoproveedor,1);
                         bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
                         abonoDAO.insertasiento(3, abonoproveedor, 1);
-                        abonoDAO.update_abono();
+                        abonoDAO.update_abono(1);
                         if (bandera) {
                             PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                             showInfo("Abono proveedor ingresado");
@@ -183,14 +184,20 @@ public final class AbonoProveedorManagedBean {
     }
 
     public void deshabilitar() {
-        abonoDAO.Insertar(this.abonoproveedor);
+        abonoDAO.Insertar(this.abonoproveedor,0);
         bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor);
         if (this.abonoproveedor.getDetalletipoPago()== "Caja") {
             abonoDAO.insertasiento(1, abonoproveedor, 0);
         } else {
             abonoDAO.insertasiento(3, abonoproveedor, 0);
         }
-        abonoDAO.update_abono();
+        abonoDAO.update_abono(0);
+        System.out.println(abonoproveedor.getIdAbonoProveedor()+"++");
+        abonoDAO.update_abono(0,abonoproveedor.getIdAbonoProveedor());
+        
+        for (int i = 0; i < this.detalleFactura.size(); i++) {
+             abonoDAO.update_factura(this.abonoproveedor.getImporte(), this.detalleFactura.get(i).getNfactura());
+        }
     }
 
     public static void removeSessionScopedBean(String beanName) {

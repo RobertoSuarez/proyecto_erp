@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <div style="font-weight: bold; background-color: #036fab; 
+                     color: white; text-align: center; height: 25px;">
+                    <h5>Listado de Ventas</h5>
+                </div>
+                
+                <h:form>
+                    <p:commandButton value="Nueva Venta" action="/View/ventas/nuevaVenta.xhtml" style="margin-top: 10px" />
+                    <p:dataTable var="ListaVentas" value="#{ListaVentaMB.listaVentas}" id="ventasTB">
+                        
+                        <p:column headerText="Factura">
+                            <h:outputText value="#{ListaVentas.factura}" />
+                        </p:column>
+                        
+                        <p:column headerText="Cliente">
+                            <h:outputText value="#{ListaVentas.idCliente}" />
+                        </p:column>
+                        
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{ListaVentas.fechaVenta}" />
+                        </p:column>
+                        
+                        <p:column headerText="Total">
+                            <h:outputText value="#{ListaVentas.totalFactura}" >
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                        
+                        <p:column headerText="Ver">
+                            <p:button value="Exportar" icon="pi pi-file-pdf" />
+                        </p:column>
+                        
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

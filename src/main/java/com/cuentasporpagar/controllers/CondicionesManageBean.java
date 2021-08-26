@@ -25,7 +25,7 @@ import org.primefaces.PrimeFaces;
  */
 @ManagedBean(name = "condicionesMB")
 @SessionScoped
-public class CondicionesManageBean implements Serializable {
+public final class CondicionesManageBean implements Serializable {
 
      private List<Condiciones> listaCondiciones;
      private Condiciones condiciones;
@@ -112,15 +112,6 @@ public class CondicionesManageBean implements Serializable {
           this.ic = ic;
      }
 
-     public void editaCondiciones() {
-          try {
-               this.condiciones.setProveedor(proveedor);
-               this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
-          } catch (SQLException e) {
-
-          }
-     }
-
      //los proveedores en la tabla se : deshabilitados o habilitados
      public void dhProveedor() throws SQLException {
 
@@ -173,6 +164,8 @@ public class CondicionesManageBean implements Serializable {
 
           this.listaCondiciones.clear();
           if (check) {
+               FacesContext.getCurrentInstance().
+                       addMessage(null, new FacesMessage("Entrando a deshabilitar"));
                //si el check es verdadero...
                this.condicionesDAO = new CondicionesDAO();
                //llenamos la tabla segun nuestra consulta en este caso los habilitados
@@ -183,6 +176,8 @@ public class CondicionesManageBean implements Serializable {
                setCl("ui-button-danger rounded-button");
                //asignamos el icono al btn
                setIc("pi pi-trash");
+               
+           
 
           } else {
                //si el check es falso...
