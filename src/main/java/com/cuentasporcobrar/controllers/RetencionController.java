@@ -91,8 +91,7 @@ public class RetencionController implements Serializable {
         return listaVenta;
     }
     //Fin
-    
-    
+
     //Metodo que nos carga las facturas de un determinado cliente.
     public void cargarFacturas() {
         try {
@@ -104,7 +103,7 @@ public class RetencionController implements Serializable {
             //Este if nos permite verificar si existe o no un cliente.
             if (persona.getIdCliente() == 0) {
 
-                mostrarMensajeInformacion("El Cliente No Existe o esta Inactivo");
+                mostrarMensajeAdvertencia("El Cliente No Existe o esta Inactivo");
 
             } else {
                 // En caso de que exista cargamos sus ventas
@@ -130,7 +129,7 @@ public class RetencionController implements Serializable {
                 }
                 //Este if valida si el cliente tiene o no cobros.
                 if (listaVenta.isEmpty()) {
-                    mostrarMensajeInformacion("Ese cliente no tiene facturas");
+                    mostrarMensajeAdvertencia("Ese cliente no tiene facturas");
                 } else {
                     mostrarMensajeInformacion("Se Cargaron las Facturas de " + persona.getRazonNombre());
 
@@ -153,11 +152,16 @@ public class RetencionController implements Serializable {
             listaRetenciones = new ArrayList<>();
             System.out.println(this.idFactura);
             listaRetenciones = retencionDAO.obtenerRetenciones(this.idFactura);
-            if (this.idFactura > 0 && !listaRetenciones.isEmpty()) {
-                mostrarMensajeInformacion("Se Cargaron las Retenciones");
+            if (this.idFactura > 0) {
+                if (!listaRetenciones.isEmpty()) {
+                    mostrarMensajeInformacion("Se Cargaron las Retenciones.");
+                } else {
+                    mostrarMensajeAdvertencia("No existen Retenciones");
+                }
             } else {
-                mostrarMensajeError("No existen Retenciones");
+                mostrarMensajeAdvertencia("Por favor seleccione una factura.");
             }
+
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -179,9 +183,8 @@ public class RetencionController implements Serializable {
             System.out.println("Error: " + ex.getMessage());
         }
         PrimeFaces.current().executeScript("PF('RetencionNew').hide()");
-        PrimeFaces.current().executeScript("location.reload()");
+//        PrimeFaces.current().executeScript("location.reload()");
     }
-
 
     //Metodo que actualiza/modifica una retencion
     public void actualizarRetencion() {
@@ -203,6 +206,12 @@ public class RetencionController implements Serializable {
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Exito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void mostrarMensajeAdvertencia(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Advertencia", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

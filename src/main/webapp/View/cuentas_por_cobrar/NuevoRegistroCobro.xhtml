@@ -16,7 +16,7 @@
                 </div>
                 <p:panel>
                     <div class="card">
-                        <p:growl id="growl" widgetVar="growl" showDetail="true" life="2000"/> 
+                        <p:growl id="growl" widgetVar="growl" showDetail="true" life="1500"/> 
                         <h:form id="form">
                             <div class="ui-grid-row" style="height: 135px;">
                                 <div>
@@ -47,9 +47,8 @@
                                                          value="#{abonoController.idFactura}"
                                                          style="height: 40px; width: 185px !important;"
                                                           filter="true" filterMatchMode="startsWith">                            
-                                            <f:selectItem itemLabel="Seleccione..." itemValue="0"/>
-                                            <f:selectItems value="#{abonoController.listaVenta}"
-                                                           itemLabel="#{abonoController.listaVenta}"/>
+                                            <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
+                                            <f:selectItems value="#{abonoController.listaVenta}"/>
                                         </p:selectOneMenu>
                                     </div>
                                 </div>
@@ -88,8 +87,8 @@
                                                      placeholder="aaaa/mm/dd"
                                                      value="#{abonoController.fechasPlan[1]}"/> 
                                     </div>
-                                    <div style="float: left; padding-top: 40px; padding-left: 35px;">
-                                        <p:commandButton value="Cargar Deuda"
+                                    <div style="float: left; padding-top: 50px; padding-left: 35px;">
+                                        <p:commandButton value="Cargar Plan de Pagos"
                                                          id="btnDeuda"
                                                          icon="pi pi-replay" 
                                                          actionListener="#{abonoController.cargarDeuda()}"
@@ -143,21 +142,25 @@
                                 </p:column>
                                 <p:column class="tamanoInput" 
                                           style="text-align: center;"
+                                          sortBy="#{varRegistroCobro.numFactura}"
                                           headerText="N° Fact">
                                     <h:outputText value="#{varRegistroCobro.numFactura}" />
                                 </p:column>
                                 <p:column class="tamanoInput" 
                                           style="text-align: center;"
+                                          sortBy="#{varRegistroCobro.fechaAbono}"
                                           headerText="Fecha de Abono">
                                     <h:outputText value="#{varRegistroCobro.fechaAbono}" />
                                 </p:column>
                                 <p:column class="tamanoInput" 
                                           style="text-align: center;"
+                                          sortBy="#{varRegistroCobro.descrFormaPago}"
                                           headerText="Forma de Pago">
                                     <h:outputText value="#{varRegistroCobro.descrFormaPago}" />
                                 </p:column>
                                 <p:column class="tamanoInput" 
                                           style="text-align: center;"
+                                          sortBy="#{varRegistroCobro.valorAbonado}"
                                           headerText="Monto">
                                     <h:outputText value="#{varRegistroCobro.valorAbonado}" >
                                         <f:convertNumber type="currency" 
@@ -181,7 +184,7 @@
                                   modal="true" widgetVar="nuevoCobro"
                                   id="dialogAddCobro" responsive="true">
                             <h:form>
-                                <p:panelGrid columns="4" layout="grid">
+                                <p:panelGrid columns="4" layout="grid" id="pgNC">
                                     <p:outputLabel for="abono" 
                                                    style="font-weight: bold;"
                                                    value="Saldo Abonar:">
@@ -231,7 +234,7 @@
                                         icon="pi pi-save" ajax="true"
                                         value="Guardar Cobro"
                                         actionListener="#{abonoController.guardarAbono()}"
-                                        update=":growl"
+                                        update=":growl, :form:tblRegistroCobro"
                                         styleClass="ui-button-success"/> 
                                 </div>
                             </h:form>

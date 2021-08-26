@@ -16,7 +16,7 @@ public class Persona_Natural extends Persona{
     private String nombre2;
     private String apellido1;
     private String apellidos2;
-    private LocalDate fechaNacimiento = LocalDate.now();
+    private LocalDate fechaNacimiento;
 
     
     public Persona_Natural() {

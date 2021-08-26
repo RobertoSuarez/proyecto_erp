@@ -62,7 +62,7 @@ public class PersonaDAO implements Serializable {
         }
         return lista_Personas;
     }
-
+    
     public List<Persona> obtenerNombresClientes() {
         lista_Personas = new ArrayList<>();
         if (conex.isEstado()) {
@@ -72,6 +72,28 @@ public class PersonaDAO implements Serializable {
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     lista_Personas.add(new Persona(result.getInt("id"),
+                            result.getString("razon_nombres")));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                lista_Personas.add(new Persona(-1, "-"));
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+        return lista_Personas;
+    }
+    
+    public List<Persona> obtenerNombresIdentiClientes() {
+        lista_Personas = new ArrayList<>();
+        if (conex.isEstado()) {
+            try {
+                String sentencia = "Select identificacion, razon_nombres from "
+                        + "Mostrar_Todos_los_Clientes()"
+                        + " Where estado_r='Activo'";
+                result = conex.ejecutarConsulta(sentencia);
+                while (result.next()) {
+                    lista_Personas.add(new Persona(result.getInt("identificacion"),
                             result.getString("razon_nombres")));
                 }
             } catch (SQLException ex) {

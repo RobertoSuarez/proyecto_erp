@@ -132,8 +132,8 @@ public final class AbonoProveedorManagedBean {
 
         //Ingresar los datos a la tabla
     }
-
-    public void enviar(List<Factura> listaFactura) {
+    
+    public void enviar() {
         if (this.listaFactura.size() > 0) {
             if (this.listaFactura.size() == dateMofid) {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
@@ -143,6 +143,8 @@ public final class AbonoProveedorManagedBean {
                 if ("Caja".equals(descrPago)) {
                     abonoDAO.Insertar(abonoproveedor);
                     bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                    abonoDAO.insertasiento(1, abonoproveedor);
+                    abonoDAO.update_abono();
                     if (bandera) {
                         PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                         showInfo("Abono proveedor ingresado");
@@ -158,6 +160,8 @@ public final class AbonoProveedorManagedBean {
                     } else {
                         abonoDAO.Insertar(abonoproveedor);
                         bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                        abonoDAO.insertasiento(3, abonoproveedor);
+                        abonoDAO.update_abono();
                         if (bandera) {
                             PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                             showInfo("Abono proveedor ingresado");
@@ -212,6 +216,7 @@ public final class AbonoProveedorManagedBean {
             f.setPor_pagar(pago);
             auxTotal = 0;
             abonoproveedor.setImporte(0);
+            dateMofid+=1;
             System.out.println(this.listaFactura.size());
             for (int i = 0; i < this.listaFactura.size(); i++) {
                 auxTotal += this.listaFactura.get(i).getPagado();

@@ -48,7 +48,7 @@ public class Plan_PagoController implements Serializable {
         //Este if nos permite verificar si existe o no un cliente.
         if (persona.getIdCliente() == 0) {
             System.out.println("El Cliente NO EXISTE O ESTA INACTIVO ");
-            mostrarMensajeInformacion("El Cliente No Existe o esta Inactivo");
+            mostrarMensajeAdvertencia("El Cliente No Existe o esta Inactivo");
         } else {
             // En caso de que exista cargamos sus cobros (Claro si tiene cobros)
             lista_Cobros = new ArrayList<>();
@@ -59,7 +59,7 @@ public class Plan_PagoController implements Serializable {
 
             //Este if valida si el cliente tiene o no cobros.
             if (lista_Cobros.isEmpty()) {
-                mostrarMensajeInformacion("Ese cliente no tiene cobros");
+                mostrarMensajeAdvertencia("Ese cliente no tiene cobros");
             } else {
                 mostrarMensajeInformacion("Se Cargaron los Cobros de " + persona.getRazonNombre());
                 
@@ -101,6 +101,12 @@ public class Plan_PagoController implements Serializable {
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Éxito: ", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void mostrarMensajeAdvertencia(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+                "Advertencia: ", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
