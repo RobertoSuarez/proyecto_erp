@@ -100,9 +100,6 @@ public final class AbonoProveedorManagedBean {
     public void onRowSelectf(SelectEvent<Proveedor> event) {
         String msg2 = event.getObject().getNombre();
         String msg3 = event.getObject().getRuc();
-        System.out.print("Nombre: " + msg2);
-        System.out.print("Ruc: " + msg3);
-        setNom(msg2);
         setCod(msg3);
         this.listaFactura.clear();
         this.listaFactura = abonoDAO.llenarFacturas(abonoproveedor.BuscarSentenciaFactura(msg3));
@@ -112,47 +109,41 @@ public final class AbonoProveedorManagedBean {
         //Buscar idabonoproveedor para tener los datos del abono
 
         abonoDAO.search_date_payment(abonoProveedor.getPago(), this.abonoproveedor);
-        System.out.print("Id Proveedor: " + this.abonoproveedor.getIdAbonoProveedor());
         //Buscar datos de abono proveedor
 
         abonoDAO.select_date_payment(this.abonoproveedor.getIdAbonoProveedor());
-        System.out.print("Cant Lista: " + this.listaAbonos.size());
         //Buscar datos de la facturas
 
-        detalleFactura = abonoDAO.select_date_invoice(this.abonoproveedor.getIdAbonoProveedor());
-        System.out.print("Cant Lista-: " + detalleFactura.size());
-
+        this.detalleFactura = abonoDAO.select_date_invoice(this.abonoproveedor.getIdAbonoProveedor());
         //Ingresar los datos a los inputext
-        tipoPago.setDescripcion(listaAbonos.get(0).getDetalletipoPago());
-        tipoBanco.setDescrpcion(listaAbonos.get(0).getDetalletipoBanco());
-        abonoproveedor.setReferencia(listaAbonos.get(0).getReferencia());
-        abonoproveedor.setFecha(listaAbonos.get(0).getFecha());
-        abonoproveedor.setPeriodo(listaAbonos.get(0).getPeriodo());
+        this.tipoPago.setDescripcion(listaAbonos.get(0).getDetalletipoPago());
+        this.tipoBanco.setDescrpcion(listaAbonos.get(0).getDetalletipoBanco());
+        this.abonoproveedor.setDetalletipoPago(listaAbonos.get(0).getDetalletipoPago());
+        this.abonoproveedor.setDetalletipoBanco(listaAbonos.get(0).getDetalletipoBanco());
+        this.abonoproveedor.setReferencia(listaAbonos.get(0).getReferencia());
+        this.abonoproveedor.setFecha(listaAbonos.get(0).getFecha());
+        this.abonoproveedor.setPeriodo(listaAbonos.get(0).getPeriodo());
         setNom(listaAbonos.get(0).getNombreProveedor());
-
-        //Ingresar los datos a la tabla
+        this.abonoproveedor.setNombreProveedor(getNom());
+        setCod(listaAbonos.get(0).getRuc());
+        this.abonoproveedor.setRuc(getCod());
+        for (int i = 0; i < this.detalleFactura.size(); i++) {
+            auxTotal = detalleFactura.get(i).getPagado();
+        }
+        this.abonoproveedor.setImporte(auxTotal);
     }
 
-    public void enviar(int n) {
-        System.out.println(n+this.listaFactura.size());
+    public void enviar() {
         if (this.listaFactura.size() > 0) {
-            if (this.listaFactura.size() == dateMofid) {
+            if (this.listaFactura.size() <= dateMofid) {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
                 abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
                 descrPago = tipoPago.getDescripcion();
-                System.out.println(descrPago + "*" + abonoproveedor.getReferencia());
-                if (descrPago == "Caja") {
-                    System.out.println("Si entre");
-//                    abonoDAO.Insertar(abonoproveedor);
-//                    bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
-                    if (n == 1) {
-                        System.out.println(n + "1.1");
-                        abonoDAO.insertasiento(1, abonoproveedor, 1);
-                    } else {
-                        System.out.println(n + "2.2");
-                        abonoDAO.insertasiento(1, abonoproveedor, 0);
-                    }
-//                    abonoDAO.update_abono();
+                if ("Caja".equals(descrPago)) {
+                    abonoDAO.Insertar(abonoproveedor);
+                    bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                    abonoDAO.insertasiento(1, abonoproveedor, 1);
+                    abonoDAO.update_abono();
                     if (bandera) {
                         PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                         showInfo("Abono proveedor ingresado");
@@ -166,14 +157,10 @@ public final class AbonoProveedorManagedBean {
                     } else if ("".equals(tipoBanco.getDescrpcion())) {
                         showWarn("Error: Ingrese Banco");
                     } else {
-//                        abonoDAO.Insertar(abonoproveedor);
-//                        bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
-                        if (n == 0) {
-                            abonoDAO.insertasiento(3, abonoproveedor, 1);
-                        } else {
-                            abonoDAO.insertasiento(3, abonoproveedor, 0);
-                        }
-//                        abonoDAO.update_abono();
+                        abonoDAO.Insertar(abonoproveedor);
+                        bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                        abonoDAO.insertasiento(3, abonoproveedor, 1);
+                        abonoDAO.update_abono();
                         if (bandera) {
                             PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                             showInfo("Abono proveedor ingresado");
@@ -195,21 +182,15 @@ public final class AbonoProveedorManagedBean {
         }
     }
 
-    public void deshabilitar(List<Factura> listaFactura) {
-        if (this.detalleFactura.size() > 0) {
-            abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
-            abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
-            abonoDAO.Insertar(abonoproveedor);
-
-            bandera = abonoDAO.InsertarDetalle(this.detalleFactura, abonoproveedor);
-            if (bandera) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle de abono revertido"));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error en registrar el abono"));
-            }
+    public void deshabilitar() {
+        abonoDAO.Insertar(this.abonoproveedor);
+        bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor);
+        if (this.abonoproveedor.getDetalletipoPago()== "Caja") {
+            abonoDAO.insertasiento(1, abonoproveedor, 0);
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error el proveedor seleccionado no tiene factura"));
+            abonoDAO.insertasiento(3, abonoproveedor, 0);
         }
+        abonoDAO.update_abono();
     }
 
     public static void removeSessionScopedBean(String beanName) {
@@ -229,8 +210,7 @@ public final class AbonoProveedorManagedBean {
             auxTotal = 0;
             abonoproveedor.setImporte(0);
             dateMofid += 1;
-            System.out.println(this.listaFactura.size());
-            for (int i = 0; i < this.listaFactura.size(); i++) {
+              for (int i = 0; i < this.listaFactura.size(); i++) {
                 auxTotal += this.listaFactura.get(i).getPagado();
             }
             abonoproveedor.setImporte(auxTotal);
@@ -313,7 +293,6 @@ public final class AbonoProveedorManagedBean {
     }
 
     public Factura getFactura() {
-        System.err.println(factura);
         return factura;
     }
 
