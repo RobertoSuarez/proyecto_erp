@@ -137,8 +137,30 @@ public class AnticipoMB  {
         PrimeFaces.current().ajax().update(":form:dialogo_anticipo");
     }
     
+    public boolean Validar_data() {
+        String resumen = "Validación de campos";
+        
+        if (this.selected_anticipo.getId_proveedor() == 0) {
+            addMessage(FacesMessage.SEVERITY_ERROR, resumen, "Se debe seleccionar un proveedor");
+            return false;
+        }
+        
+        if (this.selected_anticipo.getImporte() == 0.0) {
+            addMessage(FacesMessage.SEVERITY_ERROR, resumen, "Se debe ingresar un valor en el importe");
+            return false;
+        }
+        
+        return true;
+    }
+    
     public void guardar_anticipo() {
         System.out.println("guardar");
+        
+        if (!this.Validar_data()) {
+            PrimeFaces.current().ajax().update(":form:growl");
+            return;
+        }
+        
         try {
             System.out.println(this.selected_anticipo.getId_anticipo());
             System.out.println(this.selected_anticipo.getDescripcion());
