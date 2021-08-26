@@ -154,38 +154,46 @@ public class VentaManagedBean implements Serializable {
     public void AgregarProductoLista() {
         try {
             if (this.producto.getCodigo() > 0) {
-                DetalleVenta detalle = new DetalleVenta();
-                detalle.setCodprincipal(this.producto.getCodigo());
-                detalle.setCantidad(this.cantidad);
-                detalle.setDescuento(this.producto.getDescuento());
-                detalle.setPrecio(new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).doubleValue());
-                detalle.setProducto(this.producto);
-
-                detalle.setSubTotal(new BigDecimal(this.producto.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
-
-                this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
-                this.listaDetalle.add(detalle);
-                this.cantidad = 1;
-                this.codigoProducto = 0;
-                this.nombreProducto = "";
-
-                double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-                if (this.producto.getIva() != 0) {
-                    this.subtotal12 += subtemp;
+                if (this.producto.getStock() < this.cantidad) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.producto.getStock() + ")");
                 } else {
-                    this.subtotal0 += subtemp;
+                    if (this.cantidad <= 0) {
+                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
+                    } else {
+                        DetalleVenta detalle = new DetalleVenta();
+                        detalle.setCodprincipal(this.producto.getCodigo());
+                        detalle.setCantidad(this.cantidad);
+                        detalle.setDescuento(this.producto.getDescuento());
+                        detalle.setPrecio(new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).doubleValue());
+                        detalle.setProducto(this.producto);
+
+                        detalle.setSubTotal(new BigDecimal(this.producto.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
+
+                        this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
+                        this.listaDetalle.add(detalle);
+                        this.cantidad = 1;
+                        this.codigoProducto = 0;
+                        this.nombreProducto = "";
+
+                        double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+                        if (this.producto.getIva() != 0) {
+                            this.subtotal12 += subtemp;
+                        } else {
+                            this.subtotal0 += subtemp;
+                        }
+
+                        this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
+                        this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+
+                        this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
+
+                        this.nombreProducto = "XXXXXX";
+                        this.cantidad = 1;
+                        this.precioProducto = 0;
+
+                        this.producto = null;
+                    }
                 }
-
-                this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
-                this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-
-                this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-
-                this.nombreProducto = "XXXXXX";
-                this.cantidad = 1;
-                this.precioProducto = 0;
-
-                this.producto = null;
             } else {
                 System.out.println("No hay producto seleccionado");
             }
@@ -269,7 +277,7 @@ public class VentaManagedBean implements Serializable {
                     System.out.println("Venta realizada con Factura #" + ventaRealizada);
 
                     DetalleVentaDAO daoDetail = new DetalleVentaDAO();
-                    
+
                     while (listSize < this.listaDetalle.size()) {
                         int codProd = this.listaDetalle.get(listSize).getProducto().getCodigo();
                         double qty = this.listaDetalle.get(listSize).getCantidad();
@@ -281,7 +289,7 @@ public class VentaManagedBean implements Serializable {
                         daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
                         listSize += 1;
                     }
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/faces/View/ventas/nuevaVenta.xhtml");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/faces/View/ventas/listaVentas.xhtml");
                 }
             }
         } catch (Exception e) {
