@@ -86,8 +86,7 @@
                                 <div class="p-field p-col">
                                     <p:outputLabel for="name">Proveedor</p:outputLabel>
                                     <p:inputText id="name" type="button" 
-                                                 value="#{abonoProveedorMB.nom}" required="true"
-                                                 validatorMessage="Ingrese proveedor"/>
+                                                 value="#{abonoProveedorMB.nom}" />
                                 </div>
                                 <div class="p-field p-col">
                                     <p:inputText id="hola" value="#{abonoProveedorMB.cod}" style="visibility: hidden"/>
@@ -140,15 +139,14 @@
                                     <p:outputLabel for="fecha" value="Fecha:" style="width: 100px"/>
                                     <p:outputLabel value="#{abonoProveedorMB.abonoproveedor.fecha=abonoProveedorMB.fecha}" style="visibility: hidden"/>
                                     <p:datePicker id="fecha" 
-                                                  value="#{abonoProveedorMB.abonoproveedor.fecha}" required="true"
-                                                  validatorMessage="Ingrese una fecha valida"/>
+                                                  value="#{abonoProveedorMB.abonoproveedor.fecha}" required="true" />
                                 </div>
                                 <div class="p-field p-col">
                                     <label for="periodo" >
                                         Periodo: 
                                     </label>
                                     <p:outputLabel value="#{abonoProveedorMB.abonoproveedor.periodo=abonoProveedorMB.perio}" style="visibility: hidden"/>
-                                    <p:inputText value="#{abonoProveedorMB.abonoproveedor.periodo}"/>
+                                    <p:inputText value="#{abonoProveedorMB.abonoproveedor.periodo}" disabled="true"/>
                                     <div class="p-field p-col"></div>
 
                                 </div>

@@ -247,9 +247,10 @@
                         <f:facet name="footer">                            
                             <p:commandButton value="Guardar" icon="pi pi-check" 
                                              actionListener="#{facturaMB.insertarfactura}"
-                                             process="outputnuevo @this" update=":form:messages"/>
+                                             process="outputnuevo @this" update=":form:messages"
+                                             styleClass="ui-button-success"/>
                             <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('newFactura').hide()"
-                                             class="ui-button-secondary" actionListener="#{facturaMB.reset('outputnuevo')}" 
+                                             styleClass="ui-button-danger" actionListener="#{facturaMB.reset('outputnuevo')}" 
                                              process="@this"/>
                         </f:facet>
                     </p:dialog>

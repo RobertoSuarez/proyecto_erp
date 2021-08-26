@@ -118,14 +118,14 @@ public class AbonoProveedorDAO {
         return listaProveedor;
     }
 
-    public void Insertar(AbonoProveedor abonoProveedor) {
+    public void Insertar(AbonoProveedor abonoProveedor,int estado) {
         if (conex.isEstado()) {
             try {
                 String sentencia = String.format("select insert_abono('%1$s','%2$s',"
-                        + "'%3$s','%4$s','%5$s','%6$s') as registro",
+                        + "'%3$s','%4$s','%5$s','%6$s','%7$s') as registro",
                         abonoProveedor.getDetalletipoPago(), abonoProveedor.getDetalletipoBanco(),
                         abonoProveedor.getRuc(), abonoProveedor.getReferencia(),
-                        abonoProveedor.getFecha(), abonoProveedor.getPeriodo());
+                        abonoProveedor.getFecha(), abonoProveedor.getPeriodo(),estado);
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     abonoProveedor.setIdAbonoProveedor(result.getInt("registro"));
@@ -228,8 +228,7 @@ public class AbonoProveedorDAO {
                             + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"}]";
                     System.out.println(sentencia1);
                 }
-
-//                intJson(sentencia, sentencia1);
+                intJson(sentencia, sentencia1);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
@@ -238,13 +237,42 @@ public class AbonoProveedorDAO {
         }
     }
 
-    public void update_abono() {
+    public void update_abono(int estado) {
         if (conex.isEstado()) {
             try {
                 String sentencia = "update abonoproveedor as ap	"
-                        + "SET  idasiento= (Select max(idasiento) from asiento)"
+                        + "SET  idasiento= (Select max(idasiento) from asiento),estado="+estado
                         + "WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
 //                conex.Ejecutar2(sentencia);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+    }
+    public void update_abono(int estado,int idabono) {
+        if (conex.isEstado()) {
+            try {
+                String sentencia = "update abonoproveedor as ap	"
+                        + "SET  estado="+estado
+                        + "WHERE ap.idabonoproveedor="+idabono;
+                System.out.println(sentencia);
+                conex.Ejecutar2(sentencia);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+    }
+    public void update_factura(float total,String nfactura) {
+        if (conex.isEstado()) {
+            try {
+                String sentencia = "update factura as f	"
+                        + "SET  pagado= (select f.pagado-"+total+" from factura f where f.nfactura='"+nfactura+"')"
+                        + "WHERE f.nfactura='"+nfactura+"''";
+                conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
