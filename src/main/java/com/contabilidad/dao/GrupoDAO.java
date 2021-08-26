@@ -106,4 +106,19 @@ public class GrupoDAO {
         String sql = String.format("delete from grupocuenta where idgrupo = '%1$d'", id);
         return conexion.eliminar(sql) != -1;
     }
+    
+    public boolean isReference(int id) {
+        result = conexion.consultar("select is_reference('"+id+"')");
+        try {
+            if (result.next()) {
+                System.out.println("result:" + result.getBoolean("is_reference"));
+                return result.getBoolean("is_reference");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error is_reference: " + ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return false;
+    }
 }

@@ -104,4 +104,18 @@ public class SubGrupoDAO {
         String sql = String.format("delete from subgrupo where idsubgrupo = '%1$d'", id);
         return conexion.eliminar(sql) != -1;
     }
+    
+    public boolean isReference(int id) {
+        result = conexion.consultar("select is_reference_subgrupo('"+id+"')");
+        try {
+            if (result.next()) {
+                return result.getBoolean("is_reference_subgrupo");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error is_reference_subgrupo: " + ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return false;
+    }
 }

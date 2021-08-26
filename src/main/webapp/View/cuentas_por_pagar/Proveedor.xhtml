@@ -15,23 +15,26 @@
                          <p:growl id="messages" showDetail="true"/>
                          <h1 style="text-align: center; color: black">Proveedores</h1>
                          <!--- Boton nuevo !--> 
-                         <p:toolbar>                                   
-                              <p:toolbarGroup>
-                                   <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                    actionListener="#{proveedorDAO.openNew()}"
-                                                    update=":form:manage-product-content"
-                                                    oncomplete="PF('manageProductDialog').show()"
-                                                    styleClass="ui-button-success" 
-                                                    process="@this"
-                                                    style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-product-content"/>                                             
-                                   </p:commandButton>                                    
-                              </p:toolbarGroup>               
-                              <p:toolbarGroup align="right">
-                                   <p:selectBooleanButton id="slcbtn" value="#{condicionesMB.check}" onLabel="Habilitado" offLabel="Deshabilitado" >
+                         <p:toolbar >         
+
+                              <p:toolbarGroup align="left">                                          
+                                   <div align="left" >
+                                        <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                                         actionListener="#{proveedorDAO.openNew()}"
+                                                         update=":form:manage-product-content"
+                                                         oncomplete="PF('manageProductDialog').show()"
+                                                         styleClass="ui-button-success"
+                                                         process="@this">                                        
+                                             <p:resetInput target=":form:manage-product-content"/> 
+                                        </p:commandButton>   </div>
+                                   <p:selectBooleanButton id="slcbtn"  
+                                                          value="#{condicionesMB.check}" 
+                                                          onLabel="Deshabilitado"                                                           
+                                                          offLabel="Habilitado" >
                                         <p:ajax listener="#{condicionesMB.habTabla()}"/>
-                                   </p:selectBooleanButton>
-                              </p:toolbarGroup>
+                                   </p:selectBooleanButton>   
+                              </p:toolbarGroup>  
+
                          </p:toolbar>
 
                          <!--- Lista de Tabal de datos  !-->
@@ -51,15 +54,15 @@
                                       paginatorPosition="bottom">
 
                               <!--- Facet de Tabal de datos  !-->
-                              <f:facet name="header">
-                                   <div class="products-table-header">                                      
+                              <f:facet name="header"  >
+                                   <div class="products-table-header" align="right">                                      
                                         <!--- Filtro Pf o boton buscar de Tabal de datos  !-->
                                         <span class="filter-container ui-input-icon-left">
                                              <i class="pi pi-search"></i>
-                                             <p:inputText 
-                                                  id="globalFilter"
-                                                  onkeyup="PF('dtProducts').filter()"
-                                                  placeholder="Buscar" />
+                                             <p:inputText style="align-self: flex-end"
+                                                          id="globalFilter"
+                                                          onkeyup="PF('dtProducts').filter()"
+                                                          placeholder="Buscar" />
                                         </span>
                                         <!--- Toggler Pf o boton Columnas de Tabal de datos  !-->
                                         <span class="filter-container ui-input-icon-left">
@@ -115,7 +118,7 @@
                               </p:column>
                               <!--  Columna contacto proveedor !-->
                               <p:column headerText="Contacto" 
-                                       >
+                                        >
                                    <h:outputText 
                                         value="#{provee.proveedor.contacto}"/>
                               </p:column>
@@ -200,9 +203,9 @@
                                         oncomplete="PF('DHProveedor').show"
                                         action="#{condicionesMB.cargarDhab(provee.proveedor)}"
                                         >
-                                      
+
                                    </p:commandButton>
-                                  
+
                               </p:column>
                          </p:dataTable>
                          <!--- FIN TABLA DE DATOS  !-->
@@ -344,7 +347,7 @@
                                                        Telefono: 
                                                   </p:outputLabel>
                                                   <p:inputText 
-                                                       
+
                                                        id ="telProveedor" 
                                                        required="true" 
                                                        maxlength="10"
@@ -500,7 +503,7 @@
                                                   <p:inputText 
                                                        id ="nom_Proveedor" 
                                                        required="True"
-                                                         requiredMessage="Ingrese un nombre"
+                                                       requiredMessage="Ingrese un nombre"
                                                        value="#{proveedorDAO.proveedor.nombre}" />
                                              </div>
                                              <!---Text ruc proveedor-->
@@ -687,16 +690,16 @@
                               </f:facet>
                          </p:dialog>
                          <!--- FIN DIALOG EDITAR PROVEEDOR DE DATOS  !-->
-                         
+
                          <p:confirmDialog id="confirmDHab" widgetVar="DHProveedor" showEffect="fade" width="300"
                                           message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre}?" header="Confirmar" severity="warn">
                               <p:inputText value="#{proveedorDAO.proveedor.nombre}" type="hidden"/>
 
                               <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{condicionesMB.dhProveedor()}"
-                                             process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                             onclick="PF('DHProveedor').hide()" actionListener="#{condicionesMB.resetE()}"/>
-                    </p:confirmDialog> 
+                                               process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
+                              <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                               onclick="PF('DHProveedor').hide()" actionListener="#{condicionesMB.resetE()}"/>
+                         </p:confirmDialog> 
                     </h:form>
                </ui:define>
           </ui:composition>

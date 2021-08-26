@@ -184,7 +184,6 @@ public class AbonoProveedor {
                 + "VALUES ('%1$s',%2$d,(select t.idtipopago FROM public.tipopago t where t.descripcion='%3$s'),(select t.idtipobanco FROM tipobanco t where t.descripcion='%4$s'),"
                 + "(select idproveedor from proveedor pro where pro.codigo ='%5$s'),'%6$s');",
                 getReferencia(), 1, descripcionPago, descripcionBanco, proveedor, fecha);
-        System.out.print(sentencia);
         return sentencia;
     }
 
@@ -193,17 +192,18 @@ public class AbonoProveedor {
                 + "f.fecha,f.vencimiento,(f.importe-f.pagado)as pendiente   from factura f\n"
                 + "where f.idproveedor=(Select p.idproveedor from proveedor p where p.ruc='%1$s') \n"
                 + "and f.habilitar=1 and f.estado=1 and f.pagado<f.importe;", proveedor);
-        System.out.println(sentencia);
         return sentencia;
     }
 
     public String sentenciaMostrar() {
-        String sentencia = "SELECT a.fecha,pag.descripcion,a.referencia,sum(d.pago) as Pago,a.idproveedor,p.nombre,a.periodo\n"
-                + "FROM abonoproveedor a INNER JOIN detalleabono d ON ( a.idabonoproveedor = d.idabonoproveedor  ) \n"
-                + "INNER JOIN tipopago t ON ( a.idtipopago= t.idtipopago  ) \n"
-                + "INNER JOIN proveedor p ON ( a.idproveedor = p.idproveedor)  \n"
-                + "INNER JOIN tipopago pag ON ( a.idtipopago = pag.idtipopago) \n"
-                + "group by a.periodo,a.fecha,pag.descripcion,a.referencia,a.idproveedor,p.nombre";
+        String sentencia = "select x.fecha,x.descripcion,x.referencia,x.pago,x.idproveedor,x.nombre,x.periodo from(\n"
+                + "	SELECT a.fecha,pag.descripcion,a.referencia,sum(d.pago) as pago,a.idproveedor,p.nombre,a.periodo,a.estado\n"
+                + "	FROM abonoproveedor a INNER JOIN detalleabono d ON ( a.idabonoproveedor = d.idabonoproveedor  ) \n"
+                + "	INNER JOIN tipopago t ON ( a.idtipopago= t.idtipopago  ) \n"
+                + "	INNER JOIN proveedor p ON ( a.idproveedor = p.idproveedor) \n"
+                + "	INNER JOIN tipopago pag ON ( a.idtipopago = pag.idtipopago) \n"
+                + "	group by a.periodo,a.fecha,pag.descripcion,a.referencia,a.idproveedor,p.nombre,a.idasiento,a.estado) as x\n"
+                + "	where x.pago>0 and x.estado!=0";
         return sentencia;
     }
 

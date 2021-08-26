@@ -91,10 +91,16 @@ public class SubGrupoManagedBean implements Serializable {
     }
 
     public void form(boolean editable) {
-        System.out.println("Form ###");
         if (!editable) {
             subGrupo = new SubGrupo();
             subGrupo.setGrupo(0);
+        } else {
+            if (subGrupoDAO.isReference(subGrupo.getId())) {
+                System.out.println("no se puede modificar");
+                Messages.showWarn("No puede modificar el subgrupo, "
+                        + "ya esta referenciado con otras cuentas");
+                return;
+            }
         }
         PrimeFaces.current().executeScript("PF('dialogFormSubGrupo').show();");
     }

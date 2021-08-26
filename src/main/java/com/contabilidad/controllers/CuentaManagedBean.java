@@ -4,6 +4,7 @@ import com.contabilidad.dao.CuentaDAO;
 import com.contabilidad.dao.SubGrupoDAO;
 import com.contabilidad.models.Cuenta;
 import com.contabilidad.models.SubGrupo;
+import com.primefaces.Messages;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +106,16 @@ public class CuentaManagedBean implements Serializable {
         } else {
             return false;
         }
+    }
+    
+    public void form() {
+        if (cuentaDAO.isReference(onselectedCuenta.getIdcuenta())) {
+            System.out.println("no se puede modificar");
+            Messages.showWarn("No se puede modificar, porque ya esta "
+                    + "referenciado a otras cuentas");
+            return;
+        }
+        PrimeFaces.current().executeScript("PF('cuentaFormDialog').show();");
     }
 
     private void closeDialog(String widget) {

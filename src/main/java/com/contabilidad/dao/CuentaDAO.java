@@ -90,4 +90,18 @@ public class CuentaDAO {
         String sql = String.format("delete from cuenta where idcuenta = '%1$d'", id);
         return conexion.eliminar(sql) != -1;
     }
+    
+    public boolean isReference(int id) {
+        result = conexion.consultar("select is_reference_cuenta('"+id+"')");
+        try {
+            if (result.next()) {
+                return result.getBoolean("is_reference_cuenta");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error is_reference_cuenta: " + ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return false;
+    }
 }

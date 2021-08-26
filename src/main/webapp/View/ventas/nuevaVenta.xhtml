@@ -46,7 +46,7 @@
                                 <p:inputNumber id="priceTextBox" value="#{VentaMB.precioProducto}" modifyValueOnWheel="false" disabled="true" />
                                 <div/>
                                 <p:outputLabel value="Cantidad: "/>
-                                <p:inputNumber value="#{VentaMB.cantidad}" modifyValueOnWheel="true" />
+                                <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" />
                                 <div/>
                                 <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
                             </h:panelGrid>
@@ -152,6 +152,7 @@
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Efectivo: "/>
                                     <p:inputText value="#{VentaMB.total}" disabled="true" /> 
+                                    <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta(2)}" style="margin-top: 20px" ajax="false"/>
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Tarjeta">
@@ -160,11 +161,27 @@
                                     <p:inputText value="XXXXXXXXXXXXXXXX"/>
                                     <p:outputLabel value="Propietario: "/>
                                     <p:inputText value="#{VentaMB.cliente.nombre}"/>
-                                    <p:outputLabel value="Tipo de pago: "/>
+                                    <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta(3)}" style="margin-top: 20px" ajax="false"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Crédito" >
+                                <h:panelGrid columns="5">
+                                    <p:outputLabel value="Cliente: "/>
+                                    <p:inputText value="#{VentaMB.cliente.nombre}" disabled="true"/>
+                                    <p:outputLabel value="Días plazo" />
+                                    <p:selectOneMenu id="diasPago" value="#{VentaMB.diasPago}" >
+                                        <f:selectItem itemLabel="15 Días" itemValue="15" />
+                                        <f:selectItem itemLabel="30 Días" itemValue="30" />
+                                        <f:selectItem itemLabel="60 Días" itemValue="60" />
+                                        <f:selectItem itemLabel="90 Días" itemValue="90" />
+                                        <f:selectItem itemLabel="180 Días" itemValue="180" />
+                                        <f:selectItem itemLabel="270 Días" itemValue="270" />
+                                        <f:selectItem itemLabel="360 Días" itemValue="360" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta(1)}" style="margin-top: 20px" ajax="false"/>
                                 </h:panelGrid>
                             </p:tab>
                         </p:accordionPanel>
-                        <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta}" style="margin-top: 20px"/>
                     </h:form>
                 </p:dialog>
             </ui:define>

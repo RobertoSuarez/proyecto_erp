@@ -20,10 +20,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
-/**
- *
- * @author ebert
- */
+
 @ManagedBean(name = "proveedorDAO")
 @ViewScoped
 public class ProveedorManageBean implements Serializable {
@@ -36,7 +33,6 @@ public class ProveedorManageBean implements Serializable {
      private List<Proveedor> Proveedores;
      private Proveedor selectedProveedor;
 
-     private String msj;
      private String nom;
      private String cod;
 
@@ -55,6 +51,38 @@ public class ProveedorManageBean implements Serializable {
 
      public void setCondiciones(Condiciones condiciones) {
           this.condiciones = condiciones;
+     }
+
+     public Proveedor getProveedor() {
+          return proveedor;
+     }
+
+     public void setProveedor(Proveedor proveedor) {
+          this.proveedor = proveedor;
+     }
+
+     public ProveedorDAO getProveedorDAO() {
+          return proveedorDAO;
+     }
+
+     public void setProveedorDAO(ProveedorDAO proveedorDAO) {
+          this.proveedorDAO = proveedorDAO;
+     }
+
+     public String getNom() {
+          return nom;
+     }
+
+     public void setNom(String nom) {
+          this.nom = nom;
+     }
+
+     public String getCod() {
+          return cod;
+     }
+
+     public void setCod(String cod) {
+          this.cod = cod;
      }
 
      public CondicionesDAO getCondicionesDAO() {
@@ -84,9 +112,9 @@ public class ProveedorManageBean implements Serializable {
      public void setSelectedProveedor(Proveedor selectedProveedor) {
           this.selectedProveedor = selectedProveedor;
      }
+
 //cargarEditar permite cargar la infomracion del proveedor en los campos correspondientes
      //para asi porder visializar y  editar algun dato
-
      public void cargarEditar(Proveedor p, Condiciones c) {
           //proveedores datos
           this.proveedor.setIdProveedor(p.getIdProveedor());
@@ -108,19 +136,23 @@ public class ProveedorManageBean implements Serializable {
           this.condiciones.setDescripcion(c.getDescripcion());
      }
 
+     //editamos un proveedor con sus condiciones
      public void editar() {
           try {
-
+               //ejecutamos el metodo update del proveedor con sus paramtros 
                this.proveedorDAO.update(proveedor, proveedor.getIdProveedor());
-
                this.condiciones.setProveedor(this.proveedor);
+                //ejecutamos el metodo update de las condiciones con sus paramtros 
                this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
+               //mostramos un msj de guardado
                FacesContext.getCurrentInstance().
                        addMessage(null, new FacesMessage("Proveedor Guardado"));
 
           } catch (SQLException e) {
+               //ocurre un erro se muestra un msj de error
                FacesContext.getCurrentInstance().
-                       addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al guardar"));
+                       addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", 
+                               "Error al guardar"));
 
           }
           PrimeFaces.current().executeScript("PF('manageProductDialogEdit').hide()");
@@ -128,39 +160,28 @@ public class ProveedorManageBean implements Serializable {
 
      }
 
+     //Insertamos un proveedor
      public void insertar() {
           try {
+               //mandamos el metodo insertar un proveedor
                this.proveedorDAO.insertarp(proveedor);
+               //mandamos a insertar las condiciones
                condicionesDAO.insertarCondiciones(condiciones);
+               //msj
                FacesContext.getCurrentInstance().
                        addMessage(null,
                                new FacesMessage("Proveedor Agregado"));
 
           } catch (Exception e) {
+               //msj
                FacesContext.getCurrentInstance().
-                       addMessage(null,
-                               new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al guardar"));
+                       addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                               "Error al guardar"));
 
           }
           PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
           PrimeFaces.current().executeScript("location.reload()");
 
-     }
-
-     public Proveedor getProveedor() {
-          return proveedor;
-     }
-
-     public void setProveedor(Proveedor proveedor) {
-          this.proveedor = proveedor;
-     }
-
-     public ProveedorDAO getProveedorDAO() {
-          return proveedorDAO;
-     }
-
-     public void setProveedorDAO(ProveedorDAO proveedorDAO) {
-          this.proveedorDAO = proveedorDAO;
      }
 
      public List<Proveedor> getListaProveedor() {
@@ -176,39 +197,23 @@ public class ProveedorManageBean implements Serializable {
           this.listaProveedor = listaProveedor;
      }
 
+     //seleccionar proveedor
      public void onRowSelect(SelectEvent<Proveedor> event) {
+          //obtencion de datos segun el proveedor
           String msg2 = event.getObject().getNombre();
           String msg3 = event.getObject().getCodigo();
-          System.out.print("Nombre: " + msg2);
-          System.out.print("Codigo: " + msg3);
+         //envio de los nuevos datos 
           setNom(msg2);
           setCod(msg3);
-     }
-
-     public String getNom() {
-          return nom;
-     }
-
-     public void setNom(String nom) {
-          this.nom = nom;
-     }
-
-     public String getCod() {
-          return cod;
-     }
-
-     public void setCod(String cod) {
-          this.cod = cod;
      }
 
      public void aleatorioCod() {
           String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
           String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
           this.proveedor.setCodigo("PR-" + uuid + uuid2);
-
      }
 
-     //Metodos primeFaces
+     //Metodo para crear nuevo proveedor
      public void openNew() {
           this.selectedProveedor = new Proveedor();
           aleatorioCod();

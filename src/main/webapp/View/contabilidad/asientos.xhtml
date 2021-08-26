@@ -115,7 +115,7 @@
                                                         <f:facet name="input"> 
                                                             <p:selectOneMenu id="cuentasContables" value="#{movimiento.idSubcuenta}" filter="true" filterMatchMode="contains">
                                                                 <p:ajax update=":form:dtMovimientos"/>
-                                                                <f:selectItem itemLabel="Seleccione una sub-cuenta" itemValue="" noSelectionOption="true"/>
+                                                                <f:selectItem itemLabel="Seleccione una sub-cuenta" itemValue="0" noSelectionOption="true"/>
                                                                 <f:selectItems value="#{asientoManagedBean.subCuentas}" var="subCuenta" 
                                                                                itemLabel="#{subCuenta.codigo} #{subCuenta.nombre}" 
                                                                                itemValue="#{subCuenta.id}"></f:selectItems>

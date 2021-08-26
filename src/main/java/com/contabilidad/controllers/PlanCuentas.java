@@ -294,14 +294,17 @@ public class PlanCuentas implements Serializable {
     }
 
     public String editarCuentaContable(CuentaContable cuentaContable) {
-        System.out.println("Recibiendo: " + cuentaContable.toString());
-        this.cuentaContable = cuentaContable;
-        this.codigo = cuentaContable.getCodigo();
-        this.onSeletedGrupo = cuentaContable.getGrupo();
-        this.onSeletedSubgrupo = cuentaContable.getSubgrupo();
-        this.onSeletedCuenta = cuentaContable.getCuenta();
-        this.subCuenta.setNombre(cuentaContable.getSubcuenta());
-        return "agregarCuenta";
+        if (!contableDAO.isReferenceSubCuenta(cuentaContable.getId())) {
+            this.cuentaContable = cuentaContable;
+            this.codigo = cuentaContable.getCodigo();
+            this.onSeletedGrupo = cuentaContable.getGrupo();
+            this.onSeletedSubgrupo = cuentaContable.getSubgrupo();
+            this.onSeletedCuenta = cuentaContable.getCuenta();
+            this.subCuenta.setNombre(cuentaContable.getSubcuenta());
+            return "agregarCuenta";
+        }
+        Messages.showWarn("No se puede modificar, la subcuenta ya tiene movimientos");
+        return "";
     }
 
     public String formAgregarSubCuenta() {
