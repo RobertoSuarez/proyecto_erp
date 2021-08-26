@@ -96,6 +96,8 @@ public class ProformaManageBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
+        
+        listarProformas();
     }
 
     //Buscar cliente
@@ -273,12 +275,11 @@ public class ProformaManageBean implements Serializable {
     @Asynchronous
     public void listarProformas() {
         Proforma prf = new Proforma();
-        ProformaDAO profoDao = new ProformaDAO();
-        int listsize=0;
+        profDao = new ProformaDAO();
         this.listaProformas = new ArrayList<>();
         try {
             System.out.println("Llenando lista de proforma");
-            this.listaProformas = profoDao.retornarProformas();
+            this.listaProformas = this.profDao.retornarProformas();
             System.out.println("Lista llenada");
             if (listaProformas.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
