@@ -100,7 +100,7 @@
                                 <p:commandButton icon="pi pi-pencil"
                                                  styleClass="edit-button rounded-button ui-button-primary" 
                                                  action="#{grupoMB.form(true)}"
-                                                 update=":form-grupos:dialog-form-grupo"
+                                                 update=":form-grupos:dialog-form-grupo, :form-grupos:messages"
                                                  process="@this">
                                     <f:setPropertyActionListener value="#{grupo}" target="#{grupoMB.grupo}" />
                                     <f:setPropertyActionListener value="update" target="#{grupoMB.action}" />

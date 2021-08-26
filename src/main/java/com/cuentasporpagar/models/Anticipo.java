@@ -14,6 +14,8 @@ import java.util.logging.Logger;
  */
 public class Anticipo {
     
+
+    
     private String id_anticipo;
     private Double importe;
     private Date fecha;
@@ -152,7 +154,7 @@ public class Anticipo {
         System.out.println(this.id_proveedor);
         
         Conexion conn = new Conexion();
-        String query =  "update anticipo set \"importe\"=?, \"fecha\"=?, descripcion=?, \"id_proveedor\"=?\n" +
+        String query =  "update anticipo set \"importe\"=?, \"fecha\"=?, descripcion=?, \"id_proveedor\"=?, habilitado=?\n" +
                         "    where \"id_anticipo\"=?;";
         try {
             conn.abrirConexion();
@@ -163,7 +165,8 @@ public class Anticipo {
             stmt.setObject(2, new java.sql.Date(this.fecha.getTime()));
             stmt.setString(3, this.descripcion);
             stmt.setInt(4, this.id_proveedor);
-            stmt.setString(5, this.id_anticipo);
+            stmt.setBoolean(5, this.habilitado);
+            stmt.setString(6, this.id_anticipo);
             
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);

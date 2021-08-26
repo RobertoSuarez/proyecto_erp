@@ -60,6 +60,11 @@ public class GrupoManagedBean implements Serializable {
     public void edit() {
         System.out.println("Actualizar");
         Grupo grupoDB = grupoDAO.getGrupoById(grupo.getId());
+        // validar que no aun no tenga cuentas referenciaas
+        
+        if (!grupoDAO.isReference(grupo.getId())) {
+            
+        }
         // valida que no este vacio
         if (!grupo.getNombre().isEmpty()) {
             // se valida que no sea el mismo nombre que ya tiene
@@ -87,12 +92,18 @@ public class GrupoManagedBean implements Serializable {
         }
     }
 
-    public void form(boolean editable) {
+    public void form(boolean editable) {        
         if (!editable) {
             grupo = new Grupo();
             int codigo = grupoDAO.getUltimoCodigo();
             if (codigo > 0) {
                 grupo.setCodigo("" + (codigo + 1));
+            }
+        } else {
+            if (grupoDAO.isReference(grupo.getId())) {
+                System.out.println("no se puede modificar");
+                Messages.showWarn("No se puede modificar, ya esta referenciado a otras cuentas");
+                return;
             }
         }
         PrimeFaces.current().executeScript("PF('dialogFormGrupo').show();");
