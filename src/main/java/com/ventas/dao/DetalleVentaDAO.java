@@ -30,8 +30,9 @@ public class DetalleVentaDAO {
         try {
             int idDetalle = 1;
             ResultSet rs = null;
-
             this.con.abrirConexion();
+            
+            //Recibir siguiente código de detalle venta
             String query = "select iddetalleventa from public.detalleventa order by iddetalleventa desc limit 1;";
             rs = this.con.consultar(query);
 
@@ -39,20 +40,23 @@ public class DetalleVentaDAO {
                 idDetalle = rs.getInt(1) + 1;
             }
 
+            //insertar detalle venta
             query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
                     + idProducto + "," + cantidad + "," + descuento + "," + precio + ")";
             System.out.println(query);
             this.con.consultar(query);
 
+            
+            //Reducir stock
             int cantidadActual = 0;
             query = "select cantidad from public.productos where codprincipal = " + idProducto + ";";
             rs = this.con.consultar(query);
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
-
             query = "update public.productos set cantidad = " + (cantidadActual - cantidad) + " where codprincipal = " + idProducto + ";";
             this.con.ejecutar(query);
+            
 
             this.con.cerrarConexion();
         } catch (Exception e) {
