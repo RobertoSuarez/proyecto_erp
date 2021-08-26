@@ -445,11 +445,11 @@
                                     <div class="p-field p-col">
                                         <p:outputLabel for="editdescripcion" >Descripción:</p:outputLabel>
                                         <p:outputLabel value="#{facturaMB.factura.descripcion}" style="visibility: hidden"/>
-                                        <p:inputTextarea value="#{facturaMB.factura.descripcion}"/>
+                                        <p:inputTextarea value="#{facturaMB.factura.descripcion}" disabled="true" />
                                     </div>
                                     <div class="p-field p-col">
                                         <p:inputText value="#{facturaMB.factura.nfactura}" style="visibility: hidden"/>
-                                        <p:inputText value="#{facturaMB.factura.ruc}" style="visibility: hidden"/>
+                                        <p:inputText value="#{facturaMB.factura.ruc}" style="visibility: hidden" disabled="true" />
                                     </div>
                                 </div>
 
@@ -458,7 +458,13 @@
                                         <p:outputLabel for="editimporte">Importe:</p:outputLabel>
                                         <p:outputLabel value="#{facturaMB.factura.importe}" style="visibility: hidden"/>
                                         <p:inputText type="number" value="#{facturaMB.factura.importe}" 
-                                                     />
+                                                     disabled="true"  />
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editimporte">Pagado:</p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.pagado}" style="visibility: hidden"/>
+                                        <p:inputText type="number" value="#{facturaMB.factura.pagado}" 
+                                                     disabled="true"  />
                                     </div>
                                 </div>
 
@@ -467,7 +473,7 @@
                                         <p:outputLabel for="editimporte">Anticipo: </p:outputLabel>
                                         <p:outputLabel value="#{facturaMB.factura.pagado}" style="visibility: hidden"/>
                                         <p:inputText type="number" value="#{facturaMB.factura.pagado}" 
-                                                     />
+                                                     disabled="true"  />
                                     </div>
                                 </div>
 
@@ -477,14 +483,14 @@
                                         <div class="p-field p-col">
                                             <p:outputLabel for="editfecha" >Fecha factura:</p:outputLabel>
                                             <p:outputLabel value="#{facturaMB.factura.fecha}" style="visibility: hidden"/>
-                                            <p:datePicker value="#{facturaMB.factura.fecha}" />
+                                            <p:datePicker value="#{facturaMB.factura.fecha}"  disabled="true" />
                                         </div> 
 
                                         <div class="p-field p-col">
                                             <p:outputLabel for="editvencimiento">Vencimiento:</p:outputLabel>
                                             <p:outputLabel value="#{facturaMB.factura.vencimiento}" style="visibility: hidden"/>
                                             <p:datePicker value="#{facturaMB.factura.vencimiento}"
-                                                          />
+                                                           disabled="true" />
                                         </div>
                                     </div>
                                 </p:panel>
@@ -546,7 +552,7 @@
                         <p:commandButton value="Si" icon="pi pi-check" update=":form:outputrev"
                                          process="confirmDHab @this" oncomplete="PF('revFactura').show()" onsuccess="PF('DHFactura').hide()"/>
                         <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                         onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset('DHFactura')}"/>
+                                         onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset('outputrev')}"/>
                     </p:confirmDialog> 
 
                 </h:form>
