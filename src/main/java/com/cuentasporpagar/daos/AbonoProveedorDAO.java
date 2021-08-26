@@ -243,7 +243,7 @@ public class AbonoProveedorDAO {
                 String sentencia = "update abonoproveedor as ap	"
                         + "SET  idasiento= (Select max(idasiento) from asiento),estado="+estado
                         + "WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
-//                conex.Ejecutar2(sentencia);
+                conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
