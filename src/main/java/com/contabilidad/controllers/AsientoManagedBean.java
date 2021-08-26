@@ -17,7 +17,6 @@ import javax.ejb.Asynchronous;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
@@ -89,7 +88,7 @@ public class AsientoManagedBean implements Serializable {
         if (currentAsiento.getIdAsiento() == 0) {
             if (!currentAsiento.getDocumento().isEmpty() && !currentAsiento.getDetalle().isEmpty()
                     && currentAsiento.getFechaCreacion() != null && currentAsiento.getFechaCierre() != null
-                    && currentAsiento.getMovimientos().size() > 1 && currentAsiento.getIdDiario() != 0 
+                    && currentAsiento.getMovimientos().size() > 1 && currentAsiento.getIdDiario() != 0
                     && !verifyMovimientos(currentAsiento.getMovimientos())) {
                 if (totalDebe == totalHaber && totalDebe != 0 && totalHaber != 0) {
                     currentAsiento.setTotal(Double.toString(totalDebe));
@@ -120,6 +119,9 @@ public class AsientoManagedBean implements Serializable {
                     loadElements();
                 } else {
                     showWarn("No se detectaron cambios");
+                    closeDialogModal();
+                    openNewAsiento();
+                    loadElements();
                 }
             } else {
                 showWarn("Los valores totales deben Coincidir");
@@ -245,7 +247,7 @@ public class AsientoManagedBean implements Serializable {
                 counter++;
             }
         }
-        return counter >0;
+        return counter > 0;
     }
 
     public boolean compareMovimientos(List<Movimiento> movimientos) {
