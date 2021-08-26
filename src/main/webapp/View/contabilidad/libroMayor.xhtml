@@ -54,7 +54,7 @@
 
                                 <p:column>
                                     <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
-                                        <h:outputText styleClass="p-ml-2" value="#{libroManagedBean.calculateSaldoCuenta(libro.codigo)}"/>
+                                        <h:outputText styleClass="p-ml-2" value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.calculateSaldoCuenta(libro.codigo))}"/>
                                     </div>
                                 </p:column>
                             </p:headerRow>
