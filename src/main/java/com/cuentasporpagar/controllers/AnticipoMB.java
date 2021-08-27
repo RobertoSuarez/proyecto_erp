@@ -141,12 +141,12 @@ public class AnticipoMB  {
         String resumen = "Validación de campos";
         
         if (this.selected_anticipo.getId_proveedor() == 0) {
-            addMessage(FacesMessage.SEVERITY_ERROR, resumen, "Se debe seleccionar un proveedor");
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe seleccionar un proveedor");
             return false;
         }
         
         if (this.selected_anticipo.getImporte() == 0.0) {
-            addMessage(FacesMessage.SEVERITY_ERROR, resumen, "Se debe ingresar un valor en el importe");
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe ingresar un valor en el importe");
             return false;
         }
         
