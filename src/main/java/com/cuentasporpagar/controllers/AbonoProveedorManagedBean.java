@@ -192,7 +192,6 @@ public final class AbonoProveedorManagedBean {
             abonoDAO.insertasiento(3, abonoproveedor, 0);
         }
         abonoDAO.update_abono(0);
-        System.out.println(abonoproveedor.getIdAbonoProveedor()+"++");
         abonoDAO.update_abono(0,abonoproveedor.getIdAbonoProveedor());
         
         for (int i = 0; i < this.detalleFactura.size(); i++) {
