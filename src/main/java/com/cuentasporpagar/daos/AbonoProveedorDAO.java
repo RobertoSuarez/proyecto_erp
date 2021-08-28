@@ -49,7 +49,7 @@ public class AbonoProveedorDAO {
     public AbonoProveedorDAO(DetalleAbono detalleAbono) {
         this.detalleAbono = detalleAbono;
     }
-
+//Llenar Datos de los abonos realizados
     public List<AbonoProveedor> llenarDatos(String sentencia) {
         conex = new Conexion();
         listaAbono = new ArrayList<>();
@@ -72,7 +72,7 @@ public class AbonoProveedorDAO {
         }
         return listaAbono;
     }
-
+//LLena una lista de datos de facturas de dicho proveedor seleeccionado
     public List<Factura> llenarFacturas(String sentencia) {
         conex = new Conexion();
         listafactura = new ArrayList<>();
@@ -95,7 +95,7 @@ public class AbonoProveedorDAO {
         }
         return listafactura;
     }
-
+//Llena una lista de Todos los proveedores registrado
     public List<Proveedor> llenarProveedor() {
         if (conex.isEstado()) {
             try {
@@ -117,7 +117,7 @@ public class AbonoProveedorDAO {
         }
         return listaProveedor;
     }
-
+//Inserta abonoproveedor
     public void Insertar(AbonoProveedor abonoProveedor,int estado) {
         if (conex.isEstado()) {
             try {
@@ -137,7 +137,7 @@ public class AbonoProveedorDAO {
             }
         }
     }
-
+//Inserta los datos del detalle del pago
     public boolean InsertarDetalle(List<Factura> selectedFactura, AbonoProveedor abono) {
         if (conex.isEstado()) {
             try {
@@ -183,12 +183,6 @@ public class AbonoProveedorDAO {
         } else {
             return "PAGO-00" + (num + 1);
         }
-    }
-
-    public LocalDate sumfechas(LocalDate fecha) {
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("uuuu-MM-dd");
-        fecha = fecha.plusDays(30);
-        return fecha;
     }
 
     //asiento contable
@@ -244,6 +238,7 @@ public class AbonoProveedorDAO {
                         + "SET  idasiento= (Select max(idasiento) from asiento),estado="+estado
                         + "WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
                 conex.Ejecutar2(sentencia);
+                System.out.println(sentencia);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
@@ -256,7 +251,7 @@ public class AbonoProveedorDAO {
             try {
                 String sentencia = "update abonoproveedor as ap	"
                         + "SET  estado="+estado
-                        + "WHERE ap.idabonoproveedor="+idabono;
+                        + "WHERE ap.idabonoproveedor=("+idabono+"-1)";
                 System.out.println(sentencia);
                 conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
@@ -270,8 +265,10 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String sentencia = "update factura as f	"
-                        + "SET  pagado= (select f.pagado-"+total+" from factura f where f.nfactura='"+nfactura+"')"
+                        + "SET  pagado= select f.pagado -"+total+" from "
+                        + "((select f.pagado from factura f where f.nfactura='"+nfactura+"')) as f"
                         + "WHERE f.nfactura='"+nfactura+"''";
+                System.out.println(sentencia);
                 conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");

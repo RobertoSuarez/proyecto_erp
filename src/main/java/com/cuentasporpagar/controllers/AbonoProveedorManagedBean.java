@@ -133,13 +133,14 @@ public final class AbonoProveedorManagedBean {
         }
         this.abonoproveedor.setImporte(auxTotal);
     }
-
+//Envia los datos a verificar y guardar el pago
     public void enviar() {
         if (this.listaFactura.size() > 0) {
             if (dateMofid >=this.listaFactura.size() ) {
                 abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
                 abonoproveedor.setDetalletipoBanco(tipoBanco.getDescrpcion());
                 descrPago = tipoPago.getDescripcion();
+                //Verifica los tipos de pagos 
                 if ("Caja".equals(descrPago)) {
                     abonoDAO.Insertar(abonoproveedor,1);
                     bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
@@ -182,7 +183,7 @@ public final class AbonoProveedorManagedBean {
             showWarn("Error el proveedor seleccionado no tiene factura");
         }
     }
-
+//Envia los datos a deshabilitar
     public void deshabilitar() {
         abonoDAO.Insertar(this.abonoproveedor,0);
         bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor);
@@ -197,6 +198,8 @@ public final class AbonoProveedorManagedBean {
         for (int i = 0; i < this.detalleFactura.size(); i++) {
              abonoDAO.update_factura(this.abonoproveedor.getImporte(), this.detalleFactura.get(i).getNfactura());
         }
+        PrimeFaces.current().ajax().update(":form:dtPagos");
+        showInfo("Se revertior el pago correctamente");
     }
 
     public static void removeSessionScopedBean(String beanName) {
@@ -243,7 +246,7 @@ public final class AbonoProveedorManagedBean {
 
     //Funcion para mostrar mensaje de informacion incorrecta
     public void showWarn(String message) {
-        addMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", message);
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
     }
 
     //Limpia los imputext
@@ -270,7 +273,7 @@ public final class AbonoProveedorManagedBean {
         }
         abonoproveedor.setImporte(auxTotal);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Factura removida"));
-        PrimeFaces.current().ajax().update("form:msgs", "form:table-factura");
+        PrimeFaces.current().ajax().update("form:msgs", "form:table-factura",":form:dtPagos");
         setPago(0);
     }
 
