@@ -7,14 +7,11 @@ import com.cuentasporpagar.models.Proveedor;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -57,7 +54,7 @@ public class AnticipoMB  {
     @PostConstruct
     public void init() {
         try {
-            this.anticipos = AnticipoDAO.getAllJson();
+            this.anticipos = AnticipoDAO.getAllJson(false);
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -184,7 +181,7 @@ public class AnticipoMB  {
         
         
         try {
-            this.anticipos = AnticipoDAO.getAllJson();  // Actualiza los datos de la tabla
+            this.anticipos = AnticipoDAO.getAllJson(false);  // Actualiza los datos de la tabla
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -214,7 +211,7 @@ public class AnticipoMB  {
         }
         
         try {
-            this.anticipos = AnticipoDAO.getAllJson();  // Actualiza los datos de la tabla
+            this.anticipos = AnticipoDAO.getAllJson(false);  // Actualiza los datos de la tabla
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -22,7 +22,11 @@ public class Anticipo {
     private String descripcion;
     private int id_proveedor;
     private Proveedor proveedor;
+    private String referencia;
     private boolean habilitado;
+    private int id_asiento;
+    private boolean revertido;
+    private int id_asiento_revertido;
 
     public Anticipo() {
         this.id_anticipo = "";
@@ -31,6 +35,7 @@ public class Anticipo {
         this.descripcion = "";
         this.id_proveedor = 0;
         this.proveedor = new Proveedor();
+        this.referencia = "";
         this.habilitado = true;
     }
 
@@ -90,6 +95,38 @@ public class Anticipo {
         this.habilitado = habilitado;
     }
 
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
+
+    public int getId_asiento() {
+        return id_asiento;
+    }
+
+    public void setId_asiento(int id_asiento) {
+        this.id_asiento = id_asiento;
+    }
+
+    public boolean isRevertido() {
+        return revertido;
+    }
+
+    public void setRevertido(boolean revertido) {
+        this.revertido = revertido;
+    }
+
+    public int getId_asiento_revertido() {
+        return id_asiento_revertido;
+    }
+
+    public void setId_asiento_revertido(int id_asiento_revertido) {
+        this.id_asiento_revertido = id_asiento_revertido;
+    }
+
     
     // Metodo aux para comunicación con db
     public Anticipo GetDBProveedor() {
@@ -112,7 +149,7 @@ public class Anticipo {
         System.out.println(this.id_proveedor);
         
         Conexion conn = new Conexion();
-        String query =  "select insert_anticipo(?, ?, ?, ?, ?);";
+        String query =  "select insert_anticipo(?, ?, ?, ?, ?, ?);";
         try {
             conn.abrirConexion();
             
@@ -121,7 +158,8 @@ public class Anticipo {
             stmt.setDouble(2, this.importe);
             stmt.setObject(3, new java.sql.Date(this.fecha.getTime()));
             stmt.setString(4, this.descripcion);
-            stmt.setBoolean(5, this.habilitado);
+            stmt.setString(5, this.referencia);
+            stmt.setBoolean(6, true);
             
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);
@@ -154,7 +192,7 @@ public class Anticipo {
         System.out.println(this.id_proveedor);
         
         Conexion conn = new Conexion();
-        String query =  "update anticipo set \"importe\"=?, \"fecha\"=?, descripcion=?, \"id_proveedor\"=?, habilitado=?\n" +
+        String query =  "update anticipo set \"importe\"=?, \"fecha\"=?, descripcion=?, \"id_proveedor\"=?, habilitado=?, referencia=?\n" +
                         "    where \"id_anticipo\"=?;";
         try {
             conn.abrirConexion();
@@ -166,7 +204,8 @@ public class Anticipo {
             stmt.setString(3, this.descripcion);
             stmt.setInt(4, this.id_proveedor);
             stmt.setBoolean(5, this.habilitado);
-            stmt.setString(6, this.id_anticipo);
+            stmt.setString(6, this.referencia);
+            stmt.setString(7, this.id_anticipo);
             
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);
