@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -87,6 +89,10 @@ public class Cartera_X_EdadesController implements Serializable {
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
             
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("titulo", "Empresa S.A");
+            
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
@@ -95,7 +101,7 @@ public class Cartera_X_EdadesController implements Serializable {
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     filetext.getPath(),
-                    null,
+                    parametros,
                     new JRBeanCollectionDataSource(this.lista_Cartera_X_Edades)
             );
 

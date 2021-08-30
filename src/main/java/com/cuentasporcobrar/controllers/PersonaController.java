@@ -98,6 +98,11 @@ public class PersonaController implements Serializable {
     public void setPersona_Juridica(Persona_Juridica persona_Juridica) {
         this.persona_Juridica = persona_Juridica;
     }
+
+    public List<Persona> getListaClienteInactivos() {
+        return this.listaClienteInactivos=personaDAO.obtenerClientesInactivos();
+    }
+    
     //Fin
 
     public void cargarClientes(Persona per) {
@@ -390,13 +395,13 @@ public class PersonaController implements Serializable {
     //Metodos para mostrar mensajes de Información y Error
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Exito", mensaje);
+                "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void mostrarMensajeAdvertencia(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "Error", mensaje);
+                "Advertencia", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
