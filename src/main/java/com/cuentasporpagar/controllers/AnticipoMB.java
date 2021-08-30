@@ -4,7 +4,6 @@ import com.cuentasporpagar.daos.AnticipoDAO;
 import com.cuentasporpagar.daos.BuscarProvDAO;
 import com.cuentasporpagar.models.Anticipo;
 import com.cuentasporpagar.models.Proveedor;
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,9 +15,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import java.io.Serializable;
 
 /**
  *
@@ -28,7 +27,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "anticipoMB")
 @SessionScoped
-public class AnticipoMB  {
+public class AnticipoMB implements Serializable {
 
     static final String NUEVO = "NUEVO" ;
     static final String EDITAR = "EDITAR";
