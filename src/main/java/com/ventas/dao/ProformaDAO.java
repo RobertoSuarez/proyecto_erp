@@ -86,7 +86,7 @@ public class ProformaDAO {
             this.con.abrirConexion();
             rs = this.con.ejecutarConsulta("select * from public.proforma order by idproforma desc limit 1");
             while (rs.next()) {
-                idVenta = rs.getInt(1) + idVenta + 1;
+                idVenta = rs.getInt(1) + 1;
             }
             return idVenta;
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class ProformaDAO {
 
     public List<Proforma> retornarProformas() throws SQLException {
         ResultSet rs;
-        String consulta;
+        String consulta,estado;
         con.abrirConexion();
         List<Proforma> listadocs= new ArrayList<>();
         try {
@@ -131,6 +131,10 @@ public class ProformaDAO {
                     prof.setIva12(rs.getFloat(14));
                     prof.setIce(rs.getFloat(15));
                     prof.setTotalproforma(rs.getFloat(16));
+                    estado="Pendiente";
+                    if(prof.getEstado()=="P"){
+                        prof.setEstado(estado);
+                    }
                     listadocs.add(prof);
                     System.out.println("Proforma en lista");
                 }

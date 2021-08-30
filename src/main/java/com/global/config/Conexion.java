@@ -298,4 +298,6 @@ public class Conexion {
         }
         return valor;
     }
+    
+    
 }

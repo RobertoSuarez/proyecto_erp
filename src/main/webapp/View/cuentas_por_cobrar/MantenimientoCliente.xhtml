@@ -52,7 +52,15 @@
                                                      placeholder="Buscar"/>
                                     </span>
                                 </div>
-                                <br/><br/>
+                                <div>
+                                    <span>
+                                        <p:commandButton value="Inactivos" 
+                                                         icon="pi pi-user-minus"
+                                                         oncomplete="PF('clienteInactivo').show();"
+                                                         update=":frmCI:tblClientesInactivos"/>
+                                    </span>
+                                </div>
+                                <br/>
                             </f:facet>
                             <p:column class="tamanoInput" style="text-align: center;"
                                       headerText="Identificación"
@@ -124,18 +132,116 @@
                                                message="¿Seguro que desea inactivar este cliente?" 
                                                icon="pi pi-info-circle"/>
                                 </p:commandButton>
-                                <p:commandButton actionListener="#{personaController.activarCliente(varClientes.idCliente)}" 
-                                                 class="tamanoButtonActions" 
-                                                 styleClass="rounded-button ui-button-success" 
-                                                 icon="pi pi-check-circle"
-                                                 update=":growl tblClientes">
-                                    <p:confirm header="Advertencia" 
-                                               message="¿Seguro que desea Activar este Cliente?" 
-                                               icon="pi pi-info-circle"/>
-                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </h:form>
+
+                    <!-- Ventana Clientes Inactivos !-->
+                    <p:dialog header="Clientes Inactivos" minHeight="50"
+                              height="auto" width="900px" showEffect="fade"
+                              modal="true" widgetVar="clienteInactivo"
+                              responsive="true" id="dialogCI">
+                        <h:form id="frmCI">
+                            <p:dataTable id="tblClientesInactivos" 
+                                         var="varClienteInactivo" 
+                                         widgetVar="dtClienteInactivo"
+                                         scrollable="true"  
+                                         value="#{personaController.listaClienteInactivos}" 
+                                         rowKey="#{varClienteInactivo.idCliente}"
+                                         paginator="true" rows="5" 
+                                         rowSelectMode="add"
+                                         paginatorPosition="bottom" 
+                                         style="font-size: 14px;">
+
+                                <f:facet name="header">
+                                    <div style="float: right;">
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" 
+                                                         onkeyup="PF('dtClienteInactivo').filter()" 
+                                                         placeholder="Buscar"/>
+                                        </span>
+                                    </div>
+                                    <br/><br/>
+                                </f:facet>
+
+                                <p:column class="tamanoInput" style="text-align: center;"
+                                          headerText="Identificación"
+                                          filterBy="#{varClienteInactivo.identificacion}"
+                                          filterStyle="display : none"
+                                          sortBy="#{varClienteInactivo.identificacion}">
+                                    <h:outputText value="#{varClienteInactivo.identificacion}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;"
+                                          headerText="Tipo de Identificación"
+                                          filterBy="#{varClienteInactivo.descrIdentificacion}"
+                                          filterStyle="display : none"
+                                          sortBy="#{varClienteInactivo.descrIdentificacion}">
+                                    <h:outputText value="#{varClienteInactivo.descrIdentificacion}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;"    
+                                          headerText="Cliente"
+                                          filterBy="#{varClienteInactivo.razonNombre}" 
+                                          filterStyle="display : none"
+                                          sortBy="#{varClienteInactivo.razonNombre}">
+                                    <h:outputText value="#{varClienteInactivo.razonNombre}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;" 
+                                          headerText="Dirección" 
+                                          sortBy="#{varClienteInactivo.direccion}" >
+                                    <h:outputText value="#{varClienteInactivo.direccion}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;"  
+                                          headerText="Teléfono"
+                                          sortBy="#{varClienteInactivo.tlf1}">
+                                    <h:outputText value="#{varClienteInactivo.tlf1}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;"  
+                                          headerText="Correo"
+                                          sortBy="#{varClienteInactivo.correo}">
+                                    <h:outputText value="#{varClienteInactivo.correo}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;"  
+                                          headerText="Tipo de Cliente"
+                                          sortBy="#{varClienteInactivo.descrTipoCliente}" >
+                                    <h:outputText value="#{varClienteInactivo.descrTipoCliente}"/>
+                                </p:column>
+
+                                <p:column class="tamanoInput" style="text-align: center;" 
+                                          headerText="Estado"
+                                          sortBy="#{varClienteInactivo.estado}">
+                                    <h:outputText value="#{varClienteInactivo.descrEstado}"
+                                                  styleClass="#{varClienteInactivo.createLabel()}"/>
+                                </p:column>
+                                <p:column style="text-align: center; width: 100px;" 
+                                          headerText="Acciones">
+                                    <p:commandButton actionListener="#{personaController.activarCliente(varClienteInactivo.idCliente)}" 
+                                                     class="tamanoButtonActions" 
+                                                     styleClass="rounded-button ui-button-success" 
+                                                     icon="pi pi-check-circle"
+                                                     update=":growl tblClientesInactivos">
+                                        <p:confirm header="Advertencia" 
+                                                   message="¿Seguro que desea Activar este Cliente?" 
+                                                   icon="pi pi-info-circle"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <div style="float: right;">
+                                <br/>
+                                <p:commandButton value="Regresar" 
+                                                 onclick="PF('clienteInactivo').hide"
+                                                 immediate="true"
+                                                 oncomplete="location.reload()"
+                                                 icon="pi pi-sign-out"/>
+                            </div>
+                        </h:form>
+                    </p:dialog>
 
                     <!-- Ventana Agregar Cliente Natural  !-->
                     <p:dialog header="Nuevo Cliente Natural" minHeight="50"
@@ -465,6 +571,21 @@
                                              class="tamanoInputClienteNJ"
                                              placeholder="Opcional"
                                              value="#{personaController.persona_Juridica.paginaWeb}"/>
+                                
+                                <p:outputLabel for="fechaCreacionJuridica" 
+                                               value="Fecha de Creación:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:datePicker monthNavigator="true" 
+                                              yearNavigator="true"
+                                              id="fechaCreacionJuridica"
+                                              style="width: 100px !important;"
+                                              yearRange="1800:2050"
+                                              placeholder="aaaa-mm-dd"
+                                              readonlyInput="true"
+                                              required="true"
+                                              requiredMessage="Ingrese su Fecha de Creación"
+                                              />
                             </p:panelGrid>
                             <br/>
                             <div style="float: right;">
@@ -808,6 +929,21 @@
                                              class="tamanoInputClienteNJ"
                                              placeholder="Opcional"
                                              value="#{personaController.persona_Juridica.paginaWeb}"/>
+                                
+                                <p:outputLabel for="fechaCreacionJuridica" 
+                                               value="Fecha de Creación:"
+                                               style="font-weight: bold;">
+                                </p:outputLabel>
+                                <p:datePicker monthNavigator="true" 
+                                              yearNavigator="true"
+                                              id="fechaCreacionJuridica"
+                                              style="width: 100px !important;"
+                                              yearRange="1800:2050"
+                                              placeholder="aaaa-mm-dd"
+                                              readonlyInput="true"
+                                              required="true"
+                                              requiredMessage="Ingrese su Fecha de Creación"
+                                              />
                             </p:panelGrid>
                             <br/>
                             <div style="float: right;">

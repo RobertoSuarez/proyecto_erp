@@ -131,7 +131,10 @@ public class BeanGenerarCalendario  {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
+    public static String a_pagar(Float numero) {
+        return String.format("%.02f", numero);
+    }
+    
     public StreamedContent getFile() {
         System.out.println("///getFiledata");
         this.facturas.forEach(fac -> {
@@ -182,6 +185,7 @@ public class BeanGenerarCalendario  {
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("titulo", "Reporte desde java");
             parametros.put("fecha", LocalDate.now().toString());
+            parametros.put("empresa_nombre", "ERP CONTABLE");
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
@@ -294,4 +298,6 @@ public class BeanGenerarCalendario  {
     public void on_cambio() {
         this.disabled_fecha = !"1".equals(this.tipo);
     }
+    
+    
 }

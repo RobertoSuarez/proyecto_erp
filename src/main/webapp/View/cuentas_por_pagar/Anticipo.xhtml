@@ -103,7 +103,7 @@
                         class="p-m-3" 
                         header="Anticipo - #{anticipoMB.anticipo_modo}" 
                         showEffect="fade" 
-                        modal="true" 
+                        modal="true" height="400"
                         responsive="true" id="dialogo_anticipo" 
                         widgetVar="manageAnticipoDialog">
 
@@ -120,6 +120,7 @@
                                         id="id_anticipo" type="input"
                                         value="#{anticipoMB.selected_anticipo.id_anticipo}" />
                                 </div>
+                                
 
                                 <div class="p-formgrid p-grid">
                                     <div class="p-field p-col-12 p-md-12 p-lg-6">
@@ -163,7 +164,14 @@
                                             required="true" />
                                     </div>
                                 </div>
-
+                                
+                                <div class="p-field">
+                                    <p:outputLabel 
+                                        for="referencia" >Código de documento de referencia</p:outputLabel>
+                                    <p:inputText 
+                                        id="referencia" value="#{anticipoMB.selected_anticipo.referencia}" required="true"/>
+                                </div>
+                                
                                 <div class="p-field">
                                     <p:outputLabel 
                                         for="descripcion" >Descripción</p:outputLabel>
@@ -171,12 +179,8 @@
                                         id="descripcion" 
                                         value="#{anticipoMB.selected_anticipo.descripcion}" />
                                 </div>
-                                <div class="p-field">
-                                    <p:selectBooleanCheckbox 
-                                        value="#{anticipoMB.selected_anticipo.habilitado}" itemLabel="Habilitado" >
-                                        <p:ajax listener="#{anticipoMB.msgHabilitado()}"/>
-                                    </p:selectBooleanCheckbox>
-                                </div>
+
+                                
 
                                 <!-- dialogo busqueda de proveedor-->
                                 <p:overlayPanel for="buscar" dynamic="true" style="width:600px" widgetVar="selecionProveedor">
@@ -230,7 +234,7 @@
                                        header="Confirmar" severity="warn">
                         
                         <f:facet name="message">
-                            <h4>¿Desea dehabilitar el anticipo?</h4>
+                            <h4>¿Desea deshabilitar el anticipo?</h4>
                         </f:facet>
                         
                         <p:commandButton 
