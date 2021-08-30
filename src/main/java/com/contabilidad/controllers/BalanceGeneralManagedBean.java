@@ -74,6 +74,7 @@ public class BalanceGeneralManagedBean implements Serializable {
             parametros.put("titulo", "Reporte desde java");
             parametros.put("fecha", dateFormat.format(fecha));
             parametros.put("sumPasivoPatrimonio", pasivoPatrimonio+"");
+            parametros.put("nombreEmpresa", "EMPRESA ABC");
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
