@@ -4,13 +4,7 @@ import com.contabilidad.dao.DiarioDAO;
 import com.contabilidad.dao.ImformeContableDAO;
 import com.contabilidad.models.Diario;
 import com.contabilidad.models.Libro;
-import com.lowagie.text.BadElementException;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,7 +12,6 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +25,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.primefaces.component.export.PDFOptions;
-import org.primefaces.component.export.PDFOrientationType;
 
 @Named
 @ViewScoped
@@ -43,6 +34,8 @@ public class LibroManagedBean implements Serializable {
     private ImformeContableDAO imformes = new ImformeContableDAO();
     private DiarioDAO diarioDAO = new DiarioDAO();
     private static DecimalFormat toTwoDecimal = new DecimalFormat("#.##");
+    
+    private String empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
 
     private double totalSaldoDebe;
     private double totalSaldoHaber;
@@ -52,15 +45,11 @@ public class LibroManagedBean implements Serializable {
     private List<Diario> diarios;
 
     //Opciones para creacion de pdf
-    private PDFOptions pdfOpt;
-    private static final Font chapterFont = FontFactory.getFont(FontFactory.HELVETICA, 26, Font.BOLDITALIC);
-    private static final Font paragraphFont = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL);
-
+    
     @PostConstruct
     public void mainLibroMayor() {
         llenarLibro();
         loadDiarios();
-        customizeLibroMayor();
     }
 
     public void loadDiarios() {
@@ -103,7 +92,6 @@ public class LibroManagedBean implements Serializable {
 
     public LocalDate getDateNow() {
         LocalDate date = LocalDate.now();
-        Date fecha = new Date();
         return date;
     }
 
@@ -116,32 +104,6 @@ public class LibroManagedBean implements Serializable {
         }
     }
 
-    public void customizeLibroMayor() {
-        pdfOpt = new PDFOptions();
-        pdfOpt.setFacetBgColor("#CFFFFF");
-        pdfOpt.setFacetFontStyle("BOLD");
-        pdfOpt.setCellFontSize("12");
-        pdfOpt.setOrientation(PDFOrientationType.PORTRAIT);
-    }
-
-    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-        System.out.println("Entra a esta instancia");
-        Document pdf = (Document) document;
-
-        pdf.open();
-
-        pdf.addTitle("Libro Mayor: " + getDateNow());
-        pdf.setPageSize(PageSize.A4);
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "headerlibro.png";
-
-        Image img = Image.getInstance(logo);
-        img.scalePercent(30);
-
-        pdf.add(img);
-    }
-
     public void exportpdf() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -149,7 +111,7 @@ public class LibroManagedBean implements Serializable {
         // Cabecera de la respuesta.
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
-        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=Libro-%1$s.pdf",getDateNow()));
+        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=LibroMayor.pdf"));
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
@@ -158,6 +120,10 @@ public class LibroManagedBean implements Serializable {
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("titulo", "Reporte desde java");
             parametros.put("fecha", LocalDate.now().toString());
+            parametros.put("totaldebe", ConverTwoDecimal(totalSaldoDebe));
+            parametros.put("totalhaber", ConverTwoDecimal(totalSaldoHaber));
+            parametros.put("saldototal", ConverTwoDecimal(saldoTotal));
+            parametros.put("nombreempresa", empresa);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
@@ -188,14 +154,14 @@ public class LibroManagedBean implements Serializable {
         }
     }
 
-    public PDFOptions getPdfOpt() {
-        return pdfOpt;
+    public String getEmpresa() {
+        return empresa;
     }
 
-    public void setPdfOpt(PDFOptions pdfOpt) {
-        this.pdfOpt = pdfOpt;
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
     }
-
+    
     public List<Libro> getLibros() {
         return libros;
     }
