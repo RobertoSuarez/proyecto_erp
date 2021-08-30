@@ -71,12 +71,8 @@ public class PlanCuentas implements Serializable {
     }
 
     public void onGrupoChange() {
-        System.out.println("onSeletedGrupo: " + onSeletedGrupo);
         if (onSeletedGrupo != null && !onSeletedGrupo.trim().equals("0")) {
-            System.out.println("########################Grupo: ");
             codigo = onSeletedGrupo;
-            System.out.println("Codigo: " + codigo);
-            System.out.println("param: " + (Integer.parseInt(codigo.trim()) - 1));
             grupo = grupos.get(Integer.parseInt(codigo.trim()) - 1);
             subgrupos = contableDAO.getSubGrupos(codigo);
         } else {
@@ -89,7 +85,6 @@ public class PlanCuentas implements Serializable {
     }
 
     public void onSubGrupoChange() {
-        System.out.println("onSeletedSubgrupo: " + onSeletedSubgrupo);
         if (onSeletedSubgrupo != null && !onSeletedSubgrupo.trim().equals("0")) {
             subgrupos.forEach(g -> {
                 if (g.getId() == Integer.parseInt(onSeletedSubgrupo)) {
@@ -110,7 +105,6 @@ public class PlanCuentas implements Serializable {
     public void onCuentaChange() {
         String codAux = codigo;
         if (onSeletedCuenta != null && !onSeletedCuenta.trim().equals("0")) {
-            System.out.println("######## CuentaCodigo:" + onSeletedCuenta);
             cuentas.forEach(g -> {
                 if (g.getIdcuenta() == Integer.parseInt(onSeletedCuenta)) {
                     codigo = g.getCodigo();
@@ -125,13 +119,10 @@ public class PlanCuentas implements Serializable {
     }
 
     public void registrarSubCuenta() {
-        System.out.println("########## registrarsubcuenta");
-        System.out.println("#### registrarsubcuenta: " + subCuenta.toString());
         if (!subCuenta.getNombre().isEmpty() && subCuenta.getTipo() != null) {
             String cuentaCodigo = onSeletedCuenta.trim();
             subCuenta.setCodigo(codigo);
             subCuenta.setCuenta(Integer.parseInt(cuentaCodigo));
-            System.out.println("#### registrarsubcuenta: " + subCuenta.toString());
             contableDAO.insertSubCuenta(subCuenta);
             subCuenta = new SubCuenta();
             codigo = "";
@@ -166,7 +157,6 @@ public class PlanCuentas implements Serializable {
 
     /* Cambiar el nombre de la funcion por formAgregarGrupo */
     public void formAgregarGrupo() {
-        System.out.println("############ Form Agregar Grupo ##########");
         if (Integer.parseInt(onSeletedGrupo.trim()) <= 0) {
             intoGrupo = new Grupo();
             intoGrupo.setCodigo(String.valueOf(grupos.size() + 1));
@@ -177,11 +167,7 @@ public class PlanCuentas implements Serializable {
     }
 
     public void formAgregarSubGrupo() {
-        System.out.println("############ formAgregarSubGrupo ##########");
-        System.out.println("Subgrupo: " + onSeletedSubgrupo.trim());
-
         if (onSeletedSubgrupo.trim().equals("0") && !onSeletedGrupo.trim().equals("0")) {
-            System.out.println("pasamos al subgrupoooooo");
             intoSubgrupo = new SubGrupo();
             intoSubgrupo.setCodigo(onSeletedGrupo.trim() + "." + String.valueOf(subgrupos.size() + 1));
             intoSubgrupo.setGrupo(Integer.parseInt(onSeletedGrupo.trim()));
@@ -192,11 +178,7 @@ public class PlanCuentas implements Serializable {
     }
 
     public void formAgregarCuenta() {
-        System.out.println("############ formAgregarCuenta ##########");
-        System.out.println("Cuenta: " + onSeletedCuenta.trim());
-
         if (onSeletedCuenta.trim().equals("0") && !onSeletedSubgrupo.trim().equals("0")) {
-            System.out.println("pasamos a la cuentaaaaaaa");
             intoCuenta = new Cuenta();
             intoCuenta.setCodigo(codigo.trim() + "." + String.valueOf(cuentas.size() + 1));
             intoCuenta.setIdsubgrupo(Integer.parseInt(onSeletedSubgrupo.trim()));
@@ -238,8 +220,6 @@ public class PlanCuentas implements Serializable {
     }
 
     public void registrarSubGrupo() {
-        System.out.println("############ Registrar subgrupo");
-        System.out.println("Nombre: " + intoSubgrupo.getNombre());
         // que intoSubgrupo no este vacio
         if (!intoSubgrupo.getNombre().trim().isEmpty()) {
             // verificar que no existe en la lista
@@ -266,8 +246,6 @@ public class PlanCuentas implements Serializable {
     }
 
     public void registrarCuenta() {
-        System.out.println("############ Registrar cuenta");
-        System.out.println("Nombre: " + intoCuenta.getNombre());
         // que intoSubgrupo no este vacio
         if (!intoCuenta.getNombre().trim().isEmpty()) {
             // verificar que no existe en la lista
@@ -327,15 +305,11 @@ public class PlanCuentas implements Serializable {
     }
 
     public void onActSelectSubgrupo(SelectEvent event) {
-        System.out.println("######### Recibiendo: ");
-        System.out.println(((SubGrupo) event.getObject()).toString());
         subgrupos.add((SubGrupo) event.getObject());
         intoSubgrupo = new SubGrupo();
     }
 
     public void onActSelectCuenta(SelectEvent event) {
-        System.out.println("######### Recibiendo: ");
-        System.out.println(((Cuenta) event.getObject()).toString());
         cuentas.add((Cuenta) event.getObject());
         intoCuenta = new Cuenta();
     }

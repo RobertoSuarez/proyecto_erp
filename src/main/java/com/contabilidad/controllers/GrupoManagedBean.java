@@ -44,8 +44,6 @@ public class GrupoManagedBean implements Serializable {
     }
 
     public void create() {
-        System.out.println("Create###########");
-        System.out.println("Grupo: " + grupo.toString());
         if (!grupo.getNombre().isEmpty()) {
             if (grupoDAO.insert(grupo)) {
                 listaGrupos = grupoDAO.getGrupoCuenta();
@@ -58,7 +56,6 @@ public class GrupoManagedBean implements Serializable {
     }
 
     public void edit() {
-        System.out.println("Actualizar");
         Grupo grupoDB = grupoDAO.getGrupoById(grupo.getId());
         // valida que no este vacio
         if (!grupo.getNombre().isEmpty()) {
