@@ -43,8 +43,6 @@ public class SubGrupoManagedBean implements Serializable {
     }
 
     public void create() {
-        System.out.println("Create ####");
-        System.out.println("Subgrupo: " + subGrupo);
         if (!subGrupo.getNombre().isEmpty() && subGrupo.getGrupo() > 0) {
             // validar que no este en la lista - pendiente
             if (subGrupoDAO.store(subGrupo)) {
@@ -60,8 +58,6 @@ public class SubGrupoManagedBean implements Serializable {
     }
     
     public void edit() {
-        System.out.println("Editar ####");
-        System.out.println(subGrupo);
         SubGrupo subGrupoDB = subGrupoDAO.getGrupoById(subGrupo.getId());
         // valida que no este vacio
         if (!subGrupo.getNombre().isEmpty()) { 

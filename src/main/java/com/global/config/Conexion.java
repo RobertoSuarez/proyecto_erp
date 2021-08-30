@@ -73,7 +73,6 @@ public class Conexion {
             if (connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection(url, usuario, clave);
                 statement = connection.createStatement();
-                System.out.println("Conexion exitosa 2");
                 return true;
             }
         } catch (SQLException e) {
@@ -108,7 +107,6 @@ public class Conexion {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
                 statement.close();
-                System.out.println("Conexion desconectada");
                 return true;
             } else {
                 System.out.println("No hay una conexion para desconectar");
