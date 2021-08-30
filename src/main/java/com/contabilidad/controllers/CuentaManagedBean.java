@@ -47,7 +47,7 @@ public class CuentaManagedBean implements Serializable {
     }
 
     public void showWarn(String message) {
-        addMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", message);
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
     }
 
     public void newCuenta() {

@@ -88,7 +88,7 @@ public class GrupoManagedBean implements Serializable {
             listaGrupos.remove(grupo);
             Messages.showInfo("Grupo " + grupo.getNombre() + " fue eliminado");
         } else {
-            Messages.showError("El Grupo tiene cuentas referenciadas, no se puede eliminar");
+            Messages.showWarn("El Grupo tiene cuentas referenciadas, no se puede eliminar");
         }
     }
 
