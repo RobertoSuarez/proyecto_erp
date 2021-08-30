@@ -1,9 +1,13 @@
 package com.cuentasporpagar.models;
 
 import com.global.config.Conexion;
+import com.google.gson.Gson;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -148,7 +152,50 @@ public class Anticipo {
         System.out.println(this.importe);
         System.out.println(this.id_proveedor);
         
+        Asiento asiento = new Asiento();
+        asiento.idDiario = "11";
+        asiento.total = this.importe.toString();
+        asiento.documento = this.referencia;
+        asiento.detalle = this.descripcion;
+        asiento.fechaCreacion = new SimpleDateFormat("dd-MM-yyyy").format(this.fecha);
+        asiento.fechaCierre = new SimpleDateFormat("dd-MM-yyyy").format(this.fecha);
+        
+        List<Movimiento> movimientos = new ArrayList<>();
+        
+        Movimiento movimiento1 = new Movimiento();
+        movimiento1.idSubcuenta = "2"; // Subcuenta caja chicha
+        movimiento1.debe = this.importe.toString();
+        movimiento1.haber = "0";
+        movimiento1.tipoMovimiento = "Anticipo de proveedor";
+        
+        Movimiento movimiento2 = new Movimiento();
+        movimiento2.idSubcuenta = "65"; // Subcuenta Anticipo proveedor
+        movimiento2.debe = "0";
+        movimiento2.haber = this.importe.toString();
+        movimiento2.tipoMovimiento = "Anticipo de proveedor";
+        
+        movimientos.add(movimiento1);
+        movimientos.add(movimiento2);
+        
+        Gson gson = new Gson();
+       
+       
+        
+        
         Conexion conn = new Conexion();
+        
+        try {
+            String queryAsiento = String.format("SELECT public.generateasientocotableexternal('%s', '%s')", gson.toJson(asiento), gson.toJson(movimientos));
+            System.out.println(queryAsiento);
+            conn.ejecutar(queryAsiento);
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("No se puedo registrar el asiento del anticipo, se cacelo todo");
+            return;
+        }
+        
+        
+        
         String query =  "select insert_anticipo(?, ?, ?, ?, ?, ?);";
         try {
             conn.abrirConexion();
@@ -253,5 +300,111 @@ public class Anticipo {
         }
     }
     
+    public class Asiento {
+        private String idDiario;
+        private String total;
+        private String documento;
+        private String detalle;
+        private String fechaCreacion;
+        private String fechaCierre;
+
+        public Asiento() {
+        }
+
+        public String getIdDiario() {
+            return idDiario;
+        }
+
+        public void setIdDiario(String idDiario) {
+            this.idDiario = idDiario;
+        }
+
+      
+
+        public String getTotal() {
+            return total;
+        }
+
+        public void setTotal(String total) {
+            this.total = total;
+        }
+
+        public String getDocumento() {
+            return documento;
+        }
+
+        public void setDocumento(String documento) {
+            this.documento = documento;
+        }
+
+        public String getDetalle() {
+            return detalle;
+        }
+
+        public void setDetalle(String detalle) {
+            this.detalle = detalle;
+        }
+
+        public String getFechaCreacion() {
+            return fechaCreacion;
+        }
+
+        public void setFechaCreacion(String fechaCreacion) {
+            this.fechaCreacion = fechaCreacion;
+        }
+
+        public String getFechaCierre() {
+            return fechaCierre;
+        }
+
+        public void setFechaCierre(String fechaCierre) {
+            this.fechaCierre = fechaCierre;
+        }
+    }
+    
+    public class Movimiento {
+        private String idSubcuenta;
+        private String debe;
+        private String haber;
+        private String tipoMovimiento;
+
+        public Movimiento() {
+        }
+
+        public String getIdSubcuenta() {
+            return idSubcuenta;
+        }
+
+        public void setIdSubcuenta(String idSubcuenta) {
+            this.idSubcuenta = idSubcuenta;
+        }
+
+        public String getDebe() {
+            return debe;
+        }
+
+        public void setDebe(String debe) {
+            this.debe = debe;
+        }
+
+        public String getHaber() {
+            return haber;
+        }
+
+        public void setHaber(String haber) {
+            this.haber = haber;
+        }
+
+        public String getTipoMovimiento() {
+            return tipoMovimiento;
+        }
+
+        public void setTipoMovimiento(String tipoMovimiento) {
+            this.tipoMovimiento = tipoMovimiento;
+        }
+        
+    }
     
 }
+
+
