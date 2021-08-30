@@ -60,11 +60,6 @@ public class GrupoManagedBean implements Serializable {
     public void edit() {
         System.out.println("Actualizar");
         Grupo grupoDB = grupoDAO.getGrupoById(grupo.getId());
-        // validar que no aun no tenga cuentas referenciaas
-        
-        if (!grupoDAO.isReference(grupo.getId())) {
-            
-        }
         // valida que no este vacio
         if (!grupo.getNombre().isEmpty()) {
             // se valida que no sea el mismo nombre que ya tiene
