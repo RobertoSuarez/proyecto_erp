@@ -154,6 +154,7 @@ public final class AbonoProveedorManagedBean {
                                 PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                                 showInfo("Abono proveedor ingresado");
                                 dateMofid = 0;
+                                reset();
                             } else {
                                 showWarn("Error en registrar el abono");
                             }
@@ -171,6 +172,7 @@ public final class AbonoProveedorManagedBean {
                                     PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                                     showInfo("Abono proveedor ingresado");
                                     dateMofid = 0;
+                                    reset();
                                 } else {
                                     showError("Error en registrar el abono");
                                 }
