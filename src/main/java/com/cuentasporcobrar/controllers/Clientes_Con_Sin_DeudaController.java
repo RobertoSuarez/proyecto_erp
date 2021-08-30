@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -70,9 +72,9 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
         try (OutputStream stream = ec.getResponseOutputStream()) {
 
             // Parametros para el reporte.
-//            Map<String, Object> parametros = new HashMap<String, Object>();
-//            parametros.put("titulo", "Reporte desde java");
-//            parametros.put("fecha", LocalDate.now().toString());
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("titulo", "Empresa S.A");
+            
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
                     .getCurrentInstance()
@@ -82,7 +84,7 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     filetext.getPath(),
-                    null,
+                    parametros,
                     new JRBeanCollectionDataSource(this.lista_Clientes_con_sin_deudas)
             );
 

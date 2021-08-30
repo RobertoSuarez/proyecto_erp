@@ -5,6 +5,8 @@
  */
 package com.cuentasporcobrar.models;
 
+import java.time.LocalDate;
+
 public class Persona_Juridica extends Persona{
     
     //Declaración de las Variables
@@ -12,6 +14,7 @@ public class Persona_Juridica extends Persona{
     private String nomContacto;
     private String cargoContacto;
     private String paginaWeb;
+    private LocalDate fechaCreacion;
 
     public Persona_Juridica() {
     }
@@ -20,7 +23,7 @@ public class Persona_Juridica extends Persona{
                             String direccion, String identificacion,
                             boolean estado, String tlf1, String tlf2, 
                             String correo, int idTipoCliente,String nomContacto,
-                            String cargoContacto,String paginaWeb) {
+                            String cargoContacto,String paginaWeb, LocalDate fechaCreacion) {
         super(idTipoIdenficacion, direccion, identificacion, estado, tlf1, tlf2, 
                 correo, idTipoCliente);
         
@@ -28,6 +31,7 @@ public class Persona_Juridica extends Persona{
         this.nomContacto=nomContacto;
         this.cargoContacto=cargoContacto;
         this.cargoContacto=cargoContacto;
+        this.fechaCreacion=fechaCreacion;
     }
 
     public String getRazonSocial() {
@@ -61,9 +65,14 @@ public class Persona_Juridica extends Persona{
     public void setPaginaWeb(String paginaWeb) {
         this.paginaWeb = paginaWeb;
     }
-    
-    
-    
+
+    public LocalDate getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDate fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
 }
 

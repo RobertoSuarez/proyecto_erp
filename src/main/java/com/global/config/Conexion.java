@@ -51,7 +51,6 @@ public class Conexion {
                 Class.forName(classForName);
                 conex = DriverManager.getConnection(url, usuario, clave);
                 st = conex.createStatement();
-                System.err.println("Conexion exitosa 1");
                 estado = true;
             }
         } catch (ClassNotFoundException | SQLException exSQL) {
@@ -299,4 +298,6 @@ public class Conexion {
         }
         return valor;
     }
+    
+    
 }

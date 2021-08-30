@@ -39,7 +39,37 @@ public class PersonaDAO implements Serializable {
         lista_Personas = new ArrayList<>();
         if (conex.isEstado()) {
             try {
-                String sentencia = "Select * from Mostrar_Todos_los_Clientes() order by id desc";
+                String sentencia = "Select * from Mostrar_Todos_los_Clientes() "
+                        + "where estado_r='Activo'";
+                result = conex.ejecutarConsulta(sentencia);
+                while (result.next()) {
+                    lista_Personas.add(new Persona(result.getInt("id"),
+                            result.getString("identificacion"),
+                            result.getString("tipo_identificacion"),
+                            result.getString("razon_nombres"),
+                            result.getString("direccion_r"),
+                            result.getString("tlf1"),
+                            result.getString("tlf2"),
+                            result.getString("correo1_r"),
+                            result.getString("tipo_cliente_r"),
+                            result.getString("estado_r")));
+
+                }
+            } catch (SQLException ex) {
+                lista_Personas.add(new Persona(-1, "-", "-", "-", "-", "-", "-", "-", "-", "-"));
+            } finally {
+                conex.cerrarConexion();
+            }
+        }
+        return lista_Personas;
+    }
+    
+    public List<Persona> obtenerClientesInactivos() {
+        lista_Personas = new ArrayList<>();
+        if (conex.isEstado()) {
+            try {
+                String sentencia = "Select * from Mostrar_Todos_los_Clientes() "
+                        + "where estado_r='Inactivo'";
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     lista_Personas.add(new Persona(result.getInt("id"),

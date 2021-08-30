@@ -202,7 +202,7 @@ public class RetencionController implements Serializable {
         }
     }
 
-    //Metodos para mostrar mensajes de Información y Error
+    //Metodos para mostrar mensajes de Información, Advertencia y Error
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Exito", mensaje);

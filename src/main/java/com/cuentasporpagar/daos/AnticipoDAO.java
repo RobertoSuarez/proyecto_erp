@@ -71,10 +71,10 @@ public class AnticipoDAO {
     // El metodo getAllJson(), trae todos los anticipos con su proveedor,
     // toda esta información es traida en formato json, la cual se deserializa
     // con la biblioteca Gson de google.
-    public static List<Anticipo> getAllJson() throws SQLException {
+    public static List<Anticipo> getAllJson(boolean revertido) throws SQLException {
         String datos = null;
         Conexion conn = new Conexion();
-        String query = "select select_all_anticipo_width_proveedor() as _anticipo;";
+        String query = "select select_all_anticipo_width_proveedor('"+ revertido +"') as _anticipo;";
         try {
             conn.abrirConexion();
 

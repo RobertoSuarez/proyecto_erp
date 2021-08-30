@@ -7,6 +7,7 @@ import com.global.config.Conexion;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
@@ -44,7 +45,8 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                     + person_Juridica.getIdTipoCliente() + ",'"
                     + person_Juridica.getNomContacto()+"','"
                     + person_Juridica.getCargoContacto()+"','"
-                    + person_Juridica.getPaginaWeb()+"')";
+                    + person_Juridica.getPaginaWeb()+"','"
+                    + person_Juridica.getFechaCreacion()+"')";
             //Verificamos la conexion
             if (conex.isEstado()) {
                 //Una vez se asegura que la conexion este correcta.
@@ -76,7 +78,8 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                     + person_Juridica.getIdTipoCliente() + ",'"
                     + person_Juridica.getNomContacto()+"','"
                     + person_Juridica.getCargoContacto()+"','"
-                    + person_Juridica.getPaginaWeb()+"')";
+                    + person_Juridica.getPaginaWeb()+"','"
+                    + person_Juridica.getFechaCreacion()+"')";
 
             if (conex.isEstado()) {
                 //Una vez se asegura que la conexion este correcta.
@@ -117,12 +120,13 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                             result.getInt("idtipocliente_r"),
                             result.getString("nom_contacto_r"),
                             result.getString("cargo_contacto_r"),
-                            result.getString("pagina_web_r"));
+                            result.getString("pagina_web_r"),
+                            result.getObject("fecha_creacion_r", LocalDate.class));
 
                 }
             } catch (SQLException ex) {
                 p_juridica = new Persona_Juridica("", -1, "", "", false, "", "",
-                        "", -1,"","","");
+                        "", -1,"","","",null);
             } finally {
                 conex.cerrarConexion();
             }

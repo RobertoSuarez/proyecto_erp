@@ -87,7 +87,7 @@
 
                     <div class="p-mt-3">
                         <p:dataTable 
-                            id="tablafacturas" paginator="true" rows="10" paginatorPosition="bottom"
+                            id="tablafacturas"
                             value="#{beanGenerarCalendario.facturas}" 
                             reflow="true"
                             var="factura" 
@@ -136,7 +136,7 @@
                             </p:column>
 
                             <p:column headerText="Por pagar">
-                                <h:outputText value="#{factura.importe - factura.pagado}" />
+                                <h:outputText value="#{beanGenerarCalendario.a_pagar(factura.importe-factura.pagado)}" />
                             </p:column>
 
                             <p:column headerText="Estado">

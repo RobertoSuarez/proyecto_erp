@@ -75,6 +75,7 @@ public class VentaManagedBean implements Serializable {
 
     private double efectivo;
     private double cambio;
+    private int diasPago;
 
     //Constructor
     @PostConstruct
@@ -105,6 +106,9 @@ public class VentaManagedBean implements Serializable {
 
         this.efectivo = 0;
         this.cambio = 0;
+        this.diasPago = 0;
+
+        this.detalleDAO = new DetalleVentaDAO();
     }
 
     //Buscar cliente
@@ -115,7 +119,7 @@ public class VentaManagedBean implements Serializable {
             this.clienteNombre = this.cliente.getNombre();
         } else {
             System.out.print("No hay cliente");
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe o se encuentra inactivo.");
         }
 
         if (this.cliente.getNombre() != null) {
@@ -150,38 +154,47 @@ public class VentaManagedBean implements Serializable {
     public void AgregarProductoLista() {
         try {
             if (this.producto.getCodigo() > 0) {
-                DetalleVenta detalle = new DetalleVenta();
-                detalle.setCodprincipal(this.producto.getCodigo());
-                detalle.setCantidad(this.cantidad);
-                detalle.setDescuento(this.producto.getDescuento());
-                detalle.setPrecio(new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).doubleValue());
-                detalle.setProducto(this.producto);
-
-                detalle.setSubTotal(new BigDecimal(this.producto.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
-
-                this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
-                this.listaDetalle.add(detalle);
-                this.cantidad = 1;
-                this.codigoProducto = 0;
-                this.nombreProducto = "";
-
-                double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-                if (this.producto.getIva() != 0) {
-                    this.subtotal12 += subtemp;
+                if (this.producto.getStock() < this.cantidad) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.producto.getStock() + ")");
                 } else {
-                    this.subtotal0 += subtemp;
+                    if (this.cantidad <= 0) {
+                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
+                    } else {
+
+                        //Ingreso de valores al detalle
+                        DetalleVenta detalle = new DetalleVenta();
+                        detalle.setCodprincipal(this.producto.getCodigo());
+                        detalle.setCantidad(this.cantidad);
+                        detalle.setDescuento(this.producto.getDescuento());
+                        detalle.setPrecio(new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).doubleValue());
+                        detalle.setProducto(this.producto);
+                        detalle.setSubTotal(new BigDecimal(this.producto.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
+
+                        //Cálculo de los valores
+                        this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
+                        this.listaDetalle.add(detalle);
+                        this.cantidad = 1;
+                        this.codigoProducto = 0;
+                        this.nombreProducto = "";
+                        double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+                        if (this.producto.getIva() != 0) {
+                            this.subtotal12 += subtemp;
+                        } else {
+                            this.subtotal0 += subtemp;
+                        }
+
+                        this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
+                        this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+
+                        this.total = new BigDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice).setScale(2, RoundingMode.UP).doubleValue();
+
+                        this.nombreProducto = "XXXXXX";
+                        this.cantidad = 1;
+                        this.precioProducto = 0;
+
+                        this.producto = null;
+                    }
                 }
-
-                this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
-                this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-
-                this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-
-                this.nombreProducto = "XXXXXX";
-                this.cantidad = 1;
-                this.precioProducto = 0;
-
-                this.producto = null;
             } else {
                 System.out.println("No hay producto seleccionado");
             }
@@ -225,55 +238,72 @@ public class VentaManagedBean implements Serializable {
     }
 
     @Asynchronous
-    public void RegistrarVenta() {
+    public void RegistrarVenta(int formaPago) {
         try {
+            Venta ventaActual = new Venta();
             int listSize = 0;
             if (this.listaDetalle.isEmpty()) {
-                addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una venta nula", "Message Content");
+                addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede  realizar una venta nula");
             } else {
+                if (this.clienteNombre == null || this.clienteNombre == "") {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe elegir un cliente para la venta");
+                } else {
+                    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    String currentDate = df.format(new Date());
 
-                while (listSize < this.listaDetalle.size()) {
-                    System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
-                    listSize += 1;
+                    //Asignar valores a la venta
+                    ventaActual.setCliente(this.cliente);
+                    ventaActual.setIdCliente(this.cliente.getIdCliente());
+                    ventaActual.setIdEmpleado(1);
+                    ventaActual.setIdFormaPago(formaPago);
+                    ventaActual.setIdDocumento(0);
+                    ventaActual.setSucursal(1);
+                    ventaActual.setFechaVenta(currentDate);
+                    ventaActual.setPuntoEmision(1);
+                    ventaActual.setSecuencia(0);
+                    ventaActual.setAutorizacion("849730964");
+                    ventaActual.setFechaEmision(currentDate);
+                    ventaActual.setFechaAutorizacion(currentDate);
+                    ventaActual.setBase12(this.subtotal12);
+                    ventaActual.setBase0(this.subtotal0);
+                    ventaActual.setIva(this.iva);
+                    ventaActual.setIce(this.ice);
+                    ventaActual.setTotalFactura(this.total);
+                    ventaActual.setDiasCredito(this.diasPago);
+
+                    //Verificación en consola
+                    System.out.println(ventaActual.getCliente().getNombre());
+                    System.out.println(ventaActual.getTotalFactura());
+
+                    //Guardar la venta desde DAO
+                    int ventaRealizada = this.ventaDao.GuardarVenta(ventaActual);
+
+                    //Verificar que se haya ingresado la venta
+                    if (ventaRealizada == 0) {
+                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo realizar la venta. Revise los datos ingresados");
+                    } else {
+                        System.out.println("Venta realizada con Factura #" + ventaRealizada);
+
+                        DetalleVentaDAO daoDetail = new DetalleVentaDAO();
+
+                        //Registro de cada producto (detalle) de la venta en la BD
+                        while (listSize < this.listaDetalle.size()) {
+                            int codProd = this.listaDetalle.get(listSize).getProducto().getCodigo();
+                            double qty = this.listaDetalle.get(listSize).getCantidad();
+                            double dsc = this.listaDetalle.get(listSize).getDescuento();
+                            double price = this.listaDetalle.get(listSize).getPrecio();
+
+                            System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
+                            System.out.println(ventaRealizada + "-" + codProd + "-" + qty + "-" + dsc + "-" + price);
+                            daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
+                            listSize += 1;
+                        }
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/faces/View/ventas/listaVentas.xhtml");
+                    }
                 }
-
-                DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                String currentDate = df.format(new Date());
-
-                Venta ventaActual = new Venta();
-
-                ventaActual.setCliente(this.cliente);
-                ventaActual.setIdCliente(this.cliente.getIdCliente());
-                ventaActual.setIdEmpleado(1);
-                ventaActual.setIdFormaPago(1);
-                ventaActual.setIdDocumento(0);
-                ventaActual.setSucursal(1);
-                ventaActual.setFechaVenta(currentDate);
-                ventaActual.setPuntoEmision(1);
-                ventaActual.setSecuencia(0);
-                ventaActual.setAutorizacion("849730964");
-                ventaActual.setFechaEmision(currentDate);
-                ventaActual.setFechaAutorizacion(currentDate);
-                ventaActual.setBase12(this.subtotal12);
-                ventaActual.setBase0(this.subtotal0);
-                ventaActual.setIva(this.iva);
-                ventaActual.setIce(this.ice);
-                ventaActual.setTotalFactura(this.total);
-
-                System.out.println(ventaActual.getCliente().getNombre());
-                System.out.println(ventaActual.getTotalFactura());
-
-                this.ventaDao.GuardarVenta(ventaActual);
             }
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
-        }
-    }
-
-    @Asynchronous
-    public void ActualizarCambio() {
-        if (this.total > 0) {
-            this.cambio = this.total - this.efectivo;
         }
     }
 
@@ -472,6 +502,14 @@ public class VentaManagedBean implements Serializable {
 
     public void setCambio(double cambio) {
         this.cambio = cambio;
+    }
+
+    public int getDiasPago() {
+        return diasPago;
+    }
+
+    public void setDiasPago(int diasPago) {
+        this.diasPago = diasPago;
     }
 
 }
