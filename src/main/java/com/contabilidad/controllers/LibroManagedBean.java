@@ -103,7 +103,6 @@ public class LibroManagedBean implements Serializable {
 
     public LocalDate getDateNow() {
         LocalDate date = LocalDate.now();
-        Date fecha = new Date();
         return date;
     }
 
@@ -149,7 +148,7 @@ public class LibroManagedBean implements Serializable {
         // Cabecera de la respuesta.
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
-        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=Libro-%1$s.pdf",getDateNow()));
+        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=LibroMayor.pdf"));
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
@@ -158,6 +157,9 @@ public class LibroManagedBean implements Serializable {
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("titulo", "Reporte desde java");
             parametros.put("fecha", LocalDate.now().toString());
+            parametros.put("totaldebe", totalSaldoDebe);
+            parametros.put("totalhaber", totalSaldoHaber);
+            parametros.put("saldototal", saldoTotal);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext

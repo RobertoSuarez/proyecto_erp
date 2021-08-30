@@ -27,8 +27,10 @@ public class AsientoDAO {
             resultSet = conexion.ejecutarSql(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                Asiento onAsiento = new Asiento(resultSet.getInt("_idasiento"), resultSet.getInt("_iddiario"), resultSet.getString("_documento"),
-                        resultSet.getString("_detalle"), resultSet.getString("_estado"), resultSet.getDate("_fechacreacion"),
+                Asiento onAsiento = new Asiento(resultSet.getInt("_idasiento"), resultSet.getInt("_iddiario"), 
+                        resultSet.getString("_documento"),
+                        resultSet.getString("_detalle"), resultSet.getString("_estado"), 
+                        resultSet.getDate("_fechacreacion"),
                         resultSet.getDate("_fechacierre"), resultSet.getString("_numero"), resultSet.getString("_total"));
                 onAsiento.setNombreDiario(resultSet.getString("_nombre"));
                 asientos.add(onAsiento);
@@ -71,7 +73,8 @@ public class AsientoDAO {
             while (resultSet.next()) {
                 asientoAux = new Asiento(resultSet.getInt("idasi"), resultSet.getInt("iddiario"),
                         resultSet.getString("documento"), resultSet.getString("detalle"), resultSet.getString("estado"),
-                        resultSet.getDate("fechacreacion"), resultSet.getDate("fechacierre"), resultSet.getString("numero"), resultSet.getString("total"));
+                        resultSet.getDate("fechacreacion"), resultSet.getDate("fechacierre"), 
+                        resultSet.getString("numero"), resultSet.getString("total"));
             }
         } catch (Exception e) {
             asientoAux = new Asiento();
@@ -125,7 +128,8 @@ public class AsientoDAO {
     public boolean addAsientoContable(Asiento asiento) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String sql = String.format("select addAsientoContable('%1$s','%2$d','%8$s','%3$s','%4$s','%5$s','%6$s','%7$s');",
-                asiento.getNumero(), asiento.getIdDiario(), asiento.getDocumento(), asiento.getDetalle(), dateFormat.format(asiento.getFechaCreacion()),
+                asiento.getNumero(), asiento.getIdDiario(), asiento.getDocumento(), asiento.getDetalle(), 
+                dateFormat.format(asiento.getFechaCreacion()),
                 dateFormat.format(asiento.getFechaCierre()), asiento.getEstado(), asiento.getTotal());
         try {
             conexion.conectar();
