@@ -177,9 +177,8 @@ public class AbonoProveedor {
     public void setImporte(float Importe) {
         this.Importe = Importe;
     }
-
+    // Sentencias para consultas 
     public String getSentencia(String descripcionPago, String descripcionBanco, String proveedor, LocalDate fecha) {
-
         String sentencia = String.format("INSERT INTO abononproveedor( referencia, idasiento, idtipopago, idtipobanco, idproveedor, fecha)\n"
                 + "VALUES ('%1$s',%2$d,(select t.idtipopago FROM public.tipopago t where t.descripcion='%3$s'),(select t.idtipobanco FROM tipobanco t where t.descripcion='%4$s'),"
                 + "(select idproveedor from proveedor pro where pro.codigo ='%5$s'),'%6$s');",

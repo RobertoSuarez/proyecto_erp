@@ -72,7 +72,7 @@ public class AbonoProveedorDAO {
         }
         return listaAbono;
     }
-//LLena una lista de datos de facturas de dicho proveedor seleeccionado
+//LLena una lista de datos de facturas de dicho proveedor seleccionado
     public List<Factura> llenarFacturas(String sentencia) {
         conex = new Conexion();
         listafactura = new ArrayList<>();
