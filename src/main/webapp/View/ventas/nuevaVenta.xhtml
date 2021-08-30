@@ -20,8 +20,8 @@
                     </div>
                     <br/>
                     <div>
-                        <p:panel header="Cliente" >
-                            <h:panelGrid columns="4" width="50%" >
+                        <p:panel header="Cliente" style="width: 45%; display: inline-block;" >
+                            <h:panelGrid columns="2" width="50%" >
                                 <p:outputLabel value="Identificación: "/>
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
                                 <p:outputLabel value="Nombre: "/>
@@ -31,10 +31,10 @@
                         </p:panel>
 
 
-                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="widht: 45%; position: relative" >
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 45%; display: inline-block; margin-left: 20px" >
                             <h:panelGrid columns="3">
                                 <p:outputLabel value="Codigo: "/>
-                                <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" />
+                                <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" type="number" />
                                 <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky"/>
                             </h:panelGrid>
                             <p:divider/>

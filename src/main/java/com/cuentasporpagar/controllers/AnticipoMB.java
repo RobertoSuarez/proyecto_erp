@@ -4,24 +4,20 @@ import com.cuentasporpagar.daos.AnticipoDAO;
 import com.cuentasporpagar.daos.BuscarProvDAO;
 import com.cuentasporpagar.models.Anticipo;
 import com.cuentasporpagar.models.Proveedor;
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import java.io.Serializable;
 
 /**
  *
@@ -31,7 +27,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "anticipoMB")
 @SessionScoped
-public class AnticipoMB  {
+public class AnticipoMB implements Serializable {
 
     static final String NUEVO = "NUEVO" ;
     static final String EDITAR = "EDITAR";
@@ -57,7 +53,7 @@ public class AnticipoMB  {
     @PostConstruct
     public void init() {
         try {
-            this.anticipos = AnticipoDAO.getAllJson();
+            this.anticipos = AnticipoDAO.getAllJson(false);
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -141,12 +137,17 @@ public class AnticipoMB  {
         String resumen = "Validación de campos";
         
         if (this.selected_anticipo.getId_proveedor() == 0) {
-            addMessage(FacesMessage.SEVERITY_ERROR, resumen, "Se debe seleccionar un proveedor");
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe seleccionar un proveedor");
             return false;
         }
         
         if (this.selected_anticipo.getImporte() == 0.0) {
-            addMessage(FacesMessage.SEVERITY_ERROR, resumen, "Se debe ingresar un valor en el importe");
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe ingresar un valor en el importe");
+            return false;
+        }
+        
+        if ("".equals(this.selected_anticipo.getReferencia())) {
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe ingresar una referencia de algún documento");
             return false;
         }
         
@@ -184,7 +185,7 @@ public class AnticipoMB  {
         
         
         try {
-            this.anticipos = AnticipoDAO.getAllJson();  // Actualiza los datos de la tabla
+            this.anticipos = AnticipoDAO.getAllJson(false);  // Actualiza los datos de la tabla
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -214,7 +215,7 @@ public class AnticipoMB  {
         }
         
         try {
-            this.anticipos = AnticipoDAO.getAllJson();  // Actualiza los datos de la tabla
+            this.anticipos = AnticipoDAO.getAllJson(false);  // Actualiza los datos de la tabla
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }

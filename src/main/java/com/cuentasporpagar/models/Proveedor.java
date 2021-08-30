@@ -8,12 +8,9 @@ package com.cuentasporpagar.models;
 import com.global.config.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
+import java.sql.SQLException;
 
-/**
- *
- * @author ebert
- */
+
 public class Proveedor {
 
     int idProveedor;
@@ -26,7 +23,7 @@ public class Proveedor {
     String webPage;
     String contacto;
     String telefono;
-    boolean estado;
+    boolean estado = true;
     int vence;
 
   
@@ -201,10 +198,7 @@ public class Proveedor {
             return false;
         }
         final Proveedor other = (Proveedor) obj;
-        if (this.idProveedor != other.idProveedor) {
-            return false;
-        }
-        return true;
+        return this.idProveedor == other.idProveedor;
     }
     
     
@@ -238,7 +232,7 @@ public class Proveedor {
             }
             conn.conex.close();
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return null;
         }

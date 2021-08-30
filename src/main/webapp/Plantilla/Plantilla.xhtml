@@ -38,8 +38,8 @@
                         </a>
                         <h2>ERP CONTABLE</h2> 
                     </div>
-
-
+                    
+                    
                     <div>
                         <p:ajaxStatus style="position: relative;">
                             <f:facet name="start">
@@ -47,7 +47,7 @@
                             </f:facet>
                         </p:ajaxStatus>
                     </div>
-
+                    
                 </div>
             </ui:insert>
 
@@ -140,13 +140,10 @@
                                     </p:submenu>
                                 </p:submenu>
                                 <p:submenu label="Ventas" expanded="false" >
-                                    <p:submenu label="Venta">
-                                        <p:menuitem value="Nueva venta" outcome="/View/ventas/nuevaVenta.xhtml" icon="pi pi-shopping-cart" />
-                                        <p:menuitem value="Lista de Ventas" outcome="/View/ventas/listaVentas.xhtml" icon="pi pi-file" />
-                                    </p:submenu>
-                                    <p:submenu label="Proforma">
-                                        <p:menuitem value="Nueva proforma" outcome="/View/ventas/nuevaProforma.xhtml" icon="pi pi-file-o" />
-                                    </p:submenu>
+                                    <p:menuitem value="Nueva venta" outcome="/View/ventas/nuevaVenta.xhtml" icon="pi pi-shopping-cart" />
+                                    <p:menuitem value="Lista ventas" outcome="/View/ventas/listaVentas.xhtml" icon="pi pi-file-o" />
+                                    <p:menuitem value="Nueva proforma" outcome="/View/ventas/nuevaProforma.xhtml" icon="pi pi-file-o" />
+                                    <p:menuitem value="Lista proforma" outcome="/View/ventas/listaProforma.xhtml" icon="pi pi-file-o" />
                                 </p:submenu>
                             </p:panelMenu>
                         </h:form>
