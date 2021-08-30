@@ -41,7 +41,7 @@ public class Anticipo {
         this.descripcion = "";
         this.id_proveedor = 0;
         this.proveedor = new Proveedor();
-        this.referencia = "";
+        this.referencia = "#";
         this.habilitado = true;
     }
 
@@ -157,7 +157,7 @@ public class Anticipo {
         Asiento asiento = new Asiento();
         asiento.idDiario = "11";
         asiento.total = this.importe.toString();
-        asiento.documento = this.referencia;
+        asiento.documento = "ANT-" + this.referencia;
         asiento.detalle = this.descripcion;
         asiento.fechaCreacion = new SimpleDateFormat("dd-MM-yyyy").format(this.fecha);
         asiento.fechaCierre = new SimpleDateFormat("dd-MM-yyyy").format(this.fecha);
