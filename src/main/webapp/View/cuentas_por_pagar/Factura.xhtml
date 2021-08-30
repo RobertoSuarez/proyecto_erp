@@ -40,13 +40,16 @@
                                   paginatorPosition="bottom"
                                   style="font-size:12px">
                         <f:facet name="header">
-                            <span class="filter-container ui-input-icon-left">
-                                <i class="pi pi-search"></i>
-                                <p:inputText id="globalFilter" onkeyup="PF('dtFactura').filter()" placeholder="Buscar nfactura"/>
-                            </span>
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span style="font-weight: bold; margin-right: 6px;"></span>
+                                <span class="filter-container ui-input-icon-left"> 
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtFactura').filter()" placeholder="Buscar nfactura"/>
+                                </span>
+                            </div>
                         </f:facet>
-                        <p:column headerText="No. Factura" style="width: 60px" filterBy="#{factura.nfactura}" 
-                                  filterStyle="display: none">
+                        <p:column headerText="No. Factura" style="width: 70px" filterBy="#{factura.nfactura}" 
+                                  filterStyle="display: none" sortBy="#{factura.nfactura}">
                             <h:outputText value="#{factura.nfactura}" />
                         </p:column>
 
@@ -55,19 +58,19 @@
                             <h:outputText value="#{factura.fecha}"/>
                         </p:column>
 
-                        <p:column headerText="Proveedor" style="width: 70px">
+                        <p:column headerText="Proveedor" style="width: 70px" sortBy="#{factura.nombre}">
                             <h:outputText value="#{factura.nombre}"/>
                         </p:column>
 
-                        <p:column headerText="Importe" style="width: 70px">
+                        <p:column headerText="Importe" style="width: 70px" sortBy="#{factura.importe}">
                             <h:outputText value="#{factura.importe}"/>
                         </p:column>
 
-                        <p:column headerText="Pendiente" style="width: 70px">
+                        <p:column headerText="Pendiente" style="width: 70px" sortBy="#{factura.pendiente}">
                             <h:outputText value="#{factura.pendiente}"/>
                         </p:column>
 
-                        <p:column headerText="Vencimiento" style="width: 70px">
+                        <p:column headerText="Vencimiento" style="width: 78px" sortBy="#{factura.vencimiento}">
                             <h:outputText value="#{factura.vencimiento}"/>
                         </p:column>
 
@@ -107,7 +110,8 @@
 
                                     <div class="p-field p-col">
                                         <p:outputLabel for="nfactura">No. Factura:</p:outputLabel>
-                                        <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" required="true"/>
+                                        <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" required="true"
+                                                     maxlength="15"/>
                                     </div>
                                 </div>
 
@@ -238,12 +242,12 @@
                             </p:outputPanel>
                         </p:outputPanel>
                         <f:facet name="footer">                            
-                            <p:commandButton value="Guardar" icon="pi pi-check" 
+                            <p:commandButton value="Guardar" styleClass="ui-button-success"
                                              actionListener="#{facturaMB.insertarfactura}"
-                                             process="outputnuevo @this" update=":form:messages"
-                                             styleClass="ui-button-success"/>
-                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('newFactura').hide()"
-                                             styleClass="ui-button-danger" actionListener="#{facturaMB.reset('outputnuevo')}" 
+                                             process="outputnuevo @this" update=":form:messages"/>
+                            <p:commandButton value="Cancelar" styleClass="ui-button-danger"
+                                             onclick="PF('newFactura').hide()"
+                                             actionListener="#{facturaMB.reset('outputnuevo')}" 
                                              process="@this"/>
                         </f:facet>
                     </p:dialog>
@@ -298,24 +302,24 @@
                                 </div>
 
                                 <p:outputLabel id="group" value="Dias plazo del proveedor: #{facturaMB.factura.aux=BuscarMB.nvenc}"/>
-                                    <div class="p-formgrid p-grid">
-                                        <div class="p-field p-col">
-                                            <p:outputLabel for="editfecha" >Fecha factura:</p:outputLabel>
-                                            <p:datePicker id="editfecha"  value="#{facturaMB.factura.fecha}"
-                                                          required="true">
-                                                <p:ajax listener="#{BuscarMB.sumfechas(facturaMB.factura.aux,facturaMB.factura.fecha)}"
-                                                        update=":form:editdven,:form:editvencimiento"/>
-                                            </p:datePicker>
-                                        </div> 
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editfecha" >Fecha factura:</p:outputLabel>
+                                        <p:datePicker id="editfecha"  value="#{facturaMB.factura.fecha}"
+                                                      required="true">
+                                            <p:ajax listener="#{BuscarMB.sumfechas(facturaMB.factura.aux,facturaMB.factura.fecha)}"
+                                                    update=":form:editdven,:form:editvencimiento"/>
+                                        </p:datePicker>
+                                    </div> 
 
-                                        <div class="p-field p-col">
-                                            <p:outputLabel for="editvencimiento">Vencimiento:</p:outputLabel>
-                                            <p:outputLabel value="#{BuscarMB.vence=facturaMB.factura.vencimiento}" style="visibility: hidden"/>
-                                            <p:outputLabel id="editdven" value="#{facturaMB.factura.vencimiento=BuscarMB.vence}" style="visibility: hidden"/>
-                                            <p:datePicker id="editvencimiento" value="#{facturaMB.factura.vencimiento}"
-                                                          disabled="true"/>
-                                        </div>
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="editvencimiento">Vencimiento:</p:outputLabel>
+                                        <p:outputLabel value="#{BuscarMB.vence=facturaMB.factura.vencimiento}" style="visibility: hidden"/>
+                                        <p:outputLabel id="editdven" value="#{facturaMB.factura.vencimiento=BuscarMB.vence}" style="visibility: hidden"/>
+                                        <p:datePicker id="editvencimiento" value="#{facturaMB.factura.vencimiento}"
+                                                      disabled="true"/>
                                     </div>
+                                </div>
 
                                 <!-- FINAL CAMPOS DEL DIALOG-->
 
@@ -407,11 +411,12 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">                            
-                            <p:commandButton value="Guardar" icon="pi pi-check" 
+                            <p:commandButton value="Guardar" styleClass="ui-button-success"
                                              actionListener="#{facturaMB.editarfactura}"
                                              process="outputedit @this"/>
-                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('editFactura').hide()"
-                                             class="ui-button-secondary" action="#{facturaMB.reset('outputedit')}" 
+                            <p:commandButton value="Cancelar" styleClass="ui-button-danger"
+                                             onclick="PF('editFactura').hide()"
+                                             action="#{facturaMB.reset('outputedit')}" 
                                              process="@this"/>
                         </f:facet>
                     </p:dialog>
@@ -491,7 +496,7 @@
                                             <p:outputLabel for="editvencimiento">Vencimiento:</p:outputLabel>
                                             <p:outputLabel value="#{facturaMB.factura.vencimiento}" style="visibility: hidden"/>
                                             <p:datePicker value="#{facturaMB.factura.vencimiento}"
-                                                           disabled="true" />
+                                                          disabled="true" />
                                         </div>
                                     </div>
                                 </p:panel>
@@ -525,11 +530,12 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">                            
-                            <p:commandButton value="Guardar" icon="pi pi-check" 
+                            <p:commandButton value="Guardar" styleClass="ui-button-success"
                                              actionListener="#{facturaMB.revertirfactura}"
                                              process="outputrev @this"/>
-                            <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('revFactura').hide()"
-                                             class="ui-button-secondary" action="#{facturaMB.reset('outputrev')}" 
+                            <p:commandButton value="Cancelar" styleClass="ui-button-danger"
+                                             onclick="PF('revFactura').hide()"
+                                             action="#{facturaMB.reset('outputrev')}" 
                                              process="@this"/>
                         </f:facet>
                     </p:dialog>
@@ -550,9 +556,9 @@
                         </f:facet>
                         <p:inputText value="#{facturaMB.factura.nfactura}" type="hidden"/>
 
-                        <p:commandButton value="Si" icon="pi pi-check" update=":form:outputrev"
+                        <p:commandButton value="Si" update=":form:outputrev" styleClass="ui-button-success"
                                          process="confirmDHab @this" oncomplete="PF('revFactura').show()" onsuccess="PF('DHFactura').hide()"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                        <p:commandButton value="No" type="button" styleClass="ui-button-danger"
                                          onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset('outputrev')}"/>
                     </p:confirmDialog> 
 

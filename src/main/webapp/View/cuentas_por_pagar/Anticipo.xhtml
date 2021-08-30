@@ -215,15 +215,15 @@
                             <div class="p-d-flex p-ai-center p-jc-end p-pt-3">
                                 <p:commandButton 
                                     value="Guardar" 
+                                    styleClass="ui-button-raised ui-button-success"
                                     update="manage-anticipo-content" 
                                     process="manage-anticipo-content @this"
                                     actionListener="#{anticipoMB.guardar_anticipo()}"/>
 
                                 <p:commandButton 
                                     value="Cancelar" 
-                                    icon="pi pi-times" 
-                                    onclick="PF('manageAnticipoDialog').hide()"
-                                    class="ui-button-secondary"/>
+                                    styleClass="ui-button-raised ui-button-danger"
+                                    onclick="PF('manageAnticipoDialog').hide()"/>
                             </div>
 
                         </f:facet>
