@@ -10,10 +10,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -115,11 +118,10 @@ public class LibroManagedBean implements Serializable {
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
-            
+
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Reporte desde java");
-            parametros.put("fecha", LocalDate.now().toString());
+            parametros.put("titulo", "Reporte Libro Mayor");
             parametros.put("totaldebe", ConverTwoDecimal(totalSaldoDebe));
             parametros.put("totalhaber", ConverTwoDecimal(totalSaldoHaber));
             parametros.put("saldototal", ConverTwoDecimal(saldoTotal));
