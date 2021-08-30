@@ -205,7 +205,7 @@ public final class AbonoProveedorManagedBean {
     public static void removeSessionScopedBean(String beanName) {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
     }
-
+    //Evento para editar el dato del pago
     public void onRowEdit(RowEditEvent<Factura> event) {
         float n1 = event.getObject().getPendiente();
         float n2 = pago;
@@ -229,7 +229,8 @@ public final class AbonoProveedorManagedBean {
             showWarn("El pago a registrar debe ser mayor a 0");
         }
     }
-
+    
+    //Evento para cancelar el dato del pago
     public void onRowCancel(RowEditEvent<Factura> event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelada"));
     }
