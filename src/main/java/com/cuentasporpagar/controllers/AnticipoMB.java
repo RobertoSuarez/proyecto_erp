@@ -147,6 +147,11 @@ public class AnticipoMB  {
             return false;
         }
         
+        if ("".equals(this.selected_anticipo.getReferencia())) {
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe ingresar una referencia de algún documento");
+            return false;
+        }
+        
         return true;
     }
     

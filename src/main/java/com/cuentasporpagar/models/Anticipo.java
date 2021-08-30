@@ -3,7 +3,9 @@ package com.cuentasporpagar.models;
 import com.global.config.Conexion;
 import com.google.gson.Gson;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -185,20 +187,32 @@ public class Anticipo {
         Conexion conn = new Conexion();
         
         try {
-            String queryAsiento = String.format("SELECT public.generateasientocotableexternal('%s', '%s')", gson.toJson(asiento), gson.toJson(movimientos));
+            String queryAsiento = String.format("SELECT public.generateasientocotableexternal2('%s', '%s') as id_asiento", gson.toJson(asiento), gson.toJson(movimientos));
             System.out.println(queryAsiento);
-            conn.ejecutar(queryAsiento);
-        } catch(Exception ex) {
+            conn.abrirConexion();
+            
+            Statement statement = conn.conex.createStatement();
+            ResultSet data = statement.executeQuery(queryAsiento);
+            while (data.next()) {
+                this.id_asiento = data.getInt("id_asiento");                
+            }
+            
+            System.out.println("id asiento recuperado de la db " + this.id_asiento);
+        } catch(SQLException ex) {
             System.out.println(ex.getMessage());
             System.out.println("No se puedo registrar el asiento del anticipo, se cacelo todo");
+            try {
+                conn.conex.close();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             return;
-        }
+        } 
         
         
         
-        String query =  "select insert_anticipo(?, ?, ?, ?, ?, ?);";
+        String query =  "select insert_anticipo(?, ?, ?, ?, ?, ?, ?);";
         try {
-            conn.abrirConexion();
             
             PreparedStatement stmt = conn.conex.prepareStatement(query);
             stmt.setInt(1, this.id_proveedor);
@@ -207,6 +221,7 @@ public class Anticipo {
             stmt.setString(4, this.descripcion);
             stmt.setString(5, this.referencia);
             stmt.setBoolean(6, true);
+            stmt.setInt(7, this.id_asiento);
             
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);
