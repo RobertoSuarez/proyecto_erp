@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.Bean;
+package com.recursoshumanos.Controller.Bean;
 
-import Model.Entidad.Empleado;
-import Model.Entidad.RolPagos;
+import com.recursoshumanos.Model.Entidad.Empleado;
+import com.recursoshumanos.Model.Entidad.RolPagos;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.CiudadDAO;
-import Model.DAO.ProvinciaDAO;
-import Model.Entidad.Ciudad;
-import Model.Entidad.Provincia;
+import com.recursoshumanos.Model.DAO.CiudadDAO;
+import com.recursoshumanos.Model.DAO.ProvinciaDAO;
+import com.recursoshumanos.Model.Entidad.Ciudad;
+import com.recursoshumanos.Model.Entidad.Provincia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.EmpleadoDAO;
-import Model.DAO.EmpleadoPuestoDAO;
-import Model.DAO.EmpleadoSucursalDAO;
-import Model.DAO.HorarioLaboralDAO;
-import Model.DAO.PuestoLaboralDAO;
-import Model.DAO.SucursalDAO;
-import Model.Entidad.EmpleadoPuesto;
-import Model.Entidad.EmpleadoSucursal;
-import Model.Entidad.HorarioLaboral;
-import Model.Entidad.PuestoLaboral;
-import Model.Entidad.Sucursal;
+import com.recursoshumanos.Model.DAO.EmpleadoDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoPuestoDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoSucursalDAO;
+import com.recursoshumanos.Model.DAO.HorarioLaboralDAO;
+import com.recursoshumanos.Model.DAO.PuestoLaboralDAO;
+import com.recursoshumanos.Model.DAO.SucursalDAO;
+import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
+import com.recursoshumanos.Model.Entidad.EmpleadoSucursal;
+import com.recursoshumanos.Model.Entidad.HorarioLaboral;
+import com.recursoshumanos.Model.Entidad.PuestoLaboral;
+import com.recursoshumanos.Model.Entidad.Sucursal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

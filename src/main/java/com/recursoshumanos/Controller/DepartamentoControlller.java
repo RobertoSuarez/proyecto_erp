@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.DepartamentoDAO;
-import Model.Entidad.Departamento;
+import com.recursoshumanos.Model.DAO.DepartamentoDAO;
+import com.recursoshumanos.Model.Entidad.Departamento;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

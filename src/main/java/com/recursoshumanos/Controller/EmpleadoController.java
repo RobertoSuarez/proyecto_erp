@@ -3,20 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.CargaFamiliarDAO;
-import Model.DAO.EmpleadoDAO;
-import Model.DAO.EmpleadoPuestoDAO;
-import Model.DAO.EmpleadoReservaDAO;
-import Model.DAO.EmpleadoSucursalDAO;
-import Model.DAO.SueldoDAO;
-import Model.Entidad.CargaFamiliar;
-import Model.Entidad.Empleado;
-import Model.Entidad.EmpleadoPuesto;
-import Model.Entidad.EmpleadoReserva;
-import Model.Entidad.EmpleadoSucursal;
-import Model.Entidad.Sueldo;
+import com.recursoshumanos.Model.DAO.CargaFamiliarDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoPuestoDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoReservaDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoSucursalDAO;
+import com.recursoshumanos.Model.DAO.SueldoDAO;
+import com.recursoshumanos.Model.Entidad.CargaFamiliar;
+import com.recursoshumanos.Model.Entidad.Empleado;
+import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
+import com.recursoshumanos.Model.Entidad.EmpleadoReserva;
+import com.recursoshumanos.Model.Entidad.EmpleadoSucursal;
+import com.recursoshumanos.Model.Entidad.Sueldo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

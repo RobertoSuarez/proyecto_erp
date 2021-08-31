@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.CargoDAO;
-import Model.Entidad.Cargo;
+import com.recursoshumanos.Model.DAO.CargoDAO;
+import com.recursoshumanos.Model.Entidad.Cargo;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
