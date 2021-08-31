@@ -65,4 +65,34 @@ public class DetalleVentaDAO {
             this.con.cerrarConexion();
         }
     }
+    
+    public List<DetalleVenta> ObtenerDetalleVentas(int idVenta){
+        try{
+            this.con.abrirConexion();
+            DetalleVenta detail = new DetalleVenta();
+            List<DetalleVenta> lista = new ArrayList<>();
+            String query = "select d.iddetalleventa, d.cantidad, pr.descripcion, d.precio, CAST((d.cantidad * d.precio) as DOUBLE PRECISION) as Subtotal from public.detalleventa d inner join public.productos pr on d.codprincipal = pr.codprincipal where idventa = " + idVenta + ";";
+            System.out.println(query);
+            ResultSet rs = this.con.consultar(query);
+            
+            while(rs.next()){
+                detail = new DetalleVenta();
+                detail.setIddetalleventa(rs.getInt(1));
+                detail.setCantidad(rs.getInt(2));
+                detail.setNombreProducto(rs.getString(3));
+                detail.setPrecio(rs.getDouble(4));
+                detail.setSubTotal(rs.getDouble(5));
+                lista.add(detail);
+            }
+            
+            this.con.cerrarConexion();
+            
+            return lista;
+        }catch(Exception e){
+            System.out.println(e.getMessage().toString());
+        }finally{
+            this.con.cerrarConexion();
+        }
+        return null;
+    }
 }

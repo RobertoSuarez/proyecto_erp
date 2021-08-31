@@ -5,7 +5,10 @@
  */
 package com.ventas.controllers;
 
+import com.ventas.dao.ClienteVentaDao;
+import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.VentaDAO;
+import com.ventas.models.ClienteVenta;
 import com.ventas.models.DetalleVenta;
 import com.ventas.models.Venta;
 import java.io.File;
@@ -35,12 +38,27 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class ListaVentaManagedBean implements Serializable {
 
     private VentaDAO ventaDao;
+    private DetalleVentaDAO detalleDao;
+    private Venta ventaActual;
     private List<Venta> listaVentas;
     private List<DetalleVenta> listaDetalle;
-    private int ventaSeleccionada;
+    private ClienteVenta cliente;
+    private ClienteVentaDao clienteDao;
+
+    private String nombreCliente;
+    private String identCliente;
+    private String contactoCliente;
 
     public ListaVentaManagedBean() throws SQLException {
         this.listaVentas = new ArrayList<>();
+        this.ventaActual = new Venta();
+        this.cliente = new ClienteVenta();
+        this.listaDetalle = new ArrayList<>();
+        this.detalleDao = new DetalleVentaDAO();
+        this.identCliente = "######";
+        this.nombreCliente = "XXXXXX";
+        this.contactoCliente = "0000000000";
+        clienteDao = new ClienteVentaDao();
         ObtenerTodasVentas();
     }
 
@@ -52,7 +70,23 @@ public class ListaVentaManagedBean implements Serializable {
             System.out.println(e.getMessage().toString());
         }
     }
-    
+
+    public void CargarVenta(Venta ventaSeleccionada) {
+        this.listaDetalle = new ArrayList<>();
+        this.ventaActual = ventaSeleccionada;
+        this.listaDetalle = detalleDao.ObtenerDetalleVentas(ventaSeleccionada.getIdVenta());
+
+        this.cliente = clienteDao.BuscarClientePorId(ventaSeleccionada.getIdCliente());
+
+        System.out.println();
+
+        if (this.cliente != null) {
+            this.identCliente = this.cliente.getIdentificacion();
+            this.nombreCliente = this.cliente.getNombre();
+        }
+
+    }
+
     public List<Venta> getListaVentas() {
         return listaVentas;
     }
@@ -69,13 +103,44 @@ public class ListaVentaManagedBean implements Serializable {
         this.listaDetalle = listaDetalle;
     }
 
-    public int getVentaSeleccionada() {
-        return ventaSeleccionada;
+    public Venta getVentaActual() {
+        return ventaActual;
     }
 
-    public void setVentaSeleccionada(int ventaSeleccionada) {
-        this.ventaSeleccionada = ventaSeleccionada;
+    public void setVentaActual(Venta ventaActual) {
+        this.ventaActual = ventaActual;
     }
 
-    
+    public ClienteVenta getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteVenta cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public String getIdentCliente() {
+        return identCliente;
+    }
+
+    public void setIdentCliente(String identCliente) {
+        this.identCliente = identCliente;
+    }
+
+    public String getContactoCliente() {
+        return contactoCliente;
+    }
+
+    public void setContactoCliente(String contactoCliente) {
+        this.contactoCliente = contactoCliente;
+    }
+
 }

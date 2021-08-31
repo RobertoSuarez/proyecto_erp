@@ -20,6 +20,35 @@ public class ClienteVentaDao implements Serializable {
         this.con = new Conexion();
     }
 
+    public ClienteVenta BuscarClientePorId(int id) {
+        ResultSet rs = null;
+        ClienteVenta temp = new ClienteVenta();
+        String query = "select cl.idcliente, T.* from "
+                + "(select pn.idpersonanatural as IdNatural, null as IdJuridico, "
+                + "pr.id_persona, pn.nombre1||' '||pn.nombre2||' '||pn.apellido1||' '||pn.apellido2 as Nombre, pr.identificacion "
+                + "from public.persona_natural pn inner join public.persona pr on pn.id_persona = pr.id_persona UNION "
+                + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
+                + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
+                + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico) where cl.idcliente = " + id + ";";
+        try {
+            this.con.abrirConexion();
+            rs = this.con.consultar(query);
+            while (rs.next()) {
+                temp.setIdCliente(rs.getInt(1));
+                temp.setNombre(rs.getString(5));
+                temp.setIdentificacion(rs.getString(6));
+            }
+            this.con.cerrarConexion();
+
+            return temp;
+        } catch (Exception e) {
+            System.out.println(e.getMessage().toString());
+        } finally {
+            this.con.cerrarConexion();
+        }
+        return temp;
+    }
+
     public ClienteVenta BuscarCliente(String id) {
         ResultSet rs = null;
         ClienteVenta temp = new ClienteVenta();

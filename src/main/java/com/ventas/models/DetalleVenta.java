@@ -20,6 +20,7 @@ public class DetalleVenta implements Serializable {
     private double precio;
     private Producto producto;
     private double subTotal;
+    private String nombreProducto;
 
     public DetalleVenta() {
         
@@ -98,5 +99,13 @@ public class DetalleVenta implements Serializable {
     public void setSubTotal(double subTotal) {
         this.subTotal = subTotal;
     }
-    
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+       
 }

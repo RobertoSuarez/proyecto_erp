@@ -20,6 +20,10 @@
                     <p:commandButton value="Nueva Venta" action="/View/ventas/nuevaVenta.xhtml" style="margin-top: 10px" />
                     <p:dataTable var="ListaVentas" value="#{ListaVentaMB.listaVentas}" id="ventasTB">
 
+                        <p:column headerText="id Venta" width="10%">
+                            <h:outputText value="#{ListaVentas.idVenta}" />
+                        </p:column>
+
                         <p:column headerText="Factura">
                             <h:outputText value="#{ListaVentas.factura}" />
                         </p:column>
@@ -38,14 +42,52 @@
                             </h:outputText>
                         </p:column>
 
-                        <!--
                         <p:column headerText="Detalle">
-                            <p:button outcome="?faces-redirect=true&amp;id=#{ListaVentaMB.ventaSeleccionada}" />
+                            <p:commandButton value="Ver" onclick="PF('DetalleItem').show()" process="@this" 
+                                             actionListener="#{ListaVentaMB.CargarVenta(ListaVentas)}" update="datosFactura" />
                         </p:column>
-                        -->
-                        
+
                     </p:dataTable>
                 </h:form>
+
+
+                <p:dialog widgetVar="DetalleItem" width="70%" height="80%" >
+                    <h:form id="datosFactura">
+                        <h2>Factura: <p:outputLabel value="#{ListaVentaMB.ventaActual.factura}" /></h2>
+                        <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Identificación: "/>
+                                <p:outputLabel value="#{ListaVentaMB.identCliente}" />
+                                <p:outputLabel value="Nombre:" />
+                                <p:outputLabel value="#{ListaVentaMB.nombreCliente}" />
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ListaVentaMB.listaDetalle}">
+                            <p:column headerText="Cantidad" width="10%">
+                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
+                            </p:column>
+                            <p:column headerText="Detalle" width="50%" >
+                                <h:outputText value="#{FacturaDetailTB.nombreProducto}" />
+                            </p:column>
+                            <p:column headerText="Precio unitario" width="20%">
+                                <h:outputText value="#{FacturaDetailTB.precio}" />
+                            </p:column>
+                            <p:column headerText="Subtotal" width="20%">
+                                <h:outputText value="#{FacturaDetailTB.subTotal}" />
+                            </p:column>
+
+                            <p:columnGroup type="footer" id="colgrp">
+                                <p:row id="rowfoot">
+                                    <p:column colspan="3" style="text-align:right" footerText="Total:"/>
+                                    <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.totalFactura}" id="subtotalVenta" />
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
+
             </ui:define>
 
         </ui:composition>
