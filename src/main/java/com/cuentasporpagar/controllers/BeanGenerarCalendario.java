@@ -8,6 +8,7 @@ package com.cuentasporpagar.controllers;
 import com.cuentasporpagar.daos.FacturaDAO;
 import com.cuentasporpagar.models.Factura;
 import com.cuentasporpagar.models.ManagerCalendario;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -49,6 +50,7 @@ public class BeanGenerarCalendario  {
     private LocalDate hasta;
     private boolean disabled_fecha;
     private String tipo;
+    private String nombre = EmpresaMatrizDAO.getEmpresa().getNombre();
     
     private FacturaDAO facturaDAO;
     List<Factura> facturas; // datos que se muestran en la tabla.
@@ -78,6 +80,14 @@ public class BeanGenerarCalendario  {
         // confi of file
         //this.file = DefaultStreamedContent.builder().name("reporte.pdf").contentType("aplication/pdf").stream(() -> null).build();
         //exportar2();
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     ////////////////////////////////
@@ -185,7 +195,7 @@ public class BeanGenerarCalendario  {
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("titulo", "Reporte desde java");
             parametros.put("fecha", LocalDate.now().toString());
-            parametros.put("empresa_nombre", "ERP CONTABLE");
+            parametros.put("empresa_nombre", this.nombre);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext

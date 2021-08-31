@@ -138,7 +138,7 @@
                                     <div class="p-field p-col-12 p-md-12 p-lg-6">
                                         <p:outputLabel for="id_proveedor" >Proveedor</p:outputLabel>
                                         <div class="ui-inputgroup">
-                                            <p:commandButton value="Buscar" id="buscar" disabled="#{anticipoMB.es_editar()}"/>
+                                            <p:commandButton value="Buscar" actionListener="#{anticipoMB.actualizar_proveedor}" id="buscar" disabled="#{anticipoMB.es_editar()}"/>
                                             <p:inputText 
                                                 id="id_proveedor" 
                                                 type="input" readonly="true"
@@ -196,7 +196,7 @@
 
                                 <!-- dialogo busqueda de proveedor-->
                                 <p:overlayPanel for="buscar" dynamic="true" style="width:600px" widgetVar="selecionProveedor">
-                                    <p:dataTable var="pro" 
+                                    <p:dataTable var="pro" id="tb_proveedor" 
                                                  value="#{anticipoMB.list_proveedor}" selectionMode="single" rows="3" paginator="true"
                                                  selection="#{anticipoMB.selected_Proveedor}"
                                                  rowKey="#{pro.idProveedor}">

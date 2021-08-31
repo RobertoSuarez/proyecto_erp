@@ -223,6 +223,12 @@ public class AnticipoMB implements Serializable {
         return this.anticipo_modo.equals(EDITAR);
     }
     
+    public void actualizar_proveedor() {
+        BuscarProvDAO BP = new BuscarProvDAO();
+        this.list_proveedor = BP.llenar();
+        PrimeFaces.current().ajax().update(":form:tb_proveedor");
+    }
+    
     public void revertir() {
         System.out.println("Revertir anticipo");
 
