@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.DAO;
+package com.recursoshumanos.Model.DAO;
 
-import Config.Conexion;
-import Model.Entidad.CargaFamiliar;
-import Model.Entidad.Empleado;
-import Model.Interfaces.IDAO;
+import com.global.config.Conexion;
+import com.recursoshumanos.Model.Entidad.CargaFamiliar;
+import com.recursoshumanos.Model.Entidad.Empleado;
+import com.recursoshumanos.Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -66,9 +66,13 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
     public int insertar() {
         if (conexion.isEstado()) {
             cargaFamiliar.setId(conexion.insertar("carga_familiar",
-                    "id_empleado, cantidad_carga, fecha_cambio, nombre, documento_validacion, detalle",
-                    cargaFamiliar.getEmpleado().getId() + ", " + cargaFamiliar.getFaliares() + ", CURRENT_TIMESTAMP, '" + cargaFamiliar.getConyuge() + "', '"
-                    + cargaFamiliar.getPathValidation() + "', '" + cargaFamiliar.getDetalle() + "'",
+                    "id_empleado, cantidad_carga, fecha_cambio, "
+                    + "nombre, documento_validacion, detalle",
+                    cargaFamiliar.getEmpleado().getId() + ", " 
+                    + cargaFamiliar.getFaliares() + ", CURRENT_TIMESTAMP, '"
+                    + cargaFamiliar.getConyuge() + "', '"
+                    + cargaFamiliar.getPathValidation() + "', '" 
+                    + cargaFamiliar.getDetalle() + "'",
                     "id_cargaf"));
             return cargaFamiliar.getId();
         }
@@ -85,9 +89,13 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("carga_familiar",
-                    "id_empleado = " + cargaFamiliar.getEmpleado().getId() + ", cantidad_carga = " + cargaFamiliar.getFaliares()
-                    + ", fecha_cambio = '" + cargaFamiliar.getFechaCambio() + "', nombre = '" + cargaFamiliar.getConyuge()
-                    + "', documento_validacion = '" + cargaFamiliar.getPathValidation() + "', detalle = '" + cargaFamiliar.getDetalle() + "'",
+                    "id_empleado = " + cargaFamiliar.getEmpleado().getId() 
+                  + ", cantidad_carga = " + cargaFamiliar.getFaliares()
+                    + ", fecha_cambio = '" + cargaFamiliar.getFechaCambio()
+                    + "', nombre = '" + cargaFamiliar.getConyuge()
+                    + "', documento_validacion = '"
+                    + cargaFamiliar.getPathValidation() + "', detalle = '" 
+                    + cargaFamiliar.getDetalle() + "'",
                     "id_cargaf = " + cargaFamiliar.getId());
         }
         return -1;
@@ -105,23 +113,27 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         if (lista != null && !lista.isEmpty()) {
             return lista.get(0);
         }
-        return new CargaFamiliar(0,0, new Empleado(), "N/D", "N/D", "N/D", new Date() );
+        return new CargaFamiliar(0,0, new Empleado(), "N/D", "N/D", "N/D", 
+                                 new Date() );
     }
 
     public CargaFamiliar buscar(Empleado empleado) {
-        cargaFamiliar = new CargaFamiliar(-1,0, empleado, "N/D", "N/D", "N/D", new Date() );
+        cargaFamiliar = new CargaFamiliar(-1,0, empleado, "N/D", "N/D", "N/D", 
+                                          new Date() );
         if (conexion.isEstado()) {
             ResultSet result;
             try {
                 result = conexion.selecionar("carga_familiar",
-                        "id_cargaf, cantidad_carga, fecha_cambio, nombre, documento_validacion, detalle",
+                        "id_cargaf, cantidad_carga, fecha_cambio, "
+                      + "nombre, documento_validacion, detalle",
                         "id_empleado = " + empleado.getId(), null);
                 while (result.next()) {
                     cargaFamiliar.setId(result.getInt("id_cargaf"));
                     cargaFamiliar.setFaliares(result.getInt("cantidad_carga"));
                     cargaFamiliar.setConyuge(result.getString("nombre"));
                     cargaFamiliar.setDetalle(result.getString("detalle"));
-                    cargaFamiliar.setPathValidation(result.getString("documento_validacion"));
+                    cargaFamiliar.setPathValidation(
+                            result.getString("documento_validacion"));
                     cargaFamiliar.setFechaCambio(result.getDate("fecha_cambio"));
                 }
                 result.close();
@@ -139,18 +151,25 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         return buscar(null, "fecha_cambio DESC");
     }
 
-    private List<CargaFamiliar> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
+    private List<CargaFamiliar> buscar(@Nullable String restricciones, 
+                                       @Nullable String OrdenarAgrupar) {
         List<CargaFamiliar> cargaFamiliares = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("carga_familiar", "id_cargaf, id_empleado, cantidad_carga, fecha_cambio, nombre, documento_validacion, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("carga_familiar", "id_cargaf, "
+                                           + "id_empleado, cantidad_carga, "
+                                           + "fecha_cambio, nombre, "
+                                           + "documento_validacion, detalle", 
+                                            restricciones, OrdenarAgrupar);
                 EmpleadoDAO edao = new EmpleadoDAO();
                 while (result.next()) {
                     cargaFamiliares.add(new CargaFamiliar(
-                            result.getInt("id_cargaf"), result.getInt("cantidad_carga"),
+                            result.getInt("id_cargaf"), 
+                            result.getInt("cantidad_carga"),
                             edao.buscarPorId(result.getInt("id_empleado")),
-                            result.getString("nombre"), result.getString("detalle"),
+                            result.getString("nombre"), 
+                            result.getString("detalle"),
                             result.getString("documento_validacion"),
                             result.getDate("fecha_cambio")
                     ));

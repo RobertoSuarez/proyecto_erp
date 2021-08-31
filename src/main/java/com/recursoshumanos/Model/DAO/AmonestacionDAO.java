@@ -6,8 +6,8 @@
 package com.recursoshumanos.Model.DAO;
 
 import com.global.config.Conexion;
-import com.recursoshumanos.Model.Amonestacion;
-import Model.Entidad.Empleado;
+import com.recursoshumanos.Model.Entidad.Amonestacion;
+import com.recursoshumanos.Model.Entidad.Empleado;
 import com.recursoshumanos.Model.Interfaces.IDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,9 +56,13 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            return conexion.insertar("amonestacion", "id_empleado, tipo, valor, detalle, estado", 
-                    amonestacion.getEmpleado().getId()+ ",'" + amonestacion.getTipo()+ "'," + amonestacion.getValor() + ",'"
-                    + amonestacion.getDetalle() + "'," + amonestacion.isEstado(), "id_amonestacion");
+            return conexion.insertar("amonestacion", 
+                                     "id_empleado, tipo, valor, detalle, estado", 
+                    amonestacion.getEmpleado().getId()+ ",'" 
+                            + amonestacion.getTipo()+ "'," 
+                            + amonestacion.getValor() + ",'"
+                            + amonestacion.getDetalle() + "'," 
+                            + amonestacion.isEstado(), "id_amonestacion");
         }
         return -1;
     }
@@ -73,9 +77,13 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("amonestacion",
-                    "tipo = '" + amonestacion.getTipo()+ "', valor = " + amonestacion.getValor() + ", detalle = '"
-                    + amonestacion.getDetalle() + "', estado =" + amonestacion.isEstado(),
-                    "id_amonestacion = " + amonestacion.getId() + " AND id_empleado = " + amonestacion.getEmpleado().getId());
+                    "tipo = '" 
+                            + amonestacion.getTipo()+ "', valor = " 
+                            + amonestacion.getValor() + ", detalle = '"
+                            + amonestacion.getDetalle() + "', estado =" 
+                            + amonestacion.isEstado(),"id_amonestacion = "
+                            + amonestacion.getId() + " AND id_empleado = " 
+                            + amonestacion.getEmpleado().getId());
         }
         return -1;
     }
@@ -105,8 +113,10 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("amonestacion", "id_amonestacion, tipo, valor, detalle",
-                        "id_empleado = " + empleado.getId() + " AND estado = true", null);
+                result = conexion.selecionar("amonestacion", 
+                        "id_amonestacion, tipo, valor, detalle",
+                        "id_empleado = " + empleado.getId() + 
+                        " AND estado = true", null);
                 while (result.next()) {
                     amonestaciones.add(new Amonestacion(
                             result.getInt("id_amonestacion"),
@@ -130,8 +140,10 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("amonestacion", "id_amonestacion, tipo, valor, detalle",
-                        "id_empleado = " + empleado.getId() + " AND estado = true", null);
+                result = conexion.selecionar("amonestacion", 
+                        "id_amonestacion, tipo, valor, detalle",
+                        "id_empleado = " + empleado.getId() + 
+                        " AND estado = true", null);
                 while (result.next()) {
                     amonestacion.setId(result.getInt("id_amonestacion"));
                     amonestacion.setTipo(result.getString("tipo"));
@@ -149,18 +161,20 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         return amonestacion;
     }
 
-    private List<Amonestacion> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
+    private List<Amonestacion> buscar(@Nullable String restricciones, 
+                                      @Nullable String OrdenarAgrupar) {
         List<Amonestacion> amonestaciones = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("amonestacion", "id_amonestacion, id_empleado, tipo, valor, detalle, estado",
+                result = conexion.selecionar("amonestacion", "id_amonestacion, "
+                        + "id_empleado, tipo, valor, detalle, estado",
                         restricciones, OrdenarAgrupar);
                 EmpleadoDAO eDAO = new EmpleadoDAO();
                 while (result.next()) {
                     amonestaciones.add(new Amonestacion(
                             result.getInt("id_amonestacion"),
-                            (amonestacion.getEmpleado().getId()>0? amonestacion.getEmpleado() : eDAO.buscarPorId(result.getInt("id_empleado"))),
+                            (amonestacion.getEmpleado().getId()>0?amonestacion.getEmpleado() : eDAO.buscarPorId(result.getInt("id_empleado"))),
                             result.getString("tipo"),
                             result.getString("detalle"),
                             result.getFloat("valor"),

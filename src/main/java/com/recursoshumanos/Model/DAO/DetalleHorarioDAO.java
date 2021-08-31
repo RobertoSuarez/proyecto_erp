@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.DAO;
+package com.recursoshumanos.Model.DAO;
 
-import Config.Conexion;
-import Model.Entidad.DetalleHorario;
-import Model.Entidad.EmpleadoPuesto;
-import Model.Entidad.HorarioLaboral;
-import Model.Interfaces.IDAO;
+import com.global.config.Conexion;
+import com.recursoshumanos.Model.Entidad.DetalleHorario;
+import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
+import com.recursoshumanos.Model.Entidad.HorarioLaboral;
+import com.recursoshumanos.Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;

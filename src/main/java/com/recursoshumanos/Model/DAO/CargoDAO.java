@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.DAO;
+package com.recursoshumanos.Model.DAO;
 
-import Config.Conexion;
-import Model.Interfaces.IDAO;
-import Model.Entidad.Cargo;
+import com.global.config.Conexion;
+import com.recursoshumanos.Model.Interfaces.IDAO;
+import com.recursoshumanos.Model.Entidad.Cargo;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,7 +64,8 @@ public class CargoDAO implements IDAO<Cargo>{
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            cargo.setId(conexion.insertar("cargo", "nombre", "'" + cargo.getNombre() + "'", "id_cargo"));
+            cargo.setId(conexion.insertar("cargo", "nombre", 
+                        "'" + cargo.getNombre() + "'", "id_cargo"));
             return cargo.getId();
         }
         return -1;
@@ -79,7 +80,9 @@ public class CargoDAO implements IDAO<Cargo>{
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
-            return conexion.modificar("cargo", "nombre = '" + cargo.getNombre() + "'", "id_cargo = " + cargo.getId());
+            return conexion.modificar("cargo", "nombre = '" 
+                                      + cargo.getNombre() + "'", "id_cargo = " 
+                                      + cargo.getId());
         }
         return -1;
     }
@@ -98,15 +101,18 @@ public class CargoDAO implements IDAO<Cargo>{
         return buscar(null, "nombre");
     }
 
-    private List<Cargo> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar){
+    private List<Cargo> buscar(@Nullable String restricciones, 
+                               @Nullable String OrdenarAgrupar){
         if (conexion.isEstado()) {
             ResultSet result;
             List<Cargo> cargos;
             try {
-                result = conexion.selecionar("cargo", "id_cargo, nombre", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("cargo", "id_cargo, nombre", 
+                                             restricciones, OrdenarAgrupar);
                 cargos = new ArrayList<>();
                 while (result.next()) {
-                    cargos.add(new Cargo(result.getInt("id_cargo"),result.getString("nombre")));
+                    cargos.add(new Cargo(result.getInt("id_cargo"),
+                                result.getString("nombre")));
                 }
                 result.close();
                 return cargos;

@@ -6,9 +6,9 @@
 package com.recursoshumanos.Model.DAO;
 
 import com.global.config.Conexion;
-import Model.Entidad.Asistencia;
-import Model.Entidad.DetalleHorario;
-import Model.Entidad.EmpleadoPuesto;
+import com.recursoshumanos.Model.Entidad.Asistencia;
+import com.recursoshumanos.Model.Entidad.DetalleHorario;
+import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
 import com.recursoshumanos.Model.Interfaces.IDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;

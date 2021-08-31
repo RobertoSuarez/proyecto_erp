@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.DAO;
+package com.recursoshumanos.Model.DAO;
 
-import Config.Conexion;
-import Model.Entidad.Ciudad;
-import Model.Entidad.Provincia;
-import Model.Interfaces.IDAO;
+import com.global.config.Conexion;
+import com.recursoshumanos.Model.Entidad.Ciudad;
+import com.recursoshumanos.Model.Entidad.Provincia;
+import com.recursoshumanos.Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,8 +63,11 @@ public class CiudadDAO implements IDAO<Ciudad>{
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            ciudad.setId(conexion.insertar("ciudad", "id_provincia, nombre, detalle",
-                    ciudad.getProvincia().getId() + ",'" + ciudad.getNombre()+ "', '" + ciudad.getDetalle()+ "'", "id_ciudad"));
+            ciudad.setId(conexion.insertar("ciudad", "id_provincia, "
+                                         + "nombre, detalle",
+                    ciudad.getProvincia().getId() + ",'"
+                  + ciudad.getNombre()+ "', '" + ciudad.getDetalle()+ "'", 
+                    "id_ciudad"));
             return ciudad.getId();
         }
         return -1;
@@ -80,7 +83,8 @@ public class CiudadDAO implements IDAO<Ciudad>{
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("ciudad",
-                    "id_provincia= " + ciudad.getProvincia().getId() + ", nombre = '" + ciudad.getNombre()+ "', detalle = '"
+                    "id_provincia= " + ciudad.getProvincia().getId()
+                  + ", nombre = '" + ciudad.getNombre()+ "', detalle = '"
                     + ciudad.getDetalle()+ "'", "id_ciudad = " + ciudad.getId());
         }
         return -1;
@@ -111,7 +115,8 @@ public class CiudadDAO implements IDAO<Ciudad>{
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("ciudad", "id_ciudad, nombre, detalle", 
+                result = conexion.selecionar("ciudad", "id_ciudad, nombre, "
+                                            + "detalle", 
                         "id_provincia = " + provincia.getId(), "nombre DESC");
                 while (result.next()) {
                     lista.add(new Ciudad(
@@ -130,12 +135,14 @@ public class CiudadDAO implements IDAO<Ciudad>{
         return lista;
     }
     
-    private List<Ciudad> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
+    private List<Ciudad> buscar( @Nullable String restricciones, 
+                                 @Nullable String OrdenarAgrupar){
         List<Ciudad> lista = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("ciudad", "id_ciudad, id_provincia, nombre, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("ciudad", "id_ciudad, id_provincia, "
+                        + "nombre, detalle", restricciones, OrdenarAgrupar);
                 ProvinciaDAO pdao = new ProvinciaDAO();
                 while (result.next()) {
                     lista.add(new Ciudad(
