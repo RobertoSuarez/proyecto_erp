@@ -5,7 +5,9 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-public class Dedicacion {
+import java.io.Serializable;
+
+public class Dedicacion implements Serializable {
 
     private int id;
     private String nombre, detalle;

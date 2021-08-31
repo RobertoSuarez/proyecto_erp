@@ -6,12 +6,10 @@
 package com.recursoshumanos.Controller;
 
 import com.recursoshumanos.Model.DAO.CiudadDAO;
-import com.recursoshumanos.Model.DAO.DedicacionDAO;
 import com.recursoshumanos.Model.DAO.EmpresaDAO;
 import com.recursoshumanos.Model.DAO.ProvinciaDAO;
 import com.recursoshumanos.Model.DAO.SucursalDAO;
 import com.recursoshumanos.Model.Entidad.Ciudad;
-import com.recursoshumanos.Model.Entidad.Dedicacion;
 import com.recursoshumanos.Model.Entidad.Empresa;
 import com.recursoshumanos.Model.Entidad.Provincia;
 import com.recursoshumanos.Model.Entidad.Sucursal;
@@ -39,7 +37,6 @@ public class EmpresaController implements Serializable {
     private List<Sucursal> sucursales;
     private List<Provincia> provincias;
     private List<Ciudad> ciudades;
-    private List<Dedicacion> dedicaciones;
     private int idCiudad, idProvincia;
 
     @Inject
@@ -54,21 +51,16 @@ public class EmpresaController implements Serializable {
     @Inject
     private CiudadDAO ciudadDAO;
 
-    @Inject
-    private DedicacionDAO dedicacionDAO;
-
     public EmpresaController() {
         sucursales = new ArrayList<>();
         provincias = new ArrayList<>();
         ciudades = new ArrayList<>();
-        dedicaciones = new ArrayList<>();
     }
 
     @PostConstruct
     public void constructorEmpresa() {
         empresa = empresaDAO.cargar();
         sucursales = sucursalDAO.Listar();
-        dedicaciones = dedicacionDAO.Listar();
         provincias = provinciaDAO.Listar();
     }
 
@@ -112,14 +104,6 @@ public class EmpresaController implements Serializable {
 
     public void setProvincias(List<Provincia> provincias) {
         this.provincias = provincias;
-    }
-
-    public List<Dedicacion> getDedicaciones() {
-        return dedicaciones;
-    }
-
-    public void setDedicaciones(List<Dedicacion> dedicaciones) {
-        this.dedicaciones = dedicaciones;
     }
 
     public int getIdCiudad() {

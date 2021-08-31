@@ -5,10 +5,11 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
-public class Departamento {
+public class Departamento implements Serializable {
     private int id;
     private String nombre;
     private boolean estado;

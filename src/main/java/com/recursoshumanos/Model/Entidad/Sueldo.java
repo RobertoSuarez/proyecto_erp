@@ -6,13 +6,14 @@
 package com.recursoshumanos.Model.Entidad;
 
 import com.recursoshumanos.Model.DAO.TipoRubroDAO;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author ClasK7
  */
-public class Sueldo {
+public class Sueldo implements Serializable {
     private int id;
     private Empleado empleado;
     private float valor;

@@ -5,7 +5,9 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-public class Empresa {
+import java.io.Serializable;
+
+public class Empresa implements Serializable{
     private int id;
     private Dedicacion dedicacion;
     private String ruc, tipo, nombre, razonSocial, detalle;

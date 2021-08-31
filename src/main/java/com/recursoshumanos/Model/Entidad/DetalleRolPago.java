@@ -5,11 +5,13 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kestradalp
  */
-public class DetalleRolPago {
+public class DetalleRolPago implements Serializable {
     private RolPagos rolPagos;
     private TipoRubro tipoRubro;
     private int rubro;

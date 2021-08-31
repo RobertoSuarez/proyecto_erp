@@ -5,13 +5,14 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author ClasK7
  */
-public class EmpleadoSucursal {
+public class EmpleadoSucursal implements Serializable {
     private int id;
     private Empleado empleado;
     private Sucursal sucursal;

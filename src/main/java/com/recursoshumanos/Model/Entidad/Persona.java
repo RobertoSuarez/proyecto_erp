@@ -5,11 +5,13 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rturr
  */
-public class Persona {
+public class Persona implements Serializable {
     private int id;
     private String identificacion, tipoIdentificacion, correo, telefono1, telefono2, direccion;
     private boolean estado;

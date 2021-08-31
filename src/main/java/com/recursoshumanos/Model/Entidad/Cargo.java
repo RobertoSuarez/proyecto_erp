@@ -5,7 +5,9 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-public class Cargo {
+import java.io.Serializable;
+
+public class Cargo implements Serializable {
 
     private int id;
     private String nombre;

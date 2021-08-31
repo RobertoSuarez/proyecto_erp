@@ -6,12 +6,13 @@
 package com.recursoshumanos.Model.Entidad;
 
 import com.recursoshumanos.Model.DAO.TipoRubroDAO;
+import java.io.Serializable;
 
 /**
  *
  * @author ClasK7
  */
-public class Amonestacion {
+public class Amonestacion implements Serializable {
     private int id;
     private Empleado empleado;
     private String tipo, detalle;

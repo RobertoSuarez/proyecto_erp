@@ -5,11 +5,13 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kestradalp
  */
-public class Provincia {
+public class Provincia implements Serializable {
     private int id;;
     private String Nombre;
 

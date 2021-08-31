@@ -6,12 +6,13 @@
 package com.recursoshumanos.Model.Entidad;
 
 import com.recursoshumanos.Model.DAO.TipoRubroDAO;
+import java.io.Serializable;
 
 /**
  *
  * @author kestradalp
  */
-public class Multa {
+public class Multa implements Serializable {
     private int id;
     private Empleado empleado;
     private float porcentaje, valor;

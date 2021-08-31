@@ -5,11 +5,13 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author kestradalp
  */
-public class TipoRubro {
+public class TipoRubro implements Serializable {
     private int id, coeficiente;
     private String nombre;
 

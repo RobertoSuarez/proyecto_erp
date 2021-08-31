@@ -6,13 +6,14 @@
 package com.recursoshumanos.Model.Entidad;
 
 import com.recursoshumanos.Model.DAO.TipoRubroDAO;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author ClasK7
  */
-public class CargaFamiliar {
+public class CargaFamiliar implements Serializable {
     private TipoRubro tipoRubro;
     private int id, faliares;
     private Empleado empleado;

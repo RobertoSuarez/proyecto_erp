@@ -25,7 +25,6 @@ import javax.inject.Named;
 public class DedicacionDAO  implements  IDAO<Dedicacion>{
     private final Conexion conexion;
     private Dedicacion dedicacion;
-    
     public DedicacionDAO(){
         conexion = new Conexion();
         dedicacion = new Dedicacion();
@@ -132,6 +131,5 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
             }
         }
         return null;
-    
     }
 }

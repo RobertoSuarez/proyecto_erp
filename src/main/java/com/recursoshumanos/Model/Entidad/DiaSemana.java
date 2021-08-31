@@ -5,11 +5,13 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rturr
  */
-public class DiaSemana {
+public class DiaSemana implements Serializable {
     private int id;
     private String nombre;
 

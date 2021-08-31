@@ -5,13 +5,14 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author kestradalp
  */
-public class Asistencia {
+public class Asistencia implements Serializable {
     private EmpleadoPuesto empleadoPuesto;
     private String ingreso, salida;
     private Date fecha;

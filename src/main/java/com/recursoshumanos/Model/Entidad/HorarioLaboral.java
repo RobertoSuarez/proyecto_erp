@@ -5,13 +5,14 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author kestradalp
  */
-public class HorarioLaboral {
+public class HorarioLaboral implements Serializable {
     private int id;
     private String nombre;
     private boolean estado;

@@ -5,7 +5,9 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-public class Ciudad {
+import java.io.Serializable;
+
+public class Ciudad implements Serializable {
 
     private int id;
     private Provincia provincia;

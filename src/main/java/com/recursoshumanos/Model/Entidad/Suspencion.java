@@ -6,12 +6,13 @@
 package com.recursoshumanos.Model.Entidad;
 
 import com.recursoshumanos.Model.DAO.TipoRubroDAO;
+import java.io.Serializable;
 
 /**
  *
  * @author kestradalp
  */
-public class Suspencion {
+public class Suspencion implements Serializable {
     private int id, cantidadDias;
     private Empleado empleado;
     private float valor;

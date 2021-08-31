@@ -5,11 +5,13 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rturr
  */
-public class IngresosSalidas {
+public class IngresosSalidas implements Serializable {
     private int id;
     private String horaIngreso, horaSalida;
     private String observaciones;
