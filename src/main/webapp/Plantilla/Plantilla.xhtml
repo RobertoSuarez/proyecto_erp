@@ -145,6 +145,44 @@
                                         <p:menuitem value="Nueva proforma" outcome="/View/ventas/nuevaProforma.xhtml" icon="pi pi-file-o" />
                                     </p:submenu>
                                 </p:submenu>
+                                <p:submenu label="Recursos Humanos" expanded="true" >
+                                    <p:submenu label="Empresa">
+                                        <p:menuitem value="Datos" outcome="/View/recursoshumanos/empresa"
+                                                    icon="pi pi-home"/>
+                                        <p:menuitem value="Ciudades" outcome="/View/recursoshumanos/ciudad"
+                                                    icon="pi pi-globe"/>
+                                        <p:menuitem value="Provincias" outcome="/View/recursoshumanos/provincia"
+                                                    icon="pi pi-globe"/>
+                                    </p:submenu>
+                                    <p:submenu label="Personal">
+                                        <p:menuitem value="Empleados" outcome="/View/recursoshumanos/empleadoLista"
+                                                    icon="pi pi-users"/>
+                                        <p:menuitem value="Asistencia" outcome="/View/recursoshumanos/asistencia"
+                                                    icon="pi pi-clock"/>
+                                    </p:submenu>
+                                    <p:submenu label="Areas">
+                                        <p:menuitem value="Puestos Laborales" outcome="/View/recursoshumanos/puestosLaborales"
+                                                    icon="pi pi-clone"/>
+                                        <p:menuitem value="Cargos" outcome="/View/recursoshumanos/cargo"
+                                                    icon="pi pi-briefcase"/>
+                                        <p:menuitem value="Departamentos" outcome="/View/recursoshumanos/departamentos"
+                                                    icon="pi pi-sitemap"/>
+                                    </p:submenu>
+                                    <p:submenu label="Horarios">
+                                        <p:menuitem value="Horario Laboral" 
+                                                    outcome="/View/recursoshumanos/horarioLaboral" 
+                                                    icon="pi pi-calendar"/>
+                                        <p:menuitem value="Ingreso y Salida" 
+                                                    outcome="/View/recursoshumanos/ingresoSalidas" 
+                                                    icon="pi pi-clock"/>
+                                        <p:menuitem value="Dia/Semana" 
+                                                    outcome="/View/recursoshumanos/diaSemana" 
+                                                    icon="pi pi-align-center"/>
+                                    </p:submenu>
+                                    <p:menuitem value="Roles de Pago" 
+                                                outcome="/View/recursoshumanos/roles" 
+                                                icon="pi pi-money-bill"/>
+                                </p:submenu>
                             </p:panelMenu>
                         </h:form>
                     </ui:insert>
