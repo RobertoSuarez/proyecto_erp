@@ -25,9 +25,6 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
     
     <navigation-rule>
-        <from-view-id>/View/recursoshumanos/asistencia.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
         <from-view-id>/View/recursoshumanos/rolDePago.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>ListaRoles</from-outcome>
@@ -55,9 +52,6 @@
             <from-outcome>CrearRol</from-outcome>
             <to-view-id>/View/recursoshumanos/roldepagoCrear.xhtml</to-view-id>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/naturalesLista.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/View/recursoshumanos/empleado.xhtml</from-view-id>
@@ -95,30 +89,6 @@
             <from-outcome>CrearEmpleado</from-outcome>
             <to-view-id>/View/recursoshumanos/empleadoCrear.xhtml</to-view-id>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/empresa.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/ciudad.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/dedicacion.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/provincia.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/cargo.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/departamentos.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/ingresoSalidas.xhtml</from-view-id>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/View/recursoshumanos/puestosLaborales.xhtml</from-view-id>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/View/recursoshumanos/horarioLaboral.xhtml</from-view-id>
