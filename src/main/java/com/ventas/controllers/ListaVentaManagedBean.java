@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +77,7 @@ public class ListaVentaManagedBean implements Serializable {
         this.listaDetalle = new ArrayList<>();
         this.ventaActual = ventaSeleccionada;
         this.listaDetalle = detalleDao.ObtenerDetalleVentas(ventaSeleccionada.getIdVenta());
+        this.ventaActual.setTotalFactura(new BigDecimal(ventaSeleccionada.getTotalFactura()).setScale(2, RoundingMode.UP).doubleValue());
 
         this.cliente = clienteDao.BuscarClientePorId(ventaSeleccionada.getIdCliente());
 
