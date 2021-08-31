@@ -33,6 +33,7 @@ public class AnticipoMB implements Serializable {
     static final String EDITAR = "EDITAR";
     
     private List<Anticipo> anticipos;
+    private List<Anticipo> anticipos_revertidos;
     private Anticipo selected_anticipo;
     private List<Proveedor> list_proveedor; // se mostrar en el dialogo para selecionar el proveedor
     private Proveedor selected_Proveedor;
@@ -54,6 +55,7 @@ public class AnticipoMB implements Serializable {
     public void init() {
         try {
             this.anticipos = AnticipoDAO.getAllJson(false);
+            this.anticipos_revertidos = AnticipoDAO.getAllJson(true);
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -105,6 +107,14 @@ public class AnticipoMB implements Serializable {
         this.anticipo_modo = anticipo_modo;
     }
 
+    public List<Anticipo> getAnticipos_revertidos() {
+        return anticipos_revertidos;
+    }
+
+    public void setAnticipos_revertidos(List<Anticipo> anticipos_revertidos) {
+        this.anticipos_revertidos = anticipos_revertidos;
+    }
+
     
     
     // metodos aux
@@ -117,6 +127,19 @@ public class AnticipoMB implements Serializable {
         String resumen = this.selected_anticipo.isHabilitado() ? "Habilitado" : "Desabilitado";
         addMessage(FacesMessage.SEVERITY_WARN, "Cambio de estado", "El anticipo cambio a " + resumen);
         PrimeFaces.current().ajax().update(":form:growl");
+    }
+    
+    
+    // Recupera todos los anticipos revertidos de la base de datos.
+    public void get_anticipos_revertidos() {
+        System.out.println("get anticipos db");
+        try {
+            this.anticipos_revertidos = AnticipoDAO.getAllJson(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        PrimeFaces.current().ajax().update(":form:dt_anticipos_revertidos");
     }
     
     public void open_new() {

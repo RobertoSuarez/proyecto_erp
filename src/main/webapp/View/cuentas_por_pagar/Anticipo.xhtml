@@ -17,15 +17,27 @@
 
                         <p class="titulo">Anticipos</p>
 
-                        <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                         actionListener="#{anticipoMB.open_new}"
+                        <div>
+                            <p:commandButton 
+                                value="Revertidos" 
+                                actionListener="#{anticipoMB.get_anticipos_revertidos}" 
+                                styleClass="ui-button-raised" 
+                                oncomplete="PF('dialog_revertidos').show()">
 
-                                         oncomplete="PF('manageAnticipoDialog').show()"
-                                         styleClass="ui-button-raised ui-button-success" >
+                            </p:commandButton>
 
-                            <p:resetInput target=":form:manage-anticipo-content"/>
+                            <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                             actionListener="#{anticipoMB.open_new}"
 
-                        </p:commandButton>
+                                             oncomplete="PF('manageAnticipoDialog').show()"
+                                             styleClass="ui-button-raised ui-button-success" >
+
+                                <p:resetInput target=":form:manage-anticipo-content"/>
+
+                            </p:commandButton>
+                        </div>
+
+
                     </div>
 
                     <p:dataTable 
@@ -120,7 +132,7 @@
                                         id="id_anticipo" type="input"
                                         value="#{anticipoMB.selected_anticipo.id_anticipo}" />
                                 </div>
-                                
+
 
                                 <div class="p-formgrid p-grid">
                                     <div class="p-field p-col-12 p-md-12 p-lg-6">
@@ -164,14 +176,14 @@
                                             required="true" />
                                     </div>
                                 </div>
-                                
+
                                 <div class="p-field">
                                     <p:outputLabel 
                                         for="referencia" >Código de documento de referencia</p:outputLabel>
                                     <p:inputText 
                                         id="referencia" value="#{anticipoMB.selected_anticipo.referencia}" required="true"/>
                                 </div>
-                                
+
                                 <div class="p-field">
                                     <p:outputLabel 
                                         for="descripcion" >Descripción</p:outputLabel>
@@ -180,7 +192,7 @@
                                         value="#{anticipoMB.selected_anticipo.descripcion}" />
                                 </div>
 
-                                
+
 
                                 <!-- dialogo busqueda de proveedor-->
                                 <p:overlayPanel for="buscar" dynamic="true" style="width:600px" widgetVar="selecionProveedor">
@@ -230,13 +242,61 @@
 
                     </p:dialog>
 
+                    <p:dialog 
+                        class="p-m-3" 
+                        header="Anticipos revertidos" 
+                        showEffect="fade" 
+                        modal="true" height="400"
+                        responsive="true"
+                        widgetVar="dialog_revertidos">
+
+
+                        <p:dataTable 
+                            class="p-mt-3" paginator="true" rows="10" paginatorPosition="bottom" 
+                            id="dt_anticipos_revertidos" widgetVar="dtanticipos_revertidos" 
+                            reflow="true"
+                            size="small"
+                            value="#{anticipoMB.anticipos_revertidos}" 
+                            rowKey="#{anticipor.id_anticipo}" 
+                            var="anticipor">
+                            
+                            <p:column headerText="Fecha Registro" sortBy="#{anticipor.fecha}" filterBy="#{anticipor.fecha}" filterStyle="display : none">
+                                <h:outputText value="#{anticipoMB.FormatoFecha(anticipor.fecha)}"/>
+                            </p:column>
+
+
+                            <p:column headerText="Descripción" sortBy="#{anticipor.descripcion}" filterBy="#{anticipor.descripcion}" filterStyle="display : none">
+                                <h:outputText value="#{anticipor.descripcion}"/>
+                            </p:column>
+
+                            <p:column headerText="Importe" sortBy="#{anticipor.importe}" filterBy="#{anticipor.importe}" filterStyle="display : none">
+                                <h:outputText value="#{anticipor.importe}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Referencia" sortBy="#{anticipor.referencia}" filterBy="#{anticipor.referencia}" filterStyle="display : none">
+                                <h:outputText value="#{anticipor.referencia}"/>
+                            </p:column>
+
+                            <p:column headerText="Proveedor" sortBy="#{anticipor.proveedor.nombre}" filterBy="#{anticipor.proveedor.nombre}" filterStyle="display : none">
+                                <h:outputText value="#{anticipor.proveedor.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Ruc" sortBy="#{anticipor.proveedor.ruc}" filterBy="#{anticipor.proveedor.ruc}" filterStyle="display : none">
+                                <h:outputText value="#{anticipor.proveedor.ruc}"/>
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                    </p:dialog>
+
                     <p:confirmDialog id="delete_dialog"  widgetVar="delete_anticipo_dialog" showEffect="fade" width="700"
-                                       header="Confirmar" severity="warn">
-                        
+                                     header="Confirmar" severity="warn">
+
                         <f:facet name="message">
                             <h4>¿Desea revertir este anticipo?</h4>
                         </f:facet>
-                        
+
                         <p:commandButton 
                             value="Si" process="@this" 
                             icon="pi pi-check"
@@ -252,7 +312,7 @@
                             onclick="PF('delete_anticipo_dialog').hide()"/>
                     </p:confirmDialog>
 
-                   
+
 
                 </h:form>
             </ui:define>
