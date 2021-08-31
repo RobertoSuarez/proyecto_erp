@@ -119,7 +119,7 @@
                     <p:dialog header="Cambiar Sueldo" minHeight="40" width="350" showEffect="fade" modal="true"
                               widgetVar="manageSueldoDialog" responsive="true">
                         <p:outputPanel id="manage-sueldo-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{empty empleadoView.sueldo}">
+                            <p:outputPanel >
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
@@ -167,13 +167,6 @@
 
                                         </h:panelGrid>
                                     </div>
-
-                                    <p:fileUpload id="uploadpdf" label="Documento de Verificación" uploadLabel="Subir" cancelLabel="Cancelar"
-                                                  mode="advanced" virusScan="true" multiple="false" sizeLimit="2097152" allowTypes="/(\.|\/)(pdf)$/"
-                                                  invalidSizeMessage="El tamaño máximo de archivo permitido es 2MB"
-                                                  invalidFileMessage="solo PDF esta permitido"
-                                                  listener="#{empleadoView.handleFileUpload}"
-                                                  required="true" requiredMessage="Debe de subir el archivo de verificación"/>
 
                                     <div class="p-field">
                                         <p:outputLabel for="detalleCF" style="font-weight: bold" value="Observaciones(detalle)"/>
@@ -238,7 +231,7 @@
 
                             <p:commandButton value="Sueldo" icon="pi pi-dollar" update=":form:manage-sueldo-content"
                                              oncomplete="PF('manageSueldoDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this"/>
+                                             styleClass="edit-button rounded-button ui-button-success" process=":form:manage-sueldo-content @this"/>
                             <p:commandButton value="Familia" icon="pi #{empleadoView.cargaFamiliar.id == 0 ? 'pi-plus' : 'pi-pencil'}"
                                              update=":form:manage-cargaFamiliar-content"
                                              oncomplete="PF('manageCargaFamiliarDialog').show()"
