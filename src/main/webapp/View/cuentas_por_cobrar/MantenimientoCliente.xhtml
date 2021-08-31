@@ -127,7 +127,7 @@
                                                  class="tamanoButtonActions" 
                                                  styleClass="rounded-button ui-button-danger" 
                                                  icon="pi pi-times-circle"
-                                                 update=":growl tblClientes">
+                                                 update=":growl, :frmtblClientes:tblClientes">
                                     <p:confirm header="Advertencia" 
                                                message="¿Seguro que desea inactivar este cliente?" 
                                                icon="pi pi-info-circle"/>
@@ -140,7 +140,7 @@
                     <p:dialog header="Clientes Inactivos" minHeight="50"
                               height="auto" width="900px" showEffect="fade"
                               modal="true" widgetVar="clienteInactivo"
-                              responsive="true" id="dialogCI">
+                              responsive="true" closable="false">
                         <h:form id="frmCI">
                             <p:dataTable id="tblClientesInactivos" 
                                          var="varClienteInactivo" 
@@ -155,6 +155,13 @@
 
                                 <f:facet name="header">
                                     <div style="float: right;">
+                                        <p:commandButton value="Regresar" 
+                                                         onclick="PF('clienteInactivo').hide"
+                                                         immediate="true"
+                                                         oncomplete="location.reload()"
+                                                         icon="pi pi-sign-out"/>
+                                    </div>
+                                    <div style="float: left;">
                                         <span class="filter-container ui-input-icon-left">
                                             <i class="pi pi-search"></i>
                                             <p:inputText id="globalFilter" 
@@ -232,14 +239,6 @@
                                     </p:commandButton>
                                 </p:column>
                             </p:dataTable>
-                            <div style="float: right;">
-                                <br/>
-                                <p:commandButton value="Regresar" 
-                                                 onclick="PF('clienteInactivo').hide"
-                                                 immediate="true"
-                                                 oncomplete="location.reload()"
-                                                 icon="pi pi-sign-out"/>
-                            </div>
                         </h:form>
                     </p:dialog>
 
@@ -571,7 +570,7 @@
                                              class="tamanoInputClienteNJ"
                                              placeholder="Opcional"
                                              value="#{personaController.persona_Juridica.paginaWeb}"/>
-                                
+
                                 <p:outputLabel for="fechaCreacionJuridica" 
                                                value="Fecha de Creación:"
                                                style="font-weight: bold;">
@@ -929,7 +928,7 @@
                                              class="tamanoInputClienteNJ"
                                              placeholder="Opcional"
                                              value="#{personaController.persona_Juridica.paginaWeb}"/>
-                                
+
                                 <p:outputLabel for="fechaCreacionJuridica" 
                                                value="Fecha de Creación:"
                                                style="font-weight: bold;">
