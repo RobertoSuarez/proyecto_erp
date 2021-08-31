@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.faces.application.FacesMessage;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  *
@@ -20,6 +21,7 @@ public class Conexion {
     private ResultSet lector;
     private boolean estado;
     private String mensaje;
+    private boolean transaccionIniciada;
     private FacesMessage.Severity tipoMensaje;
 
     //Nuevos parametros estandarizados
@@ -244,6 +246,14 @@ public class Conexion {
 
     }
 
+    public boolean isTransaccionIniciada() {
+        return transaccionIniciada;
+    }
+
+    public void setTransaccionIniciada(boolean transaccionIniciada) {
+        this.transaccionIniciada = transaccionIniciada;
+    }
+
     public void Conectar() throws SQLException {
         try {
             if (conex == null || !(conex.isClosed())) {
@@ -297,5 +307,163 @@ public class Conexion {
         return valor;
     }
     
+    //  RRHH
+    public boolean iniciarTransaccion() throws SQLException, ClassNotFoundException {
+        if (conex == null || !(conex.isClosed())) {
+            Class.forName(classForName);
+            conex = DriverManager.getConnection(url, usuario, clave);
+            conex.setAutoCommit(false);
+            st = conex.createStatement();
+            estado = true;
+            transaccionIniciada = true;
+            return estado;
+        } else {
+            return false;
+        }
+    }
     
+    public void ejecutarInsertarToTrnasaccion(String tabla, String campos, String valores) throws SQLException {
+        if (transaccionIniciada) {
+            st.executeUpdate("INSERT INTO public." + tabla + "(" + campos + ")" + "VALUES(" + valores + ")");
+        } else {
+            throw new SQLException("Debe ejecutar primero la funcion iniciarTransaccion()");
+        }
+    }
+    
+    public void finalizarTransaccion(boolean conmit) throws SQLException {
+        if (conmit) {
+            conex.commit();
+        } else {
+            conex.rollback();
+        }
+        cerrarConexion();
+    }
+    
+    public ResultSet selecionar(String tabla, String campos, @Nullable String restrinciones, @Nullable String ordenar) {
+        String sql = "SELECT " + campos + " FROM public." + tabla;
+        if (restrinciones != null) {
+            sql = sql + " WHERE " + restrinciones;
+        }
+        if (ordenar != null) {
+            sql = sql + " ORDER BY " + ordenar;
+        }
+        try {
+            if (abrirConexion()) {
+                lector = st.executeQuery(sql);
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+            cerrarConexion();
+        }
+        return lector;
+    }
+    
+    //  Insertar con tres parámetros
+    public int insertar(String tabla, String campos, String valores) {
+        int retorno = -1;
+        String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ")";
+        try {
+            if (abrirConexion()) {
+                retorno = st.executeUpdate(sql);
+                mensaje = "Se insertó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            cerrarConexion();
+        }
+        return retorno;
+    }
+    
+    //  Insertar con cuatro parámetros
+    public int insertar(String tabla, String campos, String valores, String id) {
+        int retorno = -1;
+        String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ");";
+        try {
+            if (abrirConexion()) {
+                retorno = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+                lector = st.executeQuery("SELECT MAX(" + id + ") AS ID FROM public." + tabla + ";");
+                if (lector.next()) {
+                    retorno = lector.getInt("ID");
+                }
+                mensaje = "Se insertó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            cerrarConexion();
+        }
+        return retorno;
+    }
+    
+    public int ejecutarProcedure(String procedure, String parametros) {
+        int retorno = -1;
+        String sql =  "SELECT public." + procedure + "(" + parametros + ");";
+        try {
+            if (abrirConexion()) {
+                st.execute(sql);
+                cerrarConexion();
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        }
+        return retorno;
+    }
+    
+    public int modificar(String tabla, String camposModificados, String restrinciones) {
+        int retorno = -1;
+        String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;
+        try {
+            if (abrirConexion()) {
+                retorno = st.executeUpdate(sql);
+                cerrarConexion();
+                mensaje = "Se modifico correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        }
+        return retorno;
+    }
+    
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+    
+    public Connection getConexion() {
+        return conex;
+    }
+
+    public ResultSet getLector() {
+        return lector;
+    }
+
+    public FacesMessage.Severity getTipoMensaje() {
+        return tipoMensaje;
+    }
+
+    public void setTipoMensaje(FacesMessage.Severity tipoMensaje) {
+        this.tipoMensaje = tipoMensaje;
+    }
 }
