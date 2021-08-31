@@ -46,7 +46,6 @@ import org.primefaces.model.file.UploadedFile;
 @ViewScoped
 public class EmpleadoController implements Serializable {
 
-    private UploadedFile originalFile;
     private StreamedContent file;
     private Empleado empleado;
     private String resumeReserva;
@@ -158,16 +157,6 @@ public class EmpleadoController implements Serializable {
         return resumeReserva;
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
-        this.originalFile = null;
-        UploadedFile file = event.getFile();
-        if (file != null && file.getContent() != null && file.getContent().length > 0 && file.getFileName() != null) {
-            this.originalFile = file;
-            FacesMessage msg = new FacesMessage("Exito", this.originalFile.getFileName() + " esta subido.");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-    }
-
     public void cambiarSueldo() {
         sueldoDAO.setSueldo(sueldo);
         sueldoDAO.desactivar();
@@ -192,40 +181,21 @@ public class EmpleadoController implements Serializable {
     }
 
     public void guardarCargaFamiliar() {
-        try {
-            cargaFamiliar.setPathValidation("empleado-CF-" + empleado.getPersona().getIdentificacion() + ".pdf");
             cargaFamiliarDAO.setCargaFamiliar(cargaFamiliar);
-            boolean guardarFile = false;
             if (cargaFamiliar.getId() < 1) {
                 if (cargaFamiliarDAO.insertar() > 0) {
                     cargaFamiliar.setId(cargaFamiliarDAO.getCargaFamiliar().getId());
                     mostrarMensajeInformacion("Los datos de la carga familiar se ha guardado con éxito");
-                    guardarFile = true;
                 } else {
                     mostrarMensajeError("Los datos de la carga familiar se pudieron guardar");
                 }
             } else {
                 if (cargaFamiliarDAO.actualizar() > 0) {
                     mostrarMensajeInformacion("Los datos de la carga familiar se ha actualizado con éxito");
-                    guardarFile = true;
                 } else {
                     mostrarMensajeError("Los datos de la carga familiar se pudieron actualizar");
                 }
             }
-            if (guardarFile) {
-                byte[] contenido = originalFile.getContent();
-                File archivo = new File(getPathSistem() + "resources/documentos/" + cargaFamiliar.getPathValidation());
-                archivo.createNewFile();
-                FileOutputStream fos = new FileOutputStream(archivo);
-                fos.write(contenido);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            mostrarMensajeError(ex.getMessage());
-        } catch (IOException ex) {
-            Logger.getLogger(EmpleadoController.class.getName()).log(Level.SEVERE, null, ex);
-            mostrarMensajeError(ex.getMessage());
-        }
         PrimeFaces.current().executeScript("PF('manageCargaFamiliarDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }

@@ -17,7 +17,7 @@ public class CargaFamiliar implements Serializable {
     private TipoRubro tipoRubro;
     private int id, faliares;
     private Empleado empleado;
-    private String conyuge, detalle, pathValidation;
+    private String conyuge, detalle;
     private Date fechaCambio;
     
     public CargaFamiliar() {
@@ -26,18 +26,16 @@ public class CargaFamiliar implements Serializable {
         this.empleado = new Empleado();
         this.conyuge = "";
         this.detalle = "";
-        this.pathValidation = "";
         this.fechaCambio = new Date();
         inicializarTipo();
     }
 
-    public CargaFamiliar(int id, int faliares, Empleado empleado, String conyuge, String detalle, String pathValidation, Date fechaCambio) {
+    public CargaFamiliar(int id, int faliares, Empleado empleado, String conyuge, String detalle, Date fechaCambio) {
         this.id = id;
         this.faliares = faliares;
         this.empleado = empleado;
         this.conyuge = conyuge;
         this.detalle = detalle;
-        this.pathValidation = pathValidation;
         this.fechaCambio = fechaCambio;
         inicializarTipo();
     }
@@ -85,14 +83,6 @@ public class CargaFamiliar implements Serializable {
 
     public void setDetalle(String detalle) {
         this.detalle = detalle;
-    }
-
-    public String getPathValidation() {
-        return pathValidation;
-    }
-
-    public void setPathValidation(String pathValidation) {
-        this.pathValidation = pathValidation;
     }
 
     public Date getFechaCambio() {
