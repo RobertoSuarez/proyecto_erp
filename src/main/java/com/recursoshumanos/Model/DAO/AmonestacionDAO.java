@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.DAO;
+package com.recursoshumanos.Model.DAO;
 
-import Config.Conexion;
-import Model.Entidad.Amonestacion;
+import com.global.config.Conexion;
+import com.recursoshumanos.Model.Amonestacion;
 import Model.Entidad.Empleado;
-import Model.Interfaces.IDAO;
+import com.recursoshumanos.Model.Interfaces.IDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
