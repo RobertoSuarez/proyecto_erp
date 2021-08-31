@@ -3,6 +3,7 @@ package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.Estado_De_CuentaDAO;
 import com.cuentasporcobrar.models.Estado_De_Cuenta;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,6 +33,9 @@ public class Estado_De_CuentaController implements Serializable {
     //Se Declaran las clases Estado_De_Cuenta y Estado_De_CuentaDAO
     Estado_De_Cuenta estado_De_Cuenta;
     Estado_De_CuentaDAO estado_De_CuentaDAO;
+    
+    //Declaro una variable para guardar el nombre de la empresa.
+    private String empresa; 
 
     //Declaro mi lista con el estado de cuenta general 
     //que van hacer cargadas en el datatable
@@ -51,6 +55,7 @@ public class Estado_De_CuentaController implements Serializable {
         //Para que se carguen en el data table el estado de cuenta general 
         estado_De_CuentaDAO =new Estado_De_CuentaDAO();
         lista_Estado_De_Cuenta=new ArrayList<>();
+        empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
         lista_Estado_De_Cuenta=estado_De_CuentaDAO.obtenerTodosLosEstadosCuenta();
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
@@ -77,7 +82,7 @@ public class Estado_De_CuentaController implements Serializable {
 
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Empresa S.A");
+            parametros.put("titulo", empresa);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
