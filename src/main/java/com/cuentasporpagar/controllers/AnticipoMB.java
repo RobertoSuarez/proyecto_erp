@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import java.io.Serializable;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -26,7 +27,7 @@ import java.io.Serializable;
  */
 
 @ManagedBean(name = "anticipoMB")
-@SessionScoped
+@ViewScoped
 public class AnticipoMB implements Serializable {
 
     static final String NUEVO = "NUEVO" ;
