@@ -28,54 +28,84 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+/**
+ * Una clase Cartera_X_EdadesController que se va a encargar de la lógica de
+ * negocio que lleva consigo tener acceso a la BD y al modelo.
+ *
+ * @author Alexander Vega, Andy Ninasunta.
+ */
+
 @Named(value = "cartera_X_EdadesController")
 @ViewScoped
 public class Cartera_X_EdadesController implements Serializable {
-    
-    //Se Declaran las clases Cartera_X_Edades y Cartera_X_EdadesDAO
+
+    //Se Declaran las clases Cartera_X_Edades y Cartera_X_EdadesDAO.
     Cartera_X_Edades cartera_X_Edades;
     Cartera_X_EdadesDAO cartera_X_EdadesDAO;
 
     //Declaro mi lista de la cartera por edades de todos los clientes.
     List<Cartera_X_Edades> lista_Cartera_X_Edades;
 
-    //Esta clase nos permitirá reutilizar el codigo para cargar los clientes en
-    // el select one.
+    /*Esta clase nos permitirá reutilizar el codigo para cargar los clientes en
+      el componente select one de la vista CarteraxEdadesDeVencimiento. */
     Persona persona;
     PersonaDAO personaDAO;
-    //Lista con todos los clientes
+
+    //Lista con todos los clientes.
     List<SelectItem> listaCliente;
 
-    //Declaro mi lista con la sumatoria 
+    //Declaro mi lista con la sumatoria.
     List<Cartera_X_Edades> listaSum_Cartera_X_Edades;
 
+    /**
+     * Constructor que instancia mis clases declaradas.
+     */
     public Cartera_X_EdadesController() {
-        //Para que carguen en el data table todas las facturas las cuales 
-        //hayan sido pagadas como plan de pagos de todos los clientes.
+
+        //Inicializo mi clase Cartera_X_EdadesDAO.
         cartera_X_EdadesDAO = new Cartera_X_EdadesDAO();
+
+        /*Inicializo mi listaCliente y guardo todos lo clientes
+              que obtengo de un metodo en mi clase cartera_X_EdadesDAO.*/
         lista_Cartera_X_Edades = new ArrayList<>();
         lista_Cartera_X_Edades = cartera_X_EdadesDAO.obtenerCarteraxEdades();
 
-        //Carga la sumatoria de todas las ventas .
+        //Carga la sumatoria de todas las ventas.
         listaSum_Cartera_X_Edades = new ArrayList<>();
 
-        //Recibe un parámetros que será el id del cliente, en caso de ser -1 (Predeterminado)
-        //Se carga la suma de todos los clientes.
+        /*Recibe un parámetros que será el id del cliente, en caso de ser -1 
+          se carga la suma de todos los clientes. */
         listaSum_Cartera_X_Edades = cartera_X_EdadesDAO.obtenerSumCarteraxEdades(-1);
     }
 
+    /**
+     * Se carga el listado de los clientes en un componente de primefaces 
+     * (select one).
+     * @return Listado de los clientes.
+     */
     public List<SelectItem> getListaCliente() {
-        try{
-        listaCliente = new ArrayList<>();
-        personaDAO = new PersonaDAO();
-        List<Persona> p = personaDAO.obtenerNombresClientes();
-        listaCliente.clear();
+        try {
+            
+            //Se inicializa el listaCliente.
+            listaCliente = new ArrayList<>();
+            
+            //Se inicializa la clase PersonaDAO.
+            personaDAO = new PersonaDAO();
+            
+            //Se instancia una nueva lista auxiliar.
+            List<Persona> p = personaDAO.obtenerNombresClientes();
+            listaCliente.clear();
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
         return listaCliente;
     }
 
+    /**
+     * Método para exportar en pdf.
+     * @throws IOException
+     * @throws JRException
+     */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -88,11 +118,11 @@ public class Cartera_X_EdadesController implements Serializable {
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
-            
+
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("titulo", "Empresa S.A");
-            
+
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()

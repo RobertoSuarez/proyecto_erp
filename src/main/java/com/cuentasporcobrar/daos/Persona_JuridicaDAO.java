@@ -1,4 +1,3 @@
-
 package com.cuentasporcobrar.daos;
 
 import com.cuentasporcobrar.models.Persona;
@@ -10,30 +9,64 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Una clase Persona_JuridicaDAO que se va a encargar de la lógica de negocio
+ * que lleva consigo tener acceso a la BD y al modelo.
+ *
+ * @author Alexander Vega, Andy Ninasunta.
+ */
 public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
 
+    //Declaro la clase Persona_Juridica.
     Persona_Juridica person_Juridica;
+
+    //Declaro una lista_ClientesJuridicos.
     List<Persona_Juridica> lista_ClientesJuridicos;
 
+    /**
+     * Constructor que obtiene un objeto Persona_Natural, una
+     * lista_ClientesNaturales, la Conexion, el objeto Persona y un ResultSet.
+     *
+     * @param conex Obtiene la conexión a la base de datos.
+     * @param lista_ClientesJuridicos Se carga el listado de clientes juridicos.
+     * @param person_Juridica Se obtiene los campos y constructores declarados.
+     * @param persona Se obtiene los campos y constructores declarados.
+     * @param result Se realiza la lectura a las consultas que se realizan.
+     */
     public Persona_JuridicaDAO(Persona_Juridica person_Juridica, List<Persona_Juridica> lista_ClientesJuridicos, Conexion conex, Persona persona, ResultSet result) {
         super(conex, persona, result);
         this.person_Juridica = person_Juridica;
         this.lista_ClientesJuridicos = lista_ClientesJuridicos;
     }
 
+    /**
+     * Constructor que inicializa solamente la conexión.
+     */
     public Persona_JuridicaDAO() {
         conex = new Conexion();
     }
 
+    /**
+     * Constructor que recibe un objeto Persona_Juridica y que inicializa la
+     * conexión.
+     *
+     * @param person_Juridica Se obtiene los campos y contructores declarados.
+     */
     public Persona_JuridicaDAO(Persona_Juridica person_Juridica) {
         conex = new Conexion();
         this.person_Juridica = person_Juridica;
     }
 
-    //--Ejecutando Funcion (Ingresando Persona Juridica)
+    /**
+     * Se registran los clientes juridicos.
+     *
+     * @return Se retorna 1 o -1.
+     */
     public int insertarClienteJuridico() {
         try {
 
+            /*Se guarda en una variable de tipo string el procemiento 
+              almacenado. */
             String sentenciaSQL = "Select Ingresar_Cliente_Juridico"
                     + "(" + person_Juridica.getIdTipoIdenficacion() + ",'"
                     + person_Juridica.getIdentificacion() + "','"
@@ -43,29 +76,40 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                     + person_Juridica.getCorreo() + "','"
                     + person_Juridica.getRazonSocial() + "',"
                     + person_Juridica.getIdTipoCliente() + ",'"
-                    + person_Juridica.getNomContacto()+"','"
-                    + person_Juridica.getCargoContacto()+"','"
-                    + person_Juridica.getPaginaWeb()+"','"
-                    + person_Juridica.getFechaCreacion()+"')";
-            //Verificamos la conexion
+                    + person_Juridica.getNomContacto() + "','"
+                    + person_Juridica.getCargoContacto() + "','"
+                    + person_Juridica.getPaginaWeb() + "','"
+                    + person_Juridica.getFechaCreacion() + "')";
+
+            //Verificamos el estado de la conexión.
             if (conex.isEstado()) {
-                //Una vez se asegura que la conexion este correcta.
-                //Se ejecuta la sentencia ingresada.
+
+                /*Una vez se asegura que la conexion este correcta y
+                  se ejecuta la sentencia ingresada. */
                 return conex.ejecutarProcedimiento(sentenciaSQL);
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
+
+            //Se cierra la conexion.
             conex.cerrarConexion();
         }
-        //@return Caso contrario: Se retorna -1 indicando que la conexión está
-        //en estado Falso
+
+        //Se retorna -1 indicando que la conexión esta en estado Falso.
         return -1;
     }
 
-    //Método que actualiza Cliente Juridico
+    /**
+     * Se modifican los clientes juridicos.
+     *
+     * @return Se retorna 1 o -1.
+     */
     public int actualizarClienteJuridico() {
         try {
+
+            /*Se guarda en una variable de tipo string el procemiento 
+              almacenado. */
             String sentenciaSQL = "Select actualizar_persona_juridica("
                     + person_Juridica.getIdCliente() + ","
                     + person_Juridica.getIdTipoIdenficacion() + ",'"
@@ -76,38 +120,55 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                     + person_Juridica.getCorreo() + "','"
                     + person_Juridica.getRazonSocial() + "',"
                     + person_Juridica.getIdTipoCliente() + ",'"
-                    + person_Juridica.getNomContacto()+"','"
-                    + person_Juridica.getCargoContacto()+"','"
-                    + person_Juridica.getPaginaWeb()+"','"
-                    + person_Juridica.getFechaCreacion()+"')";
+                    + person_Juridica.getNomContacto() + "','"
+                    + person_Juridica.getCargoContacto() + "','"
+                    + person_Juridica.getPaginaWeb() + "','"
+                    + person_Juridica.getFechaCreacion() + "')";
 
+            //Verificamos el estado de la conexión.
             if (conex.isEstado()) {
-                //Una vez se asegura que la conexion este correcta.
-                //Se ejecuta la sentencia ingresada.
+
+                /*Una vez se asegura que la conexion este correcta y
+                  se ejecuta la sentencia ingresada. */
                 return conex.ejecutarProcedimiento(sentenciaSQL);
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
+
+            //Se cierra la conexión.
             conex.cerrarConexion();
         }
-        //@return Caso contrario: Se retorna -1 indicando que la conexión está
-        //en estado Falso
+
+        //Se retorna -1 indicando que la conexión esta en estado Falso.
         return -1;
     }
 
-    //Método que retorna los clientes Juridicos
+    /**
+     * Se obtienen todos los clientes juridicos por medio de su id.
+     *
+     * @param idCliente El id del cliente que es único en la base de datos.
+     * @return Un objeto Persona_Juridica.
+     */
     public Persona_Juridica obtenerClienteJuridico(int idCliente) {
+
+        //Se inicializa un objeto de Persona_Juridica.
         Persona_Juridica p_juridica = new Persona_Juridica();
+
+        //Verificamos el estado de la conexión.
         if (conex.isEstado()) {
             try {
+
+                /*Se guarda en una variable de tipo string el procemiento 
+                  almacenado. */
                 String sentencia = "select*from obtener_cliente_juridico("
                         + idCliente + ")";
-                result = conex.ejecutarConsulta(sentencia);
-                while (result.next()) {
 
-                    //Almacenamos en un objeto los datos personales de un 
-                    //Cliente Juridico.
+                //Se da lectura del procemiento almacenado.
+                result = conex.ejecutarConsulta(sentencia);
+
+                //Se realiza el llenado del objeto Persona_Juridica.
+                while (result.next()) {
                     p_juridica = new Persona_Juridica(
                             result.getString("razon_social_r"),
                             result.getInt("idtipoidentificacion_r"),
@@ -126,8 +187,10 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                 }
             } catch (SQLException ex) {
                 p_juridica = new Persona_Juridica("", -1, "", "", false, "", "",
-                        "", -1,"","","",null);
+                        "", -1, "", "", "", null);
             } finally {
+
+                //Se cierra la conexión.
                 conex.cerrarConexion();
             }
         }

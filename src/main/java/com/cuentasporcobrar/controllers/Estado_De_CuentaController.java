@@ -23,6 +23,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Named(value = "estado_De_CuentaController")
 @ViewScoped
+/**
+ * Clase de tipo Controlador para los Estados de Cuenta. Se encarga de llevar toda
+ * la lógica del negocio con respecto a los Estados de Cuenta.
+ */
 public class Estado_De_CuentaController implements Serializable {
     
     //Se Declaran las clases Estado_De_Cuenta y Estado_De_CuentaDAO
@@ -38,7 +42,9 @@ public class Estado_De_CuentaController implements Serializable {
     List<Estado_De_Cuenta> lista_Estado_De_Cuenta_Cliente;//POSIBLEMENTE SE ELIMINE
     //POR QUE NECESITA QUE SE CARGUE EN LA MISMA TABLA DEL GENERAL.
 
-    //Procedimiento principal(Se ejecuta una vez se llame al controlador)
+    /**
+     * Constructor que inicializa algunas variables declaradas.
+     */
     public Estado_De_CuentaController() {
         
         try{
@@ -51,6 +57,11 @@ public class Estado_De_CuentaController implements Serializable {
         }        
     }
     
+    /**
+     * Método para exportar un PDF de las facturas pendientes.
+     * @throws IOException Excepción que no controla un programador.
+     * @throws JRException Expeción del JasperReport.
+     */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.Facturas_PendientesDAO;
@@ -29,6 +25,10 @@ import org.primefaces.component.export.PDFOptions;
 
 @Named(value = "facturas_PendientesController")
 @ViewScoped
+/**
+ * Clase de tipo Controlador para las Facturas Pendientes. Se encarga de llevar toda
+ * la lógica del negocio con respecto a las Facturas Pendientes.
+ */
 public class Facturas_PendientesController implements Serializable {
 
     //Componentes para tener estilos en las exportaciones
@@ -45,6 +45,9 @@ public class Facturas_PendientesController implements Serializable {
     //Declaro un arreglo con el total de la venta [0] y la cartera pendiente[1]
     double[] totalVentaCartera;
 
+    /**
+     * Constructor donde inicializamos nuestras variables declaradas.
+     */
     public Facturas_PendientesController() {
 
         try {
@@ -61,6 +64,11 @@ public class Facturas_PendientesController implements Serializable {
         }
     }
 
+    /**
+     * Método para exportar un PDF de las facturas pendientes.
+     * @throws IOException Excepción que no controla un programador.
+     * @throws JRException Expeción del JasperReport.
+     */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
