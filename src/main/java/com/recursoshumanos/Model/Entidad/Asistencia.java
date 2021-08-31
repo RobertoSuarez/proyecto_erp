@@ -25,7 +25,8 @@ public class Asistencia {
         this.detalleHorario = new DetalleHorario();
     }
 
-    public Asistencia(EmpleadoPuesto empleadoPuesto, String ingreso, String salida, Date fecha, DetalleHorario detalleHorario) {
+    public Asistencia(EmpleadoPuesto empleadoPuesto, String ingreso, 
+        String salida, Date fecha, DetalleHorario detalleHorario) {
         this.empleadoPuesto = empleadoPuesto;
         this.ingreso = ingreso;
         this.salida = salida;

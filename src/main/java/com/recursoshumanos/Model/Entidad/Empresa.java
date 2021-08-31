@@ -20,7 +20,8 @@ public class Empresa {
         this.detalle = "";
     }
 
-    public Empresa(int id, Dedicacion dedicacion, String ruc, String tipo, String nombre, String razonSocial, String detalle) {
+    public Empresa(int id, Dedicacion dedicacion, String ruc, String tipo, 
+    String nombre, String razonSocial, String detalle) {
         this.id = id;
         this.dedicacion = dedicacion;
         this.ruc = ruc;

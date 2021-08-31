@@ -27,7 +27,8 @@ public class DetalleHorario implements Serializable{
         estado = true;
     }
 
-    public DetalleHorario(int id, IngresosSalidas ingresoSalida, HorarioLaboral horarioLaboral, DiaSemana diaSemana, boolean estado) {
+    public DetalleHorario(int id, IngresosSalidas ingresoSalida, 
+        HorarioLaboral horarioLaboral, DiaSemana diaSemana, boolean estado) {
         this.id = id;
         this.ingresoSalida = ingresoSalida;
         this.horarioLaboral = horarioLaboral;

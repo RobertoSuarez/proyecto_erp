@@ -33,7 +33,10 @@ public class Empleado implements Serializable{
         this.fechaEgreso = new Date();
     }
 
-    public Empleado(int id, Persona persona, String nombre1, String nombre2, String apellido1, String apellido2, String sexo, String genero, String detalle, Date fechaNacimiento, Date fechaIngreso, Date fechaEgreso) {
+    public Empleado(int id, Persona persona, String nombre1, String nombre2, 
+        String apellido1, String apellido2, String sexo, String genero, 
+        String detalle, Date fechaNacimiento, Date fechaIngreso, 
+        Date fechaEgreso) {
         this.id = id;
         this.persona = persona;
         this.nombre1 = nombre1;

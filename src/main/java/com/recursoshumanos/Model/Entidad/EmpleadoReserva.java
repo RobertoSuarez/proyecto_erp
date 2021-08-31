@@ -5,7 +5,7 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-import Model.DAO.TipoRubroDAO;
+import com.recursoshumanos.Model.DAO.TipoRubroDAO;
 import java.util.Date;
 
 /**
@@ -27,7 +27,8 @@ public class EmpleadoReserva {
         inicializarTipo();
     }
 
-    public EmpleadoReserva(Empleado empleado, Date fechaSolicitud, float formaPago, String detalle) {
+    public EmpleadoReserva(Empleado empleado, Date fechaSolicitud, 
+        float formaPago, String detalle) {
         this.empleado = empleado;
         this.fechaSolicitud = fechaSolicitud;
         this.formaPago = formaPago;

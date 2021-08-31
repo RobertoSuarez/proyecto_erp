@@ -28,7 +28,8 @@ public class EmpleadoSucursal {
         this.detalle = "";
     }
 
-    public EmpleadoSucursal(int id, Empleado empleado, Sucursal sucursal, Date fechaCambio, boolean estado, String detalle) {
+    public EmpleadoSucursal(int id, Empleado empleado, Sucursal sucursal, 
+    Date fechaCambio, boolean estado, String detalle) {
         this.id = id;
         this.empleado = empleado;
         this.sucursal = sucursal;

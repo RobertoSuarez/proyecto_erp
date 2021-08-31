@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.DAO;
+package com.recursoshumanos.Model.DAO;
 
-import Config.Conexion;
-import Model.Entidad.Dedicacion;
-import Model.Entidad.Empresa;
-import Model.Interfaces.IDAO;
+import com.global.config.Conexion;
+import com.recursoshumanos.Model.Entidad.Dedicacion;
+import com.recursoshumanos.Model.Entidad.Empresa;
+import com.recursoshumanos.Model.Interfaces.IDAO;
 import org.jetbrains.annotations.Nullable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -68,9 +68,9 @@ public class EmpresaDAO implements IDAO<Empresa> {
             empresa.setId(conexion.insertar("empresa_matriz",
                     "ruc, tipo, nombre, razon_social, detalle",
                     "'" + empresa.getRuc() + "', '" + empresa.getTipo()
-                    + "', '" + empresa.getNombre() + "', '" + empresa.getRazonSocial()
-                    + "', '" + empresa.getDetalle() + "'",
-                    "id_matriz"));
+                    + "', '" + empresa.getNombre() + "', '" + 
+                    empresa.getRazonSocial() + "', '" + empresa.getDetalle() 
+                    + "'", "id_matriz"));
             return empresa.getId();
         }
         return -1;
@@ -87,9 +87,10 @@ public class EmpresaDAO implements IDAO<Empresa> {
         if (conexion.isEstado()) {
             return conexion.modificar("empresa_matriz",
                     "ruc = '" + empresa.getRuc() + "', tipo = '"
-                    + empresa.getTipo() + "', nombre = '" + empresa.getNombre() + "', razon_social = '"
-                    + empresa.getRazonSocial() + "', detalle = '" + empresa.getDetalle() + "'",
-                    "id_matriz = " + empresa.getId());
+                    + empresa.getTipo() + "', nombre = '" + empresa.getNombre() 
+                    + "', razon_social = '" + empresa.getRazonSocial() + 
+                    "', detalle = '" + empresa.getDetalle() + "'","id_matriz = " 
+                    + empresa.getId());
         }
         return -1;
     }
@@ -119,16 +120,20 @@ public class EmpresaDAO implements IDAO<Empresa> {
         if (lista != null && !lista.isEmpty()) {
             return lista.get(0);
         }else{
-            return new Empresa(-1, new Dedicacion(), "9999999999999", "Comercial", DEFAUL, DEFAUL, DEFAUL);
+            return new Empresa(-1, new Dedicacion(), "9999999999999", 
+            "Comercial", DEFAUL, DEFAUL, DEFAUL);
         }
     }
 
-    private List<Empresa> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
+    private List<Empresa> buscar(@Nullable String restricciones, 
+    @Nullable String OrdenarAgrupar) {
         if (conexion.isEstado()) {
             ResultSet result;
             List<Empresa> empresas;
             try {
-                result = conexion.selecionar("empresa_matriz", "id_matriz, ruc, tipo, nombre, razon_social, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("empresa_matriz", "id_matriz, ruc, "
+                + "tipo, nombre, razon_social, detalle", restricciones, 
+                OrdenarAgrupar);
                 empresas = new ArrayList<>();
                 DedicacionDAO ddao = new DedicacionDAO();
                 while (result.next()) {

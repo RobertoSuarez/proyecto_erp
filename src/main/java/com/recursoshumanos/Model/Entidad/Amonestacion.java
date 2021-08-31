@@ -5,7 +5,7 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-import Model.DAO.TipoRubroDAO;
+import com.recursoshumanos.Model.DAO.TipoRubroDAO;
 
 /**
  *
@@ -39,7 +39,8 @@ public class Amonestacion {
         inicializarTipo();
     }
 
-    public Amonestacion(int id, Empleado empleado, String tipo, String detalle, float valor, boolean estado) {
+    public Amonestacion(int id, Empleado empleado, String tipo, String detalle, 
+        float valor, boolean estado) {
         this.id = id;
         this.empleado = empleado;
         this.tipo = tipo;

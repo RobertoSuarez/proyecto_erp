@@ -18,7 +18,8 @@ public class Dedicacion {
         porcentajeUtilidad = 0;
     }
 
-    public Dedicacion(int id, String nombre, float porcentajeUtilidad, String detalle) {
+    public Dedicacion(int id, String nombre, float porcentajeUtilidad, 
+        String detalle) {
         this.id = id;
         this.nombre = nombre;
         this.detalle = detalle;

@@ -23,7 +23,8 @@ public class Departamento {
         this.descripcion = "";
     }
 
-    public Departamento(int id, String nombre, boolean estado, Date fecha_creacion, String descripcion) {
+    public Departamento(int id, String nombre, boolean estado, 
+        Date fecha_creacion, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;

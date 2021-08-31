@@ -5,7 +5,7 @@
  */
 package com.recursoshumanos.Model.Entidad;
 
-import Model.DAO.TipoRubroDAO;
+import com.recursoshumanos.Model.DAO.TipoRubroDAO;
 import java.util.Date;
 
 /**

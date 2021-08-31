@@ -30,7 +30,9 @@ public class EmpleadoPuesto {
         this.observaciones = "";
     }
 
-    public EmpleadoPuesto(int id, Empleado empleado, PuestoLaboral puestoLaboral, HorarioLaboral horarioLaboral, Date fechaCambio, boolean estado, String observaciones) {
+    public EmpleadoPuesto(int id, Empleado empleado, 
+        PuestoLaboral puestoLaboral, HorarioLaboral horarioLaboral, 
+        Date fechaCambio, boolean estado, String observaciones) {
         this.id = id;
         this.empleado = empleado;
         this.puestoLaboral = puestoLaboral;
