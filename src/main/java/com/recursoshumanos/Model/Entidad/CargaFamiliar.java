@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model.Entidad;
+package com.recursoshumanos.Model.Entidad;
 
 import Model.DAO.TipoRubroDAO;
 import java.util.Date;
