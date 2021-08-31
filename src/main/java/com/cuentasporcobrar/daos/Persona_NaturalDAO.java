@@ -1,4 +1,3 @@
-
 package com.cuentasporcobrar.daos;
 
 import com.cuentasporcobrar.models.Persona;
@@ -10,30 +9,65 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Una clase Persona_NaturalDAO que se va a encargar de la lógica de negocio que
+ * lleva consigo tener acceso a la BD y al modelo.
+ *
+ * @author Alexander Vega, Andy Ninasunta.
+ */
 public class Persona_NaturalDAO extends PersonaDAO implements Serializable {
 
+    //Declaro la clase Persona_Natural.
     Persona_Natural person_Natural;
+
+    //Declaro una lista_ClientesNaturales.
     List<Persona_Natural> lista_ClientesNaturales;
 
+    /**
+     * Constructor que obtiene un objeto Persona_Natural, una
+     * lista_ClientesNaturales, la Conexion, el objeto Persona y un ResultSet.
+     *
+     * @param conex Obtiene la conexión a la base de datos.
+     * @param lista_ClientesNaturales Se carga el listado de clientes naturales.
+     * @param person_Natural Se obtiene los campos y constructores declarados.
+     * @param persona Se obtiene los campos y constructores declarados.
+     * @param result Se realiza la lectura a las consultas que se realizan.
+     */
     public Persona_NaturalDAO(Persona_Natural person_Natural, List<Persona_Natural> lista_ClientesNaturales, Conexion conex, Persona persona, ResultSet result) {
         super(conex, persona, result);
         this.person_Natural = person_Natural;
         this.lista_ClientesNaturales = lista_ClientesNaturales;
     }
 
+    /**
+     * Constructor que inicializa solamente la conexión.
+     */
     public Persona_NaturalDAO() {
         conex = new Conexion();
     }
 
+    /**
+     * Constructor que recibe un objeto Persona_Natural y que inicializa la
+     * conexión.
+     *
+     * @param person_Natural Se obtiene los campos y contructores declarados.
+     */
     public Persona_NaturalDAO(Persona_Natural person_Natural) {
         conex = new Conexion();
         this.person_Natural = person_Natural;
     }
 
-    //Método que retorna los clientes Naturales
+    /**
+     * Se registran los clientes naturales.
+     *
+     * @return Se retorna 1 o -1.
+     */
     public int insertarClienteNatural() {
         try {
-            String sentenciaSQL = "Select Ingresar_Cliente_Natural " //Es un Procedimiento Almacenado
+
+            /*Se guarda en una variable de tipo string el procedimiento 
+              almacenado. */
+            String sentenciaSQL = "Select Ingresar_Cliente_Natural "
                     + "(" + person_Natural.getIdTipoIdenficacion() + ",'"
                     + person_Natural.getIdentificacion() + "','"
                     + person_Natural.getNombre1() + "','"
@@ -49,26 +83,36 @@ public class Persona_NaturalDAO extends PersonaDAO implements Serializable {
                     + person_Natural.getFechaNacimiento() + "',"
                     + person_Natural.getIdTipoCliente() + ")";
 
-            //Verificamos la conexion
+            //Verificamos el estado de la conexión.
             if (conex.isEstado()) {
-                //Una vez se asegura que la conexion este correcta.
-                //Se ejecuta la sentencia ingresada.
+
+                /*Una vez se asegura que la conexion este correcta y
+                  se ejecuta la sentencia ingresada. */
                 return conex.ejecutarProcedimiento(sentenciaSQL);
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
+
+            //Se cierra la conexion.
             conex.cerrarConexion();
         }
-        //@return Caso contrario: Se retorna -1 indicando que la conexión está
-        //en estado Falso
+        
+        //Se retorna -1 indicando que la conexión esta en estado Falso.
         return -1;
 
     }
 
-    //Método que actualiza un cliente natural
+    /**
+     * Se modifican los clientes naturales.
+     *
+     * @return Se retorna 1 o -1.
+     */
     public int actualizarClienteNatural() {
         try {
+            
+            /*Se guarda en una variable de tipo string el procedimiento 
+              almacenado. */
             String sentenciaSQL = "Select actualizar_persona_natural(" + person_Natural.getIdCliente() + ","
                     + person_Natural.getIdTipoIdenficacion() + ",'"
                     + person_Natural.getIdentificacion() + "','"
@@ -85,39 +129,52 @@ public class Persona_NaturalDAO extends PersonaDAO implements Serializable {
                     + person_Natural.getFechaNacimiento() + "',"
                     + person_Natural.getIdTipoCliente() + ")";
 
+            //Verificamos el estado de la conexión.
             if (conex.isEstado()) {
-                //Una vez se asegura que la conexion este correcta.
-                //Se ejecuta la sentencia ingresada.
+                
+                /*Una vez se asegura que la conexion este correcta y
+                  se ejecuta la sentencia ingresada. */
                 return conex.ejecutarProcedimiento(sentenciaSQL);
             }
-            
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
+
+            //Se cierra la conexión.
             conex.cerrarConexion();
         }
-        //@return Caso contrario: Se retorna -1 indicando que la conexión está
-        //en estado Falso
+
+        //Se retorna -1 indicando que la conexión esta en estado Falso.
         return -1;
 
     }
 
-    //Método que retorna los clientes Naturales
+    /**
+     * Se obtienen todos los clientes naturales por medio de su id.
+     *
+     * @param idCliente El id del cliente que es único en la base de datos.
+     * @return Un objeto Persona_Natural.
+     */
     public Persona_Natural obtenerClienteNatural(int idCliente) {
+
+        //Se inicializa un objeto de Persona_Natural.
         Persona_Natural p_natural = new Persona_Natural();
 
+        //Verificamos el estado de la conexión.
         if (conex.isEstado()) {
             try {
-
+                
+                /*Se guarda en una variable de tipo string el procedimiento 
+                  almacenado. */
                 String sentencia = "select*from obtener_cliente_natural("
                         + idCliente + ")";
 
+                //Se da lectura del procemiento almacenado.
                 result = conex.ejecutarConsulta(sentencia);
 
+                //Se realiza el llenado del objeto Persona_Natural.
                 while (result.next()) {
-
-                    //Almacenamos en un objeto los datos personales de un 
-                    //Cliente Natural.
                     p_natural = new Persona_Natural(
                             result.getString("sexo_r"),
                             result.getString("genero_r"),
@@ -143,6 +200,7 @@ public class Persona_NaturalDAO extends PersonaDAO implements Serializable {
 
             } finally {
 
+                //Se cierra la conexión.
                 conex.cerrarConexion();
 
             }

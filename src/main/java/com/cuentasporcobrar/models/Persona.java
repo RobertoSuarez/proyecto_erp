@@ -72,24 +72,40 @@ public class Persona implements Serializable {
         this.correo = correo;
     }
     
-    //Constructor con el id_cliente y el nombre de la persona
+    /**
+     * Constructor que recibe el idCliente y el nombre
+     * del cliente.
+     * @param id_Cliente El idCliente que es único en la base de datos.
+     * @param razon_nombre El nombre de cliente (Razón Social/Nombres y 
+     * Apellidos).
+     */
     public Persona(int id_Cliente, String razon_nombre) {
         this.idCliente = id_Cliente;
         this.razonNombre = razon_nombre;
     }
     
-    //Constructor con el id_Cliente, la identificacion y el nombre
-
+    /**
+     * Constructor que recibe una identificacion, idCliente y el nombre
+     * del cliente.
+     * @param idCliente El idCliente que es único en la base de datos.
+     * @param identificacion La identificación del cliente (RUC, CÉDULA O
+     * PASAPORTE).
+     * @param razonNombre El nombre de cliente (Razón Social/Nombres y 
+     * Apellidos).
+     */
     public Persona(String identificacion, int idCliente, String razonNombre) {
         this.identificacion = identificacion;
         this.idCliente = idCliente;
         this.razonNombre = razonNombre;
     }
     
-    
-
+    /**
+     * Se identifica el tipo de etiqueta.
+     * @return La etiqueta identificada.
+     */
     public String createLabel() {
 
+        //Se identifica que descripcion de estado se recibe.
         switch (descrEstado) {
 
             case "Activo":
@@ -103,6 +119,7 @@ public class Persona implements Serializable {
         }
     }
 
+    //Getters y Setters.
     public int getIdTipoIdenficacion() {
         return idTipoIdenficacion;
     }
