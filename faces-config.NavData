@@ -11,13 +11,13 @@
         <Node id="View/recursoshumanos/persona.xhtml" x="1150" y="600" zoom="true"/>
         <Node id="View/recursoshumanos/reporte.xhtml" x="862" y="255" zoom="true"/>
         <Node id="View/activos_fijos/ActivosIntangibles.xhtml" x="1400" y="150" zoom="true"/>
-        <Node id="View/contabilidad/dialogAgregarSubGrupo.xhtml" x="150" y="900" zoom="true"/>
         <Node id="View/recursoshumanos/dedicacion.xhtml" x="1400" y="600" zoom="true"/>
+        <Node id="View/contabilidad/dialogAgregarSubGrupo.xhtml" x="150" y="900" zoom="true"/>
         <Node id="View/ventas/listaProforma.xhtml" x="650" y="600" zoom="true"/>
         <Node id="View/recursoshumanos/rolDePago.xhtml" x="2351" y="610" zoom="true"/>
         <Node id="index.xhtml" x="385" y="158" zoom="true"/>
-        <Node id="Plantilla/Plantilla.xhtml" x="85" y="541" zoom="true"/>
         <Node id="View/recursoshumanos/puestosLaborales.xhtml" x="900" y="450" zoom="true"/>
+        <Node id="Plantilla/Plantilla.xhtml" x="85" y="541" zoom="true"/>
         <Node id="View/contabilidad/gananciasPerdidas.xhtml" x="397" y="238" zoom="true"/>
         <Node id="View/ventas/nuevaProforma.xhtml" x="150" y="150" zoom="true"/>
         <Node id="View/cuentas_por_cobrar/FacturasPendientes.xhtml" x="400" y="600" zoom="true"/>
@@ -49,11 +49,11 @@
         <Node id="View/contabilidad/pcSubgrupos.xhtml" x="405" y="43" zoom="true"/>
         <Node id="View/contabilidad/asientos.xhtml" x="869" y="89" zoom="true"/>
         <Node id="View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml" x="650" y="450" zoom="true"/>
-        <Node id="View/ventas/nuevaVenta.xhtml" x="150" y="300" zoom="true"/>
         <Node id="View/recursoshumanos/roles.xhtml" x="2467" y="413" zoom="true"/>
+        <Node id="View/ventas/nuevaVenta.xhtml" x="150" y="300" zoom="true"/>
+        <Node id="View/contabilidad/pcGrupos.xhtml" x="391" y="538" zoom="true"/>
         <Node id="View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml" x="400" y="450" zoom="true"/>
         <Node id="View/recursoshumanos/detalleHorarioLaboral.xhtml" x="1650" y="450" zoom="true"/>
-        <Node id="View/contabilidad/pcGrupos.xhtml" x="391" y="538" zoom="true"/>
         <Node id="View/recursoshumanos/historialEmpleado.xhtml" x="900" y="750" zoom="true"/>
         <Node id="View/cuentas_por_pagar/Proveedor.xhtml" x="69" y="489" zoom="true"/>
         <Node id="View/cuentas_por_pagar/Comprobante.xhtml" x="42" y="300" zoom="true"/>

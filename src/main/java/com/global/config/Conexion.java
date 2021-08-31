@@ -1,5 +1,6 @@
 package com.global.config;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,7 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * $ psql -U appweb -h 190.15.134.7 -p 8080 erpcontableappweb
  * password: @Aplicaciones@Web@2021
  */
-public class Conexion {
+public class Conexion implements Serializable{
 
     public Connection conex;
     private java.sql.Statement st;
