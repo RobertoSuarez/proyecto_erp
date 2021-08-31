@@ -9,66 +9,101 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Una clase Plan_PagoDAO que se va a encargar de la lógica de negocio que lleva
+ * consigo tener acceso a la BD y al modelo.
+ *
+ * @author Alexander Vega, Andy Ninasunta.
+ */
 public class Plan_PagoDAO implements Serializable {
 
+    //Declaro un lista_cobros que obtiene un objeto Plan_Pago.
     List<Plan_Pago> lista_cobros;
+
+    //Declaro la clase Conexion.
     Conexion conex;
+
+    //Declaro la clase Plan_Pago.
     Plan_Pago plan_pago;
     ResultSet result;
 
-    //Constructor sin parametros, para iniciar una conexion.
+    /**
+     * Constructor que obtiene la conexion.
+     */
     public Plan_PagoDAO() {
         conex = new Conexion();
     }
 
-    //Constructor que recibe el objeto Plan_Pago e inicia una nueva conexion.
+    /**
+     * Constructor que obtiene la conexion e instancia el objeto persona.
+     *
+     * @param planPago Instancia al objeto Plan_Pago.
+     */
     public Plan_PagoDAO(Plan_Pago planPago) {
         conex = new Conexion();
         this.plan_pago = planPago;
     }
 
+    /**
+     * Constructor que recibe la conexion, el objeto Plan_Pago y el Resulset.
+     *
+     * @param conex Obtiene la conexion a la base de datos.
+     * @param planPago Instancia al objeto Plan_Pago.
+     * @param result Instancia al objeto resultset para lectura de sentencias.
+     */
     public Plan_PagoDAO(Conexion conex, Plan_Pago planPago, ResultSet result) {
         this.conex = conex;
         this.plan_pago = planPago;
         this.result = result;
     }
 
-    //Procedimiento para insertar un nuevo Plan de Pago.
+    /**
+     * Método que inserta un nuevo plan de pago.
+     *
+     * @return El retorno es 1 o -1.
+     */
     public int insertarPlanDePago() {
         try {
-            /*--Se ubica en el siguiente orden 
-        (idVenta,dias de credito,fecha de credito,
-        valor total de la factura,intereses)*/
+
+            /*Se guarda en una variable de tipo string el procedimiento 
+              almacenado. */
             String sentenciaSQL = "Select ingresar_plan_de_pago(" + plan_pago.getIdFactura()
                     + "," + plan_pago.getDiasCredito()
                     + ",'" + plan_pago.getFechaFacturacion()
                     + "'," + plan_pago.getValorTotalFactura() + "," + plan_pago.getIntereses() + ")";
 
-            //Verificamos la conexion
+            //Verificamos el estado de la conexión.
             if (conex.isEstado()) {
 
-                /*Una vez se asegura que la conexion este correcta.
-            Se ejecuta la sentencia ingresada.*/
+                /*Una vez se asegura que la conexion este correcta y
+                  se ejecuta la sentencia ingresada. */
                 return conex.ejecutarProcedimiento(sentenciaSQL);
 
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
+
+            //Se cierra la conexion.
             conex.cerrarConexion();
         }
-        
-        //@return Caso contrario: Se retorna -1 indicando que la conexión está
-        //en estado Falso
+
+        //Se retorna -1 indicando que la conexión esta en estado Falso.
         return -1;
     }
 
-    //Modificar/Actualizar un Plan de pago, 
-    //@return retorna 1 o -1 dependiendo si la función ejecuta correctamente.
-    //Nota: Solo se pueden modificar planes
-    // de pago que no tengan abonos.
+    /**
+     * Se modifican los Planes de Pago por medio de su id .
+     *
+     * @param idPlanDePago Se guarda el id de plan de pago que es único de la
+     * base de datos.
+     * @return Se retorna 1 o -1.
+     */
     public int actualizarPlanDePago(int idPlanDePago) {
         try {
+
+            /*Se guarda en una variable de tipo string el procedimiento 
+              almacenado. */
             String sentenciaSQL = "Select actualizar_plan_de_pago(" + idPlanDePago + ","
                     + plan_pago.getIdFactura()
                     + "," + plan_pago.getDiasCredito()
@@ -76,34 +111,43 @@ public class Plan_PagoDAO implements Serializable {
                     + "'," + plan_pago.getValorTotalFactura() + ","
                     + plan_pago.getIntereses() + ")";
 
-            //Verificamos la conexion
+            //Verificamos el estado de la conexión.
             if (conex.isEstado()) {
 
-                //Una vez se asegura que la conexion este correcta.
-                //Se ejecuta la sentencia ingresada.
+                /*Una vez se asegura que la conexion este correcta y
+                  se ejecuta la sentencia ingresada. */
                 return conex.ejecutarProcedimiento(sentenciaSQL);
 
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
+
+            //Se cierra la conexión.
             conex.cerrarConexion();
         }
-        //@return Caso contrario: Se retorna -1 indicando que la conexión está
-        //en estado Falso
+
+        //Se retorna -1 indicando que la conexión esta en estado Falso.
         return -1;
     }
 
-    //Funcion que devuelve una lista con los cobros de un cliente
+    /**
+     * Se obtienen todos los cobros por medio del idCliente.
+     *
+     * @param idCliente El id del cliente que es único en la base de datos.
+     * @return Un objeto Lista Plan_Pago.
+     */
     public List<Plan_Pago> obtenerCobrosCliente(int idCliente) {
+
+        //Se inicializa un objeto de lista_cobros.
         lista_cobros = new ArrayList<>();
 
-        //verificamos la conexion
+        //Verificamos el estado de la conexión.
         if (conex.isEstado()) {
             try {
-                /* Se obtiene una TABLA con todas las facturas que se pagaron a
-                credito, con sus respectivo datos calculados como la 
-                fecha de vencimiento =fecha actual+diascredito */
+
+                /*Se guarda en una variable de tipo string el procedimiento 
+                  almacenado. */
                 String sentencia = "select*from obtener_cobros_x_cliente(" + idCliente + ")";
                 result = conex.ejecutarConsulta(sentencia);
 
@@ -130,13 +174,12 @@ public class Plan_PagoDAO implements Serializable {
                                     numFact));
                 }
             } catch (SQLException ex) {
-                /*Enviamos su respectivo mensaje de error a su ves una lista 
-                    con valores incorrectos.*/
                 System.out.println(ex.getMessage());
                 lista_cobros.add(
                         new Plan_Pago(null, -1, null, -1, -1, -1, -1, "", -1, ""));
             } finally {
 
+                //Se cierra la conexión.
                 conex.cerrarConexion();
 
             }

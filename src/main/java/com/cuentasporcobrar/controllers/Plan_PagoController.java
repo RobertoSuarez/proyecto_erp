@@ -17,6 +17,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+/**
+ * Una clase Plan_PagoController que se va a encargar de la lógica de negocio
+ * que lleva consigo tener acceso a la BD y al modelo.
+ *
+ * @author Alexander Vega, Andy Ninasunta.
+ */
+
 @Named(value = "plan_PagoController")
 @ViewScoped
 public class Plan_PagoController implements Serializable {
@@ -35,36 +42,60 @@ public class Plan_PagoController implements Serializable {
     //Variable con la identificacion;
     String identificacion = "";
 
+    /**
+     * Constructor Plan_PagoController vacio.
+     */
     public Plan_PagoController() {
 
     }
 
+    /**
+     * Se realiza la búsqueda de un cliente.
+     */
     public void buscarCliente() {
-        try{
-        personaDAO = new PersonaDAO();
-        persona = new Persona();
-        //Cargamos el nombre del cliente en el input
-        persona = personaDAO.obtenerNombreClienteXIdentificacion(identificacion);
-        //Este if nos permite verificar si existe o no un cliente.
-        if (persona.getIdCliente() == 0) {
-            System.out.println("El Cliente NO EXISTE O ESTA INACTIVO ");
-            mostrarMensajeAdvertencia("El Cliente No Existe o esta Inactivo");
-        } else {
-            // En caso de que exista cargamos sus cobros (Claro si tiene cobros)
-            lista_Cobros = new ArrayList<>();
-            plan_PagoDAO = new Plan_PagoDAO();
-
-            //Cargamos los cobros de un determinado Cliente.
-            lista_Cobros = plan_PagoDAO.obtenerCobrosCliente(persona.getIdCliente());
-
-            //Este if valida si el cliente tiene o no cobros.
-            if (lista_Cobros.isEmpty()) {
-                mostrarMensajeAdvertencia("Ese cliente no tiene cobros");
-            } else {
-                mostrarMensajeInformacion("Se Cargaron los Cobros de " + persona.getRazonNombre());
+        try {
+            
+            //Se inicializa la clase PersonaDAO.
+            personaDAO = new PersonaDAO();
+            
+            //Se inicializa la clase Persona.
+            persona = new Persona();
+            
+            //Cargamos el nombre del cliente en el input.
+            persona = personaDAO.obtenerNombreClienteXIdentificacion(identificacion);
+            
+            //Este if nos permite verificar si existe o no un cliente.
+            if (persona.getIdCliente() == 0) {
                 
+                /*Muestra un mensaje de advertencia en caso de ser 0 el 
+                  idCliente. */
+                System.out.println("El Cliente NO EXISTE O ESTA INACTIVO ");
+                mostrarMensajeAdvertencia("El Cliente No Existe o esta Inactivo");
+            } else {
+                
+                /*En caso de que exista cargamos sus cobros (Claro si 
+                  tiene cobros). */
+                lista_Cobros = new ArrayList<>();
+                plan_PagoDAO = new Plan_PagoDAO();
+
+                //Cargamos los cobros de un determinado Cliente.
+                lista_Cobros = plan_PagoDAO.obtenerCobrosCliente(persona.getIdCliente());
+
+                //Este if valida si el cliente tiene o no cobros.
+                if (lista_Cobros.isEmpty()) {
+                    
+                    /*Muestra un mensaje de advertencia en caso de no tener 
+                      cobros el cliente. */
+                    mostrarMensajeAdvertencia("Ese cliente no tiene cobros");
+                } else {
+                    
+                    /*Muestra un mensaje de información en caso de tener cobros 
+                      el cliente. */
+                    mostrarMensajeInformacion("Se Cargaron los Cobros de " 
+                                              + persona.getRazonNombre());
+
+                }
             }
-        }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -97,23 +128,36 @@ public class Plan_PagoController implements Serializable {
     }
     //Fin
 
-    //Metodos para mostrar mensajes de Información y Error
+    /**
+     * Se Indican los mensajes de información.
+     *
+     * @param mensaje Se guarda el mensaje que desee mostrar en la interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Éxito: ", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
+    /**
+     * Se Indican los mensajes de error.
+     *
+     * @param mensaje Se guarda el mensaje que desee mostrar en la interfaz.
+     */
     public void mostrarMensajeAdvertencia(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN,
                 "Advertencia: ", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     * Se Indican los mensajes de advertencia.
+     *
+     * @param mensaje Se guarda el mensaje que desee mostrar en la interfaz.
+     */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Error: ", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }
-
