@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.CargoDAO;
-import Model.DAO.DepartamentoDAO;
-import Model.DAO.PuestoLaboralDAO;
-import Model.Entidad.Cargo;
-import Model.Entidad.Departamento;
-import Model.Entidad.PuestoLaboral;
+import com.recursoshumanos.Model.DAO.CargoDAO;
+import com.recursoshumanos.Model.DAO.DepartamentoDAO;
+import com.recursoshumanos.Model.DAO.PuestoLaboralDAO;
+import com.recursoshumanos.Model.Entidad.Cargo;
+import com.recursoshumanos.Model.Entidad.Departamento;
+import com.recursoshumanos.Model.Entidad.PuestoLaboral;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

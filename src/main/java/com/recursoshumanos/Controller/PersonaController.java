@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.PersonaDAO;
-import Model.Entidad.Persona;
+import com.recursoshumanos.Model.DAO.PersonaDAO;
+import com.recursoshumanos.Model.Entidad.Persona;
 import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

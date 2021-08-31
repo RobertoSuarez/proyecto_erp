@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.DetalleHorarioDAO;
-import Model.DAO.DiaSemanaDAO;
-import Model.DAO.HorarioLaboralDAO;
-import Model.DAO.IngresosSalidasDAO;
-import Model.Entidad.DetalleHorario;
-import Model.Entidad.DiaSemana;
-import Model.Entidad.HorarioLaboral;
-import Model.Entidad.IngresosSalidas;
+import com.recursoshumanos.Model.DAO.DetalleHorarioDAO;
+import com.recursoshumanos.Model.DAO.DiaSemanaDAO;
+import com.recursoshumanos.Model.DAO.HorarioLaboralDAO;
+import com.recursoshumanos.Model.DAO.IngresosSalidasDAO;
+import com.recursoshumanos.Model.Entidad.DetalleHorario;
+import com.recursoshumanos.Model.Entidad.DiaSemana;
+import com.recursoshumanos.Model.Entidad.HorarioLaboral;
+import com.recursoshumanos.Model.Entidad.IngresosSalidas;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

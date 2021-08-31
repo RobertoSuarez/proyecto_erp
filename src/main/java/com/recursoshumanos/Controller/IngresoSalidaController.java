@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.IngresosSalidasDAO;
-import Model.Entidad.IngresosSalidas;
+import com.recursoshumanos.Model.DAO.IngresosSalidasDAO;
+import com.recursoshumanos.Model.Entidad.IngresosSalidas;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

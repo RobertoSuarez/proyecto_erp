@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.CiudadDAO;
-import Model.DAO.DedicacionDAO;
-import Model.DAO.EmpresaDAO;
-import Model.DAO.ProvinciaDAO;
-import Model.DAO.SucursalDAO;
-import Model.Entidad.Ciudad;
-import Model.Entidad.Dedicacion;
-import Model.Entidad.Empresa;
-import Model.Entidad.Provincia;
-import Model.Entidad.Sucursal;
+import com.recursoshumanos.Model.DAO.CiudadDAO;
+import com.recursoshumanos.Model.DAO.DedicacionDAO;
+import com.recursoshumanos.Model.DAO.EmpresaDAO;
+import com.recursoshumanos.Model.DAO.ProvinciaDAO;
+import com.recursoshumanos.Model.DAO.SucursalDAO;
+import com.recursoshumanos.Model.Entidad.Ciudad;
+import com.recursoshumanos.Model.Entidad.Dedicacion;
+import com.recursoshumanos.Model.Entidad.Empresa;
+import com.recursoshumanos.Model.Entidad.Provincia;
+import com.recursoshumanos.Model.Entidad.Sucursal;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

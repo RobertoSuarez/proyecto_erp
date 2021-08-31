@@ -3,24 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package com.recursoshumanos.Controller;
 
-import Model.DAO.AmonestacionDAO;
-import Model.DAO.DetalleRolPagoDAO;
-import Model.DAO.EmpleadoReservaDAO;
-import Model.DAO.MultaDAO;
-import Model.DAO.RolPagosDAO;
-import Model.DAO.SueldoDAO;
-import Model.DAO.SuspencionDAO;
-import Model.Entidad.Amonestacion;
-import Model.Entidad.DetalleRolPago;
-import Model.Entidad.Empleado;
-import Model.Entidad.EmpleadoReserva;
-import Model.Entidad.Multa;
-import Model.Entidad.RolPagos;
-import Model.Entidad.Sueldo;
-import Model.Entidad.Suspencion;
-import Model.Entidad.TipoRubro;
+import com.recursoshumanos.Model.DAO.AmonestacionDAO;
+import com.recursoshumanos.Model.DAO.DetalleRolPagoDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoReservaDAO;
+import com.recursoshumanos.Model.DAO.MultaDAO;
+import com.recursoshumanos.Model.DAO.RolPagosDAO;
+import com.recursoshumanos.Model.DAO.SueldoDAO;
+import com.recursoshumanos.Model.DAO.SuspencionDAO;
+import com.recursoshumanos.Model.Entidad.Amonestacion;
+import com.recursoshumanos.Model.Entidad.DetalleRolPago;
+import com.recursoshumanos.Model.Entidad.Empleado;
+import com.recursoshumanos.Model.Entidad.EmpleadoReserva;
+import com.recursoshumanos.Model.Entidad.Multa;
+import com.recursoshumanos.Model.Entidad.RolPagos;
+import com.recursoshumanos.Model.Entidad.Sueldo;
+import com.recursoshumanos.Model.Entidad.Suspencion;
+import com.recursoshumanos.Model.Entidad.TipoRubro;
 import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
