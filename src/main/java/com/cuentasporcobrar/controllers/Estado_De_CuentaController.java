@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -21,6 +23,10 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Named(value = "estado_De_CuentaController")
 @ViewScoped
+/**
+ * Clase de tipo Controlador para los Estados de Cuenta. Se encarga de llevar toda
+ * la lógica del negocio con respecto a los Estados de Cuenta.
+ */
 public class Estado_De_CuentaController implements Serializable {
     
     //Se Declaran las clases Estado_De_Cuenta y Estado_De_CuentaDAO
@@ -36,7 +42,9 @@ public class Estado_De_CuentaController implements Serializable {
     List<Estado_De_Cuenta> lista_Estado_De_Cuenta_Cliente;//POSIBLEMENTE SE ELIMINE
     //POR QUE NECESITA QUE SE CARGUE EN LA MISMA TABLA DEL GENERAL.
 
-    //Procedimiento principal(Se ejecuta una vez se llame al controlador)
+    /**
+     * Constructor que inicializa algunas variables declaradas.
+     */
     public Estado_De_CuentaController() {
         
         try{
@@ -49,6 +57,11 @@ public class Estado_De_CuentaController implements Serializable {
         }        
     }
     
+    /**
+     * Método para exportar un PDF de las facturas pendientes.
+     * @throws IOException Excepción que no controla un programador.
+     * @throws JRException Expeción del JasperReport.
+     */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -63,9 +76,8 @@ public class Estado_De_CuentaController implements Serializable {
         try (OutputStream stream = ec.getResponseOutputStream()) {
 
             // Parametros para el reporte.
-//            Map<String, Object> parametros = new HashMap<String, Object>();
-//            parametros.put("titulo", "Reporte desde java");
-//            parametros.put("fecha", LocalDate.now().toString());
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("titulo", "Empresa S.A");
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
@@ -76,7 +88,7 @@ public class Estado_De_CuentaController implements Serializable {
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     filetext.getPath(),
-                    null,
+                    parametros,
                     new JRBeanCollectionDataSource(this.lista_Estado_De_Cuenta)
             );
 

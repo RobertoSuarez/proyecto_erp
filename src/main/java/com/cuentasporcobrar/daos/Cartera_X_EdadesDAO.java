@@ -14,47 +14,87 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Una clase Cartera_X_EdadesDAO que se va a encargar de la lógica de
+ * negocio que lleva consigo tener acceso a la BD y al modelo.
+ *
+ * @author Alexander Vega, Andy Ninasunta.
+ */
+
 public class Cartera_X_EdadesDAO implements Serializable {
 
+    //Declaro una lista_CarteraxEdades.
     List<Cartera_X_Edades> lista_CarteraxEdades;
+    
+    //Declaro una conexión.
     Conexion conex;
+    
+    //Declaro una clase Cartera_X_Edades.
     Cartera_X_Edades cartera_X_Edades;
+    
+    //Declaro un ResultSet
     ResultSet result;
 
+    /**
+     * Constructor que inicializa solamente la conexión.
+     */
     public Cartera_X_EdadesDAO() {
         conex = new Conexion();
     }
 
+    /**
+     * Constructor que recibe un objeto Cartera_X_Edades y que inicializa la
+     * conexión.
+     *
+     * @param cartera_X_Edades Se obtiene los campos y contructores declarados.
+     */
     public Cartera_X_EdadesDAO(Cartera_X_Edades cartera_X_Edades) {
         conex = new Conexion();
         this.cartera_X_Edades = cartera_X_Edades;
     }
 
-    public Cartera_X_EdadesDAO(List<Cartera_X_Edades> lista_CarteraxEdades, Conexion conex, Cartera_X_Edades cartera_X_Edades, ResultSet result) {
+    /**
+     * Constructor que obtiene un objeto lista_CarteraxEdades, una
+     * Cartera_X_EdadesDAO, la Conexion y ResultSet.
+     *
+     * @param conex Obtiene la conexión a la base de datos.
+     * @param lista_CarteraxEdades Se carga el listado de cartera x edades de
+     * vencimiento.
+     * @param cartera_X_Edades Se obtiene los campos y constructores declarados.
+     * @param result Se realiza la lectura a las consultas que se realizan.
+     */
+    public Cartera_X_EdadesDAO(List<Cartera_X_Edades> lista_CarteraxEdades, 
+            Conexion conex, Cartera_X_Edades cartera_X_Edades, ResultSet result) {
         this.lista_CarteraxEdades = lista_CarteraxEdades;
         this.conex = conex;
         this.cartera_X_Edades = cartera_X_Edades;
         this.result = result;
     }
 
-    //Funcion para enlistar la cartera por edades
+    /**
+     * Método que obtiene un listado de todos los saldos.
+     * @return El listado de todos los saldos que se encuentren registrado en
+     * la base de datos.
+     */
     public List<Cartera_X_Edades> obtenerCarteraxEdades() {
+        
+        //Se instancia la lista_CarteraxEdades.
         lista_CarteraxEdades = new ArrayList<>();
 
-        //verificamos la conexion
+        //Se valida que el estado de la conexion sea true(conexion abierta).
         if (conex.isEstado()) {
             try {
-                /* Se obtiene una TABLA con las cartera vencida por edades*/
                 String sentencia = "select*from obtener_cartera_vencidaxedades()";
                 result = conex.ejecutarConsulta(sentencia);
 
                  //Instanciamos la clase AbonoDAO.        
                 AbonoDAO abonoDAO= new AbonoDAO();
                 
-                //Recorremos la TABLA retornada y la almacenamos en la lista.
+                //Se realiza el llenado de la lista_CarteraxEdades.
                 while (result.next()) {
 
-                    //Concatenamos la sucursal, el punto de emision y el numero de la factura
+                    /*Concatenamos la sucursal, el punto de emision y el numero 
+                      de la factura. */
                     String numFact =abonoDAO.obtenerConcatenacionFactura(result.getInt("id_sucursal_r"),
                             result.getInt("puntoemision_r"), result.getInt("secuencia_r"));
                     
@@ -96,6 +136,7 @@ public class Cartera_X_EdadesDAO implements Serializable {
                 
             } finally {
 
+                //Se cierra la conéxión.
                 conex.cerrarConexion();
 
             }
@@ -103,18 +144,27 @@ public class Cartera_X_EdadesDAO implements Serializable {
         return lista_CarteraxEdades;
     }
     
-    //Funcion para enlistar la cartera por edades con las sumatorias
+    /**
+     * Método que obtiene las sumas totales de los saldos que mantienen
+     * el cliente por medio de su id.
+     * @param idCliente El idCliente que es único en la base de datos.
+     * @return El listado de las sumas totales de los saldos que se 
+     * encuentren registrado en la base de datos.
+     */
     public List<Cartera_X_Edades> obtenerSumCarteraxEdades(int idCliente) {
+        
+        //Se instancia la lista_CarteraxEdades.
         lista_CarteraxEdades = new ArrayList<>();
 
-        //verificamos la conexion
+        //Se valida que el estado de la conexion sea true(conexion abierta).
         if (conex.isEstado()) {
             try {
-                /* Se obtiene una TABLA con las cartera vencida por edades*/
                 String sentencia = "select*from obtener_sum_carteraxedades("+idCliente+")";
+                
+                //Se ejecuta la sentencia.
                 result = conex.ejecutarConsulta(sentencia);
 
-                //Recorremos la TABLA retornada y la almacenamos en la lista.
+                //Se realiza el llenado de la lista_CarteraxEdades.
                 while (result.next()) {
 
                     lista_CarteraxEdades.add(new Cartera_X_Edades(
@@ -139,6 +189,7 @@ public class Cartera_X_EdadesDAO implements Serializable {
                 
             } finally {
 
+                //Se cierra la conexión.
                 conex.cerrarConexion();
 
             }

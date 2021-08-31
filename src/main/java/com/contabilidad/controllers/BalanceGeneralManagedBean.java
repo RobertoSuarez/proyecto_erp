@@ -3,6 +3,7 @@ package com.contabilidad.controllers;
 
 import com.contabilidad.dao.BalanceGeneralDAO;
 import com.contabilidad.models.BalanceGeneral;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,28 +35,29 @@ public class BalanceGeneralManagedBean implements Serializable {
     private SimpleDateFormat dateFormat;
     private Date fecha;
     private double pasivoPatrimonio;
+    private String empresa;
   
     public BalanceGeneralManagedBean() {
         balanceGeneral = new ArrayList<>();
         balanceGeneralDAO = new BalanceGeneralDAO();
-        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
     }
     
     @PostConstruct
     public void init() {
         fecha = new Date();
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
         balanceGeneral = balanceGeneralDAO.generateBalanceGeneral(dateFormat.format(fecha));
         pasivoPatrimonio =balanceGeneralDAO.sumaPasivoPatrimonio(dateFormat.format(fecha));
     }
     
     public void recibiendoFecha() {
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         balanceGeneral = balanceGeneralDAO.generateBalanceGeneral(dateFormat.format(fecha));
         pasivoPatrimonio = balanceGeneralDAO.sumaPasivoPatrimonio(dateFormat.format(fecha));
     }
     
-    public void exportpdf() throws IOException, JRException {
-        System.out.println("metodo Export");
-                
+    public void exportpdf() throws IOException, JRException {                
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
         
@@ -71,9 +73,9 @@ public class BalanceGeneralManagedBean implements Serializable {
             // Parametros para el reporte.
             dateFormat = new SimpleDateFormat("dd/MM/yyyy", new Locale("es_ES"));
             Map<String, Object> parametros = new HashMap<>();
-            parametros.put("titulo", "Reporte desde java");
             parametros.put("fecha", dateFormat.format(fecha));
             parametros.put("sumPasivoPatrimonio", pasivoPatrimonio+"");
+            parametros.put("nombreEmpresa", empresa);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
@@ -99,7 +101,6 @@ public class BalanceGeneralManagedBean implements Serializable {
         } finally {
             // enviamos la respuesta.
             fc.responseComplete();
-            System.out.println("fin proccess");
         }
     }
 
@@ -130,6 +131,12 @@ public class BalanceGeneralManagedBean implements Serializable {
     public void setPasivoPatrimonio(double pasivoPatrimonio) {
         this.pasivoPatrimonio = pasivoPatrimonio;
     }
-    
-    
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
 }

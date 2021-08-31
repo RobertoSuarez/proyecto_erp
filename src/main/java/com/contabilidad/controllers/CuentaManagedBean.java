@@ -47,7 +47,7 @@ public class CuentaManagedBean implements Serializable {
     }
 
     public void showWarn(String message) {
-        addMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", message);
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
     }
 
     public void newCuenta() {
@@ -101,16 +101,11 @@ public class CuentaManagedBean implements Serializable {
     public boolean validateCuenta() {
         String actualNombre = onselectedCuenta.getNombre();
         Cuenta oldCuenta = cuentaDAO.getCuentaById(onselectedCuenta.getIdcuenta());
-        if (actualNombre.equals(oldCuenta.getNombre())) {
-            return true;
-        } else {
-            return false;
-        }
+        return actualNombre.equals(oldCuenta.getNombre());
     }
     
     public void form() {
         if (cuentaDAO.isReference(onselectedCuenta.getIdcuenta())) {
-            System.out.println("no se puede modificar");
             Messages.showWarn("No se puede modificar, porque ya esta "
                     + "referenciado a otras cuentas");
             return;

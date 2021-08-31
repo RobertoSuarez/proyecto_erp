@@ -32,6 +32,10 @@ import java.util.HashSet;
 
 @Named(value = "abonoController")
 @ViewScoped
+/**
+ * Clase de tipo Controlador para los Abonos. Se encarga de llevar toda la
+ * lógica del negocio con respecto a los Abonos.
+ */
 public class AbonoController implements Serializable {
 
     //Declaramos variables para identificar un plan de pago, factura y cliente.
@@ -68,12 +72,15 @@ public class AbonoController implements Serializable {
     //Para mostrar un salida de datos determinado
     DecimalFormat df = new DecimalFormat("#.##");
 
+    /**
+     * Constructor que inicializa algunas variables declaradas.
+     */
     public AbonoController() {
         abono = new Abono();
         abonoDAO = new AbonoDAO();
     }
-    //Getter y Setter de las variables, clases y listas declaradas
 
+    //Getter y Setter de las variables, clases y listas declaradas
     public int getIdPlanDePago() {
         return idPlanDePago;
     }
@@ -161,8 +168,11 @@ public class AbonoController implements Serializable {
     public void setAbono(Abono abono) {
         this.abono = abono;
     }
-
     //Fin
+
+    /**
+     * Método para cargar las facturas de un determinado cliente en un SelectOne
+     */
     public void cargarFacturas() {
         try {
             personaDAO = new PersonaDAO();
@@ -206,8 +216,9 @@ public class AbonoController implements Serializable {
         }
     }
 
-    /*Funcion que se ejecuta cuando se da clic en "Cargar Deuda" 
-      Su principal objetivo es cargar los datos del plan de pago de dicha factura
+    /**
+     * Método que se ejecuta cuando se da clic en "Cargar Deuda" Su principal
+     * objetivo es cargar los datos del plan de pago de dicha factura
      */
     public void cargarDeuda() {
         try {
@@ -225,7 +236,6 @@ public class AbonoController implements Serializable {
                 //Cargamos las fechas
                 fechasPlan = abonoDAO.obtenerFechaCreditoVencimiento(idFactura);
                 System.out.println(fechasPlan[0]);
-                
 
                 //Cargamos el total de los abonos y el total pendiente de una factura
                 totalAbonos = abonoDAO.obtenerSumAbonos(idFactura);
@@ -243,7 +253,9 @@ public class AbonoController implements Serializable {
 
     }
 
-    //Este procedimiento valida e inicia la interfaz para guardar un nuevo abono
+    /**
+     * Método que valida e inicia la interfaz para guardar un nuevo abono
+     */
     public void nuevoAbono() {
         this.abono = new Abono();
 
@@ -278,20 +290,29 @@ public class AbonoController implements Serializable {
         }
     }
 
-    //Este procedimiento almacena un nuevo abono
+    /**
+     * Método para almacenar un nuevo abono.
+     */
     public void guardarAbono() {
         try {
             abonoDAO = new AbonoDAO(abono);
 
             if (abono.getIdFormaDePago() == -1) {
+
                 mostrarMensajeAdvertencia("Por Favor. Elija una forma de Pago..");
+
             } else if (abono.getValorAbonado() <= 0) {
+
                 mostrarMensajeAdvertencia("El abono no puede ser menor o igual a 0.");
+
             }
             if (abono.getValorAbonado() > totalPendiente) {
+
                 mostrarMensajeAdvertencia("El valor a Abonar no debe exceder al"
                         + " valor pendiente.");
+
             } else if (abonoDAO.insertarNuevoAbono(idFactura, idPlanDePago) > 0) {
+
                 mostrarMensajeInformacion("Se Registró Correctamente");
                 PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
                 this.list_Abonos = abonoDAO.obtenerAbonos(idCliente);
@@ -302,11 +323,13 @@ public class AbonoController implements Serializable {
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-
-//        PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
-//        PrimeFaces.current().executeScript("location.reload()");
     }
 
+    /**
+     * Método para exportar un PDF de las facturas pendientes.
+     * @throws IOException Excepción que no controla un programador.
+     * @throws JRException Expeción del JasperReport.
+     */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();

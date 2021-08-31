@@ -43,8 +43,6 @@ public class SubGrupoManagedBean implements Serializable {
     }
 
     public void create() {
-        System.out.println("Create ####");
-        System.out.println("Subgrupo: " + subGrupo);
         if (!subGrupo.getNombre().isEmpty() && subGrupo.getGrupo() > 0) {
             // validar que no este en la lista - pendiente
             if (subGrupoDAO.store(subGrupo)) {
@@ -52,7 +50,7 @@ public class SubGrupoManagedBean implements Serializable {
                 listaSubGrupos = subGrupoDAO.getSubGrupos();
                 Messages.showInfo("Registro de SubGrupo exitoso");
             } else {
-                Messages.showError("Hubo un problema al registrar");
+                Messages.showWarn("Hubo un problema al registrar");
             }
         } else {
             Messages.showWarn("Faltan rellenar campos");
@@ -60,8 +58,6 @@ public class SubGrupoManagedBean implements Serializable {
     }
     
     public void edit() {
-        System.out.println("Editar ####");
-        System.out.println(subGrupo);
         SubGrupo subGrupoDB = subGrupoDAO.getGrupoById(subGrupo.getId());
         // valida que no este vacio
         if (!subGrupo.getNombre().isEmpty()) { 
@@ -86,7 +82,7 @@ public class SubGrupoManagedBean implements Serializable {
             listaSubGrupos.remove(subGrupo);
             Messages.showInfo("Subgrupo " + subGrupo.getNombre() + " fue eliminado");
         } else {
-            Messages.showError("El Subgrupo tiene cuentas referenciadas, no se puede eliminar");
+            Messages.showWarn("El Subgrupo tiene cuentas referenciadas, no se puede eliminar");
         }
     }
 

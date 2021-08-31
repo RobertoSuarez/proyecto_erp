@@ -4,24 +4,20 @@ import com.cuentasporpagar.daos.AnticipoDAO;
 import com.cuentasporpagar.daos.BuscarProvDAO;
 import com.cuentasporpagar.models.Anticipo;
 import com.cuentasporpagar.models.Proveedor;
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import java.io.Serializable;
 
 /**
  *
@@ -31,12 +27,13 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean(name = "anticipoMB")
 @SessionScoped
-public class AnticipoMB  {
+public class AnticipoMB implements Serializable {
 
     static final String NUEVO = "NUEVO" ;
     static final String EDITAR = "EDITAR";
     
     private List<Anticipo> anticipos;
+    private List<Anticipo> anticipos_revertidos;
     private Anticipo selected_anticipo;
     private List<Proveedor> list_proveedor; // se mostrar en el dialogo para selecionar el proveedor
     private Proveedor selected_Proveedor;
@@ -57,7 +54,8 @@ public class AnticipoMB  {
     @PostConstruct
     public void init() {
         try {
-            this.anticipos = AnticipoDAO.getAllJson();
+            this.anticipos = AnticipoDAO.getAllJson(false);
+            this.anticipos_revertidos = AnticipoDAO.getAllJson(true);
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -109,6 +107,14 @@ public class AnticipoMB  {
         this.anticipo_modo = anticipo_modo;
     }
 
+    public List<Anticipo> getAnticipos_revertidos() {
+        return anticipos_revertidos;
+    }
+
+    public void setAnticipos_revertidos(List<Anticipo> anticipos_revertidos) {
+        this.anticipos_revertidos = anticipos_revertidos;
+    }
+
     
     
     // metodos aux
@@ -121,6 +127,19 @@ public class AnticipoMB  {
         String resumen = this.selected_anticipo.isHabilitado() ? "Habilitado" : "Desabilitado";
         addMessage(FacesMessage.SEVERITY_WARN, "Cambio de estado", "El anticipo cambio a " + resumen);
         PrimeFaces.current().ajax().update(":form:growl");
+    }
+    
+    
+    // Recupera todos los anticipos revertidos de la base de datos.
+    public void get_anticipos_revertidos() {
+        System.out.println("get anticipos db");
+        try {
+            this.anticipos_revertidos = AnticipoDAO.getAllJson(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        PrimeFaces.current().ajax().update(":form:dt_anticipos_revertidos");
     }
     
     public void open_new() {
@@ -147,6 +166,11 @@ public class AnticipoMB  {
         
         if (this.selected_anticipo.getImporte() == 0.0) {
             addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe ingresar un valor en el importe");
+            return false;
+        }
+        
+        if ("".equals(this.selected_anticipo.getReferencia())) {
+            addMessage(FacesMessage.SEVERITY_WARN, resumen, "Se debe ingresar una referencia de algún documento");
             return false;
         }
         
@@ -184,7 +208,7 @@ public class AnticipoMB  {
         
         
         try {
-            this.anticipos = AnticipoDAO.getAllJson();  // Actualiza los datos de la tabla
+            this.anticipos = AnticipoDAO.getAllJson(false);  // Actualiza los datos de la tabla
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -199,29 +223,26 @@ public class AnticipoMB  {
         return this.anticipo_modo.equals(EDITAR);
     }
     
-    public void delete() {
-        System.out.println("Anticipo delete");
-        System.out.println(this.selected_anticipo.getId_anticipo());
-        System.out.println(this.selected_anticipo.getDescripcion());
-        System.out.println("Anticipo fin");
-        
-        
+    public void revertir() {
+        System.out.println("Revertir anticipo");
+
         try {
-            this.selected_anticipo.deleteDB();
+            //this.selected_anticipo.deleteDB();
+            AnticipoDAO.Revertir(this.selected_anticipo);
         } 
         catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
         
         try {
-            this.anticipos = AnticipoDAO.getAllJson();  // Actualiza los datos de la tabla
+            this.anticipos = AnticipoDAO.getAllJson(false);  // Actualiza los datos de la tabla
         } catch (SQLException ex) {
             Logger.getLogger(AnticipoMB.class.getName()).log(Level.SEVERE, null, ex);
         }
         PrimeFaces.current().ajax().update(":form:dt_anticipos");
         
         PrimeFaces.current().executeScript("PF('delete_anticipo_dialog').hide()");
-        addMessage(FacesMessage.SEVERITY_WARN, "Anticipo eliminado", "El anticipo se elimino");
+        addMessage(FacesMessage.SEVERITY_WARN, "Anticipo revertido", "El anticipo se revirtio con exito");
         
         PrimeFaces.current().ajax().update(":form:growl");
     }

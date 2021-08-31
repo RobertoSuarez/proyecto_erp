@@ -13,7 +13,7 @@
                 <h:form id="form">
                     <p:toolbar>
                         <p:toolbarGroup>
-                            <p:commandButton value="Guardar PDF" ajax="false" icon="pi pi-download" styleClass="ui-button-primary p-mr-2" actionListener="#{libroManagedBean.exportpdf()}">
+                            <p:commandButton actionListener="#{libroManagedBean.exportpdf}" value="Guardar PDF" ajax="false" icon="pi pi-download" styleClass="ui-button-primary p-mr-2">
                             </p:commandButton>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right" style="width: 27%;">
@@ -34,7 +34,7 @@
                             <f:facet name="header">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h4 style="font-weight: bold;">EMPRESA S.A.</h4>
+                                        <h4 style="font-weight: bold;"><h:outputText value="#{libroManagedBean.empresa}"></h:outputText></h4>
                                     </div>
                                     <div class="col-md-6">
                                         <h:outputText value="#{libroManagedBean.dateNow}">

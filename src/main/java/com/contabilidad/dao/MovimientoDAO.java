@@ -79,7 +79,8 @@ public class MovimientoDAO {
         String sql;
         if (movimiento.getIdMovimiento() == 0) {
             sql = String.format("select addmovimiento('%1$d','%2$d','%3$s','%4$s','%5$s')", movimiento.getIdSubcuenta(),
-                    idAsiento, Double.toString(movimiento.getDebe()), Double.toString(movimiento.getHaber()), movimiento.getTipoMovimiento());
+                    idAsiento, Double.toString(movimiento.getDebe()), Double.toString(movimiento.getHaber()), 
+                    movimiento.getTipoMovimiento());
         } else {
             sql = String.format("UPDATE public.movimiento SET idsubcuenta= '%1$d', "
                     + "tipo= '%2$s', debe= %3$s , haber= %4$s, detalle= '%5$s' "

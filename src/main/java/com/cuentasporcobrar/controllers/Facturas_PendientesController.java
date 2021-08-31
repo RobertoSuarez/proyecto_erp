@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.Facturas_PendientesDAO;
@@ -12,7 +8,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -27,6 +25,10 @@ import org.primefaces.component.export.PDFOptions;
 
 @Named(value = "facturas_PendientesController")
 @ViewScoped
+/**
+ * Clase de tipo Controlador para las Facturas Pendientes. Se encarga de llevar toda
+ * la lógica del negocio con respecto a las Facturas Pendientes.
+ */
 public class Facturas_PendientesController implements Serializable {
 
     //Componentes para tener estilos en las exportaciones
@@ -43,6 +45,9 @@ public class Facturas_PendientesController implements Serializable {
     //Declaro un arreglo con el total de la venta [0] y la cartera pendiente[1]
     double[] totalVentaCartera;
 
+    /**
+     * Constructor donde inicializamos nuestras variables declaradas.
+     */
     public Facturas_PendientesController() {
 
         try {
@@ -59,6 +64,11 @@ public class Facturas_PendientesController implements Serializable {
         }
     }
 
+    /**
+     * Método para exportar un PDF de las facturas pendientes.
+     * @throws IOException Excepción que no controla un programador.
+     * @throws JRException Expeción del JasperReport.
+     */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -72,6 +82,10 @@ public class Facturas_PendientesController implements Serializable {
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
             
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("titulo", "Empresa S.A");
+            
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
@@ -80,7 +94,7 @@ public class Facturas_PendientesController implements Serializable {
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     filetext.getPath(),
-                    null,
+                    parametros,
                     new JRBeanCollectionDataSource(this.listaFacturas_Pendientes)
             );
 

@@ -113,6 +113,7 @@ public class FacturaManagedBean {
 
     //DIANA: INSERTAR FACTURA
     public void insertarfactura() {
+        System.out.println("factura.getNfactura().length()");
         float comp = 0;
         for (int i = 0; i < detalleFactura.size(); i++)
         {
@@ -120,36 +121,44 @@ public class FacturaManagedBean {
         }
         if (factura.getImporte() != comp)
         {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Importe debe ser igual al total del detalle"));
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Importe= " + factura.getImporte() + " ; Total detalle= " + comp));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Importe debe ser igual al total del detalle"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Importe= " + factura.getImporte() + " ; Total detalle= " + comp));
         } else
         {
-            try
+            if (factura.getNfactura().length() < 15)
             {
-                if ("".equals(factura.getRuc()))
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "El número de factura debe tener 15 digitos"));
+                PrimeFaces.current().ajax().update("form:messages");
+            } else
+            {
+                try
                 {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al guardar"));
-                } else
-                {
-                    if (facturaDAO.Insertar(factura) == 0)
+                    if ("".equals(factura.getRuc()))
                     {
-                        System.out.println("YA INSERTE, AHORA EL DETALLE");
-                        facturaDAO.insertdetalle(detalleFactura, factura);
-                        facturaDAO.insertasiento(detalleFactura, factura);
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
-                        PrimeFaces.current().executeScript("PF('newFactura').hide()");
-                        listaFactura.clear();
-                        listaFactura = facturaDAO.llenarP("1");
-                        PrimeFaces.current().ajax().update("form:dt-factura", "form:slcbtn");
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al guardar"));
                     } else
                     {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Factura ya existe"));
+                        if (facturaDAO.Insertar(factura) == 0)
+                        {
+                            System.out.println("YA INSERTE, AHORA EL DETALLE");
+                            facturaDAO.insertdetalle(detalleFactura, factura);
+                            facturaDAO.insertasiento(detalleFactura, factura);
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
+                            PrimeFaces.current().executeScript("PF('newFactura').hide()");
+                            listaFactura.clear();
+                            detalleFactura.clear();
+                            listaFactura = facturaDAO.llenarP("1");
+                            PrimeFaces.current().ajax().update("form:dt-factura", "form:messages");
+                        } else
+                        {
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Factura ya existe"));
+                        }
                     }
+                } catch (Exception e)
+                {
+                    System.out.println("ERROR DAO: " + e);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "ERROR AL GUARDAR"));
                 }
-            } catch (Exception e)
-            {
-                System.out.println("ERROR DAO: " + e);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "ERROR AL GUARDAR"));
             }
         }
     }
@@ -179,8 +188,8 @@ public class FacturaManagedBean {
         }
         if (factura.getImporte() != comp)
         {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Importe es menor que el total del detalle"));
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Importe= " + factura.getImporte() + "Total= " + comp));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Importe debe ser igual al total del detalle"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Importe= " + factura.getImporte() + " ; Total detalle= " + comp));
         } else
         {
             if (fechas())
@@ -197,7 +206,7 @@ public class FacturaManagedBean {
                     {
                         if ("".equals(factura.getRuc()))
                         {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al guardar"));
+                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al guardar"));
                         } else
                         {
                             this.facturaDAO.Actualizar(factura);
@@ -207,7 +216,7 @@ public class FacturaManagedBean {
                     } catch (Exception e)
                     {
                         System.out.println("ERROR DAO: " + e);
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("ERROR AL GUARDAR"));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "ERROR AL GUARDAR"));
                     }
                     PrimeFaces.current().executeScript("PF('editFactura').hide()");
                     listaFactura.clear();
@@ -240,7 +249,7 @@ public class FacturaManagedBean {
     public void cargarDHab(Factura factura) {
         this.factura.setNfactura(factura.getNfactura());
     }
-    
+
     //Funciones apartes
     public void abrirNuevo() {
         this.factura = new Factura();
@@ -259,7 +268,6 @@ public class FacturaManagedBean {
 //        removeSessionScopedBean("facturaMB");
 //        detalleFactura.clear();
 //    }
-
     public static void removeSessionScopedBean(String beanName) {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
     }
@@ -319,13 +327,16 @@ public class FacturaManagedBean {
         f.setImporteD(datoImporte);
         f.setDetalle(datoDetalle);
         f.setCuenta(datoCuenta);
-        datoImporte = 0; datoDetalle="";datoCuenta="";
+        datoImporte = 0;
+        datoDetalle = "";
+        datoCuenta = "";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle Editado"));
     }
+
     public void onRowEdit2(RowEditEvent<Factura> event) {
         System.out.println("com.cuentasporpagar.controllers.FacturaManagedBean.onRowEdit2()");
         Factura f = (Factura) event.getObject();
-        datoImporte=f.getImporte();
+        datoImporte = f.getImporte();
         f.setImporteD(datoImporte);
         f.setDetalle(datoDetalle);
         f.setCuenta(datoCuenta);
