@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.AbonoDAO;
@@ -22,6 +17,10 @@ import org.primefaces.PrimeFaces;
 
 @Named(value = "retencionController")
 @ViewScoped
+/**
+ * Clase de tipo Controlador para las retenciones. Se encarga de llevar toda la
+ * lógica del negocio con respecto a las retenciones.
+ */
 public class RetencionController implements Serializable {
 
     //Declaramos variables para identificar una retencion, factura y cliente.
@@ -41,6 +40,9 @@ public class RetencionController implements Serializable {
 
     String identificacion = "";
 
+    /**
+     * Constructor para inicializar los objetos retencion y retencionDAO
+     */
     public RetencionController() {
         retencion = new Retencion();
         retencionDAO = new RetencionDAO();
@@ -92,7 +94,10 @@ public class RetencionController implements Serializable {
     }
     //Fin
 
-    //Metodo que nos carga las facturas de un determinado cliente.
+    /**
+     * Método para cargar las facturas de un determinado cliente en un select
+     * one
+     */
     public void cargarFacturas() {
         try {
             personaDAO = new PersonaDAO();
@@ -140,18 +145,29 @@ public class RetencionController implements Serializable {
         }
     }
 
-    //Metodo que carga los datos que seran editables en el dialog
+    /**
+     * Método para cargar los datos que seran editables en el Dialog.
+     *
+     * @param ret Objeto con una retención.
+     */
     public void CargarDatos(Retencion ret) {
         this.retencion = ret;
     }
 
-    //Metodo que se encarga de cargar las retenciones de una determinada factura
+    /**
+     * Método para cargar las retenciones en una Tabla.
+     */
     public void cargarRetenciones() {
         try {
             retencionDAO = new RetencionDAO();
             listaRetenciones = new ArrayList<>();
             System.out.println(this.idFactura);
+
+            //cargamos la lista con las retenciones
             listaRetenciones = retencionDAO.obtenerRetenciones(this.idFactura);
+
+            //Código para validar si existen retenciones y si no ha seleccionado
+            //una factura.
             if (this.idFactura > 0) {
                 if (!listaRetenciones.isEmpty()) {
                     mostrarMensajeInformacion("Se Cargaron las Retenciones.");
@@ -167,15 +183,21 @@ public class RetencionController implements Serializable {
         }
     }
 
-    //Metodo para registrar la retencion de un cliente para una determinada 
-    //factura.
+    /**
+     * Método para registrar una nueva retención, lo cual toma los parámetros de
+     * el dialog Nueva Retención.
+     */
     public void registrarRetencion() {
         try {
             retencionDAO = new RetencionDAO(retencion);
 
+            //If para verificar si se insertó correctamente una retención.
             if (retencionDAO.insertarRetencion(this.idCliente, this.idFactura) > 0) {
+
                 mostrarMensajeInformacion("Se Registró Correctamente");
+                //Aqui se ubica codigo para cargar nuevamente la tabla de retenciones
                 listaRetenciones = retencionDAO.obtenerRetenciones(this.idFactura);
+
             } else {
                 mostrarMensajeError("No se Registró Correctamente");
             }
@@ -183,17 +205,23 @@ public class RetencionController implements Serializable {
             System.out.println("Error: " + ex.getMessage());
         }
         PrimeFaces.current().executeScript("PF('RetencionNew').hide()");
-//        PrimeFaces.current().executeScript("location.reload()");
     }
 
-    //Metodo que actualiza/modifica una retencion
+    /**
+     * Método para modificar una retención, lo cual toma los parámetros de el
+     * dialog modificar Retención.
+     */
     public void actualizarRetencion() {
         try {
             retencionDAO = new RetencionDAO(retencion);
+
+            //If para verificar si se modificó correctamente una retención.
             if (retencionDAO.actualizarRetencion(retencion, this.idCliente) > 0) {
+
                 mostrarMensajeInformacion("Se Editó Correctamente");
                 //Aqui se ubica codigo para cargar nuevamente la tabla de retenciones
                 listaRetenciones = retencionDAO.obtenerRetenciones(this.idFactura);
+
             } else {
                 mostrarMensajeError("No se Editó Correctamente");
             }

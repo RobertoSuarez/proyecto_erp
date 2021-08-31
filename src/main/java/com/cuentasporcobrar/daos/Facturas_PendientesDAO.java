@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.cuentasporcobrar.daos;
 
 import com.cuentasporcobrar.models.Facturas_Pendientes;
@@ -14,29 +10,40 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de tipo DAO que proporciona ciertas funcionalidades para poder obtener
+ * de la base de datos las facturas pendientes y realizar sus respectivos 
+ * reportes.
+ * @author Andy Ninasunta, Alexander Vega
+ */
 public class Facturas_PendientesDAO implements Serializable{
+    
     List<Facturas_Pendientes> lista_facturas_Pendientes;
     Facturas_Pendientes facturas_Pendientes; 
     Conexion conex;
     ResultSet result;
 
+    /**
+     * Constructor sin parámetros, para iniciar una conexion.
+     */
     public Facturas_PendientesDAO() {
         conex=new Conexion();
     }
-
+    
+    /**
+     * Constructor que recibe el objeto Facturas_Pendientes e inicia una nueva conexion.
+     * @param facturas_Pendientes Objeto con una factura pendiente.
+     */
     public Facturas_PendientesDAO(Facturas_Pendientes facturas_Pendientes) {
         conex=new Conexion();
         this.facturas_Pendientes = facturas_Pendientes;
     }
 
-    public Facturas_PendientesDAO(List<Facturas_Pendientes> lista_facturas_Pendientes, Facturas_Pendientes facturas_Pendientes, Conexion conex, ResultSet result) {
-        this.lista_facturas_Pendientes = lista_facturas_Pendientes;
-        this.facturas_Pendientes = facturas_Pendientes;
-        this.conex = conex;
-        this.result = result;
-    }
-    
-    //Método para en enlistar las facturas pendientes.
+    /**
+     * Método para en enlistar las facturas pendientes.
+     * @return List<Facturas_Pendientes> Lista con todas las facturas pendientes 
+     * de todos los clientes.
+     */
     public List<Facturas_Pendientes> obtenerFacturasPendientes() {
         lista_facturas_Pendientes = new ArrayList<>();
 
@@ -96,11 +103,14 @@ public class Facturas_PendientesDAO implements Serializable{
         }
         return lista_facturas_Pendientes;
     }
-    
-    
-    /*Funcion para obtener el total de Venta de la empresa, así como el total de
-    lo que debe cobrar a los clientes, todo esto se lo devuelve en un arreglo
-    donde la pos[0] es la venta y la pos[1] la cartera pendiente*/
+
+    /**
+     * Método para obtener el total de Venta de la empresa, así como el total de
+     * lo que debe cobrar a los clientes pos[0] es la venta y la pos[1] 
+     * la cartera pendiente.
+     * @return double[] Arreglo de tipo double con el total de la venta y la cartera
+     * pendiente.
+     */
     public double[] obtenerTotalVentayCarteraPendiente() {
         double[] tVentaCarteraP = {0, 0}; //[0] Total Venta, [1] Cartera P.
 

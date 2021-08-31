@@ -9,6 +9,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Abonos y Planes de pago, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * @author Andy Ninasunta, Alexander Vega
+ */
 public class AbonoDAO implements Serializable {
 
     List<Abono> listaAbonos;
@@ -16,25 +22,27 @@ public class AbonoDAO implements Serializable {
     Abono abono;
     ResultSet result;
 
-    //Constructor sin parámetros, para iniciar una conexion.
+    /**
+     * Constructor sin parámetros, para iniciar una conexion.
+     */
     public AbonoDAO() {
         conex = new Conexion();
     }
 
-    //Constructor que recibe el objeto Abono e inicia una nueva conexion.
+    /**
+     * Constructor que recibe el objeto Abono e inicia una nueva conexion.
+     * @param abono  Objeto con información de un abono.
+     */
     public AbonoDAO(Abono abono) {
         conex = new Conexion();
         this.abono = abono;
     }
 
-    public AbonoDAO(List<Abono> listaAbonos, Conexion conex, Abono abono, ResultSet result) {
-        this.listaAbonos = listaAbonos;
-        this.conex = conex;
-        this.abono = abono;
-        this.result = result;
-    }
-
-    //Funcion para enlistar todos los abonos de un determinado plan de pago.
+    /**
+     * Método para enlistar todos los abonos de una determinada venta/plan de pago
+     * @param idVenta Identificación única de una venta.
+     * @return List<Abono> Lista con los abonos de una determinada venta
+     */
     public List<Abono> obtenerAbonos(int idVenta) {
         listaAbonos = new ArrayList<>();
 
@@ -58,7 +66,7 @@ public class AbonoDAO implements Serializable {
                             result.getDouble("totalabono_r"),
                             result.getObject("fechadeabono_r", LocalDate.class),
                             result.getString("nombrepago_r"),
-                            numFact));//TENGO QUE PASAR LA SURCURSAL, SECUENCIA, NUM FACT
+                            numFact));
 
                 }
 
@@ -78,10 +86,17 @@ public class AbonoDAO implements Serializable {
 
             }
         }
+        //Retornamos una lista con todos los abonos de una venta.
         return listaAbonos;
     }
 
-    //Funcion que devuelve un String con la concatenacion de la factura
+    /**
+     * Método que devuelve un String con la concatenacion de la factura
+     * @param sucursal Sucursal donde se emitio una factura
+     * @param pntEmision Punto de Emision donde se realizó la factura.
+     * @param secuencia Secuencia única de una factura
+     * @return String Retorna el numero de la factura concatenado.
+     */
     public String obtenerConcatenacionFactura(int sucursal, int pntEmision, int secuencia) {
         String numSucursal = "000", numEmision = "000", numSecuencia = "000000000";
         int longitud = 0;
@@ -102,9 +117,14 @@ public class AbonoDAO implements Serializable {
 
     }
 
-    /*Procedimiento para insertar un nuevo abono.
-    Nota:Al momento de insertar un nuevo abonos, automaticamente el valor 
-    pendiente de el plan de pago se actualiza en el procedimiento de PostGre*/
+    /**
+     * Método para insertar un nuevo abono.
+     * Nota:Al momento de insertar un nuevo abonos, automaticamente el valor
+     * pendiente de el plan de pago se actualiza en el procedimiento de PostGre
+     * @param idCliente ID único de un cliente.
+     * @param idPlanPago ID único de un plan de pago.
+     * @return int Retorna un entero, el cual sirve para saber si se insertó correctamente.
+     */
     public int insertarNuevoAbono(int idCliente, int idPlanPago) {
 
         try {
@@ -128,7 +148,11 @@ public class AbonoDAO implements Serializable {
         return -1;
     }
 
-    /*Funcion para devolver el valor pendiente de cobro de un determinado plan*/
+    /**
+     * Método para devolver el valor pendiente de cobro de un determinado plan/venta.
+     * @param idVenta Identificación única de una venta.
+     * @return double Double con el valor pendiente de una venta.  
+     */
     public double obtenerValorPendiente(int idVenta) {
         double valorPendiente = 0;
 
@@ -161,7 +185,11 @@ public class AbonoDAO implements Serializable {
         return valorPendiente;
     }
 
-    /*Funcion para devolver la suma de todos los abonos de una vente*/
+    /**
+     * Método para devolver la suma de todos los abonos de una venta.
+     * @param idVenta Identificación única de una venta.
+     * @return double Suma de todos los abonos de una venta.
+     */
     public double obtenerSumAbonos(int idVenta) {
         double sumAbonos = 0;
 
@@ -194,7 +222,11 @@ public class AbonoDAO implements Serializable {
         return sumAbonos;
     }
 
-    /*Funcion para devolver el id del plan de pago y poder validar*/
+    /**
+     * Método para devolver el id del plan de pago y poder validar.
+     * @param idVenta Identificación única de una venta.
+     * @return int Retorna el ID del plan de pago.
+     */
     public int obtenerIdPlanPago(int idVenta) {
         int idPlanDePago = 0;
 
@@ -227,8 +259,13 @@ public class AbonoDAO implements Serializable {
         return idPlanDePago;
     }
 
-    /*Funcion para obtener la fecha de credito y vencimiento de un plan de pago.
-    Donde [0] es la fecha de credito y [1] la fecha de vencimiento*/
+    /**
+     * Funcion para obtener la fecha de credito y vencimiento de un plan de pago.
+     * Donde [0] es la fecha de credito y [1] la fecha de vencimiento.
+     * @param idVenta Identificación única de una venta.
+     * @return LocalDate[] Arreglo de tipo LocalDate con la fecha de credito y fecha
+     * de vencimiento.
+     */
     public LocalDate[] obtenerFechaCreditoVencimiento(int idVenta) {
 
         LocalDate[] fechasPlanPago = {null, null}; //[0] Total Venta, [1] Cartera P.
@@ -263,5 +300,4 @@ public class AbonoDAO implements Serializable {
 
         return fechasPlanPago;
     }
-
 }
