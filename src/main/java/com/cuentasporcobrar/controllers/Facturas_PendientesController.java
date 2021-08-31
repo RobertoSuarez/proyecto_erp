@@ -3,6 +3,7 @@ package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.Facturas_PendientesDAO;
 import com.cuentasporcobrar.models.Facturas_Pendientes;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,8 +21,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.primefaces.component.export.ExcelOptions;
-import org.primefaces.component.export.PDFOptions;
 
 @Named(value = "facturas_PendientesController")
 @ViewScoped
@@ -31,9 +30,8 @@ import org.primefaces.component.export.PDFOptions;
  */
 public class Facturas_PendientesController implements Serializable {
 
-    //Componentes para tener estilos en las exportaciones
-    ExcelOptions excelOpt;
-    PDFOptions pdfOpt;
+    //Declaro una variable para guardar el nombre de la empresa.
+    private String empresa; 
 
     //Declaro mis Facturas_Pendientes y Facturas Pendientes DAO
     Facturas_Pendientes facturas_Pendientes;
@@ -58,6 +56,8 @@ public class Facturas_PendientesController implements Serializable {
 
             //Para cargar el total de las ventas y la cartera pendiente.
             totalVentaCartera = facturas_PendientesDAO.obtenerTotalVentayCarteraPendiente();
+            
+            empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
 
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
@@ -84,7 +84,7 @@ public class Facturas_PendientesController implements Serializable {
             
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Empresa S.A");
+            parametros.put("titulo", empresa);
             
             File filetext = new File(FacesContext
                     .getCurrentInstance()

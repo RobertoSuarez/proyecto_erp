@@ -9,6 +9,7 @@ import com.cuentasporcobrar.daos.Cartera_X_EdadesDAO;
 import com.cuentasporcobrar.daos.PersonaDAO;
 import com.cuentasporcobrar.models.Cartera_X_Edades;
 import com.cuentasporcobrar.models.Persona;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,6 +43,9 @@ public class Cartera_X_EdadesController implements Serializable {
     //Se Declaran las clases Cartera_X_Edades y Cartera_X_EdadesDAO.
     Cartera_X_Edades cartera_X_Edades;
     Cartera_X_EdadesDAO cartera_X_EdadesDAO;
+    
+    //Declaro una variable para guardar el nombre de la empresa.
+    private String empresa; 
 
     //Declaro mi lista de la cartera por edades de todos los clientes.
     List<Cartera_X_Edades> lista_Cartera_X_Edades;
@@ -76,6 +80,7 @@ public class Cartera_X_EdadesController implements Serializable {
         /*Recibe un parámetros que será el id del cliente, en caso de ser -1 
           se carga la suma de todos los clientes. */
         listaSum_Cartera_X_Edades = cartera_X_EdadesDAO.obtenerSumCarteraxEdades(-1);
+        empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
     }
 
     /**
@@ -121,7 +126,7 @@ public class Cartera_X_EdadesController implements Serializable {
 
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Empresa S.A");
+            parametros.put("titulo", empresa);
 
             File filetext = new File(FacesContext
                     .getCurrentInstance()
