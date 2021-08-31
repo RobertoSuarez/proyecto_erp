@@ -10,6 +10,7 @@ import java.util.List;
 import com.cuentasporpagar.models.Condiciones;
 import javax.faces.bean.ManagedBean;
 import com.cuentasporpagar.daos.CondicionesDAO;
+import com.cuentasporpagar.models.Factura;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,18 +33,21 @@ public final class CondicionesManageBean implements Serializable {
      private CondicionesDAO condicionesDAO;
      private Proveedor proveedor;
      String msj;
+     private Factura factura;
      private boolean check;
      private String value;
      private String cl;
      private String ic;
 
      public CondicionesManageBean() {
-          value = "HABILITAR";
+          value = "habilitar";
           check = true;
-          setCl("ui-button-danger rounded-button");
+          setCl("ui-button-danger  private boolean check;\n"
+                  + "   rounded-button");
           setIc("pi pi-trash");
           listaCondiciones = new ArrayList<>();
           proveedor = new Proveedor();
+          factura = new Factura();
      }
 
      @PostConstruct
@@ -119,22 +123,22 @@ public final class CondicionesManageBean implements Serializable {
                //si nuestro check es vrd, entonces mandamos los parametros
                //nombre del proveedor junto con un parametro false, 
                //dichos parámetros son necesarios para la connsulta sql
+
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), false);
-               //Se manda un msj 
-               FacesContext.getCurrentInstance().addMessage(null,
-                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Deshabilitado proveedor: " + proveedor.getNombre()));
+
                //limpiamos la lista
                listaCondiciones.clear();
                //llenamos la lista con los provedeores habilitados
                listaCondiciones = condicionesDAO.llenarP(true);
+
           } else {
                //si nuestro check es falso, entonces mandamos los parametros
                //nombre del proveedor junto con un parametro false, 
                //dichos parámetros son necesarios para la connsulta sql
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), true);
-               //Se manda un msj 
-               FacesContext.getCurrentInstance().addMessage(null,
-                       new FacesMessage("Deshabilitada proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Habilitado proveedor: " + proveedor.getNombre()));
+
                //se limpia  la lista
                listaCondiciones.clear();
                //se llena la lista con los provedeores deshabilitados
@@ -142,7 +146,7 @@ public final class CondicionesManageBean implements Serializable {
 
           }
           //actualizamos el dialog y enviamos un msj
-          PrimeFaces.current().ajax().update(":form:manageProductDialog", ":form:messages");
+          PrimeFaces.current().ajax().update("form:manageProductDialog", "form:messages");
      }
 
      //listamos a los proveedores
@@ -164,27 +168,24 @@ public final class CondicionesManageBean implements Serializable {
 
           this.listaCondiciones.clear();
           if (check) {
-               FacesContext.getCurrentInstance().
-                       addMessage(null, new FacesMessage("Entrando a deshabilitar"));
+
                //si el check es verdadero...
                this.condicionesDAO = new CondicionesDAO();
                //llenamos la tabla segun nuestra consulta en este caso los habilitados
                this.listaCondiciones = this.condicionesDAO.llenarP(true);
                //asignamos el nombre al btn
-               setValue("Deshabilitar");
+               setValue("deshabilitar");
                //asignamos el color al btn
                setCl("ui-button-danger rounded-button");
                //asignamos el icono al btn
                setIc("pi pi-trash");
-               
-           
 
           } else {
                //si el check es falso...
                //llenamos la tabla segun nuestra consulta en este caso los deshabilitados
                this.listaCondiciones = condicionesDAO.llenarP(false);
                //asignamos el nombre al btn
-               setValue("Habilitar");
+               setValue("habilitar");
                //asignamos el color al btn
                setCl("ui-button-primary rounded-button");
                //asignamos el icono al btn
@@ -196,12 +197,13 @@ public final class CondicionesManageBean implements Serializable {
      public void cargarDhab(Proveedor p) {
           //obtengo el nombre del proveedor para cargarlo en la ventana
           this.proveedor.setNombre(p.getNombre());
-          PrimeFaces.current().ajax().update(":form:confirmDHab");
      }
 
      public void resetE() {
           System.out.println("Entrandoa rest");
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelado"));
           PrimeFaces.current().resetInputs("form:manage-product-content", "form:dt-products");
+          removeSessionScopedBean("condicionesMB");
+          listaCondiciones.clear();
      }
 }
