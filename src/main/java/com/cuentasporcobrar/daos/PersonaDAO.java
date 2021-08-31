@@ -75,7 +75,7 @@ public class PersonaDAO implements Serializable {
         if (conex.isEstado()) {
             try {
                 String sentencia = "Select * from Mostrar_Todos_los_Clientes() "
-                        + "where estado_r='Activo'";
+                        + "where estado_r='Activo' order by id desc";
 
                 //Se ejecuta la sentencia.
                 result = conex.ejecutarConsulta(sentencia);
