@@ -200,15 +200,12 @@ public class AnticipoMB implements Serializable {
         return this.anticipo_modo.equals(EDITAR);
     }
     
-    public void delete() {
-        System.out.println("Anticipo delete");
-        System.out.println(this.selected_anticipo.getId_anticipo());
-        System.out.println(this.selected_anticipo.getDescripcion());
-        System.out.println("Anticipo fin");
-        
-        
+    public void revertir() {
+        System.out.println("Revertir anticipo");
+
         try {
-            this.selected_anticipo.deleteDB();
+            //this.selected_anticipo.deleteDB();
+            AnticipoDAO.Revertir(this.selected_anticipo);
         } 
         catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -222,7 +219,7 @@ public class AnticipoMB implements Serializable {
         PrimeFaces.current().ajax().update(":form:dt_anticipos");
         
         PrimeFaces.current().executeScript("PF('delete_anticipo_dialog').hide()");
-        addMessage(FacesMessage.SEVERITY_WARN, "Anticipo eliminado", "El anticipo se elimino");
+        addMessage(FacesMessage.SEVERITY_WARN, "Anticipo revertido", "El anticipo se revirtio con exito");
         
         PrimeFaces.current().ajax().update(":form:growl");
     }

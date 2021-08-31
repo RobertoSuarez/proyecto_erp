@@ -234,20 +234,20 @@
                                        header="Confirmar" severity="warn">
                         
                         <f:facet name="message">
-                            <h4>¿Desea deshabilitar el anticipo?</h4>
+                            <h4>¿Desea revertir este anticipo?</h4>
                         </f:facet>
                         
                         <p:commandButton 
                             value="Si" process="@this" 
                             icon="pi pi-check"
-                            styleClass="ui-button-raised"
-                            actionListener="#{anticipoMB.delete()}" 
+                            styleClass="ui-button-raised ui-button-success"
+                            actionListener="#{anticipoMB.revertir()}" 
                             oncomplete="PF('delete_anticipo_dialog').hide()" />
 
                         <p:commandButton 
                             value="No" 
                             type="button" 
-                            styleClass="ui-button-secondary" 
+                            styleClass="ui-button-raised ui-button-danger" 
                             icon="pi pi-times"
                             onclick="PF('delete_anticipo_dialog').hide()"/>
                     </p:confirmDialog>
