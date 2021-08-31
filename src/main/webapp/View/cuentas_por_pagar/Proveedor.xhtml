@@ -199,11 +199,10 @@
                                         icon="#{condicionesMB.ic}"
                                         process="@this"
                                         update=":form:confirmDHab"
-                                        disabled="true"
-                                        oncomplete="PF('DHProveedor').show"
+                                        oncomplete="PF('DHProveedor').show()"
                                         action="#{condicionesMB.cargarDhab(provee.proveedor)}"
-                                        >
-
+                                         >
+                                             
                                    </p:commandButton>
 
                               </p:column>
@@ -231,7 +230,6 @@
                                                        id ="codProveedor" 
                                                        required="True"
                                                        style="background: darkgray;
-                                                       font-size: x-large;
                                                        color:#000000"
                                                        value="#{proveedorDAO.proveedor.codigo}"/>
                                              </div>
@@ -239,7 +237,7 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel for="check"> Habilitado:
                                                   </p:outputLabel>
-                                                  <p:selectBooleanCheckbox 
+                                                  <p:selectBooleanCheckbox
                                                        id="check" 
                                                        value="#{proveedorDAO.proveedor.estado}" />
                                              </div>
@@ -439,13 +437,14 @@
                               <!---Botones guardar y cancelar proveedor-->
                               <f:facet name="footer">
                                    <p:commandButton value="Guardar" icon="pi pi-check" 
+                                                    styleClass="ui-button-success"
                                                     update="manage-product-content, messages"
                                                     process="manage-product-content @this"
                                                     actionListener="#{proveedorDAO.insertar()}"
                                                     onclick="PF('manageProductDialog').hide()"/>
                                    <p:commandButton value="Cancelar" icon="pi pi-times"
-                                                    onclick="PF('manageProductDialog').hide()"
-                                                    class="ui-button-secondary"
+                                                    styleClass="ui-button-danger"
+                                                    onclick="PF('manageProductDialog').hide()"                                                    
                                                     oncomplete="location.reload()"/>
                               </f:facet>
                          </p:dialog>
@@ -476,8 +475,7 @@
                                                   </p:outputLabel>                                                  
                                                   <p:inputText 
                                                        id ="cod_Proveedor" 
-                                                       style="background: darkgray;
-                                                       font-size: x-large;
+                                                       style="background: darkgray;                                                       
                                                        color:#000000;"
                                                        value="#{proveedorDAO.proveedor.codigo}"/>
                                              </div>
@@ -681,24 +679,26 @@
                               <!---Botones guardar y cancelar proveedor-->
                               <f:facet name="footer">
                                    <p:commandButton value="Guardar" icon="pi pi-check" 
+                                                    styleClass="ui-button-success"
                                                     update="manage-product-content-edit, messages"
                                                     process="manage-product-content-edit @this" 
                                                     actionListener="#{proveedorDAO.editar()}"
                                                     />
                                    <p:commandButton value="Cancelar" icon="pi pi-times"
-                                                    class="ui-button-secondary"/>
+                                                    styleClass="ui-button-danger"
+                                                   />
                               </f:facet>
                          </p:dialog>
                          <!--- FIN DIALOG EDITAR PROVEEDOR DE DATOS  !-->
 
                          <p:confirmDialog id="confirmDHab" widgetVar="DHProveedor" showEffect="fade" width="300"
-                                          message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre}?" header="Confirmar" severity="warn">
-                              <p:inputText value="#{proveedorDAO.proveedor.nombre}" type="hidden"/>
-
+                                          message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre} ?"
+                                          header="Confirmar" severity="warn">
+                             
                               <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{condicionesMB.dhProveedor()}"
                                                process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
                               <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                               onclick="PF('DHProveedor').hide()" actionListener="#{condicionesMB.resetE()}"/>
+                                               onclick="PF('DHProveedor').hide()"  />
                          </p:confirmDialog> 
                     </h:form>
                </ui:define>
