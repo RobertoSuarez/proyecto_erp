@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import java.io.Serializable;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -26,7 +27,7 @@ import java.io.Serializable;
  */
 
 @ManagedBean(name = "anticipoMB")
-@SessionScoped
+@ViewScoped
 public class AnticipoMB implements Serializable {
 
     static final String NUEVO = "NUEVO" ;
@@ -221,6 +222,12 @@ public class AnticipoMB implements Serializable {
     
     public boolean es_editar() {
         return this.anticipo_modo.equals(EDITAR);
+    }
+    
+    public void actualizar_proveedor() {
+        BuscarProvDAO BP = new BuscarProvDAO();
+        this.list_proveedor = BP.llenar();
+        PrimeFaces.current().ajax().update(":form:tb_proveedor");
     }
     
     public void revertir() {
