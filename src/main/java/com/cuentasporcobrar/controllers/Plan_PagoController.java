@@ -16,6 +16,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.event.SelectEvent;
 
 /**
  * Una clase Plan_PagoController que se va a encargar de la lógica de negocio
@@ -98,6 +99,20 @@ public class Plan_PagoController implements Serializable {
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
+        }
+    }
+    
+        /**
+     * Se selecciona la fila de un determinado cliente.
+     *
+     * @param event Un evento de selección de primefaces.
+     */
+    public void onRowSelects(SelectEvent<Persona> event) {
+        try {
+            this.identificacion = event.getObject().getIdentificacion();
+            System.out.println(this.identificacion);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 

@@ -29,11 +29,6 @@
     height: 40px;
 }
 
-#divFactura{
-    float: left; 
-    padding-left: 150px;
-}
-
 #fechaEmision{
     text-align: center; 
     width: 150px; 

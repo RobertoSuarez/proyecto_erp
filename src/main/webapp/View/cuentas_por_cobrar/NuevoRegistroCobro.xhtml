@@ -25,6 +25,7 @@
                                                        value="Identificación: "
                                                        style="font-weight:bold;"/>
                                         <br/> <br/>
+                                        <p:commandButton value="Buscar"  id="buscar"/>
                                         <p:inputText id="identificacionCliente" 
                                                      placeholder="CI/PA/RUC"
                                                      value="#{abonoController.identificacion}"
@@ -46,14 +47,14 @@
                                         <p:selectOneMenu id="optionFactura" 
                                                          value="#{abonoController.idFactura}"
                                                          style="height: 40px; width: 185px !important;"
-                                                          filter="true" filterMatchMode="startsWith">                            
+                                                         filter="true" filterMatchMode="startsWith">                            
                                             <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
                                             <f:selectItems value="#{abonoController.listaVenta}"/>
                                         </p:selectOneMenu>
                                     </div>
                                 </div>
                                 <div>
-                                    <div style="float: left; padding-top: 30px; padding-left: 45px;">
+                                    <div style="float: left; padding-top: 50px; padding-left: 40px;">
                                         <p:outputLabel value="Nombre Cliente: " 
                                                        for="nombreCliente" 
                                                        style="font-weight:bold;"/>
@@ -62,7 +63,7 @@
                                                      disabled="true" 
                                                      placeholder="Razón Social/Nombres y Apellidos"
                                                      value="#{abonoController.persona.razonNombre}"
-                                                     class="inputListaCobros"/> 
+                                                     style="width: 300px;"/> 
                                     </div>
                                 </div>
 
@@ -87,7 +88,7 @@
                                                      placeholder="aaaa/mm/dd"
                                                      value="#{abonoController.fechasPlan[1]}"/> 
                                     </div>
-                                    <div style="float: left; padding-top: 50px; padding-left: 35px;">
+                                    <div style="float: left; padding-top: 20px; padding-left: 120px;">
                                         <p:commandButton value="Cargar Plan de Pagos"
                                                          id="btnDeuda"
                                                          icon="pi pi-replay" 
@@ -97,7 +98,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <br/><br/><br/><br/>
+                            <br/><br/><br/><br/><br/>
                             <p:dataTable id="tblRegistroCobro" var="varRegistroCobro"
                                          emptyMessage="No existen Registros." 
                                          scrollable="true" paginator="true" 
@@ -176,6 +177,49 @@
                                                  icon="pi pi-save" 
                                                  styleClass="ui-button-success"/>
                             </div>
+
+                            <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
+                                            widgetVar="selecionCliente">
+                                <p:dataTable var="cliente" id="tbcliente" 
+                                             widgetVar="dtcliente"
+                                             value="#{personaController.listaCliente}" 
+                                             selectionMode="single" 
+                                             rows="3" paginator="true"
+                                             rowSelectMode="add"
+                                             paginatorPosition="bottom"
+                                             rowKey="#{cliente.idCliente}">
+                                    
+                                    <p:ajax event="rowSelect" 
+                                            listener="#{abonoController.onRowSelect}" 
+                                            onsuccess="PF('selecionCliente').hide()" 
+                                            update=":form"/>
+
+                                    <f:facet name="header">
+                                        <div style="float: right;">
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" 
+                                                             onkeyup="PF('dtcliente').filter()" 
+                                                             placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                        <br/><br/>
+                                    </f:facet>
+
+                                    <p:column headerText="Cliente" 
+                                              filterBy="#{cliente.razonNombre}"
+                                              filterStyle="display : none">
+                                        <h:outputText value="#{cliente.razonNombre}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Identificacion"
+                                              filterBy="#{cliente.identificacion}"
+                                              filterStyle="display : none">
+                                        <h:outputText value="#{cliente.identificacion}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:overlayPanel>
                         </h:form>
 
                         <!-- Ventana Agregar un Nuevo Cobro!-->
@@ -195,7 +239,7 @@
                                                  style="width: 100px !important;">
                                         <p:keyFilter mask="num" />
                                     </p:inputText>
-                                    
+
                                     <p:outputLabel for="formaPago" 
                                                    style="font-weight: bold;"
                                                    value="Forma de Pago:">

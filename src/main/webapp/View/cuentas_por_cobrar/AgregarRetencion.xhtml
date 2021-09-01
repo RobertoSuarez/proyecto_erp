@@ -18,13 +18,14 @@
                 <p:panel>
                     <p:growl id="growl" widgetVar="growl" showDetail="true" life="1500"/> 
                     <h:form id="frmprincipal">
-                        <div class="ui-grid-row" style="height: 135px; padding-left: 50px;">
+                        <div class="ui-grid-row" style="height: 135px;">
                             <div>
-                                <div style="float: left;">
+                                <div style="float: left; padding-left: 30px;">
                                     <p:outputLabel for="identificacionCliente"
                                                    value="Identificación: "
                                                    style="font-weight:bold;"/>
                                     <br/> <br/>
+                                    <p:commandButton value="Buscar"  id="buscarC"/>
                                     <p:inputText id="identificacionCliente" 
                                                  placeholder="CI/PA/RUC"
                                                  maxlength="13"
@@ -38,7 +39,7 @@
                                                          actionListener="#{retencionController.cargarFacturas()}"/>
                                     </div>
                                 </div>
-                                <div id="divFactura">
+                                <div style="float: left; padding-left: 80px;">
                                     <p:outputLabel value="N° Factura: " 
                                                    for="optionFactura"
                                                    style="font-weight:bold;" />
@@ -46,14 +47,14 @@
                                     <p:selectOneMenu id="optionFactura" 
                                                      value="#{retencionController.idFactura}"
                                                      style="height: 40px; width: 185px !important;"
-                                                      filter="true" filterMatchMode="startsWith">                            
+                                                     filter="true" filterMatchMode="startsWith">                            
                                         <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                         <f:selectItems value="#{retencionController.listaVentas}"/>
                                     </p:selectOneMenu>
                                 </div>
                             </div>
                             <div>
-                                <div id="divFactura">
+                                <div style="float: left; padding-left: 80px;">
                                     <p:outputLabel value="Fecha Emisión: " for="fechaEmision" 
                                                    style="font-weight:bold;"/>
                                     <br/> <br/> 
@@ -68,19 +69,19 @@
                         <div style="text-align: center;">
                             <p:toolbarGroup>
                                 <div>
-                                        <p:commandButton icon="pi pi-replay " 
-                                                         value="Cargar Retención" 
-                                                         ajax="false"
-                                                         actionListener="#{retencionController.cargarRetenciones()}"
-                                                         styleClass=" ui-button-secondary" 
-                                                         update=":growl dialogAddRetencion"
-                                                         style="margin:.3rem;"/>
-                                        &nbsp;&nbsp;
-                                        <p:commandButton icon="pi pi-plus " 
-                                                         value="Añadir Nueva Retención" 
-                                                         oncomplete="PF('RetencionNew').show();"
-                                                         styleClass=" ui-button-success" 
-                                                         style="margin:.3rem;"/>
+                                    <p:commandButton icon="pi pi-replay " 
+                                                     value="Cargar Retención" 
+                                                     ajax="false"
+                                                     actionListener="#{retencionController.cargarRetenciones()}"
+                                                     styleClass=" ui-button-secondary" 
+                                                     update=":growl dialogAddRetencion"
+                                                     style="margin:.3rem;"/>
+                                    &nbsp;&nbsp;
+                                    <p:commandButton icon="pi pi-plus " 
+                                                     value="Añadir Nueva Retención" 
+                                                     oncomplete="PF('RetencionNew').show();"
+                                                     styleClass=" ui-button-success" 
+                                                     style="margin:.3rem;"/>
                                 </div>
                             </p:toolbarGroup>
                         </div>
@@ -126,6 +127,51 @@
                                                  icon="pi pi-pencil"/>
                             </p:column>
                         </p:dataTable>
+
+                        <p:overlayPanel for="buscarC" dynamic="true" 
+                                        style="width:600px" 
+                                        widgetVar="seleccionC">
+
+                            <p:dataTable var="varcliente" id="tbclienteR" 
+                                         widgetVar="dtclienteR"
+                                         value="#{personaController.listaCliente}" 
+                                         selectionMode="single" 
+                                         rows="3" paginator="true"
+                                         rowSelectMode="add"
+                                         paginatorPosition="bottom"
+                                         rowKey="#{varcliente.idCliente}">
+
+                                <p:ajax event="rowSelect" 
+                                        listener="#{retencionController.onRowSelect}" 
+                                        onsuccess="PF('seleccionC').hide()" 
+                                        />
+
+                                <f:facet name="header">
+                                    <div style="float: right;">
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" 
+                                                         onkeyup="PF('dtclienteR').filter()" 
+                                                         placeholder="Buscar"/>
+                                        </span>
+                                    </div>
+                                    <br/><br/>
+                                </f:facet>
+
+                                <p:column headerText="Cliente" 
+                                          filterBy="#{varcliente.razonNombre}"
+                                          filterStyle="display : none">
+                                    <h:outputText value="#{varcliente.razonNombre}"/>
+                                </p:column>
+
+                                <p:column headerText="Identificacion"
+                                          filterBy="#{varcliente.identificacion}"
+                                          filterStyle="display : none">
+                                    <h:outputText value="#{varcliente.identificacion}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:overlayPanel>
                     </h:form>
 
                     <!-- Ventana Agregar datos de la retencion!-->
@@ -235,7 +281,6 @@
                             </div>
                         </h:form>
                     </p:dialog>
-
                 </p:panel>
             </ui:define>
         </ui:composition>

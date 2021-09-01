@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 @Named(value = "retencionController")
 @ViewScoped
@@ -142,6 +143,20 @@ public class RetencionController implements Serializable {
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Se selecciona la fila de un determinado cliente.
+     *
+     * @param event Un evento de selección de primefaces.
+     */
+    public void onRowSelect(SelectEvent<Persona> event) {
+        try {
+            this.identificacion = event.getObject().getIdentificacion();
+            System.out.println(this.identificacion);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
