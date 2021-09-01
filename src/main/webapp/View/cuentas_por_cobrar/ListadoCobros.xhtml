@@ -119,8 +119,9 @@
                                          rowKey="#{clientes.idCliente}">
 
                                 <p:ajax event="rowSelect" 
-                                        listener="#{plan_PagoController.onRowSelects}" 
-                                        onsuccess="PF('selecionClientes').hide()"/>
+                                        listener="#{plan_PagoController.onRowSelect}" 
+                                        onsuccess="PF('selecionClientes').hide()"
+                                        update=":formListaCobros"/>
 
                                 <f:facet name="header">
                                     <div style="float: right;">

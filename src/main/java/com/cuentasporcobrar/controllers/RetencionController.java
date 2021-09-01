@@ -29,6 +29,9 @@ public class RetencionController implements Serializable {
     int idFactura = 0;
     int idCliente = 0;
 
+    //Objeto para traer funciones de primefaces
+    PrimeFaces current = PrimeFaces.current();
+
     //Declaramos las clases para tener acceso a los metodos y los atributos.
     Retencion retencion;
     RetencionDAO retencionDAO;
@@ -133,6 +136,10 @@ public class RetencionController implements Serializable {
                     this.listaVenta.add(ventasItem);
 
                 }
+
+                current.ajax().update(":frmprincipal:tblRetenciones");
+                this.listaRetenciones = new ArrayList();
+                
                 //Este if valida si el cliente tiene o no cobros.
                 if (listaVenta.isEmpty()) {
                     mostrarMensajeAdvertencia("Ese cliente no tiene facturas");
