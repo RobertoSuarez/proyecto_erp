@@ -76,6 +76,8 @@ public class VentaManagedBean implements Serializable {
     private double efectivo;
     private double cambio;
     private int diasPago;
+    
+    private List<ClienteVenta> listaClientes;
 
     //Constructor
     @PostConstruct
@@ -108,7 +110,12 @@ public class VentaManagedBean implements Serializable {
         this.cambio = 0;
         this.diasPago = 0;
 
+        this.clienteDAO = new ClienteVentaDao();
         this.detalleDAO = new DetalleVentaDAO();
+        this.listaClientes = new ArrayList<>();
+        this.listaClientes = clienteDAO.ListarClientes();
+        
+        System.out.print(listaClientes.get(0).getNombre());
     }
 
     //Buscar cliente
@@ -238,7 +245,7 @@ public class VentaManagedBean implements Serializable {
     }
 
     @Asynchronous
-    public void RegistrarVenta(int formaPago) {
+    public String RegistrarVenta(int formaPago) {
         try {
             Venta ventaActual = new Venta();
             int listSize = 0;
@@ -298,13 +305,21 @@ public class VentaManagedBean implements Serializable {
                             daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
                             listSize += 1;
                         }
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/faces/View/ventas/listaVentas.xhtml");
+                        
+                        return "listaVenta";
                     }
                 }
             }
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
+        return null;
+    }
+    
+    public void SeleccionarCliente(ClienteVenta cl){
+        this.clienteNombre = cl.getNombre();
+        this.clienteIdNum = cl.getIdentificacion();
+        this.cliente = cl;
     }
 
     //--------------------Getter y Setter-------------------//
@@ -512,4 +527,13 @@ public class VentaManagedBean implements Serializable {
         this.diasPago = diasPago;
     }
 
+    public List<ClienteVenta> getListaClientes() {
+        return listaClientes;
+    }
+
+    public void setListaClientes(List<ClienteVenta> listaClientes) {
+        this.listaClientes = listaClientes;
+    }
+
+    
 }
