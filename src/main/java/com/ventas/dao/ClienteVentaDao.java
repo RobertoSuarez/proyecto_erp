@@ -9,7 +9,9 @@ import com.global.config.Conexion;
 import com.ventas.models.ClienteVenta;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class ClienteVentaDao implements Serializable {
 
@@ -48,6 +50,33 @@ public class ClienteVentaDao implements Serializable {
         }
         return temp;
     }
+    
+    public List<ClienteVenta> ListarClientes(){
+        List<ClienteVenta> clientes = new ArrayList<>();
+        try{
+            this.con.abrirConexion();
+            String query = "select cl.idcliente, T.* from "
+                + "(select pn.idpersonanatural as IdNatural, null as IdJuridico, "
+                + "pr.id_persona, pn.nombre1||' '||pn.nombre2||' '||pn.apellido1||' '||pn.apellido2 as Nombre, pr.identificacion "
+                + "from public.persona_natural pn inner join public.persona pr on pn.id_persona = pr.id_persona UNION "
+                + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
+                + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
+                + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
+            ResultSet rs = this.con.consultar(query);
+            while(rs.next()){
+                this.clienteVenta = new ClienteVenta();
+                this.clienteVenta.setIdCliente(rs.getInt(1));
+                this.clienteVenta.setNombre(rs.getString(5));
+                this.clienteVenta.setIdentificacion(rs.getString(6));
+                clientes.add(this.clienteVenta);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage().toString());
+        }finally{
+            this.con.cerrarConexion();
+        }
+        return clientes;
+    } 
 
     public ClienteVenta BuscarCliente(String id) {
         ResultSet rs = null;
