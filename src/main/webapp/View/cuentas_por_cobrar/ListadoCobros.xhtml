@@ -14,34 +14,36 @@
                 <div class="titleView">
                     <h4>LISTADO DE COBRO</h4>
                 </div>
-                <br/>
-
                 <p:panel>
                     <p:growl id="growl" widgetVar="growl" showDetail="true" life="1500"/> 
                     <h:form id="formListaCobros">
-                        <div style="text-align: center;">
+                        <div style="float: left; padding-left: 50px; margin-top: 10px;">
                             <p:outputLabel value="Identificación: " for="txtidentificacion" 
                                            style="font-weight: bold; padding: 10px;"/>
+                            <br/>
+                            <p:commandButton value="Buscar"  id="buscarC"/>
                             <p:inputText id="txtidentificacion" 
                                          placeholder="CI/PA/RUC"
                                          value="#{plan_PagoController.identificacion}"
                                          style="width: 150px;"/> 
                             &nbsp;
-                            <p:commandButton id="btnconsulta" icon="pi pi-search" 
-                                             styleClass="rounded-button ui-button-primary"
+                            <p:commandButton id="btnconsulta" icon="pi pi-replay" 
+                                             styleClass="rounded-button ui-button-secondary"
                                              update="growl txtnombrecliente tblFacturasVencidas"
                                              actionListener="#{plan_PagoController.buscarCliente()}"/>
-
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            
+                        </div>
+                        <div style="float: left; margin-left: 130px;">
                             <p:outputLabel value="Nombre: " for="txtnombrecliente" 
                                            class="outputListaCobros"/>
+                            <br/>
                             <p:inputText id="txtnombrecliente" disabled="true"
                                          placeholder="Razón Social/Nombres y Apellidos"
                                          value="#{plan_PagoController.persona.razonNombre}"
                                          class="inputListaCobros"/> 
                         </div>
-                        <br/><br/>
-                        
+                        <br/><br/><br/><br/><br/><br/>
+
                         <p:dataTable id="tblFacturasVencidas" var="varFacturasVencidas"
                                      emptyMessage="No existen Registros."
                                      value="#{plan_PagoController.lista_Cobros}"
@@ -63,7 +65,7 @@
                                       headerText="Días de Crédito">
                                 <h:outputText value="#{varFacturasVencidas.diasCredito}"/>
                             </p:column>
-                            
+
                             <p:column class="tamanoInput" style="text-align: center;"  
                                       headerText="Fecha de Vencimiento">
                                 <h:outputText value="#{varFacturasVencidas.fechaVencimiento}"/>
@@ -78,7 +80,7 @@
                                       headerText="Valor Total Factura">
                                 <h:outputText value="#{varFacturasVencidas.valorTotalFactura}">
                                     <f:convertNumber type="currency" 
-                                                         currencySymbol="$"/>
+                                                     currencySymbol="$"/>
                                 </h:outputText>
                             </p:column>
 
@@ -86,7 +88,7 @@
                                       headerText="Total Abonos">
                                 <h:outputText value="#{varFacturasVencidas.totalAbonos}">
                                     <f:convertNumber type="currency" 
-                                                         currencySymbol="$"/>
+                                                     currencySymbol="$"/>
                                 </h:outputText>
                             </p:column>
 
@@ -94,7 +96,7 @@
                                       headerText="Saldo Pendiente">
                                 <h:outputText value="#{varFacturasVencidas.valorPendiente}">
                                     <f:convertNumber type="currency" 
-                                                         currencySymbol="$"/>
+                                                     currencySymbol="$"/>
                                 </h:outputText>
                             </p:column>
 
@@ -104,6 +106,49 @@
                                               styleClass="#{varFacturasVencidas.estadoFac()}"/>
                             </p:column>
                         </p:dataTable>
+
+                        <p:overlayPanel for="buscarC" dynamic="true" style="width:600px" 
+                                        widgetVar="selecionClientes">
+                            <p:dataTable var="clientes" id="tbclienteL" 
+                                         widgetVar="dtclientes"
+                                         value="#{personaController.listaCliente}" 
+                                         selectionMode="single" 
+                                         rows="3" paginator="true"
+                                         paginatorPosition="bottom"
+                                         rowSelectMode="add"
+                                         rowKey="#{clientes.idCliente}">
+
+                                <p:ajax event="rowSelect" 
+                                        listener="#{plan_PagoController.onRowSelect}" 
+                                        onsuccess="PF('selecionClientes').hide()"
+                                        update=":formListaCobros"/>
+
+                                <f:facet name="header">
+                                    <div style="float: right;">
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" 
+                                                         onkeyup="PF('dtclientes').filter()" 
+                                                         placeholder="Buscar"/>
+                                        </span>
+                                    </div>
+                                    <br/><br/>
+                                </f:facet>
+
+                                <p:column headerText="Cliente" 
+                                          filterBy="#{clientes.razonNombre}"
+                                          filterStyle="display : none">
+                                    <h:outputText value="#{clientes.razonNombre}"/>
+                                </p:column>
+
+                                <p:column headerText="Identificacion"
+                                          filterBy="#{clientes.identificacion}"
+                                          filterStyle="display : none">
+                                    <h:outputText value="#{clientes.identificacion}"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:overlayPanel>
                     </h:form>
                 </p:panel>
             </ui:define>

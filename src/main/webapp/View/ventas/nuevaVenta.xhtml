@@ -21,6 +21,28 @@
                     <br/>
                     <div>
                         <p:panel header="Cliente" style="width: 45%; display: inline-block;" >
+
+                            <!--
+                            <p:commandButton id="clientBtn" value="Buscar Cliente" type="button" icon="pi pi-search" />
+                            <p:overlayPanel for="clientBtn" dynamic="true" style="width:600px" widgetVar="clientePick">
+                                <p:dataTable var="clienteTB" value="#{VentaMB.listaClientes}" rows="5" paginator="true" selectionMode="single"
+                                             selection="#{VentaMB.cliente}" >
+
+                                    <p:column headerText="Id">
+                                        <h:outputText value="#{clienteTB.idCliente}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{clienteTB.nombre}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Identificación">
+                                        <h:outputText value="#{clienteTB.identificacion}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:overlayPanel>
+                            -->
+                            
                             <h:panelGrid columns="2" width="50%" >
                                 <p:outputLabel value="Identificación: "/>
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
@@ -152,7 +174,7 @@
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Efectivo: "/>
                                     <p:inputText value="#{VentaMB.total}" disabled="true" /> 
-                                    <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta(2)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Pagar" action="#{VentaMB.RegistrarVenta(2)}" style="margin-top: 20px" ajax="false"/>
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Tarjeta">
@@ -161,7 +183,7 @@
                                     <p:inputText value="XXXXXXXXXXXXXXXX"/>
                                     <p:outputLabel value="Propietario: "/>
                                     <p:inputText value="#{VentaMB.cliente.nombre}"/>
-                                    <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta(3)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Pagar" action="#{VentaMB.RegistrarVenta(3)}" style="margin-top: 20px" ajax="false"/>
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Crédito" >
@@ -178,7 +200,7 @@
                                         <f:selectItem itemLabel="270 Días" itemValue="270" />
                                         <f:selectItem itemLabel="360 Días" itemValue="360" />
                                     </p:selectOneMenu>
-                                    <p:commandButton value="Pagar" actionListener="#{VentaMB.RegistrarVenta(1)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Pagar" action="#{VentaMB.RegistrarVenta(1)}" style="margin-top: 20px" ajax="false"/>
                                 </h:panelGrid>
                             </p:tab>
                         </p:accordionPanel>

@@ -67,10 +67,10 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         if (conexion.isEstado()) {
             cargaFamiliar.setId(conexion.insertar("carga_familiar",
                     "id_empleado, cantidad_carga, fecha_cambio, "
-                    + "nombre, detalle",
+                    + "nombre, documento_validacion, detalle",
                     cargaFamiliar.getEmpleado().getId() + ", " 
                     + cargaFamiliar.getFaliares() + ", CURRENT_TIMESTAMP, '"
-                    + cargaFamiliar.getConyuge() + "', '" 
+                    + cargaFamiliar.getConyuge() + "','', '" 
                     + cargaFamiliar.getDetalle() + "'",
                     "id_cargaf"));
             return cargaFamiliar.getId();

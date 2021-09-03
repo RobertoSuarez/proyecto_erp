@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 @Named(value = "retencionController")
 @ViewScoped
@@ -27,6 +28,9 @@ public class RetencionController implements Serializable {
     int idRetencion = 0;
     int idFactura = 0;
     int idCliente = 0;
+
+    //Objeto para traer funciones de primefaces
+    PrimeFaces current = PrimeFaces.current();
 
     //Declaramos las clases para tener acceso a los metodos y los atributos.
     Retencion retencion;
@@ -132,6 +136,10 @@ public class RetencionController implements Serializable {
                     this.listaVenta.add(ventasItem);
 
                 }
+
+                current.ajax().update(":frmprincipal:tblRetenciones");
+                this.listaRetenciones = new ArrayList();
+                
                 //Este if valida si el cliente tiene o no cobros.
                 if (listaVenta.isEmpty()) {
                     mostrarMensajeAdvertencia("Ese cliente no tiene facturas");
@@ -142,6 +150,20 @@ public class RetencionController implements Serializable {
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Se selecciona la fila de un determinado cliente.
+     *
+     * @param event Un evento de selección de primefaces.
+     */
+    public void onRowSelect(SelectEvent<Persona> event) {
+        try {
+            this.identificacion = event.getObject().getIdentificacion();
+            System.out.println(this.identificacion);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 

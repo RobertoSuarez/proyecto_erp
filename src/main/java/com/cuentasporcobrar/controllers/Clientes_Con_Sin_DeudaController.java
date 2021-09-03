@@ -7,6 +7,7 @@ package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.Clientes_Con_Sin_DeudaDAO;
 import com.cuentasporcobrar.models.Clientes_Con_Sin_Deuda;
+import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,6 +40,9 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
     //Se Declaran las clases Clientes_Con_Sin_Deuda y Clientes_Con_Sin_DeudaDAO.
     Clientes_Con_Sin_Deuda clientes_Con_Sin_Deuda;
     Clientes_Con_Sin_DeudaDAO clientes_Con_Sin_DeudaDAO;
+    
+    //Declaro una variable para guardar el nombre de la empresa.
+    private String empresa; 
 
     /*Declaro mi lista de Clientes con y sin Deudas que van hacer cargadas en el
       datatable.*/
@@ -68,6 +72,8 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
         //Lista con los todos los cliente SIN deudas.
         lista_Clientes_Sin_Deudas=new ArrayList<>();
         lista_Clientes_Sin_Deudas=clientes_Con_Sin_DeudaDAO.obtenerClientesSinDeudas();
+        
+        empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
 
     }
     
@@ -91,7 +97,7 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
 
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Empresa S.A");
+            parametros.put("titulo", empresa);
             
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext

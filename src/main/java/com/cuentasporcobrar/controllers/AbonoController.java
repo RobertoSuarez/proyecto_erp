@@ -29,6 +29,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.primefaces.PrimeFaces;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import org.primefaces.event.SelectEvent;
 
 @Named(value = "abonoController")
 @ViewScoped
@@ -42,6 +43,9 @@ public class AbonoController implements Serializable {
     int idPlanDePago = 0;
     int idFactura = 0;
     int idCliente = 0;
+    
+    //Objeto para traer funciones de primefaces
+    PrimeFaces current = PrimeFaces.current();
 
     //Se Declaran las clases Abono y AbonoDAO
     Abono abono;
@@ -80,7 +84,7 @@ public class AbonoController implements Serializable {
         abonoDAO = new AbonoDAO();
     }
 
-    //Getter y Setter de las variables, clases y listas declaradas
+    //Getter y Setter de las variables, clases y listas declaradas.
     public int getIdPlanDePago() {
         return idPlanDePago;
     }
@@ -203,6 +207,14 @@ public class AbonoController implements Serializable {
                     this.listaVenta.add(ventasItem);
 
                 }
+                
+                current.ajax().update(":form:tblRegistroCobro");
+                list_Abonos = new ArrayList();
+                LocalDate[] fechas = {null, null};
+                this.fechasPlan = fechas;
+                totalAbonos = 0;
+                totalPendiente = 0;
+
                 //Este if valida si el cliente tiene o no cobros.
                 if (listaVenta.isEmpty()) {
                     mostrarMensajeAdvertencia("Ese cliente no tiene facturas");
@@ -220,6 +232,7 @@ public class AbonoController implements Serializable {
      * Método que se ejecuta cuando se da clic en "Cargar Deuda" Su principal
      * objetivo es cargar los datos del plan de pago de dicha factura
      */
+    @SuppressWarnings("empty-statement")
     public void cargarDeuda() {
         try {
             // En esta lista cargaremos los abonos de esa venta
@@ -229,13 +242,20 @@ public class AbonoController implements Serializable {
             idPlanDePago = abonoDAO.obtenerIdPlanPago(idFactura);
             if (idPlanDePago == 0) {
                 mostrarMensajeAdvertencia("Esa factura no pertenece a un plan de pago.");
+            }
+            if (idFactura == -1) {
+                list_Abonos = new ArrayList();
+                LocalDate[] fechas = {null, null};
+                this.fechasPlan = fechas;
+                totalAbonos = 0;
+                totalPendiente = 0;
             } else {
+
                 //Cargamos los abonos de un determinado Cliente.
                 list_Abonos = abonoDAO.obtenerAbonos(idFactura);
 
                 //Cargamos las fechas
                 fechasPlan = abonoDAO.obtenerFechaCreditoVencimiento(idFactura);
-                System.out.println(fechasPlan[0]);
 
                 //Cargamos el total de los abonos y el total pendiente de una factura
                 totalAbonos = abonoDAO.obtenerSumAbonos(idFactura);
@@ -327,6 +347,7 @@ public class AbonoController implements Serializable {
 
     /**
      * Método para exportar un PDF de las facturas pendientes.
+     *
      * @throws IOException Excepción que no controla un programador.
      * @throws JRException Expeción del JasperReport.
      */
@@ -383,6 +404,20 @@ public class AbonoController implements Serializable {
             fc.responseComplete();
 
             System.out.println("fin proccess");
+        }
+    }
+
+    /**
+     * Se selecciona la fila de un determinado cliente.
+     *
+     * @param event Un evento de selección de primefaces.
+     */
+    public void onRowSelect(SelectEvent<Persona> event) {
+        try {
+            this.identificacion = event.getObject().getIdentificacion();
+            System.out.println(this.identificacion);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
