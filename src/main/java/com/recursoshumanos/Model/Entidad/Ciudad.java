@@ -60,6 +60,6 @@ public class Ciudad implements Serializable {
     }
     
     public String resumen(){
-        return nombre + "(" + provincia.getNombre() + ")";
+        return nombre + " (" + provincia.getNombre() + ")";
     }
 }

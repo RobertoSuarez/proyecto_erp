@@ -76,16 +76,16 @@
                 <p:dataTable id="dt-asistencias" widgetVar="dtAsistencias" var="asistencia" value="#{asistenciaView.asistencias}"
                              reflow="true" size="small" liveResize="true" styleClass="asistencias-table"
                               paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                    <p:column headerText="Horario" >
+                    <p:column headerText="Horario" sortBy="#{asistencia.detalleHorario.ingresoSalida.resumen()}">
                         <h:outputText value="#{asistencia.detalleHorario.ingresoSalida.resumen()}"/>
                     </p:column>
-                    <p:column headerText="Fecha" width="20%">
+                    <p:column headerText="Fecha" sortBy="#{asistencia.fecha}" width="20%">
                         <h:outputText value="#{asistencia.fecha}"/>
                     </p:column>
-                    <p:column headerText="Hora de Ingreso" width="20%">
+                    <p:column headerText="Hora de Ingreso" sortBy="#{asistencia.ingreso}" width="20%">
                         <h:outputText value="#{asistencia.ingreso}"/>
                     </p:column>
-                    <p:column headerText="Hora de Salida" width="20%">
+                    <p:column headerText="Hora de Salida" sortBy="#{asistencia.salida}" width="20%">
                         <h:outputText value="#{asistencia.salida}"/>
                     </p:column>
                 </p:dataTable>

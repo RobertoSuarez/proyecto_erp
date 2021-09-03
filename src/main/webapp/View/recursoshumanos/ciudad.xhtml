@@ -27,10 +27,12 @@
                                  reflow="true" size="small" liveResize="true" styleClass="ciudad-table"
                                  rowKey="#{ciudad.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Ciudad">
+                        
+                        
+                        <p:column headerText="Ciudad" sortBy="#{ciudad.nombre}" filterBy="#{ciudad.nombre}">
                             <h:outputText value="#{ciudad.nombre}"/>
                         </p:column>
-                        <p:column headerText="Provincia">
+                        <p:column headerText="Provincia" sortBy="#{ciudad.provincia.nombre}" filterBy="#{ciudad.provincia.nombre}">
                             <h:outputText value="#{ciudad.provincia.nombre}"/>
                         </p:column>
                         <p:column headerText="Detalle" width="45%">

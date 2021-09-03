@@ -29,10 +29,12 @@ public class ProvinciaController implements Serializable {
     private ProvinciaDAO provinciaDAO;
     private Provincia provincia;
     private List<Provincia> provincias;
+    private List<Provincia> filteredProvincia;
 
     public ProvinciaController() {
         provincia = new Provincia();
         provincias = new ArrayList<>();
+        filteredProvincia = new ArrayList<>();
     }
 
     @PostConstruct
@@ -54,6 +56,14 @@ public class ProvinciaController implements Serializable {
 
     public void setProvincias(List<Provincia> provincias) {
         this.provincias = provincias;
+    }
+
+    public List<Provincia> getFilteredProvincia() {
+        return filteredProvincia;
+    }
+
+    public void setFilteredProvincia(List<Provincia> filteredProvincia) {
+        this.filteredProvincia = filteredProvincia;
     }
 
     public void nuevo() {
