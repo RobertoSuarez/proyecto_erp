@@ -50,6 +50,7 @@ public class VentaManagedBean implements Serializable {
     private String clienteNombre;
 
     private DetalleVenta productoSeleccionado;
+    private ClienteVenta clienteSeleccionado;
 
     private ProductoDAO productoDao;
     private Producto producto;
@@ -102,6 +103,7 @@ public class VentaManagedBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
+        this.clienteSeleccionado=null;
 
         this.venta = new Venta();
         this.ventaDao = new VentaDAO();
@@ -321,6 +323,10 @@ public class VentaManagedBean implements Serializable {
         this.clienteIdNum = cl.getIdentificacion();
         this.cliente = cl;
     }
+    
+    public void ObtenerListaClientes(){
+    
+}
 
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
@@ -535,5 +541,14 @@ public class VentaManagedBean implements Serializable {
         this.listaClientes = listaClientes;
     }
 
+    public ClienteVenta getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(ClienteVenta clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+
+    
     
 }

@@ -20,40 +20,22 @@
                     </div>
                     <br/>
                     <div>
-                        <p:panel header="Cliente" style="width: 45%; display: inline-block;" >
-
-                            <!--
-                            <p:commandButton id="clientBtn" value="Buscar Cliente" type="button" icon="pi pi-search" />
-                            <p:overlayPanel for="clientBtn" dynamic="true" style="width:600px" widgetVar="clientePick">
-                                <p:dataTable var="clienteTB" value="#{VentaMB.listaClientes}" rows="5" paginator="true" selectionMode="single"
-                                             selection="#{VentaMB.cliente}" >
-
-                                    <p:column headerText="Id">
-                                        <h:outputText value="#{clienteTB.idCliente}"/>
-                                    </p:column>
-
-                                    <p:column headerText="Nombre">
-                                        <h:outputText value="#{clienteTB.nombre}"/>
-                                    </p:column>
-
-                                    <p:column headerText="Identificación">
-                                        <h:outputText value="#{clienteTB.identificacion}"/>
-                                    </p:column>
-                                </p:dataTable>
-                            </p:overlayPanel>
-                            -->
+                        <p:panel header="Cliente" style="width: 35%; display: inline-block;" >
                             
                             <h:panelGrid columns="2" width="50%" >
+                               
                                 <p:outputLabel value="Identificación: "/>
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
+                                
                                 <p:outputLabel value="Nombre: "/>
                                 <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
                                 <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm growl growl-sticky Pagos" />
+                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
                             </h:panelGrid>
                         </p:panel>
 
 
-                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 45%; display: inline-block; margin-left: 20px" >
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 55%; display: inline-block; margin-left: 20px" >
                             <h:panelGrid columns="3">
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" type="number" />
@@ -204,6 +186,37 @@
                                 </h:panelGrid>
                             </p:tab>
                         </p:accordionPanel>
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog header="Busqueda de cliente" widgetVar="BuscarCliente" id="busquedaCliente"
+                          minHeight="600" width="70%" showEffect="fade">
+                    <h:form>
+                        <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{VentaMB.listaClientes}" 
+                                     selection="#{VentaMB.clienteSeleccionado}" rowKey="#{ListaClientes.idCliente}" >
+
+                        <f:facet name="header">
+                            Clientes Registrados
+                        </f:facet>
+
+                        <p:column headerText="Seleccionar" >
+                            <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                             actionListener="#{VentaMB.SeleccionarCliente(ListaClientes)}" update="ventaForm" oncomplete="PF('BuscarCliente').hide();"/>
+                        </p:column>
+
+                        <p:column headerText="Cod">
+                            <h:outputText value="#{ListaClientes.idCliente}" />
+                        </p:column>
+
+                        <p:column headerText="Cliente" >
+                            <h:outputText value="#{ListaClientes.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Identificacion">
+                            <h:outputText value="#{ListaClientes.identificacion}" >
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
                     </h:form>
                 </p:dialog>
             </ui:define>

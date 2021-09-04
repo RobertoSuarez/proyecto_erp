@@ -19,6 +19,7 @@ import com.ventas.models.Proforma;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,6 +48,7 @@ public class ProformaManageBean implements Serializable {
     private String clienteNombre;
 
     private DetalleVenta productoSeleccionado;
+    private ClienteVenta clienteSeleccionado;
 
     private ProductoDAO productoDao;
     private Producto producto;
@@ -69,6 +71,8 @@ public class ProformaManageBean implements Serializable {
     private double ice;
     private double iva;
     private double total;
+    
+    private List<ClienteVenta> listaClientes;
 
     //Constructor
     @PostConstruct
@@ -96,7 +100,9 @@ public class ProformaManageBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
-        
+        this.clienteSeleccionado=null;
+        this.listaClientes = new ArrayList<>();
+        this.listaClientes = clienteDAO.ListarClientes();
         listarProformas();
     }
 
@@ -274,7 +280,6 @@ public class ProformaManageBean implements Serializable {
 
     @Asynchronous
     public void listarProformas() {
-        Proforma prf = new Proforma();
         profDao = new ProformaDAO();
         this.listaProformas = new ArrayList<>();
         try {
@@ -284,7 +289,7 @@ public class ProformaManageBean implements Serializable {
             if (listaProformas.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
         }
     }
@@ -308,6 +313,12 @@ public class ProformaManageBean implements Serializable {
         return fecha;
     }
 
+    public void SeleccionarCliente(ClienteVenta cl){
+        this.clienteNombre = cl.getNombre();
+        this.clienteIdNum = cl.getIdentificacion();
+        this.cliente = cl;
+    }
+    
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
         return cliente;
@@ -496,6 +507,24 @@ public class ProformaManageBean implements Serializable {
     public void setProfDao(ProformaDAO profDao) {
         this.profDao = profDao;
     }
+
+    public List<ClienteVenta> getListaClientes() {
+        return listaClientes;
+    }
+
+    public void setListaClientes(List<ClienteVenta> listaClientes) {
+        this.listaClientes = listaClientes;
+    }
+
+    public ClienteVenta getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(ClienteVenta clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+    
+    
 
     
     //Agregar producto a la lista de detalle
