@@ -63,6 +63,7 @@ public class CondicionesDAO implements Serializable {
                          c.setProveedor(p);
                          lista.add(c);
                     }
+                     conexion.cerrarConexion();
 
                } catch (SQLException e) {
                     throw e;
@@ -81,6 +82,7 @@ public class CondicionesDAO implements Serializable {
                     String cadena = "select habilitarproveedor(" + n + ",'" + d + "')";
                     conexion.ejecutar(cadena);
                     System.out.println(cadena);
+                     conexion.cerrarConexion();
                } catch (Exception e) {
                     throw e;
 
@@ -103,6 +105,7 @@ public class CondicionesDAO implements Serializable {
                        + "(SELECT idproveedor FROM proveedor ORDER BY idproveedor DESC LIMIT 1));";
 
                conexion.insertar(sentencia);
+                conexion.cerrarConexion();
 
           } catch (SQLException e) {
                throw e;
@@ -127,6 +130,7 @@ public class CondicionesDAO implements Serializable {
                        + "WHERE idproveedor = " + codigo + "";
                conexion.ejecutar(cadena);
                System.out.print(cadena);
+                conexion.cerrarConexion();
           } catch (SQLException e) {
 
                System.err.print(e);

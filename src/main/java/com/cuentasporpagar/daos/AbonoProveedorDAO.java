@@ -50,6 +50,7 @@ public class AbonoProveedorDAO {
         this.detalleAbono = detalleAbono;
     }
 //Llenar Datos de los abonos realizados
+
     public List<AbonoProveedor> llenarDatos(String sentencia) {
         conex = new Conexion();
         listaAbono = new ArrayList<>();
@@ -73,6 +74,7 @@ public class AbonoProveedorDAO {
         return listaAbono;
     }
 //LLena una lista de datos de facturas de dicho proveedor seleccionado
+
     public List<Factura> llenarFacturas(String sentencia) {
         conex = new Conexion();
         listafactura = new ArrayList<>();
@@ -96,10 +98,17 @@ public class AbonoProveedorDAO {
         return listafactura;
     }
 //Llena una lista de Todos los proveedores registrado
+
     public List<Proveedor> llenarProveedor() {
         if (conex.isEstado()) {
             try {
-                String sentencia = "SELECT proveedor.codigo,proveedor.ruc,proveedor.nombre FROM proveedor";
+                String sentencia = "select x.codigo,x.ruc,x.nombre from (select count(f.idproveedor),f.idproveedor,p.codigo,p.ruc,p.nombre\n"
+                        + "from factura f inner join proveedor p on (p.idproveedor=f.idproveedor)\n"
+                        + "inner join condiciones c on \n"
+                        + "(c.idproveedor = p.idproveedor)\n"
+                        + "where f.habilitar=1 and f.estado=1 and f.pagado<f.importe\n"
+                        + "group by f.idproveedor,p.codigo,p.ruc,p.nombre) as x";
+                System.out.println(sentencia);
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     listaProveedor.add(new Proveedor(
@@ -118,14 +127,15 @@ public class AbonoProveedorDAO {
         return listaProveedor;
     }
 //Inserta abonoproveedor
-    public void Insertar(AbonoProveedor abonoProveedor,int estado) {
+
+    public void Insertar(AbonoProveedor abonoProveedor, int estado) {
         if (conex.isEstado()) {
             try {
                 String sentencia = String.format("select insert_abono('%1$s','%2$s',"
                         + "'%3$s','%4$s','%5$s','%6$s','%7$s') as registro",
                         abonoProveedor.getDetalletipoPago(), abonoProveedor.getDetalletipoBanco(),
                         abonoProveedor.getRuc(), abonoProveedor.getReferencia(),
-                        abonoProveedor.getFecha(), abonoProveedor.getPeriodo(),estado);
+                        abonoProveedor.getFecha(), abonoProveedor.getPeriodo(), estado);
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
                     abonoProveedor.setIdAbonoProveedor(result.getInt("registro"));
@@ -138,6 +148,7 @@ public class AbonoProveedorDAO {
         }
     }
 //Inserta los datos del detalle del pago
+
     public boolean InsertarDetalle(List<Factura> selectedFactura, AbonoProveedor abono) {
         if (conex.isEstado()) {
             try {
@@ -167,7 +178,7 @@ public class AbonoProveedorDAO {
             while (result.next()) {
                 numero = result.getInt("count");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             numero = -1;
             return numero;
         } finally {
@@ -203,7 +214,7 @@ public class AbonoProveedorDAO {
                             + abono.getDetalletipoPago() + "\",\"fechaCreacion\": \""
                             + abono.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                             + abono.getFecha().plusDays(30).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
-   
+
                     sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
                             + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
                             + "{\"idSubcuenta\":\"" + idSubcuenta + "\",\"debe\":\"0\",\"haber\":\""
@@ -215,8 +226,8 @@ public class AbonoProveedorDAO {
                             + abono.getDetalletipoPago() + " R\",\"fechaCreacion\": \""
                             + abono.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                             + abono.getFecha().plusDays(30).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
-   
-                   sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
+
+                    sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
                             + abono.getImporte() + "\",\"tipoMovimiento\":\"Pago\"},"
                             + "{\"idSubcuenta\":\"" + idSubcuenta + "\",\"debe\":\""
                             + abono.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"}]";
@@ -235,7 +246,7 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String sentencia = "update abonoproveedor as ap	"
-                        + "SET  idasiento= (Select max(idasiento) from asiento),estado="+estado
+                        + "SET  idasiento= (Select max(idasiento) from asiento),estado=" + estado
                         + "WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
                 conex.Ejecutar2(sentencia);
                 System.out.println(sentencia);
@@ -246,12 +257,13 @@ public class AbonoProveedorDAO {
             }
         }
     }
-    public void update_abono(int estado,int idabono) {
+
+    public void update_abono(int estado, int idabono) {
         if (conex.isEstado()) {
             try {
                 String sentencia = "update abonoproveedor as ap	"
-                        + "SET  estado="+estado
-                        + "WHERE ap.idabonoproveedor=("+idabono+"-1)";
+                        + "SET  estado=" + estado
+                        + "WHERE ap.idabonoproveedor=(" + idabono + "-1)";
                 System.out.println(sentencia);
                 conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
@@ -261,13 +273,14 @@ public class AbonoProveedorDAO {
             }
         }
     }
-    public void update_factura(float total,String nfactura) {
+
+    public void update_factura(float total, String nfactura) {
         if (conex.isEstado()) {
             try {
                 String sentencia = "update factura as f	"
-                        + "SET  pagado= select f.pagado -"+total+" from "
-                        + "((select f.pagado from factura f where f.nfactura='"+nfactura+"')) as f"
-                        + "WHERE f.nfactura='"+nfactura+"''";
+                        + "SET  pagado= select f.pagado -" + total + " from "
+                        + "((select f.pagado from factura f where f.nfactura='" + nfactura + "')) as f"
+                        + "WHERE f.nfactura='" + nfactura + "''";
                 System.out.println(sentencia);
                 conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
