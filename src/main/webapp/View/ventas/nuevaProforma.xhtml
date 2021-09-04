@@ -28,6 +28,7 @@
                                 <p:outputLabel value="Nombre: "/>
                                 <p:inputText id="NombreCliente" value="#{ProformaMB.clienteNombre}" disabled="true" />
                                 <p:commandButton actionListener="#{ProformaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm" />
+                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
                             </h:panelGrid>
                         </p:panel>
 
@@ -140,6 +141,36 @@
                     </h:form >
                 </p:dialog>
                 
+                <p:dialog header="Busqueda de cliente" widgetVar="BuscarCliente" id="busquedaCliente"
+                          minHeight="600" width="70%" showEffect="fade">
+                    <h:form>
+                        <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{ProformaMB.listaClientes}" 
+                                     selection="#{ProformaMB.clienteSeleccionado}" rowKey="#{ListaClientes.idCliente}" >
+
+                        <f:facet name="header">
+                            Clientes Registrados
+                        </f:facet>
+
+                        <p:column headerText="Seleccionar" >
+                            <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                             actionListener="#{ProformaMB.SeleccionarCliente(ListaClientes)}" update="ventaForm" oncomplete="PF('BuscarCliente').hide();"/>
+                        </p:column>
+
+                        <p:column headerText="Cod">
+                            <h:outputText value="#{ListaClientes.idCliente}" />
+                        </p:column>
+
+                        <p:column headerText="Cliente" >
+                            <h:outputText value="#{ListaClientes.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Identificacion">
+                            <h:outputText value="#{ListaClientes.identificacion}" >
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    </h:form>
+                </p:dialog>
                 
             </ui:define>
 

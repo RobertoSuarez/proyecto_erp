@@ -123,6 +123,28 @@ public class ProformaDAO {
                     prof.setFecha_expiracion(rs.getString(6));
                     prof.setProforma_terminada(rs.getBoolean(7));
                     prof.setAceptacion_cliente(rs.getBoolean(8));
+                    estado="P";
+                    if(rs.getString(9).equals(estado)){
+                        estado="Pendiente";
+                        prof.setEstado(estado);
+                    }
+                    else{
+                        estado="A";
+                        if(rs.getString(9).equals(estado)){
+                            estado="Aceptada";
+                            prof.setEstado(estado);
+                        }
+                        else{
+                            estado="R";
+                            if(rs.getString(9).equals(estado)){
+                                estado="Rechazado";
+                                prof.setEstado(estado);
+                            }
+                            else{
+                                System.out.println("Fallo al cargar estado");
+                            }
+                        }
+                    }
                     prof.setEstado(rs.getString(9));
                     prof.setFecha_autorizacion(rs.getString(10));
                     prof.setBase12(rs.getFloat(11));
@@ -131,10 +153,6 @@ public class ProformaDAO {
                     prof.setIva12(rs.getFloat(14));
                     prof.setIce(rs.getFloat(15));
                     prof.setTotalproforma(rs.getFloat(16));
-                    estado="Pendiente";
-                    if(prof.getEstado()=="P"){
-                        prof.setEstado(estado);
-                    }
                     listadocs.add(prof);
                     System.out.println("Proforma en lista");
                 }
