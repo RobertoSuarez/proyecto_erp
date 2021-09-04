@@ -79,6 +79,7 @@ public class VentaManagedBean implements Serializable {
     private int diasPago;
     
     private List<ClienteVenta> listaClientes;
+    private List<Producto> listaProductos;
 
     //Constructor
     @PostConstruct
@@ -116,6 +117,7 @@ public class VentaManagedBean implements Serializable {
         this.detalleDAO = new DetalleVentaDAO();
         this.listaClientes = new ArrayList<>();
         this.listaClientes = clienteDAO.ListarClientes();
+        this.listaProductos = productoDao.ListarProductos();
         
         System.out.print(listaClientes.get(0).getNombre());
     }
@@ -324,8 +326,11 @@ public class VentaManagedBean implements Serializable {
         this.cliente = cl;
     }
     
-    public void ObtenerListaClientes(){
-    
+    public void SeleccionarProducto(Producto pr){
+    this.codigoProducto = pr.getCodigoAux();
+    this.nombreProducto = pr.getDescripcion();
+    this.precioProducto = pr.getPrecioUnitario();
+    this.producto = pr;
 }
 
     //--------------------Getter y Setter-------------------//
@@ -547,6 +552,14 @@ public class VentaManagedBean implements Serializable {
 
     public void setClienteSeleccionado(ClienteVenta clienteSeleccionado) {
         this.clienteSeleccionado = clienteSeleccionado;
+    }
+
+    public List<Producto> getListaProductos() {
+        return listaProductos;
+    }
+
+    public void setListaProductos(List<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
     }
 
     

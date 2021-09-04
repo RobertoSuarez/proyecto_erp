@@ -81,4 +81,43 @@ public class ProductoDAO {
 
         return null;
     }
+    
+    public List<Producto> ListarProductos(){
+        List<Producto> listaventa = new ArrayList<>();
+        Producto temp;
+        ResultSet rs;
+        try{
+            con.abrirConexion();
+            rs=con.ejecutarConsulta("Select * from productos");
+            if (rs == null) {
+                System.out.println("No existen registros");
+            } else {
+                System.out.println("Existen registros");
+                
+                while (rs.next()) {
+                    temp = new Producto();
+                    temp.setCodigo(rs.getInt(1));
+                    temp.setCodigoAux(rs.getInt(2));
+                    temp.setStock(rs.getInt(3));
+                    temp.setDescripcion(rs.getString(4));
+                    temp.setDetalleAdicional(rs.getString(5));
+                    temp.setPrecioUnitario(rs.getFloat(6));
+                    temp.setSubsidio(rs.getFloat(7));
+                    temp.setIce(rs.getFloat(8));
+                    temp.setIva(rs.getFloat(9));
+                    temp.setDescuento(rs.getFloat(10));
+                    listaventa.add(temp);
+                }
+        }
+        }
+        catch(Exception e){
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
+        }
+        finally{
+            con.cerrarConexion();
+        }
+        return listaventa;
+    }
 }

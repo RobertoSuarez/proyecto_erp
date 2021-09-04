@@ -38,6 +38,7 @@
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{ProformaMB.codigoProducto}" />
                                 <p:commandButton value="Buscar" actionListener="#{ProformaMB.BuscarProducto}" update="detalleProducto"/>
+                                <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" />
                             </h:panelGrid>
                             <p:divider/>
                             <h:panelGrid id="detalleProducto" columns="3" >
@@ -48,7 +49,7 @@
                                 <p:inputNumber id="priceTextBox" value="#{ProformaMB.precioProducto}" modifyValueOnWheel="false" disabled="false" />
                                 <div/>
                                 <p:outputLabel value="Cantidad: "/>
-                                <p:inputNumber value="#{ProformaMB.cantidad}" modifyValueOnWheel="true" />
+                                <p:inputNumber value="#{ProformaMB.cantidad}" modifyValueOnWheel="true" maxValue="#{ProformaMB.producto.stock}" minValue="0" decimalPlaces="0" />
                                 <div/>
                                 <p:commandButton value="Agregar" actionListener="#{ProformaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData growl" />
                             </h:panelGrid>
@@ -166,6 +167,47 @@
 
                         <p:column headerText="Identificacion">
                             <h:outputText value="#{ListaClientes.identificacion}" >
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog header="Busqueda de productos" widgetVar="BuscarProductos" id="busquedaProducto"
+                          minHeight="600" width="70%" showEffect="fade">
+                    <h:form>
+                        <p:dataTable var="ListaProductos" id="listaProductos" selectionMode="single" value="#{ProformaMB.listaProductos}" 
+                                     selection="#{ProformaMB.productoSeleccionado}" rowKey="#{ListaProductos.codigo}" >
+
+                        <f:facet name="header">
+                            Catalogo de productos
+                        </f:facet>
+
+                        <p:column headerText="Seleccionar" >
+                            <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                             actionListener="#{ProformaMB.SeleccionarProducto(ListaProductos)}"  update="ventaForm" oncomplete="PF('BuscarProductos').hide();"/>
+                        </p:column>
+
+                        <p:column headerText="Cod">
+                            <h:outputText value="#{ListaProductos.codigoAux}" />
+                        </p:column>
+
+                        <p:column headerText="Producto" >
+                            <h:outputText value="#{ListaProductos.descripcion}" />
+                        </p:column>
+
+                        <p:column headerText="Detalle">
+                            <h:outputText value="#{ListaProductos.detalleAdicional}" >
+                            </h:outputText>
+                        </p:column>
+                        
+                        <p:column headerText="Precio unitario">
+                            <h:outputText value="#{ListaProductos.precioUnitario}" >
+                            </h:outputText>
+                        </p:column>
+                            
+                        <p:column headerText="Stock">
+                            <h:outputText value="#{ListaProductos.stock}" >
                             </h:outputText>
                         </p:column>
                     </p:dataTable>

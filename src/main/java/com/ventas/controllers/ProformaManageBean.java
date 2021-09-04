@@ -63,6 +63,7 @@ public class ProformaManageBean implements Serializable {
     private DetalleVentaDAO detalleDAO;
     private List<DetalleVenta> listaDetalle;
     private List<Proforma> listaProformas;
+    
     private double cantidad;
 
     private double subtotal12;
@@ -73,6 +74,7 @@ public class ProformaManageBean implements Serializable {
     private double total;
     
     private List<ClienteVenta> listaClientes;
+     private List<Producto> listaProductos;
 
     //Constructor
     @PostConstruct
@@ -103,6 +105,7 @@ public class ProformaManageBean implements Serializable {
         this.clienteSeleccionado=null;
         this.listaClientes = new ArrayList<>();
         this.listaClientes = clienteDAO.ListarClientes();
+         this.listaProductos = productoDao.ListarProductos();
         listarProformas();
     }
 
@@ -319,6 +322,13 @@ public class ProformaManageBean implements Serializable {
         this.cliente = cl;
     }
     
+        public void SeleccionarProducto(Producto pr){
+    this.codigoProducto = pr.getCodigoAux();
+    this.nombreProducto = pr.getDescripcion();
+    this.precioProducto = pr.getPrecioUnitario();
+    this.producto = pr;
+}
+    
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
         return cliente;
@@ -522,6 +532,14 @@ public class ProformaManageBean implements Serializable {
 
     public void setClienteSeleccionado(ClienteVenta clienteSeleccionado) {
         this.clienteSeleccionado = clienteSeleccionado;
+    }
+
+    public List<Producto> getListaProductos() {
+        return listaProductos;
+    }
+
+    public void setListaProductos(List<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
     }
     
     
