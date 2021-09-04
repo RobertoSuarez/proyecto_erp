@@ -41,6 +41,7 @@ public class ProveedorDAO extends Conexion {
                        + " '" + p.getTelefono() + "','" + p.isEstado() + "');";
                System.out.print(cadena);
                conexion.Ejecutar2(cadena);
+               conexion.cerrarConexion();
 
           } catch (SQLException e) {
 
@@ -64,6 +65,7 @@ public class ProveedorDAO extends Conexion {
                        + " estado='" + proveedor.isEstado() + "' "
                        + " Where idproveedor = "+codigo+"";
                conexion.ejecutar(cadena);
+               conexion.cerrarConexion();
           } catch (SQLException e) {
                throw e;
           } finally {
