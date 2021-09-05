@@ -6,6 +6,7 @@
 package com.recursoshumanos.Model.Entidad;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -39,5 +40,16 @@ public class Provincia implements Serializable {
 
     public void setNombre(String Nombre) {
         this.Nombre = Nombre;
+    }
+    
+    @Override
+    public boolean equals (Object obj) {
+        if (obj instanceof Provincia) {
+            return this.equals((Provincia) obj);
+        }  else { return false; }
+    }
+    
+    public boolean equals (Provincia obj) {
+        return this.id == obj.id && this.Nombre.equals(obj.Nombre);
     }
 }

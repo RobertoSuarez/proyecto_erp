@@ -16,28 +16,28 @@
             <p:growl id="messages" showDetail="true"/>
             <p:panel id="dt-empresa" >
                 <h2>#{empresaView.empresa.razonSocial}</h2>
-                <p:toolbar>
-                    <p:toolbarGroup  style="width: 80%">
-                        <h:panelGrid columns="4" style="border:0px none; background-color:transparent; width: 100%;">
+                <h:panelGrid columns="2" columnClasses="ui-grid-col-11,ui-grid-col-1"
+                             styleClass="ui-panelgrid-blank ui-fluid"
+                             style="width: 100%;">
+                    <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-3,ui-grid-col-5"
+                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                 style="width: 100%;">
 
-                            <p:outputLabel for="nombreC" style="font-weight: bold; width: 25%;">Nombre Comercial: </p:outputLabel>
-                            <h:outputText id="nombreC" style="width: 30%" value="#{empresaView.empresa.nombre}"/>
-
-                            <p:outputLabel for="ruc" style="font-weight: bold; width: 20%;">RUC: </p:outputLabel>
-                            <h:outputText id="ruc" style="width: 30%" value="#{empresaView.empresa.ruc}"/>
-                            
-                            <p:outputLabel for="tipo" style="font-weight: bold; width: 20%;">Tipo: </p:outputLabel>
-                            <h:outputText id="tipo" style="width: 30%" value="#{empresaView.empresa.tipo}"/>
-                        </h:panelGrid>
-                    </p:toolbarGroup>
-                    <p:toolbarGroup align="right">
-                        <p:commandButton value="Editar" icon="pi pi-pencil" update=":form:manage-empresa-content"
-                                         oncomplete="PF('manageEmpresaDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
-                            <p:resetInput target=":form:manage-empresa-content"/>
-                        </p:commandButton>
-                    </p:toolbarGroup>
-                </p:toolbar>
+                        <p:outputLabel for="ruc" style="font-weight: bold;">RUC: </p:outputLabel>
+                        <h:outputText id="ruc" value="#{empresaView.empresa.ruc}"/>
+                        
+                        <p:outputLabel for="nombreC" style="font-weight: bold; margin-left: 10px;">Nombre Comercial: </p:outputLabel>
+                        <h:outputText id="nombreC" value="#{empresaView.empresa.nombre}"/>
+                        
+                        <p:outputLabel for="tipo" style="font-weight: bold;">Tipo: </p:outputLabel>
+                        <h:outputText id="tipo" value="#{empresaView.empresa.tipo}"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Editar" icon="pi pi-pencil" update=":form:manage-empresa-content"
+                                     oncomplete="PF('manageEmpresaDialog').show()"
+                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                        <p:resetInput target=":form:manage-empresa-content"/>
+                    </p:commandButton>
+                </h:panelGrid>
                 <f:facet name="footer">
                     <h5 class="p-mt-0">#{empresaView.empresa.detalle}</h5>
                 </f:facet>
@@ -66,7 +66,7 @@
                                     <div class="p-field">
                                         <p:outputLabel for="inputtipo" style="font-weight: bold">Tipo: </p:outputLabel>
                                         <p:inputText id="inputtipo" value="#{empresaView.empresa.tipo}" 
-                                                      required="true" requiredMessage="Campo requerido"/>
+                                                     required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputdetalle" style="font-weight: bold">Detalle: </p:outputLabel>
@@ -104,13 +104,13 @@
                                  reflow="true" size="small" liveResize="true" styleClass="sucursales-table"
                                  rowKey="#{sucursal.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Ciudad" width="20%">
-                            <h:outputText value="#{sucursal.ciudad.resumen()}"/>
+                        <p:column headerText="Ciudad" width="20%" sortBy="#{sucursal.ciudad.nombre}">
+                            <h:outputText value="#{sucursal.ciudad.nombre}" title="#{sucursal.ciudad.resumen()}"/>
                         </p:column>
-                        <p:column headerText="Dirección">
+                        <p:column headerText="Dirección" sortBy="#{sucursal.direccion}">
                             <h:outputText value="#{sucursal.direccion}"/>
                         </p:column>
-                        <p:column headerText="Detalle">
+                        <p:column headerText="Detalle" sortBy="#{sucursal.detalle}">
                             <h:outputText value="#{sucursal.detalle}"/>
                         </p:column>
                         <p:column exportable="false" width="5%">
@@ -132,7 +132,8 @@
                                     <div class="ui-fluid">
                                         <div class="p-field">
                                             <p:outputLabel for="inputProvincia" value="Provincia: "/>
-                                            <p:selectOneMenu id="inputProvincia" value="#{empresaView.idProvincia}">
+                                            <p:selectOneMenu id="inputProvincia" value="#{empresaView.idProvincia}"
+                                                             required="true" requiredMessage="Debe seleccionar una Provincia">
                                                 <p:ajax listener="#{empresaView.provinciaSeleccionada(empresaView.idProvincia)}"
                                                         update="inputCiudad"/>
                                                 <f:selectItem itemLabel="Selecione una Provincia" itemValue="#{0}"
@@ -143,7 +144,8 @@
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="inputCiudad" value="Ciudad: "/>
-                                            <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}">
+                                            <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}"
+                                                             required="true" requiredMessage="Debe seleccionar una ciudad">
                                                 <f:selectItem itemLabel="Selecione un ciudad" itemValue="#{0}" noSelectionOption="true"/>
                                                 <f:selectItems value="#{empresaView.ciudades}" var="ciudad" 
                                                                itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>

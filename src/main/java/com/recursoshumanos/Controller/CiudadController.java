@@ -35,6 +35,7 @@ public class CiudadController implements Serializable {
     @Inject
     private ProvinciaDAO provinciaDAO;
     private List<Provincia> provincias;
+    private List<Provincia> filtroProvincias;
     
     private int idProvincia;
 
@@ -42,12 +43,22 @@ public class CiudadController implements Serializable {
         ciudad = new Ciudad();
         ciudades = new ArrayList<>();
         provincias = new ArrayList<>();
+        filtroProvincias = new ArrayList<>();
     }
 
     @PostConstruct
     public void constructorCiudad() {
         this.idProvincia = 0;
         this.ciudades = ciudadDAO.Listar();
+        for(Ciudad ciudad : ciudades){
+            if(filtroProvincias.isEmpty()){
+                filtroProvincias.add(ciudad.getProvincia());
+            }else{
+                if(!filtroProvincias.contains(ciudad.getProvincia())){
+                    filtroProvincias.add(ciudad.getProvincia());
+                }
+            }
+        }
         this.provincias = provinciaDAO.Listar();
     }
 
@@ -71,8 +82,12 @@ public class CiudadController implements Serializable {
         return provincias;
     }
 
-    public void setProvincias(List<Provincia> provincias) {
-        this.provincias = provincias;
+    public List<Provincia> getFiltroProvincias() {
+        return filtroProvincias;
+    }
+
+    public void setFiltroProvincias(List<Provincia> filtroProvincias) {
+        this.filtroProvincias = filtroProvincias;
     }
     
     public void editar(int id){

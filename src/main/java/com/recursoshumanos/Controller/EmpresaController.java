@@ -124,7 +124,7 @@ public class EmpresaController implements Serializable {
 
     public void postLoad() {
         if (empresa.getId() == -1 ) {
-            mostrarMensajeError("Debe ingresar los datos de la Empresa");
+            mostrarMensajePrecaucion("Debe ingresar los datos de la Empresa");
             PrimeFaces.current().executeScript("PF('manageEmpresaDialog').show()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-empresa");
         }
@@ -218,6 +218,11 @@ public class EmpresaController implements Serializable {
     //  MENSAJE DE ERROR
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void mostrarMensajePrecaucion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Atención!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

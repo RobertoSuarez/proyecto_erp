@@ -137,7 +137,7 @@ public class HorarioLaboralController implements Serializable {
         dias = diaSemanaDAO.Listar();
         horas = ingresosSalidasDAO.Listar();
         if(horarios.isEmpty()){
-             mostrarMensajeInformacion("Debe definir los los dias y horas de este horario");
+             mostrarMensajePrecaucion("Debe definir los dias y horas de este horario");
         }
     }
     
@@ -219,6 +219,9 @@ public class HorarioLaboralController implements Serializable {
     public void cambiarEstado(HorarioLaboral horarioLaboral){
         horarioLaboralDAO.setHorarioLaboral(horarioLaboral);
         horarioLaboralDAO.cambiarEstado();
+        if (detalleHorarioDAO.Listar(idIngresoSalida).isEmpty() && horarioLaboral.isEstado()){
+            mostrarMensajePrecaucion("Debe definir los dias y horas del horario " + horarioLaboral.getNombre());
+        }
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
     }
 
@@ -230,6 +233,11 @@ public class HorarioLaboralController implements Serializable {
     //  MENSAJE DE ERROR
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void mostrarMensajePrecaucion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Atención!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

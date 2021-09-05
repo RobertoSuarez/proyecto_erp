@@ -279,6 +279,8 @@ public class Conexion implements Serializable{
             }
         } catch (SQLException exc) {
             System.out.print(exc);
+        } finally {
+            cerrarConexion();
         }
     }
     //para modulo activos fijos
@@ -421,6 +423,8 @@ public class Conexion implements Serializable{
             mensaje = exc.getMessage();
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
+        } finally {
+            cerrarConexion();
         }
         return retorno;
     }
@@ -440,6 +444,8 @@ public class Conexion implements Serializable{
             mensaje = exc.getMessage();
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
+        } finally {
+            cerrarConexion();
         }
         return retorno;
     }

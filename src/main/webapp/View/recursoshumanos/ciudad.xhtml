@@ -32,10 +32,18 @@
                         <p:column headerText="Ciudad" sortBy="#{ciudad.nombre}" filterBy="#{ciudad.nombre}">
                             <h:outputText value="#{ciudad.nombre}"/>
                         </p:column>
-                        <p:column headerText="Provincia" sortBy="#{ciudad.provincia.nombre}" filterBy="#{ciudad.provincia.nombre}">
+                        <p:column field="nombre" filterBy="#{ciudad.provincia.nombre}" headerText="Provincia" sortBy="#{ciudad.provincia.nombre}"
+                                  filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('dtCiudades').filter()">
+                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{ciudadView.filtroProvincias}" var="provincia"
+                                                   itemLabel="#{provincia.nombre}" itemValue="#{provincia.nombre}" />
+                                </p:selectOneMenu>
+                            </f:facet>
                             <h:outputText value="#{ciudad.provincia.nombre}"/>
                         </p:column>
-                        <p:column headerText="Detalle" width="45%">
+                        <p:column headerText="Detalle" width="45%" filterBy="#{ciudad.detalle}">
                             <h:outputText value="#{ciudad.detalle}"/>
                         </p:column>
                         <p:column exportable="false" width="5%">
