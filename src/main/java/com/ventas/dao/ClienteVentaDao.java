@@ -44,6 +44,9 @@ public class ClienteVentaDao implements Serializable {
 
             return temp;
         } catch (Exception e) {
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
             System.out.println(e.getMessage().toString());
         } finally {
             this.con.cerrarConexion();
@@ -71,6 +74,9 @@ public class ClienteVentaDao implements Serializable {
                 clientes.add(this.clienteVenta);
             }
         }catch(Exception e){
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
             System.out.println(e.getMessage().toString());
         }finally{
             this.con.cerrarConexion();

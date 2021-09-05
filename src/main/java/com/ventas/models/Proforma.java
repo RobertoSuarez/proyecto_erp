@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Proforma implements Serializable {
     public int id_proforma;
     public int id_cliente;
+    public String nombreCliente;
     public int id_empleado;
     public String fecha_creacion;
     public String fecha_actualizacion;
@@ -163,6 +164,14 @@ public class Proforma implements Serializable {
 
     public void setDetalleproformacodigo(int detalleproformacodigo) {
         this.detalleproformacodigo = detalleproformacodigo;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
     
     
