@@ -268,10 +268,12 @@ public class ProformaManageBean implements Serializable {
                 profor.setTotalproforma((float) this.total);
                 profordao.IngresarProforma(profor);
                 System.out.println("Proforma Registrada");
-                while (listSize < this.listaDetalle.size()) {
-                    temp = this.listaDetalle.get(listSize);
-//                    this.proformaDAO.ingresarDetalleProforma(temp, profor);
-//                    System.out.println("Detalle Proforma ingresada");
+                Producto produc;
+                while (listSize <= this.listaDetalle.size()) {
+                    produc = new Producto();
+                    produc = this.listaDetalle.get(listSize).getProducto();
+                    profordao.ingresarDetalleProforma(produc, profor);
+                    System.out.println("Detalle Proforma ingresada");
                     listSize += 1;
                 }
             }

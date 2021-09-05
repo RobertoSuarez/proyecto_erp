@@ -49,7 +49,7 @@
                                 <p:inputNumber id="priceTextBox" value="#{ProformaMB.precioProducto}" modifyValueOnWheel="false" disabled="false" />
                                 <div/>
                                 <p:outputLabel value="Cantidad: "/>
-                                <p:inputNumber value="#{ProformaMB.cantidad}" modifyValueOnWheel="true" maxValue="#{ProformaMB.producto.stock}" minValue="0" decimalPlaces="0" />
+                                <p:inputNumber value="#{ProformaMB.cantidad}" modifyValueOnWheel="true" minValue="0" decimalPlaces="0" />
                                 <div/>
                                 <p:commandButton value="Agregar" actionListener="#{ProformaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData growl" />
                             </h:panelGrid>

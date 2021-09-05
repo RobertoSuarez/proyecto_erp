@@ -55,18 +55,21 @@ public class ProformaDAO {
 
     public void ingresarDetalleProforma(Producto prod, Proforma ProformaDetalle) throws SQLException {
         String procedimiento;
-        int estado;
+        ResultSet rs;
+        int estado,codigo;
         con.abrirConexion();
         try {
+            codigo= codigodetalleproforma();
             estado = 0;
-            procedimiento = "call insertarproductoproforma(" + ProformaDetalle.getDetalleproformacodigo()
-                    + "," + ProformaDetalle.getId_proforma() + "," + prod.getCodigo()
-                    + "," + prod.getStock() + "," + prod.getDescuento() + "," + prod.getPrecioUnitario() + ")";
-            estado = con.ejecutarProcedimiento(procedimiento);
-            if (estado > 0) {
-                System.out.println("Detalle de proforma ingresado correctamente");
+            procedimiento = "INSERT INTO public.detalleproforma(" +
+"	iddetalleproforma, idproforma, codprincipal, cantidad, descuento, precio)" +
+"	VALUES ("+ codigo +","+ ProformaDetalle.getId_proforma() + ","+ prod.getCodigo() 
+                    + ","+ prod.getStock() +","+ prod.getDescuento() +","+ prod.getPrecioUnitario() +");";
+            rs = con.ejecutarConsulta(procedimiento);
+            if (rs == null) {
+                System.out.println("Detalle de proforma incorrectamente");
             } else {
-                System.out.println("Problema al ingresar detalle proforma");
+                System.out.println("Detalle proforma ingresado correctamente");
             }
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -81,7 +84,6 @@ public class ProformaDAO {
     public int codigoproforma() {
         ResultSet rs = null;
         int idVenta = 1;
-        Proforma proformaactual = new Proforma();
         try {
             this.con.abrirConexion();
             rs = this.con.ejecutarConsulta("select * from public.proforma order by idproforma desc limit 1");
@@ -89,7 +91,28 @@ public class ProformaDAO {
                 idVenta = rs.getInt(1) + 1;
             }
             return idVenta;
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
+        } finally {
+            con.cerrarConexion();
+            return idVenta;
+        }
+    }
+    
+    public int codigodetalleproforma() {
+        ResultSet rs = null;
+        int idVenta = 1;
+        try {
+            this.con.abrirConexion();
+            rs = this.con.ejecutarConsulta("select * from public.detalleproforma order by iddetalleproforma ASC");
+            while (rs.next()) {
+                idVenta = rs.getInt(1) + 1;
+            }
+            return idVenta;
+        } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
                 con.cerrarConexion();
