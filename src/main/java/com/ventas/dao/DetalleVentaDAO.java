@@ -60,6 +60,9 @@ public class DetalleVentaDAO {
 
             this.con.cerrarConexion();
         } catch (Exception e) {
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
             System.out.println(e.getMessage().toString());
         } finally {
             this.con.cerrarConexion();
@@ -89,6 +92,9 @@ public class DetalleVentaDAO {
             
             return lista;
         }catch(Exception e){
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
             System.out.println(e.getMessage().toString());
         }finally{
             this.con.cerrarConexion();

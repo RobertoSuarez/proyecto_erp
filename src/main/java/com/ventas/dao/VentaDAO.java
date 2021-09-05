@@ -71,6 +71,9 @@ public class VentaDAO {
 
             return ventaActual.getIdVenta();
         } catch (Exception e) {
+            if (con.isEstado()) {
+                con.cerrarConexion();
+            }
             System.out.println(e.getMessage().toString());
         } finally {
             this.con.cerrarConexion();

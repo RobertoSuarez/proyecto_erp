@@ -11,14 +11,13 @@
         <ui:composition template="../../Plantilla/Plantilla.xhtml">
 
             <ui:define name="content">
-                <p:commandButton value="Cargar Proforma" actionListener="#{ProformaMB.listarProformas()}" />
                 <h:form>
-                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}">
-                        <p:column headerText="Codigo proforma" width="5%">
+                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}" paginator="true" rows="10">
+                        <p:column headerText="Codigo proforma" width="5%" filterBy="#{Lista.id_proforma}" filterMatchMode="contains">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
-                        <p:column headerText="Cliente" width="5%">
-                            <h:outputText value="#{Lista.id_cliente}" />
+                        <p:column headerText="Cliente" width="15%" filterBy="#{Lista.nombreCliente}" filterMatchMode="contains" >
+                            <h:outputText value="#{Lista.nombreCliente}" />
                         </p:column>
                         <p:column headerText="Estado" width="10%">
                             <h:outputText value="#{Lista.estado}" />
@@ -30,8 +29,8 @@
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="25%">
-                            <p:commandButton icon="pi pi-pencil" value="Aceptar" style="float: right; margin: 20px 0px;" />
-                            <p:commandButton icon="pi pi-file-pdf" value="Rechazar" style="float: right; margin: 20px 0px;" />
+                            <p:commandButton icon="pi pi-pencil" value="Aceptar" />
+                            <p:commandButton icon="pi pi-pencil" value="Rechazar" />
                         </p:column>
                     </p:dataTable>
                 </h:form>

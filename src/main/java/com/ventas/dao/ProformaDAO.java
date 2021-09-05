@@ -16,11 +16,16 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import javax.ejb.Asynchronous;
+import com.ventas.dao.ClienteVentaDao;
+import com.ventas.models.ClienteVenta;
 
 public class ProformaDAO {
 
     Conexion con;
     Proforma proforma = new Proforma();
+    ClienteVentaDao clienteDao = new ClienteVentaDao();
+    ClienteVenta cliente = new ClienteVenta();
+    
 
     public ProformaDAO() {
         con = new Conexion();
@@ -138,8 +143,12 @@ public class ProformaDAO {
                 
                 while (rs.next()) {
                     Proforma prof = new Proforma();
+                    this.cliente = new ClienteVenta();
+                    this.clienteDao=new ClienteVentaDao();
                     prof.setId_proforma(rs.getInt(1));
                     prof.setId_cliente(rs.getInt(2));
+                    this.cliente=this.clienteDao.BuscarClientePorId(prof.getId_cliente());
+                    prof.setNombreCliente(this.cliente.getNombre());
                     prof.setId_empleado(rs.getInt(3));
                     prof.setFecha_creacion(rs.getString(4));
                     prof.setFecha_actualizacion(rs.getString(5));
@@ -147,19 +156,19 @@ public class ProformaDAO {
                     prof.setProforma_terminada(rs.getBoolean(7));
                     prof.setAceptacion_cliente(rs.getBoolean(8));
                     estado="P";
-                    if(rs.getString(9).equals(estado)){
+                    if(rs.getString(9).trim().equals(estado)){
                         estado="Pendiente";
                         prof.setEstado(estado);
                     }
                     else{
                         estado="A";
-                        if(rs.getString(9).equals(estado)){
+                        if(rs.getString(9).trim().equals(estado)){
                             estado="Aceptada";
                             prof.setEstado(estado);
                         }
                         else{
                             estado="R";
-                            if(rs.getString(9).equals(estado)){
+                            if(rs.getString(9).trim().equals(estado)){
                                 estado="Rechazado";
                                 prof.setEstado(estado);
                             }
@@ -168,7 +177,6 @@ public class ProformaDAO {
                             }
                         }
                     }
-                    prof.setEstado(rs.getString(9));
                     prof.setFecha_autorizacion(rs.getString(10));
                     prof.setBase12(rs.getFloat(11));
                     prof.setBase0(rs.getFloat(12));
