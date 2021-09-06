@@ -11,13 +11,14 @@
         <ui:composition template="../../Plantilla/Plantilla.xhtml">
 
             <ui:define name="content">
-                <h:form>
-                    <p:dataTable var="Lista" id="itemsTable" value="#{detalleProformaManagedBean.listaProformas}" paginator="true" rows="10">
-                        <p:column headerText="Codigo proforma" width="5%" filterBy="#{Lista.id_proforma}" filterMatchMode="contains">
+                <h:form id="listaDeProforma" >
+                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}" rowKey="#{Lista.id_proforma}" 
+                                 selectionMode="single" selection="#{ProformaMB.proformaActual}">
+                        <p:column headerText="Codigo proforma" width="5%">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
-                        <p:column headerText="Cliente" width="15%" filterBy="#{Lista.nombreCliente}" filterMatchMode="contains" >
-                            <h:outputText value="#{Lista.nombreCliente}" />
+                        <p:column headerText="Cliente" width="15%" filterBy="#{Lista.nombreCliente}" filterMatchMode="content">
+                            <h:outputText value="#{Lista.nombreCliente}"  />
                         </p:column>
                         <p:column headerText="Estado" width="10%">
                             <h:outputText value="#{Lista.estado}" />
@@ -29,31 +30,33 @@
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
-                            <p:commandButton type="button" icon="pi pi-check" value="Aceptar" styleClass="rounded-button" />
-                            <p:commandButton type="button" icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"/>
-                            <p:commandButton type="button" icon="pi pi-eye" value="Ver" styleClass="rounded-button" onclick="PF('DetalleProforma').show()" />
+                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" />
+                            <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger" 
+                                             actionListener="#{ProformaMB.rechazarProforma()}" update="listaDeProforma"/>
+                            <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this"
+                                             onclick="PF('DetalleProforma').show()" actionListener="#{ProformaMB.detalleProforma(Lista)}" update="datosFactura" />
                         </p:column>
                     </p:dataTable>
                 </h:form>
                 
                 <p:dialog widgetVar="DetalleProforma" width="70%" height="80%" >
                     <h:form id="datosFactura">
-                        <h2>Detalle proforma: <p:outputLabel value="#{detalleProformaManagedBean.proformaSeleccionada.id_proforma}" /></h2>
+                        <h2>Detalle proforma: <p:outputLabel value="#{ProformaMB.proformaActual.id_proforma}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Identificación: "/>
-                                <p:outputLabel value="#{detalleProformaManagedBean.identificacion}" />
+                                <p:outputLabel value="#{ProformaMB.identificacion}" />
                                 <p:outputLabel value="Nombre:" />
-                                <p:outputLabel value="#{detalleProformaManagedBean.nombrecliente}" />
+                                <p:outputLabel value="#{ProformaMB.nombrecliente}" />
                             </h:panelGrid>
                         </p:panel>
 
-                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{detalleProformaManagedBean.listaDetalles}">
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ProformaMB.listaDetalles}">
                             <p:column headerText="Cantidad" width="10%">
-                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
+                                <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
                             </p:column>
                             <p:column headerText="Detalle" width="50%" >
-                                <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
+                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
                             </p:column>
                             <p:column headerText="Precio unitario" width="20%">
                                 <h:outputText value="#{FacturaDetailTB.price}" />
@@ -62,23 +65,23 @@
                             <p:columnGroup type="footer" id="colgrp">
                                 <p:row id="Base12">
                                     <p:column colspan="3" style="text-align:right" footerText="Base 12%"/>
-                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.base12}" />
+                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.base12}" />
                                 </p:row>
                                 <p:row id="Base0">
                                     <p:column colspan="3" style="text-align:right" footerText="Base 0%"/>
-                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.base0}" />
+                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.base0}" />
                                 </p:row>
                                 <p:row id="Iva">
                                     <p:column colspan="3" style="text-align:right" footerText="Iva"/>
-                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.iva12}"  />
+                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.iva12}"  />
                                 </p:row>
                                 <p:row id="Ice">
                                     <p:column colspan="3" style="text-align:right" footerText="Ice"/>
-                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.ice}" />
+                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.ice}" />
                                 </p:row>
                                 <p:row id="Total">
                                     <p:column colspan="3" style="text-align:right" footerText="Total:"/>
-                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.totalproforma}" id="subtotalVenta" />
+                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.totalproforma}" id="subtotalVenta" />
                                 </p:row>
                             </p:columnGroup>
 

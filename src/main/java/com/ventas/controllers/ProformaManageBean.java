@@ -13,6 +13,7 @@ import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.ProductoDAO;
 import com.ventas.dao.ProformaDAO;
 import com.ventas.models.ClienteVenta;
+import com.ventas.models.DetalleProforma;
 import com.ventas.models.DetalleVenta;
 import com.ventas.models.Producto;
 import com.ventas.models.Proforma;
@@ -46,6 +47,8 @@ public class ProformaManageBean implements Serializable {
     private ClienteVentaDao clienteDAO;
     private String clienteIdNum;
     private String clienteNombre;
+    String Identificacion;
+    String nombrecliente;
 
     private DetalleVenta productoSeleccionado;
     private ClienteVenta clienteSeleccionado;
@@ -59,12 +62,14 @@ public class ProformaManageBean implements Serializable {
     private double subTotalVenta;
 
     private Proforma proformas;
+    Proforma proformaActual;
     private ProformaDAO profDao;
     private DetalleVenta detalleVenta;
     private DetalleVentaDAO detalleDAO;
     private List<DetalleVenta> listaDetalle;
     private List<Proforma> listaProformas;
-    
+    private List<DetalleProforma> listaDetalles;
+
     private double cantidad;
 
     private double subtotal12;
@@ -73,9 +78,9 @@ public class ProformaManageBean implements Serializable {
     private double ice;
     private double iva;
     private double total;
-    
+
     private List<ClienteVenta> listaClientes;
-     private List<Producto> listaProductos;
+    private List<Producto> listaProductos;
 
     //Constructor
     @PostConstruct
@@ -86,10 +91,12 @@ public class ProformaManageBean implements Serializable {
         this.producto = new Producto();
         this.productoDao = new ProductoDAO();
         this.proformas = new Proforma();
-        
+
         this.codigoProducto = 0;
         this.nombreProducto = "XXXXXX";
         this.subTotalVenta = 0;
+        this.nombrecliente = "";
+        this.Identificacion = "";
 
         this.subtotal12 = 0;
         this.subtotal0 = 0;
@@ -103,11 +110,12 @@ public class ProformaManageBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
-        this.clienteSeleccionado=null;
-        this.proformaSeleccionada=null;
+        this.clienteSeleccionado = null;
+        this.proformaSeleccionada = null;
         this.listaClientes = new ArrayList<>();
         this.listaClientes = clienteDAO.ListarClientes();
-         this.listaProductos = productoDao.ListarProductos();
+        this.listaProductos = productoDao.ListarProductos();
+        this.listaDetalles = new ArrayList<>();
         listarProformas();
     }
 
@@ -320,19 +328,42 @@ public class ProformaManageBean implements Serializable {
         return fecha;
     }
 
-    public void SeleccionarCliente(ClienteVenta cl){
+    public void SeleccionarCliente(ClienteVenta cl) {
         this.clienteNombre = cl.getNombre();
         this.clienteIdNum = cl.getIdentificacion();
         this.cliente = cl;
     }
-    
-        public void SeleccionarProducto(Producto pr){
-    this.codigoProducto = pr.getCodigoAux();
-    this.nombreProducto = pr.getDescripcion();
-    this.precioProducto = pr.getPrecioUnitario();
-    this.producto = pr;
-}
-    
+
+    public void SeleccionarProducto(Producto pr) {
+        this.codigoProducto = pr.getCodigoAux();
+        this.nombreProducto = pr.getDescripcion();
+        this.precioProducto = pr.getPrecioUnitario();
+        this.producto = pr;
+    }
+
+    @Asynchronous
+    public void detalleProforma(Proforma profor) throws SQLException {
+        this.listaDetalles = new ArrayList<>();
+        this.proformaActual = profor;
+        System.out.println("Inicia variable local");
+        this.listaDetalles = this.profDao.listaDetalleProforma(this.proformaActual);
+        System.out.println("Lllena la lista de detalles");
+        this.cliente = this.clienteDAO.BuscarClientePorId(this.proformaActual.getId_cliente());
+        System.out.println("LLENA el objeto cliente");
+        this.Identificacion = this.cliente.getIdentificacion();
+        System.out.println("Llena la identificacion");
+        this.nombrecliente = this.cliente.getNombre();
+        System.out.println("Llena el nombre del cliente");
+    }
+
+    @Asynchronous
+    public void rechazarProforma() throws SQLException {
+        String rechazar = "R";
+        System.out.print(rechazar);
+        this.profDao.cambiarEstadoProforma(rechazar, this.proformaActual.getId_proforma());
+        System.out.print("Proforma Rechazada");
+    }
+
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
         return cliente;
@@ -553,9 +584,44 @@ public class ProformaManageBean implements Serializable {
     public void setProformaSeleccionada(Proforma proformaSeleccionada) {
         this.proformaSeleccionada = proformaSeleccionada;
     }
-    
-    
 
+    public void setClienteDAO(ClienteVentaDao clienteDAO) {
+        this.clienteDAO = clienteDAO;
+    }
+
+    public String getIdentificacion() {
+        return Identificacion;
+    }
+
+    public void setIdentificacion(String Identificacion) {
+        this.Identificacion = Identificacion;
+    }
+
+    public String getNombrecliente() {
+        return nombrecliente;
+    }
+
+    public void setNombrecliente(String nombrecliente) {
+        this.nombrecliente = nombrecliente;
+    }
+
+    public Proforma getProformaActual() {
+        return proformaActual;
+    }
+
+    public void setProformaActual(Proforma proformaActual) {
+        this.proformaActual = proformaActual;
+    }
+
+    public List<DetalleProforma> getListaDetalles() {
+        return listaDetalles;
+    }
+
+    public void setListaDetalles(List<DetalleProforma> listaDetalles) {
+        this.listaDetalles = listaDetalles;
+    }
+
+    
     
     //Agregar producto a la lista de detalle
     public void AgregarProductoLista2() {

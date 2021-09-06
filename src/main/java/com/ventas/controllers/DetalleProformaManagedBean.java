@@ -29,43 +29,32 @@ public class DetalleProformaManagedBean implements Serializable {
     List<Proforma> listaProformas;
     DetalleProforma details;
     List<DetalleProforma> listaDetalles;
-    Proforma proformaSeleccionada;
+    Proforma proformaActual;
     ClienteVenta cliente;
     ClienteVentaDao clientedao;
     String Identificacion;
     String nombrecliente;
     
-    public DetalleProformaManagedBean() {
+    public DetalleProformaManagedBean() throws SQLException {
         this.nombrecliente ="";
         this.Identificacion="";
-        listarProformas();
+        this.profDao = new ProformaDAO();
+        this.listaProformas = new ArrayList<>();
+        this.details = new DetalleProforma();
+        this.listaDetalles = new ArrayList<>();
+        this.cliente = new ClienteVenta();
     }
 
     
-public void detalleProforma(Proforma ProformaSeleccionada) throws SQLException{
+public void detalleProforma() throws SQLException{
+    System.out.println("Ingresa al metodo");
     this.listaDetalles = new ArrayList<>();
-    this.proformaSeleccionada= ProformaSeleccionada;
-    this.listaDetalles = this.profDao.listaDetalleProforma(this.proformaSeleccionada);
-    this.cliente = this.clientedao.BuscarClientePorId(this.proformaSeleccionada.getId_cliente());
+    this.listaDetalles = this.profDao.listaDetalleProforma(this.proformaActual);
+    this.cliente = this.clientedao.BuscarClientePorId(this.proformaActual.getId_cliente());
     this.Identificacion= this.cliente.getIdentificacion();
     this.nombrecliente=this.cliente.getNombre();
 }
     
-    @Asynchronous
-    public void listarProformas() {
-        this.profDao = new ProformaDAO();
-        this.listaProformas = new ArrayList<>();
-        try {
-            System.out.println("Llenando lista de proforma");
-            this.listaProformas = this.profDao.retornarProformas();
-            System.out.println("Lista llenada");
-            if (listaProformas.isEmpty()) {
-                addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
-            }
-        } catch (SQLException e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
-        }
-    }
     
     //Mostrar algun mensaje
     @Asynchronous
@@ -106,12 +95,12 @@ public void detalleProforma(Proforma ProformaSeleccionada) throws SQLException{
         this.listaDetalles = listaDetalles;
     }
 
-    public Proforma getProformaSeleccionada() {
-        return proformaSeleccionada;
+    public Proforma getProformaActual() {
+        return proformaActual;
     }
 
-    public void setProformaSeleccionada(Proforma proformaSeleccionada) {
-        this.proformaSeleccionada = proformaSeleccionada;
+    public void setProformaActual(Proforma proformaActual) {
+        this.proformaActual = proformaActual;
     }
 
     public ClienteVenta getCliente() {

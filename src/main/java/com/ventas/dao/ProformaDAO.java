@@ -142,7 +142,7 @@ public class ProformaDAO {
         List<Proforma> listadocs= new ArrayList<>();
         try {
             consulta="SELECT * FROM public.proforma ORDER BY idproforma ASC ";
-            rs=con.ejecutarConsulta(consulta);
+            rs=con.consultar(consulta);
              if (rs == null) {
                 System.out.println("No existen registros");
             } else {
@@ -181,6 +181,7 @@ public class ProformaDAO {
                             }
                             else{
                                 System.out.println("Fallo al cargar estado");
+                                prof.setEstado(rs.getString(9));
                             }
                         }
                     }
@@ -194,9 +195,9 @@ public class ProformaDAO {
                     listadocs.add(prof);
                     System.out.println("Proforma en lista");
                 }
-                con.cerrarConexion();
             }
-        } catch (Exception e) {
+             con.cerrarConexion();
+        } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
                 con.cerrarConexion();
@@ -244,6 +245,31 @@ public class ProformaDAO {
         con.cerrarConexion();
         return listaitems;
         
+    }
+    
+    public void cambiarEstadoProforma(String estado, int idproforma) throws SQLException{
+        String consulta;
+        ResultSet rs;
+        con.abrirConexion();
+        try{
+            consulta="UPDATE public.proforma SET estado= '"+ estado.toString() +"' WHERE idproforma = "+ idproforma +";";
+            rs = con.ejecutarConsulta(consulta);
+            if(rs==null){
+                System.out.print("No se pudo cambiar el estado");
+            }
+            else{
+                System.out.print("Estado cambiado con exito");
+            }
+        }
+        catch(Exception e){
+            if(con.isEstado()){
+                con.cerrarConexion();
+            }
+        }
+        finally{
+            con.cerrarConexion();
+        }
+        con.cerrarConexion();
     }
 
 }
