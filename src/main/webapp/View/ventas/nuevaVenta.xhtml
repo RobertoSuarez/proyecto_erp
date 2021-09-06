@@ -51,7 +51,7 @@
                                 <p:inputNumber id="priceTextBox" value="#{VentaMB.precioProducto}" modifyValueOnWheel="false" disabled="true" />
                                 <div/>
                                 <p:outputLabel value="Cantidad: "/>
-                                <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" maxValue="#{VentaMB.producto.stock}" decimalPlaces="0" />
+                                <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
                                 <div/>
                                 <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
                             </h:panelGrid>
