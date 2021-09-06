@@ -8,7 +8,7 @@
     <ui:define name="content">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postLoad(personaBean.idRolDePago, personaBean.nuevo)}" />
+                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePago(personaBean.idRolDePago, personaBean.nuevo)}" />
             </f:metadata>
         </h:head>
         <h:form id="form" class="content-section implementation" enctype="multipart/form-data">
