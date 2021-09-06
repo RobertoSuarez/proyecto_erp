@@ -15,15 +15,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 
 /**
  *
  * @author ClasK7
  */
-@Named
-@ApplicationScoped
 public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
 
     private final Conexion conexion;

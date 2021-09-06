@@ -14,15 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 
 /**
  *
  * @author cturriagos
  */
-@Named
-@ApplicationScoped
 public class EmpleadoPuestoDAO implements IDAO<EmpleadoPuesto> {
 
     private Conexion conexion;

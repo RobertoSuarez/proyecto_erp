@@ -15,16 +15,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import org.jetbrains.annotations.Nullable;
 
 /**
  *
  * @author kestradalp
  */
-@Named
-@ApplicationScoped
 public class AsistenciaDAO implements IDAO<Asistencia>{
     private final Conexion conexion;
     private Asistencia asistencia;
