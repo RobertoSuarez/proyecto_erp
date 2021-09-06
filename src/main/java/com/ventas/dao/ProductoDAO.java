@@ -108,6 +108,7 @@ public class ProductoDAO {
                     temp.setDescuento(rs.getFloat(10));
                     listaventa.add(temp);
                 }
+                con.cerrarConexion();
         }
         }
         catch(Exception e){

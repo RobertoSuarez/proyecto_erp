@@ -8,6 +8,7 @@ package com.ventas.dao;
 import com.global.config.Conexion;
 import com.ventas.models.Producto;
 import com.ventas.models.Proforma;
+import com.ventas.models.DetalleProforma;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +24,8 @@ public class ProformaDAO {
 
     Conexion con;
     Proforma proforma = new Proforma();
+    DetalleProforma detalleprof;
+    
     ClienteVentaDao clienteDao = new ClienteVentaDao();
     ClienteVenta cliente = new ClienteVenta();
     
@@ -47,6 +50,7 @@ public class ProformaDAO {
                     + "," + ProformaDetalle.getTotalproforma() + ")";
             con.ejecutarConsulta(procedimiento);
             System.out.println("Proforma correctamente ingresada");
+            con.cerrarConexion();
 
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -76,6 +80,7 @@ public class ProformaDAO {
             } else {
                 System.out.println("Detalle proforma ingresado correctamente");
             }
+            con.cerrarConexion();
         } catch (Exception e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
@@ -95,6 +100,7 @@ public class ProformaDAO {
             while (rs.next()) {
                 idVenta = rs.getInt(1) + 1;
             }
+            this.con.cerrarConexion();
             return idVenta;
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -116,6 +122,7 @@ public class ProformaDAO {
             while (rs.next()) {
                 idVenta = rs.getInt(1) + 1;
             }
+            this.con.cerrarConexion();
             return idVenta;
         } catch (SQLException e) {
             System.out.println(e.toString());
@@ -187,6 +194,7 @@ public class ProformaDAO {
                     listadocs.add(prof);
                     System.out.println("Proforma en lista");
                 }
+                con.cerrarConexion();
             }
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -197,6 +205,45 @@ public class ProformaDAO {
             con.cerrarConexion();
         }
         return listadocs;
+    }
+    
+    public List<DetalleProforma> listaDetalleProforma(Proforma prof) throws SQLException{
+        ResultSet rs;
+        String consulta;
+        DetalleProforma details;
+        List<DetalleProforma> listaitems= new ArrayList<>();
+        consulta="Select * from public.detalleproforma where idproforma="+ prof.id_proforma;
+        con.abrirConexion();
+        try{
+            rs=con.ejecutarConsulta(consulta);
+            if(rs==null){
+                System.out.print("No existe ninguna proforma en la Base de datos");
+            }
+            else{
+                while(rs.next()){
+                    details = new DetalleProforma();
+                    details.setIdDetalle(rs.getInt(1));
+                    details.setIdProforma(rs.getInt(2));
+                    details.setCodigoProducto(rs.getInt(3));
+                    details.setCantidad(rs.getInt(4));
+                    details.setDescuento(rs.getFloat(5));
+                    details.setPrice(rs.getFloat(6));
+                    listaitems.add(details);
+                }
+            }
+            con.cerrarConexion();
+        }
+        catch(Exception e){
+            if(con.isEstado()){
+                con.cerrarConexion();
+            }
+        }
+        finally{
+            con.cerrarConexion();
+        }
+        con.cerrarConexion();
+        return listaitems;
+        
     }
 
 }

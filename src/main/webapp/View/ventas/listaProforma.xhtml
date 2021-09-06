@@ -12,7 +12,7 @@
 
             <ui:define name="content">
                 <h:form>
-                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}" paginator="true" rows="10">
+                    <p:dataTable var="Lista" id="itemsTable" value="#{detalleProformaManagedBean.listaProformas}" paginator="true" rows="10">
                         <p:column headerText="Codigo proforma" width="5%" filterBy="#{Lista.id_proforma}" filterMatchMode="contains">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
@@ -25,16 +25,66 @@
                         <p:column headerText="Fecha creacion" width="10%" >
                             <h:outputText value="#{Lista.fecha_creacion}"/>
                         </p:column>
-                        <p:column headerText="Total" width="10%" >
+                        <p:column headerText="Total" width="7%" >
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
-                        <p:column headerText="Acciones" width="25%">
-                            <p:commandButton icon="pi pi-pencil" value="Aceptar" />
-                            <p:commandButton icon="pi pi-pencil" value="Rechazar" />
+                        <p:column headerText="Acciones" width="35%">
+                            <p:commandButton type="button" icon="pi pi-check" value="Aceptar" styleClass="rounded-button" />
+                            <p:commandButton type="button" icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"/>
+                            <p:commandButton type="button" icon="pi pi-eye" value="Ver" styleClass="rounded-button" onclick="PF('DetalleProforma').show()" />
                         </p:column>
                     </p:dataTable>
                 </h:form>
                 
+                <p:dialog widgetVar="DetalleProforma" width="70%" height="80%" >
+                    <h:form id="datosFactura">
+                        <h2>Detalle proforma: <p:outputLabel value="#{detalleProformaManagedBean.proformaSeleccionada.id_proforma}" /></h2>
+                        <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Identificación: "/>
+                                <p:outputLabel value="#{detalleProformaManagedBean.identificacion}" />
+                                <p:outputLabel value="Nombre:" />
+                                <p:outputLabel value="#{detalleProformaManagedBean.nombrecliente}" />
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{detalleProformaManagedBean.listaDetalles}">
+                            <p:column headerText="Cantidad" width="10%">
+                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
+                            </p:column>
+                            <p:column headerText="Detalle" width="50%" >
+                                <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Precio unitario" width="20%">
+                                <h:outputText value="#{FacturaDetailTB.price}" />
+                            </p:column>
+
+                            <p:columnGroup type="footer" id="colgrp">
+                                <p:row id="Base12">
+                                    <p:column colspan="3" style="text-align:right" footerText="Base 12%"/>
+                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.base12}" />
+                                </p:row>
+                                <p:row id="Base0">
+                                    <p:column colspan="3" style="text-align:right" footerText="Base 0%"/>
+                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.base0}" />
+                                </p:row>
+                                <p:row id="Iva">
+                                    <p:column colspan="3" style="text-align:right" footerText="Iva"/>
+                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.iva12}"  />
+                                </p:row>
+                                <p:row id="Ice">
+                                    <p:column colspan="3" style="text-align:right" footerText="Ice"/>
+                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.ice}" />
+                                </p:row>
+                                <p:row id="Total">
+                                    <p:column colspan="3" style="text-align:right" footerText="Total:"/>
+                                    <p:column style="text-align:left" footerText="${detalleProformaManagedBean.proformaSeleccionada.totalproforma}" id="subtotalVenta" />
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
                 
             </ui:define>
 
