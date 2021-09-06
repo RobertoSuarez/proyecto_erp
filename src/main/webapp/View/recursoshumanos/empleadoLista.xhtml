@@ -6,8 +6,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/Plantilla/Plantilla.xhtml">
 
-    <ui:define name="content">
-        <h:form id="form">
+    <ui:define name="content" class="Contenido">
+        <h:form id="form" style="width: 105%; margin-left: -23px;">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
                 <p:panel>
@@ -17,30 +17,46 @@
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
                             <p:linkButton value="Nuevo Empleado" icon="pi pi-user-plus" outcome="CrearEmpleado"
-                                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+                                          styleClass="ui-button-success" style="margin-right: .5rem"/>
                         </p:toolbarGroup>
                     </p:toolbar>
                     <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" var="empleado" value="#{empleadoListaView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="empleados-table"
                                  rowKey="#{empleado.id}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom">
-                        
-                        <p:column headerText="Identificación" width="15%">
+
+                        <p:column headerText="Identificación" width="12%" sortBy="#{empleado.persona.identificacion}"
+                                  filterBy="#{empleado.persona.identificacion}">
                             <h:outputText value="#{empleado.persona.identificacion}"/>
                         </p:column>
-                        <p:column headerText="Nombres y Apellidos">
-                            <h:outputText value="#{empleado.nombreCompleto()}"/>
+                        <p:column headerText="Apellidos" sortBy="#{empleado.apellidos}"
+                                  filterBy="#{empleado.apellidos}">
+                            <h:outputText value="#{empleado.apellidos}"/>
                         </p:column>
-                        <p:column headerText="Ingreso" width="10%">
+                        <p:column headerText="Nombres" sortBy="#{empleado.nombres}"
+                                  filterBy="#{empleado.nombres}">
+                            <h:outputText value="#{empleado.nombres}"/>
+                        </p:column>
+                        <p:column headerText="Ingreso" width="9%" filterMatchMode="range"
+                                  sortBy="#{empleado.fechaIngreso}">
                             <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaIngreso)}"/>
                         </p:column>
-                        <p:column headerText="Salida" width="10%">
+                        <p:column headerText="Salida" width="9%"
+                                  sortBy="#{empleado.fechaEgreso}">
                             <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaEgreso)}"/>
                         </p:column>
-                        <p:column headerText="Estado" width="10%">
-                            <h:outputText id="inputmarca" value="#{empleado.persona.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
+                        <p:column headerText="Estado" width="12%" field="estado" filterBy="#{empleado.persona.estado}"
+                                  filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('dtEmpleados').filter()">
+                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <h:outputText value="#{empleado.persona.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                         </p:column>
-                        <p:column exportable="false" width="10%">
+                        <p:column exportable="false" width="9%">
                             <p:commandButton icon="pi pi-eye" action="Empleado" 
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{empleado.id}" target="#{personaBean.idEmpleado}"/>

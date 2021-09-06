@@ -150,4 +150,12 @@ public class Empleado implements Serializable{
     public String nombreCompleto(){
         return nombre1 + " " + nombre2 + " " + apellido1 + " " + apellido2;
     }
+    
+    public String getApellidos(){
+        return apellido1 + " " + apellido2;
+    }
+    
+    public String getNombres(){
+        return nombre1 + " " + nombre2;
+    }
 }
