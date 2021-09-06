@@ -6,7 +6,6 @@
 package com.recursoshumanos.Model.Entidad;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  *

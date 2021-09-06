@@ -23,7 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -34,20 +33,22 @@ import org.primefaces.PrimeFaces;
 @Named(value = "empleadoPuestoView")
 @ViewScoped
 public class EmpleadoPuestoController implements Serializable {
+    
+    private final EmpleadoSucursalDAO empleadoSucursalDAO;
+    private final EmpleadoPuestoDAO empleadoPuestoDAO;
+    
     private EmpleadoPuesto empleadoPuesto;
     private EmpleadoSucursal empleadoSucursal;
     
-    @Inject
-    private EmpleadoPuestoDAO empleadoPuestoDAO;
     private List<PuestoLaboral> puestos;
     private List<HorarioLaboral> horarios;
-    @Inject
-    private EmpleadoSucursalDAO empleadoSucursalDAO;
     private List<Sucursal> sucursales;
     
     private int idPuesto, idHorario, idSucursal;
 
     public EmpleadoPuestoController() {
+        empleadoSucursalDAO = new EmpleadoSucursalDAO();
+        empleadoPuestoDAO = new EmpleadoPuestoDAO();
         empleadoPuesto = new EmpleadoPuesto();
         empleadoSucursal = new EmpleadoSucursal();
         puestos = new ArrayList<>();

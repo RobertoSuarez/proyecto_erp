@@ -26,7 +26,7 @@ import org.primefaces.PrimeFaces;
 public class DedicacionController implements Serializable {
 
     private Dedicacion dedicacion;
-    private DedicacionDAO dedicacionDAO;
+    private final DedicacionDAO dedicacionDAO;
     private List<Dedicacion> lista;
 
     public DedicacionController() {

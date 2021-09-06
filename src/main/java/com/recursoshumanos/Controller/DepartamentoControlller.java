@@ -27,8 +27,8 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class DepartamentoControlller implements Serializable {
 
-    private Departamento departamento = new Departamento();
-    private DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+    private Departamento departamento;
+    private final DepartamentoDAO departamentoDAO;
     private List<Departamento> lista;
 
     public DepartamentoControlller() {

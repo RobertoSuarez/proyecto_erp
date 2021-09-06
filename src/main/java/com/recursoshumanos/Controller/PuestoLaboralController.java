@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -32,22 +31,20 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class PuestoLaboralController implements Serializable {
 
+    private final PuestoLaboralDAO puestoLaboralDAO;
+    private final DepartamentoDAO departamentoDAO;
+    private final CargoDAO cargoDAO;
+
     private PuestoLaboral puestoLaboral;
     private List<PuestoLaboral> lista;
     private List<Departamento> departamentos;
     private List<Cargo> cargos;
     private int idDepartamento, idCargo;
-
-    @Inject
-    private CargoDAO cargoDAO;
-    
-    @Inject
-    private PuestoLaboralDAO puestoLaboralDAO;
-    
-    @Inject
-    private DepartamentoDAO departamentoDAO;
         
     public PuestoLaboralController() {
+        puestoLaboralDAO = new PuestoLaboralDAO();
+        departamentoDAO = new DepartamentoDAO();
+        cargoDAO = new CargoDAO();
         lista = new ArrayList<>();
         departamentos = new ArrayList<>();
         cargos = new ArrayList<>();

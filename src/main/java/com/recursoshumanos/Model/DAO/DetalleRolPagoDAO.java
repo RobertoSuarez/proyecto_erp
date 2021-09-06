@@ -13,16 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import org.jetbrains.annotations.Nullable;
 
 /**
  *
  * @author ClasK7
  */
-@Named
-@ApplicationScoped
 public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
 
     private final Conexion conexion;

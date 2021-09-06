@@ -26,7 +26,7 @@ import org.primefaces.PrimeFaces;
 public class IngresoSalidaController implements Serializable {
 
     private IngresosSalidas ingresosSalidas;
-    private IngresosSalidasDAO ingresosSalidasDAO;
+    private final IngresosSalidasDAO ingresosSalidasDAO;
     private List<IngresosSalidas> lista;
 
     public IngresoSalidaController() {

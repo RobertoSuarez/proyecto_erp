@@ -14,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -27,11 +26,10 @@ import org.primefaces.PrimeFaces;
 public class DiaSemanaController implements Serializable {
     private DiaSemana diaSemana;
     private List<DiaSemana> lista;
-    
-    @Inject
-    private DiaSemanaDAO diaSemanaDAO;
+    private final DiaSemanaDAO diaSemanaDAO;
 
     public DiaSemanaController() {
+        diaSemanaDAO = new DiaSemanaDAO();
         diaSemana = new DiaSemana();
         lista = new ArrayList<>();
     }

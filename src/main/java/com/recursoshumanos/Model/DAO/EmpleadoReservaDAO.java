@@ -13,16 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import org.jetbrains.annotations.Nullable;
 
 /**
  *
  * @author kestradalp
  */
-@Named
-@ApplicationScoped
 public class EmpleadoReservaDAO implements IDAO<EmpleadoReserva> {
 
     private Conexion conexion;

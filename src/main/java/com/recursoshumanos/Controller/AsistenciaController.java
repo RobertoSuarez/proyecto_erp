@@ -19,7 +19,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -31,24 +30,24 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class AsistenciaController implements Serializable {
 
-    @Inject
-    private AsistenciaDAO asistenciaDAO;
+    private final AsistenciaDAO asistenciaDAO;
     private Asistencia asistencia;
     private List<Asistencia> asistencias;
-    @Inject
-    private EmpleadoPuestoDAO empleadoPuestoDAO;
-    @Inject
-    private EmpleadoDAO empleadoDAO;
+    private final EmpleadoPuestoDAO empleadoPuestoDAO;
+    private final EmpleadoDAO empleadoDAO;
     private List<Empleado> empleados;
-    @Inject
-    private DetalleHorarioDAO detalleHorarioDAO;
+    private final DetalleHorarioDAO detalleHorarioDAO;
     private List<DetalleHorario> horarios;
 
     public AsistenciaController() {
+        empleadoPuestoDAO = new EmpleadoPuestoDAO();
+        detalleHorarioDAO = new DetalleHorarioDAO();
+        asistenciaDAO = new AsistenciaDAO();
+        empleadoDAO = new EmpleadoDAO();
+        asistencias = new ArrayList<>();
         asistencia = new Asistencia();
         empleados = new ArrayList<>();
         horarios = new ArrayList<>();
-        asistencias = new ArrayList<>();
     }
 
     @PostConstruct

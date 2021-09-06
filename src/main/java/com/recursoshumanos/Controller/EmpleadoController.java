@@ -5,38 +5,37 @@
  */
 package com.recursoshumanos.Controller;
 
+import com.recursoshumanos.Model.DAO.EmpleadoSucursalDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoReservaDAO;
+import com.recursoshumanos.Model.DAO.HorarioLaboralDAO;
+import com.recursoshumanos.Model.DAO.EmpleadoPuestoDAO;
+import com.recursoshumanos.Model.DAO.PuestoLaboralDAO;
 import com.recursoshumanos.Model.DAO.CargaFamiliarDAO;
 import com.recursoshumanos.Model.DAO.EmpleadoDAO;
-import com.recursoshumanos.Model.DAO.EmpleadoPuestoDAO;
-import com.recursoshumanos.Model.DAO.EmpleadoReservaDAO;
-import com.recursoshumanos.Model.DAO.EmpleadoSucursalDAO;
+import com.recursoshumanos.Model.DAO.SucursalDAO;
+import com.recursoshumanos.Model.DAO.PersonaDAO;
 import com.recursoshumanos.Model.DAO.SueldoDAO;
-import com.recursoshumanos.Model.Entidad.CargaFamiliar;
-import com.recursoshumanos.Model.Entidad.Empleado;
-import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
-import com.recursoshumanos.Model.Entidad.EmpleadoReserva;
 import com.recursoshumanos.Model.Entidad.EmpleadoSucursal;
+import com.recursoshumanos.Model.Entidad.EmpleadoReserva;
+import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
+import com.recursoshumanos.Model.Entidad.HorarioLaboral;
+import com.recursoshumanos.Model.Entidad.CargaFamiliar;
+import com.recursoshumanos.Model.Entidad.PuestoLaboral;
+import com.recursoshumanos.Model.Entidad.Sucursal;
+import com.recursoshumanos.Model.Entidad.Empleado;
+import com.recursoshumanos.Model.Entidad.Persona;
 import com.recursoshumanos.Model.Entidad.Sueldo;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.StreamedContent;
-import org.primefaces.model.file.UploadedFile;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -46,42 +45,71 @@ import org.primefaces.model.file.UploadedFile;
 @ViewScoped
 public class EmpleadoController implements Serializable {
 
-    private StreamedContent file;
-    private Empleado empleado;
-    private String resumeReserva;
-
-    @Inject
-    private EmpleadoSucursalDAO empleadoSucursalDAO;
+    private final EmpleadoSucursalDAO empleadoSucursalDAO;
+    private final EmpleadoReservaDAO empleadoReservaDAO;
+    private final HorarioLaboralDAO horarioLaboralDAO;
+    private final EmpleadoPuestoDAO empleadoPuestoDAO;
+    private final PuestoLaboralDAO puestoLaboralDAO;
+    private final CargaFamiliarDAO cargaFamiliarDAO;
+    private final SucursalDAO sucursalDAO;
+    private final EmpleadoDAO empleadoDAO;
+    private final PersonaDAO personaDAO;
+    private final SueldoDAO sueldoDAO;
+    
     private EmpleadoSucursal empleadoSucursal;
-
-    @Inject
-    private EmpleadoReservaDAO empleadoReservaDAO;
     private EmpleadoReserva empleadoReserva;
-
-    @Inject
-    private EmpleadoPuestoDAO empleadoPuestoDAO;
     private EmpleadoPuesto empleadoPuesto;
-
-    @Inject
-    private CargaFamiliarDAO cargaFamiliarDAO;
     private CargaFamiliar cargaFamiliar;
-
-    @Inject
-    private SueldoDAO sueldoDAO;
+    private Empleado empleado;
+    private Persona persona;
     private Sueldo sueldo;
+    
+    private List<HorarioLaboral> horarios;
+    private List<PuestoLaboral> puestos;
+    private List<Sucursal> sucursales;
+    private List<Empleado> lista;
+    
+    private String resumeReserva;
+    private boolean saltar, newPersona, familia;
 
     public EmpleadoController() {
-        empleado = new Empleado();
-        empleadoPuesto = new EmpleadoPuesto();
+        empleadoSucursalDAO = new EmpleadoSucursalDAO();
+        empleadoReservaDAO = new EmpleadoReservaDAO();
+        empleadoPuestoDAO = new EmpleadoPuestoDAO();
+        horarioLaboralDAO = new HorarioLaboralDAO();
+        puestoLaboralDAO = new PuestoLaboralDAO();
+        cargaFamiliarDAO = new CargaFamiliarDAO();
+        sucursalDAO = new SucursalDAO();
+        empleadoDAO = new EmpleadoDAO();
+        personaDAO = new PersonaDAO();
+        sueldoDAO = new SueldoDAO();
+        
         empleadoSucursal = new EmpleadoSucursal();
         empleadoReserva = new EmpleadoReserva();
+        empleadoPuesto = new EmpleadoPuesto();
         cargaFamiliar = new CargaFamiliar();
+        empleado = new Empleado();
+        
+        sueldo = new Sueldo();
+        lista = new ArrayList<>();
+        puestos = new ArrayList<>();
+        horarios = new ArrayList<>();
+        sucursales = new ArrayList<>();
+        
+        
+        empleado = new Empleado();
+        persona = new Persona();
+        empleadoSucursal = new EmpleadoSucursal();
+        empleadoPuesto = new EmpleadoPuesto();
         sueldo = new Sueldo();
     }
+    
+    public void postLista(){
+        lista = empleadoDAO.Listar();
+    }
 
-    public void postLoad(int idEmpleado) {
+    public void postEmpleado(int idEmpleado) {
         if (idEmpleado > 0) {
-            EmpleadoDAO empleadoDAO = new EmpleadoDAO();
             empleado = empleadoDAO.buscarPorId(idEmpleado);
             empleadoSucursal = empleadoSucursalDAO.buscar(empleado);
             empleadoReserva = empleadoReservaDAO.buscar(empleado);
@@ -92,6 +120,25 @@ public class EmpleadoController implements Serializable {
             PrimeFaces.current().ajax().update(null, "form:dt-empleado");
         }
     }
+    
+    public void postNuevoEmpleado(){
+        empleadoDAO.setConexion(personaDAO.obtenerConexion());
+        empleadoPuestoDAO.setConexion(personaDAO.obtenerConexion());
+        empleadoPuestoDAO.setConexion(personaDAO.obtenerConexion());
+        empleadoSucursalDAO.setConexion(personaDAO.obtenerConexion());
+        sueldoDAO.setConexion(personaDAO.obtenerConexion());
+        puestos = puestoLaboralDAO.Activos();
+        horarios = horarioLaboralDAO.Activos();
+        sucursales = sucursalDAO.Listar();
+    }
+    
+    public void postEditarEmpleado(int idEmpleado){
+        empleadoDAO.setConexion(personaDAO.obtenerConexion());
+        if(idEmpleado > 0) {
+            empleado = empleadoDAO.buscarPorId(idEmpleado);
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
+        }
+    }
 
     public EmpleadoSucursal getEmpleadoSucursal() {
         return empleadoSucursal;
@@ -99,6 +146,14 @@ public class EmpleadoController implements Serializable {
 
     public void setEmpleadoSucursal(EmpleadoSucursal empleadoSucursal) {
         this.empleadoSucursal = empleadoSucursal;
+    }
+
+    public EmpleadoReserva getEmpleadoReserva() {
+        return empleadoReserva;
+    }
+
+    public void setEmpleadoReserva(EmpleadoReserva empleadoReserva) {
+        this.empleadoReserva = empleadoReserva;
     }
 
     public EmpleadoPuesto getEmpleadoPuesto() {
@@ -117,6 +172,62 @@ public class EmpleadoController implements Serializable {
         this.cargaFamiliar = cargaFamiliar;
     }
 
+    public List<HorarioLaboral> getHorarios() {
+        return horarios;
+    }
+
+    public void setHorarios(List<HorarioLaboral> horarios) {
+        this.horarios = horarios;
+    }
+
+    public List<Sucursal> getSucursales() {
+        return sucursales;
+    }
+
+    public void setSucursales(List<Sucursal> sucursales) {
+        this.sucursales = sucursales;
+    }
+
+    public List<PuestoLaboral> getPuestos() {
+        return puestos;
+    }
+
+    public void setPuestos(List<PuestoLaboral> puestos) {
+        this.puestos = puestos;
+    }
+
+    public List<Empleado> getLista() {
+        return lista;
+    }
+
+    public void setLista(List<Empleado> empleados) {
+        lista = empleados;
+    }
+
+    public String getResumenReserva() {
+        return resumeReserva;
+    }
+
+    public String onFlowProcess(FlowEvent event) {
+        return event.getNewStep();
+    }
+
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
     public Sueldo getSueldo() {
         return sueldo;
     }
@@ -125,36 +236,16 @@ public class EmpleadoController implements Serializable {
         this.sueldo = sueldo;
     }
 
-    public EmpleadoReserva getEmpleadoReserva() {
-        return empleadoReserva;
-    }
-
-    public void setEmpleadoReserva(EmpleadoReserva empleadoReserva) {
-        this.empleadoReserva = empleadoReserva;
-    }
-
-    public StreamedContent getFile() {
-        return file;
-    }
-
-    public void setFile(StreamedContent file) {
-        this.file = file;
-    }
-
     public List<Sueldo> historialSueldo() {
         return sueldoDAO.historial(empleado);
     }
     
     private void resumenReserva(){
-            if (empleadoReserva.getFormaPago() != 0) {
-                resumeReserva = "$ " + (empleadoReserva.getFormaPago() * sueldo.getValor()) + " (" + (empleadoReserva.getFormaPago() == 1 ? "ANUAL" : "MENSUAL") + ")";
-            } else {
-                resumeReserva = "S/D";
-            }
-    }
-
-    public String getResumenReserva() {
-        return resumeReserva;
+        if (empleadoReserva.getFormaPago() != 0) {
+            resumeReserva = "$ " + (empleadoReserva.getFormaPago() * sueldo.getValor()) + " (" + (empleadoReserva.getFormaPago() == 1 ? "ANUAL" : "MENSUAL") + ")";
+        } else {
+            resumeReserva = "S/D";
+        }
     }
 
     public void cambiarSueldo() {
@@ -170,34 +261,101 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
 
-    public String getPathSistem() {
-        try {
-            ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-            return ctx.getRealPath("/");
-        } catch (Exception e) {
-            mostrarMensajeError("getPath() " + e.getLocalizedMessage());
+    public String guardar() {
+        String mensaje = "";
+        boolean result = false;
+        personaDAO.setPersona(persona);
+        if (personaDAO.insertar() > 0) {
+            persona.setId(personaDAO.getPersona().getId());
+            empleado.setPersona(persona);
+            empleadoDAO.setEmpleado(empleado);
+            if (empleadoDAO.insertar() > 0) {
+                empleado.setId(empleadoDAO.getEmpleado().getId());
+                empleadoPuesto.setEmpleado(empleado);
+                empleadoPuestoDAO.setEmpleadoPuesto(empleadoPuesto);
+                if (empleadoPuestoDAO.insertar() > 0) {
+                    empleadoPuesto.setId(empleadoPuestoDAO.getEmpleadoPuesto().getId());
+                    empleadoSucursal.setEmpleado(empleado);
+                    empleadoSucursalDAO.setEmpleadoSucursal(empleadoSucursal);
+                    if (empleadoSucursalDAO.insertar() > 0) {
+                        empleadoSucursal.setId(empleadoSucursalDAO.getEmpleadoSucursal().getId());
+                        sueldo.setEmpleado(empleado);
+                        sueldoDAO.setSueldo(sueldo);
+                        if (sueldoDAO.insertar() > 0) {
+                            sueldo.setId(sueldoDAO.getSueldo().getId());
+                            result = true;
+                        } else {
+                            mensaje = "El sueldo no se pudo asignar";
+                        }
+                    } else {
+                        mensaje = "La sucursal no se pudo asignar";
+                    }
+                } else {
+                    mensaje = "El puesto no se pudo asignar";
+                }
+            } else {
+                mensaje = "El empleado no se pudo guardar";
+            }
+        } else {
+            mensaje = "La persona no se pudo guardar";
         }
-        return "";
+        if (result) {
+            mostrarMensajeInformacion("Datos guardados correctamente");
+            return "Empleado";
+        } else {
+            mostrarMensajeError(mensaje);
+            return "";
+        }
+    }
+
+    public String actualizar() {
+        String mensaje = "";
+        boolean result = false;
+            empleadoDAO.setEmpleado(empleado);
+            personaDAO.setPersona(empleado.getPersona());
+            if (personaDAO.actualizar() > 0) {
+                empleadoDAO.setEmpleado(empleado);
+                if (empleadoDAO.actualizar() > 0) {
+                    result = true;
+                } else {
+                    mensaje = "El empleado no se pudo actualizar";
+                }
+            } else {
+                mensaje = "La persona no se pudo actualizar";
+            }
+        if (result) {
+            mostrarMensajeInformacion("Datos actualizados correctamente");
+            return "Empleado";
+        } else {
+            mostrarMensajeError(mensaje);
+            return "";
+        }
     }
 
     public void guardarCargaFamiliar() {
-            cargaFamiliarDAO.setCargaFamiliar(cargaFamiliar);
-            if (cargaFamiliar.getId() < 1) {
-                if (cargaFamiliarDAO.insertar() > 0) {
-                    cargaFamiliar.setId(cargaFamiliarDAO.getCargaFamiliar().getId());
-                    mostrarMensajeInformacion("Los datos de la carga familiar se ha guardado con éxito");
-                } else {
-                    mostrarMensajeError("Los datos de la carga familiar se pudieron guardar");
-                }
+        cargaFamiliarDAO.setCargaFamiliar(cargaFamiliar);
+        if (cargaFamiliar.getId() < 1) {
+            if (cargaFamiliarDAO.insertar() > 0) {
+                cargaFamiliar.setId(cargaFamiliarDAO.getCargaFamiliar().getId());
+                mostrarMensajeInformacion("Los datos de la carga familiar se ha guardado con éxito");
             } else {
-                if (cargaFamiliarDAO.actualizar() > 0) {
-                    mostrarMensajeInformacion("Los datos de la carga familiar se ha actualizado con éxito");
-                } else {
-                    mostrarMensajeError("Los datos de la carga familiar se pudieron actualizar");
-                }
+                mostrarMensajeError("Los datos de la carga familiar se pudieron guardar");
             }
+        } else {
+            if (cargaFamiliarDAO.actualizar() > 0) {
+                mostrarMensajeInformacion("Los datos de la carga familiar se ha actualizado con éxito");
+            } else {
+                mostrarMensajeError("Los datos de la carga familiar se pudieron actualizar");
+            }
+        }
         PrimeFaces.current().executeScript("PF('manageCargaFamiliarDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
+    }
+    
+    public void cambiarEstado(Empleado empleado){
+        empleadoDAO.setEmpleado(empleado);
+        empleadoDAO.cambiarEstado();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-empleados");
     }
 
     public void guardarReserva() {
