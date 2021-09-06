@@ -9,7 +9,7 @@
     <ui:define name="content">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{empleadoEditarView.postLoad(personaBean.idEmpleado)}" />
+                <f:event type="preRenderView" listener="#{empleadoView.postEditarEmpleado(personaBean.idEmpleado)}" />
             </f:metadata>
         </h:head>
         <div class="card">
@@ -32,7 +32,7 @@
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
                             <h:outputLabel for="tipoI" value="Tipo de identificación: "/>
-                            <p:selectOneMenu id="tipoI" value="#{empleadoEditarView.empleado.persona.tipoIdentificacion}" required="true" label="Tipo Identificación">
+                            <p:selectOneMenu id="tipoI" value="#{empleadoView.empleado.persona.tipoIdentificacion}" required="true" label="Tipo Identificación">
                                 <f:selectItem itemLabel="Selecione el tipo" itemValue="" noSelectionOption="true"/>
                                 <f:selectItem itemLabel="RUC" itemValue="RUC"/>
                                 <f:selectItem itemLabel="CEDULA" itemValue="CEDULA"/>
@@ -42,40 +42,40 @@
                             </p:selectOneMenu>
 
                             <h:outputLabel style="margin-left: 10PX" for="identi" value="Identificación: "/>
-                            <p:inputText id="identi" value="#{empleadoEditarView.empleado.persona.identificacion}" required="true"
+                            <p:inputText id="identi" value="#{empleadoView.empleado.persona.identificacion}" required="true"
                                          label="Identificación" maxlength="15">
                                 <f:validateRegex pattern="^([0-9])*$"/>
                             </p:inputText>
 
                             <h:outputText value="Primer nombre: "/>
-                            <p:inputText value="#{empleadoEditarView.empleado.nombre1}" required="true" label="Primer nombre"/>
+                            <p:inputText value="#{empleadoView.empleado.nombre1}" required="true" label="Primer nombre"/>
 
                             <h:outputText style="margin-left: 10PX" value="Segundo nombre: "/>
-                            <p:inputText value="#{empleadoEditarView.empleado.nombre2}" required="true" label="Segundo nombre"/>
+                            <p:inputText value="#{empleadoView.empleado.nombre2}" required="true" label="Segundo nombre"/>
 
                             <h:outputText value="Primer apellido: "/>
-                            <p:inputText value="#{empleadoEditarView.empleado.apellido1}" required="true" label="Primer apellido"/>
+                            <p:inputText value="#{empleadoView.empleado.apellido1}" required="true" label="Primer apellido"/>
 
                             <h:outputText style="margin-left: 10PX" value="Segundo apellido: "/>
-                            <p:inputText value="#{empleadoEditarView.empleado.apellido2}" required="true" label="Segundo apellido"/>
+                            <p:inputText value="#{empleadoView.empleado.apellido2}" required="true" label="Segundo apellido"/>
 
                             <h:outputLabel for="phone1" value="Teléfono #1: "/>
-                            <p:inputMask id="phone1" value="#{empleadoEditarView.empleado.persona.telefono1}" required="true"
+                            <p:inputMask id="phone1" value="#{empleadoView.empleado.persona.telefono1}" required="true"
                                          mask="(999) 999-9999[ x99999]"/>
 
                             <h:outputLabel style="margin-left: 10PX" for="phone2" value="Teléfono #2: "/>
-                            <p:inputMask id="phone2" value="#{empleadoEditarView.empleado.persona.telefono2}" mask="(999) 999-9999"/>
+                            <p:inputMask id="phone2" value="#{empleadoView.empleado.persona.telefono2}" mask="(999) 999-9999"/>
 
                             <h:outputText value="Fecha de nacimiento: "/>
-                            <p:datePicker id="fechaN" value="#{empleadoEditarView.empleado.fechaNacimiento}" 
+                            <p:datePicker id="fechaN" value="#{empleadoView.empleado.fechaNacimiento}" 
                                           monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
                                           required="true" label="Fecha de nacimiento"/>
 
                             <h:outputText style="margin-left: 10PX" value="Género: "/>
-                            <p:inputText value="#{empleadoEditarView.empleado.genero}" required="true" label="Género"/>
+                            <p:inputText value="#{empleadoView.empleado.genero}" required="true" label="Género"/>
 
                             <h:outputText value="sexo: "/>
-                            <p:selectOneRadio id="sexo" value="#{empleadoEditarView.empleado.sexo}" required="true" label="Sexo">
+                            <p:selectOneRadio id="sexo" value="#{empleadoView.empleado.sexo}" required="true" label="Sexo">
                                 <f:selectItem itemLabel="Maculino" itemValue="Maculino"/>
                                 <f:selectItem itemLabel="Femenino" itemValue="Femenino"/>
                                 <f:selectItem itemLabel="Otro" itemValue="Otro"/>
@@ -86,17 +86,17 @@
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
                             <h:outputLabel for="email" value="Correo: "/>
-                            <p:inputText id="email" value="#{empleadoEditarView.empleado.persona.correo}" required="true"
+                            <p:inputText id="email" value="#{empleadoView.empleado.persona.correo}" required="true"
                                          label="Correo" validatorMessage="Correo no válido"> 
                                 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
 
                             <h:outputText value="Dirección: "/>
-                            <p:inputTextarea id="direc" value="#{empleadoEditarView.empleado.persona.direccion}" 
+                            <p:inputTextarea id="direc" value="#{empleadoView.empleado.persona.direccion}" 
                                              required="true" label="Dirección"/>
 
                             <h:outputText value="Detalle(observacion): "/>
-                            <p:inputTextarea id="detalle" value="#{empleadoEditarView.empleado.detalle}"/>
+                            <p:inputTextarea id="detalle" value="#{empleadoView.empleado.detalle}"/>
                         </h:panelGrid>
                     </p:panel>
 
@@ -104,10 +104,10 @@
                         <p:toolbarGroup>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoEditarView.actualizar}"
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoView.actualizar}"
                                              update="dt-empleado" styleClass="p-mr-2 ui-button-success"
                                              process="dt-empleado @this">
-                                <f:setPropertyActionListener value="#{empleadoEditarView.empleado.id}" target="#{personaBean.idEmpleado}"/>
+                                <f:setPropertyActionListener value="#{empleadoView.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>

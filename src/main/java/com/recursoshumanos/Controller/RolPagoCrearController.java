@@ -40,13 +40,11 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class RolPagoCrearController implements Serializable {
 
-    @Inject
-    private RolPagosDAO rolPagosDAO;
+    private final DetalleRolPagoDAO detalleRolPagoDAO;
+    private final RolPagosDAO rolPagosDAO;
     private RolPagos rolPagos;
     private Empleado empleado;
-    @Inject
-    private DetalleRolPagoDAO detalleRolPagoDAO;
-
+    
     private Amonestacion amonestacion;
     private Sueldo sueldo;
     private EmpleadoReserva empleadoReserva;
@@ -58,6 +56,8 @@ public class RolPagoCrearController implements Serializable {
     private Date fechaPago;
 
     public RolPagoCrearController() {
+        detalleRolPagoDAO = new DetalleRolPagoDAO();
+        rolPagosDAO = new RolPagosDAO();
         rolPagos = new RolPagos();
         sueldo = new Sueldo();
         empleadoReserva = new EmpleadoReserva();

@@ -28,7 +28,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.math3.util.Precision;
 import org.primefaces.PrimeFaces;
@@ -41,8 +40,7 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class RolDePagoController implements Serializable{
     
-    @Inject
-    private DetalleRolPagoDAO detalleRolPagoDAO;
+    private final DetalleRolPagoDAO detalleRolPagoDAO;
     
     private EmpleadoReserva empleadoReserva;
     private List<DetalleRolPago> detalles;
@@ -56,6 +54,7 @@ public class RolDePagoController implements Serializable{
     private int horasLaboradas, horasSuplementarias;
 
     public RolDePagoController() {
+        detalleRolPagoDAO = new DetalleRolPagoDAO();
         rolPagos = new RolPagos();
         sueldo = new Sueldo();
         empleadoReserva = new EmpleadoReserva();

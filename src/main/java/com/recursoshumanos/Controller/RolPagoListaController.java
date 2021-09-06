@@ -28,17 +28,16 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class RolPagoListaController implements Serializable {
     
+    private final RolPagosDAO rolPagosDAO;
+    private final EmpleadoDAO empleadoDAO;
     private List<Empleado> empleados;
+    private List<RolPagos> pagos;
     private Empleado empleado;
     private int idEmpleado;
-    @Inject
-    private EmpleadoDAO empleadoDAO;
-    
-    private List<RolPagos> pagos;
-    @Inject
-    private RolPagosDAO rolPagosDAO;
-
+        
     public RolPagoListaController() {
+        rolPagosDAO = new RolPagosDAO();
+        empleadoDAO = new EmpleadoDAO();
         empleado = new Empleado();
         empleados = new ArrayList<>();
         pagos = new ArrayList<>();

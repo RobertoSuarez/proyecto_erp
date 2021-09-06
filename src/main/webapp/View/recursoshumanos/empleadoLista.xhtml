@@ -7,6 +7,11 @@
                 template="/Plantilla/Plantilla.xhtml">
 
     <ui:define name="content" class="Contenido">
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{empleadoView.postLista()}" />
+            </f:metadata>
+        </h:head>
         <h:form id="form" style="width: 105%; margin-left: -23px;">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
@@ -20,7 +25,7 @@
                                           styleClass="ui-button-success" style="margin-right: .5rem"/>
                         </p:toolbarGroup>
                     </p:toolbar>
-                    <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" var="empleado" value="#{empleadoListaView.lista}"
+                    <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" var="empleado" value="#{empleadoView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="empleados-table"
                                  rowKey="#{empleado.id}" paginator="true"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom">
@@ -39,11 +44,11 @@
                         </p:column>
                         <p:column headerText="Ingreso" width="9%" filterMatchMode="range"
                                   sortBy="#{empleado.fechaIngreso}">
-                            <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaIngreso)}"/>
+                            <h:outputText value="#{empleadoView.darFormato(empleado.fechaIngreso)}"/>
                         </p:column>
                         <p:column headerText="Salida" width="9%"
                                   sortBy="#{empleado.fechaEgreso}">
-                            <h:outputText value="#{empleadoListaView.darFormato(empleado.fechaEgreso)}"/>
+                            <h:outputText value="#{empleadoView.darFormato(empleado.fechaEgreso)}"/>
                         </p:column>
                         <p:column headerText="Estado" width="12%" field="estado" filterBy="#{empleado.persona.estado}"
                                   filterMatchMode="exact">
@@ -63,7 +68,7 @@
                             </p:commandButton>
                             <p:commandButton icon="pi pi-#{empleado.persona.estado? 'times' : 'check'}"
                                              styleClass="edit-button rounded-button ui-button-success" 
-                                             actionListener="#{empleadoListaView.cambiarEstado(empleado)}"
+                                             actionListener="#{empleadoView.cambiarEstado(empleado)}"
                                              update="dt-empleados" process="dt-empleados @this">
                                 <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>
                             </p:commandButton>
