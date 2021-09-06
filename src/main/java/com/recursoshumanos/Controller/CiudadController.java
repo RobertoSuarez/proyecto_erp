@@ -16,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -28,12 +27,10 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class CiudadController implements Serializable {
 
-    @Inject
-    private CiudadDAO ciudadDAO;
+    private final CiudadDAO ciudadDAO;
     private List<Ciudad> ciudades;
     private Ciudad ciudad;
-    @Inject
-    private ProvinciaDAO provinciaDAO;
+    private final ProvinciaDAO provinciaDAO;
     private List<Provincia> provincias;
     private List<Provincia> filtroProvincias;
     
@@ -42,7 +39,9 @@ public class CiudadController implements Serializable {
     public CiudadController() {
         ciudad = new Ciudad();
         ciudades = new ArrayList<>();
+        ciudadDAO = new CiudadDAO();
         provincias = new ArrayList<>();
+        provinciaDAO = new ProvinciaDAO();
         filtroProvincias = new ArrayList<>();
     }
 

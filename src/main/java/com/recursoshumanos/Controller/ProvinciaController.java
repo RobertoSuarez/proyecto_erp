@@ -14,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -25,13 +24,14 @@ import org.primefaces.PrimeFaces;
 @Named(value = "provinciaView")
 @ViewScoped
 public class ProvinciaController implements Serializable {
-    @Inject
-    private ProvinciaDAO provinciaDAO;
+    
+    private final ProvinciaDAO provinciaDAO;
     private Provincia provincia;
     private List<Provincia> provincias;
     private List<Provincia> filteredProvincia;
 
     public ProvinciaController() {
+        provinciaDAO = new ProvinciaDAO();
         provincia = new Provincia();
         provincias = new ArrayList<>();
         filteredProvincia = new ArrayList<>();

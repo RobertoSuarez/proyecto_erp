@@ -27,7 +27,7 @@ import org.primefaces.event.RowEditEvent;
 public class CargoControlller implements Serializable {
 
     private Cargo cargo;
-    private CargoDAO cargoDAO;
+    private final CargoDAO cargoDAO;
     private List<Cargo> lista;
 
     public CargoControlller() {

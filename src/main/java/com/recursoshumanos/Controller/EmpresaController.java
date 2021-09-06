@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -32,6 +31,11 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class EmpresaController implements Serializable {
 
+    private final ProvinciaDAO provinciaDAO;
+    private final SucursalDAO sucursalDAO;
+    private final EmpresaDAO empresaDAO;
+    private final CiudadDAO ciudadDAO;
+
     private Empresa empresa;
     private Sucursal sucursal;
     private List<Sucursal> sucursales;
@@ -39,19 +43,11 @@ public class EmpresaController implements Serializable {
     private List<Ciudad> ciudades;
     private int idCiudad, idProvincia;
 
-    @Inject
-    private EmpresaDAO empresaDAO;
-
-    @Inject
-    private SucursalDAO sucursalDAO;
-
-    @Inject
-    private ProvinciaDAO provinciaDAO;
-
-    @Inject
-    private CiudadDAO ciudadDAO;
-
     public EmpresaController() {
+        provinciaDAO = new ProvinciaDAO();
+        sucursalDAO = new SucursalDAO();
+        empresaDAO = new EmpresaDAO();
+        ciudadDAO = new CiudadDAO();
         sucursales = new ArrayList<>();
         provincias = new ArrayList<>();
         ciudades = new ArrayList<>();

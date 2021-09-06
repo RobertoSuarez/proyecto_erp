@@ -11,7 +11,6 @@ import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
@@ -25,8 +24,11 @@ public class PersonaController implements Serializable {
 
     private Persona persona;
 
-    @Inject
-    private PersonaDAO personaDAO;
+    private final PersonaDAO personaDAO;
+
+    public PersonaController() {
+        personaDAO = new PersonaDAO();
+    }
 
     public Persona getPersona() {
         return persona;

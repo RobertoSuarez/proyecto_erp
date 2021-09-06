@@ -21,7 +21,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import javax.enterprise.context.SessionScoped;
@@ -34,6 +33,12 @@ import javax.enterprise.context.SessionScoped;
 @SessionScoped
 public class HorarioLaboralController implements Serializable {
 
+    private final IngresosSalidasDAO ingresosSalidasDAO;
+    private final HorarioLaboralDAO horarioLaboralDAO;
+    private final DetalleHorarioDAO detalleHorarioDAO;
+    private final DiaSemanaDAO diaSemanaDAO;
+    private final String INICIO = "HorarioLaboral";
+
     private HorarioLaboral horarioLaboral;
     private DetalleHorario detalleHorario;
     private List<HorarioLaboral> lista;
@@ -41,26 +46,17 @@ public class HorarioLaboralController implements Serializable {
     private List<DiaSemana> dias;
     private List<IngresosSalidas> horas;
     private int idDia, idIngresoSalida;
-    private final String INICIO = "HorarioLaboral";
-
-    @Inject
-    private HorarioLaboralDAO horarioLaboralDAO;
-
-    @Inject
-    private DetalleHorarioDAO detalleHorarioDAO;
-
-    @Inject
-    private IngresosSalidasDAO ingresosSalidasDAO;
-
-    @Inject
-    private DiaSemanaDAO diaSemanaDAO;
 
     public HorarioLaboralController() {
-        lista = new ArrayList<>();
+        ingresosSalidasDAO = new IngresosSalidasDAO();
+        horarioLaboralDAO = new HorarioLaboralDAO();
+        detalleHorarioDAO = new DetalleHorarioDAO();
+        diaSemanaDAO = new DiaSemanaDAO();
         horarioLaboral = new HorarioLaboral();
-        horarios = new ArrayList<>();
         dias = new ArrayList<>();
         horas = new ArrayList<>();
+        lista = new ArrayList<>();
+        horarios = new ArrayList<>();
     }
 
     @PostConstruct
