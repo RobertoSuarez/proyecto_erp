@@ -15,11 +15,12 @@ import com.cuentasporpagar.models.Condiciones;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-
 
 @ManagedBean(name = "proveedorDAO")
 @ViewScoped
@@ -138,40 +139,124 @@ public class ProveedorManageBean implements Serializable {
 
      //editamos un proveedor con sus condiciones
      public void editar() {
-          try {
-               //ejecutamos el metodo update del proveedor con sus paramtros 
-               this.proveedorDAO.update(proveedor, proveedor.getIdProveedor());
-               this.condiciones.setProveedor(this.proveedor);
-                //ejecutamos el metodo update de las condiciones con sus paramtros 
-               this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
-               //mostramos un msj de guardado
-               FacesContext.getCurrentInstance().
-                       addMessage(null, new FacesMessage("Proveedor Guardado"));
+          Pattern pattern = Pattern
+                  .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                          + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
+          Matcher mather = pattern.matcher(proveedor.getEmail());
+          try {
+               if ("".equals(proveedor.getNombre())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un nombre"));
+               } else if ("".equals(proveedor.getRazonSocial())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una razón social"));
+
+               } else if ("".equals(proveedor.getTelefono())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un teléfono"));
+
+               } else if ("".equals(proveedor.getEmail())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un email"));
+
+               } else if (mather.find() == false) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un email válido"));
+               } else if ("".equals(proveedor.getRuc())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Ruc"));
+               } else if (proveedor.getRuc().length() < 13) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ruc incompleto"));
+                    PrimeFaces.current().ajax().update("form:messages");
+               } else if (proveedor.getTelefono().length() < 10) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Teléfono incompleto"));
+                    PrimeFaces.current().ajax().update("form:messages");
+               } else if ("".equals(condiciones.getDiasNeto())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día neto"));
+
+               } else if ("".equals(condiciones.getDescuento())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un descuento"));
+
+               } else if ("".equals(condiciones.getDiasDescuento())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día descuento"));
+
+               } else if ("".equals(condiciones.getCantDiasVencidos())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una cantidad de días vencidos"));
+
+               } else if ("".equals(condiciones.getDescripcion())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una descripción"));
+
+               } else {
+
+                    //ejecutamos el metodo update del proveedor con sus paramtros 
+                    this.proveedorDAO.update(proveedor, proveedor.getIdProveedor());
+                    this.condiciones.setProveedor(this.proveedor);
+                    //ejecutamos el metodo update de las condiciones con sus paramtros 
+                    this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
+                    //mostramos un msj de guardado
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proveedor Guardado"));
+               }
           } catch (SQLException e) {
                //ocurre un erro se muestra un msj de error
                FacesContext.getCurrentInstance().
-                       addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", 
+                       addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                                "Error al guardar"));
 
           }
           PrimeFaces.current().executeScript("PF('manageProductDialogEdit').hide()");
-          PrimeFaces.current().executeScript("location.reload()");
-
+          PrimeFaces.current().ajax().update("form:dt-products", "form:messages");
      }
 
      //Insertamos un proveedor
      public void insertar() {
-          try {
-               //mandamos el metodo insertar un proveedor
-               this.proveedorDAO.insertarp(proveedor);
-               //mandamos a insertar las condiciones
-               condicionesDAO.insertarCondiciones(condiciones);
-               //msj
-               FacesContext.getCurrentInstance().
-                       addMessage(null,
-                               new FacesMessage("Proveedor Agregado"));
+          Pattern pattern = Pattern
+                  .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                          + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
+          Matcher mather = pattern.matcher(proveedor.getEmail());
+
+          try {
+              if ("".equals(proveedor.getNombre())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un nombre"));
+               } else if ("".equals(proveedor.getRazonSocial())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una razón social"));
+
+               } else if ("".equals(proveedor.getTelefono())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un teléfono"));
+
+               } else if ("".equals(proveedor.getEmail())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un email"));
+
+               } else if (mather.find() == false) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un email válido"));
+               } else if ("".equals(proveedor.getRuc())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Ruc"));
+               } else if (proveedor.getRuc().length() < 13) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ruc incompleto"));
+                    PrimeFaces.current().ajax().update("form:messages");
+               } else if (proveedor.getTelefono().length() < 10) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Teléfono incompleto"));
+                    PrimeFaces.current().ajax().update("form:messages");
+               } else if ("".equals(condiciones.getDiasNeto())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día neto"));
+
+               } else if ("".equals(condiciones.getDescuento())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un descuento"));
+
+               } else if ("".equals(condiciones.getDiasDescuento())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día descuento"));
+
+               } else if ("".equals(condiciones.getCantDiasVencidos())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una cantidad de días vencidos"));
+
+               } else if ("".equals(condiciones.getDescripcion())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una descripción"));
+
+               } else {
+                    //mandamos el metodo insertar un proveedor
+                    this.proveedorDAO.insertarp(proveedor);
+                    //mandamos a insertar las condiciones
+                    condicionesDAO.insertarCondiciones(condiciones);
+                    //msj
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proveedor Agregado"));
+               }
           } catch (Exception e) {
                //msj
                FacesContext.getCurrentInstance().
@@ -180,8 +265,6 @@ public class ProveedorManageBean implements Serializable {
 
           }
           PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
-          PrimeFaces.current().executeScript("location.reload()");
-
      }
 
      public List<Proveedor> getListaProveedor() {
@@ -202,7 +285,7 @@ public class ProveedorManageBean implements Serializable {
           //obtencion de datos segun el proveedor
           String msg2 = event.getObject().getNombre();
           String msg3 = event.getObject().getCodigo();
-         //envio de los nuevos datos 
+          //envio de los nuevos datos 
           setNom(msg2);
           setCod(msg3);
      }

@@ -125,7 +125,7 @@ public final class CondicionesManageBean implements Serializable {
                //dichos parámetros son necesarios para la connsulta sql
 
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), false);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Deshabilitado proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:","Deshabilitado proveedor: " + proveedor.getNombre()));
 
                //limpiamos la lista
                listaCondiciones.clear();
@@ -137,7 +137,7 @@ public final class CondicionesManageBean implements Serializable {
                //nombre del proveedor junto con un parametro false, 
                //dichos parámetros son necesarios para la connsulta sql
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), true);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Habilitado proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:","Habilitado proveedor: " + proveedor.getNombre()));
 
                //se limpia  la lista
                listaCondiciones.clear();
@@ -181,6 +181,7 @@ public final class CondicionesManageBean implements Serializable {
                setIc("pi pi-trash");
 
           } else {
+               
                //si el check es falso...
                //llenamos la tabla segun nuestra consulta en este caso los deshabilitados
                this.listaCondiciones = condicionesDAO.llenarP(false);
@@ -190,6 +191,7 @@ public final class CondicionesManageBean implements Serializable {
                setCl("ui-button-primary rounded-button");
                //asignamos el icono al btn
                setIc("pi pi-check");
+              
           }
           PrimeFaces.current().ajax().update("form:dt-products");
      }

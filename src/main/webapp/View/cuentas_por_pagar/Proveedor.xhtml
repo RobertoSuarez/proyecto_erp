@@ -248,12 +248,10 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="nomProveedor"> 
-                                                       Nombre:
+                                                       Nombre:*
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="nomProveedor"
-                                                       required="true"
-                                                       requiredMessage="Ingrese un nombre"
                                                        maxlength="40"
                                                        value="#{proveedorDAO.proveedor.nombre}"/>
                                              </div>
@@ -261,7 +259,7 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="rucProveedor"> 
-                                                       Ruc:
+                                                       Ruc:*
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="rucProveedor"
@@ -313,12 +311,10 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="emailProveedor">
-                                                       Email: 
+                                                       Email: *
                                                   </p:outputLabel>
                                                   <p:inputText 
-                                                       id ="emailProveedor" 
-                                                       required="false" 
-                                                       onkeyup="/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/"
+                                                       id ="emailProveedor"                                                                                                           
                                                        maxlength="30"
                                                        value="#{proveedorDAO.proveedor.email}"/>
                                              </div>
@@ -329,27 +325,22 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="rsocialProveedor"> 
-                                                       Razón social: 
+                                                       Razón social: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="rsocialProveedor" 
-                                                       required="true" 
                                                        maxlength="40"
-                                                       requiredMessage="Ingrese una Razón Social"
                                                        value="#{proveedorDAO.proveedor.razonSocial}"/>
                                              </div>
                                              <!---Text teléfono proveedor-->
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="telProveedor">
-                                                       Telefono: 
+                                                       Telefono: *
                                                   </p:outputLabel>
                                                   <p:inputText 
-
                                                        id ="telProveedor" 
-                                                       required="true" 
                                                        maxlength="10"
-                                                       requiredMessage="Ingrese un Telefono"
                                                        value="#{proveedorDAO.proveedor.telefono}"/>
                                              </div>
                                         </div>
@@ -367,7 +358,7 @@
                                                        id ="descuento" 
                                                        value="#{proveedorDAO.condiciones.descuento}"
                                                        required="true"
-                                                       maxlength="2"/>
+                                                       maxlength="4"/>
                                              </div>
                                              <!---Text días neto proveedor-->
                                              <div class="p-field p-col">
@@ -436,13 +427,13 @@
                               </p:outputPanel>
                               <!---Botones guardar y cancelar proveedor-->
                               <f:facet name="footer">
-                                   <p:commandButton value="Guardar" icon="pi pi-check" 
+                                   <p:commandButton value="Guardar" 
                                                     styleClass="ui-button-success"
                                                     update="manage-product-content, messages"
                                                     process="manage-product-content @this"
                                                     actionListener="#{proveedorDAO.insertar()}"
                                                     onclick="PF('manageProductDialog').hide()"/>
-                                   <p:commandButton value="Cancelar" icon="pi pi-times"
+                                   <p:commandButton value="Cancelar" 
                                                     styleClass="ui-button-danger"
                                                     onclick="PF('manageProductDialog').hide()"                                                    
                                                     oncomplete="location.reload()"/>
@@ -465,8 +456,7 @@
                                                   <!---Text id proveedor-->
                                                   <p:inputText 
                                                        id ="idProveedor" 
-                                                       style="visibility: hidden" 
-                                                       required="True"
+                                                       style="visibility: hidden"
                                                        value="#{proveedorDAO.proveedor.idProveedor}"/>
                                                   <!---Text código proveedor-->
                                                   <p:outputLabel 
@@ -496,23 +486,21 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="nom_Proveedor"> 
-                                                       Nombre:
+                                                       Nombre: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="nom_Proveedor" 
-                                                       required="True"
-                                                       requiredMessage="Ingrese un nombre"
                                                        value="#{proveedorDAO.proveedor.nombre}" />
                                              </div>
                                              <!---Text ruc proveedor-->
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="ruc_Proveedor"> 
-                                                       Ruc:
+                                                       Ruc: *
                                                   </p:outputLabel>
                                                   <p:inputText
+                                                       maxlength="13"
                                                        id ="ruc_Proveedor" 
-                                                       required="True" 
                                                        value="#{proveedorDAO.proveedor.ruc}"/>
                                              </div>
                                         </div>
@@ -526,7 +514,6 @@
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="dir_Proveedor" 
-                                                       required="false" 
                                                        value="#{proveedorDAO.proveedor.direccion}"/>
                                              </div>
                                              <!---Text contacto proveedor-->
@@ -537,7 +524,6 @@
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="contac_Proveedor" 
-                                                       required="false" 
                                                        value="#{proveedorDAO.proveedor.contacto}"/>
                                              </div>
                                         </div>
@@ -551,18 +537,16 @@
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="web_Proveedor" 
-                                                       required="false" 
                                                        value="#{proveedorDAO.proveedor.webPage}"/>
                                              </div>
                                              <!---Text email proveedor-->
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="email_Proveedor">
-                                                       Email: 
+                                                       Email: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="email_Proveedor" 
-                                                       required="false" 
                                                        value="#{proveedorDAO.proveedor.email}"/>
                                              </div>
                                         </div>
@@ -572,24 +556,21 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="rsocial_Proveedor"> 
-                                                       Razón social: 
+                                                       Razón social: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="rsocial_Proveedor"
-                                                       required="true" 
-                                                       requiredMessage="Ingrese una Razón Social"
                                                        value="#{proveedorDAO.proveedor.razonSocial}"/>
                                              </div>
                                              <!---Text teléfono proveedor-->
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="tel_Proveedor"> 
-                                                       Telefono: 
+                                                       Telefono: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="tel_Proveedor"
-                                                       required="true" 
-                                                       requiredMessage="Ingrese un Teléfono"
+                                                       maxlength="10"
                                                        value="#{proveedorDAO.proveedor.telefono}"/>
                                              </div>
                                         </div>
@@ -602,20 +583,18 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="descuento_"> 
-                                                       Descuento: 
+                                                       Descuento: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="descuento_"
-                                                       value="#{proveedorDAO.condiciones.descuento}"
-                                                       required="true"
-                                                       requiredMessage="Ingrese un descuento"
-                                                       maxlength="3"/>
+                                                       value="#{proveedorDAO.condiciones.descuento}"                                                     
+                                                       maxlength="4"/>
                                              </div>
                                              <!---Text días neto proveedor-->
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="dias_Neto">
-                                                       Dias neto: 
+                                                       Dias neto: *
                                                   </p:outputLabel>
                                                   <p:inputMask
                                                        mask="9[999]"
@@ -623,14 +602,13 @@
                                                        maxlength="3"
                                                        id ="dias_Neto"
                                                        value="#{proveedorDAO.condiciones.diasNeto}"
-                                                       required="true"
-                                                       requiredMessage="Ingrese Día neto"/>
+                                                      />
                                              </div>
                                              <!---Text dias descuento proveedor-->
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="dia_Descuento"> 
-                                                       Dias descuento: 
+                                                       Dias descuento: *
                                                   </p:outputLabel>
                                                   <p:inputMask
                                                        mask="9[999]"
@@ -638,8 +616,7 @@
                                                        maxlength="3"
                                                        id ="dia_Descuento"
                                                        value="#{proveedorDAO.condiciones.diasDescuento}"
-                                                       required="true"
-                                                       requiredMessage="Ingrese día descuento"/>
+                                                     />
                                              </div>
                                              <!---Text cant. días vencidos proveedor-->
                                              <div class="p-field p-col">
@@ -653,8 +630,7 @@
                                                        maxlength="3"
                                                        id="cant_DiasVencidos"
                                                        value="#{proveedorDAO.condiciones.cantDiasVencidos}" 
-                                                       required="true"
-                                                       requiredMessage="Ingrese cantidad dia"/>                                                  
+                                                      />                                                  
                                              </div>                                             
                                         </div>
                                         <!---Sección 7 proveedor-->
@@ -663,14 +639,13 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="descripcion_"> 
-                                                       Descripción:
+                                                       Descripción: *
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="descripcion_" 
                                                        maxlength="100"
                                                        value="#{proveedorDAO.condiciones.descripcion}" 
-                                                       required="true" 
-                                                       requiredMessage="Ingrese descripción"/>                                                
+                                                     />                                                
                                              </div>    
                                         </div>
 
@@ -678,13 +653,13 @@
                               </p:outputPanel>
                               <!---Botones guardar y cancelar proveedor-->
                               <f:facet name="footer">
-                                   <p:commandButton value="Guardar" icon="pi pi-check" 
+                                   <p:commandButton value="Guardar" 
                                                     styleClass="ui-button-success"
                                                     update="manage-product-content-edit, messages"
                                                     process="manage-product-content-edit @this" 
                                                     actionListener="#{proveedorDAO.editar()}"
                                                     />
-                                   <p:commandButton value="Cancelar" icon="pi pi-times"
+                                   <p:commandButton value="Cancelar"
                                                     styleClass="ui-button-danger"
                                                    />
                               </f:facet>
@@ -695,10 +670,10 @@
                                           message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre} ?"
                                           header="Confirmar" severity="warn">
                              
-                              <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{condicionesMB.dhProveedor()}"
-                                               process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
-                              <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                               onclick="PF('DHProveedor').hide()"  />
+                              <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
+                                               styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
+                              <p:commandButton value="Cancelar" type="button" 
+                                                 styleClass="ui-button-danger" onclick="PF('DHProveedor').hide()"  />
                          </p:confirmDialog> 
                     </h:form>
                </ui:define>
