@@ -13,7 +13,11 @@ import com.recursoshumanos.Model.Entidad.Asistencia;
 import com.recursoshumanos.Model.Entidad.DetalleHorario;
 import com.recursoshumanos.Model.Entidad.Empleado;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -30,14 +34,15 @@ import org.primefaces.PrimeFaces;
 @ViewScoped
 public class AsistenciaController implements Serializable {
 
-    private final AsistenciaDAO asistenciaDAO;
-    private Asistencia asistencia;
-    private List<Asistencia> asistencias;
     private final EmpleadoPuestoDAO empleadoPuestoDAO;
-    private final EmpleadoDAO empleadoDAO;
-    private List<Empleado> empleados;
     private final DetalleHorarioDAO detalleHorarioDAO;
+    private final AsistenciaDAO asistenciaDAO;
+    private final EmpleadoDAO empleadoDAO;
+    private Asistencia asistencia;
     private List<DetalleHorario> horarios;
+    private List<Asistencia> asistencias;
+    private List<Empleado> empleados;
+    private Date minTimeI, maxTimeI, minTimeS, maxTimeS, minT;
 
     public AsistenciaController() {
         empleadoPuestoDAO = new EmpleadoPuestoDAO();
@@ -52,31 +57,13 @@ public class AsistenciaController implements Serializable {
 
     @PostConstruct
     public void constructorAsistencia() {
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(Calendar.HOUR_OF_DAY, 0);
+        tmp.set(Calendar.MINUTE, 0);
+        tmp.set(Calendar.SECOND, 0);
+        tmp.set(Calendar.MILLISECOND, 0);
+        minT = tmp.getTime();
         empleados = empleadoDAO.activos();
-    }
-
-    public Asistencia getAsistencia() {
-        return asistencia;
-    }
-
-    public void setAsistencia(Asistencia asistencia) {
-        this.asistencia = asistencia;
-    }
-
-    public List<Empleado> getEmpleados() {
-        return empleados;
-    }
-
-    public void setEmpleados(List<Empleado> empleados) {
-        this.empleados = empleados;
-    }
-
-    public List<DetalleHorario> getHorarios() {
-        return horarios;
-    }
-
-    public void setHorarios(List<DetalleHorario> horarios) {
-        this.horarios = horarios;
     }
 
     public List<Asistencia> getAsistencias() {
@@ -87,35 +74,207 @@ public class AsistenciaController implements Serializable {
         this.asistencias = asistencias;
     }
 
+    public List<DetalleHorario> getHorarios() {
+        return horarios;
+    }
+
+    public void setHorarios(List<DetalleHorario> horarios) {
+        this.horarios = horarios;
+    }
+
+    public List<Empleado> getEmpleados() {
+        return empleados;
+    }
+
+    public void setEmpleados(List<Empleado> empleados) {
+        this.empleados = empleados;
+    }
+
+    public Asistencia getAsistencia() {
+        return asistencia;
+    }
+
+    public void setAsistencia(Asistencia asistencia) {
+        this.asistencia = asistencia;
+    }
+
+    public Date getMinTimeI() {
+        return minTimeI;
+    }
+
+    public void setMinTimeI(Date minTimeI) {
+        this.minTimeI = minTimeI;
+    }
+
+    public Date getMaxTimeI() {
+        return maxTimeI;
+    }
+
+    public void setMaxTimeI(Date maxTimeI) {
+        this.maxTimeI = maxTimeI;
+    }
+
+    public Date getMinTimeS() {
+        return minTimeS;
+    }
+
+    public void setMinTimeS(Date minTimeS) {
+        this.minTimeS = minTimeS;
+    }
+
+    public Date getMaxTimeS() {
+        return maxTimeS;
+    }
+
+    public void setMaxTimeS(Date maxTimeS) {
+        this.maxTimeS = maxTimeS;
+    }
+
+    public Date getMinT() {
+        return minT;
+    }
+
+    public void setMinT(Date minT) {
+        this.minT = minT;
+    }
+
     public void empleadoSeleccionado() {
         asistencia.setEmpleadoPuesto(empleadoPuestoDAO.buscar(asistencia.getEmpleadoPuesto().getEmpleado()));
         horarios = detalleHorarioDAO.buscar(asistencia.getEmpleadoPuesto());
         cargarDatos();
-        actualizarAsistencias();
     }
     
     private void actualizarAsistencias(){
-        asistencias = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto());
+        asistencias = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto(), asistencia.getFecha());
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-asistencia form:dt-asistencias");
+    }
+    
+    public void minmax(){
+        Calendar tmp = Calendar.getInstance();
+        String[] hoarioStr;
+        switch(horarios.size()){
+            case 1:
+                tmp.set(Calendar.HOUR_OF_DAY, 0);
+                tmp.set(Calendar.MINUTE, 0);
+                tmp.set(Calendar.SECOND, 1);
+                tmp.set(Calendar.MILLISECOND, 0);
+                minTimeI = tmp.getTime();
+                tmp = Calendar.getInstance();
+                hoarioStr = horarios.get(0).getIngresoSalida().getHoraSalida().split(":");
+                tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                tmp.set(Calendar.MILLISECOND, 0);
+                maxTimeI = tmp.getTime();
+                tmp = Calendar.getInstance();
+                hoarioStr = horarios.get(0).getIngresoSalida().getHoraIngreso().split(":");
+                tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                tmp.set(Calendar.MILLISECOND, 0);
+                minTimeS = tmp.getTime();
+                tmp = Calendar.getInstance();
+                tmp.set(Calendar.HOUR_OF_DAY, 23);
+                tmp.set(Calendar.MINUTE, 59);
+                tmp.set(Calendar.SECOND, 59);
+                tmp.set(Calendar.MILLISECOND, 999);
+                maxTimeS =  tmp.getTime();
+                break;
+            case 2:
+                int hora1 = Integer.parseInt(horarios.get(0).getIngresoSalida().getHoraIngreso().split(":")[0]);
+                int hora2 = Integer.parseInt(horarios.get(1).getIngresoSalida().getHoraIngreso().split(":")[0]);
+                if(hora1<hora2){
+                    hora1 = 0;
+                    hora2 = 1;
+                }else{
+                    hora1 = 1;
+                    hora2 = 0;
+                }
+                if(asistencia.getDetalleHorario().getId() == horarios.get(hora1).getId()){
+                    tmp.set(Calendar.HOUR_OF_DAY, 0);
+                    tmp.set(Calendar.MINUTE, 0);
+                    tmp.set(Calendar.SECOND, 1);
+                    tmp.set(Calendar.MILLISECOND, 0);
+                    minTimeI = tmp.getTime();
+                    tmp = Calendar.getInstance();
+                    hoarioStr = horarios.get(hora1).getIngresoSalida().getHoraSalida().split(":");
+                    tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                    tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                    tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                    tmp.set(Calendar.MILLISECOND, 0);
+                    maxTimeI = tmp.getTime();
+                    tmp = Calendar.getInstance();
+                    hoarioStr = horarios.get(hora1).getIngresoSalida().getHoraIngreso().split(":");
+                    tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                    tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                    tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                    tmp.set(Calendar.MILLISECOND, 0);
+                    minTimeS = tmp.getTime();
+                    tmp = Calendar.getInstance();
+                    hoarioStr = horarios.get(hora2).getIngresoSalida().getHoraIngreso().split(":");
+                    tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                    tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                    tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                    tmp.set(Calendar.MILLISECOND, 0);
+                    maxTimeS = tmp.getTime();
+                }else{
+                    if(asistencia.getDetalleHorario().getId() == horarios.get(hora2).getId()){
+                        hoarioStr = horarios.get(hora1).getIngresoSalida().getHoraSalida().split(":");
+                        tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                        tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                        tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                        tmp.set(Calendar.MILLISECOND, 0);
+                        minTimeI = tmp.getTime();
+                        tmp = Calendar.getInstance();
+                        hoarioStr = horarios.get(hora2).getIngresoSalida().getHoraSalida().split(":");
+                        tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                        tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                        tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                        tmp.set(Calendar.MILLISECOND, 0);
+                        maxTimeI = tmp.getTime();
+                        tmp = Calendar.getInstance();
+                        hoarioStr = horarios.get(hora2).getIngresoSalida().getHoraIngreso().split(":");
+                        tmp.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hoarioStr[0]));
+                        tmp.set(Calendar.MINUTE, Integer.parseInt(hoarioStr[1]));
+                        tmp.set(Calendar.SECOND, Integer.parseInt(hoarioStr[2]));
+                        tmp.set(Calendar.MILLISECOND, 0);
+                        minTimeS = tmp.getTime();
+                        tmp = Calendar.getInstance();
+                        tmp.set(Calendar.HOUR_OF_DAY, 23);
+                        tmp.set(Calendar.MINUTE, 59);
+                        tmp.set(Calendar.SECOND, 59);
+                        tmp.set(Calendar.MILLISECOND, 999);
+                        maxTimeS =  tmp.getTime();
+                    }
+                }
+                break;
+        }
     }
     
     public void cargarDatos(){
         asistencia = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto(), asistencia.getFecha(), asistencia.getDetalleHorario());
+        try{
+            minmax();
+        }catch(Exception ex){
+            mostrarMensajeError(ex.getMessage());
+        }
+        actualizarAsistencias();
     }
 
-    public void guardar() {
+    public void guardar(){
+        
         asistenciaDAO.setAsistencia(asistencia);
-        if (!asistencia.getIngreso().isEmpty() && asistencia.getSalida().isEmpty()) {
+        if (asistencia.getIngreso() != null && asistencia.getSalida() == null) {
             if (asistenciaDAO.insertar() > 0) {
                 mostrarMensajeInformacion("Se marco la hora de ingreso");
             } else {
                 mostrarMensajeError("No se pudo marcar la hora de ingreso");
             }
         } else {
-            if (!asistencia.getIngreso().isEmpty() && !asistencia.getSalida().isEmpty()) {
+            if (asistencia.getIngreso() != null && asistencia.getSalida() != null) {
                 if (asistenciaDAO.actualizar()> 0) {
                     mostrarMensajeInformacion("Se marco la hora de salida");
                 } else {
-
                     mostrarMensajeError("No se pudo marcar la hora de salida");
                 }
             }else{
@@ -123,7 +282,6 @@ public class AsistenciaController implements Serializable {
             }
         }
         actualizarAsistencias();
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-asistencia form:dt-asistencias");
     }
     
 

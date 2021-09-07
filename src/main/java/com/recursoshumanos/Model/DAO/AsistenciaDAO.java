@@ -63,7 +63,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         if (conexion.isEstado()) {
             conexion.insertar("asistencia",
                     "id_empleado_puesto, reg_hora_ingreso, reg_hora_salida, fecha, id_detalle_horario",
-                    asistencia.getEmpleadoPuesto().getId() + ", '" + asistencia.getIngreso()+ "', null, '" 
+                    asistencia.getEmpleadoPuesto().getId() + ", '" + asistencia.getIngreso()+ "'::time, null, '" 
                     + asistencia.getFecha() + "', " + asistencia.getDetalleHorario().getId(), "id_empleado_puesto");
             return asistencia.getDetalleHorario().getId();
         }
@@ -80,9 +80,9 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("asistencia",
-                    "reg_hora_salida = '" + asistencia.getSalida() + "'",
-                    "id_empleado_puesto = " + asistencia.getEmpleadoPuesto().getId() + " AND reg_hora_ingreso = '" 
-                    + asistencia.getIngreso()+ "' AND fecha = '" + asistencia.getFecha() 
+                    "reg_hora_salida = CAST('" + asistencia.getSalida() + "'::timestamp AS time)",
+                    "id_empleado_puesto = " + asistencia.getEmpleadoPuesto().getId() + " AND reg_hora_ingreso = CAST('" 
+                    + asistencia.getIngreso()+ "'::timestamp AS time) AND fecha = '" + asistencia.getFecha() 
                     + "' AND id_detalle_horario = " + asistencia.getDetalleHorario().getId());
         }
         return -1;
@@ -112,8 +112,8 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
                                              "id_empleado_puesto = " + empleadoPuesto.getId() + " AND fecha = '" 
                                              + asistencia.getFecha() + "' AND id_detalle_horario = " + detalleHorario.getId(), null);
                 while (result.next()) {
-                    asistencia.setIngreso(result.getString("reg_hora_ingreso"));
-                    asistencia.setSalida(result.getString("reg_hora_salida"));
+                    asistencia.setIngreso(result.getTime("reg_hora_ingreso"));
+                    asistencia.setSalida(result.getTime("reg_hora_salida"));
                 }
                 result.close();
             } catch (SQLException ex) {
@@ -125,17 +125,20 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         return asistencia;
     }
 
-    public List<Asistencia> buscar(EmpleadoPuesto empleadoPuesto) {
+    public List<Asistencia> buscar(EmpleadoPuesto empleadoPuesto, Date fecha) {
         List<Asistencia> asistencias = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
                 result = conexion.selecionar("asistencia", "fecha, reg_hora_ingreso, reg_hora_salida, id_detalle_horario",
-                                             "id_empleado_puesto = " + empleadoPuesto.getId(), "fecha DESC");
+                                             "id_empleado_puesto = " + empleadoPuesto.getId() +
+                                             " AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM '" + fecha.toString() +
+                                             "'::DATE) AND EXTRACT(MONTH FROM fecha) = EXTRACT(MONTH FROM '" + fecha.toString()
+                                             + "'::DATE)", "fecha DESC");
                 DetalleHorarioDAO dhdao = new DetalleHorarioDAO();
                 while (result.next()) {
-                    asistencias.add(new Asistencia( empleadoPuesto, result.getString("reg_hora_ingreso"),
-                                                    result.getString("reg_hora_salida"),  result.getDate("fecha"),
+                    asistencias.add(new Asistencia( empleadoPuesto, result.getTime("reg_hora_ingreso"),
+                                                    result.getTime("reg_hora_salida"),  result.getDate("fecha"),
                                                     dhdao.buscarPorId(result.getInt("id_detalle_horario"),
                                                     empleadoPuesto.getHorarioLaboral())));
                 }
@@ -167,7 +170,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
                 while (result.next()) {
                     asistencias.add(new Asistencia(
                             epdao.buscarPorId(result.getInt("id_empleado_puesto")),
-                            result.getString("reg_hora_ingreso"), result.getString("reg_hora_salida"),
+                            result.getTime("reg_hora_ingreso"), result.getTime("reg_hora_salida"),
                             result.getDate("fecha"), dhdao.buscarPorId(result.getInt("id_detalle_horario"))
                     ));
                 }

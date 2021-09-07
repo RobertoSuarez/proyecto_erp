@@ -6,6 +6,7 @@
 package com.recursoshumanos.Model.Entidad;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,20 +15,26 @@ import java.util.Date;
  */
 public class Asistencia implements Serializable {
     private EmpleadoPuesto empleadoPuesto;
-    private String ingreso, salida;
-    private Date fecha;
+    private Date fecha, ingreso, salida;
     private DetalleHorario detalleHorario;
 
     public Asistencia() {
+        Calendar tmp = Calendar.getInstance();
+        tmp.set(Calendar.HOUR_OF_DAY, 0);
+        tmp.set(Calendar.MINUTE, 0);
+        tmp.set(Calendar.SECOND, 0);
+        tmp.set(Calendar.MILLISECOND, 0);
+        Date minT = tmp.getTime();
+        
         this.empleadoPuesto = new EmpleadoPuesto();
-        this.ingreso = null;
-        this.salida = null;
+        this.ingreso = minT;
+        this.salida = minT;
         this.fecha = new Date();
         this.detalleHorario = new DetalleHorario();
     }
 
-    public Asistencia(EmpleadoPuesto empleadoPuesto, String ingreso, 
-        String salida, Date fecha, DetalleHorario detalleHorario) {
+    public Asistencia(EmpleadoPuesto empleadoPuesto, Date ingreso, 
+        Date salida, Date fecha, DetalleHorario detalleHorario) {
         this.empleadoPuesto = empleadoPuesto;
         this.ingreso = ingreso;
         this.salida = salida;
@@ -43,19 +50,19 @@ public class Asistencia implements Serializable {
         this.empleadoPuesto = empleadoPuesto;
     }
 
-    public String getIngreso() {
+    public Date getIngreso() {
         return ingreso;
     }
 
-    public void setIngreso(String ingreso) {
+    public void setIngreso(Date ingreso) {
         this.ingreso = ingreso;
     }
 
-    public String getSalida() {
+    public Date getSalida() {
         return salida;
     }
 
-    public void setSalida(String salida) {
+    public void setSalida(Date salida) {
         this.salida = salida;
     }
 
