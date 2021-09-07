@@ -49,7 +49,6 @@ public class ProformaDAO {
                     + "," + ProformaDetalle.getIva12() + "," + ProformaDetalle.getIce()
                     + "," + ProformaDetalle.getTotalproforma() + ")";
             con.ejecutarConsulta(procedimiento);
-            System.out.println("Proforma correctamente ingresada");
             con.cerrarConexion();
 
         } catch (Exception e) {
@@ -142,13 +141,11 @@ public class ProformaDAO {
         List<Proforma> listadocs= new ArrayList<>();
         try {
             consulta="SELECT * FROM public.proforma ORDER BY idproforma ASC ";
-            rs=con.consultar(consulta);
+            rs=con.ejecutarConsulta(consulta);
             con.conex.close();
              if (rs == null) {
                 System.out.println("No existen registros");
-            } else {
-                System.out.println("Existen registros");
-                
+            } else {                
                 while (rs.next()) {
                     Proforma prof = new Proforma();
                     this.cliente = new ClienteVenta();
@@ -181,7 +178,6 @@ public class ProformaDAO {
                                 prof.setEstado(estado);
                             }
                             else{
-                                System.out.println("Fallo al cargar estado");
                                 prof.setEstado(rs.getString(9));
                             }
                         }
@@ -194,7 +190,6 @@ public class ProformaDAO {
                     prof.setIce(rs.getFloat(15));
                     prof.setTotalproforma(rs.getFloat(16));
                     listadocs.add(prof);
-                    System.out.println("Proforma en lista");
                 }
             }
              con.cerrarConexion();
@@ -233,7 +228,7 @@ public class ProformaDAO {
                     listaitems.add(details);
                 }
             }
-            con.cerrarConexion();
+            con.conex.close();
         }
         catch(Exception e){
             if(con.isEstado()){
@@ -243,7 +238,6 @@ public class ProformaDAO {
         finally{
             con.cerrarConexion();
         }
-        con.cerrarConexion();
         return listaitems;
         
     }

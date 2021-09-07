@@ -35,13 +35,12 @@ public class ClienteVentaDao implements Serializable {
                 + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico) where cl.idcliente = " + id + ";";
         try {
             con.abrirConexion();
-            rs = this.con.consultar(query);
+            rs = this.con.ejecutarConsulta(query);
             con.conex.close();
             while (rs.next()) {
                 temp.setIdCliente(rs.getInt(1));
                 temp.setNombre(rs.getString(5));
                 temp.setIdentificacion(rs.getString(6));
-                con.conex.close();
             }
             con.cerrarConexion();
             return temp;
@@ -67,7 +66,7 @@ public class ClienteVentaDao implements Serializable {
                 + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
                 + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                 + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
-            ResultSet rs = this.con.consultar(query);
+            ResultSet rs = this.con.ejecutarConsulta(query);
             con.conex.close();
             while(rs.next()){
                 this.clienteVenta = new ClienteVenta();
@@ -91,9 +90,6 @@ public class ClienteVentaDao implements Serializable {
     public ClienteVenta BuscarCliente(String id) {
         ResultSet rs = null;
         ClienteVenta temp = new ClienteVenta();
-
-        System.out.println("Consultando " + id);
-
         try {
             con.abrirConexion();
             if (id.length() <= 10) {

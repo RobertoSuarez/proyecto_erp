@@ -147,10 +147,8 @@ public class ProformaManageBean implements Serializable {
         this.producto = this.productoDao.ObtenerProducto(this.codigoProducto);
 
         if (this.producto.getDescripcion() == null || this.producto.getDescripcion() == "") {
-            System.out.println("Producto nulo");
             addMessage(FacesMessage.SEVERITY_ERROR, "El producto no existe", "Message Content");
         } else {
-            System.out.println("Existe el producto" + this.nombreProducto);
             this.nombreProducto = this.producto.getDescripcion();
             this.precioProducto = new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).floatValue();
         }
@@ -195,7 +193,7 @@ public class ProformaManageBean implements Serializable {
 
                 this.producto = null;
             } else {
-                System.out.println("No hay producto seleccionado");
+                addMessage(FacesMessage.SEVERITY_ERROR, "Debe escoger un producto en primera instancia", "Message Content");
             }
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
@@ -223,7 +221,7 @@ public class ProformaManageBean implements Serializable {
             this.listaDetalle.remove(detalle);
 
             PrimeFaces.current().ajax().update("ventaForm");
-            System.out.println("Eliminado");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Producto eliminado de la lista", "Message Content");
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
         }
@@ -248,28 +246,17 @@ public class ProformaManageBean implements Serializable {
             if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una proforma nula", "Message Content");
             } else {
-                System.out.println("Registrando proforma . . .");
                 profor.setId_cliente(this.cliente.getIdCliente());
-                System.out.println("Proforma registrada con cliente:" + this.cliente.getIdCliente());
                 profor.setId_empleado(1);
-                System.out.println("Proforma registrada con empleado 1");
                 codigo = profordao.codigoproforma();
                 profor.setId_proforma(codigo);
-                System.out.println("Proforma registrada con codigo:" + profor.getId_proforma());
                 profor.setFecha_actualizacion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setFecha_creacion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setFecha_expiracion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setFecha_autorizacion(ObtenerFecha());
-                System.out.println("Proforma registrada con fecha:" + ObtenerFecha());
                 profor.setProforma_terminada(estado);
-                System.out.println("Proforma registrada con estado:" + estado);
                 profor.setAceptacion_cliente(estado);
-                System.out.println("Proforma registrada con estado:" + estado);
                 profor.setEstado("P");
-                System.out.println("Proforma registrada con estado pendiente");
                 profor.setBase12((float) this.subtotal12);
                 profor.setBase0((float) this.subtotal0);
                 profor.setBase_excento_iva(0);
@@ -277,15 +264,14 @@ public class ProformaManageBean implements Serializable {
                 profor.setIce((float) this.ice);
                 profor.setTotalproforma((float) this.total);
                 profordao.IngresarProforma(profor);
-                System.out.println("Proforma Registrada");
                 Producto produc;
                 while (listSize <= this.listaDetalle.size()) {
                     produc = new Producto();
                     produc = this.listaDetalle.get(listSize).getProducto();
                     profordao.ingresarDetalleProforma(produc, profor);
-                    System.out.println("Detalle Proforma ingresada");
                     listSize += 1;
                 }
+                addMessage(FacesMessage.SEVERITY_INFO, "Proforma ingresada correctamente", "Message Content");
             }
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
@@ -298,9 +284,7 @@ public class ProformaManageBean implements Serializable {
         profDao = new ProformaDAO();
         this.listaProformas = new ArrayList<>();
         try {
-            System.out.println("Llenando lista de proforma");
             this.listaProformas = this.profDao.retornarProformas();
-            System.out.println("Lista llenada");
             if (listaProformas.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
             }
@@ -346,9 +330,9 @@ public class ProformaManageBean implements Serializable {
         this.listaDetalles = new ArrayList<>();
         this.proformaActual = profor;
         System.out.println("Inicia variable local");
-        this.listaDetalles = this.profDao.listaDetalleProforma(this.proformaActual);
+        this.listaDetalles = this.profDao.listaDetalleProforma(profor);
         System.out.println("Lllena la lista de detalles");
-        this.cliente = this.clienteDAO.BuscarClientePorId(this.proformaActual.getId_cliente());
+        this.cliente = this.clienteDAO.BuscarClientePorId(profor.id_cliente);
         System.out.println("LLENA el objeto cliente");
         this.Identificacion = this.cliente.getIdentificacion();
         System.out.println("Llena la identificacion");

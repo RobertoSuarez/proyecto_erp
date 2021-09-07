@@ -73,7 +73,7 @@ public class ListaVentaManagedBean implements Serializable {
         }
     }
 
-    public void CargarVenta(Venta ventaSeleccionada) {
+    public void CargarVenta(Venta ventaSeleccionada) throws SQLException {
         this.listaDetalle = new ArrayList<>();
         this.ventaActual = ventaSeleccionada;
         this.listaDetalle = detalleDao.ObtenerDetalleVentas(ventaSeleccionada.getIdVenta());

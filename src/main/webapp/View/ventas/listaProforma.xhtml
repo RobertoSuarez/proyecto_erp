@@ -12,8 +12,7 @@
 
             <ui:define name="content">
                 <h:form id="listaDeProforma" >
-                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}" rowKey="#{Lista.id_proforma}" 
-                                 selectionMode="single" selection="#{ProformaMB.proformaActual}">
+                    <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}">
                         <p:column headerText="Codigo proforma" width="5%">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
