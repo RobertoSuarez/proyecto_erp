@@ -115,8 +115,11 @@
                                 </div>
                                 <div class="p-field p-col">
                                     <p:outputLabel value="Referencia" />
-                                    <p:inputText id="Referencia" type="text" 
-                                                 value="#{abonoProveedorMB.abonoproveedor.referencia}" />
+                                    <p:inputNumber id="Referencia"
+                                                   value="#{abonoProveedorMB.abonoproveedor.referencia}" 
+                                                   minValue="4"
+                                                   maxlength ="6" thousandSeparator="" 
+                                                   decimalSeparator="." decimalPlaces="0"/>
                                 </div>
                                 <div class="p-field p-col">
                                     <!-- Datos del Banco -->
@@ -150,8 +153,9 @@
                                     <p:outputLabel value="#{abonoProveedorMB.abonoproveedor.periodo=abonoProveedorMB.perio}" style="visibility: hidden"/>
                                     <p:inputText value="#{abonoProveedorMB.abonoproveedor.periodo}" disabled="true"/>
                                     <div class="p-field p-col"></div>
-
+                                    <div class="p-field p-col"></div>
                                 </div>
+                                <div class="p-field p-col"></div>
                             </div>
                             <div class="p-formgrid p-grid">
                                 <div class="p-field p-col">
