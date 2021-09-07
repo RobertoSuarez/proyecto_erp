@@ -6,8 +6,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/Plantilla/Plantilla.xhtml">
 
-    <ui:define name="content">
-        <h:form id="form">
+    <ui:define name="content" class="Contenido">
+        <h:form id="form" style="width: 105%; margin-left: -23px;">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
                 <p:panel>
@@ -27,16 +27,26 @@
                                  reflow="true" size="small" liveResize="true" styleClass="horarioLaborales-table"
                                  rowKey="#{horarioLaboral.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Nombre del horario">
+                        
+                        <p:column headerText="Nombre del horario" sortBy="#{horarioLaboral.nombre}"
+                                  filterBy="#{horarioLaboral.nombre}">
                             <h:outputText value="#{horarioLaboral.nombre}"/>
                         </p:column>
                         <p:column headerText="Observaciones" width="35%">
                             <h:outputText value="#{horarioLaboral.observaciones}"/>
                         </p:column>
-                        <p:column headerText="Creado" width="10%">
+                        <p:column headerText="Creado" width="10%" sortBy="#{horarioLaboral.fechaVigencia}">
                             <h:outputLabel value="#{horarioLaboralView.darFormato(horarioLaboral.fechaVigencia)}"/>
                         </p:column>
-                        <p:column headerText="Estado" width="10%">
+                        <p:column headerText="Estado" width="13%" field="estado" filterBy="#{horarioLaboral.estado}"
+                                  filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('dtHorarioLaborales').filter()">
+                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
+                                </p:selectOneMenu>
+                            </f:facet>
                             <h:outputText id="inputmarca" value="#{horarioLaboral.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                         </p:column>
                         <p:column exportable="false" width="14%">

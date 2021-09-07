@@ -215,10 +215,16 @@ public class HorarioLaboralController implements Serializable {
     public void cambiarEstado(HorarioLaboral horarioLaboral){
         horarioLaboralDAO.setHorarioLaboral(horarioLaboral);
         horarioLaboralDAO.cambiarEstado();
-        if (detalleHorarioDAO.Listar(idIngresoSalida).isEmpty() && horarioLaboral.isEstado()){
+        if (detalleHorarioDAO.Listar(horarioLaboral.getId()).isEmpty() && !horarioLaboral.isEstado()){
             mostrarMensajePrecaucion("Debe definir los dias y horas del horario " + horarioLaboral.getNombre());
         }
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
+    }
+    
+    public void cambiarEstadoDetalle(DetalleHorario detalleHorario){
+        detalleHorarioDAO.setDetalleHorario(detalleHorario);
+        detalleHorarioDAO.cambiarEstado();
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-detalleHorarios");
     }
 
     public void mostrarMensajeInformacion(String mensaje) {
