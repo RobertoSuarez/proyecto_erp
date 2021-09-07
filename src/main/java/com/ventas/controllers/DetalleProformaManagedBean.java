@@ -49,7 +49,7 @@ public class DetalleProformaManagedBean implements Serializable {
 public void detalleProforma() throws SQLException{
     System.out.println("Ingresa al metodo");
     this.listaDetalles = new ArrayList<>();
-    this.listaDetalles = this.profDao.listaDetalleProforma(this.proformaActual);
+//    this.listaDetalles = this.profDao.listaDetalleProforma(this.proformaActual);
     this.cliente = this.clientedao.BuscarClientePorId(this.proformaActual.getId_cliente());
     this.Identificacion= this.cliente.getIdentificacion();
     this.nombrecliente=this.cliente.getNombre();

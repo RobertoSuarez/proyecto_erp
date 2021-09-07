@@ -16,6 +16,9 @@
                         <p:column headerText="Codigo proforma" width="5%">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
+                        <p:column headerText="Cliente" width="5%">
+                            <h:outputText value="#{Lista.id_cliente}"  />
+                        </p:column>
                         <p:column headerText="Cliente" width="15%">
                             <h:outputText value="#{Lista.nombreCliente}"  />
                         </p:column>
@@ -43,8 +46,6 @@
                         <h2>Detalle proforma: <p:outputLabel value="#{ProformaMB.proformaActual.id_proforma}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
                             <h:panelGrid columns="2">
-                                <p:outputLabel value="Identificación: "/>
-                                <p:outputLabel value="#{ProformaMB.identificacion}" />
                                 <p:outputLabel value="Nombre:" />
                                 <p:outputLabel value="#{ProformaMB.nombrecliente}" />
                             </h:panelGrid>

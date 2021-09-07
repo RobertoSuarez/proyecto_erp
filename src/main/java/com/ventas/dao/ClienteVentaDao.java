@@ -35,57 +35,53 @@ public class ClienteVentaDao implements Serializable {
                 + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico) where cl.idcliente = " + id + ";";
         try {
             con.abrirConexion();
-            rs = this.con.ejecutarConsulta(query);
-            con.conex.close();
+            rs = con.ejecutarConsulta(query);
             while (rs.next()) {
                 temp.setIdCliente(rs.getInt(1));
                 temp.setNombre(rs.getString(5));
                 temp.setIdentificacion(rs.getString(6));
             }
-            con.cerrarConexion();
-            return temp;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             if (con.isEstado()) {
                 con.cerrarConexion();
             }
-            System.out.println(e.getMessage().toString());
+            System.out.println(e.getMessage());
         } finally {
-            con.conex.close();
+            con.cerrarConexion();
         }
         return temp;
     }
-    
-    public List<ClienteVenta> ListarClientes(){
+
+    public List<ClienteVenta> ListarClientes() {
         List<ClienteVenta> clientes = new ArrayList<>();
-        try{
+        try {
             this.con.abrirConexion();
             String query = "select cl.idcliente, T.* from "
-                + "(select pn.idpersonanatural as IdNatural, null as IdJuridico, "
-                + "pr.id_persona, pn.nombre1||' '||pn.nombre2||' '||pn.apellido1||' '||pn.apellido2 as Nombre, pr.identificacion "
-                + "from public.persona_natural pn inner join public.persona pr on pn.id_persona = pr.id_persona UNION "
-                + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
-                + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
-                + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
+                    + "(select pn.idpersonanatural as IdNatural, null as IdJuridico, "
+                    + "pr.id_persona, pn.nombre1||' '||pn.nombre2||' '||pn.apellido1||' '||pn.apellido2 as Nombre, pr.identificacion "
+                    + "from public.persona_natural pn inner join public.persona pr on pn.id_persona = pr.id_persona UNION "
+                    + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
+                    + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
+                    + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
             ResultSet rs = this.con.ejecutarConsulta(query);
             con.conex.close();
-            while(rs.next()){
+            while (rs.next()) {
                 this.clienteVenta = new ClienteVenta();
                 this.clienteVenta.setIdCliente(rs.getInt(1));
                 this.clienteVenta.setNombre(rs.getString(5));
                 this.clienteVenta.setIdentificacion(rs.getString(6));
                 clientes.add(this.clienteVenta);
             }
-            this.con.cerrarConexion();
-        }catch(Exception e){
+        } catch (Exception e) {
             if (con.isEstado()) {
                 con.cerrarConexion();
             }
             System.out.println(e.getMessage().toString());
-        }finally{
+        } finally {
             this.con.cerrarConexion();
         }
         return clientes;
-    } 
+    }
 
     public ClienteVenta BuscarCliente(String id) {
         ResultSet rs = null;

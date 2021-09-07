@@ -204,15 +204,15 @@ public class ProformaDAO {
         return listadocs;
     }
     
-    public List<DetalleProforma> listaDetalleProforma(Proforma prof) throws SQLException{
+    public List<DetalleProforma> listaDetalleProforma(int id) throws SQLException{
         ResultSet rs;
         String consulta;
         DetalleProforma details;
-        List<DetalleProforma> listaitems= new ArrayList<>();
-        consulta="Select * from public.detalleproforma where idproforma="+ prof.id_proforma;
-        con.abrirConexion();
+        List<DetalleProforma> listaitems = new ArrayList<>();
+        consulta="Select * from public.detalleproforma where idproforma=" + id +";";
+        this.con.abrirConexion();
         try{
-            rs=con.ejecutarConsulta(consulta);
+            rs=this.con.ejecutarConsulta(consulta);
             if(rs==null){
                 System.out.print("No existe ninguna proforma en la Base de datos");
             }
@@ -228,9 +228,10 @@ public class ProformaDAO {
                     listaitems.add(details);
                 }
             }
-            con.conex.close();
+            this.con.conex.close();
         }
-        catch(Exception e){
+        catch(SQLException e){
+            System.out.println(e.toString());
             if(con.isEstado()){
                 con.cerrarConexion();
             }

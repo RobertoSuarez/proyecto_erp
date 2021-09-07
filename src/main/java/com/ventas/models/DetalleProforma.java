@@ -18,6 +18,8 @@ public class DetalleProforma implements Serializable {
     private int cantidad;
     private float descuento;
     private float price;
+    private String nombrecliente;
+    private String identificacionCliente;
 
     public DetalleProforma() {
     }
@@ -69,5 +71,23 @@ public class DetalleProforma implements Serializable {
     public void setPrice(float price) {
         this.price = price;
     }
+
+    public String getNombrecliente() {
+        return nombrecliente;
+    }
+
+    public void setNombrecliente(String nombrecliente) {
+        this.nombrecliente = nombrecliente;
+    }
+
+    public String getIdentificacionCliente() {
+        return identificacionCliente;
+    }
+
+    public void setIdentificacionCliente(String identificacionCliente) {
+        this.identificacionCliente = identificacionCliente;
+    }
+    
+    
     
 }
