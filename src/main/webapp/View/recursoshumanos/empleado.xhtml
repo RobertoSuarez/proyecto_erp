@@ -124,8 +124,8 @@
                                     <div class="ui-fluid">
                                         <div class="p-field">
                                             <p:outputLabel for="insueldo" style="font-weight: bold" value="Nuevo Sueldo: " />
-                                            <p:spinner id="insueldo" value="#{empleadoView.sueldo.valor}" stepFactor="1.00"
-                                                       required="true" requiredMessage="Necesita ingresar un valor"/>
+                                            <p:spinner id="insueldo" value="#{empleadoView.sueldo.valor}" stepFactor="0.01"
+                                                       required="true" min="0.01" requiredMessage="Necesita ingresar un valor"/>
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="inobservacion" style="font-weight: bold" value="Observaciones del (puesto)"/>

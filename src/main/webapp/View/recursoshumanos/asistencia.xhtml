@@ -34,7 +34,7 @@
                         <h:outputLabel for="inhorario" style="margin-left: 10PX" value="Horario: "/>
                         <p:selectOneMenu id="inhorario" value="#{asistenciaView.asistencia.detalleHorario.id}"
                                          required="true" label="Horario">
-                            <p:ajax listener="#{asistenciaView.cargarDatos}" update="iningreso insalida"/>
+                            <p:ajax listener="#{asistenciaView.cargarDatos}" update="iningreso insalida dt-asistencias"/>
                             <f:selectItem itemLabel="Selecione el horario" itemValue="#{0}" noSelectionOption="true"/>
                             <f:selectItems value="#{asistenciaView.horarios}" var="horario" 
                                            itemLabel="#{horario.ingresoSalida.resumen()}" itemValue="#{horario.id}">
@@ -49,18 +49,21 @@
                         <p:datePicker id="fecha" value="#{asistenciaView.asistencia.fecha}"
                                       monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
                                       pattern="dd/MM/yyyy" required="true" label="Fecha">
-                            <p:ajax listener="#{asistenciaView.cargarDatos}" update="inhorario iningreso insalida"/>
+                            <p:ajax listener="#{asistenciaView.cargarDatos}" update="inhorario iningreso insalida dt-asistencias"/>
                         </p:datePicker>
 
                         <h:outputLabel for="iningreso" style="margin-left: 10PX" value="Hora de ingreso: "/>
-                        <p:inputMask  id="iningreso" style="margin-left: -20PX" value="#{asistenciaView.asistencia.ingreso}"
-                                      mask="99:99:99" disabled="#{not empty asistenciaView.asistencia.ingreso}" required="true" />
+                        <p:datePicker  id="iningreso" style="margin-left: -20PX" value="#{asistenciaView.asistencia.ingreso}"
+                                      timeOnly="true" pattern="HH:mm:ss" mindate="#{asistenciaView.minTimeI}"
+                                      maxdate="#{asistenciaView.maxTimeI}"/>
 
                         <h:outputLabel for="insalida" style="margin-left: 10PX" value="Hora de salida: "/>
-                        <p:inputMask  id="insalida" value="#{asistenciaView.asistencia.salida}"  style="margin-left: -20PX" 
-                                      mask="99:99:99" disabled="#{not empty asistenciaView.asistencia.salida}"/>
+                        <p:datePicker id="insalida" value="#{asistenciaView.asistencia.salida}"  style="margin-left: -20PX" 
+                                      timeOnly="true" pattern="HH:mm:ss" mindate="#{asistenciaView.minTimeS}"
+                                      maxdate="#{asistenciaView.maxTimeS}"/>
 
-                        <p:commandButton value="Guardar" style="align-content: center; width: 62%;" icon="pi pi-save" actionListener="#{asistenciaView.guardar()}"
+                        <p:commandButton value="Guardar" style="align-content: center; width: 62%;" icon="pi pi-save"
+                                         actionListener="#{asistenciaView.guardar()}"
                                          update="dt-asistencia dt-asistencias" styleClass="p-mr-2 ui-button-success"
                                          process="dt-asistencia @this">
                         </p:commandButton>

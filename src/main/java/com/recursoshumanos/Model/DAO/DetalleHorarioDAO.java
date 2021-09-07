@@ -90,6 +90,12 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         this.detalleHorario = entity;
         return actualizar();
     }
+    
+    public void cambiarEstado(){
+        if (conexion.isEstado()) {
+            conexion.modificar("detalle_horario", "estado = NOT estado", "id_detalle_horario = " + detalleHorario.getId());
+        }
+    }
 
     @Override
     public DetalleHorario buscarPorId(Object id) {

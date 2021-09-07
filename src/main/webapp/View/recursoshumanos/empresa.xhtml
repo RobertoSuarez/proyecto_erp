@@ -6,13 +6,13 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/Plantilla/Plantilla.xhtml">
 
-    <ui:define name="content">
+    <ui:define name="content" class="Contenido">
         <h:head>
             <f:metadata>
                 <f:event type="preRenderView" listener="#{empresaView.postLoad}" />
             </f:metadata>
         </h:head>
-        <h:form id="form">
+        <h:form id="form" style="width: 105%; margin-left: -23px;">
             <p:growl id="messages" showDetail="true"/>
             <p:panel id="dt-empresa" >
                 <h2>#{empresaView.empresa.razonSocial}</h2>
@@ -25,10 +25,10 @@
 
                         <p:outputLabel for="ruc" style="font-weight: bold;">RUC: </p:outputLabel>
                         <h:outputText id="ruc" value="#{empresaView.empresa.ruc}"/>
-                        
+
                         <p:outputLabel for="nombreC" style="font-weight: bold; margin-left: 10px;">Nombre Comercial: </p:outputLabel>
                         <h:outputText id="nombreC" value="#{empresaView.empresa.nombre}"/>
-                        
+
                         <p:outputLabel for="tipo" style="font-weight: bold;">Tipo: </p:outputLabel>
                         <h:outputText id="tipo" value="#{empresaView.empresa.tipo}"/>
                     </h:panelGrid>
@@ -99,82 +99,79 @@
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
-                <p:panel>
-                    <p:dataTable id="dt-sucursales" widgetVar="dtSucursales" var="sucursal" value="#{empresaView.sucursales}"
-                                 reflow="true" size="small" liveResize="true" styleClass="sucursales-table"
-                                 rowKey="#{sucursal.id}" paginator="true"
-                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Ciudad" width="20%" sortBy="#{sucursal.ciudad.nombre}">
-                            <h:outputText value="#{sucursal.ciudad.nombre}" title="#{sucursal.ciudad.resumen()}"/>
-                        </p:column>
-                        <p:column headerText="Dirección" sortBy="#{sucursal.direccion}">
-                            <h:outputText value="#{sucursal.direccion}"/>
-                        </p:column>
-                        <p:column headerText="Detalle" sortBy="#{sucursal.detalle}">
-                            <h:outputText value="#{sucursal.detalle}"/>
-                        </p:column>
-                        <p:column exportable="false" width="5%">
-                            <p:commandButton icon="pi pi-pencil" update=":form:manage-sucursal-content"
-                                             oncomplete="PF('manageSucursalDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <p:ajax listener="#{empresaView.editarSucursal(sucursal.ciudad.provincia.id, sucursal.ciudad.id)}"
-                                        update=":form:manage-sucursal-content" />
-                                <f:setPropertyActionListener value="#{sucursal}" target="#{empresaView.sucursal}"/>
-                                <p:resetInput target=":form:manage-sucursal-content"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog header="Sucursal" showEffect="fade" modal="true"
-                              widgetVar="manageSucursalDialog" responsive="true">
-                        <p:outputPanel id="manage-sucursal-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty empresaView.sucursal}">
-                                <div class="card">
-                                    <div class="ui-fluid">
-                                        <div class="p-field">
-                                            <p:outputLabel for="inputProvincia" value="Provincia: "/>
-                                            <p:selectOneMenu id="inputProvincia" value="#{empresaView.idProvincia}"
-                                                             required="true" requiredMessage="Debe seleccionar una Provincia">
-                                                <p:ajax listener="#{empresaView.provinciaSeleccionada(empresaView.idProvincia)}"
-                                                        update="inputCiudad"/>
-                                                <f:selectItem itemLabel="Selecione una Provincia" itemValue="#{0}"
-                                                              noSelectionOption="true"/>
-                                                <f:selectItems value="#{empresaView.provincias}" var="provincia" 
-                                                               itemLabel="#{provincia.nombre}" itemValue="#{provincia.id}"/>
-                                            </p:selectOneMenu>
-                                        </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="inputCiudad" value="Ciudad: "/>
-                                            <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}"
-                                                             required="true" requiredMessage="Debe seleccionar una ciudad">
-                                                <f:selectItem itemLabel="Selecione un ciudad" itemValue="#{0}" noSelectionOption="true"/>
-                                                <f:selectItems value="#{empresaView.ciudades}" var="ciudad" 
-                                                               itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
-                                            </p:selectOneMenu>
-                                        </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="inputdireccion" style="font-weight: bold">Dirección: </p:outputLabel>
-                                            <p:inputTextarea id="inputdireccion" value="#{empresaView.sucursal.direccion}" 
-                                                             required="true" requiredMessage="Campo requerido"/>
-                                        </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="inputdetalles" style="font-weight: bold">Detalle: </p:outputLabel>
-                                            <p:inputTextarea id="inputdetalles" value="#{empresaView.sucursal.detalle}" 
-                                                             required="true" requiredMessage="Campo requerido"/>
-                                        </div>
+                <p:dataTable id="dt-sucursales" widgetVar="dtSucursales" var="sucursal" value="#{empresaView.sucursales}"
+                             reflow="true" size="small" liveResize="true" styleClass="sucursales-table"
+                             rowKey="#{sucursal.id}" paginator="true"
+                             rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                    <p:column headerText="Ciudad" width="20%" sortBy="#{sucursal.ciudad.nombre}">
+                        <h:outputText value="#{sucursal.ciudad.nombre}" title="#{sucursal.ciudad.resumen()}"/>
+                    </p:column>
+                    <p:column headerText="Dirección" sortBy="#{sucursal.direccion}">
+                        <h:outputText value="#{sucursal.direccion}"/>
+                    </p:column>
+                    <p:column headerText="Detalle" sortBy="#{sucursal.detalle}">
+                        <h:outputText value="#{sucursal.detalle}"/>
+                    </p:column>
+                    <p:column exportable="false" width="5%">
+                        <p:commandButton icon="pi pi-pencil" update=":form:manage-sucursal-content"
+                                         oncomplete="PF('manageSucursalDialog').show()"
+                                         styleClass="edit-button rounded-button ui-button-success" process="@this">
+                            <p:ajax listener="#{empresaView.editarSucursal(sucursal.ciudad.provincia.id, sucursal.ciudad.id)}"
+                                    update=":form:manage-sucursal-content" />
+                            <f:setPropertyActionListener value="#{sucursal}" target="#{empresaView.sucursal}"/>
+                            <p:resetInput target=":form:manage-sucursal-content"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog header="Sucursal" showEffect="fade" modal="true"
+                          widgetVar="manageSucursalDialog" responsive="true">
+                    <p:outputPanel id="manage-sucursal-content" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty empresaView.sucursal}">
+                            <div class="card">
+                                <div class="ui-fluid">
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputProvincia" value="Provincia: "/>
+                                        <p:selectOneMenu id="inputProvincia" value="#{empresaView.idProvincia}"
+                                                         required="true" requiredMessage="Debe seleccionar una Provincia">
+                                            <p:ajax listener="#{empresaView.provinciaSeleccionada(empresaView.idProvincia)}"
+                                                    update="inputCiudad"/>
+                                            <f:selectItem itemLabel="Selecione una Provincia" itemValue="#{0}"
+                                                          noSelectionOption="true"/>
+                                            <f:selectItems value="#{empresaView.provincias}" var="provincia" 
+                                                           itemLabel="#{provincia.nombre}" itemValue="#{provincia.id}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputCiudad" value="Ciudad: "/>
+                                        <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}"
+                                                         required="true" requiredMessage="Debe seleccionar una ciudad">
+                                            <f:selectItem itemLabel="Selecione un ciudad" itemValue="#{0}" noSelectionOption="true"/>
+                                            <f:selectItems value="#{empresaView.ciudades}" var="ciudad" 
+                                                           itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputdireccion" style="font-weight: bold">Dirección: </p:outputLabel>
+                                        <p:inputTextarea id="inputdireccion" value="#{empresaView.sucursal.direccion}" 
+                                                         required="true" requiredMessage="Campo requerido"/>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="inputdetalles" style="font-weight: bold">Detalle: </p:outputLabel>
+                                        <p:inputTextarea id="inputdetalles" value="#{empresaView.sucursal.detalle}" 
+                                                         required="true" requiredMessage="Campo requerido"/>
                                     </div>
                                 </div>
-                            </p:outputPanel>
+                            </div>
                         </p:outputPanel>
-                        <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empresaView.guardarSucursal}"
-                                             update="manage-sucursal-content" styleClass="ui-button-success" process="manage-sucursal-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSucursalDialog').hide()"
-                                             process="@none" styleClass="p-mr-2" resetValues="true" />
-                        </f:facet>
-                    </p:dialog>
-                </p:panel>
+                    </p:outputPanel>
+                    <f:facet name="footer">
+                        <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empresaView.guardarSucursal}"
+                                         update="manage-sucursal-content" styleClass="ui-button-success" process="manage-sucursal-content @this"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSucursalDialog').hide()"
+                                         process="@none" styleClass="p-mr-2" resetValues="true" />
+                    </f:facet>
+                </p:dialog>
             </p:panel>
-
         </h:form>
     </ui:define>
 </ui:composition>

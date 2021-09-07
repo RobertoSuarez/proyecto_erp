@@ -101,7 +101,6 @@ public class TipoRubroDAO implements IDAO<TipoRubro> {
                 result = conexion.selecionar("tipo_rubro", "id_tipo_rubro, nombre, coeficiente",
                         restricciones, OrdenarAgrupar);
                 roles = new ArrayList<>();
-                EmpleadoDAO eDAO = new EmpleadoDAO();
                 while (result.next()) {
                     roles.add(new TipoRubro(result.getInt("id_tipo_rubro"), result.getInt("coeficiente"), result.getString("nombre")));
                 }

@@ -127,7 +127,9 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("empleado_bck_rrhh", "id_empleado, nombre1, nombre2, apellido1, apellido2, fecha_ingreso, fecha_egreso", null, "nombre1, nombre2, apellido1, apellido2 ASC");
+                result = conexion.selecionar("empleado_bck_rrhh",
+                        "id_empleado, nombre1, nombre2, apellido1, apellido2, fecha_ingreso, fecha_egreso",
+                        null, "nombre1, nombre2, apellido1, apellido2 ASC");
                 
                 while (result.next()) {
                     empleados.add(new Empleado(

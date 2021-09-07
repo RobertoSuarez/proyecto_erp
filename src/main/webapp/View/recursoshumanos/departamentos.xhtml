@@ -6,8 +6,8 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/Plantilla/Plantilla.xhtml">
 
-    <ui:define name="content">
-        <h:form id="form">
+    <ui:define name="content" class="Contenido">
+        <h:form id="form" style="width: 105%; margin-left: -23px;">
             <div class="card crud-demo">
                 <p:growl id="messages" showDetail="true"/>
                 <p:panel>
@@ -27,16 +27,24 @@
                                  reflow="true" size="small" liveResize="true" styleClass="departamentos-table"
                                  rowKey="#{departamento.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Departamento">
+                        <p:column headerText="Departamento" sortBy="#{departamento.nombre}" filterBy="#{departamento.nombre}">
                             <h:outputText value="#{departamento.nombre}"/>
                         </p:column>
                         <p:column headerText="Descripción" width="35%">
                             <h:outputText value="#{departamento.descripcion}"/>
                         </p:column>
-                        <p:column headerText="Creado" width="10%">
+                        <p:column headerText="Creado" width="10%" sortBy="#{departamento.fecha_creacion}">
                             <h:outputText value="#{departamentoView.darFormato(departamento.fecha_creacion)}"/>
                         </p:column>
-                        <p:column headerText="Estado" width="10%">
+                        <p:column headerText="Estado" width="12%" field="estado" filterBy="#{departamento.estado}"
+                                  filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('dtDepartamentos').filter()">
+                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
+                                </p:selectOneMenu>
+                            </f:facet>
                             <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                         </p:column>
                         <p:column exportable="false" width="10%">

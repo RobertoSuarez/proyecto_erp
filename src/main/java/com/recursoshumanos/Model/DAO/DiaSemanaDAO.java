@@ -23,7 +23,7 @@ public class DiaSemanaDAO implements IDAO<DiaSemana>{
     protected DiaSemana diaSemana;
 
     public DiaSemanaDAO() {
-        conexion = new Conexion();;
+        conexion = new Conexion();
         diaSemana = new DiaSemana();
     }
 
