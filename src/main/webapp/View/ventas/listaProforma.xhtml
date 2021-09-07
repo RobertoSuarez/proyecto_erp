@@ -17,7 +17,7 @@
                         <p:column headerText="Codigo proforma" width="5%">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
-                        <p:column headerText="Cliente" width="15%" filterBy="#{Lista.nombreCliente}" filterMatchMode="content">
+                        <p:column headerText="Cliente" width="15%">
                             <h:outputText value="#{Lista.nombreCliente}"  />
                         </p:column>
                         <p:column headerText="Estado" width="10%">
@@ -32,7 +32,7 @@
                         <p:column headerText="Acciones" width="35%">
                             <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" />
                             <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger" 
-                                             actionListener="#{ProformaMB.rechazarProforma()}" update="listaDeProforma"/>
+                                             actionListener="#{ProformaMB.rechazarProforma()}" update="itemsTable"/>
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this"
                                              onclick="PF('DetalleProforma').show()" actionListener="#{ProformaMB.detalleProforma(Lista)}" update="datosFactura" />
                         </p:column>

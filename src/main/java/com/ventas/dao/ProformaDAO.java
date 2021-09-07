@@ -143,6 +143,7 @@ public class ProformaDAO {
         try {
             consulta="SELECT * FROM public.proforma ORDER BY idproforma ASC ";
             rs=con.consultar(consulta);
+            con.conex.close();
              if (rs == null) {
                 System.out.println("No existen registros");
             } else {

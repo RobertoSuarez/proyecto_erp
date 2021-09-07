@@ -9,6 +9,7 @@ import com.global.config.Conexion;
 import com.ventas.models.ClienteVenta;
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +23,7 @@ public class ClienteVentaDao implements Serializable {
         this.con = new Conexion();
     }
 
-    public ClienteVenta BuscarClientePorId(int id) {
+    public ClienteVenta BuscarClientePorId(int id) throws SQLException {
         ResultSet rs = null;
         ClienteVenta temp = new ClienteVenta();
         String query = "select cl.idcliente, T.* from "
@@ -33,15 +34,16 @@ public class ClienteVentaDao implements Serializable {
                 + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                 + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico) where cl.idcliente = " + id + ";";
         try {
-            this.con.abrirConexion();
+            con.abrirConexion();
             rs = this.con.consultar(query);
+            con.conex.close();
             while (rs.next()) {
                 temp.setIdCliente(rs.getInt(1));
                 temp.setNombre(rs.getString(5));
                 temp.setIdentificacion(rs.getString(6));
+                con.conex.close();
             }
-            this.con.cerrarConexion();
-
+            con.cerrarConexion();
             return temp;
         } catch (Exception e) {
             if (con.isEstado()) {
@@ -49,7 +51,7 @@ public class ClienteVentaDao implements Serializable {
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.con.cerrarConexion();
+            con.conex.close();
         }
         return temp;
     }
@@ -66,6 +68,7 @@ public class ClienteVentaDao implements Serializable {
                 + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                 + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
             ResultSet rs = this.con.consultar(query);
+            con.conex.close();
             while(rs.next()){
                 this.clienteVenta = new ClienteVenta();
                 this.clienteVenta.setIdCliente(rs.getInt(1));
