@@ -27,10 +27,12 @@
                                  reflow="true" size="small" liveResize="true" styleClass="ingresosSalidas-table"
                                  rowKey="#{ingresoSalida.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Ingreso">
+                        <p:column headerText="Ingreso" sortBy="#{ingresoSalida.horaIngreso}"
+                                  filterBy="#{ingresoSalida.horaIngreso}">
                             <h:outputText value="#{ingresoSalida.horaIngreso}"/>
                         </p:column>
-                        <p:column headerText="Salida">
+                        <p:column headerText="Salida" sortBy="#{ingresoSalida.horaSalida}"
+                                  filterBy="#{ingresoSalida.horaSalida}">
                             <h:outputText value="#{ingresoSalida.horaSalida}"/>
                         </p:column>
                         <p:column headerText="Observaciones" width="45%">

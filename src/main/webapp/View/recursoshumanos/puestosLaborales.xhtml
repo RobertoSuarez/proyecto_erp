@@ -27,19 +27,30 @@
                                  reflow="true" size="small" liveResize="true" styleClass="puestoLaborals-table"
                                  rowKey="#{puestoLaboral.id}" paginator="true"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Departamento">
+                        
+                        <p:column headerText="Departamento" sortBy="#{puestoLaboral.departamento.nombre}"
+                                  filterBy="#{puestoLaboral.departamento.nombre}">
                             <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
                         </p:column>
-                        <p:column headerText="Cargo">
+                        <p:column headerText="Cargo" sortBy="#{puestoLaboral.cargo.nombre}"
+                                  filterBy="#{puestoLaboral.cargo.nombre}">
                             <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
                         </p:column>
-                        <p:column headerText="Creado" width="10%">
+                        <p:column headerText="Creado" width="10%" sortBy="#{puestoLaboral.fecha_creacion}">
                             <h:outputText value="#{puestoLaboralView.darFormato(puestoLaboral.fecha_creacion)}"/>
                         </p:column>
                         <p:column headerText="Descripción" width="30%">
                             <h:outputText value="#{puestoLaboral.descripcion}"/>
                         </p:column>
-                        <p:column headerText="Estado" width="10%">
+                        <p:column headerText="Estado" width="13%" field="estado" filterBy="#{puestoLaboral.estado}"
+                                  filterMatchMode="exact">
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('dtPuestoLaborals').filter()">
+                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
+                                </p:selectOneMenu>
+                            </f:facet>
                             <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
                         </p:column>
                         <p:column exportable="false" width="10%">
