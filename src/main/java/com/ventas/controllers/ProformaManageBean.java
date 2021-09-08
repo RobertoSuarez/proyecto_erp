@@ -332,23 +332,21 @@ public class ProformaManageBean implements Serializable {
     public void detalleProforma(Proforma profor) throws SQLException {
         this.client = new ClienteVenta();
         this.listaDetalles = new ArrayList<>();
-        System.out.println(profor.id_proforma);
         this.proformaActual = profor;
-        System.out.println(profor.getId_cliente());
-        System.out.println("Inicia variable local");
         this.listaDetalles = this.profDao.listaDetalleProforma(profor.id_proforma);
-//        this.Identificacion = this.client.getIdentificacion();
-//        System.out.println("Llena la identificacion");
         this.nombrecliente = profor.getNombreCliente();
-        System.out.println("Llena el nombre del cliente");
     }
 
     @Asynchronous
-    public void rechazarProforma() throws SQLException {
+    public void rechazarProforma(Proforma profor) throws SQLException {
         String rechazar = "R";
-        System.out.print(rechazar);
-        this.profDao.cambiarEstadoProforma(rechazar, this.proformaActual.getId_proforma());
-        System.out.print("Proforma Rechazada");
+        this.profDao.cambiarEstadoProforma(rechazar, profor.id_proforma);
+    }
+    
+     @Asynchronous
+    public void aceptarProforma(Proforma profor) throws SQLException {
+        String rechazar = "A";
+        this.profDao.aceptarProforma(rechazar, profor, ObtenerFecha());
     }
 
     //--------------------Getter y Setter-------------------//
