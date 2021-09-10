@@ -105,8 +105,8 @@
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
                             <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoView.actualizar}"
-                                             update="dt-empleado" styleClass="p-mr-2 ui-button-success"
-                                             process="dt-empleado @this">
+                                             update="messages dt-empleado" styleClass="p-mr-2 ui-button-success"
+                                             process="messages dt-empleado @this">
                                 <f:setPropertyActionListener value="#{empleadoView.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
                         </p:toolbarGroup>

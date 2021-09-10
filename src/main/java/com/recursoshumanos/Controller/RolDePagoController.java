@@ -471,10 +471,16 @@ public class RolDePagoController implements Serializable{
                                 result = false;
                             }
                         }
-                        if (checkedMulta && result) {
+                        if (checkedMulta && result && multa.getId() > 0) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, multa.getTipoRubro(), multa.getId()));
                             result = true;
-                            if (detalleRolPagoDAO.insertar() < 1) {
+                            if (detalleRolPagoDAO.insertar() > 0) {
+                                multa.setEstado(false);
+                                if (multaDAO.actualizar()>0){
+                                    mensaje = "El detalle no se pudo asignar";
+                                    result = false;
+                                }
+                            }else{
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }

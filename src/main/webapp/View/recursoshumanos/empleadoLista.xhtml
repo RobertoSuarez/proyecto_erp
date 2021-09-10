@@ -27,7 +27,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" var="empleado" value="#{empleadoView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="empleados-table"
-                                 rowKey="#{empleado.id}" paginator="true"
+                                 rowKey="#{empleado.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
                         <p:column headerText="Identificación" width="12%" sortBy="#{empleado.persona.identificacion}"

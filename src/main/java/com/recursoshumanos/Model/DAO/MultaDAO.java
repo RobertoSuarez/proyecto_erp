@@ -52,9 +52,10 @@ public class MultaDAO implements IDAO<Multa>  {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            return conexion.insertar("multa", "id_empleado, porcentaje, valor, detalle, estado", 
+            this.multa.setId(conexion.insertar("multa", "id_empleado, porcentaje, valor, detalle, estado", 
                     multa.getEmpleado().getId()+ "," + multa.getPorcentaje()+ "," + multa.getValor() + ",'"
-                    + multa.getDetalle() + "'," + multa.isEstado(), "id_multa");
+                    + multa.getDetalle() + "'," + multa.isEstado(), "id_multa"));
+            return this.multa.getId();
         }
         return -1;
     }
@@ -102,7 +103,7 @@ public class MultaDAO implements IDAO<Multa>  {
             ResultSet result;
             try {
                 result = conexion.selecionar("multa", "id_multa, porcentaje, valor, detalle",
-                        "id_empleado = " + empleado.getId() + " AND estado = true", null);
+                        "id_empleado = " + empleado.getId() + " AND estado = true", "id_multa DESC");
                 while (result.next()) {
                     multas.add(new Multa(
                             result.getInt("id_multa"),
@@ -122,12 +123,12 @@ public class MultaDAO implements IDAO<Multa>  {
     }
     
     public Multa buacar(Empleado empleado) {
-        multa = new Multa(empleado);
+        multa = new Multa(0, empleado, 0, 0, "N/D", true);
         if (conexion.isEstado()) {
             ResultSet result;
             try {
                 result = conexion.selecionar("multa", "id_multa, porcentaje, valor, detalle",
-                        "id_empleado = " + empleado.getId() + " AND estado = true", null);
+                        "id_empleado = " + empleado.getId() + " AND estado = true", "id_multa DESC");
                 while (result.next()) {
                      multa.setId(result.getInt("id_multa"));
                      multa.setPorcentaje(result.getFloat("porcentaje"));
