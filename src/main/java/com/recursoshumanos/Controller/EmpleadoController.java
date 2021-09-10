@@ -40,6 +40,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.apache.commons.math3.util.Precision;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 
@@ -321,11 +322,21 @@ public class EmpleadoController implements Serializable {
     }
     
     public void guardarMulta(){
+        multa.setValor(Precision.round(sueldo.getValor() * (multa.getPorcentaje() /100), 2));
         multa.setId(multaDAO.insertar(multa));
         if(multa.getId() > 0){
             mostrarMensajeInformacion("Se ha guardado la multa con éxito");
         }else{
             mostrarMensajeError("La multa no se pudo guardar");
+        }
+    }
+    
+    public void guardarAmonestacion(){
+        amonestacion.setId(amonestacionDAO.insertar(amonestacion));
+        if(amonestacion.getId() > 0){
+            mostrarMensajeInformacion("Se ha guardado la amonestación con éxito");
+        }else{
+            mostrarMensajeError("La amonestación no se pudo guardar");
         }
     }
 

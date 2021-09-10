@@ -130,14 +130,11 @@
                                         <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
                                             styleClass="ui-panelgrid-blank ui-fluid"
                                             style="width: 100%;">
+                                            
                                             <p:outputLabel for="inporcentaje" style="font-weight: bold" value="Porcentaje: " />
                                             <p:spinner id="inporcentaje" value="#{empleadoView.multa.porcentaje}" decimalPlaces="2"
                                                            required="true"  min="0.01" max="100.00" label="Porcentaje"
                                                            requiredMessage="Necesita ingresar un valor" stepFactor="0.01"/>
-                                            <p:outputLabel for="invalor" style="font-weight: bold" value="Monto($): " />
-                                            <p:spinner id="invalor" value="#{empleadoView.multa.valor}" decimalPlaces="2"
-                                                           required="true"  prefix="$" min="0" stepFactor="1"
-                                                           requiredMessage="Necesita ingresar un valor"/>
                                         </h:panelGrid>
                                         <div class="p-field">
                                             <p:outputLabel for="indetallemulta" style="font-weight: bold" value="Detalle: "/>
@@ -154,6 +151,42 @@
                                            icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageMultaDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog header="Amonestación" minHeight="40" width="350" showEffect="fade" modal="true"
+                              widgetVar="manageAmonestacionDialog" responsive="true">
+                        <p:outputPanel id="manage-amonestacion-content" class="ui-fluid">
+                            <p:outputPanel >
+                                    <div class="ui-fluid">
+                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
+                                            styleClass="ui-panelgrid-blank ui-fluid"
+                                            style="width: 100%;">
+                                                                                        
+                                            <p:outputLabel for="invaloramo" style="font-weight: bold" value="Monto($): " />
+                                            <p:spinner id="invaloramo" value="#{empleadoView.amonestacion.valor}" required="true"
+                                                       decimalPlaces="2" prefix="$" min="1" stepFactor="1"
+                                                       requiredMessage="Necesita ingresar un valor"/>
+                                            
+                                            <p:outputLabel for="intipoamo" style="font-weight: bold" value="Tipo: " />
+                                            <p:inputText id="intipoamo" value="#{empleadoView.amonestacion.tipo}" required="true"
+                                                         label="Porcentaje" requiredMessage="Necesita ingresar el tipo"/>
+                                        </h:panelGrid>
+                                        <div class="p-field">
+                                            <p:outputLabel for="indetalleamo" style="font-weight: bold" value="Detalle: "/>
+                                            <p:inputTextarea id="indetalleamo" value="#{empleadoView.amonestacion.detalle}"/>
+                                        </div>
+                                    </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarAmonestacion}"
+                                             update="messages manage-amonestacion-content" styleClass="ui-button-success"
+                                             process="messages manage-amonestacion-content @this">
+                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar la amonestación?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageAmonestacionDialog').hide()"
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
                     </p:dialog>
@@ -217,8 +250,14 @@
                             <h:outputText value="Fecha de Salida: " style="font-weight: bold;" />
                             <h:outputText value="#{empleadoView.darFormato(empleadoView.sueldo.empleado.fechaEgreso)}" />
 
-                            <h:outputText rendered="#{empleadoView.multa.id > 0}" value="Multa: " style="font-weight: bold;" />
+                            <h:outputText rendered="#{empleadoView.multa.id > 0}" style="font-weight: bold;"
+                                          value="Multa: #{empleadoView.multa.porcentaje}%"/>
                             <h:outputText rendered="#{empleadoView.multa.id > 0}" value="$ #{empleadoView.multa.valor}" />
+
+                            <h:outputText rendered="#{empleadoView.amonestacion.id > 0}" style="font-weight: bold;"
+                                          value="Amonestación: "/>
+                            <h:outputText rendered="#{empleadoView.amonestacion.id > 0}"
+                                          value="$ #{empleadoView.amonestacion.valor} #{empleadoView.amonestacion.tipo}"/>
 
                         </h:panelGrid>
                         <h:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"

@@ -22,7 +22,7 @@
 
 
                         <h:outputLabel for="inempleado" value="Empleado: "/>
-                        <p:selectOneMenu id="inempleado" value="#{asistenciaView.asistencia.empleadoPuesto.empleado.id}"
+                        <p:selectOneMenu id="inempleado" style="width: 100%" value="#{asistenciaView.asistencia.empleadoPuesto.empleado.id}"
                                          required="true" requiredMessage="Debe seleccionar un empleado"
                                          filter="true" filterMatchMode="startsWith">
                             <p:ajax listener="#{asistenciaView.empleadoSeleccionado}" update="inhorario dt-asistencias"/>
@@ -60,7 +60,7 @@
                         <h:outputLabel for="insalida" style="margin-left: 10PX" value="Hora de salida: "/>
                         <p:datePicker id="insalida" value="#{asistenciaView.asistencia.salida}"  style="margin-left: -20PX" 
                                       timeOnly="true" pattern="HH:mm:ss" mindate="#{asistenciaView.minTimeS}"
-                                      maxdate="#{asistenciaView.maxTimeS}"/>
+                                      maxdate="#{asistenciaView.maxTimeS}" />
 
                         <p:commandButton value="Guardar" style="align-content: center; width: 62%;" icon="pi pi-save"
                                          actionListener="#{asistenciaView.guardar()}"
