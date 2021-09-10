@@ -96,6 +96,33 @@ public class SuspencionDAO implements IDAO<Suspencion> {
         return buscar(null, null);
     }
     
+    public List<Suspencion> historial(Empleado empleado) {
+        List<Suspencion> suspenciones = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("suspencion", "id_suspencion, valor, cantidad_dias, detalle, estado",
+                        "id_empleado = " + empleado.getId(), "valor, cantidad_dias DESC");
+                while (result.next()) {
+                    suspenciones.add(new Suspencion(
+                            result.getInt("id_suspencion"),
+                            result.getInt("cantidad_dias"),
+                            empleado,
+                            result.getFloat("valor"),
+                            result.getString("detalle"),
+                            result.getBoolean("estado"))
+                    );
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return suspenciones;
+    }
+    
     public List<Suspencion> Listar(Empleado empleado) {
         List<Suspencion> suspenciones = new ArrayList<>();
         if (conexion.isEstado()) {

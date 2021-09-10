@@ -79,8 +79,12 @@ public class EmpleadoController implements Serializable {
     
     private List<HorarioLaboral> horarios;
     private List<PuestoLaboral> puestos;
+    private List<Amonestacion> amonestaciones;
+    private List<Suspencion> suspenciones;
     private List<Sucursal> sucursales;
     private List<Empleado> lista;
+    private List<Sueldo> sueldos;
+    private List<Multa> multas;
     
     private String resumeReserva;
     private Date fechaMax;
@@ -112,7 +116,9 @@ public class EmpleadoController implements Serializable {
         multa = new Multa();
         
         lista = new ArrayList<>();
+        multas = new ArrayList<>();
         puestos = new ArrayList<>();
+        sueldos = new ArrayList<>();
         horarios = new ArrayList<>();
         sucursales = new ArrayList<>();
         fechaMax = new Date();
@@ -168,6 +174,14 @@ public class EmpleadoController implements Serializable {
         this.empleadoSucursal = empleadoSucursal;
     }
 
+    public List<Amonestacion> getAmonestaciones() {
+        return amonestaciones;
+    }
+
+    public void setAmonestaciones(List<Amonestacion> amonestaciones) {
+        this.amonestaciones = amonestaciones;
+    }
+
     public EmpleadoReserva getEmpleadoReserva() {
         return empleadoReserva;
     }
@@ -182,6 +196,14 @@ public class EmpleadoController implements Serializable {
 
     public void setEmpleadoPuesto(EmpleadoPuesto empleadoPuesto) {
         this.empleadoPuesto = empleadoPuesto;
+    }
+
+    public List<Suspencion> getSuspenciones() {
+        return suspenciones;
+    }
+
+    public void setSuspenciones(List<Suspencion> suspenciones) {
+        this.suspenciones = suspenciones;
     }
 
     public CargaFamiliar getCargaFamiliar() {
@@ -248,6 +270,14 @@ public class EmpleadoController implements Serializable {
         lista = empleados;
     }
 
+    public List<Sueldo> getSueldos() {
+        return sueldos;
+    }
+
+    public void setSueldos(List<Sueldo> sueldos) {
+        this.sueldos = sueldos;
+    }
+
     public String getResumenReserva() {
         return resumeReserva;
     }
@@ -262,6 +292,14 @@ public class EmpleadoController implements Serializable {
 
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
+    }
+
+    public List<Multa> getMultas() {
+        return multas;
+    }
+
+    public void setMultas(List<Multa> multas) {
+        this.multas = multas;
     }
 
     public Persona getPersona() {
@@ -295,10 +333,6 @@ public class EmpleadoController implements Serializable {
     public void setMulta(Multa multa) {
         this.multa = multa;
     }
-
-    public List<Sueldo> historialSueldo() {
-        return sueldoDAO.historial(empleado);
-    }
     
     private void resumenReserva(){
         if (empleadoReserva.getFormaPago() != 0) {
@@ -306,6 +340,26 @@ public class EmpleadoController implements Serializable {
         } else {
             resumeReserva = "S/D";
         }
+    }
+    
+    public void verAmonestaciones(){
+        amonestaciones = amonestacionDAO.historial(empleado);
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-amonestaciones");
+    }
+    
+    public void verSuspenciones(){
+        suspenciones = suspencionDAO.Listar(empleado);
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-suspenciones");
+    }
+    
+    public void verSueldos(){
+        sueldos = sueldoDAO.historial(empleado);
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-sueldos");
+    }
+    
+    public void verMultas(){
+        multas = multaDAO.historial(empleado);
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-multas");
     }
 
     public void cambiarSueldo() {
