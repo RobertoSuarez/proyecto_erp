@@ -196,11 +196,13 @@
                                             <p:cellEditor >
                                                 <f:facet name="output">
                                                     <h:outputText value="#{pagoFactura.por_pagar}">
-                                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                                        <p:inputNumber minValue="0" maxlength="4"/>
                                                     </h:outputText>
                                                 </f:facet>
                                                 <f:facet name="input">
-                                                    <p:inputText value="#{abonoProveedorMB.pago}" label="Pago"/>
+                                                    <p:inputNumber value="#{abonoProveedorMB.pago}" 
+                                                                   label="Pago" minValue="0" 
+                                                                   decimalPlaces="2"/>
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
@@ -243,14 +245,14 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.insert_Payment()}" 
-                                                 update=":form:proveedortabla, msgs"
-                                                 process="pago-content @this" styleClass="ui-button-success"/>
+                                             update=":form:proveedortabla, msgs"
+                                             process="pago-content @this" styleClass="ui-button-success"/>
                             <p:commandButton value="Cancelar" onclick="PF('managePagoDialog').hide()"
-                                                 actionListener="#{abonoProveedorMB.reset}"
-                                                 styleClass="ui-button-danger" process="@this"/>
+                                             actionListener="#{abonoProveedorMB.reset}"
+                                             styleClass="ui-button-danger" process="@this"/>
 
                         </f:facet>
-                       
+
                     </p:dialog>
                     <!-- Dialogo Deshablitar-->
                     <p:dialog id="pago-edit" header="Detalle de Pago" showEffect="fade" modal="true"
