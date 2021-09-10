@@ -25,7 +25,8 @@
                     </p:toolbar>
                     <p:dataTable id="dt-provincias" widgetVar="dtProvincias" var="provincia" value="#{provinciaView.provincias}"
                                  size="small" liveResize="true" styleClass="provincia-table" rowKey="#{provincia.id}"
-                                 paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                                 paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom"
+                                 rowsPerPageTemplate="3,5,10,{ShowAll|'All'}">
 
                         <p:column exportable="false" width="20%"></p:column>
                         <p:column headerText="Provincia" sortBy="#{provincia.nombre}" filterBy="#{provincia.nombre}">
@@ -50,7 +51,7 @@
                                         <div class="p-field">
                                             <p:outputLabel for="inProvincia" style="font-weight: bold">Provincia: </p:outputLabel>
                                             <p:inputText style="width: 100%;" id="inProvincia" value="#{provinciaView.provincia.nombre}"
-                                                         required="true" requiredMessage="Campo requerido"/>
+                                                         required="true" label="Provincia"/>
                                         </div>
                                     </div>
                                 </div>
@@ -58,8 +59,8 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{provinciaView.enviar}"
-                                             update="manage-provincia-content" styleClass="ui-button-success"
-                                             process="manage-provincia-content @this"/>
+                                             update="messages manage-provincia-content" styleClass="ui-button-success"
+                                             process="messages manage-provincia-content @this"/>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageProvinciaDialog').hide()"
                                              class="ui-button-secondary"/>
                         </f:facet>

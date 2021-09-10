@@ -9,7 +9,7 @@
         }
 
 //]]>
-/*document.getElementById('email').addEventListener('input', function() {
+document.getElementById('email').addEventListener('input', function() {
     campo = event.target;
     valido = document.getElementById('emailOK');
         
@@ -20,4 +20,4 @@
     } else {
       valido.innerText = "incorrecto";
     }
-});*/
+});

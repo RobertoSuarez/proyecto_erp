@@ -25,7 +25,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-diaSemanas" widgetVar="dtDiaSemanas" var="diaSemana" value="#{diaSemanaView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="diaSemanas-table"
-                                 rowKey="#{diaSemana.id}" paginator="true"
+                                 rowKey="#{diaSemana.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
                         <p:column exportable="false" width="10%">
                         </p:column>
@@ -48,9 +48,9 @@
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
-                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre</p:outputLabel>
+                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre: </p:outputLabel>
                                             <p:inputText id="nombre" value="#{diaSemanaView.diaSemana.nombre}"
-                                                         required="true" requiredMessage="Campo requerido"/>
+                                                         required="true" label="Nombre"/>
                                         </div>
                                     </div>
                                 </div>
@@ -58,7 +58,8 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{diaSemanaView.enviar}"
-                                             update="manage-diaSemana-content" styleClass="ui-button-success" process="manage-diaSemana-content @this"/>
+                                             update="messages manage-diaSemana-content" styleClass="ui-button-success"
+                                             process="messages manage-diaSemana-content @this"/>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDiaSemanaDialog').hide()"
                                              class="ui-button-secondary"/>
                         </f:facet>

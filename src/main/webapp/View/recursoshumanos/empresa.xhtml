@@ -50,23 +50,23 @@
                                     <div class="p-field">
                                         <p:outputLabel for="razonSocial" style="font-weight: bold">Razón Social: </p:outputLabel>
                                         <p:inputText id="razonSocial" value="#{empresaView.empresa.razonSocial}" 
-                                                     required="true" requiredMessage="Campo requerido"/>
+                                                     required="true" requiredMessage="Ingrese una Razon Social"/>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputnombre" style="font-weight: bold">Nombre Comercial: </p:outputLabel>
                                         <p:inputText id="inputnombre" value="#{empresaView.empresa.nombre}" 
-                                                     required="true" requiredMessage="Campo requerido"/>
+                                                     required="true" requiredMessage="Ingrese el Nombre Comercial"/>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputruc" style="font-weight: bold">RUC: </p:outputLabel>
                                         <p:inputText id="inputruc" value="#{empresaView.empresa.ruc}" maxlength="13" 
-                                                     required="true" requiredMessage="Campo requerido">
+                                                     required="true" requiredMessage="Debe de ingresar el RUC">
                                         </p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputtipo" style="font-weight: bold">Tipo: </p:outputLabel>
                                         <p:inputText id="inputtipo" value="#{empresaView.empresa.tipo}" 
-                                                     required="true" requiredMessage="Campo requerido"/>
+                                                     required="true" requiredMessage="Debe de escribir el tipo"/>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputdetalle" style="font-weight: bold">Detalle: </p:outputLabel>
@@ -78,8 +78,8 @@
                     </p:outputPanel>
                     <f:facet name="footer">
                         <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empresaView.guardarEmpresa}"
-                                         update="manage-empresa-content" styleClass="ui-button-success"
-                                         process="manage-empresa-content @this">
+                                         update="messages manage-empresa-content" styleClass="ui-button-success"
+                                         process="messages manage-empresa-content @this">
                         </p:commandButton>
                         <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageEmpresaDialog').hide()"
                                          process="@none" styleClass="p-mr-2" resetValues="true" />
@@ -101,7 +101,7 @@
                 </p:toolbar>
                 <p:dataTable id="dt-sucursales" widgetVar="dtSucursales" var="sucursal" value="#{empresaView.sucursales}"
                              reflow="true" size="small" liveResize="true" styleClass="sucursales-table"
-                             rowKey="#{sucursal.id}" paginator="true"
+                             rowKey="#{sucursal.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                              rows="5" rowSelectMode="add" paginatorPosition="bottom">
                     <p:column headerText="Ciudad" width="20%" sortBy="#{sucursal.ciudad.nombre}">
                         <h:outputText value="#{sucursal.ciudad.nombre}" title="#{sucursal.ciudad.resumen()}"/>
@@ -130,9 +130,9 @@
                             <div class="card">
                                 <div class="ui-fluid">
                                     <div class="p-field">
-                                        <p:outputLabel for="inputProvincia" value="Provincia: "/>
+                                        <p:outputLabel for="inputProvincia" value="Provincia: " style="font-weight: bold"/>
                                         <p:selectOneMenu id="inputProvincia" value="#{empresaView.idProvincia}"
-                                                         required="true" requiredMessage="Debe seleccionar una Provincia">
+                                                         label="Provincia" required="true">
                                             <p:ajax listener="#{empresaView.provinciaSeleccionada(empresaView.idProvincia)}"
                                                     update="inputCiudad"/>
                                             <f:selectItem itemLabel="Selecione una Provincia" itemValue="#{0}"
@@ -142,23 +142,23 @@
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="inputCiudad" value="Ciudad: "/>
-                                        <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}"
+                                        <p:outputLabel for="inputCiudad" value="Ciudad: " style="font-weight: bold"/>
+                                        <p:selectOneMenu id="inputCiudad" value="#{empresaView.idCiudad}" label="Ciudad"
                                                          required="true" requiredMessage="Debe seleccionar una ciudad">
                                             <f:selectItem itemLabel="Selecione un ciudad" itemValue="#{0}" noSelectionOption="true"/>
-                                            <f:selectItems value="#{empresaView.ciudades}" var="ciudad" 
+                                            <f:selectItems value="#{empresaView.ciudades}" var="ciudad"
                                                            itemLabel="#{ciudad.nombre}" itemValue="#{ciudad.id}"/>
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputdireccion" style="font-weight: bold">Dirección: </p:outputLabel>
                                         <p:inputTextarea id="inputdireccion" value="#{empresaView.sucursal.direccion}" 
-                                                         required="true" requiredMessage="Campo requerido"/>
+                                                         label="Dirección" required="true" requiredMessage="Debe ingresar una dirección"/>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputdetalles" style="font-weight: bold">Detalle: </p:outputLabel>
                                         <p:inputTextarea id="inputdetalles" value="#{empresaView.sucursal.detalle}" 
-                                                         required="true" requiredMessage="Campo requerido"/>
+                                                         label="Detalle" required="true" requiredMessage="Debe ingresar un detalle"/>
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +166,8 @@
                     </p:outputPanel>
                     <f:facet name="footer">
                         <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empresaView.guardarSucursal}"
-                                         update="manage-sucursal-content" styleClass="ui-button-success" process="manage-sucursal-content @this"/>
+                                         update="messages manage-sucursal-content" styleClass="ui-button-success"
+                                         process="messages manage-sucursal-content @this"/>
                         <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSucursalDialog').hide()"
                                          process="@none" styleClass="p-mr-2" resetValues="true" />
                     </f:facet>

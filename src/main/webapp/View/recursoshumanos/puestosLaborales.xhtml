@@ -25,7 +25,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-puestoLaborals" widgetVar="dtPuestoLaborals" var="puestoLaboral" value="#{puestoLaboralView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="puestoLaborals-table"
-                                 rowKey="#{puestoLaboral.id}" paginator="true"
+                                 rowKey="#{puestoLaboral.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
                         
                         <p:column headerText="Departamento" sortBy="#{puestoLaboral.departamento.nombre}"
@@ -78,7 +78,8 @@
                                     <div class="ui-fluid">
                                         <div class="p-field">
                                             <p:outputLabel for="depart" value="Departamento: "/>
-                                            <p:selectOneMenu id="depart" value="#{puestoLaboralView.idDepartamento}">
+                                            <p:selectOneMenu id="depart" value="#{puestoLaboralView.idDepartamento}"
+                                                             required=="true" label="Departamento">
                                                 <f:selectItem itemLabel="Selecione un departamento" itemValue="#{0}" noSelectionOption="true"/>
                                                 <f:selectItems value="#{puestoLaboralView.departamentos}" var="departamento" 
                                                                itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
@@ -86,7 +87,8 @@
                                         </div>
                                         <div class="p-field">
                                             <p:outputLabel for="inputcargo" value="Cargo: "/>
-                                            <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.idCargo}">
+                                            <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.idCargo}"
+                                                             required="true" label="Cargo">
                                                 <f:selectItem itemLabel="Selecione un cargo" itemValue="#{0}" noSelectionOption="true"/>
                                                 <f:selectItems value="#{puestoLaboralView.cargos}" var="cargo" 
                                                                itemLabel="#{cargo.nombre}" itemValue="#{cargo.id}"/>
@@ -95,7 +97,7 @@
                                         <div class="p-field">
                                             <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
                                             <p:inputTextarea id="description" value="#{puestoLaboralView.puestoLaboral.descripcion}" 
-                                                             required="true" requiredMessage="Campo requerido"/>
+                                                             required="true" label="Descripción"/>
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +105,8 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{puestoLaboralView.enviar}"
-                                             update="manage-puestoLaboral-content" styleClass="ui-button-success" process="manage-puestoLaboral-content @this"/>
+                                             update="messages manage-puestoLaboral-content" styleClass="ui-button-success"
+                                             process="messages manage-puestoLaboral-content @this"/>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('managePuestoLaboralDialog').hide()"
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>

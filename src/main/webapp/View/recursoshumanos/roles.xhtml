@@ -6,13 +6,13 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/Plantilla/Plantilla.xhtml">
 
-    <ui:define name="content">
+    <ui:define name="content" class="Contenido">
         <h:head>
             <f:metadata>
                 <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoLista()}" />
             </f:metadata>
         </h:head>
-        <h:form id="form">
+        <h:form id="form" style="width: 105%; margin-left: -23px;">
             <div class="card  crud-demo">
                 <p:growl id="messages" showDetail="true"/>
                 <p:panel>
@@ -38,7 +38,8 @@
                     </p:toolbar>
                     <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" value="#{rolDePagoView.pagos}"
                                  reflow="true" size="small" liveResize="true" styleClass="roles-table"
-                                 paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                                 paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                                 rowsPerPageTemplate="3,5,10,{ShowAll|'All'}">
                         <p:column headerText="Código" width="30%">
                             <h:outputText value="#{rolPago.codigo}"/>
                         </p:column>

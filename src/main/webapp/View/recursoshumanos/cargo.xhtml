@@ -25,7 +25,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-cargos" widgetVar="dtCargos" var="cargo" value="#{cargoView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="cargos-table"
-                                 rowKey="#{cargo.id}" paginator="true"
+                                 rowKey="#{cargo.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
                         
                         <p:column width="10%">

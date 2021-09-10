@@ -63,7 +63,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         if (conexion.isEstado()) {
             conexion.insertar("asistencia",
                     "id_empleado_puesto, reg_hora_ingreso, reg_hora_salida, fecha, id_detalle_horario",
-                    asistencia.getEmpleadoPuesto().getId() + ", '" + asistencia.getIngreso()+ "'::time, null, '" 
+                    asistencia.getEmpleadoPuesto().getId() + ", CAST('" + asistencia.getIngreso()+ "'::timestamp AS time), null, '" 
                     + asistencia.getFecha() + "', " + asistencia.getDetalleHorario().getId(), "id_empleado_puesto");
             return asistencia.getDetalleHorario().getId();
         }

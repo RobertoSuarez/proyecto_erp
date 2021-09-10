@@ -54,19 +54,19 @@
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
-                                            <p:outputLabel for="horaIngreso" style="font-weight: bold">Hora de Ingreso</p:outputLabel>
+                                            <p:outputLabel for="horaIngreso" style="font-weight: bold">Hora de Ingreso: </p:outputLabel>
                                             <p:inputMask id="horaIngreso" value="#{ingresosSalidasView.ingresosSalidas.horaIngreso}"
-                                                         mask="99:99:99" required="true" requiredMessage="Campo requerido"/>
+                                                         mask="99:99:99" required="true" label="Hora de Ingreso"/>
                                         </div>
                                         <div class="p-field">
-                                            <p:outputLabel for="horaSalida" style="font-weight: bold">Hora de Salida</p:outputLabel>
+                                            <p:outputLabel for="horaSalida" style="font-weight: bold">Hora de Salida: </p:outputLabel>
                                             <p:inputMask id="horaSalida" value="#{ingresosSalidasView.ingresosSalidas.horaSalida}"
-                                                         mask="99:99:99" required="true" requiredMessage="Campo requerido"/>
+                                                         mask="99:99:99" required="true" label="Hora de Salida"/>
                                         </div>
                                         <div class="p-field">
-                                            <p:outputLabel for="observaciones" style="font-weight: bold">Observaciones</p:outputLabel>
+                                            <p:outputLabel for="observaciones" style="font-weight: bold">Observaciones: </p:outputLabel>
                                             <p:inputTextarea id="observaciones" value="#{ingresosSalidasView.ingresosSalidas.observaciones}"
-                                                             required="true" requiredMessage="Campo requerido"/>
+                                                             required="true" label="Observaciones"/>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +74,8 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ingresosSalidasView.enviar}"
-                                             update="manage-ingresosSalidas-content" styleClass="ui-button-success" process="manage-ingresosSalidas-content @this"/>
+                                             update="messages manage-ingresosSalidas-content" styleClass="ui-button-success"
+                                             process="messages manage-ingresosSalidas-content @this"/>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageIngresosSalidasDialog').hide()"
                                              class="ui-button-secondary"/>
                         </f:facet>

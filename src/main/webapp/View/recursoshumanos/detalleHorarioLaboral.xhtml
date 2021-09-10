@@ -49,7 +49,7 @@
                 </p:toolbar>
                     <p:dataTable id="dt-detalleHorarios" widgetVar="dtDetalleHorarios" var="detalleHorario" value="#{horarioLaboralView.horarios}"
                                  reflow="true" size="small" liveResize="true" styleClass="detalleHorarios-table"
-                                 rowKey="#{detalleHorario.id}" paginator="true"
+                                 rowKey="#{detalleHorario.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
                         <p:column headerText="Dia" width="20%" sortBy="#{detalleHorario.diaSemana.nombre}"
                                   filterBy="#{detalleHorario.diaSemana.nombre}">

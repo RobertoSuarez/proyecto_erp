@@ -71,7 +71,8 @@
                 </p:panel>
                 <p:dataTable id="dt-asistencias" widgetVar="dtAsistencias" var="asistencia" value="#{asistenciaView.asistencias}"
                              reflow="true" size="small" liveResize="true" styleClass="asistencias-table"
-                             paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                             paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                             rowsPerPageTemplate="3,5,10,{ShowAll|'All'}">
                     <p:column headerText="Horario" sortBy="#{asistencia.detalleHorario.ingresoSalida.resumen()}">
                         <h:outputText value="#{asistencia.detalleHorario.ingresoSalida.resumen()}"/>
                     </p:column>

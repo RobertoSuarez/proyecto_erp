@@ -25,7 +25,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-horarioLaborales" widgetVar="dtHorarioLaborales" var="horarioLaboral" value="#{horarioLaboralView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="horarioLaborales-table"
-                                 rowKey="#{horarioLaboral.id}" paginator="true"
+                                 rowKey="#{horarioLaboral.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
                         
                         <p:column headerText="Nombre del horario" sortBy="#{horarioLaboral.nombre}"
@@ -75,19 +75,19 @@
                                 <div class="card">
                                     <div class="ui-fluid">
                                         <div class="p-field">
-                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre</p:outputLabel>
+                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre: </p:outputLabel>
                                             <p:inputText id="nombre" value="#{horarioLaboralView.horarioLaboral.nombre}" 
-                                                         required="true" requiredMessage="Campo requerido"/>
+                                                         required="true" label="Nombre"/>
                                         </div>
                                         <div class="p-field">
-                                            <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
+                                            <p:outputLabel for="description" style="font-weight: bold">Descripción: </p:outputLabel>
                                             <p:inputTextarea id="description" value="#{horarioLaboralView.horarioLaboral.observaciones}" 
-                                                             required="true" requiredMessage="Campo requerido"/>
+                                                             required="true" label="Descripción"/>
                                         </div>
                                         <div class="p-field">
-                                            <p:outputLabel for="fechav" style="font-weight: bold">Fecha de Vigencia</p:outputLabel>
+                                            <p:outputLabel for="fechav" style="font-weight: bold">Fecha de Vigencia: </p:outputLabel>
                                             <p:datePicker id="fechav" value="#{horarioLaboralView.horarioLaboral.fechaVigencia}" 
-                                                          pattern="dd/MM/yyyy" required="true" requiredMessage="Campo requerido"/>
+                                                          pattern="dd/MM/yyyy" required="true" requiredMessage="Fecha requerida"/>
                                         </div>
                                     </div>
                                 </div>
@@ -95,8 +95,8 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" action="DetalleHorario" actionListener="#{horarioLaboralView.guardarHorario}"
-                                             update="manage-horarioLaboral-content" styleClass="ui-button-success"
-                                             process="manage-horarioLaboral-content @this">
+                                             update="messages manage-horarioLaboral-content" styleClass="ui-button-success"
+                                             process="messages manage-horarioLaboral-content @this">
                             </p:commandButton>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageHorarioLaboralDialog').hide()"
                                              process="@none" styleClass="p-mr-2" resetValues="true" />

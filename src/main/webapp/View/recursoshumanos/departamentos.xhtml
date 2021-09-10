@@ -25,7 +25,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-departamentos" widgetVar="dtDepartamentos" var="departamento" value="#{departamentoView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="departamentos-table"
-                                 rowKey="#{departamento.id}" paginator="true"
+                                 rowKey="#{departamento.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                  rows="5" rowSelectMode="add" paginatorPosition="bottom">
                         <p:column headerText="Departamento" sortBy="#{departamento.nombre}" filterBy="#{departamento.nombre}">
                             <h:outputText value="#{departamento.nombre}"/>
@@ -84,7 +84,8 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{departamentoView.enviar}"
-                                             update="manage-departamento-content" styleClass="ui-button-success" process="manage-departamento-content @this"/>
+                                             update="messages manage-departamento-content" styleClass="ui-button-success"
+                                             process="messages manage-departamento-content @this"/>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDepartamentoDialog').hide()"
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
