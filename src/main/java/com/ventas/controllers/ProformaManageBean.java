@@ -44,6 +44,7 @@ import org.primefaces.event.SelectEvent;
 public class ProformaManageBean implements Serializable {
 
     private ClienteVenta cliente;
+     ClienteVenta client;
     private ClienteVentaDao clienteDAO;
     private String clienteIdNum;
     private String clienteNombre;
@@ -87,6 +88,7 @@ public class ProformaManageBean implements Serializable {
     public void ProformaManagedBean() {
         this.cliente = new ClienteVenta();
         this.clienteDAO = new ClienteVentaDao();
+        this.client = new ClienteVenta();
 
         this.producto = new Producto();
         this.productoDao = new ProductoDAO();
@@ -165,6 +167,7 @@ public class ProformaManageBean implements Serializable {
                 detalle.setDescuento(this.producto.getDescuento());
                 detalle.setPrecio(this.precioProducto);
                 detalle.setProducto(this.producto);
+                detalle.getProducto().setStock((int)this.cantidad);
 
                 detalle.setSubTotal(new BigDecimal(this.precioProducto * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
 
@@ -246,6 +249,7 @@ public class ProformaManageBean implements Serializable {
             if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No puede  realizar una proforma nula", "Message Content");
             } else {
+                addMessage(FacesMessage.SEVERITY_INFO, "Proforma ingresada correctamente", "Message Content");
                 profor.setId_cliente(this.cliente.getIdCliente());
                 profor.setId_empleado(1);
                 codigo = profordao.codigoproforma();
@@ -271,7 +275,6 @@ public class ProformaManageBean implements Serializable {
                     profordao.ingresarDetalleProforma(produc, profor);
                     listSize += 1;
                 }
-                addMessage(FacesMessage.SEVERITY_INFO, "Proforma ingresada correctamente", "Message Content");
             }
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
@@ -289,7 +292,7 @@ public class ProformaManageBean implements Serializable {
                 addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
             }
         } catch (SQLException e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
         }
     }
 
@@ -327,25 +330,23 @@ public class ProformaManageBean implements Serializable {
 
     @Asynchronous
     public void detalleProforma(Proforma profor) throws SQLException {
+        this.client = new ClienteVenta();
         this.listaDetalles = new ArrayList<>();
         this.proformaActual = profor;
-        System.out.println("Inicia variable local");
-        this.listaDetalles = this.profDao.listaDetalleProforma(profor);
-        System.out.println("Lllena la lista de detalles");
-        this.cliente = this.clienteDAO.BuscarClientePorId(profor.id_cliente);
-        System.out.println("LLENA el objeto cliente");
-        this.Identificacion = this.cliente.getIdentificacion();
-        System.out.println("Llena la identificacion");
-        this.nombrecliente = this.cliente.getNombre();
-        System.out.println("Llena el nombre del cliente");
+        this.listaDetalles = this.profDao.listaDetalleProforma(profor.id_proforma);
+        this.nombrecliente = profor.getNombreCliente();
     }
 
     @Asynchronous
-    public void rechazarProforma() throws SQLException {
+    public void rechazarProforma(Proforma profor) throws SQLException {
         String rechazar = "R";
-        System.out.print(rechazar);
-        this.profDao.cambiarEstadoProforma(rechazar, this.proformaActual.getId_proforma());
-        System.out.print("Proforma Rechazada");
+        this.profDao.cambiarEstadoProforma(rechazar, profor.id_proforma);
+    }
+    
+     @Asynchronous
+    public void aceptarProforma(Proforma profor) throws SQLException {
+        String rechazar = "A";
+        this.profDao.aceptarProforma(rechazar, profor, ObtenerFecha());
     }
 
     //--------------------Getter y Setter-------------------//
@@ -603,10 +604,18 @@ public class ProformaManageBean implements Serializable {
 
     public void setListaDetalles(List<DetalleProforma> listaDetalles) {
         this.listaDetalles = listaDetalles;
+    } 
+
+    public ClienteVenta getClient() {
+        return client;
     }
 
+    public void setClient(ClienteVenta client) {
+        this.client = client;
+    }
     
     
+
     //Agregar producto a la lista de detalle
     public void AgregarProductoLista2() {
         if (this.producto.getCodigo() > 0) {
