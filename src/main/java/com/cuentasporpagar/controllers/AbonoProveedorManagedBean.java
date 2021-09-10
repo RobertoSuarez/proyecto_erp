@@ -147,9 +147,9 @@ public final class AbonoProveedorManagedBean {
                         //Verifica los tipos de pagos 
                         if ("Caja".equals(descrPago)) {
                             abonoDAO.Insertar(abonoproveedor, 1);
-                            bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                            bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor,1);
                             abonoDAO.insertasiento(1, abonoproveedor, 1);
-                            abonoDAO.update_abono(1);
+                            abonoDAO.update_abono(1,abonoproveedor.getIdAbonoProveedor());
                             if (bandera) {
                                 PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                                 showInfo("Abono proveedor ingresado");
@@ -165,9 +165,9 @@ public final class AbonoProveedorManagedBean {
                                 showWarn("Ingrese Banco");
                             } else {
                                 abonoDAO.Insertar(abonoproveedor, 1);
-                                bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor);
+                                bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor,1);
                                 abonoDAO.insertasiento(3, abonoproveedor, 1);
-                                abonoDAO.update_abono(1);
+                                abonoDAO.update_abono(1,abonoproveedor.getIdAbonoProveedor());
                                 if (bandera) {
                                     PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                                     showInfo("Abono proveedor ingresado");
@@ -191,16 +191,12 @@ public final class AbonoProveedorManagedBean {
     //Envia los datos a deshabilitar
     public void to_Disable() {
         abonoDAO.Insertar(this.abonoproveedor, 0);
-        bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor);
+        bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor,0);
         if (this.abonoproveedor.getDetalletipoPago() == "Caja") {
             abonoDAO.insertasiento(1, abonoproveedor, 0);
         } else {
             abonoDAO.insertasiento(3, abonoproveedor, 0);
         }
-        for (int i = 0; i < this.detalleFactura.size(); i++) {
-            abonoDAO.update_factura(this.abonoproveedor.getImporte(), this.detalleFactura.get(i).getNfactura());
-        }
-        abonoDAO.update_abono(0);
         abonoDAO.update_abono(0, abonoproveedor.getIdAbonoProveedor());
         listaAbonos.clear();
         listaAbonos = abonoDAO.llenarDatos(abonoproveedor.sentenciaMostrar());
