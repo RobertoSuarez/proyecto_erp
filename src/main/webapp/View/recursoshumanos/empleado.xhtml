@@ -190,6 +190,39 @@
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
                     </p:dialog>
+                    <p:dialog header="Suspención" minHeight="40" width="350" showEffect="fade" modal="true"
+                              widgetVar="manageSuspencionDialog" responsive="true">
+                        <p:outputPanel id="manage-suspencion-content" class="ui-fluid">
+                            <p:outputPanel >
+                                    <div class="ui-fluid">
+                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
+                                            styleClass="ui-panelgrid-blank ui-fluid"
+                                            style="width: 100%;">
+                                                                                        
+                                            <p:outputLabel for="incantidad" style="font-weight: bold" value="# Días: " />
+                                            <p:spinner id="incantidad" value="#{empleadoView.suspencion.valor}" required="true"
+                                                       decimalPlaces="0" min="1" max="30" stepFactor="1"
+                                                       requiredMessage="Necesita ingresar un número"/>
+                                            
+                                        </h:panelGrid>
+                                        <div class="p-field">
+                                            <p:outputLabel for="indetallesus" style="font-weight: bold" value="Detalle: "/>
+                                            <p:inputTextarea id="indetallesus" value="#{empleadoView.suspencion.detalle}"/>
+                                        </div>
+                                    </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarSuspencion}"
+                                             update="messages manage-suspencion-content" styleClass="ui-button-success"
+                                             process="messages manage-suspencion-content @this">
+                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar la amonestación?"
+                                           icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSuspencionDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
                     <p:toolbar>
                         <p:toolbarGroup>
                             <span style="font-weight: bold" icon="pi pi-table">#{empleadoView.sueldo.empleado.nombreCompleto()}</span>
@@ -259,6 +292,11 @@
                             <h:outputText rendered="#{empleadoView.amonestacion.id > 0}"
                                           value="$ #{empleadoView.amonestacion.valor} #{empleadoView.amonestacion.tipo}"/>
 
+                            <h:outputText rendered="#{empleadoView.suspencion.id > 0}" style="font-weight: bold;"
+                                          value="Suspención: #{empleadoView.suspencion.cantidadDias} dias"/>
+                            <h:outputText rendered="#{empleadoView.suspencion.id > 0}"
+                                          value="$ #{empleadoView.suspencion.valor}"/>
+
                         </h:panelGrid>
                         <h:panelGrid columns="5" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
                                      styleClass="ui-panelgrid-blank ui-fluid"
@@ -298,7 +336,9 @@
                             <h:outputText value="Sobre la carga Familiar: #{empleadoView.cargaFamiliar.detalle}" />
                             <h:outputText value="Sobre la sucursal: #{empleadoView.empleadoSucursal.detalle}" />
                             <h:outputText value="Sobre la reserva: #{empleadoView.empleadoReserva.detalle}" />
-                            <h:outputText value="Sobre mutas: #{empleadoView.multa.detalle}" />
+                            <h:outputText value="Sobre multas: #{empleadoView.multa.detalle}" />
+                            <h:outputText value="Sobre amonestación: #{empleadoView.amonestacion.detalle}" />
+                            <h:outputText value="Sobre suspención: #{empleadoView.suspencion.detalle}" />
                         </h:panelGrid>
                     </p:panel>
                     <p:panel class="ui-fluid">
@@ -325,6 +365,14 @@
                                              oncomplete="PF('manageMultaDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success"
                                              process=":form:manage-multa-content @this"/>
+                            <p:commandButton value="Amonestación" icon="pi pi-dollar" update=":form:manage-amonestacion-content"
+                                             oncomplete="PF('manageAmonestacionDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success"
+                                             process=":form:manage-amonestacion-content @this"/>
+                            <p:commandButton value="Suspención" icon="pi pi-dollar" update=":form:manage-suspencion-content"
+                                             oncomplete="PF('manageSuspencionDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success"
+                                             process=":form:manage-suspencion-content @this"/>
                             
                         </h:panelGrid>
                     </p:panel>

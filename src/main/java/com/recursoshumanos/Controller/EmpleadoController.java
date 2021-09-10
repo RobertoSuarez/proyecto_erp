@@ -339,6 +339,16 @@ public class EmpleadoController implements Serializable {
             mostrarMensajeError("La amonestación no se pudo guardar");
         }
     }
+    
+    public void guardarSuspencion(){
+        suspencion.setValor(Precision.round((suspencion.getValor()/30/8)* suspencion.getCantidadDias(), 2));
+        suspencion.setId(suspencionDAO.insertar(suspencion));
+        if(suspencion.getId() > 0){
+            mostrarMensajeInformacion("Se ha guardado la suspención con éxito");
+        }else{
+            mostrarMensajeError("La suspención no se pudo guardar");
+        }
+    }
 
     public String guardar() {
         String mensaje = "";
