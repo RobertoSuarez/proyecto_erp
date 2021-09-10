@@ -197,14 +197,16 @@ public final class AbonoProveedorManagedBean {
         } else {
             abonoDAO.insertasiento(3, abonoproveedor, 0);
         }
-        abonoDAO.update_abono(0);
-        abonoDAO.update_abono(0, abonoproveedor.getIdAbonoProveedor());
-
         for (int i = 0; i < this.detalleFactura.size(); i++) {
             abonoDAO.update_factura(this.abonoproveedor.getImporte(), this.detalleFactura.get(i).getNfactura());
         }
-        PrimeFaces.current().ajax().update(":form:dtPagos");
-        showInfo("Se revertior el pago correctamente");
+        abonoDAO.update_abono(0);
+        abonoDAO.update_abono(0, abonoproveedor.getIdAbonoProveedor());
+        listaAbonos.clear();
+        listaAbonos = abonoDAO.llenarDatos(abonoproveedor.sentenciaMostrar());
+        PrimeFaces.current().ajax().update("form:proveedortabla");
+        showInfo("Se revertio el pago correctamente");
+        reset();
     }
 
     public static void removeSessionScopedBean(String beanName) {

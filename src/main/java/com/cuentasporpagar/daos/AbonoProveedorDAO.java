@@ -247,7 +247,7 @@ public class AbonoProveedorDAO {
             try {
                 String sentencia = "update abonoproveedor as ap	"
                         + "SET  idasiento= (Select max(idasiento) from asiento),estado=" + estado
-                        + "WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
+                        + " WHERE ap.idabonoproveedor=(Select max(idabonoproveedor) from abonoproveedor)";
                 conex.Ejecutar2(sentencia);
                 System.out.println(sentencia);
             } catch (Exception ex) {
@@ -259,6 +259,7 @@ public class AbonoProveedorDAO {
     }
 
     public void update_abono(int estado, int idabono) {
+        conex.cerrarConexion();
         if (conex.isEstado()) {
             try {
                 String sentencia = "update abonoproveedor as ap	"
@@ -278,9 +279,9 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String sentencia = "update factura as f	"
-                        + "SET  pagado= select f.pagado -" + total + " from "
-                        + "((select f.pagado from factura f where f.nfactura='" + nfactura + "')) as f"
-                        + "WHERE f.nfactura='" + nfactura + "''";
+                        + "SET pagado=(select f.pagado - " + total + " from "
+                        + "(select f.pagado from factura f where f.nfactura='" + nfactura + "') as f)"
+                        + "where f.nfactura='" + nfactura + "'";
                 System.out.println(sentencia);
                 conex.Ejecutar2(sentencia);
             } catch (Exception ex) {
