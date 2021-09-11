@@ -6,7 +6,6 @@
 package com.cuentasporpagar.controllers;
 
 import com.cuentasporpagar.daos.AbonoProveedorDAO;
-import com.cuentasporpagar.daos.BuscarProvDAO;
 import com.cuentasporpagar.daos.FacturaDAO;
 import com.cuentasporpagar.models.AbonoProveedor;
 import com.cuentasporpagar.models.TipoPago;
@@ -30,6 +29,12 @@ import org.primefaces.event.RowEditEvent;
 /**
  *
  * @author PAOLA
+ * @see AbonoProveedor
+ * @see TipoPago
+ * @see TipoBanco
+ * @see AbonoProveedorDAO
+ * @see FacturaDAO
+ * @see Factura
  */
 @ManagedBean(name = "abonoProveedorMB")
 @SessionScoped
@@ -46,7 +51,6 @@ public final class AbonoProveedorManagedBean {
     private List<Factura> detalleFactura;
     private List<Proveedor> listaProveedor;
     private List<Factura> listaDetalleFact;
-    private BuscarProvDAO buscarprovDAO;
     private Factura factura;
     private String nfactura;
     private float pago;
@@ -59,7 +63,7 @@ public final class AbonoProveedorManagedBean {
     private String perio;
     private float total;
     private float auxTotal = 0;
-
+    
     public AbonoProveedorManagedBean() {
         abonoproveedor = new AbonoProveedor();
         tipoPago = new TipoPago();
@@ -82,17 +86,28 @@ public final class AbonoProveedorManagedBean {
     }
 
     //Metodos 
-    //Consulta para listar todos los datos del abono
+    /**
+     * Consulta para listar todos los datos del abono
+     *
+     */
     public void show_payment() {
         this.listaAbonos = abonoDAO.llenarDatos(abonoproveedor.sentenciaMostrar());
     }
 
-    //Consulta para listar todos los proveedores
+    /**
+     * Consulta para listar todos los proveedores
+     */
     public void show_Supplier() {
         this.listaProveedor.clear();
         this.listaProveedor = abonoDAO.llenarProveedor();
     }
 
+    /**
+     * Este metodo nos ayuda en selecciona un proveedor y hacer una consulta de
+     * todas las facturas que pertenece a dicho proveedor
+     *
+     * @param event Evento para seleccionar
+     */
     public void onRowSelectf(SelectEvent<Proveedor> event) {
         setCod(event.getObject().getRuc());
         setNom(event.getObject().getNombre());
@@ -102,13 +117,20 @@ public final class AbonoProveedorManagedBean {
         this.listaFactura = abonoDAO.llenarFacturas(abonoproveedor.BuscarSentenciaFactura(getCod()));
     }
 
+    /**
+     * Este metodo nos ayuda en cargar todos los datos de dicho pago
+     * seleccionado para revertir
+     *
+     * @param abonoProveedor requerido para saber los datos que ha seleccionado
+     * en la vista
+     * @
+     */
     public void load_Data(AbonoProveedor abonoProveedor) {
         //Buscar idabonoproveedor para tener los datos del abono
-        
-        abonoDAO.search_date_payment(abonoProveedor.getPago(),abonoProveedor.getRuc(), this.abonoproveedor);
-        System.out.println(this.abonoproveedor.getIdAbonoProveedor());
-        //Buscar datos de abono proveedor
 
+        abonoDAO.search_date_payment(abonoProveedor.getPago(), abonoProveedor.getRuc(), this.abonoproveedor);
+
+        //Buscar datos de abono proveedor
         abonoDAO.select_date_payment(this.abonoproveedor.getIdAbonoProveedor());
         //Buscar datos de la facturas
 
@@ -130,15 +152,20 @@ public final class AbonoProveedorManagedBean {
         }
         this.abonoproveedor.setImporte(auxTotal);
     }
-    
-    //Envia los datos a verificar y guardar el pago
+
+    /**
+     * Envia los datos a verificar y guardar el pago
+     */
     public void insert_Payment() {
+        //Verificar la seleccion de un porveedor
         if (this.abonoproveedor.getNombreProveedor() == null) {
             showWarn("Seleccione el proveedor");
         } else {
-            if (this.tipoPago.getDescripcion() == null||this.tipoPago.getDescripcion()=="") {
+            //Verifica la seleccion de un tipo de pago
+            if (this.tipoPago.getDescripcion() == null || this.tipoPago.getDescripcion() == "") {
                 showWarn("Ingrese tipo de pago");
             } else {
+                //Verifica la lista de facturas que tiene dicho proveedor
                 if (this.listaFactura.size() > 0) {
                     if (dateMofid >= this.listaFactura.size()) {
                         abonoproveedor.setDetalletipoPago(tipoPago.getDescripcion());
@@ -146,10 +173,11 @@ public final class AbonoProveedorManagedBean {
                         descrPago = tipoPago.getDescripcion();
                         //Verifica los tipos de pagos 
                         if ("Caja".equals(descrPago)) {
+                            //Envio de datos a registrar BD
                             abonoDAO.Insertar(abonoproveedor, 1);
-                            bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor,1);
+                            bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor, 1);
                             abonoDAO.insertasiento(1, abonoproveedor, 1);
-                            abonoDAO.update_abono(1,abonoproveedor.getIdAbonoProveedor());
+                            abonoDAO.update_abono(1, abonoproveedor.getIdAbonoProveedor());
                             if (bandera) {
                                 PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                                 showInfo("Abono proveedor ingresado");
@@ -165,9 +193,9 @@ public final class AbonoProveedorManagedBean {
                                 showWarn("Ingrese Banco");
                             } else {
                                 abonoDAO.Insertar(abonoproveedor, 1);
-                                bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor,1);
+                                bandera = abonoDAO.InsertarDetalle(this.listaFactura, abonoproveedor, 1);
                                 abonoDAO.insertasiento(3, abonoproveedor, 1);
-                                abonoDAO.update_abono(1,abonoproveedor.getIdAbonoProveedor());
+                                abonoDAO.update_abono(1, abonoproveedor.getIdAbonoProveedor());
                                 if (bandera) {
                                     PrimeFaces.current().executeScript("PF('managePagoDialog').hide()");
                                     showInfo("Abono proveedor ingresado");
@@ -187,31 +215,38 @@ public final class AbonoProveedorManagedBean {
             }
         }
     }
-    
-    //Envia los datos a deshabilitar
+
+    /**
+     * Este metodo nos ayuda en deshabilitar un pago registrado
+     */
     public void to_Disable() {
+        //Actualiza el estado del pago seleccionado
         abonoDAO.update_abono(0, abonoproveedor.getIdAbonoProveedor());
+        //Envio de datos a registrar
         abonoDAO.Insertar(this.abonoproveedor, 0);
-        bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor,0);
+        bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor, 0);
         if (this.abonoproveedor.getDetalletipoPago() == "Caja") {
             abonoDAO.insertasiento(1, abonoproveedor, 0);
         } else {
             abonoDAO.insertasiento(3, abonoproveedor, 0);
         }
+        //Actualiza el estado del pago revertido
         abonoDAO.update_abono(0, abonoproveedor.getIdAbonoProveedor());
+        //Actualiza los datos de la tabla pago  y muestra dicho datos
         listaAbonos.clear();
         listaAbonos = abonoDAO.llenarDatos(abonoproveedor.sentenciaMostrar());
         PrimeFaces.current().ajax().update("form:proveedortabla");
+        //cierra el dialogo de deshabilitar
         PrimeFaces.current().executeScript("PF('managePagoDialog-desh').hide()");
         showInfo("Se revertio el pago correctamente");
         reset();
     }
 
-    public static void removeSessionScopedBean(String beanName) {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
-    }
-
-    //Evento para editar el dato del pago
+    /**
+     * Evento para editar el dato del pago de las factura del proveedor
+     *
+     * @param event Evento para ingresar el pago
+     */
     public void onRowEdit(RowEditEvent<Factura> event) {
         float n1 = event.getObject().getPendiente();
         float n2 = pago;
@@ -236,32 +271,57 @@ public final class AbonoProveedorManagedBean {
         }
     }
 
-    //Evento para cancelar el dato del pago
+    /**
+     * Evento para cancelar el dato del pago
+     *
+     * @param event Evento para cancelar la edición del pago
+     */
     public void onRowCancel(RowEditEvent<Factura> event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cancelada"));
     }
 
+    /**
+     * Este metodo muestra los mensajes
+     *
+     * @param severity la severidad
+     * @param summary Texto de mensaje de resumen localizado
+     * @param detail Texto de mensaje de detalle localizado
+     */
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    //Funcion para mostrar mensaje de informacion correcta
+    /**
+     * Funcion para mostrar mensaje de informacion correcta
+     *
+     * @param message Mensaje detallado a mostrar
+     */
     public void showInfo(String message) {
         addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
     }
 
-    //Funcion para mostrar mensaje de informacion incorrecta
+    /**
+     * Funcion para mostrar mensaje de informacion incorrecta
+     *
+     * @param message Mensaje detallado a mostrar
+     */
     public void showWarn(String message) {
         addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
     }
-    
-    //Funcion para mostrar mensaje de error con la BD
+
+    /**
+     * Funcion para mostrar mensaje de error con la BD
+     *
+     * @param message Mensaje detallado a mostrar
+     */
     public void showError(String message) {
         addMessage(FacesMessage.SEVERITY_ERROR, "Error", message);
     }
 
-    //Limpia los imputext
+    /**
+     * Limpia los imputext
+     */
     public void reset() {
         PrimeFaces.current().resetInputs(":form:pago-content,:form:table-factura, "
                 + ":form:pago, :form:pago-content-edit");
@@ -274,7 +334,9 @@ public final class AbonoProveedorManagedBean {
         this.setTotal(0);
     }
 
-    //Elimina una factura que no desea
+    /**
+     * Elimina una factura que no desea
+     */
     public void deleteFactura() {
         this.listaFactura.remove(this.factura);
         this.factura = null;
@@ -289,26 +351,56 @@ public final class AbonoProveedorManagedBean {
         setPago(0);
     }
 
+    /**
+     * Getter de lista abono proveedor
+     *
+     * @return Lista de todos los pago registrados en BD
+     */
     public List<AbonoProveedor> getListaAbonos() {
         return listaAbonos;
     }
 
+    /**
+     * Setter de lista abono proveedor
+     *
+     * @param listaAbonos Datos a agregar
+     */
     public void setListaAbonos(List<AbonoProveedor> listaAbonos) {
         this.listaAbonos = listaAbonos;
     }
 
+    /**
+     * Getter de lista Factura
+     *
+     * @return lista de todos las facturas registrados en BD
+     */
     public List<Factura> getListaFactura() {
         return listaFactura;
     }
 
+    /**
+     * Setter de lista Factura
+     *
+     * @param listaFactura Datos a agregar
+     */
     public void setListaFactura(List<Factura> listaFactura) {
         this.listaFactura = listaFactura;
     }
 
+    /**
+     * Getter de lista proveedor
+     *
+     * @return lista de todos las proveedor registrados en BD
+     */
     public List<Proveedor> getListaProveedor() {
         return listaProveedor;
     }
 
+    /**
+     * Setter de lista proveedor
+     *
+     * @param listaProveedor Datos a agregar
+     */
     public void setListaProveedor(List<Proveedor> listaProveedor) {
         this.listaProveedor = listaProveedor;
     }
@@ -407,14 +499,6 @@ public final class AbonoProveedorManagedBean {
 
     public void setListaDetalleFact(List<Factura> listaDetalleFact) {
         this.listaDetalleFact = listaDetalleFact;
-    }
-
-    public BuscarProvDAO getBuscarprovDAO() {
-        return buscarprovDAO;
-    }
-
-    public void setBuscarprovDAO(BuscarProvDAO buscarprovDAO) {
-        this.buscarprovDAO = buscarprovDAO;
     }
 
     public List<Factura> getDetalleFactura() {

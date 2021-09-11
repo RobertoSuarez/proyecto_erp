@@ -20,6 +20,9 @@ import java.time.format.DateTimeFormatter;
 /**
  *
  * @author PAOLA
+ * @see AbonoProveedor
+ * @see DetalleAbono
+ * @see Factura
  */
 public class AbonoProveedorDAO {
 
@@ -49,8 +52,14 @@ public class AbonoProveedorDAO {
     public AbonoProveedorDAO(DetalleAbono detalleAbono) {
         this.detalleAbono = detalleAbono;
     }
-//Llenar Datos de los abonos realizados
 
+    /**
+     * Llenar Datos de los abonos realizados
+     *
+     * @param sentencia Sentencia para ejecutar que contiene los
+     * campos(referencia, idproveedor,fecha,pago,periodo,descripcion,nombre)
+     * @return Retorna una lista de pagos registrados en BD
+     */
     public List<AbonoProveedor> llenarDatos(String sentencia) {
         conex = new Conexion();
         listaAbono = new ArrayList<>();
@@ -73,8 +82,14 @@ public class AbonoProveedorDAO {
         }
         return listaAbono;
     }
-//LLena una lista de datos de facturas de dicho proveedor seleccionado
 
+    /**
+     * LLena una lista de datos de facturas de dicho proveedor seleccionado
+     *
+     * @param sentencia Sentencia para ejecutar que contiene los
+     * campos(nfactura, importe,pagado,fecha,vencimiento,pendiente)
+     * @return Retorna una lista de facturas registrados en BD
+     */
     public List<Factura> llenarFacturas(String sentencia) {
         conex = new Conexion();
         listafactura = new ArrayList<>();
@@ -97,8 +112,12 @@ public class AbonoProveedorDAO {
         }
         return listafactura;
     }
-//Llena una lista de Todos los proveedores registrado
 
+    /**
+     * Llena una lista de Todos los proveedores registrado
+     *
+     * @return Retorna una lista de proveedores registrados en BD
+     */
     public List<Proveedor> llenarProveedor() {
         if (conex.isEstado()) {
             try {
@@ -126,8 +145,13 @@ public class AbonoProveedorDAO {
         }
         return listaProveedor;
     }
-//Inserta abonoproveedor
 
+    /**
+     * Inserta abonoproveedor
+     *
+     * @param abonoProveedor Datos de la cabecera de un pago
+     * @param estado Estado a mostrar(0=hablitado,1=deshabilitado)
+     */
     public void Insertar(AbonoProveedor abonoProveedor, int estado) {
         if (conex.isEstado()) {
             try {
@@ -148,8 +172,16 @@ public class AbonoProveedorDAO {
             }
         }
     }
-//Inserta los datos del detalle del pago
 
+    /**
+     * Inserta los datos del detalle del pago
+     *
+     * @param selectedFactura Detalle de las facturas a realizar pago 
+     * @param abono Total de cada factura
+     * @param opcion Opcion para saber si es deshabilitado y registrado
+     * @return Retorna una bandera para verificar el ingreso de los detalle de
+     * pago
+     */
     public boolean InsertarDetalle(List<Factura> selectedFactura, AbonoProveedor abono, int opcion) {
         if (conex.isEstado()) {
             try {
@@ -189,6 +221,11 @@ public class AbonoProveedorDAO {
         return numero;
     }
 
+    /**
+     * Genera un número de pago para la referencia del asiento contable
+     *
+     * @return Retorna un String (codigo de referncia en asiento)
+     */
     private String generateNumeroPago() {
         int num = getCountPago();
         if (num > 8) {
@@ -198,6 +235,11 @@ public class AbonoProveedorDAO {
         }
     }
 
+    /**
+     * Metodo para consultar el id Diario del modulo cuenta por pagar
+     *
+     * @return Retorna el id del dicho diario
+     */
     public int idDiario() {
         int iddiario = 0;
         if (conex.isEstado()) {
@@ -216,7 +258,13 @@ public class AbonoProveedorDAO {
         return iddiario;
     }
 
-    //asiento contable
+    /**
+     * Metodo para llenar la sentencia tipo Json
+     *
+     * @param idSubcuenta Tipo de subcuenta
+     * @param abono Total del abono del pago
+     * @param accion Tipo de accion(registrar , deshabilitar)
+     */
     public void insertasiento(int idSubcuenta, AbonoProveedor abono, int accion) {
         try {
             String sentencia1, sentencia;
@@ -250,7 +298,13 @@ public class AbonoProveedorDAO {
             System.out.println(ex.getMessage() + " error en conectarse");
         }
     }
-    // actualizar el estado en las facturas
+
+    /**
+     * Actualizar el estado en las facturas
+     *
+     * @param estado EStado de un pago(1=registrado,0=deshabilitado)
+     * @param idabono idabono para actualizar el estado
+     */
     public void update_abono(int estado, int idabono) {
         conex.cerrarConexion();
         if (conex.isEstado()) {
@@ -266,7 +320,13 @@ public class AbonoProveedorDAO {
             }
         }
     }
-    // Envia los datos tipo json a insertar
+
+    /**
+     * Envia los datos tipo json a insertar
+     *
+     * @param a Sentencia del tipo json (asiento)
+     * @param b Sentencia del tipo json (movimiento)
+     */
     public void intJson(String a, String b) {
         if (conex.isEstado()) {
             try {
@@ -300,11 +360,18 @@ public class AbonoProveedorDAO {
         return n;
     }
 
+    /**
+     * metodo para consultar el idabonoproveedor
+     *
+     * @param importe
+     * @param ruc
+     * @param abonoProveedor
+     */
     public void search_date_payment(float importe, String ruc, AbonoProveedor abonoProveedor) {
         if (conex.isEstado()) {
             try {
-                System.out.println(importe+"-"+ruc);
-                String sentencia ="select search_date_payment("+importe+",'"+ruc+"') as idabono;";
+                System.out.println(importe + "-" + ruc);
+                String sentencia = "select search_date_payment(" + importe + ",'" + ruc + "') as idabono;";
                 System.out.println(sentencia);
                 result = conex.ejecutarConsulta(sentencia);
                 while (result.next()) {
@@ -318,6 +385,11 @@ public class AbonoProveedorDAO {
         }
     }
 
+    /**
+     * metodo para consultar el proveedor
+     *
+     * @param idabono
+     */
     public void select_date_payment(int idabono) {
         if (conex.isEstado()) {
             try {
@@ -340,6 +412,12 @@ public class AbonoProveedorDAO {
         }
     }
 
+    /**
+     * metodo para consuultar la factura
+     *
+     * @param idabono
+     * @return
+     */
     public List<Factura> select_date_invoice(int idabono) {
         if (conex.isEstado()) {
             try {
