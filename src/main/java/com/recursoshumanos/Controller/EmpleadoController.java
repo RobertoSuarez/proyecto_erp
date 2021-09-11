@@ -154,7 +154,7 @@ public class EmpleadoController implements Serializable {
         horarios = horarioLaboralDAO.Activos();
         sucursales = sucursalDAO.Listar();
         fechaMax.setYear(103);
-        empleado.getFechaNacimiento().setYear(103);
+        empleado.setFechaNacimiento(fechaMax);
         PrimeFaces.current().ajax().update(null, "form:dt-empleado");
     }
     

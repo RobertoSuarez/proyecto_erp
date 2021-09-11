@@ -76,7 +76,7 @@
                                     <p:outputLabel for="fechaN" style="font-weight: bold; margin-left: -10PX; margin-right: -10PX;" value="Fecha de nacimiento: "/>
                                     <p:datePicker id="fechaN" value="#{empleadoView.empleado.fechaNacimiento}" pattern="dd/MM/yyyy"
                                                   monthNavigator="true" yearNavigator="true" mindate="01/01/1956"
-                                                  maxdate="#{empleadoView.darFormato(empleadoView.fechaMax)}"
+                                                  maxdate="#{empleadoView.fechaMax}"
                                                   required="true" label="Fecha de nacimiento"/>
 
                                     <p:outputLabel for="genero" style="font-weight: bold; margin-left: 10PX" value="Género: "/>
