@@ -80,7 +80,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
     /**
      * Creación del metedo INSERTAR, para registrar
      * los datos recopilados de los Empleados.
-     * @return ciudad Retorna la confirmación
+     * @return empleado Retorna la confirmación
      * de un registro exitoso o erroneo.
      */
     @Override
