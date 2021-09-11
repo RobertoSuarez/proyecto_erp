@@ -44,7 +44,7 @@ import org.primefaces.event.SelectEvent;
 public class ProformaManageBean implements Serializable {
 
     private ClienteVenta cliente;
-     ClienteVenta client;
+    ClienteVenta client;
     private ClienteVentaDao clienteDAO;
     private String clienteIdNum;
     private String clienteNombre;
@@ -160,41 +160,48 @@ public class ProformaManageBean implements Serializable {
     @Asynchronous
     public void AgregarProductoLista() {
         try {
+            double valorreferencia = 0;
+            valorreferencia = this.producto.getPrecioUnitario() * 0.75;
             if (this.codigoProducto > 0) {
-                DetalleVenta detalle = new DetalleVenta();
-                detalle.setCodprincipal(this.producto.getCodigo());
-                detalle.setCantidad(this.cantidad);
-                detalle.setDescuento(this.producto.getDescuento());
-                detalle.setPrecio(this.precioProducto);
-                detalle.setProducto(this.producto);
-                detalle.getProducto().setStock((int)this.cantidad);
+                if (this.precioProducto > valorreferencia) {
+                    DetalleVenta detalle = new DetalleVenta();
+                    detalle.setCodprincipal(this.producto.getCodigo());
+                    detalle.setCantidad(this.cantidad);
+                    detalle.setDescuento(this.producto.getDescuento());
+                    detalle.setPrecio(this.precioProducto);
+                    detalle.setProducto(this.producto);
+                    detalle.getProducto().setStock((int) this.cantidad);
 
-                detalle.setSubTotal(new BigDecimal(this.precioProducto * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
+                    detalle.setSubTotal(new BigDecimal(this.precioProducto * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
 
-                this.producto.setPrecioUnitario(this.precioProducto);
-                this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
-                this.listaDetalle.add(detalle);
-                this.cantidad = 1;
-                this.codigoProducto = 0;
-                this.nombreProducto = "";
+                    this.producto.setPrecioUnitario(this.precioProducto);
+                    this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
+                    this.listaDetalle.add(detalle);
+                    this.cantidad = 1;
+                    this.codigoProducto = 0;
+                    this.nombreProducto = "";
 
-                double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-                if (this.producto.getIva() != 0) {
-                    this.subtotal12 += subtemp;
+                    double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+                    if (this.producto.getIva() != 0) {
+                        this.subtotal12 += subtemp;
+                    } else {
+                        this.subtotal0 += subtemp;
+                    }
+
+                    this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
+                    this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+
+                    this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
+
+                    this.nombreProducto = "XXXXXX";
+                    this.cantidad = 1;
+                    this.precioProducto = 0;
+
+                    this.producto = null;
                 } else {
-                    this.subtotal0 += subtemp;
+                    addMessage(FacesMessage.SEVERITY_INFO, "Muy bajo el valor que desea pagar por el producto. Se registro el valor minimo aceptado en pantalla", "Message Content");
+                    this.precioProducto = (float) valorreferencia;
                 }
-
-                this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
-                this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-
-                this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-
-                this.nombreProducto = "XXXXXX";
-                this.cantidad = 1;
-                this.precioProducto = 0;
-
-                this.producto = null;
             } else {
                 addMessage(FacesMessage.SEVERITY_ERROR, "Debe escoger un producto en primera instancia", "Message Content");
             }
@@ -343,14 +350,14 @@ public class ProformaManageBean implements Serializable {
         listarProformas();
         addMessage(FacesMessage.SEVERITY_ERROR, "Proforma rechazada", "Message Content");
     }
-    
-     @Asynchronous
+
+    @Asynchronous
     public void aceptarProforma(Proforma profor) throws SQLException {
         String rechazar = "A";
         int factura;
         factura = this.profDao.aceptarProforma(rechazar, profor, ObtenerFecha());
         listarProformas();
-        addMessage(FacesMessage.SEVERITY_ERROR, "Proforma aceptada con dactura" + factura , "Message Content");
+        addMessage(FacesMessage.SEVERITY_ERROR, "Proforma aceptada con dactura" + factura, "Message Content");
     }
 
     //--------------------Getter y Setter-------------------//
@@ -608,7 +615,7 @@ public class ProformaManageBean implements Serializable {
 
     public void setListaDetalles(List<DetalleProforma> listaDetalles) {
         this.listaDetalles = listaDetalles;
-    } 
+    }
 
     public ClienteVenta getClient() {
         return client;
@@ -617,8 +624,6 @@ public class ProformaManageBean implements Serializable {
     public void setClient(ClienteVenta client) {
         this.client = client;
     }
-    
-    
 
     //Agregar producto a la lista de detalle
     public void AgregarProductoLista2() {
