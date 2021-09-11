@@ -257,8 +257,9 @@ public class ProformaDAO {
         }
     }
 
-    public void aceptarProforma(String estado, Proforma pr, String fecha) throws SQLException {
+    public int aceptarProforma(String estado, Proforma pr, String fecha) throws SQLException {
         List<DetalleProforma> detalle = new ArrayList<>();
+        int codigoventa=0;
         this.venta = new Venta();
         String consulta;
         con.abrirConexion();
@@ -281,7 +282,7 @@ public class ProformaDAO {
             this.venta.setIva(pr.getIva12());
             this.venta.setIce(pr.getIce());
             this.venta.setTotalFactura(pr.totalproforma);
-            int codigoventa = this.ventaDao.GuardarVenta(this.venta);
+            codigoventa = this.ventaDao.GuardarVenta(this.venta);
             detalle = listaDetalleProforma(pr.id_proforma);
             int listSize = 0;
             if (codigoventa == 0) {
@@ -309,7 +310,7 @@ public class ProformaDAO {
         } finally {
             con.desconectar();
         }
-
+        return codigoventa;
     }
 
 }

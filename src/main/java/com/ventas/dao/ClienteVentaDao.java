@@ -41,13 +41,14 @@ public class ClienteVentaDao implements Serializable {
                 temp.setNombre(rs.getString(5));
                 temp.setIdentificacion(rs.getString(6));
             }
+            con.cerrarConexion();
         } catch (SQLException e) {
             if (con.isEstado()) {
                 con.cerrarConexion();
             }
             System.out.println(e.getMessage());
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
         return temp;
     }
@@ -72,13 +73,14 @@ public class ClienteVentaDao implements Serializable {
                 this.clienteVenta.setIdentificacion(rs.getString(6));
                 clientes.add(this.clienteVenta);
             }
+            this.con.cerrarConexion();
         } catch (Exception e) {
             if (con.isEstado()) {
                 con.cerrarConexion();
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.con.cerrarConexion();
+            this.con.desconectar();
         }
         return clientes;
     }
