@@ -39,9 +39,9 @@ public class CondicionesDAO implements Serializable {
      /**
       * Funcion llenarP en donde listara el proveedor segun el parametro recibido aplicamos throws
       *
-      * @param n
-      * @return lista
-      * @throws SQLException
+      * @param n variable
+      * @return lista List
+      * @throws SQLException validador
       */
      public List<Condiciones> llenarP(boolean n) throws SQLException {
           this.conexion.Conectar();
@@ -91,8 +91,8 @@ public class CondicionesDAO implements Serializable {
      /**
       * Habilitamos o deshabilitamos un proveedor segun su estado aplicamos throws
       *
-      * @param d
-      * @param n
+      * @param d variable tipo string
+      * @param n variable boleana
       */
      public void deshabilitar(String d, boolean n) {
           if (conexion.isEstado()) {
@@ -113,8 +113,8 @@ public class CondicionesDAO implements Serializable {
      /**
       * Método para insertar las condicones del proveedor aplica throws
       *
-      * @throws SQLException
-      * @param c
+      * @throws SQLException validador
+      * @param c ojeto
       */
      public void insertarCondiciones(Condiciones c) throws Exception {
           try {
@@ -137,9 +137,9 @@ public class CondicionesDAO implements Serializable {
      /**
       * Método para actualizar las condicones del proveedor aplica throws
       *
-      * @throws SQLException
-      * @param c
-      * @param codigo
+      * @throws SQLException validador
+      * @param c objeto Condiciones
+      * @param codigo variable tipo int
       */
      public void updateCondiciones(Condiciones c, int codigo) throws SQLException {
 
