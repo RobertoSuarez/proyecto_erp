@@ -33,7 +33,7 @@
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
                             <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" 
-                                             actionListener="#{ProformaMB.aceptarProforma(Lista)}" update="listaDeProforma" />
+                                             actionListener="#{ProformaMB.aceptarProforma(Lista)}" update="listaDeProforma"/>
                             <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger" 
                                              actionListener="#{ProformaMB.rechazarProforma(Lista)}" update="listaDeProforma"/>
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this"
@@ -53,10 +53,10 @@
                         </p:panel>
 
                         <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ProformaMB.listaDetalles}">
-                            <p:column headerText="Cantidad" width="10%">
+                            <p:column headerText="Codigo" width="10%">
                                 <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
                             </p:column>
-                            <p:column headerText="Detalle" width="50%" >
+                            <p:column headerText="Cantidad" width="50%" >
                                 <h:outputText value="#{FacturaDetailTB.cantidad}" />
                             </p:column>
                             <p:column headerText="Precio unitario" width="20%">

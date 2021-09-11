@@ -76,7 +76,7 @@ public class VentaDAO {
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.con.cerrarConexion();
+            this.con.desconectar();
         }
         return 0;
     }
@@ -135,7 +135,7 @@ public class VentaDAO {
             
         }
 
-        this.con.cerrarConexion();
+        this.con.desconectar();
 
         return ventas;
     }
