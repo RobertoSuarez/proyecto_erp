@@ -65,7 +65,9 @@
                         <p:column headerText="Ruc" sortBy="#{pago.ruc}">
                             <h:outputText value="#{pago.ruc}"/>
                         </p:column>
-                        <p:column headerText="Nombre" sortBy="#{pago.nombreProveedor}">
+                        <p:column headerText="Nombre" filterBy="#{pago.nombreProveedor}"
+                                  filterStyle="display : none"
+                                  sortBy="#{pago.nombreProveedor}">
                             <h:outputText value="#{pago.nombreProveedor}" />
                         </p:column>
 
