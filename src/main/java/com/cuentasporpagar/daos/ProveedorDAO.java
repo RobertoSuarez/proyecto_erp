@@ -8,9 +8,12 @@ package com.cuentasporpagar.daos;
 import com.global.config.Conexion;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.SQLException;
+
 /**
  *
  * @author ebert
+ * @see Conexion
+ * @see Proveedor
  */
 public class ProveedorDAO extends Conexion {
 
@@ -25,11 +28,22 @@ public class ProveedorDAO extends Conexion {
           this.proveedor = proveedor;
      }
 
+     /**
+      * Constructor en donde tendremos los metodos conexion proveedor
+      */
+
      public ProveedorDAO() {
           conexion = new Conexion();
           proveedor = new Proveedor();
      }
-   
+
+     /**
+      * Método para insertar un proveedor recibiendo un parámetro Dicha clase implementa try and
+      * catch
+      *
+      * @param p
+      */
+
      public void insertarp(Proveedor p) {
           try {
                this.conexion.Conectar();
@@ -50,10 +64,17 @@ public class ProveedorDAO extends Conexion {
           }
      }
 
-     public void update(Proveedor proveedor, int codigo) throws SQLException {         
+     /**
+      * Método para actualizar un proveedor recibiendo dos parametro Dicha clase implementa throws
+      *
+      * @param proveedor
+      * @param codigo
+      * @throws SQLException
+      */
+     public void update(Proveedor proveedor, int codigo) throws SQLException {
           try {
                this.conexion.Conectar();
-                String cadena = "UPDATE public.proveedor\n"
+               String cadena = "UPDATE public.proveedor\n"
                        + "	SET  razonsocial= '" + proveedor.getRazonSocial() + "',"
                        + " ruc='" + proveedor.getRuc() + "', "
                        + "nombre='" + proveedor.getNombre() + "',"
@@ -63,7 +84,7 @@ public class ProveedorDAO extends Conexion {
                        + "contacto='" + proveedor.getContacto() + "',"
                        + " telefono='" + proveedor.getTelefono() + "',"
                        + " estado='" + proveedor.isEstado() + "' "
-                       + " Where idproveedor = "+codigo+"";
+                       + " Where idproveedor = " + codigo + "";
                conexion.ejecutar(cadena);
                conexion.cerrarConexion();
           } catch (SQLException e) {
