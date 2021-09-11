@@ -16,8 +16,14 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 /**
- *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Detalle Rol dePagos.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
 
@@ -44,6 +50,10 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         this.detalleRolPago = detalleRolPago;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;

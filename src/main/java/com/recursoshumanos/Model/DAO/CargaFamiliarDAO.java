@@ -22,8 +22,7 @@ import java.util.List;
  * @author rturr
  * 
  * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
- * para todo lo que tenga que ver con CargaFamiliar, Esta clase 
- * tiene muchas funciones que son reutilizables.
+ * para todo lo que tenga que ver con CargaFamiliar.
  * Y se encarga de administrar las sentencias de la BD, utilizando
  * las clases de los modelos
  */
