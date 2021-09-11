@@ -383,6 +383,7 @@ public class EmpleadoController implements Serializable {
         }else{
             mostrarMensajeError("La multa no se pudo guardar");
         }
+        PrimeFaces.current().executeScript("PF('manageMultaDialog').hide()");
     }
     
     public void guardarAmonestacion(){
@@ -392,16 +393,18 @@ public class EmpleadoController implements Serializable {
         }else{
             mostrarMensajeError("La amonestación no se pudo guardar");
         }
+        PrimeFaces.current().executeScript("PF('manageAmonestacionDialog').hide()");
     }
     
     public void guardarSuspencion(){
-        suspencion.setValor(Precision.round((suspencion.getValor()/30/8)* suspencion.getCantidadDias(), 2));
+        suspencion.setValor(Precision.round((sueldo.getValor()/30/8)* suspencion.getCantidadDias(), 2));
         suspencion.setId(suspencionDAO.insertar(suspencion));
         if(suspencion.getId() > 0){
             mostrarMensajeInformacion("Se ha guardado la suspención con éxito");
         }else{
             mostrarMensajeError("La suspención no se pudo guardar");
         }
+        PrimeFaces.current().executeScript("PF('manageSuspencionDialog').hide()");
     }
 
     public String guardar() {

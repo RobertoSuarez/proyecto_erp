@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.activosfijos.api.Depreciable.class);
         resources.add(com.mycompanny.interfaces_mcp.resources.JavaEE8Resource.class);
+        resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
     }
     
 }

@@ -200,7 +200,7 @@
                                                  style="width: 100%;">
 
                                         <p:outputLabel for="incantidad" style="font-weight: bold" value="# Días: " />
-                                        <p:spinner id="incantidad" value="#{empleadoView.suspencion.valor}" required="true"
+                                        <p:spinner id="incantidad" value="#{empleadoView.suspencion.cantidadDias}" required="true"
                                                    decimalPlaces="0" min="1" max="30" stepFactor="1"
                                                    requiredMessage="Necesita ingresar un número"/>
 
@@ -304,9 +304,6 @@
                                              rowKey="#{amonestaciones.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                              rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
-                                    <p:column headerText="Tipo" sortBy="#{amonestacion.tipo}">
-                                        <h:outputText value="#{amonestacion.tipo}"/>
-                                    </p:column>
                                     <p:column headerText="Monto" sortBy="#{amonestacion.valor}">
                                               <h:outputText value="#{amonestacion.valor}"/>
                                     </p:column>
@@ -322,7 +319,7 @@
                                                 <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
                                             </p:selectOneMenu>
                                         </f:facet>
-                                        <h:outputText value="#{sueldo.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
+                                        <h:outputText value="#{amonestacion.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
                                     </p:column>
                                 </p:dataTable>
                             </p:outputPanel>
@@ -338,7 +335,7 @@
                             <p:outputPanel >
                                 <p:dataTable id="dt-suspenciones" widgetVar="dtSuspenciones" var="suspencion"
                                              value="#{empleadoView.suspenciones}"
-                                             reflow="true" size="small" liveResize="true" styleClass="amonestaciones-table"
+                                             reflow="true" size="small" liveResize="true" styleClass="suspenciones-table"
                                              rowKey="#{suspenciones.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                              rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
@@ -360,7 +357,7 @@
                                                 <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
                                             </p:selectOneMenu>
                                         </f:facet>
-                                        <h:outputText value="#{sueldo.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
+                                        <h:outputText value="#{suspencion.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
                                     </p:column>
                                 </p:dataTable>
                             </p:outputPanel>
@@ -437,7 +434,7 @@
                             <h:outputText rendered="#{empleadoView.amonestacion.id > 0}" style="font-weight: bold;"
                                           value="Amonestación: "/>
                             <h:outputText rendered="#{empleadoView.amonestacion.id > 0}"
-                                          value="$ #{empleadoView.amonestacion.valor} #{empleadoView.amonestacion.tipo}"/>
+                                          value="$ #{empleadoView.amonestacion.valor}"/>
 
                             <h:outputText rendered="#{empleadoView.suspencion.id > 0}" style="font-weight: bold;"
                                           value="Suspención: #{empleadoView.suspencion.cantidadDias} dias"/>
@@ -540,7 +537,7 @@
                                              process=":form:manage-amonestaciones-content @this"
                                              styleClass="edit-button rounded-button ui-button-success"/>
                             <p:commandButton value="Suspenciones" icon="pi pi-list" update=":form:manage-suspenciones-content"
-                                             oncomplete="PF('manageSuspencionesDialog').show()"
+                                             actionListener="#{empleadoView.verSuspenciones}" oncomplete="PF('manageSuspencionesDialog').show()"
                                              process=":form:manage-suspenciones-content @this"
                                              styleClass="edit-button rounded-button ui-button-success"/>
 

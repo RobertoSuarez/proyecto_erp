@@ -34,6 +34,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.apache.commons.math3.util.Precision;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -41,8 +42,8 @@ import org.primefaces.PrimeFaces;
  */
 @Named(value = "rolDePagoView")
 @ViewScoped
-public class RolDePagoController implements Serializable{
-    
+public class RolDePagoController implements Serializable {
+
     private final EmpleadoReservaDAO empleadoReservaDAO;
     private final DetalleRolPagoDAO detalleRolPagoDAO;
     private final AmonestacionDAO amonestacionDAO;
@@ -51,7 +52,7 @@ public class RolDePagoController implements Serializable{
     private final EmpleadoDAO empleadoDAO;
     private final SueldoDAO sueldoDAO;
     private final MultaDAO multaDAO;
-    
+
     private EmpleadoReserva empleadoReserva;
     private Amonestacion amonestacion;
     private Suspencion suspencion;
@@ -59,16 +60,16 @@ public class RolDePagoController implements Serializable{
     private RolPagos rolPagos;
     private Sueldo sueldo;
     private Multa multa;
-    
+
     private List<DetalleRolPago> detalles;
     private List<Empleado> empleados;
     private List<RolPagos> pagos;
-    
+
+    private StreamedContent file;
     private float aportesIESS, decimoTercero, decimoCuarto, fondosReserva, montoHLabboradas, montoHSuplem, subTotal, total;
     private int horasLaboradas, horasSuplementarias, idEmpleado;
     private boolean checkdDecimoTercero, checkdDecimoCuarto, checkedMulta, checkedSuspencion, checkedAmonestacion;
     private Date fechaPago;
-    
 
     public RolDePagoController() {
         empleadoReservaDAO = new EmpleadoReservaDAO();
@@ -79,7 +80,7 @@ public class RolDePagoController implements Serializable{
         empleadoDAO = new EmpleadoDAO();
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
-        
+
         empleadoReserva = new EmpleadoReserva();
         amonestacion = new Amonestacion();
         suspencion = new Suspencion();
@@ -87,12 +88,12 @@ public class RolDePagoController implements Serializable{
         rolPagos = new RolPagos();
         sueldo = new Sueldo();
         multa = new Multa();
-        
+
         empleados = new ArrayList<>();
         detalles = new ArrayList<>();
         pagos = new ArrayList<>();
     }
-    
+
     @PostConstruct
     public void constructorRolDePago() {
         fondosReserva = 0;
@@ -101,15 +102,15 @@ public class RolDePagoController implements Serializable{
         aportesIESS = 0;
         subTotal = 0;
         total = 0;
-        
+
         checkdDecimoTercero = false;
         checkedAmonestacion = false;
         checkdDecimoCuarto = false;
         checkedSuspencion = false;
         checkedMulta = false;
     }
-    
-    public void postRolDePagoLista(){
+
+    public void postRolDePagoLista() {
         empleados = empleadoDAO.Listar();
     }
 
@@ -123,7 +124,7 @@ public class RolDePagoController implements Serializable{
         amonestacion = amonestacionDAO.buscar(empleado);
         multa = multaDAO.buacar(empleado);
     }
-    
+
     public void postRolDePago(int idRolDePago, boolean nuevo) {
         this.rolPagos = rolPagosDAO.buscarPorId(idRolDePago);
         detalles = detalleRolPagoDAO.buscar(rolPagos);
@@ -134,8 +135,8 @@ public class RolDePagoController implements Serializable{
                 break;
             }
         }
-        horasLaboradas = (int) (rolPagos.getHorasLaboradas()/((sueldo.getValor()/30)/8));
-        horasSuplementarias = (int) (rolPagos.getHorasSuplemetarias()/(((sueldo.getValor()/30)/8)*1.5));
+        horasLaboradas = (int) (rolPagos.getHorasLaboradas() / ((sueldo.getValor() / 30) / 8));
+        horasSuplementarias = (int) (rolPagos.getHorasSuplemetarias() / (((sueldo.getValor() / 30) / 8) * 1.5));
         float porcentajeIESS = 0;
         for (DetalleRolPago detalle : detalles) {
             switch (detalle.getTipoRubro().getId()) {
@@ -147,7 +148,7 @@ public class RolDePagoController implements Serializable{
                     porcentajeIESS = (float) 0.0945;
                     break;
                 case 6:
-                    decimoCuarto = Precision.round(rolPagosDAO.obtenerDecicmoCuarto(),2);
+                    decimoCuarto = Precision.round(rolPagosDAO.obtenerDecicmoCuarto(), 2);
                     break;
                 case 7:
                     decimoTercero = Precision.round(rolPagosDAO.obtenerDecicmoTercero(), 2);
@@ -172,7 +173,7 @@ public class RolDePagoController implements Serializable{
         total = Precision.round((subTotal - aportesIESS + (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente())
                 + (suspencion.getValor() * suspencion.getTipoRubro().getCoeficiente())
                 + (multa.getValor() * multa.getTipoRubro().getCoeficiente())), 2);
-        if (nuevo){
+        if (nuevo) {
             mostrarMensajeInformacion("Pago Generado");
         }
         PrimeFaces.current().ajax().update("form:messages", "form:rolPago");
@@ -357,11 +358,19 @@ public class RolDePagoController implements Serializable{
 
     public void setIdEmpleado(int idEmpleado) {
         this.idEmpleado = idEmpleado;
-        if(idEmpleado != 0){
+        if (idEmpleado != 0) {
             empleado = empleadoDAO.buscarPorId(idEmpleado);
             pagos = rolPagosDAO.buscar(empleado);
             PrimeFaces.current().ajax().update("form:messages", "form:dt-roles");
         }
+    }
+
+    public StreamedContent getFile() {
+        return file;
+    }
+
+    public void setFile(StreamedContent file) {
+        this.file = file;
     }
 
     public Date getFechaPago() {
@@ -387,9 +396,9 @@ public class RolDePagoController implements Serializable{
     public void setSueldo(Sueldo sueldo) {
         this.sueldo = sueldo;
     }
-    
-    public String darFormato(Date fecha){
-        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha) : "";
+
+    public String darFormato(Date fecha) {
+        return fecha != null ? new SimpleDateFormat("dd/MM/yyyy").format(fecha) : "";
     }
 
     public Multa getMulta() {
@@ -468,11 +477,11 @@ public class RolDePagoController implements Serializable{
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
                                 amonestacion.setEstado(false);
-                                if (amonestacionDAO.actualizar(amonestacion)<1){
+                                if (amonestacionDAO.actualizar(amonestacion) < 1) {
                                     mensaje = "El detalle no se pudo asignar";
                                     result = false;
                                 }
-                            }else{
+                            } else {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
@@ -482,11 +491,11 @@ public class RolDePagoController implements Serializable{
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
                                 multa.setEstado(false);
-                                if (multaDAO.actualizar(multa)<1){
+                                if (multaDAO.actualizar(multa) < 1) {
                                     mensaje = "El detalle no se pudo asignar";
                                     result = false;
                                 }
-                            }else{
+                            } else {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
@@ -496,11 +505,11 @@ public class RolDePagoController implements Serializable{
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
                                 suspencion.setEstado(false);
-                                if (suspencionDAO.actualizar(suspencion)<1){
+                                if (suspencionDAO.actualizar(suspencion) < 1) {
                                     mensaje = "El detalle no se pudo asignar";
                                     result = false;
                                 }
-                            }else{
+                            } else {
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
@@ -530,7 +539,7 @@ public class RolDePagoController implements Serializable{
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
