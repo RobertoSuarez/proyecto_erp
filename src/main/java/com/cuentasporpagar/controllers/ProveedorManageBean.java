@@ -22,6 +22,13 @@ import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
+/**
+ * Creamos el Manage Beans Proveedor
+ *
+ * @author Ebert Guaranga
+ * @see Condiciones
+ * @see CondicionesDAO
+ */
 @ManagedBean(name = "proveedorDAO")
 @ViewScoped
 public class ProveedorManageBean implements Serializable {
@@ -37,6 +44,10 @@ public class ProveedorManageBean implements Serializable {
      private String nom;
      private String cod;
 
+     /**
+      * Constructor Proveedor Manage Bean inicializablos las variables condiciones,
+      * condicionesDAO,listaProveedor, proveedorDao, proveedor
+      */
      public ProveedorManageBean() {
           condiciones = new Condiciones();
           condicionesDAO = new CondicionesDAO();
@@ -114,10 +125,16 @@ public class ProveedorManageBean implements Serializable {
           this.selectedProveedor = selectedProveedor;
      }
 
-//cargarEditar permite cargar la infomracion del proveedor en los campos correspondientes
-     //para asi porder visializar y  editar algun dato
+     /**
+      * CargarEditar metodo que permite cargar la infomracion del proveedor
+      *
+      * @param p objeto Proveedor
+      * @param c objeto Condiciones
+      */
      public void cargarEditar(Proveedor p, Condiciones c) {
-          //proveedores datos
+          /**
+           * Proveedores datos
+           */
           this.proveedor.setIdProveedor(p.getIdProveedor());
           this.proveedor.setCodigo(p.getCodigo());
           this.proveedor.setNombre(p.getNombre());
@@ -129,7 +146,9 @@ public class ProveedorManageBean implements Serializable {
           this.proveedor.setTelefono(p.getTelefono());
           this.proveedor.setEmail(p.getEmail());
           this.proveedor.setEstado(p.isEstado());
-          //condiciones datos
+          /**
+           * Condiciones datos
+           */
           this.condiciones.setCantDiasVencidos(c.getCantDiasVencidos());
           this.condiciones.setDescuento(c.getDescuento());
           this.condiciones.setDiasNeto(c.getDiasNeto());
@@ -137,14 +156,22 @@ public class ProveedorManageBean implements Serializable {
           this.condiciones.setDescripcion(c.getDescripcion());
      }
 
-     //editamos un proveedor con sus condiciones
+     /**
+      * Editar metodo que permite editar la infomracion del proveedor
+      */
      public void editar() {
+          /**
+           * Validacion email
+           */
           Pattern pattern = Pattern
                   .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                           + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
           Matcher mather = pattern.matcher(proveedor.getEmail());
           try {
+               /**
+                * Validamos campos vacios del cuadro de texto asi como sus longitudes
+                */
                if ("".equals(proveedor.getNombre())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un nombre"));
                } else if ("".equals(proveedor.getRazonSocial())) {
@@ -182,18 +209,32 @@ public class ProveedorManageBean implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una descripción"));
 
                } else {
-
-                    //ejecutamos el metodo update del proveedor con sus paramtros 
+                    /**
+                     * Si es falso ejecutamos el metodo update del proveedor con sus paramtros
+                     *
+                     * @param proveedor objeto Proveedor
+                     * @param proveedor.getIdProveedor() objeto Condiciones
+                     */
                     this.proveedorDAO.update(proveedor, proveedor.getIdProveedor());
                     this.condiciones.setProveedor(this.proveedor);
-                    //ejecutamos el metodo update de las condiciones con sus paramtros 
+                    /**
+                     * Ejecutamos el metodo update de las condiciones con sus paramtros
+                     *
+                     * @param proveedor objeto Condiciones
+                     * @param proveedor.getIdProveedor() objeto Condiciones
+                     */
                     this.condicionesDAO.updateCondiciones(condiciones, proveedor.getIdProveedor());
-                    //mostramos un msj de guardado
+                    /**
+                     * Mostramos el mensaje
+                     */
                     FacesContext.getCurrentInstance().
                             addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proveedor Guardado"));
                }
           } catch (SQLException e) {
-               //ocurre un erro se muestra un msj de error
+               /**
+                * Ocurre un erro se muestra un msj de error
+                */
+
                FacesContext.getCurrentInstance().
                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                                "Error al guardar"));
@@ -203,8 +244,11 @@ public class ProveedorManageBean implements Serializable {
           PrimeFaces.current().ajax().update("form:dt-products", "form:messages");
      }
 
-     //Insertamos un proveedor
+     /**
+      * Metodo que permitira insertar un proveedor
+      */
      public void insertar() {
+          //pattern valida correo
           Pattern pattern = Pattern
                   .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                           + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -212,7 +256,8 @@ public class ProveedorManageBean implements Serializable {
           Matcher mather = pattern.matcher(proveedor.getEmail());
 
           try {
-              if ("".equals(proveedor.getNombre())) {
+               //validaciones de msj
+               if ("".equals(proveedor.getNombre())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un nombre"));
                } else if ("".equals(proveedor.getRazonSocial())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una razón social"));
@@ -267,6 +312,9 @@ public class ProveedorManageBean implements Serializable {
           PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
      }
 
+     /**
+      * Retorna una lista de proveedores para su visualización
+      */
      public List<Proveedor> getListaProveedor() {
           try {
                this.proveedorDAO = new ProveedorDAO();
@@ -276,11 +324,21 @@ public class ProveedorManageBean implements Serializable {
           return listaProveedor;
      }
 
+     /**
+      * Obtine una lista de proveedores
+      *
+      * @param listaProveedor
+      */
+
      public void setListaProveedor(List<Proveedor> listaProveedor) {
           this.listaProveedor = listaProveedor;
      }
 
-     //seleccionar proveedor
+     /**
+      * Selecciona un proveedor de la fila
+      *
+      * @param event recibe un parametro de evento para su ejecución
+      */
      public void onRowSelect(SelectEvent<Proveedor> event) {
           //obtencion de datos segun el proveedor
           String msg2 = event.getObject().getNombre();
@@ -296,38 +354,13 @@ public class ProveedorManageBean implements Serializable {
           this.proveedor.setCodigo("PR-" + uuid + uuid2);
      }
 
-     //Metodo para crear nuevo proveedor
+     /**
+      * Metodo openNew me permite crear un nuevo proveedor contiene el metodo aleatorioCod() para la
+      * asignacion de un código aleatorio
+      */
      public void openNew() {
           this.selectedProveedor = new Proveedor();
           aleatorioCod();
-     }
-
-     public void deleteProduct() {
-          this.Proveedores.remove(this.selectedProveedor);
-          this.selectedProveedor = null;
-          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
-          PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
-     }
-
-     public String getDeleteButtonMessage() {
-          if (hasSelectedProducts()) {
-               int size = this.listaProveedor.size();
-               return size > 1 ? size + " products selected" : "1 product selected";
-          }
-
-          return "Delete";
-     }
-
-     public boolean hasSelectedProducts() {
-          return this.listaProveedor != null && !this.listaProveedor.isEmpty();
-     }
-
-     public void deleteSelectedProducts() {
-          this.Proveedores.removeAll(this.listaProveedor);
-          this.listaProveedor = null;
-          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Products Removed"));
-          PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
-          PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
      }
 
 }

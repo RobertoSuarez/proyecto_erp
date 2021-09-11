@@ -10,7 +10,6 @@ import java.util.List;
 import com.cuentasporpagar.models.Condiciones;
 import javax.faces.bean.ManagedBean;
 import com.cuentasporpagar.daos.CondicionesDAO;
-import com.cuentasporpagar.models.Factura;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,6 +22,9 @@ import org.primefaces.PrimeFaces;
 /**
  *
  * @author ebert
+ * @see Proveedor
+ * @see CondicionesDAO
+ * @see Condiciones
  */
 @ManagedBean(name = "condicionesMB")
 @SessionScoped
@@ -33,12 +35,14 @@ public final class CondicionesManageBean implements Serializable {
      private CondicionesDAO condicionesDAO;
      private Proveedor proveedor;
      String msj;
-     private Factura factura;
      private boolean check;
      private String value;
      private String cl;
      private String ic;
 
+     /**
+      * Constructor de la clase
+      */
      public CondicionesManageBean() {
           value = "habilitar";
           check = true;
@@ -47,9 +51,11 @@ public final class CondicionesManageBean implements Serializable {
           setIc("pi pi-trash");
           listaCondiciones = new ArrayList<>();
           proveedor = new Proveedor();
-          factura = new Factura();
      }
 
+     /**
+      * PostConstruct de la clase
+      */
      @PostConstruct
      public void init() {
           this.condiciones = new Condiciones();
@@ -60,63 +66,138 @@ public final class CondicionesManageBean implements Serializable {
           return check;
      }
 
+     /**
+      * Método setCheck
+      *
+      * @param check
+      */
      public void setCheck(boolean check) {
           this.check = check;
      }
 
+     /**
+      * Función getValue
+      *
+      * @return value
+      */
      public String getValue() {
           return value;
      }
 
+     /**
+      * Método setValue
+      *
+      * @param value
+      */
      public void setValue(String value) {
           this.value = value;
      }
 
+     /**
+      * Método setListaCondiciones
+      *
+      * @param listaCondiciones
+      */
      public void setListaCondiciones(List<Condiciones> listaCondiciones) {
           this.listaCondiciones = listaCondiciones;
      }
 
+     /**
+      * Función getCondiciones
+      *
+      * @return condiciones
+      */
      public Condiciones getCondiciones() {
           return condiciones;
      }
 
+     /**
+      * Método setCondiciones
+      *
+      * @param condiciones
+      */
      public void setCondiciones(Condiciones condiciones) {
           this.condiciones = condiciones;
      }
 
+     /**
+      * Función getCondicionesDAO
+      *
+      * @return condicionesDAO
+      */
      public CondicionesDAO getCondicionesDAO() {
           return condicionesDAO;
      }
 
+     /**
+      * Método setCondicionesDAO
+      *
+      * @param condicionesDAO
+      */
      public void setCondicionesDAO(CondicionesDAO condicionesDAO) {
           this.condicionesDAO = condicionesDAO;
      }
 
+     /**
+      * Función getProveedor
+      *
+      * @return proveedor
+      */
      public Proveedor getProveedor() {
           return proveedor;
      }
 
+     /**
+      * Método setProveedor
+      *
+      * @param proveedor
+      */
      public void setProveedor(Proveedor proveedor) {
           this.proveedor = proveedor;
      }
 
+     /**
+      * Función getCl
+      *
+      * @return cl
+      */
      public String getCl() {
           return cl;
      }
 
+     /**
+      * Método setCl
+      *
+      * @param cl
+      */
      public void setCl(String cl) {
           this.cl = cl;
      }
 
+     /**
+      * Función getIc
+      *
+      * @return ic
+      */
      public String getIc() {
           return ic;
      }
 
+     /**
+      * Método setIc
+      *
+      * @param ic
+      */
      public void setIc(String ic) {
           this.ic = ic;
      }
 
-     //los proveedores en la tabla se : deshabilitados o habilitados
+     /**
+      * Método para los proveedores en la tabla se : deshabilitados o habilitados Con ina sentencia
+      * if la cual chequeará si el proveedor está habilitado o no
+      *
+      * @throws SQLException
+      */
      public void dhProveedor() throws SQLException {
 
           if (check) {
@@ -125,7 +206,7 @@ public final class CondicionesManageBean implements Serializable {
                //dichos parámetros son necesarios para la connsulta sql
 
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), false);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:","Deshabilitado proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:", "Deshabilitado proveedor: " + proveedor.getNombre()));
 
                //limpiamos la lista
                listaCondiciones.clear();
@@ -137,7 +218,7 @@ public final class CondicionesManageBean implements Serializable {
                //nombre del proveedor junto con un parametro false, 
                //dichos parámetros son necesarios para la connsulta sql
                this.condicionesDAO.deshabilitar(proveedor.getNombre(), true);
-               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:","Habilitado proveedor: " + proveedor.getNombre()));
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:", "Habilitado proveedor: " + proveedor.getNombre()));
 
                //se limpia  la lista
                listaCondiciones.clear();
@@ -149,7 +230,12 @@ public final class CondicionesManageBean implements Serializable {
           PrimeFaces.current().ajax().update("form:manageProductDialog", "form:messages");
      }
 
-     //listamos a los proveedores
+     /**
+      * Función para listar condiciones
+      *
+      * @return listaCondiciones
+      * @throws Exception
+      */
      public List<Condiciones> getListaCondiciones() throws Exception {
           try {
                habTabla();
@@ -163,7 +249,11 @@ public final class CondicionesManageBean implements Serializable {
           FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
      }
 
-     //Listamos segun sean habilitados o deshabilitados
+     /**
+      * Método para listar segun sean habilitados o deshabilitados implementa throws
+      *
+      * @throws SQLException
+      */
      public void habTabla() throws SQLException {
 
           this.listaCondiciones.clear();
@@ -181,7 +271,7 @@ public final class CondicionesManageBean implements Serializable {
                setIc("pi pi-trash");
 
           } else {
-               
+
                //si el check es falso...
                //llenamos la tabla segun nuestra consulta en este caso los deshabilitados
                this.listaCondiciones = condicionesDAO.llenarP(false);
@@ -191,13 +281,18 @@ public final class CondicionesManageBean implements Serializable {
                setCl("ui-button-primary rounded-button");
                //asignamos el icono al btn
                setIc("pi pi-check");
-              
+
           }
           PrimeFaces.current().ajax().update("form:dt-products");
      }
 
+     /**
+      * Método para obtener el nombre del proveedor para cargarlo en la ventana Recive como
+      * parámetro un objeto tipo proveedor
+      *
+      * @param p
+      */
      public void cargarDhab(Proveedor p) {
-          //obtengo el nombre del proveedor para cargarlo en la ventana
           this.proveedor.setNombre(p.getNombre());
      }
 

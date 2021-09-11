@@ -15,6 +15,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Ebert Guaranga
+ * @see Conexion
+ * @see Proveedor
+ */
 
 public class CondicionesDAO implements Serializable {
 
@@ -22,12 +28,21 @@ public class CondicionesDAO implements Serializable {
      private final Proveedor proveedor;
      List<Condiciones> lista;
 
+     /**
+      * Constructor en donde tendremos instaciada las variables lista, proveedor
+      */
      public CondicionesDAO() {
           proveedor = new Proveedor();
           lista = new ArrayList<>();
      }
 
-     //llenar lista segun el estado
+     /**
+      * Funcion llenarP en donde listara el proveedor segun el parametro recibido aplicamos throws
+      *
+      * @param n
+      * @return lista
+      * @throws SQLException
+      */
      public List<Condiciones> llenarP(boolean n) throws SQLException {
           this.conexion.Conectar();
           if (conexion.isEstado()) {
@@ -63,26 +78,28 @@ public class CondicionesDAO implements Serializable {
                          c.setProveedor(p);
                          lista.add(c);
                     }
-                     conexion.cerrarConexion();
-
+                    conexion.cerrarConexion();
                } catch (SQLException e) {
                     throw e;
                } finally {
                     conexion.cerrarConexion();
                }
           }
-
           return lista;
      }
 
-     //habilitamos o deschabilitamos un proveedor segun el estado 
+     /**
+      * Habilitamos o deshabilitamos un proveedor segun su estado aplicamos throws
+      *
+      * @param d
+      * @param n
+      */
      public void deshabilitar(String d, boolean n) {
           if (conexion.isEstado()) {
                try {
                     String cadena = "select habilitarproveedor(" + n + ",'" + d + "')";
-                    conexion.ejecutar(cadena);
-                    System.out.println(cadena);
-                     conexion.cerrarConexion();
+                    conexion.ejecutar(cadena);                   
+                    conexion.cerrarConexion();
                } catch (Exception e) {
                     throw e;
 
@@ -93,7 +110,12 @@ public class CondicionesDAO implements Serializable {
           }
      }
 
-     //insertamos las condiciones
+     /**
+      * Método para insertar las condicones del proveedor aplica throws
+      *
+      * @throws SQLException
+      * @param c
+      */
      public void insertarCondiciones(Condiciones c) throws Exception {
           try {
                this.conexion.Conectar();
@@ -105,18 +127,20 @@ public class CondicionesDAO implements Serializable {
                        + "(SELECT idproveedor FROM proveedor ORDER BY idproveedor DESC LIMIT 1));";
 
                conexion.insertar(sentencia);
-                conexion.cerrarConexion();
-
+               conexion.cerrarConexion();
           } catch (SQLException e) {
                throw e;
-
           } finally {
                this.conexion.cerrarConexion();
           }
-
      }
-
-     //acualizamos las ocndiciones 
+     /**
+      * Método para actualizar las condicones del proveedor aplica throws
+      *
+      * @throws SQLException
+      * @param c
+      * @param codigo
+      */
      public void updateCondiciones(Condiciones c, int codigo) throws SQLException {
 
           try {
@@ -130,7 +154,7 @@ public class CondicionesDAO implements Serializable {
                        + "WHERE idproveedor = " + codigo + "";
                conexion.ejecutar(cadena);
                System.out.print(cadena);
-                conexion.cerrarConexion();
+               conexion.cerrarConexion();
           } catch (SQLException e) {
 
                System.err.print(e);
