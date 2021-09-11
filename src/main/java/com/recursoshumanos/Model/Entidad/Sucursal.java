@@ -72,4 +72,8 @@ public class Sucursal implements Serializable {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
+    
+    public String resumen(){
+        return this.direccion + " - " + this.ciudad.resumen();
+    }
 }

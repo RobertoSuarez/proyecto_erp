@@ -97,6 +97,33 @@ public class MultaDAO implements IDAO<Multa>  {
         return buscar(null, null);
     }
     
+    public List<Multa> historial(Empleado empleado) {
+        List<Multa> multas = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("multa", "id_multa, porcentaje, valor, detalle, estado",
+                        "id_empleado = " + empleado.getId(), "id_multa DESC");
+                while (result.next()) {
+                    multas.add(new Multa(
+                            result.getInt("id_multa"),
+                            empleado,
+                            result.getFloat("porcentaje"),
+                            result.getFloat("valor"),
+                            result.getString("detalle"),
+                            result.getBoolean("estado")
+                    ));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return multas;
+    }
+    
     public List<Multa> Listar(Empleado empleado) {
         List<Multa> multas = new ArrayList<>();
         if (conexion.isEstado()) {

@@ -466,7 +466,13 @@ public class RolDePagoController implements Serializable{
                         if (checkedAmonestacion && result) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, amonestacion.getTipoRubro(), amonestacion.getId()));
                             result = true;
-                            if (detalleRolPagoDAO.insertar() < 1) {
+                            if (detalleRolPagoDAO.insertar() > 0) {
+                                amonestacion.setEstado(false);
+                                if (amonestacionDAO.actualizar(amonestacion)<1){
+                                    mensaje = "El detalle no se pudo asignar";
+                                    result = false;
+                                }
+                            }else{
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }
@@ -476,7 +482,7 @@ public class RolDePagoController implements Serializable{
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
                                 multa.setEstado(false);
-                                if (multaDAO.actualizar()>0){
+                                if (multaDAO.actualizar(multa)<1){
                                     mensaje = "El detalle no se pudo asignar";
                                     result = false;
                                 }
@@ -488,7 +494,13 @@ public class RolDePagoController implements Serializable{
                         if (checkedSuspencion && result) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, suspencion.getTipoRubro(), suspencion.getId()));
                             result = true;
-                            if (detalleRolPagoDAO.insertar() < 1) {
+                            if (detalleRolPagoDAO.insertar() > 0) {
+                                suspencion.setEstado(false);
+                                if (suspencionDAO.actualizar(suspencion)<1){
+                                    mensaje = "El detalle no se pudo asignar";
+                                    result = false;
+                                }
+                            }else{
                                 mensaje = "El detalle no se pudo asignar";
                                 result = false;
                             }

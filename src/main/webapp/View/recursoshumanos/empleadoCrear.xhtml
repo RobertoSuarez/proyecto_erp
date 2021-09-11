@@ -148,7 +148,7 @@
                                                      rendered="true" required="true" label="Sucursal">
                                         <f:selectItem itemLabel="Selecione una sucursal" itemValue="#{0}" noSelectionOption="true"/>
                                         <f:selectItems value="#{empleadoView.sucursales}" var="sucursal" 
-                                                       itemLabel="#{sucursal.direccion}" itemValue="#{sucursal.id}"/>
+                                                       itemLabel="#{sucursal.resumen()}" itemValue="#{sucursal.id}"/>
                                     </p:selectOneMenu>
 
                                     <h:outputText style="font-weight: bold" value="Observacion (sucursal): "/>

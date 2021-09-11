@@ -126,21 +126,21 @@
                               widgetVar="manageMultaDialog" responsive="true">
                         <p:outputPanel id="manage-multa-content" class="ui-fluid">
                             <p:outputPanel >
-                                    <div class="ui-fluid">
-                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
-                                            styleClass="ui-panelgrid-blank ui-fluid"
-                                            style="width: 100%;">
-                                            
-                                            <p:outputLabel for="inporcentaje" style="font-weight: bold" value="Porcentaje: " />
-                                            <p:spinner id="inporcentaje" value="#{empleadoView.multa.porcentaje}" decimalPlaces="2"
-                                                           required="true"  min="0.01" max="100.00" label="Porcentaje"
-                                                           requiredMessage="Necesita ingresar un valor" stepFactor="0.01"/>
-                                        </h:panelGrid>
-                                        <div class="p-field">
-                                            <p:outputLabel for="indetallemulta" style="font-weight: bold" value="Detalle: "/>
-                                            <p:inputTextarea id="indetallemulta" value="#{empleadoView.multa.detalle}"/>
-                                        </div>
+                                <div class="ui-fluid">
+                                    <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="width: 100%;">
+
+                                        <p:outputLabel for="inporcentaje" style="font-weight: bold" value="Porcentaje: " />
+                                        <p:spinner id="inporcentaje" value="#{empleadoView.multa.porcentaje}" decimalPlaces="2"
+                                                   required="true"  min="0.01" max="100.00" label="Porcentaje"
+                                                   requiredMessage="Necesita ingresar un valor" stepFactor="0.01"/>
+                                    </h:panelGrid>
+                                    <div class="p-field">
+                                        <p:outputLabel for="indetallemulta" style="font-weight: bold" value="Detalle: "/>
+                                        <p:inputTextarea id="indetallemulta" value="#{empleadoView.multa.detalle}"/>
                                     </div>
+                                </div>
                             </p:outputPanel>
                         </p:outputPanel>
                         <f:facet name="footer">
@@ -158,25 +158,25 @@
                               widgetVar="manageAmonestacionDialog" responsive="true">
                         <p:outputPanel id="manage-amonestacion-content" class="ui-fluid">
                             <p:outputPanel >
-                                    <div class="ui-fluid">
-                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
-                                            styleClass="ui-panelgrid-blank ui-fluid"
-                                            style="width: 100%;">
-                                                                                        
-                                            <p:outputLabel for="invaloramo" style="font-weight: bold" value="Monto($): " />
-                                            <p:spinner id="invaloramo" value="#{empleadoView.amonestacion.valor}" required="true"
-                                                       decimalPlaces="2" prefix="$" min="1" stepFactor="1"
-                                                       requiredMessage="Necesita ingresar un valor"/>
-                                            
-                                            <p:outputLabel for="intipoamo" style="font-weight: bold" value="Tipo: " />
-                                            <p:inputText id="intipoamo" value="#{empleadoView.amonestacion.tipo}" required="true"
-                                                         label="Porcentaje" requiredMessage="Necesita ingresar el tipo"/>
-                                        </h:panelGrid>
-                                        <div class="p-field">
-                                            <p:outputLabel for="indetalleamo" style="font-weight: bold" value="Detalle: "/>
-                                            <p:inputTextarea id="indetalleamo" value="#{empleadoView.amonestacion.detalle}"/>
-                                        </div>
+                                <div class="ui-fluid">
+                                    <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="width: 100%;">
+
+                                        <p:outputLabel for="invaloramo" style="font-weight: bold" value="Monto($): " />
+                                        <p:spinner id="invaloramo" value="#{empleadoView.amonestacion.valor}" required="true"
+                                                   decimalPlaces="2" prefix="$" min="1" stepFactor="1"
+                                                   requiredMessage="Necesita ingresar un valor"/>
+
+                                        <p:outputLabel for="intipoamo" style="font-weight: bold" value="Tipo: " />
+                                        <p:inputText id="intipoamo" value="#{empleadoView.amonestacion.tipo}" required="true"
+                                                     label="Porcentaje" requiredMessage="Necesita ingresar el tipo"/>
+                                    </h:panelGrid>
+                                    <div class="p-field">
+                                        <p:outputLabel for="indetalleamo" style="font-weight: bold" value="Detalle: "/>
+                                        <p:inputTextarea id="indetalleamo" value="#{empleadoView.amonestacion.detalle}"/>
                                     </div>
+                                </div>
                             </p:outputPanel>
                         </p:outputPanel>
                         <f:facet name="footer">
@@ -194,22 +194,22 @@
                               widgetVar="manageSuspencionDialog" responsive="true">
                         <p:outputPanel id="manage-suspencion-content" class="ui-fluid">
                             <p:outputPanel >
-                                    <div class="ui-fluid">
-                                        <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
-                                            styleClass="ui-panelgrid-blank ui-fluid"
-                                            style="width: 100%;">
-                                                                                        
-                                            <p:outputLabel for="incantidad" style="font-weight: bold" value="# Días: " />
-                                            <p:spinner id="incantidad" value="#{empleadoView.suspencion.valor}" required="true"
-                                                       decimalPlaces="0" min="1" max="30" stepFactor="1"
-                                                       requiredMessage="Necesita ingresar un número"/>
-                                            
-                                        </h:panelGrid>
-                                        <div class="p-field">
-                                            <p:outputLabel for="indetallesus" style="font-weight: bold" value="Detalle: "/>
-                                            <p:inputTextarea id="indetallesus" value="#{empleadoView.suspencion.detalle}"/>
-                                        </div>
+                                <div class="ui-fluid">
+                                    <h:panelGrid columns="2" columnClasses="ui-grid-col-5,ui-grid-col-7"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="width: 100%;">
+
+                                        <p:outputLabel for="incantidad" style="font-weight: bold" value="# Días: " />
+                                        <p:spinner id="incantidad" value="#{empleadoView.suspencion.valor}" required="true"
+                                                   decimalPlaces="0" min="1" max="30" stepFactor="1"
+                                                   requiredMessage="Necesita ingresar un número"/>
+
+                                    </h:panelGrid>
+                                    <div class="p-field">
+                                        <p:outputLabel for="indetallesus" style="font-weight: bold" value="Detalle: "/>
+                                        <p:inputTextarea id="indetallesus" value="#{empleadoView.suspencion.detalle}"/>
                                     </div>
+                                </div>
                             </p:outputPanel>
                         </p:outputPanel>
                         <f:facet name="footer">
@@ -220,6 +220,153 @@
                                            icon="pi pi-exclamation-triangle"/>
                             </p:commandButton>
                             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSuspencionDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog header="Sueldos" showEffect="fade" modal="true"
+                              widgetVar="manageSueldosDialog" responsive="true">
+                        <p:outputPanel id="manage-sueldos-content" class="ui-fluid">
+                            <p:outputPanel >
+                                <p:dataTable id="dt-sueldos" widgetVar="dtSueldos" var="sueldo" value="#{empleadoView.sueldos}"
+                                             reflow="true" size="small" liveResize="true" styleClass="sueldos-table"
+                                             rowKey="#{sueldo.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
+                                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+
+                                    <p:column headerText="Monto" sortBy="#{sueldo.valor}">
+                                              <h:outputText value="#{sueldo.valor}"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha" sortBy="#{sueldo.fechaActualizacion}">
+                                        <h:outputText value="#{empleadoView.darFormato(sueldo.fechaActualizacion)}"/>
+                                    </p:column>
+                                    <p:column headerText="Estado" width="12%" field="estado" filterBy="#{sueldo.estado}"
+                                              filterMatchMode="exact">
+                                        <f:facet name="filter">
+                                            <p:selectOneMenu onchange="PF('dtSueldos').filter()">
+                                                <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="Actual" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="Antigüos" itemValue="#{false}" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                        <h:outputText value="#{sueldo.estado ? 'Actual': 'Antigüo'}" style="width:100%"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSueldosDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog header="Multas" showEffect="fade" modal="true"
+                              widgetVar="manageMultasDialog" responsive="true">
+                        <p:outputPanel id="manage-multas-content" class="ui-fluid">
+                            <p:outputPanel >
+                                <p:dataTable id="dt-multas" widgetVar="dtMultas" var="multa" value="#{empleadoView.multas}"
+                                             reflow="true" size="small" liveResize="true" styleClass="multas-table"
+                                             rowKey="#{multa.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
+                                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+
+                                    <p:column headerText="Porcentaje" sortBy="#{multa.porcentaje}">
+                                        <h:outputText value="#{multa.porcentaje}"/>
+                                    </p:column>
+                                    <p:column headerText="Monto" sortBy="#{multa.valor}">
+                                              <h:outputText value="#{multa.valor}"/>
+                                    </p:column>
+                                    <p:column headerText="Detalle" sortBy="#{multa.detalle}">
+                                        <h:outputText value="#{multa.detalle}"/>
+                                    </p:column>
+                                    <p:column headerText="Estado" width="12%" field="estado" filterBy="#{multa.estado}"
+                                              filterMatchMode="exact">
+                                        <f:facet name="filter">
+                                            <p:selectOneMenu onchange="PF('dtMultas').filter()">
+                                                <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="No pagadas" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                        <h:outputText value="#{multa.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageMultasDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog header="Amonestaciones" showEffect="fade" modal="true"
+                              widgetVar="manageAmonestacionesDialog" responsive="true">
+                        <p:outputPanel id="manage-amonestaciones-content" class="ui-fluid">
+                            <p:outputPanel >
+                                <p:dataTable id="dt-amonestaciones" widgetVar="dtAmonestaciones" var="amonestacion"
+                                             value="#{empleadoView.amonestaciones}"
+                                             reflow="true" size="small" liveResize="true" styleClass="amonestaciones-table"
+                                             rowKey="#{amonestaciones.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
+                                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+
+                                    <p:column headerText="Tipo" sortBy="#{amonestacion.tipo}">
+                                        <h:outputText value="#{amonestacion.tipo}"/>
+                                    </p:column>
+                                    <p:column headerText="Monto" sortBy="#{amonestacion.valor}">
+                                              <h:outputText value="#{amonestacion.valor}"/>
+                                    </p:column>
+                                    <p:column headerText="Detalle" sortBy="#{amonestacion.detalle}">
+                                        <h:outputText value="#{amonestacion.detalle}"/>
+                                    </p:column>
+                                    <p:column headerText="Estado" width="12%" field="estado" filterBy="#{amonestacion.estado}"
+                                              filterMatchMode="exact">
+                                        <f:facet name="filter">
+                                            <p:selectOneMenu onchange="PF('dtAmonestaciones').filter()">
+                                                <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="No pagadas" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                        <h:outputText value="#{sueldo.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageAmonestacionesDialog').hide()"
+                                             process="@none" styleClass="p-mr-2" resetValues="true" />
+                        </f:facet>
+                    </p:dialog>
+                    <p:dialog header="Suspenciones" showEffect="fade" modal="true"
+                              widgetVar="manageSuspencionesDialog" responsive="true">
+                        <p:outputPanel id="manage-suspenciones-content" class="ui-fluid">
+                            <p:outputPanel >
+                                <p:dataTable id="dt-suspenciones" widgetVar="dtSuspenciones" var="suspencion"
+                                             value="#{empleadoView.suspenciones}"
+                                             reflow="true" size="small" liveResize="true" styleClass="amonestaciones-table"
+                                             rowKey="#{suspenciones.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
+                                             rows="10" rowSelectMode="add" paginatorPosition="bottom">
+
+                                    <p:column headerText="Días #" sortBy="#{suspencion.cantidadDias}">
+                                        <h:outputText value="#{suspencion.cantidadDias}"/>
+                                    </p:column>
+                                    <p:column headerText="Monto" sortBy="#{suspencion.valor}">
+                                              <h:outputText value="#{suspencion.valor}"/>
+                                    </p:column>
+                                    <p:column headerText="Detalle" sortBy="#{suspencion.detalle}">
+                                        <h:outputText value="#{suspencion.detalle}"/>
+                                    </p:column>
+                                    <p:column headerText="Estado" width="12%" field="estado" filterBy="#{suspencion.estado}"
+                                              filterMatchMode="exact">
+                                        <f:facet name="filter">
+                                            <p:selectOneMenu onchange="PF('dtSuspenciones').filter()">
+                                                <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="No pagadas" itemValue="#{true}" />
+                                                <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                        <h:outputText value="#{sueldo.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSuspencionesDialog').hide()"
                                              process="@none" styleClass="p-mr-2" resetValues="true" />
                         </f:facet>
                     </p:dialog>
@@ -234,7 +381,7 @@
                                 <f:setPropertyActionListener value="#{empleadoView.sueldo.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
                             <p:linkButton value="Volver a la lista" icon="pi pi-list" outcome="ListaEmpleado"
-                                             styleClass="ui-button-success" style="margin-right: .5rem"/>
+                                          styleClass="ui-button-success" style="margin-right: .5rem"/>
                         </p:toolbarGroup>
                     </p:toolbar>
                     <p:panel id="dt-empleado" class="ui-fluid">
@@ -342,14 +489,11 @@
                         </h:panelGrid>
                     </p:panel>
                     <p:panel class="ui-fluid">
-                        <h4 >Botones de cambios</h4>
+                        <h6>Botones de cambios</h6>
                         <h:panelGrid columns="12"
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
 
-                            <p:commandButton value="Sueldo" icon="pi pi-dollar" update=":form:manage-sueldo-content"
-                                             oncomplete="PF('manageSueldoDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process=":form:manage-sueldo-content @this"/>
                             <p:commandButton value="Familia" icon="pi #{empleadoView.cargaFamiliar.id == 0 ? 'pi-plus' : 'pi-pencil'}"
                                              update=":form:manage-cargaFamiliar-content"
                                              oncomplete="PF('manageCargaFamiliarDialog').show()"
@@ -361,6 +505,9 @@
                             <p:commandButton value="Reserva" icon="pi #{empleadoView.empleadoReserva.formaPago == 0 ? 'pi-plus' : 'pi-pencil'}" 
                                              update=":form:manage-reserva-content" oncomplete="PF('manageReservaDialog').show()"
                                              styleClass="rounded-button ui-button-success" style="margin-right: .5rem"/>
+                            <p:commandButton value="Sueldo" icon="pi pi-dollar" update=":form:manage-sueldo-content"
+                                             oncomplete="PF('manageSueldoDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success" process=":form:manage-sueldo-content @this"/>
                             <p:commandButton value="Multar" icon="pi pi-dollar" update=":form:manage-multa-content"
                                              oncomplete="PF('manageMultaDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success"
@@ -373,7 +520,30 @@
                                              oncomplete="PF('manageSuspencionDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success"
                                              process=":form:manage-suspencion-content @this"/>
-                            
+
+                        </h:panelGrid>
+                        <h6>Listas</h6>
+                        <h:panelGrid columns="12"
+                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                            <p:commandButton value="Sueldos" icon="pi pi-list" update=":form:manage-sueldos-content"
+                                             actionListener="#{empleadoView.verSueldos}" oncomplete="PF('manageSueldosDialog').show()"
+                                             process=":form:manage-sueldos-content @this"
+                                             styleClass="edit-button rounded-button ui-button-success"/>
+                            <p:commandButton value="Multas" icon="pi pi-list" update=":form:manage-multas-content"
+                                             actionListener="#{empleadoView.verMultas}" oncomplete="PF('manageMultasDialog').show()"
+                                             process=":form:manage-multas-content @this"
+                                             styleClass="edit-button rounded-button ui-button-success"/>
+                            <p:commandButton value="Amonestaciones" icon="pi pi-list" update=":form:manage-amonestaciones-content"
+                                             actionListener="#{empleadoView.verAmonestaciones}" oncomplete="PF('manageAmonestacionesDialog').show()"
+                                             process=":form:manage-amonestaciones-content @this"
+                                             styleClass="edit-button rounded-button ui-button-success"/>
+                            <p:commandButton value="Suspenciones" icon="pi pi-list" update=":form:manage-suspenciones-content"
+                                             oncomplete="PF('manageSuspencionesDialog').show()"
+                                             process=":form:manage-suspenciones-content @this"
+                                             styleClass="edit-button rounded-button ui-button-success"/>
+
                         </h:panelGrid>
                     </p:panel>
                     <p:confirmDialog global="true" showEffect="fade" width="300">

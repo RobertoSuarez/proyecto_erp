@@ -104,6 +104,34 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         return buscar(null, null);
     }
     
+    public List<Amonestacion> historial(Empleado empleado) {
+        List<Amonestacion> amonestaciones = new ArrayList<>();
+        if (conexion.isEstado()) {
+            ResultSet result;
+            try {
+                result = conexion.selecionar("amonestacion", 
+                        "id_amonestacion, tipo, valor, detalle, estado",
+                        "id_empleado = " + empleado.getId(), "tipo, valor DESC");
+                while (result.next()) {
+                    amonestaciones.add(new Amonestacion(
+                            result.getInt("id_amonestacion"),
+                            empleado,
+                            result.getString("tipo"),
+                            result.getString("detalle"),
+                            result.getFloat("valor"), 
+                            result.getBoolean("estado")
+                    ));
+                }
+                result.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return amonestaciones;
+    }
+    
     public List<Amonestacion> Listar(Empleado empleado) {
         List<Amonestacion> amonestaciones = new ArrayList<>();
         if (conexion.isEstado()) {
