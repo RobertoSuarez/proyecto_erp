@@ -30,11 +30,11 @@
                         </p:toolbarGroup>
                     </p:toolbar>
 
-                    <p:dataTable id="proveedortabla" widgetVar="dtPagos" var="pago" 
+                    <p:dataTable id="proveedor-tabla" widgetVar="dtPago" var="pago" 
                                  value="#{abonoProveedorMB.listaAbonos}"
                                  reflow="true" paginator="true" rows="5" 
                                  resizableColumns="true" class="p-mt-3"
-                                 paginatorPosition="bottom" styleClass="products-table" 
+                                 paginatorPosition="bottom"
                                  style="font-size:13px" >
 
                         <f:facet name="header">
@@ -42,16 +42,16 @@
                                 <span style="font-weight: bold; margin-right: 6px;"></span>
                                 <span class="filter-container ui-input-icon-left">
                                     <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" onkeyup="PF('dtPagos').filter()" placeholder="Nombre Proveedor"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtPago').filter()" placeholder="Nombre Proveedor"/>
                                 </span>
                             </div>
                         </f:facet>
 
-                        <p:column headerText="Fecha" sortBy="#{pago.fecha}">
+                        <p:column headerText="Fecha" filterBy="#{pago.fecha}"
+                                  filterStyle="display : none" sortBy="#{pago.fecha}">
                             <h:outputText value="#{pago.fecha}"/>
                         </p:column>
-                        <p:column headerText="Pago por" filterBy="#{pago.detalletipoPago}" 
-                                  filterStyle="display : none" sortBy="#{pago.detalletipoPago}">
+                        <p:column headerText="Pago por" sortBy="#{pago.detalletipoPago}">
                             <h:outputText value="#{pago.detalletipoPago}"/>
                         </p:column>
                         <p:column headerText="Referencia" sortBy="#{pago.referencia}">
@@ -62,8 +62,10 @@
                                 <f:convertNumber currencySymbol="$" type="currency"/>
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Nombre" filterBy="#{pago.nombreProveedor}" 
-                                  filterStyle="display : none" sortBy="#{pago.nombreProveedor}">
+                        <p:column headerText="Ruc" sortBy="#{pago.ruc}">
+                            <h:outputText value="#{pago.ruc}"/>
+                        </p:column>
+                        <p:column headerText="Nombre" sortBy="#{pago.nombreProveedor}">
                             <h:outputText value="#{pago.nombreProveedor}" />
                         </p:column>
 
@@ -117,7 +119,7 @@
                                     <p:outputLabel value="Referencia" />
                                     <p:inputNumber id="Referencia"
                                                    value="#{abonoProveedorMB.abonoproveedor.referencia}" 
-                                                   minValue="4"
+                                                   minValue="1"
                                                    maxlength ="6" thousandSeparator="" 
                                                    decimalSeparator="." decimalPlaces="0"/>
                                 </div>
@@ -245,7 +247,7 @@
                         </p:outputPanel>
                         <f:facet name="footer">
                             <p:commandButton value="Guardar" actionListener="#{abonoProveedorMB.insert_Payment()}" 
-                                             update=":form:proveedortabla, msgs"
+                                             update=":form:proveedor-tabla, msgs"
                                              process="pago-content @this" styleClass="ui-button-success"/>
                             <p:commandButton value="Cancelar" onclick="PF('managePagoDialog').hide()"
                                              actionListener="#{abonoProveedorMB.reset}"
@@ -256,7 +258,7 @@
                     </p:dialog>
                     <!-- Dialogo Deshablitar-->
                     <p:dialog id="pago-edit" header="Detalle de Pago" showEffect="fade" modal="true"
-                              widgetVar="managePagoDialog-edit" responsive="true" height="400" width="70%"  closable="false">
+                              widgetVar="managePagoDialog-desh" responsive="true" height="400" width="70%"  closable="false">
                         <p:outputPanel id="pago-content-edit" class="ui-fluid" >
 
                             <div class="p-formgrid p-grid">
@@ -363,11 +365,10 @@
                         <f:facet name="footer">
                             <p:commandButton value="Guardar"
                                              styleClass="ui-button-success"
-                                             actionListener="#{abonoProveedorMB.to_Disable()}" 
-                                             onclick="PF('managePagoDialog-edit').hide()"
+                                             actionListener="#{abonoProveedorMB.to_Disable()}"
                                              process="pago-content-edit @this" />
 
-                            <p:commandButton value="Cancelar" onclick="PF('managePagoDialog-edit').hide()"
+                            <p:commandButton value="Cancelar" onclick="PF('managePagoDialog-desh').hide()"
                                              action="#{abonoProveedorMB.reset}"
                                              styleClass="ui-button-danger" process="@this"/>
                         </f:facet>
@@ -394,7 +395,7 @@
                             <h:outputText value="Crear Pago de reversion ahora?" />
                         </f:facet>
                         <p:commandButton value="Si" process="@this" 
-                                         oncomplete="PF('managePagoDialog-edit').show()" 
+                                         oncomplete="PF('managePagoDialog-desh').show()" 
                                          update=":form:pago-content-edit"
                                          styleClass="ui-button-success"
                                          onclick="PF('dataPagoDialog').hide()"/>

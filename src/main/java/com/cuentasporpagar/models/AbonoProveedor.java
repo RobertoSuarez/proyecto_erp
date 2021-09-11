@@ -33,7 +33,7 @@ public class AbonoProveedor {
 
     public AbonoProveedor(String referencia, int idProveedor, LocalDate fecha,
             float Pago, String periodo, String detalletipoPago,
-            String nombreProveedor) {
+            String nombreProveedor,String ruc) {
         this.referencia = referencia;
         this.idProveedor = idProveedor;
         this.fecha = fecha;
@@ -41,6 +41,7 @@ public class AbonoProveedor {
         this.periodo = periodo;
         this.detalletipoPago = detalletipoPago;
         this.nombreProveedor = nombreProveedor;
+        this.ruc = ruc;
     }
 
     public AbonoProveedor(int idAbonoProveedor, String referencia,
@@ -195,13 +196,13 @@ public class AbonoProveedor {
     }
 
     public String sentenciaMostrar() {
-        String sentencia = "select x.fecha,x.descripcion,x.referencia,x.pago,x.idproveedor,x.nombre,x.periodo from(\n"
-                + "	SELECT a.fecha,pag.descripcion,a.referencia,sum(d.pago) as pago,a.idproveedor,p.nombre,a.periodo,a.estado\n"
+        String sentencia = "select x.fecha,x.descripcion,x.referencia,x.pago,x.idproveedor,x.ruc,x.nombre,x.periodo from(\n"
+                + "	SELECT a.fecha,pag.descripcion,a.referencia,sum(d.pago) as pago,a.idproveedor,p.ruc,p.nombre,a.periodo,a.estado\n"
                 + "	FROM abonoproveedor a INNER JOIN detalleabono d ON ( a.idabonoproveedor = d.idabonoproveedor  ) \n"
                 + "	INNER JOIN tipopago t ON ( a.idtipopago= t.idtipopago  ) \n"
                 + "	INNER JOIN proveedor p ON ( a.idproveedor = p.idproveedor) \n"
                 + "	INNER JOIN tipopago pag ON ( a.idtipopago = pag.idtipopago) \n"
-                + "	group by a.periodo,a.fecha,pag.descripcion,a.referencia,a.idproveedor,p.nombre,a.idasiento,a.estado) as x\n"
+                + "	group by a.periodo,a.fecha,pag.descripcion,a.referencia,a.idproveedor,p.ruc,p.nombre,a.idasiento,a.estado) as x\n"
                 + "	where x.pago>0 and x.estado!=0";
         return sentencia;
     }
