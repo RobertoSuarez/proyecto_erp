@@ -94,19 +94,19 @@ public final class AbonoProveedorManagedBean {
     }
 
     public void onRowSelectf(SelectEvent<Proveedor> event) {
-        String msg2 = event.getObject().getNombre();
-        String msg3 = event.getObject().getRuc();
-        setCod(msg3);
-        setNom(msg2);
+        setCod(event.getObject().getRuc());
+        setNom(event.getObject().getNombre());
         this.abonoproveedor.setNombreProveedor(getNom());
+        this.abonoproveedor.setRuc(getCod());
         this.listaFactura.clear();
-        this.listaFactura = abonoDAO.llenarFacturas(abonoproveedor.BuscarSentenciaFactura(msg3));
+        this.listaFactura = abonoDAO.llenarFacturas(abonoproveedor.BuscarSentenciaFactura(getCod()));
     }
 
     public void load_Data(AbonoProveedor abonoProveedor) {
         //Buscar idabonoproveedor para tener los datos del abono
-
-        abonoDAO.search_date_payment(abonoProveedor.getPago(), this.abonoproveedor);
+        
+        abonoDAO.search_date_payment(abonoProveedor.getPago(),abonoProveedor.getRuc(), this.abonoproveedor);
+        System.out.println(this.abonoproveedor.getIdAbonoProveedor());
         //Buscar datos de abono proveedor
 
         abonoDAO.select_date_payment(this.abonoproveedor.getIdAbonoProveedor());
@@ -190,6 +190,7 @@ public final class AbonoProveedorManagedBean {
     
     //Envia los datos a deshabilitar
     public void to_Disable() {
+        abonoDAO.update_abono(0, abonoproveedor.getIdAbonoProveedor());
         abonoDAO.Insertar(this.abonoproveedor, 0);
         bandera = abonoDAO.InsertarDetalle(this.detalleFactura, this.abonoproveedor,0);
         if (this.abonoproveedor.getDetalletipoPago() == "Caja") {
@@ -201,6 +202,7 @@ public final class AbonoProveedorManagedBean {
         listaAbonos.clear();
         listaAbonos = abonoDAO.llenarDatos(abonoproveedor.sentenciaMostrar());
         PrimeFaces.current().ajax().update("form:proveedortabla");
+        PrimeFaces.current().executeScript("PF('managePagoDialog-desh').hide()");
         showInfo("Se revertio el pago correctamente");
         reset();
     }
