@@ -18,8 +18,15 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 /**
- *
  * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Asistencias, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class AsistenciaDAO implements IDAO<Asistencia>{
     private final Conexion conexion;
@@ -53,11 +60,19 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         this.asistencia = asistencia;
     }
 
+    /**
+     * A continuación se crea el método obtenerconexion: 
+     * @return Conexion variable con los datos de la conexión
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
 
+    /**
+     * A continuación se crea el método insertar: 
+     * @return insertar maneja la acciòn de INSERT
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -70,12 +85,22 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         return -1;
     }
 
+    
+    /**
+     * A continuación se crea el método insertar con
+     * una asistencia vacia para controles (validaciones): 
+     * @return insertar maneja la acciòn de INSERT
+     */
     @Override
     public int insertar(Asistencia entity) {
         this.asistencia = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar: 
+     * @return actualizar maneja la acciòn de UPDATE
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -88,12 +113,24 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         return -1;
     }
 
+    /**
+     * A continuación se crea el método insertar con
+     * una asistencia vacia para controles (validaciones): 
+     * @return actualizar maneja la acciòn de UPDATE
+     */
     @Override
     public int actualizar(Asistencia entity) {
         this.asistencia = entity;
         return actualizar();
     }
 
+    /**
+     * 
+     * @param id Contiene el dato del ID que sirve para
+     * realizar la acción de buscar a cierto dato de acuerdo
+     * al tipo de identificacón.
+     * @return List<Asistencia> retorna la lista de la asistencia consultada.
+     */
     @Override
     public Asistencia buscarPorId(Object id) {
         List<Asistencia> lista = buscar("id_cargaf = " + id, null);
@@ -103,6 +140,13 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         return new Asistencia(new EmpleadoPuesto(), null, null, new Date(), new DetalleHorario());
     }
 
+    /**
+     * Busca al empleado de acuerdo a su registri
+     * @param empleadoPuesto mantienen el puesto del empleado
+     * @param fecha mite la fecha de formación.
+     * @param detalleHorario Muestra todo el horario
+     * @return Asistencia buscar
+     */
     public Asistencia buscar(EmpleadoPuesto empleadoPuesto, Date fecha, DetalleHorario detalleHorario) {
         asistencia = new Asistencia(empleadoPuesto, null, null, fecha, detalleHorario);
         if (conexion.isEstado()) {
@@ -125,6 +169,14 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
         return asistencia;
     }
 
+    /**
+     * Lista a los empleados de acuerdo a su ID de registro,
+     * los ordena para una mejor vista.
+     * @param empleadoPuesto objeto del puesto laboral
+     * @param fecha objeto de fecha
+     * @return List<Asistencia> regresa la lista de asistencias 
+     * de acuerdo o por usuario.
+     */
     public List<Asistencia> buscar(EmpleadoPuesto empleadoPuesto, Date fecha) {
         List<Asistencia> asistencias = new ArrayList<>();
         if (conexion.isEstado()) {

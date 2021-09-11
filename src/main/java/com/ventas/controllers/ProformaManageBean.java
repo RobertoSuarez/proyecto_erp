@@ -345,19 +345,27 @@ public class ProformaManageBean implements Serializable {
 
     @Asynchronous
     public void rechazarProforma(Proforma profor) throws SQLException {
-        String rechazar = "R";
-        this.profDao.cambiarEstadoProforma(rechazar, profor.id_proforma);
-        listarProformas();
-        addMessage(FacesMessage.SEVERITY_ERROR, "Proforma rechazada", "Message Content");
+        if (profor.estado == "Pendiente") {
+            String rechazar = "R";
+            this.profDao.cambiarEstadoProforma(rechazar, profor.id_proforma);
+            listarProformas();
+            addMessage(FacesMessage.SEVERITY_ERROR, "Proforma rechazada", "Message Content");
+        } else {
+            addMessage(FacesMessage.SEVERITY_INFO, "Proforma rechazada o aceptada con anterioridad", "Message Content");
+        }
     }
 
     @Asynchronous
     public void aceptarProforma(Proforma profor) throws SQLException {
-        String rechazar = "A";
-        int factura;
-        factura = this.profDao.aceptarProforma(rechazar, profor, ObtenerFecha());
-        listarProformas();
-        addMessage(FacesMessage.SEVERITY_ERROR, "Proforma aceptada con dactura" + factura, "Message Content");
+        if (profor.estado == "Pendiente") {
+            String rechazar = "A";
+            int factura;
+            factura = this.profDao.aceptarProforma(rechazar, profor, ObtenerFecha());
+            listarProformas();
+            addMessage(FacesMessage.SEVERITY_ERROR, "Proforma aceptada con factura: " + factura, "Message Content");
+        }else{
+            addMessage(FacesMessage.SEVERITY_INFO, "Proforma rechazada o aceptada con anterioridad", "Message Content");
+        }
     }
 
     //--------------------Getter y Setter-------------------//
