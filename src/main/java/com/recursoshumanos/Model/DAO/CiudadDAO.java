@@ -133,7 +133,7 @@ public class CiudadDAO implements IDAO<Ciudad>{
      * dentro de los registros.
      * @param id Objeto encargado del ID del parametro
      * de busqueda.
-     * @return List<Ciudad> Retorna la lista de busqueda
+     * @return lista Retorna la lista de busqueda
      */
     @Override
     public Ciudad buscarPorId(Object id) {
@@ -146,7 +146,7 @@ public class CiudadDAO implements IDAO<Ciudad>{
 
     /**
      * Valida que no exista nulo en la busqueda
-     * @return List<Ciudad> envia la lista del resultado
+     * @return buscar envia la lista del resultado
      */
     @Override
     public List<Ciudad> Listar() {
@@ -158,7 +158,7 @@ public class CiudadDAO implements IDAO<Ciudad>{
      * mediante un identificador el ID para retornar
      * el dato correspondiente.
      * @param provincia Objeto con el identificador del dato.
-     * @return List<Ciudad> retorna la lista de la ciudad.
+     * @return lista retorna la lista de la ciudad.
      */
     public List<Ciudad> Listar(Provincia provincia) {
         List<Ciudad> lista = new ArrayList<>();

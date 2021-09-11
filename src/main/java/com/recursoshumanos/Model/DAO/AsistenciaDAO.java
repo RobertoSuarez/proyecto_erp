@@ -89,6 +89,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
     /**
      * A continuación se crea el método insertar con
      * una asistencia vacia para controles (validaciones): 
+     * @param entity Identifica la entidad de asistencia
      * @return insertar maneja la acciòn de INSERT
      */
     @Override
@@ -116,6 +117,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
     /**
      * A continuación se crea el método insertar con
      * una asistencia vacia para controles (validaciones): 
+     * @param entity Identifica la entidad
      * @return actualizar maneja la acciòn de UPDATE
      */
     @Override
@@ -129,7 +131,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
      * @param id Contiene el dato del ID que sirve para
      * realizar la acción de buscar a cierto dato de acuerdo
      * al tipo de identificacón.
-     * @return List<Asistencia> retorna la lista de la asistencia consultada.
+     * @return lista retorna la lista de la asistencia consultada.
      */
     @Override
     public Asistencia buscarPorId(Object id) {
@@ -174,7 +176,7 @@ public class AsistenciaDAO implements IDAO<Asistencia>{
      * los ordena para una mejor vista.
      * @param empleadoPuesto objeto del puesto laboral
      * @param fecha objeto de fecha
-     * @return List<Asistencia> regresa la lista de asistencias 
+     * @return asistencias regresa la lista de asistencias 
      * de acuerdo o por usuario.
      */
     public List<Asistencia> buscar(EmpleadoPuesto empleadoPuesto, Date fecha) {

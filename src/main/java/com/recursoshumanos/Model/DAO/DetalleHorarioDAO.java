@@ -142,7 +142,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
      * dentro de los registros.
      * @param id Objeto encargado del ID del parametro
      * de busqueda.
-     * @return List<DetalleHorario> Retorna la lista de busqueda indicada
+     * @return lista Retorna la lista de busqueda indicada
      */
     @Override
     public DetalleHorario buscarPorId(Object id) {
@@ -192,7 +192,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
 
     /**
      * Valida que no exista nulo en la busqueda
-     * @return List<DetalleHorario> envia la lista del resultado
+     * @return ListDetalleHorario envia la lista del resultado
      */
     @Override
     public List<DetalleHorario> Listar() {
@@ -203,7 +203,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
      * Valida que sea diferente a nulo dentro del método Listar 
      * el detalle de horario.
      * @param idHorarioLaboral Objeto con el ID del horario laboral.
-     * @return List<DetalleHorario> envia la lista del resultado.
+     * @return ListDetalleHorario envia la lista del resultado.
      */
     public List<DetalleHorario> Listar(int idHorarioLaboral) {
         return buscar("id_horario_laboral = " + idHorarioLaboral , null);
@@ -212,7 +212,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
     /**
      * Busca el puesto del empleado de acuerdo a su registro
      * @param empleadoPuesto Objeto que almacena el puesto del empleado.
-     * @return List<DetalleHorario> envia la lista del resultado.
+     * @return ListDetalleHorario envia la lista del resultado.
      */
     public List<DetalleHorario> buscar(EmpleadoPuesto empleadoPuesto) {
         if (conexion.isEstado()) {

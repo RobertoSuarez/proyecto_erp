@@ -132,7 +132,7 @@ public class DepartamentoDAO implements IDAO<Departamento> {
      * dentro de los registros.
      * @param id Objeto encargado del ID del parametro
      * de busqueda.
-     * @return List<Departamento> Retorna la lista de busqueda
+     * @return lista Retorna la lista de busqueda
      */
     @Override
     public Departamento buscarPorId(Object id) {
@@ -145,7 +145,7 @@ public class DepartamentoDAO implements IDAO<Departamento> {
 
     /**
      * Valida que no exista nulo en la busqueda
-     * @return List<Departamento> envia la lista del resultado
+     * @return buscar envia la lista del resultado
      */
     @Override
     public List<Departamento> Listar() {

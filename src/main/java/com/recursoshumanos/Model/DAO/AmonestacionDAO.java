@@ -106,6 +106,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     /**
      * A continuación se crea el método insertar con
      * una amonestación vacia para controles (validaciones): 
+     * @param entity Identifica la entidad.
      * @return insertar maneja la acciòn de INSERT
      */
     @Override
@@ -136,6 +137,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     /**
      * A continuación se crea el método actualizar con
      * una amonestación vacia para controles (validaciones): 
+     * @param entity Identifica la entidad.
      * @return actualizar maneja la acciòn de UPDATE
      */
     @Override
@@ -149,7 +151,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
      * @param id Contiene el dato del ID que sirve para
      * realizar la acción de buscar a cierto dato de acuerdo
      * al tipo de identificacón.
-     * @return List<Amonestacion> retorna la lista de la amonestación consultada.
+     * @return lista retorna la lista de la amonestación consultada.
      */
     @Override
     public Amonestacion buscarPorId(Object id) {
@@ -163,7 +165,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     /**
      * Método que controla los nulls (nulos) en los resultados
      * de busquedas que se realicen.
-     * @return List<Amonestacion> retorna la lista de la amonestación consultada.
+     * @return buscar retorna la lista de la amonestación consultada.
      */
     @Override
     public List<Amonestacion> Listar() {
@@ -173,7 +175,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     /**
      * Muestra el historial del empleado.
      * @param empleado variable que registra el ID del empleado
-     * @return List<Amonestacion> devuelve el listado de las
+     * @return amonestaciones devuelve el listado de las
      * amonestaciones del empleado.
      */
     public List<Amonestacion> historial(Empleado empleado) {
@@ -208,7 +210,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
      * Lista a los empleados de acuerdo a su ID de registro,
      * los ordena para una mejor vista.
      * @param empleado objeto empleado para obtener el dato.
-     * @return List<Amonestacion> retorna la lista del empleado
+     * @return amonestaciones retorna la lista del empleado
      * para sus amonestaciones.
      */
     public List<Amonestacion> Listar(Empleado empleado) {

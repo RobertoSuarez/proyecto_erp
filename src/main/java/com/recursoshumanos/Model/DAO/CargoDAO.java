@@ -128,7 +128,7 @@ public class CargoDAO implements IDAO<Cargo>{
      * dentro de los registros.
      * @param id Objeto encargado del ID del parametro
      * de busqueda.
-     * @return List<Cargo> Retorna la lista de busqueda
+     * @return lista Retorna la lista de busqueda
      */
     @Override
     public Cargo buscarPorId(Object id) {
@@ -141,7 +141,7 @@ public class CargoDAO implements IDAO<Cargo>{
     
     /**
      * Valida que no exista nulo en la busqueda
-     * @return List<Cargo> envia la lista del resultado
+     * @return buscar envia la lista del resultado
      */
     @Override
     public List<Cargo> Listar() {

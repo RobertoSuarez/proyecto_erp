@@ -138,7 +138,7 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
      * dentro de los registros.
      * @param id Objeto encargado del ID del parametro
      * de busqueda.
-     * @return List<CargaFamiliar> Retorna la lista de busqueda
+     * @return lista Retorna la lista de busqueda
      */
     @Override
     public CargaFamiliar buscarPorId(Object id) {
@@ -186,7 +186,7 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
     /**
      * Genera un listado de manera DESCENDENTE o
      * ordena el resultado presentado por pantalla.
-     * @return List<CargaFamiliar> Regresa la lista con los datos
+     * @return buscar Regresa la lista con los datos
      * ordenados para el usuario.
      */
     @Override

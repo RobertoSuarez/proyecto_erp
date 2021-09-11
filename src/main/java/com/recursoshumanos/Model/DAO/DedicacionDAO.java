@@ -128,7 +128,7 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
      * dentro de los registros.
      * @param id Objeto encargado del ID del parametro
      * de busqueda.
-     * @return List<Dedicacion> Retorna la lista de busqueda
+     * @return lista Retorna la lista de busqueda
      */
     @Override
     public Dedicacion buscarPorId(Object id) {
@@ -141,7 +141,7 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
 
     /**
      * Valida que no exista nulo en la busqueda
-     * @return List<Dedicacion> envia la lista del resultado
+     * @return buscar envia la lista del resultado
      */
     @Override
     public List<Dedicacion> Listar() {
