@@ -14,6 +14,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Cargo, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
+ */
 public class CargoDAO implements IDAO<Cargo>{
     private final Conexion conexion;
     private Cargo cargo;
@@ -46,17 +57,34 @@ public class CargoDAO implements IDAO<Cargo>{
         return cargo;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return this.conexion;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(Cargo entity) {
         this.cargo = entity;
       return insertar();
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de los cargos
+     * @return cargo Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -67,12 +95,24 @@ public class CargoDAO implements IDAO<Cargo>{
         return -1;
     }
 
+    /**
+     * A continuación se crea el método actualizar con
+     * un Cargo vacia para controles (validaciones):
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(Cargo entity) {
         this.cargo = entity;
         return actualizar();
     }
 
+    /**
+     * A continuación se crea el método actualizar: 
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -83,6 +123,13 @@ public class CargoDAO implements IDAO<Cargo>{
         return -1;
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return List<Cargo> Retorna la lista de busqueda
+     */
     @Override
     public Cargo buscarPorId(Object id) {
         List<Cargo> lista = buscar("id_cargo = " + id, "nombre");
@@ -92,11 +139,23 @@ public class CargoDAO implements IDAO<Cargo>{
         return null;
     }
     
+    /**
+     * Valida que no exista nulo en la busqueda
+     * @return List<Cargo> envia la lista del resultado
+     */
     @Override
     public List<Cargo> Listar() {
         return buscar(null, "nombre");
     }
 
+    /**
+     * Busca al empleado de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados.
+     * @return List<Cargo> Muestra la lista.
+     */
     private List<Cargo> buscar(@Nullable String restricciones, 
                                @Nullable String OrdenarAgrupar){
         if (conexion.isEstado()) {

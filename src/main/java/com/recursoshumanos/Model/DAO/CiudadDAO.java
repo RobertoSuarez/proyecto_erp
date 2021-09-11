@@ -16,8 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Ciudades, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class CiudadDAO implements IDAO<Ciudad>{
     private final Conexion conexion;
@@ -51,11 +58,21 @@ public class CiudadDAO implements IDAO<Ciudad>{
         this.ciudad = ciudad;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de las ciudades.
+     * @return ciudad Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -69,12 +86,24 @@ public class CiudadDAO implements IDAO<Ciudad>{
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(Ciudad entity) {
         this.ciudad = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar:
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -86,12 +115,26 @@ public class CiudadDAO implements IDAO<Ciudad>{
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de actualizar.
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(Ciudad entity) {
         this.ciudad = entity;
         return actualizar();
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return List<Ciudad> Retorna la lista de busqueda
+     */
     @Override
     public Ciudad buscarPorId(Object id) {
         List<Ciudad> lista = buscar("id_ciudad = " + id, "nombre");
@@ -101,11 +144,22 @@ public class CiudadDAO implements IDAO<Ciudad>{
         return null;
     }
 
+    /**
+     * Valida que no exista nulo en la busqueda
+     * @return List<Ciudad> envia la lista del resultado
+     */
     @Override
     public List<Ciudad> Listar() {
         return buscar(null, "nombre");
     }
     
+    /**
+     * Valida que no exista nulo en la busqueda y envia
+     * mediante un identificador el ID para retornar
+     * el dato correspondiente.
+     * @param provincia Objeto con el identificador del dato.
+     * @return List<Ciudad> retorna la lista de la ciudad.
+     */
     public List<Ciudad> Listar(Provincia provincia) {
         List<Ciudad> lista = new ArrayList<>();
         if (conexion.isEstado()) {
@@ -131,6 +185,14 @@ public class CiudadDAO implements IDAO<Ciudad>{
         return lista;
     }
     
+    /**
+     * Busca a la ciudad de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados. 
+     * @return List<Ciudad> Muestra la lista.
+     */
     private List<Ciudad> buscar( @Nullable String restricciones, 
                                  @Nullable String OrdenarAgrupar){
         List<Ciudad> lista = new ArrayList<>();

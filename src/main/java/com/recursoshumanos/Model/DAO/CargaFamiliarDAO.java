@@ -17,8 +17,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con CargaFamiliar, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
 
@@ -58,6 +65,12 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         return conexion;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de cargas familiares
+     * @return cargaFamiliar Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -74,12 +87,24 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(CargaFamiliar entity) {
         this.cargaFamiliar = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar: 
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -95,12 +120,26 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         return -1;
     }
 
+    /**
+     * A continuación se crea el método actualizar con
+     * una CargaFamiliar vacia para controles (validaciones):
+     * @param entity Objeto que valida campos vacios
+     * @return Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(CargaFamiliar entity) {
         this.cargaFamiliar = entity;
         return actualizar();
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return List<CargaFamiliar> Retorna la lista de busqueda
+     */
     @Override
     public CargaFamiliar buscarPorId(Object id) {
         List<CargaFamiliar> lista = buscar("id_cargaf = " + id, null);
@@ -111,6 +150,12 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
                                  new Date() );
     }
 
+    /**
+     * Permite buscar a un empleado en específico 
+     * @param empleado Objeto que envia el dato de busquedad
+     * mediante la setencia SELECT para obtener el dato.
+     * @return CargaFamiliar Objeto con los datos.
+     */
     public CargaFamiliar buscar(Empleado empleado) {
         cargaFamiliar = new CargaFamiliar(-1,0, empleado, "N/D", "N/D", 
                                           new Date() );
@@ -138,11 +183,25 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
         return cargaFamiliar;
     }
 
+    /**
+     * Genera un listado de manera DESCENDENTE o
+     * ordena el resultado presentado por pantalla.
+     * @return List<CargaFamiliar> Regresa la lista con los datos
+     * ordenados para el usuario.
+     */
     @Override
     public List<CargaFamiliar> Listar() {
         return buscar(null, "fecha_cambio DESC");
     }
 
+    /**
+     * Busca al empleado de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados.
+     * @return List<CargaFamiliar> Muestra una lista.
+     */
     private List<CargaFamiliar> buscar(@Nullable String restricciones, 
                                        @Nullable String OrdenarAgrupar) {
         List<CargaFamiliar> cargaFamiliares = new ArrayList<>();

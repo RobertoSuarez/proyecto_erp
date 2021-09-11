@@ -15,8 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Dedicación, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class DedicacionDAO  implements  IDAO<Dedicacion>{
     private final Conexion conexion;
@@ -49,11 +56,21 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
         this.dedicacion = dedicacion;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de las ciudades.
+     * @return dedicacion Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -65,12 +82,24 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(Dedicacion entity) {
         this.dedicacion = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar:
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -81,12 +110,26 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de actualizar.
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(Dedicacion entity) {
         this.dedicacion = entity;
         return actualizar();
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return List<Dedicacion> Retorna la lista de busqueda
+     */
     @Override
     public Dedicacion buscarPorId(Object id) {
         List<Dedicacion> lista = buscar("id_dedicacion = " + id, "nombre");
@@ -96,11 +139,23 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
         return null;
     }
 
+    /**
+     * Valida que no exista nulo en la busqueda
+     * @return List<Dedicacion> envia la lista del resultado
+     */
     @Override
     public List<Dedicacion> Listar() {
         return buscar(null, "nombre");
     }
     
+    /**
+     * Busca al empleado de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados. 
+     * @return List<Dedicacion> Muestra la lista.
+     */
     private List<Dedicacion> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
         if (conexion.isEstado()) {
             ResultSet result;
