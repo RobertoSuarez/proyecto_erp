@@ -16,8 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author cturriagos
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Departamentos.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class EmpleadoDAO implements IDAO<Empleado> {
 
@@ -54,15 +60,29 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         this.empleado = empleado;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
 
+    /**
+     * Crea el SET para el mètodo conexion
+     * @param conexion Almacena la variable de la conexion
+     */
     public void setConexion(Conexion conexion) {
         this.conexion = conexion;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de los Empleados.
+     * @return empleado Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -77,12 +97,24 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(Empleado entity) {
         this.empleado = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar:
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -95,6 +127,11 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         }
         return -1;
     }
+    
+    /**
+     * Modifica el estado del Empleado, ya sea
+     * ha Activado o Desactivado
+     */
     public void cambiarEstado() {
         if (conexion.isEstado()) {
             conexion.modificar("persona_bck_rrhh",
@@ -102,12 +139,26 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         }
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de actualizar.
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(Empleado entity) {
         this.empleado = entity;
         return actualizar();
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return lista Retorna la lista de busqueda
+     */
     @Override
     public Empleado buscarPorId(Object id) {
         List<Empleado> lista = buscar("id_empleado = " + id, null);
@@ -117,11 +168,19 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         return new Empleado();
     }
 
+    /**
+     * Valida que no exista nulo en la busqueda
+     * @return buscar envia la lista del resultado
+     */
     @Override
     public List<Empleado> Listar() {
         return buscar(null, "nombre1, nombre2, apellido1, apellido2 ASC");
     }
 
+    /**
+     * Genera un resumen de los datos de los Empleados
+     * @return empleados El objeto encargado de los datos a mostrar.
+     */
     public List<Empleado> resumen() {
         List<Empleado> empleados = new ArrayList<>();
         if (conexion.isEstado()) {
@@ -154,6 +213,11 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         return empleados;
     }
     
+    /**
+     * Se encarga de los empleados activos, realiza una consulta SQL de
+     * SELECT para obtener los datos.
+     * @return empleados Objeto encargado de los datos
+     */
     public List<Empleado> activos() {
         List<Empleado> empleados = new ArrayList<>();
         if (conexion.isEstado()) {
@@ -189,6 +253,14 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         return empleados;
     }
 
+    /**
+     * Busca el departamento de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados. 
+     * @return List<Empleado> Muestra la lista.
+     */
     private List<Empleado> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         List<Empleado> empleados = new ArrayList<>();
         if (conexion.isEstado()) {

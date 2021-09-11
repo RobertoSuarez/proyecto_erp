@@ -59,14 +59,28 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         return conexion;
     }
 
+    /**
+     * Metodo GET de Detalle de Rol de Pagos
+     * @return detalleRolPago Objeto que obtiene el dato
+     */
     public DetalleRolPago getDetalleRolPago() {
         return detalleRolPago;
     }
 
+    /**
+     * Metodo SET de Detalle de Rol de Pagos
+     * @param detalleRolPago Objeto que envia el dato
+     */
     public void setDetalleRolPago(DetalleRolPago detalleRolPago) {
         this.detalleRolPago = detalleRolPago;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de la clase de DetalleHorarioDAO.
+     * @return conexion.insertar Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -77,12 +91,25 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(DetalleRolPago entity) {
         this.detalleRolPago = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar el cual
+     * permite modificar los datos en la BD.
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -93,12 +120,26 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de actualizar.
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(DetalleRolPago entity) {
         this.detalleRolPago = entity;
         return actualizar();
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return lista Retorna la lista de busqueda indicada
+     */
     @Override
     public DetalleRolPago buscarPorId(Object id) {
         List<DetalleRolPago> lista = buscar("id_rol = " + id, null);
@@ -108,11 +149,21 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         return null;
     }
 
+    /**
+     * Valida que no exista nulo en la busqueda
+     * @return buscar envia la lista del resultado
+     */
     @Override
     public List<DetalleRolPago> Listar() {
         return buscar(null, null);
     }
 
+    /**
+     * Se encarga de buscar el Rol de Pagos
+     * @param rolPagos Objeto identificado como el set que
+     * se usara para la cadena de conexión de la BD.
+     * @return detalles Retorna el detalle de la busqueda.
+     */
     public List<DetalleRolPago> buscar(RolPagos rolPagos) {
         List<DetalleRolPago> detalles = new ArrayList<>();
         this.detalleRolPago.setRolPagos(rolPagos);
@@ -135,6 +186,14 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
         return detalles;
     }
 
+    /**
+     * Busca el DetalleHorario de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados. 
+     * @return List<DetalleRolPago> Muestra la lista.
+     */
     private List<DetalleRolPago> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         if (conexion.isEstado()) {
             ResultSet result;
