@@ -17,8 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
+ * para todo lo que tenga que ver con Departamentos, Esta clase 
+ * tiene muchas funciones que son reutilizables.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
 
@@ -53,11 +60,21 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         this.detalleHorario = detalleHorario;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de la clase de DetalleHorarioDAO.
+     * @return conexion.insertar Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -69,12 +86,24 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(DetalleHorario entity) {
         this.detalleHorario = entity;
         return insertar();
     }
 
+     /**
+     * A continuación se crea el método actualizar:
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -85,18 +114,36 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de actualizar.
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(DetalleHorario entity) {
         this.detalleHorario = entity;
         return actualizar();
     }
     
+    /**
+     * Modifica el estado del Departamento, ya sea
+     * ha Activado o Desactivado
+     */
     public void cambiarEstado(){
         if (conexion.isEstado()) {
             conexion.modificar("detalle_horario", "estado = NOT estado", "id_detalle_horario = " + detalleHorario.getId());
         }
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return List<DetalleHorario> Retorna la lista de busqueda indicada
+     */
     @Override
     public DetalleHorario buscarPorId(Object id) {
         List<DetalleHorario> lista = buscar("id_detalle_horario = " + id + " AND id_horario_laboral = " + detalleHorario.getHorarioLaboral().getId(), null);
@@ -106,6 +153,16 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         return null;
     }
 
+    /**
+     * Aparte de identificar por ID se realiza
+     * una variable que nos permite obtener su horario
+     * laboral del dato indicado.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @param horarioLaboral Objeto encargado de identificar el 
+     * registro (ID) del dato.
+     * @return detalleHorario Regresa el detalle del horario (su lista).
+     */
     public DetalleHorario buscarPorId(int id, HorarioLaboral horarioLaboral) {
         detalleHorario = new DetalleHorario();
         if (conexion.isEstado()) {
@@ -133,15 +190,30 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         return detalleHorario;
     }
 
+    /**
+     * Valida que no exista nulo en la busqueda
+     * @return List<DetalleHorario> envia la lista del resultado
+     */
     @Override
     public List<DetalleHorario> Listar() {
         return buscar(null, null);
     }
     
+    /**
+     * Valida que sea diferente a nulo dentro del método Listar 
+     * el detalle de horario.
+     * @param idHorarioLaboral Objeto con el ID del horario laboral.
+     * @return List<DetalleHorario> envia la lista del resultado.
+     */
     public List<DetalleHorario> Listar(int idHorarioLaboral) {
         return buscar("id_horario_laboral = " + idHorarioLaboral , null);
     }
 
+    /**
+     * Busca el puesto del empleado de acuerdo a su registro
+     * @param empleadoPuesto Objeto que almacena el puesto del empleado.
+     * @return List<DetalleHorario> envia la lista del resultado.
+     */
     public List<DetalleHorario> buscar(EmpleadoPuesto empleadoPuesto) {
         if (conexion.isEstado()) {
             ResultSet result;
@@ -175,6 +247,14 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
         return null;
     }
 
+    /**
+     * Busca el DetalleHorario de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados. 
+     * @return List<DetalleHorario> Muestra la lista.
+     */
     private List<DetalleHorario> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         if (conexion.isEstado()) {
             ResultSet result;
