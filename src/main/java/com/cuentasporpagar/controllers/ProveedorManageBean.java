@@ -313,7 +313,8 @@ public class ProveedorManageBean implements Serializable {
      }
 
      /**
-      * Retorna una lista de proveedores para su visualización
+      * Función getListaProveedor retorna una lista de proveedores para su visualización
+      * @return listaProveedor retorna un List
       */
      public List<Proveedor> getListaProveedor() {
           try {
@@ -327,7 +328,7 @@ public class ProveedorManageBean implements Serializable {
      /**
       * Obtine una lista de proveedores
       *
-      * @param listaProveedor
+      * @param listaProveedor variable tipo List
       */
 
      public void setListaProveedor(List<Proveedor> listaProveedor) {

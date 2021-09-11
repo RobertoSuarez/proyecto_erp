@@ -69,7 +69,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setCheck
       *
-      * @param check
+      * @param check variabke booleana
       */
      public void setCheck(boolean check) {
           this.check = check;
@@ -78,7 +78,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Función getValue
       *
-      * @return value
+      * @return value valor a retornar
       */
      public String getValue() {
           return value;
@@ -87,7 +87,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setValue
       *
-      * @param value
+      * @param value variable string
       */
      public void setValue(String value) {
           this.value = value;
@@ -96,7 +96,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setListaCondiciones
       *
-      * @param listaCondiciones
+      * @param listaCondiciones variable List
       */
      public void setListaCondiciones(List<Condiciones> listaCondiciones) {
           this.listaCondiciones = listaCondiciones;
@@ -105,7 +105,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Función getCondiciones
       *
-      * @return condiciones
+      * @return condiciones variable a retornar
       */
      public Condiciones getCondiciones() {
           return condiciones;
@@ -114,7 +114,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setCondiciones
       *
-      * @param condiciones
+      * @param condiciones Objeto 
       */
      public void setCondiciones(Condiciones condiciones) {
           this.condiciones = condiciones;
@@ -132,7 +132,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setCondicionesDAO
       *
-      * @param condicionesDAO
+      * @param condicionesDAO Objeto CondicionesDAO
       */
      public void setCondicionesDAO(CondicionesDAO condicionesDAO) {
           this.condicionesDAO = condicionesDAO;
@@ -141,7 +141,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Función getProveedor
       *
-      * @return proveedor
+      * @return proveedor variable a retornar
       */
      public Proveedor getProveedor() {
           return proveedor;
@@ -150,7 +150,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setProveedor
       *
-      * @param proveedor
+      * @param proveedor objeto 
       */
      public void setProveedor(Proveedor proveedor) {
           this.proveedor = proveedor;
@@ -159,7 +159,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Función getCl
       *
-      * @return cl
+      * @return cl variable a retornar
       */
      public String getCl() {
           return cl;
@@ -168,7 +168,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setCl
       *
-      * @param cl
+      * @param cl variable tipo string
       */
      public void setCl(String cl) {
           this.cl = cl;
@@ -177,7 +177,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Función getIc
       *
-      * @return ic
+      * @return ic retornar
       */
      public String getIc() {
           return ic;
@@ -186,7 +186,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setIc
       *
-      * @param ic
+      * @param ic variable tipo string 
       */
      public void setIc(String ic) {
           this.ic = ic;
@@ -196,7 +196,7 @@ public final class CondicionesManageBean implements Serializable {
       * Método para los proveedores en la tabla se : deshabilitados o habilitados Con ina sentencia
       * if la cual chequeará si el proveedor está habilitado o no
       *
-      * @throws SQLException
+      * @throws SQLException validador
       */
      public void dhProveedor() throws SQLException {
 
@@ -233,8 +233,8 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Función para listar condiciones
       *
-      * @return listaCondiciones
-      * @throws Exception
+      * @return listaCondiciones retorno
+      * @throws Exception validadores
       */
      public List<Condiciones> getListaCondiciones() throws Exception {
           try {
@@ -252,7 +252,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método para listar segun sean habilitados o deshabilitados implementa throws
       *
-      * @throws SQLException
+      * @throws SQLException validadores
       */
      public void habTabla() throws SQLException {
 
@@ -290,7 +290,7 @@ public final class CondicionesManageBean implements Serializable {
       * Método para obtener el nombre del proveedor para cargarlo en la ventana Recive como
       * parámetro un objeto tipo proveedor
       *
-      * @param p
+      * @param p objeto
       */
      public void cargarDhab(Proveedor p) {
           this.proveedor.setNombre(p.getNombre());

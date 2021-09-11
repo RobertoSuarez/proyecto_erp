@@ -41,7 +41,7 @@ public class ProveedorDAO extends Conexion {
       * Método para insertar un proveedor recibiendo un parámetro Dicha clase implementa try and
       * catch
       *
-      * @param p
+      * @param p objeto proveedor
       */
 
      public void insertarp(Proveedor p) {
@@ -67,9 +67,9 @@ public class ProveedorDAO extends Conexion {
      /**
       * Método para actualizar un proveedor recibiendo dos parametro Dicha clase implementa throws
       *
-      * @param proveedor
-      * @param codigo
-      * @throws SQLException
+      * @param proveedor obejto proveedor
+      * @param codigo variable tipo int
+      * @throws SQLException validador
       */
      public void update(Proveedor proveedor, int codigo) throws SQLException {
           try {
