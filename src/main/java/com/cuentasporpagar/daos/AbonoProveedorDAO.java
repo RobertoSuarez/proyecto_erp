@@ -250,7 +250,7 @@ public class AbonoProveedorDAO {
             System.out.println(ex.getMessage() + " error en conectarse");
         }
     }
-
+    // actualizar el estado en las facturas
     public void update_abono(int estado, int idabono) {
         conex.cerrarConexion();
         if (conex.isEstado()) {
@@ -266,7 +266,7 @@ public class AbonoProveedorDAO {
             }
         }
     }
-    
+    // Envia los datos tipo json a insertar
     public void intJson(String a, String b) {
         if (conex.isEstado()) {
             try {
