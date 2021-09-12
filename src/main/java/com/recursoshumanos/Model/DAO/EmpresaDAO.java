@@ -63,7 +63,7 @@ public class EmpresaDAO implements IDAO<Empresa> {
 
     /**
      * Método GET de la empresa
-     * @return Retorna el dato de la empresa
+     * @return empresa Retorna el dato de la empresa
      */
     public Empresa getEmpresa() {
         return empresa;
@@ -88,7 +88,7 @@ public class EmpresaDAO implements IDAO<Empresa> {
 
     /**
      * Creación del metedo INSERTAR, para registrar
-     * los datos recopilados de los Empleados.
+     * los datos recopilados de la empresa.
      * @return empresa Retorna la confirmación
      * de un registro exitoso o erroneo.
      */
