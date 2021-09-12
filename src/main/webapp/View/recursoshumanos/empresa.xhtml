@@ -59,10 +59,9 @@
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputruc" style="font-weight: bold">RUC: </p:outputLabel>
-                                        <p:inputText id="inputruc" value="#{empresaView.empresa.ruc}" maxlength="13" 
-                                                     required="true" requiredMessage="Debe de ingresar el RUC">
-                                             <f:validateRegex pattern="^([0-9])*$"/>
-                                        </p:inputText>
+                                        <p:inputMask id="inputruc" value="#{empresaView.empresa.ruc}" maxlength="13" 
+                                                     required="true" requiredMessage="Debe de ingresar el RUC" mask="9999999999001"/>
+
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="inputtipo" style="font-weight: bold">Tipo: </p:outputLabel>
