@@ -45,13 +45,23 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 
 /**
- *
- * @author cturriagos
- */
+  * 
+  * @author kestradalp
+  * @author ClasK7
+  * @author rturr
+  * 
+  * Las clases CONTROLLER son los que responden a la interacción
+  * (eventos del mismo) que hace el usuario en la interfaz
+  * y realiza las peticiones al modelDAO
+  */
 @Named(value = "empleadoView")
 @ViewScoped
 public class EmpleadoController implements Serializable {
 
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Empleado Parte1.
+     */
     private final EmpleadoSucursalDAO empleadoSucursalDAO;
     private final EmpleadoReservaDAO empleadoReservaDAO;
     private final HorarioLaboralDAO horarioLaboralDAO;
@@ -66,6 +76,10 @@ public class EmpleadoController implements Serializable {
     private final SueldoDAO sueldoDAO;
     private final MultaDAO multaDAO;
     
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Empleado Parte2.
+     */
     private EmpleadoSucursal empleadoSucursal;
     private EmpleadoReserva empleadoReserva;
     private EmpleadoPuesto empleadoPuesto;
@@ -77,6 +91,10 @@ public class EmpleadoController implements Serializable {
     private Sueldo sueldo;
     private Multa multa;
     
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Empleado Parte3.
+     */
     private List<HorarioLaboral> horarios;
     private List<PuestoLaboral> puestos;
     private List<Amonestacion> amonestaciones;
@@ -86,9 +104,16 @@ public class EmpleadoController implements Serializable {
     private List<Sueldo> sueldos;
     private List<Multa> multas;
     
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Empleado Parte4.
+     */
     private String resumeReserva;
     private Date fechaMax;
 
+    /**
+     * Se crea las nuevas variables para asignarlos Parte1
+     */
     public EmpleadoController() {
         empleadoSucursalDAO = new EmpleadoSucursalDAO();
         empleadoReservaDAO = new EmpleadoReservaDAO();
@@ -104,6 +129,9 @@ public class EmpleadoController implements Serializable {
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
         
+        /**
+     * Se crea las nuevas variables para asignarlos Parte2
+     */
         empleadoSucursal = new EmpleadoSucursal();
         empleadoReserva = new EmpleadoReserva();
         empleadoPuesto = new EmpleadoPuesto();
@@ -115,6 +143,9 @@ public class EmpleadoController implements Serializable {
         sueldo = new Sueldo();
         multa = new Multa();
         
+        /**
+     * Se crea las nuevas variables para asignarlos Parte3
+     */
         lista = new ArrayList<>();
         multas = new ArrayList<>();
         puestos = new ArrayList<>();
@@ -124,10 +155,17 @@ public class EmpleadoController implements Serializable {
         fechaMax = new Date();
     }
     
+    /**
+     * Evento POST para geberar la lista
+     */
     public void postLista(){
         lista = empleadoDAO.Listar();
     }
 
+    /**
+     * Evento POST para empleado
+     * @param idEmpleado Objeto que contiene el ID del Empleado
+     */
     public void postEmpleado(int idEmpleado) {
         if (idEmpleado > 0) {
             empleado = empleadoDAO.buscarPorId(idEmpleado);
@@ -144,6 +182,10 @@ public class EmpleadoController implements Serializable {
         }
     }
     
+    /**
+     * Evento para generar un nuevo empleado en la interfaz del
+     * usuario al presionar el botón correspondiente
+     */
     public void postNuevoEmpleado(){
         empleadoDAO.setConexion(personaDAO.obtenerConexion());
         empleadoPuestoDAO.setConexion(personaDAO.obtenerConexion());
@@ -158,6 +200,11 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().ajax().update(null, "form:dt-empleado");
     }
     
+    /**
+     * Evento para editar el empleado.
+     * @param idEmpleado Objeto que usa el ID
+     * del empleado para que pueda ser editado
+     */
     public void postEditarEmpleado(int idEmpleado){
         empleadoDAO.setConexion(personaDAO.obtenerConexion());
         if(idEmpleado > 0) {
@@ -166,6 +213,13 @@ public class EmpleadoController implements Serializable {
         }
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET
+     * de cada una de las variables declaradas al inicio de
+     * la clase.
+     * @return lista Los GET tienen un return que nos retornan
+     * los datos y los SET una variable que recibe el dato.
+     */
     public EmpleadoSucursal getEmpleadoSucursal() {
         return empleadoSucursal;
     }
@@ -407,6 +461,11 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().executeScript("PF('manageSuspencionDialog').hide()");
     }
 
+    /**
+     * Eventio que regustra al nuevo empleado al presioanr el
+     * botón de guardar en la interfaz del usuario
+     * @return 
+     */
     public String guardar() {
         String mensaje = "";
         boolean result = false;
@@ -454,6 +513,10 @@ public class EmpleadoController implements Serializable {
         }
     }
 
+    /**
+     * Evento que actualiza el empleado
+     * @return retorna los datos actualizados
+     */
     public String actualizar() {
         String mensaje = "";
         boolean result = false;
@@ -478,6 +541,9 @@ public class EmpleadoController implements Serializable {
         }
     }
 
+    /**
+     * Evento que guarda la carga familiar del empleado
+     */
     public void guardarCargaFamiliar() {
         cargaFamiliarDAO.setCargaFamiliar(cargaFamiliar);
         if (cargaFamiliar.getId() < 1) {
@@ -498,12 +564,19 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
     
+    /**
+     * Evento que cambia de activado a desactivado al empleado
+     * @param empleado Objeto que lleva el estado
+     */
     public void cambiarEstado(Empleado empleado){
         empleadoDAO.setEmpleado(empleado);
         empleadoDAO.cambiarEstado();
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleados");
     }
 
+    /**
+     * Guara al empleado de reserva
+     */
     public void guardarReserva() {
         empleadoReservaDAO.setEmpleadoReserva(empleadoReserva);
         if (resumeReserva.equalsIgnoreCase("S/D")) {
@@ -528,12 +601,23 @@ public class EmpleadoController implements Serializable {
         return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha):"";
     }
 
-    //  MENSAJE DE ERROR
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido Éxitoso el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido con Error el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
