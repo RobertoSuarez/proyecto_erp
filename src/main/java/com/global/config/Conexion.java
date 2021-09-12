@@ -31,14 +31,11 @@ public class Conexion implements Serializable{
     private ResultSet result;
 
     //Credenciales para la conexion
-//    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
-//    private String usuario = "appweb";
-//    private String clave = "@Aplicaciones@Web@2021";
-//    private String classForName = "org.postgresql.Driver";
-    private String url = "jdbc:postgresql://localhost:5432/hola";
-    private String usuario = "postgres";
-    private String clave = "123456";
+    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
+    private String usuario = "appweb";
+    private String clave = "@Aplicaciones@Web@2021";
     private String classForName = "org.postgresql.Driver";
+
 
     public Conexion() {
         estado = true;
