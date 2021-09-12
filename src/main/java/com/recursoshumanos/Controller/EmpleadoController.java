@@ -115,7 +115,7 @@ public class EmpleadoController implements Serializable {
     private Date fechaMax;
 
     /**
-     * Se crea las nuevas variables para asignarlos Parte1
+     * Se instancian las nuevas variables para asignarlos Parte1
      */
     public EmpleadoController() {
         empleadoSucursalDAO = new EmpleadoSucursalDAO();
@@ -135,7 +135,7 @@ public class EmpleadoController implements Serializable {
         httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
         /**
-         * Se crea las nuevas variables para asignarlos Parte2
+         * Se instancian las nuevas variables para asignarlos Parte2
          */
         empleadoSucursal = new EmpleadoSucursal();
         empleadoReserva = new EmpleadoReserva();
@@ -149,7 +149,7 @@ public class EmpleadoController implements Serializable {
         multa = new Multa();
 
         /**
-         * Se crea las nuevas variables para asignarlos Parte3
+         * Se instancian las nuevas variables para asignarlos Parte3
          */
         lista = new ArrayList<>();
         multas = new ArrayList<>();

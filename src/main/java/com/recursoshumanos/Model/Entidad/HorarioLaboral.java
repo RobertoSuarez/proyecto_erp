@@ -11,22 +11,34 @@ import java.util.Date;
 /**
  *
  * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla HorarioLaboral de la base de datos
  */
 public class HorarioLaboral implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private String nombre;
     private boolean estado;
     private String observaciones;
     private Date fechaVigencia;
 
-    public HorarioLaboral(){
+    /**
+     * Constructores para la clase
+     */
+    public HorarioLaboral() {
         this.id = 0;
         this.nombre = "";
         this.estado = true;
         this.observaciones = "";
         this.fechaVigencia = new Date();
     }
-    
+
     public HorarioLaboral(int id, String nombre, boolean estado, String observaciones, Date fechaVigencia) {
         this.id = id;
         this.nombre = nombre;
@@ -35,6 +47,13 @@ public class HorarioLaboral implements Serializable {
         this.fechaVigencia = fechaVigencia;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }

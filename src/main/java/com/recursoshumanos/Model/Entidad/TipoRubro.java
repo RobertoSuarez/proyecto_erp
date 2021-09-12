@@ -10,11 +10,23 @@ import java.io.Serializable;
 /**
  *
  * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla amonestación de la base de datos
  */
 public class TipoRubro implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id, coeficiente;
     private String nombre;
 
+    /**
+     * Constructores para la clase
+     */
     public TipoRubro() {
         this.id = 0;
         this.coeficiente = 0;
@@ -27,6 +39,13 @@ public class TipoRubro implements Serializable {
         this.nombre = nombre;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }

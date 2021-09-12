@@ -9,14 +9,28 @@ import java.io.Serializable;
 
 /**
  *
+ * @author kestradalp
+ * @author ClasK7
  * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla IngresosSalidas de la base de
+ * datos
  */
 public class IngresosSalidas implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private String horaIngreso, horaSalida;
     private String observaciones;
 
-    public IngresosSalidas() {}
+    /**
+     * Constructores para la clase
+     */
+    public IngresosSalidas() {
+    }
 
     public IngresosSalidas(int id, String horaIngreso, String horaSalida, String observaciones) {
         this.id = id;
@@ -25,6 +39,13 @@ public class IngresosSalidas implements Serializable {
         this.observaciones = observaciones;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
@@ -56,11 +77,11 @@ public class IngresosSalidas implements Serializable {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-    
+
     public String horario() {
         return horaIngreso + "-" + horaSalida;
     }
-    
+
     public String resumen() {
         return observaciones + " (" + horario() + ")";
     }

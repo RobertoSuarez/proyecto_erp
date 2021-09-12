@@ -11,9 +11,17 @@ import java.util.Date;
 /**
  *
  * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla RolPagos de la base de datos
  */
 public class RolPagos implements Serializable {
 
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Empleado empleado;
     private final String usuario = "ADMINISTRADOR";
@@ -21,6 +29,9 @@ public class RolPagos implements Serializable {
     private Date fechaGenerado, fechaAprobacion, fechaPago;
     private float horasLaboradas, horasSuplemetarias, valor;
 
+    /**
+     * Constructores para la clase
+     */
     public RolPagos() {
         this.id = 0;
         this.empleado = new Empleado();
@@ -77,6 +88,13 @@ public class RolPagos implements Serializable {
         this.codigo = codigo;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public String getUsuario() {
         return usuario;
     }

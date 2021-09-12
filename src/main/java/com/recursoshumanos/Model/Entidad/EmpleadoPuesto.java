@@ -10,9 +10,18 @@ import java.util.Date;
 
 /**
  *
- * @author cturriagos
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla EmpleadoPuesto de la base de datos
  */
 public class EmpleadoPuesto implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Empleado empleado;
     private PuestoLaboral puestoLaboral;
@@ -20,7 +29,10 @@ public class EmpleadoPuesto implements Serializable {
     private Date fechaCambio;
     private boolean estado;
     private String observaciones;
-    
+
+    /**
+     * Constructores para la clase
+     */
     public EmpleadoPuesto() {
         this.id = 0;
         this.empleado = new Empleado();
@@ -31,9 +43,9 @@ public class EmpleadoPuesto implements Serializable {
         this.observaciones = "";
     }
 
-    public EmpleadoPuesto(int id, Empleado empleado, 
-        PuestoLaboral puestoLaboral, HorarioLaboral horarioLaboral, 
-        Date fechaCambio, boolean estado, String observaciones) {
+    public EmpleadoPuesto(int id, Empleado empleado,
+            PuestoLaboral puestoLaboral, HorarioLaboral horarioLaboral,
+            Date fechaCambio, boolean estado, String observaciones) {
         this.id = id;
         this.empleado = empleado;
         this.puestoLaboral = puestoLaboral;
@@ -43,6 +55,13 @@ public class EmpleadoPuesto implements Serializable {
         this.observaciones = observaciones;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }

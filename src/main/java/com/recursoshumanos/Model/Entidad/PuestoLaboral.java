@@ -9,10 +9,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- *
- * @author rturr
+ * Lista de variables que representas los atributos y tablas con las que se
+ * relaciona la tabla
  */
 public class PuestoLaboral implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Cargo cargo;
     private Departamento departamento;
@@ -20,6 +25,9 @@ public class PuestoLaboral implements Serializable {
     private boolean estado;
     private String descripcion;
 
+    /**
+     * Constructores para la amonestación
+     */
     public PuestoLaboral() {
     }
 
@@ -32,6 +40,13 @@ public class PuestoLaboral implements Serializable {
         this.descripcion = descripcion;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }

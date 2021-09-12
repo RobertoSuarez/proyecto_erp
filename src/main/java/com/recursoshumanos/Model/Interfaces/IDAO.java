@@ -9,10 +9,17 @@ import com.global.config.Conexion;
 import java.util.List;
 
 /**
- *
- * @author rturr
- */
+  * 
+  * @author kestradalp
+  * @author ClasK7
+  * @author rturr
+  * 
+  * Clase de tipo interfaz
+  *  Indicar qué métodos debe obligatoriamente implementar
+ * @param <T>
+  */
 public interface IDAO<T> {
+
     public Conexion obtenerConexion();
     public int insertar();
     public int insertar(T entity);

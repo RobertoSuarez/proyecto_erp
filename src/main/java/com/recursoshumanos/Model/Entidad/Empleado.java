@@ -10,14 +10,26 @@ import java.util.Date;
 
 /**
  *
- * @author cturriagos
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla Empleado de la base de datos
  */
-public class Empleado implements Serializable{
+public class Empleado implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Persona persona;
     private String nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle;
     private Date fechaNacimiento, fechaIngreso, fechaEgreso;
 
+    /**
+     * Constructores para la clase
+     */
     public Empleado() {
         this.id = 0;
         this.persona = new Persona();
@@ -33,10 +45,10 @@ public class Empleado implements Serializable{
         this.fechaEgreso = new Date();
     }
 
-    public Empleado(int id, Persona persona, String nombre1, String nombre2, 
-        String apellido1, String apellido2, String sexo, String genero, 
-        String detalle, Date fechaNacimiento, Date fechaIngreso, 
-        Date fechaEgreso) {
+    public Empleado(int id, Persona persona, String nombre1, String nombre2,
+            String apellido1, String apellido2, String sexo, String genero,
+            String detalle, Date fechaNacimiento, Date fechaIngreso,
+            Date fechaEgreso) {
         this.id = id;
         this.persona = persona;
         this.nombre1 = nombre1;
@@ -51,6 +63,13 @@ public class Empleado implements Serializable{
         this.fechaEgreso = fechaEgreso;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
@@ -146,16 +165,16 @@ public class Empleado implements Serializable{
     public void setFechaEgreso(Date fechaEgreso) {
         this.fechaEgreso = fechaEgreso;
     }
-    
-    public String nombreCompleto(){
+
+    public String nombreCompleto() {
         return nombre1 + " " + nombre2 + " " + apellido1 + " " + apellido2;
     }
-    
-    public String getApellidos(){
+
+    public String getApellidos() {
         return apellido1 + " " + apellido2;
     }
-    
-    public String getNombres(){
+
+    public String getNombres() {
         return nombre1 + " " + nombre2;
     }
 }
