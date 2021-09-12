@@ -40,6 +40,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.math3.util.Precision;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
@@ -75,6 +76,8 @@ public class EmpleadoController implements Serializable {
     private final PersonaDAO personaDAO;
     private final SueldoDAO sueldoDAO;
     private final MultaDAO multaDAO;
+
+    private static HttpSession httpSession;
     
     /**
      * Se declaran las variables del modelo Controlador de
@@ -128,6 +131,8 @@ public class EmpleadoController implements Serializable {
         personaDAO = new PersonaDAO();
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
+        
+        httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         
         /**
      * Se crea las nuevas variables para asignarlos Parte2
@@ -394,6 +399,10 @@ public class EmpleadoController implements Serializable {
         } else {
             resumeReserva = "S/D";
         }
+    }
+    
+    public void verEmpleado(){
+        httpSession.setAttribute("empleado", empleado);
     }
     
     public void verAmonestaciones(){
