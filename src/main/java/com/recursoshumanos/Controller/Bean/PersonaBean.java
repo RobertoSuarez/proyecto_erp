@@ -12,9 +12,15 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 /**
- *
- * @author cturriagos
- */
+  * 
+  * @author kestradalp
+  * @author ClasK7
+  * @author rturr
+  * 
+  * Clase PERSONA BEAN requerida como sesiòn dado que
+  * se la usa cuando se pasa de una vista a otra debido a que
+  * en sesión no permanece de una vista a otra.
+  */
 @Named
 @SessionScoped
 public class PersonaBean implements Serializable{
@@ -23,6 +29,9 @@ public class PersonaBean implements Serializable{
     private RolPagos rolPago;
     private boolean nuevo;
     
+    /**
+     * Variables declaradas para persona BEAN
+     */
     public PersonaBean() {
         idPersona = 0;
         idEmpleado = 0;
@@ -32,6 +41,13 @@ public class PersonaBean implements Serializable{
         rolPago = new RolPagos();
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET
+     * de cada una de las variables declaradas al inicio de
+     * la clase.
+     * @return lista Los GET tienen un return que nos retornan
+     * los datos y los SET una variable que recibe el dato.
+     */
     public int getIdPersona() {
         return idPersona;
     }
