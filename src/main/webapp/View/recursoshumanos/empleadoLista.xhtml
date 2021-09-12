@@ -62,9 +62,8 @@
                             <h:outputText value="#{empleado.persona.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                         </p:column>
                         <p:column exportable="false" width="9%">
-                            <p:commandButton icon="pi pi-eye" action="Empleado" actionListener="#{empleadoView.verEmpleado}"
+                            <p:commandButton icon="pi pi-eye" action="Empleado" actionListener="#{empleadoView.verEmpleado(empleado)}"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <f:setPropertyActionListener value="#{empleado}" target="#{empleadoView.empleado}"/>
                             </p:commandButton>
                             <p:commandButton icon="pi pi-#{empleado.persona.estado? 'times' : 'check'}"
                                              styleClass="edit-button rounded-button ui-button-success" 

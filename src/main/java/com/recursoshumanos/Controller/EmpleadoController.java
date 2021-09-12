@@ -400,6 +400,10 @@ public class EmpleadoController implements Serializable {
     }
 
     public void verEmpleado() {
+        httpSession.setAttribute("empleado", this.empleado);
+    }
+
+    public void verEmpleado(Empleado empleado) {
         httpSession.setAttribute("empleado", empleado);
     }
 
