@@ -171,9 +171,8 @@ public class EmpleadoController implements Serializable {
      * Evento POST para empleado
      * @param idEmpleado Objeto que contiene el ID del Empleado
      */
-    public void postEmpleado(int idEmpleado) {
-        if (idEmpleado > 0) {
-            empleado = empleadoDAO.buscarPorId(idEmpleado);
+    public void postEmpleado() {
+            empleado = (Empleado) httpSession.getAttribute("empleado");
             empleadoSucursal = empleadoSucursalDAO.buscar(empleado);
             empleadoReserva = empleadoReservaDAO.buscar(empleado);
             empleadoPuesto = empleadoPuestoDAO.buscar(empleado);
@@ -184,7 +183,6 @@ public class EmpleadoController implements Serializable {
             multa = multaDAO.buacar(empleado);
             resumenReserva();
             PrimeFaces.current().ajax().update(null, "form:dt-empleado");
-        }
     }
     
     /**
