@@ -46,22 +46,22 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.FlowEvent;
 
 /**
-  * 
-  * @author kestradalp
-  * @author ClasK7
-  * @author rturr
-  * 
-  * Las clases CONTROLLER son los que responden a la interacción
-  * (eventos del mismo) que hace el usuario en la interfaz
-  * y realiza las peticiones al modelDAO
-  */
+ *
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Las clases CONTROLLER son los que responden a la interacción (eventos del
+ * mismo) que hace el usuario en la interfaz y realiza las peticiones al
+ * modelDAO
+ */
 @Named(value = "empleadoView")
 @ViewScoped
 public class EmpleadoController implements Serializable {
 
     /**
-     * Se declaran las variables del modelo Controlador de
-     * la parte de Empleado Parte1.
+     * Se declaran las variables del modelo Controlador de la parte de Empleado
+     * Parte1.
      */
     private final EmpleadoSucursalDAO empleadoSucursalDAO;
     private final EmpleadoReservaDAO empleadoReservaDAO;
@@ -78,10 +78,10 @@ public class EmpleadoController implements Serializable {
     private final MultaDAO multaDAO;
 
     private static HttpSession httpSession;
-    
+
     /**
-     * Se declaran las variables del modelo Controlador de
-     * la parte de Empleado Parte2.
+     * Se declaran las variables del modelo Controlador de la parte de Empleado
+     * Parte2.
      */
     private EmpleadoSucursal empleadoSucursal;
     private EmpleadoReserva empleadoReserva;
@@ -93,10 +93,10 @@ public class EmpleadoController implements Serializable {
     private Persona persona;
     private Sueldo sueldo;
     private Multa multa;
-    
+
     /**
-     * Se declaran las variables del modelo Controlador de
-     * la parte de Empleado Parte3.
+     * Se declaran las variables del modelo Controlador de la parte de Empleado
+     * Parte3.
      */
     private List<HorarioLaboral> horarios;
     private List<PuestoLaboral> puestos;
@@ -106,10 +106,10 @@ public class EmpleadoController implements Serializable {
     private List<Empleado> lista;
     private List<Sueldo> sueldos;
     private List<Multa> multas;
-    
+
     /**
-     * Se declaran las variables del modelo Controlador de
-     * la parte de Empleado Parte4.
+     * Se declaran las variables del modelo Controlador de la parte de Empleado
+     * Parte4.
      */
     private String resumeReserva;
     private Date fechaMax;
@@ -131,12 +131,12 @@ public class EmpleadoController implements Serializable {
         personaDAO = new PersonaDAO();
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
-        
+
         httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        
+
         /**
-     * Se crea las nuevas variables para asignarlos Parte2
-     */
+         * Se crea las nuevas variables para asignarlos Parte2
+         */
         empleadoSucursal = new EmpleadoSucursal();
         empleadoReserva = new EmpleadoReserva();
         empleadoPuesto = new EmpleadoPuesto();
@@ -147,10 +147,10 @@ public class EmpleadoController implements Serializable {
         persona = new Persona();
         sueldo = new Sueldo();
         multa = new Multa();
-        
+
         /**
-     * Se crea las nuevas variables para asignarlos Parte3
-     */
+         * Se crea las nuevas variables para asignarlos Parte3
+         */
         lista = new ArrayList<>();
         multas = new ArrayList<>();
         puestos = new ArrayList<>();
@@ -159,37 +159,38 @@ public class EmpleadoController implements Serializable {
         sucursales = new ArrayList<>();
         fechaMax = new Date();
     }
-    
+
     /**
      * Evento POST para geberar la lista
      */
-    public void postLista(){
+    public void postLista() {
         lista = empleadoDAO.Listar();
     }
 
     /**
      * Evento POST para empleado
+     *
      * @param idEmpleado Objeto que contiene el ID del Empleado
      */
     public void postEmpleado() {
-            empleado = (Empleado) httpSession.getAttribute("empleado");
-            empleadoSucursal = empleadoSucursalDAO.buscar(empleado);
-            empleadoReserva = empleadoReservaDAO.buscar(empleado);
-            empleadoPuesto = empleadoPuestoDAO.buscar(empleado);
-            cargaFamiliar = cargaFamiliarDAO.buscar(empleado);
-            amonestacion = amonestacionDAO.buscar(empleado);
-            suspencion = suspencionDAO.buscar(empleado);
-            sueldo = sueldoDAO.Actual(empleado);
-            multa = multaDAO.buacar(empleado);
-            resumenReserva();
-            PrimeFaces.current().ajax().update(null, "form:dt-empleado");
+        empleado = (Empleado) httpSession.getAttribute("empleado");
+        empleadoSucursal = empleadoSucursalDAO.buscar(empleado);
+        empleadoReserva = empleadoReservaDAO.buscar(empleado);
+        empleadoPuesto = empleadoPuestoDAO.buscar(empleado);
+        cargaFamiliar = cargaFamiliarDAO.buscar(empleado);
+        amonestacion = amonestacionDAO.buscar(empleado);
+        suspencion = suspencionDAO.buscar(empleado);
+        sueldo = sueldoDAO.Actual(empleado);
+        multa = multaDAO.buacar(empleado);
+        resumenReserva();
+        PrimeFaces.current().ajax().update(null, "form:dt-empleado");
     }
-    
+
     /**
-     * Evento para generar un nuevo empleado en la interfaz del
-     * usuario al presionar el botón correspondiente
+     * Evento para generar un nuevo empleado en la interfaz del usuario al
+     * presionar el botón correspondiente
      */
-    public void postNuevoEmpleado(){
+    public void postNuevoEmpleado() {
         empleadoDAO.setConexion(personaDAO.obtenerConexion());
         empleadoPuestoDAO.setConexion(personaDAO.obtenerConexion());
         empleadoPuestoDAO.setConexion(personaDAO.obtenerConexion());
@@ -202,26 +203,25 @@ public class EmpleadoController implements Serializable {
         empleado.setFechaNacimiento(fechaMax);
         PrimeFaces.current().ajax().update(null, "form:dt-empleado");
     }
-    
+
     /**
      * Evento para editar el empleado.
-     * @param idEmpleado Objeto que usa el ID
-     * del empleado para que pueda ser editado
+     *
+     * @param idEmpleado Objeto que usa el ID del empleado para que pueda ser
+     * editado
      */
-    public void postEditarEmpleado(int idEmpleado){
+    public void postEditarEmpleado(int idEmpleado) {
         empleadoDAO.setConexion(personaDAO.obtenerConexion());
-        if(idEmpleado > 0) {
-            empleado = empleadoDAO.buscarPorId(idEmpleado);
-            PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
-        }
+        empleado = (Empleado) httpSession.getAttribute("empleado");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
 
     /**
-     * A continuación continuan los métodos de GET y SET
-     * de cada una de las variables declaradas al inicio de
-     * la clase.
-     * @return lista Los GET tienen un return que nos retornan
-     * los datos y los SET una variable que recibe el dato.
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
      */
     public EmpleadoSucursal getEmpleadoSucursal() {
         return empleadoSucursal;
@@ -390,35 +390,35 @@ public class EmpleadoController implements Serializable {
     public void setMulta(Multa multa) {
         this.multa = multa;
     }
-    
-    private void resumenReserva(){
+
+    private void resumenReserva() {
         if (empleadoReserva.getFormaPago() != 0) {
             resumeReserva = "$ " + (empleadoReserva.getFormaPago() * sueldo.getValor()) + " (" + (empleadoReserva.getFormaPago() == 1 ? "ANUAL" : "MENSUAL") + ")";
         } else {
             resumeReserva = "S/D";
         }
     }
-    
-    public void verEmpleado(){
+
+    public void verEmpleado() {
         httpSession.setAttribute("empleado", empleado);
     }
-    
-    public void verAmonestaciones(){
+
+    public void verAmonestaciones() {
         amonestaciones = amonestacionDAO.historial(empleado);
         PrimeFaces.current().ajax().update("form:messages", "form:dt-amonestaciones");
     }
-    
-    public void verSuspenciones(){
+
+    public void verSuspenciones() {
         suspenciones = suspencionDAO.Listar(empleado);
         PrimeFaces.current().ajax().update("form:messages", "form:dt-suspenciones");
     }
-    
-    public void verSueldos(){
+
+    public void verSueldos() {
         sueldos = sueldoDAO.historial(empleado);
         PrimeFaces.current().ajax().update("form:messages", "form:dt-sueldos");
     }
-    
-    public void verMultas(){
+
+    public void verMultas() {
         multas = multaDAO.historial(empleado);
         PrimeFaces.current().ajax().update("form:messages", "form:dt-multas");
     }
@@ -435,43 +435,44 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().executeScript("PF('manageSueldoDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
-    
-    public void guardarMulta(){
-        multa.setValor(Precision.round(sueldo.getValor() * (multa.getPorcentaje() /100), 2));
+
+    public void guardarMulta() {
+        multa.setValor(Precision.round(sueldo.getValor() * (multa.getPorcentaje() / 100), 2));
         multa.setId(multaDAO.insertar(multa));
-        if(multa.getId() > 0){
+        if (multa.getId() > 0) {
             mostrarMensajeInformacion("Se ha guardado la multa con éxito");
-        }else{
+        } else {
             mostrarMensajeError("La multa no se pudo guardar");
         }
         PrimeFaces.current().executeScript("PF('manageMultaDialog').hide()");
     }
-    
-    public void guardarAmonestacion(){
+
+    public void guardarAmonestacion() {
         amonestacion.setId(amonestacionDAO.insertar(amonestacion));
-        if(amonestacion.getId() > 0){
+        if (amonestacion.getId() > 0) {
             mostrarMensajeInformacion("Se ha guardado la amonestación con éxito");
-        }else{
+        } else {
             mostrarMensajeError("La amonestación no se pudo guardar");
         }
         PrimeFaces.current().executeScript("PF('manageAmonestacionDialog').hide()");
     }
-    
-    public void guardarSuspencion(){
-        suspencion.setValor(Precision.round((sueldo.getValor()/30)* suspencion.getCantidadDias(), 2));
+
+    public void guardarSuspencion() {
+        suspencion.setValor(Precision.round((sueldo.getValor() / 30) * suspencion.getCantidadDias(), 2));
         suspencion.setId(suspencionDAO.insertar(suspencion));
-        if(suspencion.getId() > 0){
+        if (suspencion.getId() > 0) {
             mostrarMensajeInformacion("Se ha guardado la suspención con éxito");
-        }else{
+        } else {
             mostrarMensajeError("La suspención no se pudo guardar");
         }
         PrimeFaces.current().executeScript("PF('manageSuspencionDialog').hide()");
     }
 
     /**
-     * Eventio que regustra al nuevo empleado al presioanr el
-     * botón de guardar en la interfaz del usuario
-     * @return 
+     * Eventio que regustra al nuevo empleado al presioanr el botón de guardar
+     * en la interfaz del usuario
+     *
+     * @return
      */
     public String guardar() {
         String mensaje = "";
@@ -512,6 +513,7 @@ public class EmpleadoController implements Serializable {
             mensaje = "La persona no se pudo guardar";
         }
         if (result) {
+            verEmpleado();
             mostrarMensajeInformacion("Datos guardados correctamente");
             return "Empleado";
         } else {
@@ -522,24 +524,26 @@ public class EmpleadoController implements Serializable {
 
     /**
      * Evento que actualiza el empleado
+     *
      * @return retorna los datos actualizados
      */
     public String actualizar() {
         String mensaje = "";
         boolean result = false;
+        empleadoDAO.setEmpleado(empleado);
+        personaDAO.setPersona(empleado.getPersona());
+        if (personaDAO.actualizar() > 0) {
             empleadoDAO.setEmpleado(empleado);
-            personaDAO.setPersona(empleado.getPersona());
-            if (personaDAO.actualizar() > 0) {
-                empleadoDAO.setEmpleado(empleado);
-                if (empleadoDAO.actualizar() > 0) {
-                    result = true;
-                } else {
-                    mensaje = "El empleado no se pudo actualizar";
-                }
+            if (empleadoDAO.actualizar() > 0) {
+                result = true;
             } else {
-                mensaje = "La persona no se pudo actualizar";
+                mensaje = "El empleado no se pudo actualizar";
             }
+        } else {
+            mensaje = "La persona no se pudo actualizar";
+        }
         if (result) {
+            verEmpleado();
             mostrarMensajeInformacion("Datos actualizados correctamente");
             return "Empleado";
         } else {
@@ -570,12 +574,13 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().executeScript("PF('manageCargaFamiliarDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
-    
+
     /**
      * Evento que cambia de activado a desactivado al empleado
+     *
      * @param empleado Objeto que lleva el estado
      */
-    public void cambiarEstado(Empleado empleado){
+    public void cambiarEstado(Empleado empleado) {
         empleadoDAO.setEmpleado(empleado);
         empleadoDAO.cambiarEstado();
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleados");
@@ -589,13 +594,13 @@ public class EmpleadoController implements Serializable {
         if (resumeReserva.equalsIgnoreCase("S/D")) {
             if (empleadoReservaDAO.insertar() > 0) {
                 mostrarMensajeInformacion("Los datos se guardarón con éxito");
-            }else{
+            } else {
                 mostrarMensajeError("No se pudierón guardar los datos");
             }
-        }else{
+        } else {
             if (empleadoReservaDAO.actualizar() > 0) {
                 mostrarMensajeInformacion("Los datos se actualizarón con éxito");
-            }else{
+            } else {
                 mostrarMensajeError("No se pudierón actualizar los datos");
             }
         }
@@ -603,16 +608,17 @@ public class EmpleadoController implements Serializable {
         PrimeFaces.current().executeScript("PF('manageReservaDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
     }
-    
-    public String darFormato(Date fecha){
-        return fecha != null? new SimpleDateFormat("dd/MM/yyyy").format(fecha):"";
+
+    public String darFormato(Date fecha) {
+        return fecha != null ? new SimpleDateFormat("dd/MM/yyyy").format(fecha) : "";
     }
 
     /**
-     * Evento que muestra el mensaje de informaciòn en la interfaz
-     * de que ha sido Éxitoso el mensaje 
-     * @param mensaje Objeto que almacena la información
-     * ha ser mostrada en la interfaz.
+     * Evento que muestra el mensaje de informaciòn en la interfaz de que ha
+     * sido Éxitoso el mensaje
+     *
+     * @param mensaje Objeto que almacena la información ha ser mostrada en la
+     * interfaz.
      */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
@@ -620,10 +626,11 @@ public class EmpleadoController implements Serializable {
     }
 
     /**
-     * Evento que muestra el mensaje de informaciòn en la interfaz
-     * de que ha sido con Error el mensaje 
-     * @param mensaje Objeto que almacena la información
-     * ha ser mostrada en la interfaz.
+     * Evento que muestra el mensaje de informaciòn en la interfaz de que ha
+     * sido con Error el mensaje
+     *
+     * @param mensaje Objeto que almacena la información ha ser mostrada en la
+     * interfaz.
      */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);

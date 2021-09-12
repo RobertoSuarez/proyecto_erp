@@ -9,7 +9,7 @@
     <ui:define name="content">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{empleadoView.postEditarEmpleado(personaBean.idEmpleado)}" />
+                <f:event type="preRenderView" listener="#{empleadoView.postEditarEmpleado}" />
             </f:metadata>
         </h:head>
         <div class="card">
@@ -107,7 +107,6 @@
                             <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoView.actualizar}"
                                              update="messages dt-empleado" styleClass="p-mr-2 ui-button-success"
                                              process="messages dt-empleado @this">
-                                <f:setPropertyActionListener value="#{empleadoView.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
