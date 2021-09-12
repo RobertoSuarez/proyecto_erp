@@ -363,9 +363,9 @@ public class AbonoProveedorDAO {
     /**
      * metodo para consultar el idabonoproveedor
      *
-     * @param importe
-     * @param ruc
-     * @param abonoProveedor
+     * @param importe Valor total
+     * @param ruc Ruc del proveerdor
+     * @param abonoProveedor datos de los pagos
      */
     public void search_date_payment(float importe, String ruc, AbonoProveedor abonoProveedor) {
         if (conex.isEstado()) {

@@ -123,7 +123,7 @@ public final class AbonoProveedorManagedBean {
      *
      * @param abonoProveedor requerido para saber los datos que ha seleccionado
      * en la vista
-     * @
+     * 
      */
     public void load_Data(AbonoProveedor abonoProveedor) {
         //Buscar idabonoproveedor para tener los datos del abono
