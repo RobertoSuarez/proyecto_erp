@@ -26,14 +26,24 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
-/**
- *
- * @author kestradalp
- */
+ /**
+  * 
+  * @author kestradalp
+  * @author ClasK7
+  * @author rturr
+  * 
+  * Las clases CONTROLLER son los que responden a la interacción
+  * (eventos del mismo) que hace el usuario en la interfaz
+  * y realiza las peticiones al modelDAO
+  */
 @Named(value = "asistenciaView")
 @ViewScoped
 public class AsistenciaController implements Serializable {
 
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Asistencia.
+     */
     private final EmpleadoPuestoDAO empleadoPuestoDAO;
     private final DetalleHorarioDAO detalleHorarioDAO;
     private final AsistenciaDAO asistenciaDAO;
@@ -44,6 +54,9 @@ public class AsistenciaController implements Serializable {
     private List<Empleado> empleados;
     private Date minTimeI, maxTimeI, minTimeS, maxTimeS, minT;
 
+    /**
+     * Se crea las nuevas variables para asignarlos
+     */
     public AsistenciaController() {
         empleadoPuestoDAO = new EmpleadoPuestoDAO();
         detalleHorarioDAO = new DetalleHorarioDAO();
@@ -55,8 +68,21 @@ public class AsistenciaController implements Serializable {
         horarios = new ArrayList<>();
     }
 
+    /**
+     * La notación POSTCONSTRUCT define un método como un método
+     * de inicialización de un bean que se ejecuta después de que
+     * se complete el ingreso de la dependencia.
+     */
     @PostConstruct
     public void constructorAsistencia() {
+        /**
+         * Aqui se construye el constructor de la Asistencia,
+         * donde se obtienen los datos para el calendario.
+         * permitiendo registrar "Horas, Minutos, Segundos
+         * y Milesegundos, todo esto siempre y cuando el empleado
+         * de la clase DAO se encuentre validado
+         * desde el método ACTIVOS.
+         */
         Calendar tmp = Calendar.getInstance();
         tmp.set(Calendar.HOUR_OF_DAY, 0);
         tmp.set(Calendar.MINUTE, 0);
@@ -66,22 +92,47 @@ public class AsistenciaController implements Serializable {
         empleados = empleadoDAO.activos();
     }
 
+    /**
+     * Método GET de Asistencias
+     * @return asistencias Objeto que retorna las asistencias
+     */
     public List<Asistencia> getAsistencias() {
         return asistencias;
     }
 
+    /**
+     * Método SET de las Asistencias
+     * @param asistencias Objeto que recibe el dato de la
+     * variable asistencia.
+     */
     public void setAsistencias(List<Asistencia> asistencias) {
         this.asistencias = asistencias;
     }
 
+    /**
+     * Método GET del Detalle de Horarios
+     * @return horarios Objeto que retorna los datos.
+     */
     public List<DetalleHorario> getHorarios() {
         return horarios;
     }
 
+    /**
+     * Método SET del Detalle de Horarios
+     * @param horarios Objeto que recibe el dato del 
+     * detalle del horario
+     */
     public void setHorarios(List<DetalleHorario> horarios) {
         this.horarios = horarios;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET
+     * de cada una de las variables declaradas al inicio de
+     * la clase.
+     * @return empleados Los GET tienen un return que nos retornan
+     * los datos y los SET una variable que recibe el dato.
+     */
     public List<Empleado> getEmpleados() {
         return empleados;
     }
@@ -138,17 +189,27 @@ public class AsistenciaController implements Serializable {
         this.minT = minT;
     }
 
+    /**
+     * Evento al seleccionar el empleado en la interfaz
+     */
     public void empleadoSeleccionado() {
         asistencia.setEmpleadoPuesto(empleadoPuestoDAO.buscar(asistencia.getEmpleadoPuesto().getEmpleado()));
         horarios = detalleHorarioDAO.buscar(asistencia.getEmpleadoPuesto());
         cargarDatos();
     }
     
+    /**
+     * Evento de actualizar asistencias
+     */
     private void actualizarAsistencias(){
         asistencias = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto(), asistencia.getFecha());
         PrimeFaces.current().ajax().update("form:messages", "form:dt-asistencia form:dt-asistencias");
     }
     
+    /**
+     * Evento que maneja el minimo y máximo del Calendario
+     * haciendo uso de un Switch
+     */
     public void minmax(){
         Calendar tmp = Calendar.getInstance();
         String[] hoarioStr;
@@ -251,6 +312,9 @@ public class AsistenciaController implements Serializable {
         }
     }
     
+    /**
+     * Evento de cargar datos de la asistencia o en si actualizarlos
+     */
     public void cargarDatos(){
         asistencia = asistenciaDAO.buscar(asistencia.getEmpleadoPuesto(), asistencia.getFecha(), asistencia.getDetalleHorario());
         try{
@@ -261,6 +325,11 @@ public class AsistenciaController implements Serializable {
         actualizarAsistencias();
     }
 
+    /**
+     * Evento que se ejecuta al presioanr el botón de Guardar en la
+     * interfaz ejecutando la siguiente sentencia y actualizando
+     * la asistencia al final.
+     */
     public void guardar(){
         
         asistenciaDAO.setAsistencia(asistencia);
@@ -285,12 +354,23 @@ public class AsistenciaController implements Serializable {
     }
     
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido Éxitoso el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    //  MENSAJE DE ERROR
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido con Error el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
