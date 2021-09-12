@@ -12,14 +12,27 @@ import java.util.Date;
 /**
  *
  * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla EmpleadoReserva de la base de
+ * datos
  */
 public class EmpleadoReserva implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private Empleado empleado;
     private Date fechaSolicitud;
     private float formaPago;
     private String detalle;
     private TipoRubro tipoRubro;
 
+    /**
+     * Constructores para la clase
+     */
     public EmpleadoReserva() {
         this.empleado = new Empleado();
         this.fechaSolicitud = new Date();
@@ -28,8 +41,8 @@ public class EmpleadoReserva implements Serializable {
         inicializarTipo();
     }
 
-    public EmpleadoReserva(Empleado empleado, Date fechaSolicitud, 
-        float formaPago, String detalle) {
+    public EmpleadoReserva(Empleado empleado, Date fechaSolicitud,
+            float formaPago, String detalle) {
         this.empleado = empleado;
         this.fechaSolicitud = fechaSolicitud;
         this.formaPago = formaPago;
@@ -37,10 +50,14 @@ public class EmpleadoReserva implements Serializable {
         inicializarTipo();
     }
 
-    private void inicializarTipo(){
+    /**
+     * inicializarTipo() selecciona le tipo de rubro 2, el cual hace referencia
+     * a fondos de reserva
+     */
+    private void inicializarTipo() {
         TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
         tipoRubro = tipoRubroDAO.buscarPorId(8);
-    } 
+    }
 
     public Empleado getEmpleado() {
         return empleado;

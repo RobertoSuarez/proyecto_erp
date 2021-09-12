@@ -11,15 +11,27 @@ import java.util.Date;
 
 /**
  *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla CargaFamiliar de la base de datos
  */
 public class CargaFamiliar implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private TipoRubro tipoRubro;
     private int id, faliares;
     private Empleado empleado;
     private String conyuge, detalle;
     private Date fechaCambio;
-    
+
+    /**
+     * Constructores para cargaFamiliar
+     */
     public CargaFamiliar() {
         this.id = 0;
         this.faliares = 0;
@@ -40,11 +52,22 @@ public class CargaFamiliar implements Serializable {
         inicializarTipo();
     }
 
-    private void inicializarTipo(){
+    /**
+     * inicializarTipo() selecciona le tipo de rubro 5, el cual hace referencia
+     * a cargaFamiliar
+     */
+    private void inicializarTipo() {
         TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
         tipoRubro = tipoRubroDAO.buscarPorId(5);
     }
-    
+
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
@@ -91,7 +114,7 @@ public class CargaFamiliar implements Serializable {
 
     public void setFechaCambio(Date fechaCambio) {
         this.fechaCambio = fechaCambio;
-    }    
+    }
 
     public TipoRubro getTipoRubro() {
         return tipoRubro;

@@ -10,13 +10,25 @@ import java.io.Serializable;
 /**
  *
  * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla Sucursal de la base de datos
  */
 public class Sucursal implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Empresa empresa;
     private Ciudad ciudad;
     private String direccion, detalle;
 
+    /**
+     * Constructores para la clase
+     */
     public Sucursal() {
         this.id = 0;
         this.empresa = new Empresa();
@@ -33,6 +45,13 @@ public class Sucursal implements Serializable {
         this.detalle = detalle;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
@@ -72,8 +91,8 @@ public class Sucursal implements Serializable {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
-    
-    public String resumen(){
+
+    public String resumen() {
         return this.direccion + " - " + this.ciudad.resumen();
     }
 }

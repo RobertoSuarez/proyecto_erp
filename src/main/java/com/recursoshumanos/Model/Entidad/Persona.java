@@ -9,13 +9,25 @@ import java.io.Serializable;
 
 /**
  *
+ * @author kestradalp
+ * @author ClasK7
  * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla Persona de la base de datos
  */
 public class Persona implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private String identificacion, tipoIdentificacion, correo, telefono1, telefono2, direccion;
     private boolean estado;
 
+    /**
+     * Constructores para la clase
+     */
     public Persona() {
         this.id = 0;
         this.identificacion = "";
@@ -38,6 +50,13 @@ public class Persona implements Serializable {
         this.estado = estado;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
@@ -101,8 +120,8 @@ public class Persona implements Serializable {
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
-    
-    public String telefonos(){
-        return telefono1 + (telefono2.isEmpty()? "" : " - " + telefono2);
+
+    public String telefonos() {
+        return telefono1 + (telefono2.isEmpty() ? "" : " - " + telefono2);
     }
 }

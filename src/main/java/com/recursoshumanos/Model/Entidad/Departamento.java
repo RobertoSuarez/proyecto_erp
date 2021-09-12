@@ -8,14 +8,28 @@ package com.recursoshumanos.Model.Entidad;
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ *
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla Departamento de la base de datos
+ */
 public class Departamento implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos de la tabla
+     */
     private int id;
     private String nombre;
     private boolean estado;
     private Date fecha_creacion;
     private String descripcion;
 
+    /**
+     * Constructores para departamento
+     */
     public Departamento() {
         this.id = 0;
         this.nombre = "";
@@ -24,8 +38,8 @@ public class Departamento implements Serializable {
         this.descripcion = "";
     }
 
-    public Departamento(int id, String nombre, boolean estado, 
-        Date fecha_creacion, String descripcion) {
+    public Departamento(int id, String nombre, boolean estado,
+            Date fecha_creacion, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;
@@ -33,6 +47,13 @@ public class Departamento implements Serializable {
         this.descripcion = descripcion;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }

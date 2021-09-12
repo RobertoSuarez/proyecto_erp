@@ -9,16 +9,27 @@ import java.io.Serializable;
 
 /**
  *
+ * @author kestradalp
+ * @author ClasK7
  * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla DetalleHorario de la base de datos
  */
-public class DetalleHorario implements Serializable{
+public class DetalleHorario implements Serializable {
 
+    /**
+     * Lista de variables que representan los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private IngresosSalidas ingresoSalida;
     private HorarioLaboral horarioLaboral;
     private DiaSemana diaSemana;
     private boolean estado;
 
+    /**
+     * Constructores para la detalleHorario
+     */
     public DetalleHorario() {
         id = 0;
         ingresoSalida = new IngresosSalidas();
@@ -27,8 +38,8 @@ public class DetalleHorario implements Serializable{
         estado = true;
     }
 
-    public DetalleHorario(int id, IngresosSalidas ingresoSalida, 
-        HorarioLaboral horarioLaboral, DiaSemana diaSemana, boolean estado) {
+    public DetalleHorario(int id, IngresosSalidas ingresoSalida,
+            HorarioLaboral horarioLaboral, DiaSemana diaSemana, boolean estado) {
         this.id = id;
         this.ingresoSalida = ingresoSalida;
         this.horarioLaboral = horarioLaboral;
@@ -36,6 +47,13 @@ public class DetalleHorario implements Serializable{
         this.estado = estado;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }

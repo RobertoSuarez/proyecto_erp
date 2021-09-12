@@ -9,10 +9,17 @@ import java.io.Serializable;
 
 public class Ciudad implements Serializable {
 
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Provincia provincia;
     private String nombre, detalle;
 
+    /**
+     * Constructores para la Ciudad()
+     */
     public Ciudad() {
         this.id = 0;
         this.provincia = new Provincia();
@@ -27,6 +34,13 @@ public class Ciudad implements Serializable {
         this.detalle = detalle;
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
@@ -58,8 +72,12 @@ public class Ciudad implements Serializable {
     public void setDetalle(String detalle) {
         this.detalle = detalle;
     }
-    
-    public String resumen(){
+
+    /**
+     * resumen() Concatena el nombre de la ciudad con la provincia
+     * @return nombre de la ciudad con la provincia
+     */
+    public String resumen() {
         return nombre + " (" + provincia.getNombre() + ")";
     }
 }

@@ -11,9 +11,18 @@ import java.util.Date;
 
 /**
  *
+ * @author kestradalp
  * @author ClasK7
+ * @author rturr
+ *
+ * Clase de tipo ENTIDAD, representa la tabla Sueldo de la base de datos
  */
 public class Sueldo implements Serializable {
+
+    /**
+     * Lista de variables que representas los atributos y tablas con las que se
+     * relaciona la tabla
+     */
     private int id;
     private Empleado empleado;
     private float valor;
@@ -21,6 +30,9 @@ public class Sueldo implements Serializable {
     private boolean estado;
     private TipoRubro tipoRubro;
 
+    /**
+     * Constructores para la clase
+     */
     public Sueldo() {
         this.id = 0;
         this.empleado = new Empleado();
@@ -39,11 +51,22 @@ public class Sueldo implements Serializable {
         inicializarTipo();
     }
 
-    private void inicializarTipo(){
+    /**
+     * inicializarTipo() selecciona le tipo de rubro 11, el cual hace referencia
+     * a sueldo
+     */
+    private void inicializarTipo() {
         TipoRubroDAO tipoRubroDAO = new TipoRubroDAO();
         tipoRubro = tipoRubroDAO.buscarPorId(11);
-    } 
+    }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public int getId() {
         return id;
     }
