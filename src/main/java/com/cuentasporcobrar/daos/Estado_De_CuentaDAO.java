@@ -39,7 +39,7 @@ public class Estado_De_CuentaDAO implements Serializable {
 
     /**
      * Método para enlistar el estado de cuenta de todos los clientes.
-     * @return List<Estado_De_Cuenta> Lista con el estado de cuenta general.
+     * @return List Estado_De_Cuenta Lista con el estado de cuenta general.
      */
     public List<Estado_De_Cuenta> obtenerTodosLosEstadosCuenta() {
         lista_Estado_de_Cuenta = new ArrayList<>();
@@ -97,7 +97,7 @@ public class Estado_De_CuentaDAO implements Serializable {
     /**
      * Método para enlistar el estado de cuenta general de un cliente.
      * @param idCliente ID única de un cliente.
-     * @return List<Estado_De_Cuenta> Lista con el estado de cuenta de un cliente.
+     * @return List Estado_De_Cuenta Lista con el estado de cuenta de un cliente.
      */
     public List<Estado_De_Cuenta> obtenerEstadosCuentaDeCliente(int idCliente) {
         lista_Estado_de_Cuenta = new ArrayList<>();

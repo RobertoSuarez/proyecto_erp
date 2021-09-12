@@ -41,7 +41,7 @@ public class Facturas_PendientesDAO implements Serializable{
 
     /**
      * Método para en enlistar las facturas pendientes.
-     * @return List<Facturas_Pendientes> Lista con todas las facturas pendientes 
+     * @return List Facturas_Pendientes Lista con todas las facturas pendientes 
      * de todos los clientes.
      */
     public List<Facturas_Pendientes> obtenerFacturasPendientes() {

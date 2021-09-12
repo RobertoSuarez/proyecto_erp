@@ -41,7 +41,7 @@ public class AbonoDAO implements Serializable {
     /**
      * Método para enlistar todos los abonos de una determinada venta/plan de pago
      * @param idVenta Identificación única de una venta.
-     * @return List<Abono> Lista con los abonos de una determinada venta
+     * @return List Abono Lista con los abonos de una determinada venta
      */
     public List<Abono> obtenerAbonos(int idVenta) {
         listaAbonos = new ArrayList<>();

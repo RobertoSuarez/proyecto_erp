@@ -388,7 +388,7 @@ public class AbonoProveedorDAO {
     /**
      * metodo para consultar el proveedor
      *
-     * @param idabono
+     * @param idabono Valor del id abono para relacionarlos con proveedor
      */
     public void select_date_payment(int idabono) {
         if (conex.isEstado()) {
@@ -413,10 +413,10 @@ public class AbonoProveedorDAO {
     }
 
     /**
-     * metodo para consuultar la factura
+     * metodo para consultar la factura
      *
-     * @param idabono
-     * @return
+     * @param idabono dato del idabono
+     * @return Retorna una lista de dicha factura esta relacionada con el abono
      */
     public List<Factura> select_date_invoice(int idabono) {
         if (conex.isEstado()) {

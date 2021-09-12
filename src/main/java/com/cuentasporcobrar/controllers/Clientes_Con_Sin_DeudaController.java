@@ -79,8 +79,8 @@ public class Clientes_Con_Sin_DeudaController implements Serializable {
     
     /**
      * Método para exportar en pdf.
-     * @throws IOException
-     * @throws JRException
+     * @throws IOException excepción
+     * @throws JRException excepción
      */
     public void exportarPDF() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();

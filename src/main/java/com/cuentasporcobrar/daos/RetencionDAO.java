@@ -44,7 +44,7 @@ public class RetencionDAO implements Serializable {
      * Método que retorna una lista con todas las retenciones de una venta.
      *
      * @param idVenta ID único de una venta.
-     * @return List<Retencion> Lista con todas las retenciones de una venta.
+     * @return List Retencion Lista con todas las retenciones de una venta.
      */
     public List<Retencion> obtenerRetenciones(int idVenta) {
         lista_Retencion = new ArrayList<>();
@@ -96,7 +96,7 @@ public class RetencionDAO implements Serializable {
      * Facturas de un cliente en específico.
      *
      * @param idCliente ID único de un cliente.
-     * @return List<Retencion> Lista con las facturas de un cliente.
+     * @return List Retencion Lista con las facturas de un cliente.
      */
     public List<Retencion> obtenerVentas(int idCliente) {
         lista_Retencion = new ArrayList<>();
