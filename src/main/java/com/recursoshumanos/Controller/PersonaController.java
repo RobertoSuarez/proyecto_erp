@@ -16,16 +16,28 @@ import org.primefaces.PrimeFaces;
 
 /**
  *
- * @author cturriagos
+ * @author kestradalp
+ * @author ClasK7
+ * @author rturr
+ *
+ * Las clases CONTROLLER son los que responden a la interacción (eventos del
+ * mismo) que hace el usuario en la interfaz y realiza las peticiones al
+ * modelDAO
  */
 @Named(value = "personaView")
 @ViewScoped
 public class PersonaController implements Serializable {
 
+    /**
+     * Se declaran las variables del modelo Controlador de la parte de Persona
+     */
     private Persona persona;
 
     private final PersonaDAO personaDAO;
 
+    /**
+     * Constructor de la clase
+     */
     public PersonaController() {
         personaDAO = new PersonaDAO();
     }
@@ -34,6 +46,10 @@ public class PersonaController implements Serializable {
         return persona;
     }
 
+    /**
+     *  cargar() Carga un persona
+     * @param id id de la persona que se desea cargar
+     */
     public void cargar(int id) {
         if (id > 0) {
             persona = personaDAO.buscarPorId(id);
@@ -43,6 +59,10 @@ public class PersonaController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-personas");
     }
 
+    /**
+     * enviar() Guarda los datos de la persona Verifica si se trata de una
+     * inserción o una actualización y actúa en cosecuencia
+     */
     public void enviar() {
         personaDAO.setPersona(persona);
         if (persona.getId() == 0) {
@@ -61,6 +81,13 @@ public class PersonaController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-personas");
     }
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz de que ha
+     * sido con Error el mensaje
+     *
+     * @param mensaje Objeto que almacena la información ha ser mostrada en la
+     * interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
