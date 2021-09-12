@@ -8,7 +8,7 @@
     <ui:define name="content" class="Contenido">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePago(personaBean.idRolDePago, personaBean.nuevo)}" />
+                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePago}" />
             </f:metadata>
             <h:outputScript library="primefaces" name="jquery/jquery.js"/>
             <h:outputScript library="js" name="jspdf.umd.min.js"/>
@@ -25,7 +25,6 @@
                             <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaRoles"
                                              update="dt-rolPago" process="dt-rolPago @this"
                                              styleClass="ui-button-success" style="margin-right: .5rem">
-                                <f:setPropertyActionListener value="#{false}" target="#{personaBean.nuevo}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>

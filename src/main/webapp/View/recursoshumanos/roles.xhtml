@@ -9,7 +9,7 @@
     <ui:define name="content" class="Contenido">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoLista()}" />
+                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoLista}" />
             </f:metadata>
         </h:head>
         <h:form id="form" style="width: 105%; margin-left: -23px;">
@@ -30,9 +30,8 @@
                             </p:selectOneMenu>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" action="CrearRol"
+                            <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" action="CrearRol" actionListener="#{rolDePagoView.nuevoRoldePago}"
                                              styleClass="ui-button-success" update="messages empleadolist" style="margin-right: .5rem">
-                                <f:setPropertyActionListener value="#{rolDePagoView.empleado}" target="#{personaBean.empleado}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
@@ -59,10 +58,8 @@
                             <h:outputText value="#{rolPago.estado}"/>
                         </p:column>
                         <p:column exportable="false">
-                            <p:commandButton icon="pi pi-eye" action="RolDePago" update="dt-roles"
+                            <p:commandButton icon="pi pi-eye" action="RolDePago" update="dt-roles" actionListener="#{rolDePagoView.verRoldePago(rolPago)}"
                                              styleClass="edit-button rounded-button ui-button-success" process="dt-roles @this">
-                                <f:setPropertyActionListener value="#{rolPago.id}" target="#{personaBean.idRolDePago}"/>
-                                <f:setPropertyActionListener value="#{true}" target="#{personaBean.nuevo}"/>
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>

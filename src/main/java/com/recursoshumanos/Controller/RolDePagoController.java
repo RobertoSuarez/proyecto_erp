@@ -32,6 +32,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.math3.util.Precision;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.StreamedContent;
@@ -63,6 +64,8 @@ public class RolDePagoController implements Serializable {
     private final EmpleadoDAO empleadoDAO;
     private final SueldoDAO sueldoDAO;
     private final MultaDAO multaDAO;
+
+    private static HttpSession httpSession;
 
     /**
      * Se declaran las variables del modelo Controlador de
@@ -109,6 +112,8 @@ public class RolDePagoController implements Serializable {
         empleadoDAO = new EmpleadoDAO();
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
+
+        httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
         /**
      * Se crea las nuevas variables para asignarlos
@@ -161,8 +166,8 @@ public class RolDePagoController implements Serializable {
      * Evento POST al crear un nuevo rol de pagos
      * @param empleado Usa el ID del empleado
      */
-    public void postRolDePagoCrear(Empleado empleado) {
-        this.empleado = empleado;
+    public void postRolDePagoCrear() {
+        this.empleado = (Empleado) httpSession.getAttribute("empleado");
         rolPagos.setEmpleado(this.empleado);
         sueldo = sueldoDAO.Actual(empleado);
         empleadoReserva = empleadoReservaDAO.buscar(empleado);
@@ -177,8 +182,8 @@ public class RolDePagoController implements Serializable {
      * @param idRolDePago Objeto que lleva el rol del pagos
      * @param nuevo Objeto que lleva el nuevo rol de pagos
      */
-    public void postRolDePago(int idRolDePago, boolean nuevo) {
-        this.rolPagos = rolPagosDAO.buscarPorId(idRolDePago);
+    public void postRolDePago() {
+        this.rolPagos = (RolPagos) httpSession.getAttribute("rolPagos");
         detalles = detalleRolPagoDAO.buscar(rolPagos);
         for (DetalleRolPago detalle : detalles) {
             if (detalle.getTipoRubro().getId() == 11) {
@@ -225,9 +230,6 @@ public class RolDePagoController implements Serializable {
         total = Precision.round((subTotal - aportesIESS + (amonestacion.getValor() * amonestacion.getTipoRubro().getCoeficiente())
                 + (suspencion.getValor() * suspencion.getTipoRubro().getCoeficiente())
                 + (multa.getValor() * multa.getTipoRubro().getCoeficiente())), 2);
-        if (nuevo) {
-            mostrarMensajeInformacion("Pago Generado");
-        }
         PrimeFaces.current().ajax().update("form:messages", "form:rolPago");
     }
 
@@ -475,6 +477,14 @@ public class RolDePagoController implements Serializable {
     public void setTotal(float total) {
         this.total = total;
     }
+    
+    public void nuevoRoldePago(){
+        httpSession.setAttribute("empleado", empleado);
+    }
+    
+    public void verRoldePago(RolPagos rolPagos){
+        httpSession.setAttribute("rolPagos", rolPagos);
+    }
 
     /**
      * Evento que obtiene los datos
@@ -598,6 +608,7 @@ public class RolDePagoController implements Serializable {
             mensaje = "El rol de pagos no se pudo guardar";
         }
         if (result) {
+            verRoldePago(rolPagos);
             mostrarMensajeInformacion("Datos guardados correctamente");
         } else {
             mostrarMensajeError(mensaje);

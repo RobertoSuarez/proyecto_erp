@@ -9,7 +9,7 @@
     <ui:define name="content" class="Contenido">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoCrear(personaBean.empleado)}" />
+                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoCrear}" />
             </f:metadata>
         </h:head>
         <div class="card">
@@ -29,7 +29,7 @@
                                      styleClass="ui-panelgrid-blank ui-fluid"
                                      style="border:0px none; background-color:transparent; width: 100%;">
                             <h:outputText style="font-weight: bold; margin-right: -15px;" value="Empleado: "/>
-                            <h:outputText style="margin-left: 15px;" value="#{personaBean.empleado.nombreCompleto()}"/>
+                            <h:outputText style="margin-left: 15px;" value="#{rolDePagoView.empleado.nombreCompleto()}"/>
                             <h:outputText style="font-weight: bold;" value="Fecha: "/>
                             <p:datePicker id="mes" style="margin-left: -10px;" value="#{rolDePagoView.fechaPago}"
                                           monthNavigator="true" yearNavigator="true">
@@ -139,8 +139,6 @@
                                              process="todo @this">
                                 <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas Generar el Rol de Pago?"
                                            icon="pi pi-exclamation-triangle"/>
-                                <f:setPropertyActionListener value="#{true}" target="#{personaBean.nuevo}"/>
-                                <f:setPropertyActionListener value="#{rolDePagoView.rolPagos.id}" target="#{personaBean.idRolDePago}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
