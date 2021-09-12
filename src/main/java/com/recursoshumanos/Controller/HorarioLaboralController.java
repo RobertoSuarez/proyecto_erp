@@ -26,13 +26,21 @@ import org.primefaces.PrimeFaces;
 import javax.enterprise.context.SessionScoped;
 
 /**
- *
+ * @author kestradalp
+ * @author ClasK7
  * @author rturr
+ *
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * todo lo que tenga que ver con un horario laboral. Y se encarga de administrar
+ * las sentencias de la BD, utilizando las clases de los modelos
  */
 @Named(value = "horarioLaboralView")
 @SessionScoped
 public class HorarioLaboralController implements Serializable {
 
+    /**
+     * Se declaran las variables que usará el Controlador de horario laboral.
+     */
     private final IngresosSalidasDAO ingresosSalidasDAO;
     private final HorarioLaboralDAO horarioLaboralDAO;
     private final DetalleHorarioDAO detalleHorarioDAO;
@@ -47,6 +55,9 @@ public class HorarioLaboralController implements Serializable {
     private List<IngresosSalidas> horas;
     private int idDia, idIngresoSalida;
 
+    /**
+     * Se crea las nuevas variables para asignarlos
+     */
     public HorarioLaboralController() {
         ingresosSalidasDAO = new IngresosSalidasDAO();
         horarioLaboralDAO = new HorarioLaboralDAO();
@@ -59,11 +70,26 @@ public class HorarioLaboralController implements Serializable {
         horarios = new ArrayList<>();
     }
 
+    /**
+     * La notación POSTCONSTRUCT define un método como un método de
+     * inicialización de un bean que se ejecuta después de que se complete el
+     * ingreso de la dependencia.
+     */
     @PostConstruct
+    /**
+     * Se crea el constructor
+     */
     public void constructorHorarioLaboral() {
         lista = horarioLaboralDAO.Listar();
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET de cada una de las
+     * variables declaradas al inicio de la clase.
+     *
+     * @return lista Los GET tienen un return que nos retornan los datos y los
+     * SET una variable que recibe el dato.
+     */
     public HorarioLaboral getHorarioLaboral() {
         return horarioLaboral;
     }
@@ -128,31 +154,50 @@ public class HorarioLaboralController implements Serializable {
         this.horas = horas;
     }
 
+    /**
+     * postLoadDetalle() Carga el detalle del horario antes de que se renderice
+     * la interfaz del horario laboral
+     */
     public void postLoadDetalle() {
         horarios = detalleHorarioDAO.Listar(horarioLaboral.getId());
         dias = diaSemanaDAO.Listar();
         horas = ingresosSalidasDAO.Listar();
-        if(horarios.isEmpty()){
-             mostrarMensajePrecaucion("Debe definir los dias y horas de este horario");
+        if (horarios.isEmpty()) {
+            mostrarMensajePrecaucion("Debe definir los dias y horas de este horario");
         }
     }
-    
-    public String darFormato(Date fecha){
+
+    /**
+     * darFormato() Coloca un formato a un fecha
+     *
+     * @param fecha Objeto tipo fecha
+     */
+    public String darFormato(Date fecha) {
         return new SimpleDateFormat("dd/MM/yyyy").format(fecha);
     }
 
+    /**
+     * nuevoHorario() Instancia un nuevo horario
+     */
     public void nuevoHorario() {
         horarioLaboral = new HorarioLaboral();
     }
 
+    /**
+     * nuevoDetalle() le prepata todo para el nuevo detalle de un horario
+     * laboral
+     */
     public void nuevoDetalle() {
         idDia = 0;
         idIngresoSalida = 0;
         detalleHorario = new DetalleHorario();
         detalleHorario.setHorarioLaboral(horarioLaboral);
     }
-    
-    public String volver(){
+
+    /**
+     * nuevoDetalle() limpia los datos y regresa a inicio
+     */
+    public String volver() {
         horarios.clear();
         dias.clear();
         horas.clear();
@@ -160,11 +205,18 @@ public class HorarioLaboralController implements Serializable {
         return INICIO;
     }
 
+    /**
+     * editarDetalle() edita el detalle de un horario laboral
+     */
     public void editarDetalle(int idDia, int idIngresoSalida) {
         this.idDia = idDia;
         this.idIngresoSalida = idIngresoSalida;
     }
 
+    /**
+     * guardarHorario() Guarda los datos del horario laboral Define si se trata
+     * de una edición o de una inserción y actúan en consecuncia
+     */
     public void guardarHorario() {
         horarioLaboralDAO.setHorarioLaboral(horarioLaboral);
         if (horarioLaboral.getId() == 0) {
@@ -185,6 +237,10 @@ public class HorarioLaboralController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
     }
 
+    /**
+     * enviar() Guarda el detalle de una horario laboral de una edición o de una
+     * inserción y actúan en consecuncia
+     */
     public void enviar() {
         if (idDia != 0 && idIngresoSalida != 0) {
             detalleHorario.getDiaSemana().setId(idDia);
@@ -211,22 +267,41 @@ public class HorarioLaboralController implements Serializable {
         PrimeFaces.current().executeScript("PF('manageDetalleHorarioDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-detalleHorarios");
     }
-    
-    public void cambiarEstado(HorarioLaboral horarioLaboral){
+
+    /**
+     * cambiarEstado () cambia el estado de un horario laboral
+     *
+     * @param horarioLaboral objeto de tipo HorarioLaboral al que se le desea
+     * hacer el cambio de estado
+     */
+    public void cambiarEstado(HorarioLaboral horarioLaboral) {
         horarioLaboralDAO.setHorarioLaboral(horarioLaboral);
         horarioLaboralDAO.cambiarEstado();
-        if (detalleHorarioDAO.Listar(horarioLaboral.getId()).isEmpty() && !horarioLaboral.isEstado()){
+        if (detalleHorarioDAO.Listar(horarioLaboral.getId()).isEmpty() && !horarioLaboral.isEstado()) {
             mostrarMensajePrecaucion("Debe definir los dias y horas del horario " + horarioLaboral.getNombre());
         }
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puestoLaborals");
     }
-    
-    public void cambiarEstadoDetalle(DetalleHorario detalleHorario){
+
+    /**
+     * cambiarEstadoDetalle () cambia el estado del detalle de un horaio laboral
+     *
+     * @param detalleHorario objeto de tipo DetalleHorario al que se le desea
+     * hacer el cambio de estado
+     */
+    public void cambiarEstadoDetalle(DetalleHorario detalleHorario) {
         detalleHorarioDAO.setDetalleHorario(detalleHorario);
         detalleHorarioDAO.cambiarEstado();
         PrimeFaces.current().ajax().update("form:messages", "form:dt-detalleHorarios");
     }
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz de que ha
+     * sido con Error el mensaje
+     *
+     * @param mensaje Objeto que almacena la información ha ser mostrada en la
+     * interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
