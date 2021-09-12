@@ -37,13 +37,24 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.model.StreamedContent;
 
 /**
- *
- * @author kestradalp
- */
+  * 
+  * @author kestradalp
+  * @author ClasK7
+  * @author rturr
+  * 
+  * Las clases CONTROLLER son los que responden a la interacción
+  * (eventos del mismo) que hace el usuario en la interfaz
+  * y realiza las peticiones al modelDAO
+  */
 @Named(value = "rolDePagoView")
 @ViewScoped
 public class RolDePagoController implements Serializable {
 
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Rol de Pagos Parte1, los cuales nos permiten
+     * manejar el Rol.
+     */
     private final EmpleadoReservaDAO empleadoReservaDAO;
     private final DetalleRolPagoDAO detalleRolPagoDAO;
     private final AmonestacionDAO amonestacionDAO;
@@ -53,6 +64,11 @@ public class RolDePagoController implements Serializable {
     private final SueldoDAO sueldoDAO;
     private final MultaDAO multaDAO;
 
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Rol de Pagos Parte2, los cuales nos permiten
+     * manejar el Rol.
+     */
     private EmpleadoReserva empleadoReserva;
     private Amonestacion amonestacion;
     private Suspencion suspencion;
@@ -61,16 +77,29 @@ public class RolDePagoController implements Serializable {
     private Sueldo sueldo;
     private Multa multa;
 
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Rol de Pagos Parte3, los cuales nos permiten
+     * manejar el Rol.
+     */
     private List<DetalleRolPago> detalles;
     private List<Empleado> empleados;
     private List<RolPagos> pagos;
 
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Rol de Pagos Parte4, los cuales nos permiten
+     * manejar el Rol.
+     */
     private StreamedContent file;
     private float aportesIESS, decimoTercero, decimoCuarto, fondosReserva, montoHLabboradas, montoHSuplem, subTotal, total;
     private int horasLaboradas, horasSuplementarias, idEmpleado;
     private boolean checkdDecimoTercero, checkdDecimoCuarto, checkedMulta, checkedSuspencion, checkedAmonestacion;
     private Date fechaPago;
 
+    /**
+     * Se crea las nuevas variables para asignarlos
+     */
     public RolDePagoController() {
         empleadoReservaDAO = new EmpleadoReservaDAO();
         detalleRolPagoDAO = new DetalleRolPagoDAO();
@@ -81,6 +110,9 @@ public class RolDePagoController implements Serializable {
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
 
+        /**
+     * Se crea las nuevas variables para asignarlos
+     */
         empleadoReserva = new EmpleadoReserva();
         amonestacion = new Amonestacion();
         suspencion = new Suspencion();
@@ -89,12 +121,23 @@ public class RolDePagoController implements Serializable {
         sueldo = new Sueldo();
         multa = new Multa();
 
+        /**
+     * Se crea las nuevas variables para asignarlos
+     */
         empleados = new ArrayList<>();
         detalles = new ArrayList<>();
         pagos = new ArrayList<>();
     }
 
+    /**
+     * La notación POSTCONSTRUCT define un método como un método
+     * de inicialización de un bean que se ejecuta después de que
+     * se complete el ingreso de la dependencia.
+     */
     @PostConstruct
+    /**
+     * Se crea el constructor
+     */
     public void constructorRolDePago() {
         fondosReserva = 0;
         decimoTercero = 0;
@@ -114,6 +157,10 @@ public class RolDePagoController implements Serializable {
         empleados = empleadoDAO.Listar();
     }
 
+    /**
+     * Evento POST al crear un nuevo rol de pagos
+     * @param empleado Usa el ID del empleado
+     */
     public void postRolDePagoCrear(Empleado empleado) {
         this.empleado = empleado;
         rolPagos.setEmpleado(this.empleado);
@@ -125,6 +172,11 @@ public class RolDePagoController implements Serializable {
         multa = multaDAO.buacar(empleado);
     }
 
+    /**
+     * Evento POSt del rol de pagos
+     * @param idRolDePago Objeto que lleva el rol del pagos
+     * @param nuevo Objeto que lleva el nuevo rol de pagos
+     */
     public void postRolDePago(int idRolDePago, boolean nuevo) {
         this.rolPagos = rolPagosDAO.buscarPorId(idRolDePago);
         detalles = detalleRolPagoDAO.buscar(rolPagos);
@@ -179,6 +231,13 @@ public class RolDePagoController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:rolPago");
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET
+     * de cada una de las variables declaradas al inicio de
+     * la clase.
+     * @return lista Los GET tienen un return que nos retornan
+     * los datos y los SET una variable que recibe el dato.
+     */
     public boolean isCheckdDecimoTercero() {
         return checkdDecimoTercero;
     }
@@ -417,6 +476,9 @@ public class RolDePagoController implements Serializable {
         this.total = total;
     }
 
+    /**
+     * Evento que obtiene los datos
+     */
     public void obtenerDatos() {
         rolPagos.setFechaGenerado(fechaPago);
         rolPagosDAO.setRolPagos(rolPagos);
@@ -429,6 +491,9 @@ public class RolDePagoController implements Serializable {
         calcularTotal();
     }
 
+    /**
+     * Evento que calcula el total
+     */
     public void calcularTotal() {
         subTotal = Precision.round((fondosReserva * empleadoReserva.getTipoRubro().getCoeficiente() + montoHLabboradas + montoHSuplem + (checkdDecimoTercero ? decimoTercero : 0)
                 + (checkdDecimoCuarto ? decimoCuarto : 0)), 2);
@@ -439,6 +504,12 @@ public class RolDePagoController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:DATOS");
     }
 
+    /**
+     * Evento que valida el Guardar o registro de los datos del
+     * rol de pagos, al presionar le botón de Guardar en la interfaz
+     * del usuario.
+     * @return 
+     */
     public String guardar() {
         String mensaje = "";
         boolean result = false;
@@ -535,11 +606,23 @@ public class RolDePagoController implements Serializable {
         return result ? "RolDePago" : "";
     }
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido Éxitoso el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido con Error el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
