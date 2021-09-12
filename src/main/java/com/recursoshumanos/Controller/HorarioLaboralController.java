@@ -30,7 +30,7 @@ import javax.enterprise.context.SessionScoped;
  * @author ClasK7
  * @author rturr
  *
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * Clase tipo CONTROLER que se encargará de proporcionar ciertas funcionalidades para
  * todo lo que tenga que ver con un horario laboral. Y se encarga de administrar
  * las sentencias de la BD, utilizando las clases de los modelos
  */

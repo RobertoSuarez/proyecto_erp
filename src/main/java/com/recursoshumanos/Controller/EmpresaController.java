@@ -28,7 +28,7 @@ import org.primefaces.PrimeFaces;
  * @author ClasK7
  * @author rturr
  *
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * Clase tipo CONTROLLER que se encargará de proporcionar ciertas funcionalidades para
  * todo lo que tenga que ver con la Empresa. Y se encarga de administrar las
  * sentencias de la BD, utilizando las clases de los modelos
  */
