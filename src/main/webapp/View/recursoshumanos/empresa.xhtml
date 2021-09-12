@@ -61,6 +61,7 @@
                                         <p:outputLabel for="inputruc" style="font-weight: bold">RUC: </p:outputLabel>
                                         <p:inputText id="inputruc" value="#{empresaView.empresa.ruc}" maxlength="13" 
                                                      required="true" requiredMessage="Debe de ingresar el RUC">
+                                             <f:validateRegex pattern="^([0-9])*$"/>
                                         </p:inputText>
                                     </div>
                                     <div class="p-field">
