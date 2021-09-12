@@ -11,6 +11,7 @@ import com.recursoshumanos.Model.DAO.EmpleadoSucursalDAO;
 import com.recursoshumanos.Model.DAO.HorarioLaboralDAO;
 import com.recursoshumanos.Model.DAO.PuestoLaboralDAO;
 import com.recursoshumanos.Model.DAO.SucursalDAO;
+import com.recursoshumanos.Model.Entidad.Empleado;
 import com.recursoshumanos.Model.Entidad.EmpleadoPuesto;
 import com.recursoshumanos.Model.Entidad.EmpleadoSucursal;
 import com.recursoshumanos.Model.Entidad.HorarioLaboral;
@@ -24,6 +25,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -46,6 +48,8 @@ public class EmpleadoPuestoController implements Serializable {
      */
     private final EmpleadoSucursalDAO empleadoSucursalDAO;
     private final EmpleadoPuestoDAO empleadoPuestoDAO;
+
+    private static HttpSession httpSession;
     
     /**
      * Se declaran las variables del modelo Controlador de
@@ -74,6 +78,9 @@ public class EmpleadoPuestoController implements Serializable {
     public EmpleadoPuestoController() {
         empleadoSucursalDAO = new EmpleadoSucursalDAO();
         empleadoPuestoDAO = new EmpleadoPuestoDAO();
+
+        httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        
         empleadoPuesto = new EmpleadoPuesto();
         empleadoSucursal = new EmpleadoSucursal();
         puestos = new ArrayList<>();
@@ -176,16 +183,14 @@ public class EmpleadoPuestoController implements Serializable {
      * @param idEmpleado Objeto que carga el ID del empleado
      */
     public void postLoad(int idEmpleado) {
-        if (idEmpleado > 0 ) {
             EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-            empleadoDAO.setEmpleado(empleadoDAO.buscarPorId(idEmpleado));
+            empleadoDAO.setEmpleado((Empleado) httpSession.getAttribute("empleado"));
             empleadoSucursal = empleadoSucursalDAO.buscar(empleadoDAO.getEmpleado());
             empleadoPuesto = empleadoPuestoDAO.buscar(empleadoDAO.getEmpleado());
             idPuesto = empleadoPuesto.getPuestoLaboral().getId();
             idHorario = empleadoPuesto.getHorarioLaboral().getId();
             idSucursal = empleadoSucursal.getSucursal().getId();
             PrimeFaces.current().ajax().update(null, "form:dt-puesto");
-        }
     }
 
     /**
@@ -229,6 +234,7 @@ public class EmpleadoPuestoController implements Serializable {
                 mostrarMensajeError("Los datos de la sucursal no se pudieron actualizar");
             }
         }
+        httpSession.setAttribute("empelado", empleadoPuesto.getEmpleado());
         PrimeFaces.current().ajax().update("form:messages", "form:dt-puesto");
     }
 

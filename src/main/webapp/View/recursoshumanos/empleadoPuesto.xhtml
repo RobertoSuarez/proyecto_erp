@@ -9,7 +9,7 @@
     <ui:define name="content">
         <h:head>
             <f:metadata>
-                <f:event type="preRenderView" listener="#{empleadoPuestoView.postLoad(personaBean.idEmpleado)}" />
+                <f:event type="preRenderView" listener="#{empleadoPuestoView.postLoad}" />
             </f:metadata>
         </h:head>
         <div class="card">
@@ -71,10 +71,9 @@
                         <p:toolbarGroup>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoPuestoView.guardar()}"
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoPuestoView.guardar}"
                                              update="messages dt-puesto" styleClass="p-mr-2 ui-button-success"
                                              process="messages dt-puesto @this">
-                                <f:setPropertyActionListener value="#{empleadoPuestoView.empleadoPuesto.empleado.id}" target="#{personaBean.idEmpleado}"/>
                             </p:commandButton>
                         </p:toolbarGroup>
                     </p:toolbar>
