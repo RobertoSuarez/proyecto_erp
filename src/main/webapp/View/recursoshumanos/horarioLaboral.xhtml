@@ -62,7 +62,7 @@
                                              update="dt-horarioLaborales" process="dt-horarioLaborales @this">
                                 <f:setPropertyActionListener value="#{!horarioLaboral.estado}" target="#{horarioLaboral.estado}"/>
                             </p:commandButton>
-                            <p:commandButton icon="pi pi-list" action="DetalleHorario"
+                            <p:commandButton icon="pi pi-list" action="DetalleHorario" actionListener="#{horarioLaboralView.verDetalle}"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this">
                                 <f:setPropertyActionListener value="#{horarioLaboral}" target="#{horarioLaboralView.horarioLaboral}"/>
                             </p:commandButton>

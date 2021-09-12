@@ -23,7 +23,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author kestradalp
@@ -35,7 +36,7 @@ import javax.enterprise.context.SessionScoped;
  * las sentencias de la BD, utilizando las clases de los modelos
  */
 @Named(value = "horarioLaboralView")
-@SessionScoped
+@ViewScoped
 public class HorarioLaboralController implements Serializable {
 
     /**
@@ -47,6 +48,8 @@ public class HorarioLaboralController implements Serializable {
     private final DiaSemanaDAO diaSemanaDAO;
     private final String INICIO = "HorarioLaboral";
 
+    private static HttpSession httpSession;
+    
     private HorarioLaboral horarioLaboral;
     private DetalleHorario detalleHorario;
     private List<HorarioLaboral> lista;
@@ -64,6 +67,7 @@ public class HorarioLaboralController implements Serializable {
         detalleHorarioDAO = new DetalleHorarioDAO();
         diaSemanaDAO = new DiaSemanaDAO();
         horarioLaboral = new HorarioLaboral();
+        httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         dias = new ArrayList<>();
         horas = new ArrayList<>();
         lista = new ArrayList<>();
@@ -159,6 +163,7 @@ public class HorarioLaboralController implements Serializable {
      * la interfaz del horario laboral
      */
     public void postLoadDetalle() {
+        horarioLaboral = (HorarioLaboral) httpSession.getAttribute("horarioLaboral");
         horarios = detalleHorarioDAO.Listar(horarioLaboral.getId());
         dias = diaSemanaDAO.Listar();
         horas = ingresosSalidasDAO.Listar();
@@ -211,6 +216,10 @@ public class HorarioLaboralController implements Serializable {
     public void editarDetalle(int idDia, int idIngresoSalida) {
         this.idDia = idDia;
         this.idIngresoSalida = idIngresoSalida;
+    }
+    
+    public void verDetalle(){
+        httpSession.setAttribute("horarioLaboral", horarioLaboral);
     }
 
     /**
