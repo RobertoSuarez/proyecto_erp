@@ -18,18 +18,31 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 /**
- *
- * @author kestradalp
- */
+  * 
+  * @author kestradalp
+  * @author ClasK7
+  * @author rturr
+  * 
+  * Las clases CONTROLLER son los que responden a la interacción
+  * (eventos del mismo) que hace el usuario en la interfaz
+  * y realiza las peticiones al modelDAO
+  */
 @Named(value = "provinciaView")
 @ViewScoped
 public class ProvinciaController implements Serializable {
     
+    /**
+     * Se declaran las variables del modelo Controlador de
+     * la parte de Provincia.
+     */
     private final ProvinciaDAO provinciaDAO;
     private Provincia provincia;
     private List<Provincia> provincias;
     private List<Provincia> filteredProvincia;
 
+    /**
+     * Se crea las nuevas variables para asignarlos
+     */
     public ProvinciaController() {
         provinciaDAO = new ProvinciaDAO();
         provincia = new Provincia();
@@ -37,11 +50,26 @@ public class ProvinciaController implements Serializable {
         filteredProvincia = new ArrayList<>();
     }
 
+    /**
+     * La notación POSTCONSTRUCT define un método como un método
+     * de inicialización de un bean que se ejecuta después de que
+     * se complete el ingreso de la dependencia.
+     */
     @PostConstruct
+    /**
+     * Se crea el constructor
+     */
     public void constructorRolPago() {
         provincias = provinciaDAO.Listar();
     }
 
+    /**
+     * A continuación continuan los métodos de GET y SET
+     * de cada una de las variables declaradas al inicio de
+     * la clase.
+     * @return lista Los GET tienen un return que nos retornan
+     * los datos y los SET una variable que recibe el dato.
+     */
     public Provincia getProvincia() {
         return provincia;
     }
@@ -66,11 +94,19 @@ public class ProvinciaController implements Serializable {
         this.filteredProvincia = filteredProvincia;
     }
 
+    /**
+     * Permite crear una nueva provincia a lo que el usuario
+     * persiona el botòn de nuevo en la interfaz del usuario
+     */
     public void nuevo() {
         this.provincia = new Provincia();
         PrimeFaces.current().ajax().update("form:messages", "form:manage-provincia-content");
     }
 
+    /**
+     * Permite enviar una nueva provincia a lo que el usuario
+     * persiona el botòn de enviar en la interfaz del usuario
+     */
     public void enviar() {
         provinciaDAO.setProvincia(provincia);
         if (provincia.getId() == 0) {
@@ -91,12 +127,23 @@ public class ProvinciaController implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-provincias");
     }
 
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido Éxitoso el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    //  MENSAJE DE ERROR
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido con Error el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
