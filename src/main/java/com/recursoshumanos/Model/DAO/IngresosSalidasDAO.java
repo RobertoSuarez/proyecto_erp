@@ -15,8 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * @author kestradalp
+ * @author ClasK7
  * @author rturr
+ * 
+ * Clase tipo DAO que se encargará de proporcionar 
+ * ciertas funcionalidades
+ * para todo lo que tenga que ver con Horario Laboral.
+ * Y se encarga de administrar las sentencias de la BD, utilizando
+ * las clases de los modelos
  */
 public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
     private final Conexion conexion;
@@ -50,11 +57,21 @@ public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
         this.ingresosSalidas = ingresosSalidas;
     }
 
+    /**
+     * Llama a la clase conexión.
+     * @return conexion Objeto con los datos para validar la conexión.
+     */
     @Override
     public Conexion obtenerConexion() {
         return conexion;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para registrar
+     * los datos recopilados de los Ingresos y Salidas.
+     * @return empresa Retorna la confirmación
+     * de un registro exitoso o erroneo.
+     */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
@@ -67,12 +84,24 @@ public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de insertar.
+     * @param entity Objeto con la información para
+     * la validación correspondiente.
+     * @return insertar Objeto con la información.
+     */
     @Override
     public int insertar(IngresosSalidas entity) {
         this.ingresosSalidas = entity;
         return insertar();
     }
 
+    /**
+     * A continuación se crea el método actualizar:
+     * @return conexion Objeto con la conexion
+     * con los datos correspondientes para su modificación.
+     */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -83,12 +112,26 @@ public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
         return -1;
     }
 
+    /**
+     * Metodo que verifica y controla las entidades o registros
+     * vacios que se realicen al momento de actualizar.
+     * @param entity Objeto que valida campos vacios
+     * @return actualizar Objeto que retorna la actualización de o los
+     * elementos en la BD.
+     */
     @Override
     public int actualizar(IngresosSalidas entity) {
         this.ingresosSalidas = entity;
         return actualizar();
     }
 
+    /**
+     * Metodo que permite buscar mediante el ID
+     * dentro de los registros.
+     * @param id Objeto encargado del ID del parametro
+     * de busqueda.
+     * @return lista Retorna la lista de busqueda
+     */
     @Override
     public IngresosSalidas buscarPorId(Object id) {
         List<IngresosSalidas> lista = buscar("id_ingreso_salida = " + id, "hora_ingreso, hora_salida");
@@ -98,11 +141,23 @@ public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
         return null;
     }
 
+    /**
+     * Lista por hora de salida e ingreso
+     * @return buscar Objeto con el nombre de retorno
+     */
     @Override
     public List<IngresosSalidas> Listar() {
        return buscar(null, "hora_ingreso, hora_salida");
     }
     
+    /**
+     * Busca el departamento de acuerdo a su registro
+     * @param restricciones Objeto con las restricciones
+     * o validaciones de las mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar
+     * los resultados. 
+     * @return List<IngresosSalidas> Muestra la lista.
+     */
     private List<IngresosSalidas> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
         if (conexion.isEstado()) {
             ResultSet result;

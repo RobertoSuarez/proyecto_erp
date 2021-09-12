@@ -168,6 +168,10 @@ public class HorarioLaboralDAO implements IDAO<HorarioLaboral>{
         return null;
     }
 
+    /**
+     * Lista por nombre
+     * @return buscar Objeto con el nombre de retorno
+     */
     @Override
     public List<HorarioLaboral> Listar() {
         return buscar(null, "nombre");
