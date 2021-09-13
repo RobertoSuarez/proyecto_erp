@@ -153,11 +153,9 @@ public class CondicionesDAO implements Serializable {
                        + "descripcion = '" + c.getDescripcion() + "' "
                        + "WHERE idproveedor = " + codigo + "";
                conexion.ejecutar(cadena);
-               System.out.print(cadena);
                conexion.cerrarConexion();
           } catch (SQLException e) {
-
-               System.err.print(e);
+              throw  e;
           } finally {
                this.conexion.cerrarConexion();
           }

@@ -53,7 +53,7 @@ public class ProveedorDAO extends Conexion {
                        + ",'" + p.getRuc() + "','" + p.getNombre() + "','" + p.getDireccion() + "'"
                        + ",'" + p.getEmail() + "','" + p.getWebPage() + "','" + p.getContacto() + "',"
                        + " '" + p.getTelefono() + "','" + p.isEstado() + "');";
-               System.out.print(cadena);
+        
                conexion.Ejecutar2(cadena);
                conexion.cerrarConexion();
 
