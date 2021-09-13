@@ -6,7 +6,6 @@
 package com.cuentasporpagar.controllers;
 
 import java.time.LocalDate;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 

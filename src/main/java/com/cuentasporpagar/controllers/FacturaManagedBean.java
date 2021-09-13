@@ -111,7 +111,10 @@ public class FacturaManagedBean {
           this.datoCuenta = datoCuenta;
      }
 
-     //DIANA: INSERTAR FACTURA
+     /**
+      * Método para insertar una factura
+      *
+      */
      public void insertarfactura() {
           System.out.println("factura.getNfactura().length()");
           float comp = 0;
@@ -152,6 +155,11 @@ public class FacturaManagedBean {
           }
      }
 
+     /**
+      * Método para revertir una factura
+      *
+      */
+
      public void revertirfactura() {
           try {
                facturaDAO.revasiento(detalleFactura, factura);
@@ -166,7 +174,10 @@ public class FacturaManagedBean {
           }
      }
 
-     //Diana Actualizar factura
+     /**
+      * Actualiza la factura
+      *
+      */
      public void editarfactura() {
           float comp = 0;
           for (int i = 0; i < detalleFactura.size(); i++) {
@@ -228,6 +239,7 @@ public class FacturaManagedBean {
 
      /**
       * cargar dato para deshabilitar y habilitar
+      *
       * @param factura objeto
       */
      //
@@ -260,7 +272,12 @@ public class FacturaManagedBean {
           FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
      }
 
-     //Comparación de fechas
+     //
+     /**
+      * Comparación de fechas
+      *
+      * @return false Retorar boleano para compara fechas
+      */
      public Boolean fechas() {
           int year1 = Integer.parseInt(((factura.getFecha()).toString()).substring(0, 4));
           int mes1 = Integer.parseInt(((factura.getFecha()).toString()).substring(5, 7));
@@ -292,6 +309,11 @@ public class FacturaManagedBean {
           }
      }
 
+     /**
+      * Suma de fechas
+      *
+      * @return dia retorna un dia dado a la fecha
+      */
      public int sumfechas() {
           Duration diff = Duration.between(factura.getFecha().atStartOfDay(), factura.getVencimiento().atStartOfDay());
           long diffDays = diff.toDays();
@@ -304,6 +326,11 @@ public class FacturaManagedBean {
           this.factura.setNfactura("000-000-000");
      }
 
+     /**
+      * Editar una fila
+      *
+      * @param event seleciona un evento
+      */
      public void onRowEdit(RowEditEvent<Factura> event) {
           Factura f = (Factura) event.getObject();
           f.setImporteD(datoImporte);
@@ -315,6 +342,11 @@ public class FacturaManagedBean {
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle Editado"));
      }
 
+     /**
+      * Editar una fila 2
+      *
+      * @param event seleciona un evento
+      */
      public void onRowEdit2(RowEditEvent<Factura> event) {
           System.out.println("com.cuentasporpagar.controllers.FacturaManagedBean.onRowEdit2()");
           Factura f = (Factura) event.getObject();
@@ -329,6 +361,9 @@ public class FacturaManagedBean {
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Edición Cancelada"));
      }
 
+     /**
+      * Metodo onAddNew Añade un producto a la tabla
+      */
      public void onAddNew() {
           // Add one new product to the table:
           System.out.println("Cantidad detalle: " + listaCuentas.size());
@@ -346,6 +381,11 @@ public class FacturaManagedBean {
                listaCuentas.add(Cuentas);
           }
      }
+
+     /**
+      * Metodo para llenar una factura
+      *
+      */
 
      public void llenar() {
           this.listaFactura.clear();
