@@ -19,32 +19,32 @@ import java.util.List;
  * @author kestradalp
  * @author ClasK7
  * @author rturr
- * 
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
- * para todo lo que tenga que ver con Ciudades.
- * Y se encarga de administrar las sentencias de la BD, utilizando
- * las clases de los modelos
+ *
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * todo lo que tenga que ver con Ciudades. Y se encarga de administrar las
+ * sentencias de la BD, utilizando las clases de los modelos
  */
-public class CiudadDAO implements IDAO<Ciudad>{
+public class CiudadDAO implements IDAO<Ciudad> {
+
     private final Conexion conexion;
     private Ciudad ciudad;
-    
-    public CiudadDAO(){
+
+    public CiudadDAO() {
         conexion = new Conexion();
         ciudad = new Ciudad();
     }
-    
-    public CiudadDAO(Conexion conexion){
+
+    public CiudadDAO(Conexion conexion) {
         this.conexion = conexion;
         ciudad = new Ciudad();
     }
-    
-    public CiudadDAO(Ciudad ciudad){
+
+    public CiudadDAO(Ciudad ciudad) {
         conexion = new Conexion();
         this.ciudad = ciudad;
     }
-    
-    public CiudadDAO(Conexion conexion, Ciudad ciudad){
+
+    public CiudadDAO(Conexion conexion, Ciudad ciudad) {
         this.conexion = conexion;
         this.ciudad = ciudad;
     }
@@ -59,6 +59,7 @@ public class CiudadDAO implements IDAO<Ciudad>{
 
     /**
      * Llama a la clase conexión.
+     *
      * @return conexion Objeto con los datos para validar la conexión.
      */
     @Override
@@ -67,18 +68,18 @@ public class CiudadDAO implements IDAO<Ciudad>{
     }
 
     /**
-     * Creación del metedo INSERTAR, para registrar
-     * los datos recopilados de las ciudades.
-     * @return ciudad Retorna la confirmación
-     * de un registro exitoso o erroneo.
+     * Creación del metedo INSERTAR, para registrar los datos recopilados de las
+     * ciudades.
+     *
+     * @return ciudad Retorna la confirmación de un registro exitoso o erroneo.
      */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
             ciudad.setId(conexion.insertar("ciudad", "id_provincia, "
-                                         + "nombre, detalle",
+                    + "nombre, detalle",
                     ciudad.getProvincia().getId() + ",'"
-                  + ciudad.getNombre()+ "', '" + ciudad.getDetalle()+ "'", 
+                    + ciudad.getNombre() + "', '" + ciudad.getDetalle() + "'",
                     "id_ciudad"));
             return ciudad.getId();
         }
@@ -86,10 +87,11 @@ public class CiudadDAO implements IDAO<Ciudad>{
     }
 
     /**
-     * Metodo que verifica y controla las entidades o registros
-     * vacios que se realicen al momento de insertar.
-     * @param entity Objeto con la información para
-     * la validación correspondiente.
+     * Metodo que verifica y controla las entidades o registros vacios que se
+     * realicen al momento de insertar.
+     *
+     * @param entity Objeto con la información para la validación
+     * correspondiente.
      * @return insertar Objeto con la información.
      */
     @Override
@@ -100,26 +102,28 @@ public class CiudadDAO implements IDAO<Ciudad>{
 
     /**
      * A continuación se crea el método actualizar:
-     * @return conexion Objeto con la conexion
-     * con los datos correspondientes para su modificación.
+     *
+     * @return conexion Objeto con la conexion con los datos correspondientes
+     * para su modificación.
      */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("ciudad",
                     "id_provincia= " + ciudad.getProvincia().getId()
-                  + ", nombre = '" + ciudad.getNombre()+ "', detalle = '"
-                    + ciudad.getDetalle()+ "'", "id_ciudad = " + ciudad.getId());
+                    + ", nombre = '" + ciudad.getNombre() + "', detalle = '"
+                    + ciudad.getDetalle() + "'", "id_ciudad = " + ciudad.getId());
         }
         return -1;
     }
 
     /**
-     * Metodo que verifica y controla las entidades o registros
-     * vacios que se realicen al momento de actualizar.
+     * Metodo que verifica y controla las entidades o registros vacios que se
+     * realicen al momento de actualizar.
+     *
      * @param entity Objeto que valida campos vacios
-     * @return actualizar Objeto que retorna la actualización de o los
-     * elementos en la BD.
+     * @return actualizar Objeto que retorna la actualización de o los elementos
+     * en la BD.
      */
     @Override
     public int actualizar(Ciudad entity) {
@@ -128,34 +132,34 @@ public class CiudadDAO implements IDAO<Ciudad>{
     }
 
     /**
-     * Metodo que permite buscar mediante el ID
-     * dentro de los registros.
-     * @param id Objeto encargado del ID del parametro
-     * de busqueda.
+     * Metodo que permite buscar mediante el ID dentro de los registros.
+     *
+     * @param id Objeto encargado del ID del parametro de busqueda.
      * @return lista Retorna la lista de busqueda
      */
     @Override
     public Ciudad buscarPorId(Object id) {
         List<Ciudad> lista = buscar("id_ciudad = " + id, "nombre");
-        if(lista != null && !lista.isEmpty()){
-                return lista.get(0);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.get(0);
         }
         return null;
     }
 
     /**
      * Valida que no exista nulo en la busqueda
+     *
      * @return buscar envia la lista del resultado
      */
     @Override
     public List<Ciudad> Listar() {
         return buscar(null, "nombre");
     }
-    
+
     /**
-     * Valida que no exista nulo en la busqueda y envia
-     * mediante un identificador el ID para retornar
-     * el dato correspondiente.
+     * Valida que no exista nulo en la busqueda y envia mediante un
+     * identificador el ID para retornar el dato correspondiente.
+     *
      * @param provincia Objeto con el identificador del dato.
      * @return lista retorna la lista de la ciudad.
      */
@@ -165,14 +169,14 @@ public class CiudadDAO implements IDAO<Ciudad>{
             ResultSet result;
             try {
                 result = conexion.selecionar("ciudad", "id_ciudad, nombre, "
-                                            + "detalle", 
+                        + "detalle",
                         "id_provincia = " + provincia.getId(), "nombre DESC");
                 while (result.next()) {
                     lista.add(new Ciudad(
-                                    result.getInt("id_ciudad"), provincia,
-                                    result.getString("nombre"),
-                                    result.getString("detalle")
-                                ));
+                            result.getInt("id_ciudad"), provincia,
+                            result.getString("nombre"),
+                            result.getString("detalle")
+                    ));
                 }
                 result.close();
             } catch (SQLException ex) {
@@ -183,17 +187,17 @@ public class CiudadDAO implements IDAO<Ciudad>{
         }
         return lista;
     }
-    
+
     /**
      * Busca a la ciudad de acuerdo a su registro
-     * @param restricciones Objeto con las restricciones
-     * o validaciones de las mismas.
-     * @param OrdenarAgrupar Objeto encargado de ordenar
-     * los resultados. 
+     *
+     * @param restricciones Objeto con las restricciones o validaciones de las
+     * mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar los resultados.
      * @return List<Ciudad> Muestra la lista.
      */
-    private List<Ciudad> buscar( @Nullable String restricciones, 
-                                 @Nullable String OrdenarAgrupar){
+    private List<Ciudad> buscar(@Nullable String restricciones,
+            @Nullable String OrdenarAgrupar) {
         List<Ciudad> lista = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
@@ -203,11 +207,12 @@ public class CiudadDAO implements IDAO<Ciudad>{
                 ProvinciaDAO pdao = new ProvinciaDAO();
                 while (result.next()) {
                     lista.add(new Ciudad(
-                                    result.getInt("id_ciudad"), 
-                                    pdao.buscarPorId(result.getInt("id_provincia")),
-                                    result.getString("nombre"),
-                                    result.getString("detalle")
-                                ));
+                            result.getInt("id_ciudad"),
+                            pdao.buscarPorId(result.getInt(
+                                    "id_provincia")),
+                            result.getString("nombre"),
+                            result.getString("detalle")
+                    ));
                 }
                 result.close();
             } catch (SQLException ex) {

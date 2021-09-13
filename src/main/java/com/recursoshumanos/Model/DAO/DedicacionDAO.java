@@ -18,31 +18,32 @@ import java.util.List;
  * @author kestradalp
  * @author ClasK7
  * @author rturr
- * 
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
- * para todo lo que tenga que ver con Dedicación.
- * Y se encarga de administrar las sentencias de la BD, utilizando
- * las clases de los modelos
+ *
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * todo lo que tenga que ver con Dedicación. Y se encarga de administrar las
+ * sentencias de la BD, utilizando las clases de los modelos
  */
-public class DedicacionDAO  implements  IDAO<Dedicacion>{
+public class DedicacionDAO implements IDAO<Dedicacion> {
+
     private final Conexion conexion;
     private Dedicacion dedicacion;
-    public DedicacionDAO(){
+
+    public DedicacionDAO() {
         conexion = new Conexion();
         dedicacion = new Dedicacion();
     }
-    
-    public DedicacionDAO(Conexion conexion){
+
+    public DedicacionDAO(Conexion conexion) {
         this.conexion = conexion;
         dedicacion = new Dedicacion();
     }
-    
-    public DedicacionDAO(Dedicacion dedicacion){
+
+    public DedicacionDAO(Dedicacion dedicacion) {
         conexion = new Conexion();
         this.dedicacion = dedicacion;
     }
-    
-    public DedicacionDAO(Conexion conexion, Dedicacion dedicacion){
+
+    public DedicacionDAO(Conexion conexion, Dedicacion dedicacion) {
         this.conexion = conexion;
         this.dedicacion = dedicacion;
     }
@@ -57,6 +58,7 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
 
     /**
      * Llama a la clase conexión.
+     *
      * @return conexion Objeto con los datos para validar la conexión.
      */
     @Override
@@ -65,16 +67,20 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
     }
 
     /**
-     * Creación del metedo INSERTAR, para registrar
-     * los datos recopilados de las ciudades.
-     * @return dedicacion Retorna la confirmación
-     * de un registro exitoso o erroneo.
+     * Creación del metedo INSERTAR, para registrar los datos recopilados de las
+     * ciudades.
+     *
+     * @return dedicacion Retorna la confirmación de un registro exitoso o
+     * erroneo.
      */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            dedicacion.setId(conexion.insertar("dedicacion", "nombre, porcentaje_utilidad, detalle",
-                    "'" + dedicacion.getNombre()+ "','" + dedicacion.getPorcentajeUtilidad()+ "', '" + dedicacion.getDetalle()+ "'",
+            dedicacion.setId(conexion.insertar("dedicacion",
+                    "nombre, porcentaje_utilidad, detalle",
+                    "'" + dedicacion.getNombre() + "','"
+                    + dedicacion.getPorcentajeUtilidad() + "', '"
+                    + dedicacion.getDetalle() + "'",
                     "id_dedicacion"));
             return dedicacion.getId();
         }
@@ -82,10 +88,11 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
     }
 
     /**
-     * Metodo que verifica y controla las entidades o registros
-     * vacios que se realicen al momento de insertar.
-     * @param entity Objeto con la información para
-     * la validación correspondiente.
+     * Metodo que verifica y controla las entidades o registros vacios que se
+     * realicen al momento de insertar.
+     *
+     * @param entity Objeto con la información para la validación
+     * correspondiente.
      * @return insertar Objeto con la información.
      */
     @Override
@@ -96,25 +103,30 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
 
     /**
      * A continuación se crea el método actualizar:
-     * @return conexion Objeto con la conexion
-     * con los datos correspondientes para su modificación.
+     *
+     * @return conexion Objeto con la conexion con los datos correspondientes
+     * para su modificación.
      */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("dedicacion",
-                    "nombre = '" + dedicacion.getNombre()+ "', porcentaje_utilidad = '" + dedicacion.getPorcentajeUtilidad()+ "', detalle = '" + dedicacion.getDetalle()+ "'",
+                    "nombre = '" + dedicacion.getNombre()
+                    + "', porcentaje_utilidad = '"
+                    + dedicacion.getPorcentajeUtilidad() + "', detalle = '"
+                    + dedicacion.getDetalle() + "'",
                     "id_dedicacion = " + dedicacion.getId());
         }
         return -1;
     }
 
     /**
-     * Metodo que verifica y controla las entidades o registros
-     * vacios que se realicen al momento de actualizar.
+     * Metodo que verifica y controla las entidades o registros vacios que se
+     * realicen al momento de actualizar.
+     *
      * @param entity Objeto que valida campos vacios
-     * @return actualizar Objeto que retorna la actualización de o los
-     * elementos en la BD.
+     * @return actualizar Objeto que retorna la actualización de o los elementos
+     * en la BD.
      */
     @Override
     public int actualizar(Dedicacion entity) {
@@ -123,49 +135,52 @@ public class DedicacionDAO  implements  IDAO<Dedicacion>{
     }
 
     /**
-     * Metodo que permite buscar mediante el ID
-     * dentro de los registros.
-     * @param id Objeto encargado del ID del parametro
-     * de busqueda.
+     * Metodo que permite buscar mediante el ID dentro de los registros.
+     *
+     * @param id Objeto encargado del ID del parametro de busqueda.
      * @return lista Retorna la lista de busqueda
      */
     @Override
     public Dedicacion buscarPorId(Object id) {
         List<Dedicacion> lista = buscar("id_dedicacion = " + id, "nombre");
-        if(lista != null && !lista.isEmpty()){
-                return lista.get(0);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.get(0);
         }
         return null;
     }
 
     /**
      * Valida que no exista nulo en la busqueda
+     *
      * @return buscar envia la lista del resultado
      */
     @Override
     public List<Dedicacion> Listar() {
         return buscar(null, "nombre");
     }
-    
+
     /**
      * Busca al empleado de acuerdo a su registro
-     * @param restricciones Objeto con las restricciones
-     * o validaciones de las mismas.
-     * @param OrdenarAgrupar Objeto encargado de ordenar
-     * los resultados. 
+     *
+     * @param restricciones Objeto con las restricciones o validaciones de las
+     * mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar los resultados.
      * @return List<Dedicacion> Muestra la lista.
      */
-    private List<Dedicacion> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
+    private List<Dedicacion> buscar(@Nullable String restricciones,
+            @Nullable String OrdenarAgrupar) {
         if (conexion.isEstado()) {
             ResultSet result;
             List<Dedicacion> lista;
             try {
-                result = conexion.selecionar("dedicacion", "id_dedicacion, nombre, porcentaje_utilidad, detalle", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("dedicacion", "id_dedicacion, "
+                        + "nombre, porcentaje_utilidad, detalle",
+                        restricciones, OrdenarAgrupar);
                 lista = new ArrayList<>();
                 while (result.next()) {
                     lista.add(
                             new Dedicacion(
-                                    result.getInt("id_dedicacion"), 
+                                    result.getInt("id_dedicacion"),
                                     result.getString("nombre"),
                                     result.getFloat("porcentaje_utilidad"),
                                     result.getString("detalle")

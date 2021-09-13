@@ -42,7 +42,8 @@ public class Sueldo implements Serializable {
         inicializarTipo();
     }
 
-    public Sueldo(int id, Empleado empleado, float valor, Date fechaActualizacion, boolean estado) {
+    public Sueldo(int id, Empleado empleado, float valor,
+            Date fechaActualizacion, boolean estado) {
         this.id = id;
         this.empleado = empleado;
         this.valor = valor;

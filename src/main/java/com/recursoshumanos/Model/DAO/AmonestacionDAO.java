@@ -19,11 +19,10 @@ import org.jetbrains.annotations.Nullable;
  * @author kestradalp
  * @author ClasK7
  * @author rturr
- * 
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
- * para todo lo que tenga que ver con Amonestaciones.
- * Y se encarga de administrar las sentencias de la BD, utilizando
- * las clases de los modelos
+ *
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * todo lo que tenga que ver con Amonestaciones. Y se encarga de administrar las
+ * sentencias de la BD, utilizando las clases de los modelos
  */
 public class AmonestacionDAO implements IDAO<Amonestacion> {
 
@@ -31,8 +30,8 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     private Amonestacion amonestacion;
 
     /**
-     * Constructor que inicia una nueva conexion e
-     * indica una nueva variable Amonestacion.
+     * Constructor que inicia una nueva conexion e indica una nueva variable
+     * Amonestacion.
      */
     public AmonestacionDAO() {
         this.conexion = new Conexion();
@@ -40,9 +39,10 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * Constructor que indica un nuevo objeto de Conexión e indica
-     * una nueva Amonestacion.
-     * @param conexion  Objeto con información de una conexion.
+     * Constructor que indica un nuevo objeto de Conexión e indica una nueva
+     * Amonestacion.
+     *
+     * @param conexion Objeto con información de una conexion.
      */
     public AmonestacionDAO(Conexion conexion) {
         this.conexion = conexion;
@@ -50,9 +50,10 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * Constructor que indica un nuevo objeto de amonestacion e indica
-     * una nueva Conexión.
-     * @param amonestacion  Objeto con información de una amonestacion.
+     * Constructor que indica un nuevo objeto de amonestacion e indica una nueva
+     * Conexión.
+     *
+     * @param amonestacion Objeto con información de una amonestacion.
      */
     public AmonestacionDAO(Amonestacion amonestacion) {
         this.conexion = new Conexion();
@@ -60,9 +61,10 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * Constructor que recibe todas la variables de los
-     * anteriores constructores.
-     * @param conexion  Objeto con información de una conexion.
+     * Constructor que recibe todas la variables de los anteriores
+     * constructores.
+     *
+     * @param conexion Objeto con información de una conexion.
      * @param amonestacion Objeto com información de una amomnestacion
      */
     public AmonestacionDAO(Conexion conexion, Amonestacion amonestacion) {
@@ -71,12 +73,12 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * El @override nos ayuda a sobre-escribir el método
-     * en el que se esta trabajando
+     * El @override nos ayuda a sobre-escribir el método en el que se esta
+     * trabajando
      */
-    
     /**
-     * A continuación se crea el método obtenerconexion: 
+     * A continuación se crea el método obtenerconexion:
+     *
      * @return Conexion variable con los datos de la conexión
      */
     @Override
@@ -85,26 +87,28 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * A continuación se crea el método insertar: 
+     * A continuación se crea el método insertar:
+     *
      * @return insertar maneja la acciòn de INSERT
      */
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            return conexion.insertar("amonestacion", 
-                                     "id_empleado, tipo, valor, detalle, estado", 
-                    amonestacion.getEmpleado().getId()+ ",'" 
-                            + amonestacion.getTipo()+ "'," 
-                            + amonestacion.getValor() + ",'"
-                            + amonestacion.getDetalle() + "'," 
-                            + amonestacion.isEstado(), "id_amonestacion");
+            return conexion.insertar("amonestacion",
+                    "id_empleado, tipo, valor, detalle, estado",
+                    amonestacion.getEmpleado().getId() + ",'"
+                    + amonestacion.getTipo() + "',"
+                    + amonestacion.getValor() + ",'"
+                    + amonestacion.getDetalle() + "',"
+                    + amonestacion.isEstado(), "id_amonestacion");
         }
         return -1;
     }
 
     /**
-     * A continuación se crea el método insertar con
-     * una amonestación vacia para controles (validaciones): 
+     * A continuación se crea el método insertar con una amonestación vacia para
+     * controles (validaciones):
+     *
      * @param entity Identifica la entidad.
      * @return insertar maneja la acciòn de INSERT
      */
@@ -115,27 +119,29 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * A continuación se crea el método actualizar: 
+     * A continuación se crea el método actualizar:
+     *
      * @return actualizar maneja la acciòn de UPDATE
      */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("amonestacion",
-                    "tipo = '" 
-                            + amonestacion.getTipo()+ "', valor = " 
-                            + amonestacion.getValor() + ", detalle = '"
-                            + amonestacion.getDetalle() + "', estado =" 
-                            + amonestacion.isEstado(),"id_amonestacion = "
-                            + amonestacion.getId() + " AND id_empleado = " 
-                            + amonestacion.getEmpleado().getId());
+                    "tipo = '"
+                    + amonestacion.getTipo() + "', valor = "
+                    + amonestacion.getValor() + ", detalle = '"
+                    + amonestacion.getDetalle() + "', estado ="
+                    + amonestacion.isEstado(), "id_amonestacion = "
+                    + amonestacion.getId() + " AND id_empleado = "
+                    + amonestacion.getEmpleado().getId());
         }
         return -1;
     }
 
     /**
-     * A continuación se crea el método actualizar con
-     * una amonestación vacia para controles (validaciones): 
+     * A continuación se crea el método actualizar con una amonestación vacia
+     * para controles (validaciones):
+     *
      * @param entity Identifica la entidad.
      * @return actualizar maneja la acciòn de UPDATE
      */
@@ -146,10 +152,9 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * 
-     * @param id Contiene el dato del ID que sirve para
-     * realizar la acción de buscar a cierto dato de acuerdo
-     * al tipo de identificacón.
+     *
+     * @param id Contiene el dato del ID que sirve para realizar la acción de
+     * buscar a cierto dato de acuerdo al tipo de identificacón.
      * @return lista retorna la lista de la amonestación consultada.
      */
     @Override
@@ -162,27 +167,29 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
     }
 
     /**
-     * Método que controla los nulls (nulos) en los resultados
-     * de busquedas que se realicen.
+     * Método que controla los nulls (nulos) en los resultados de busquedas que
+     * se realicen.
+     *
      * @return buscar retorna la lista de la amonestación consultada.
      */
     @Override
     public List<Amonestacion> Listar() {
         return buscar(null, null);
     }
-    
+
     /**
      * Muestra el historial del empleado.
+     *
      * @param empleado variable que registra el ID del empleado
-     * @return amonestaciones devuelve el listado de las
-     * amonestaciones del empleado.
+     * @return amonestaciones devuelve el listado de las amonestaciones del
+     * empleado.
      */
     public List<Amonestacion> historial(Empleado empleado) {
         List<Amonestacion> amonestaciones = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("amonestacion", 
+                result = conexion.selecionar("amonestacion",
                         "id_amonestacion, tipo, valor, detalle, estado",
                         "id_empleado = " + empleado.getId(), "tipo, valor DESC");
                 while (result.next()) {
@@ -191,7 +198,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
                             empleado,
                             result.getString("tipo"),
                             result.getString("detalle"),
-                            result.getFloat("valor"), 
+                            result.getFloat("valor"),
                             result.getBoolean("estado")
                     ));
                 }
@@ -204,23 +211,24 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         }
         return amonestaciones;
     }
-    
+
     /**
-     * Lista a los empleados de acuerdo a su ID de registro,
-     * los ordena para una mejor vista.
+     * Lista a los empleados de acuerdo a su ID de registro, los ordena para una
+     * mejor vista.
+     *
      * @param empleado objeto empleado para obtener el dato.
-     * @return amonestaciones retorna la lista del empleado
-     * para sus amonestaciones.
+     * @return amonestaciones retorna la lista del empleado para sus
+     * amonestaciones.
      */
     public List<Amonestacion> Listar(Empleado empleado) {
         List<Amonestacion> amonestaciones = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("amonestacion", 
+                result = conexion.selecionar("amonestacion",
                         "id_amonestacion, tipo, valor, detalle",
-                        "id_empleado = " + empleado.getId() + 
-                        " AND estado = true", null);
+                        "id_empleado = " + empleado.getId()
+                        + " AND estado = true", null);
                 while (result.next()) {
                     amonestaciones.add(new Amonestacion(
                             result.getInt("id_amonestacion"),
@@ -238,11 +246,12 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         }
         return amonestaciones;
     }
-    
+
     /**
      * Permite buscar al empleado
-     * @param empleado variable que registra o almacena el ID
-     * del empleado que se va ha buscar.
+     *
+     * @param empleado variable que registra o almacena el ID del empleado que
+     * se va ha buscar.
      * @return Amonestacion regresa el resultado de la busqueda.
      */
     public Amonestacion buscar(Empleado empleado) {
@@ -250,15 +259,15 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("amonestacion", 
+                result = conexion.selecionar("amonestacion",
                         "id_amonestacion, tipo, valor, detalle",
-                        "id_empleado = " + empleado.getId() + 
-                        " AND estado = true", null);
+                        "id_empleado = " + empleado.getId()
+                        + " AND estado = true", null);
                 while (result.next()) {
                     amonestacion.setId(result.getInt("id_amonestacion"));
                     amonestacion.setTipo(result.getString("tipo"));
-                    amonestacion.setDetalle( result.getString("detalle"));
-                    amonestacion.setValor( result.getFloat("valor"));
+                    amonestacion.setDetalle(result.getString("detalle"));
+                    amonestacion.setValor(result.getFloat("valor"));
                     amonestacion.setEstado(true);
                 }
                 result.close();
@@ -273,13 +282,14 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
 
     /**
      * Busca y realiza un ordenamiento de la misma
+     *
      * @param restricciones las restricciones de busqueda
      * @param OrdenarAgrupar permite ordenar los datos
-     * @return List<Amonestacion> regresan los datos de
-     * la busqueda de forma ordenada.
+     * @return List<Amonestacion> regresan los datos de la busqueda de forma
+     * ordenada.
      */
-    private List<Amonestacion> buscar(@Nullable String restricciones, 
-                                      @Nullable String OrdenarAgrupar) {
+    private List<Amonestacion> buscar(@Nullable String restricciones,
+            @Nullable String OrdenarAgrupar) {
         List<Amonestacion> amonestaciones = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
@@ -291,7 +301,9 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
                 while (result.next()) {
                     amonestaciones.add(new Amonestacion(
                             result.getInt("id_amonestacion"),
-                            (amonestacion.getEmpleado().getId()>0?amonestacion.getEmpleado() : eDAO.buscarPorId(result.getInt("id_empleado"))),
+                            (amonestacion.getEmpleado().getId() > 0
+                            ? amonestacion.getEmpleado()
+                            : eDAO.buscarPorId(result.getInt("id_empleado"))),
                             result.getString("tipo"),
                             result.getString("detalle"),
                             result.getFloat("valor"),

@@ -11,11 +11,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  *
- * Coexion a la db por line command
- * $ psql -U appweb -h 190.15.134.7 -p 8080 erpcontableappweb
- * password: @Aplicaciones@Web@2021
+ * Coexion a la db por line command $ psql -U appweb -h 190.15.134.7 -p 8080
+ * erpcontableappweb password: @Aplicaciones@Web@2021
  */
-public class Conexion implements Serializable{
+public class Conexion implements Serializable {
 
     public Connection conex;
     private java.sql.Statement st;
@@ -31,11 +30,14 @@ public class Conexion implements Serializable{
     private ResultSet result;
 
     //Credenciales para la conexion
-    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
-    private String usuario = "appweb";
-    private String clave = "@Aplicaciones@Web@2021";
+//    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
+//    private String usuario = "appweb";
+//    private String clave = "@Aplicaciones@Web@2021";
+//    private String classForName = "org.postgresql.Driver";
+    private String url = "jdbc:postgresql://localhost:5432/hola";
+    private String usuario = "postgres";
+    private String clave = "123456";
     private String classForName = "org.postgresql.Driver";
-
 
     public Conexion() {
         estado = true;
@@ -310,7 +312,7 @@ public class Conexion implements Serializable{
         }
         return valor;
     }
-    
+
     //  RRHH
     public boolean iniciarTransaccion() throws SQLException, ClassNotFoundException {
         if (conex == null || !(conex.isClosed())) {
@@ -325,7 +327,7 @@ public class Conexion implements Serializable{
             return false;
         }
     }
-    
+
     public void ejecutarInsertarToTrnasaccion(String tabla, String campos, String valores) throws SQLException {
         if (transaccionIniciada) {
             st.executeUpdate("INSERT INTO public." + tabla + "(" + campos + ")" + "VALUES(" + valores + ")");
@@ -333,7 +335,7 @@ public class Conexion implements Serializable{
             throw new SQLException("Debe ejecutar primero la funcion iniciarTransaccion()");
         }
     }
-    
+
     public void finalizarTransaccion(boolean conmit) throws SQLException {
         if (conmit) {
             conex.commit();
@@ -342,7 +344,7 @@ public class Conexion implements Serializable{
         }
         cerrarConexion();
     }
-    
+
     public ResultSet selecionar(String tabla, String campos, @Nullable String restrinciones, @Nullable String ordenar) {
         String sql = "SELECT " + campos + " FROM public." + tabla;
         if (restrinciones != null) {
@@ -364,7 +366,7 @@ public class Conexion implements Serializable{
         }
         return lector;
     }
-    
+
     //  Insertar con tres parámetros
     public int insertar(String tabla, String campos, String valores) {
         int retorno = -1;
@@ -385,7 +387,7 @@ public class Conexion implements Serializable{
         }
         return retorno;
     }
-    
+
     //  Insertar con cuatro parámetros
     public int insertar(String tabla, String campos, String valores, String id) {
         int retorno = -1;
@@ -410,10 +412,10 @@ public class Conexion implements Serializable{
         }
         return retorno;
     }
-    
+
     public int ejecutarProcedure(String procedure, String parametros) {
         int retorno = -1;
-        String sql =  "SELECT public." + procedure + "(" + parametros + ");";
+        String sql = "SELECT public." + procedure + "(" + parametros + ");";
         try {
             if (abrirConexion()) {
                 st.execute(sql);
@@ -429,7 +431,7 @@ public class Conexion implements Serializable{
         }
         return retorno;
     }
-    
+
     public int modificar(String tabla, String camposModificados, String restrinciones) {
         int retorno = -1;
         String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;
@@ -450,7 +452,7 @@ public class Conexion implements Serializable{
         }
         return retorno;
     }
-    
+
     public String getMensaje() {
         return mensaje;
     }
@@ -458,7 +460,7 @@ public class Conexion implements Serializable{
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
     }
-    
+
     public Connection getConexion() {
         return conex;
     }

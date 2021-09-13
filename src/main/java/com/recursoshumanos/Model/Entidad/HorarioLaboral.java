@@ -39,7 +39,8 @@ public class HorarioLaboral implements Serializable {
         this.fechaVigencia = new Date();
     }
 
-    public HorarioLaboral(int id, String nombre, boolean estado, String observaciones, Date fechaVigencia) {
+    public HorarioLaboral(int id, String nombre, boolean estado,
+            String observaciones, Date fechaVigencia) {
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;

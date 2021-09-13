@@ -37,7 +37,8 @@ public class Sucursal implements Serializable {
         this.detalle = "";
     }
 
-    public Sucursal(int id, Empresa empresa, Ciudad ciudad, String direccion, String detalle) {
+    public Sucursal(int id, Empresa empresa, Ciudad ciudad, String direccion,
+            String detalle) {
         this.id = id;
         this.empresa = empresa;
         this.ciudad = ciudad;

@@ -74,7 +74,10 @@ public class RolPagos implements Serializable {
         this.codigo = "";
     }
 
-    public RolPagos(int id, Empleado empleado, String detalle, Date fechaGenerado, Date fechaAprobacion, Date fechaPago, String estado, float horasLaboradas, float horasSuplemetarias, float valor, String codigo) {
+    public RolPagos(int id, Empleado empleado, String detalle,
+            Date fechaGenerado, Date fechaAprobacion, Date fechaPago,
+            String estado, float horasLaboradas, float horasSuplemetarias,
+            float valor, String codigo) {
         this.id = id;
         this.empleado = empleado;
         this.detalle = detalle;
