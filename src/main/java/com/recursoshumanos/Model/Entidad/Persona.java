@@ -22,7 +22,8 @@ public class Persona implements Serializable {
      * relaciona la tabla
      */
     private int id;
-    private String identificacion, tipoIdentificacion, correo, telefono1, telefono2, direccion;
+    private String identificacion, tipoIdentificacion, correo, telefono1,
+            telefono2, direccion;
     private boolean estado;
 
     /**

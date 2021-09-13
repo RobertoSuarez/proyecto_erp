@@ -249,7 +249,7 @@ public class EmpresaController implements Serializable {
                 }
             }
         } else {
-            mostrarMensajeError("Debe de seleccionar la ciudad en la que esta la sucursal");
+            mostrarMensajePrecaucion("Debe de seleccionar la ciudad en la que esta la sucursal");
         }
         PrimeFaces.current().executeScript("PF('manageSucursalDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-sucursales");

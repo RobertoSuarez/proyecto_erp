@@ -42,7 +42,8 @@ public class CargaFamiliar implements Serializable {
         inicializarTipo();
     }
 
-    public CargaFamiliar(int id, int faliares, Empleado empleado, String conyuge, String detalle, Date fechaCambio) {
+    public CargaFamiliar(int id, int faliares, Empleado empleado, String conyuge,
+             String detalle, Date fechaCambio) {
         this.id = id;
         this.faliares = faliares;
         this.empleado = empleado;

@@ -32,7 +32,8 @@ public class IngresosSalidas implements Serializable {
     public IngresosSalidas() {
     }
 
-    public IngresosSalidas(int id, String horaIngreso, String horaSalida, String observaciones) {
+    public IngresosSalidas(int id, String horaIngreso, String horaSalida,
+            String observaciones) {
         this.id = id;
         this.horaIngreso = horaIngreso;
         this.horaSalida = horaSalida;

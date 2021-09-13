@@ -18,11 +18,10 @@ import java.util.List;
  * @author kestradalp
  * @author ClasK7
  * @author rturr
- * 
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
- * para todo lo que tenga que ver con Departamentos.
- * Y se encarga de administrar las sentencias de la BD, utilizando
- * las clases de los modelos
+ *
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * todo lo que tenga que ver con Departamentos. Y se encarga de administrar las
+ * sentencias de la BD, utilizando las clases de los modelos
  */
 public class DepartamentoDAO implements IDAO<Departamento> {
 
@@ -56,9 +55,10 @@ public class DepartamentoDAO implements IDAO<Departamento> {
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
-    
+
     /**
      * Llama a la clase conexión.
+     *
      * @return conexion Objeto con los datos para validar la conexión.
      */
     @Override
@@ -67,10 +67,10 @@ public class DepartamentoDAO implements IDAO<Departamento> {
     }
 
     /**
-     * Creación del metedo INSERTAR, para registrar
-     * los datos recopilados de los departamentos.
-     * @return ciudad Retorna la confirmación
-     * de un registro exitoso o erroneo.
+     * Creación del metedo INSERTAR, para registrar los datos recopilados de los
+     * departamentos.
+     *
+     * @return ciudad Retorna la confirmación de un registro exitoso o erroneo.
      */
     @Override
     public int insertar() {
@@ -78,7 +78,9 @@ public class DepartamentoDAO implements IDAO<Departamento> {
             departamento.setEstado(true);
             departamento.setId(conexion.insertar("departamento",
                     "nombre, estado, fecha_creacion, descripcion",
-                    "'" + departamento.getNombre() + "', " + departamento.isEstado() + ", CURRENT_TIMESTAMP , '" + departamento.getDescripcion() + "'",
+                    "'" + departamento.getNombre() + "', "
+                    + departamento.isEstado() + ", CURRENT_TIMESTAMP , '"
+                    + departamento.getDescripcion() + "'",
                     "id_departamento"));
             return departamento.getId();
         }
@@ -86,10 +88,11 @@ public class DepartamentoDAO implements IDAO<Departamento> {
     }
 
     /**
-     * Metodo que verifica y controla las entidades o registros
-     * vacios que se realicen al momento de insertar.
-     * @param entity Objeto con la información para
-     * la validación correspondiente.
+     * Metodo que verifica y controla las entidades o registros vacios que se
+     * realicen al momento de insertar.
+     *
+     * @param entity Objeto con la información para la validación
+     * correspondiente.
      * @return insertar Objeto con la información.
      */
     @Override
@@ -100,25 +103,29 @@ public class DepartamentoDAO implements IDAO<Departamento> {
 
     /**
      * A continuación se crea el método actualizar:
-     * @return conexion Objeto con la conexion
-     * con los datos correspondientes para su modificación.
+     *
+     * @return conexion Objeto con la conexion con los datos correspondientes
+     * para su modificación.
      */
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("departamento",
-                    "nombre = '" + departamento.getNombre() + "', estado = " + departamento.isEstado() + ", descripcion = '" + departamento.getDescripcion() + "'",
+                    "nombre = '" + departamento.getNombre() + "', estado = "
+                    + departamento.isEstado() + ", descripcion = '"
+                    + departamento.getDescripcion() + "'",
                     "id_departamento = " + departamento.getId());
         }
         return -1;
     }
 
     /**
-     * Metodo que verifica y controla las entidades o registros
-     * vacios que se realicen al momento de actualizar.
+     * Metodo que verifica y controla las entidades o registros vacios que se
+     * realicen al momento de actualizar.
+     *
      * @param entity Objeto que valida campos vacios
-     * @return actualizar Objeto que retorna la actualización de o los
-     * elementos en la BD.
+     * @return actualizar Objeto que retorna la actualización de o los elementos
+     * en la BD.
      */
     @Override
     public int actualizar(Departamento entity) {
@@ -127,23 +134,23 @@ public class DepartamentoDAO implements IDAO<Departamento> {
     }
 
     /**
-     * Metodo que permite buscar mediante el ID
-     * dentro de los registros.
-     * @param id Objeto encargado del ID del parametro
-     * de busqueda.
+     * Metodo que permite buscar mediante el ID dentro de los registros.
+     *
+     * @param id Objeto encargado del ID del parametro de busqueda.
      * @return lista Retorna la lista de busqueda
      */
     @Override
     public Departamento buscarPorId(Object id) {
         List<Departamento> lista = buscar("id_departamento = " + id, "nombre");
-        if(lista != null && !lista.isEmpty()){
-                return lista.get(0);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.get(0);
         }
         return null;
     }
 
     /**
      * Valida que no exista nulo en la busqueda
+     *
      * @return buscar envia la lista del resultado
      */
     @Override
@@ -153,21 +160,25 @@ public class DepartamentoDAO implements IDAO<Departamento> {
 
     /**
      * Busca el departamento de acuerdo a su registro
-     * @param restricciones Objeto con las restricciones
-     * o validaciones de las mismas.
-     * @param OrdenarAgrupar Objeto encargado de ordenar
-     * los resultados. 
+     *
+     * @param restricciones Objeto con las restricciones o validaciones de las
+     * mismas.
+     * @param OrdenarAgrupar Objeto encargado de ordenar los resultados.
      * @return List<Departamento> Muestra la lista.
      */
-    private List<Departamento> buscar( @Nullable String restricciones, @Nullable String OrdenarAgrupar){
+    private List<Departamento> buscar(@Nullable String restricciones,
+            @Nullable String OrdenarAgrupar) {
         if (conexion.isEstado()) {
             ResultSet result;
             List<Departamento> departamentos;
             try {
-                result = conexion.selecionar("departamento", "id_departamento, nombre, estado, fecha_creacion, descripcion", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("departamento",
+                        "id_departamento, nombre, estado, fecha_creacion,"
+                        + " descripcion", restricciones, OrdenarAgrupar);
                 departamentos = new ArrayList<>();
                 while (result.next()) {
-                    departamentos.add(new Departamento(result.getInt("id_departamento"),
+                    departamentos.add(new Departamento(result.getInt(
+                            "id_departamento"),
                             result.getString("nombre"),
                             result.getBoolean("estado"),
                             result.getDate("fecha_creacion"),
@@ -186,12 +197,12 @@ public class DepartamentoDAO implements IDAO<Departamento> {
     }
 
     /**
-     * Modifica el estado del Departamento, ya sea
-     * ha Activado o Desactivado
+     * Modifica el estado del Departamento, ya sea ha Activado o Desactivado
      */
     public void cambiarEstado() {
         if (conexion.isEstado()) {
-            conexion.modificar("departamento", "estado = NOT estado","id_departamento = " + departamento.getId());
+            conexion.modificar("departamento", "estado = NOT estado",
+                    "id_departamento = " + departamento.getId());
         }
     }
 }

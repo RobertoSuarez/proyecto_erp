@@ -18,7 +18,7 @@ public class Ciudad implements Serializable {
     private String nombre, detalle;
 
     /**
-     * Constructores para la Ciudad()
+     * Constructores para la Ciudad
      */
     public Ciudad() {
         this.id = 0;

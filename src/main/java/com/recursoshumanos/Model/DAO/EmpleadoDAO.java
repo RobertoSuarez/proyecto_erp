@@ -174,7 +174,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
      */
     @Override
     public List<Empleado> Listar() {
-        return buscar(null, "nombre1, nombre2, apellido1, apellido2 ASC");
+        return buscar(null, "apellido1, apellido2, nombre1, nombre2  ASC");
     }
 
     /**

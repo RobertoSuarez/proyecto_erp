@@ -31,7 +31,8 @@ public class PuestoLaboral implements Serializable {
     public PuestoLaboral() {
     }
 
-    public PuestoLaboral(int id, Cargo cargo, Departamento departamento, Date fecha_creacion, boolean estado, String descripcion) {
+    public PuestoLaboral(int id, Cargo cargo, Departamento departamento,
+            Date fecha_creacion, boolean estado, String descripcion) {
         this.id = id;
         this.cargo = cargo;
         this.departamento = departamento;

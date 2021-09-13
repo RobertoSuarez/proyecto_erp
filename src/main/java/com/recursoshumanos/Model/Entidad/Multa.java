@@ -52,7 +52,8 @@ public class Multa implements Serializable {
         inicializarTipo();
     }
 
-    public Multa(int id, Empleado empleado, float porcentaje, float valor, String detalle, boolean estado) {
+    public Multa(int id, Empleado empleado, float porcentaje, float valor,
+            String detalle, boolean estado) {
         this.id = id;
         this.empleado = empleado;
         this.porcentaje = porcentaje;

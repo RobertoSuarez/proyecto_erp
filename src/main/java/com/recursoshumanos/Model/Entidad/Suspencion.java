@@ -52,7 +52,8 @@ public class Suspencion implements Serializable {
         inicializarTipo();
     }
 
-    public Suspencion(int id, int cantidadDias, Empleado empleado, float valor, String detalle, boolean estado) {
+    public Suspencion(int id, int cantidadDias, Empleado empleado, float valor,
+            String detalle, boolean estado) {
         this.id = id;
         this.cantidadDias = cantidadDias;
         this.empleado = empleado;
