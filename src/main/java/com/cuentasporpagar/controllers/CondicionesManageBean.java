@@ -63,7 +63,7 @@ public final class CondicionesManageBean implements Serializable {
      }
 
      public boolean isCheck() {
-          return check;
+           return check;
      }
 
      /**
@@ -100,6 +100,7 @@ public final class CondicionesManageBean implements Serializable {
       */
      public void setListaCondiciones(List<Condiciones> listaCondiciones) {
           this.listaCondiciones = listaCondiciones;
+           
      }
 
      /**
@@ -114,7 +115,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setCondiciones
       *
-      * @param condiciones Objeto 
+      * @param condiciones Objeto
       */
      public void setCondiciones(Condiciones condiciones) {
           this.condiciones = condiciones;
@@ -150,7 +151,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setProveedor
       *
-      * @param proveedor objeto 
+      * @param proveedor objeto
       */
      public void setProveedor(Proveedor proveedor) {
           this.proveedor = proveedor;
@@ -186,7 +187,7 @@ public final class CondicionesManageBean implements Serializable {
      /**
       * Método setIc
       *
-      * @param ic variable tipo string 
+      * @param ic variable tipo string
       */
      public void setIc(String ic) {
           this.ic = ic;
@@ -255,8 +256,8 @@ public final class CondicionesManageBean implements Serializable {
       * @throws SQLException validadores
       */
      public void habTabla() throws SQLException {
-
-          this.listaCondiciones.clear();
+           
+          this.listaCondiciones.clear();         
           if (check) {
 
                //si el check es verdadero...
@@ -274,6 +275,7 @@ public final class CondicionesManageBean implements Serializable {
 
                //si el check es falso...
                //llenamos la tabla segun nuestra consulta en este caso los deshabilitados
+              
                this.listaCondiciones = condicionesDAO.llenarP(false);
                //asignamos el nombre al btn
                setValue("habilitar");
@@ -281,7 +283,7 @@ public final class CondicionesManageBean implements Serializable {
                setCl("ui-button-primary rounded-button");
                //asignamos el icono al btn
                setIc("pi pi-check");
-
+                
           }
           PrimeFaces.current().ajax().update("form:dt-products");
      }
@@ -294,6 +296,12 @@ public final class CondicionesManageBean implements Serializable {
       */
      public void cargarDhab(Proveedor p) {
           this.proveedor.setNombre(p.getNombre());
+     }
+     
+     public void msjHD(){
+          FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito:", "Lista de proveedores"));
+        
+
      }
 
      public void resetE() {
