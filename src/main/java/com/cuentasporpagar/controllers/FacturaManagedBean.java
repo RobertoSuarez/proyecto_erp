@@ -253,6 +253,7 @@ public class FacturaManagedBean {
     //Funciones apartes
     public void abrirNuevo() {
         this.factura = new Factura();
+        ejemplofac();
     }
 
     public void reset(String d) {
@@ -320,6 +321,9 @@ public class FacturaManagedBean {
         System.out.println("Diffrence between dates is : " + diffDays + "days");
         int dia = (int) diffDays;
         return dia;
+    }
+    public void ejemplofac(){
+          this.factura.setNfactura("000-000-000");
     }
 
     public void onRowEdit(RowEditEvent<Factura> event) {

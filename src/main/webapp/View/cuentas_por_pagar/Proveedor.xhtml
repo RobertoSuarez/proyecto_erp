@@ -352,7 +352,7 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="descuento"> 
-                                                       Descuento: 
+                                                       Descuento *: 
                                                   </p:outputLabel>
                                                   <p:inputText 
                                                        id ="descuento" 
@@ -364,7 +364,7 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel 
                                                        for="diasNeto"> 
-                                                       Dias neto: 
+                                                       Dias neto *: 
                                                   </p:outputLabel>
                                                   <p:inputMask
                                                        mask="9[999]"
@@ -379,13 +379,12 @@
                                                   <p:outputLabel 
                                                        for="diaDescuento" 
                                                        > 
-                                                       Dias descuento: 
+                                                       Dias descuento *: 
                                                   </p:outputLabel>
                                                   <p:inputMask
                                                        mask="9[999]"
                                                        validateMask="true" 
-                                                       id ="diaDescuento" 
-                                                      
+                                                       id ="diaDescuento"                                                       
                                                        maxlength="3"  
                                                        value="#{proveedorDAO.condiciones.diasDescuento}"
                                                       />
@@ -394,7 +393,7 @@
                                              <div class="p-field p-col">
                                                   <p:outputLabel
                                                        for="cantDiasVencidos" >
-                                                       Cantidad días vencido: 
+                                                       Cantidad días vencido *: 
                                                   </p:outputLabel>
                                                   <p:inputMask
                                                        mask="9[999]"
