@@ -104,6 +104,7 @@ public class EmpleadoController implements Serializable {
     private List<Suspencion> suspenciones;
     private List<Sucursal> sucursales;
     private List<Empleado> lista;
+    private List<Empleado> filteredEmpleado;
     private List<Sueldo> sueldos;
     private List<Multa> multas;
 
@@ -157,6 +158,7 @@ public class EmpleadoController implements Serializable {
         sueldos = new ArrayList<>();
         horarios = new ArrayList<>();
         sucursales = new ArrayList<>();
+        filteredEmpleado = new ArrayList<>();
         fechaMax = new Date();
     }
 
@@ -229,6 +231,14 @@ public class EmpleadoController implements Serializable {
 
     public void setEmpleadoSucursal(EmpleadoSucursal empleadoSucursal) {
         this.empleadoSucursal = empleadoSucursal;
+    }
+
+    public List<Empleado> getFilteredEmpleado() {
+        return filteredEmpleado;
+    }
+
+    public void setFilteredEmpleado(List<Empleado> filteredEmpleado) {
+        this.filteredEmpleado = filteredEmpleado;
     }
 
     public List<Amonestacion> getAmonestaciones() {
