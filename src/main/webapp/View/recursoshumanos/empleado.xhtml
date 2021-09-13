@@ -495,7 +495,7 @@
                                              oncomplete="PF('manageCargaFamiliarDialog').show()"
                                              styleClass="edit-button rounded-button ui-button-success" process="@this"/>
                             <p:commandButton value="Puesto Laboral" icon="pi pi-pencil" action="EditarPuesto" actionListener="#{empleadoView.verEmpleado}"
-                                             styleClass="rounded-button ui-button-success">
+                                             styleClass="rounded-button ui-button-success" process="@this">
                             </p:commandButton>
                             <p:commandButton value="Reserva" icon="pi #{empleadoView.empleadoReserva.formaPago == 0 ? 'pi-plus' : 'pi-pencil'}" 
                                              update=":form:manage-reserva-content" oncomplete="PF('manageReservaDialog').show()"

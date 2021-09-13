@@ -37,7 +37,6 @@
                                                    style="font-weight: bold; margin-left: -10PX; margin-right: -10PX"/>
                                     <p:selectOneMenu id="tipoI" value="#{empleadoView.persona.tipoIdentificacion}"
                                                      required="true" label="Tipo Identificación">
-                                        <p:ajax event="blur" update="@this"/>
                                         <f:selectItem itemLabel="Selecione el tipo" itemValue="" noSelectionOption="true"/>
                                         <f:selectItem itemLabel="RUC" itemValue="RUC"/>
                                         <f:selectItem itemLabel="CEDULA" itemValue="CEDULA"/>
@@ -49,59 +48,42 @@
                                     <p:outputLabel style="font-weight: bold; margin-left: 10PX" for="identi" value="Identificación: "/>
                                     <p:inputText id="identi" value="#{empleadoView.persona.identificacion}" required="true"
                                                  label="Identificación" maxlength="15">
-                                        <p:ajax event="blur" update="@this"/>
                                         <f:validateRegex pattern="^([0-9])*$"/>
                                     </p:inputText>
 
                                     <p:outputLabel for="nombre1" style="font-weight: bold; margin-left: -10PX;" value="Primer nombre: "/>
                                     <p:inputText id="nombre1" value="#{empleadoView.empleado.nombre1}" required="true"
-                                                 label="Primer nombre">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputText>
+                                                 label="Primer nombre"/>
 
                                     <p:outputLabel for="nombre2" style="font-weight: bold; margin-left: 10PX" value="Segundo nombre: "/>
                                     <p:inputText id="nombre2" value="#{empleadoView.empleado.nombre2}" required="true"
-                                                 label="Segundo nombre">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputText>
+                                                 label="Segundo nombre"/>
 
                                     <p:outputLabel for="apellido1" style="font-weight: bold; margin-left: -10PX;" value="Primer apellido: "/>
                                     <p:inputText id="apellido1" value="#{empleadoView.empleado.apellido1}" required="true"
-                                                 label="Primer apellido">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputText>
+                                                 label="Primer apellido"/>
 
                                     <p:outputLabel for="apellido2" style="font-weight: bold; margin-left: 10PX" value="Segundo apellido: "/>
-                                    <p:inputText id="apellido2" value="#{empleadoView.empleado.apellido2}" required="true" label="Segundo apellido">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputText>
+                                    <p:inputText id="apellido2" value="#{empleadoView.empleado.apellido2}" required="true" label="Segundo apellido"/>
 
                                     <h:outputLabel for="phone1" style="font-weight: bold; margin-left: -10PX;" value="Teléfono #1: "/>
                                     <p:inputMask id="phone1" value="#{empleadoView.persona.telefono1}" required="true"
-                                                 label="Telefono #1" mask="(999) 999-9999[ x99999]">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputMask>
+                                                 label="Telefono #1" mask="(999) 999-9999[ x99999]"/>
+
                                     <h:outputLabel style="font-weight: bold; margin-left: 10PX" value="Teléfono #2: "/>
-                                    <p:inputMask value="#{empleadoView.persona.telefono2}" mask="(999) 999-9999">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputMask>
+                                    <p:inputMask value="#{empleadoView.persona.telefono2}" mask="(999) 999-9999"/>
 
                                     <p:outputLabel for="fechaN" style="font-weight: bold; margin-left: -10PX; margin-right: -10PX;" value="Fecha de nacimiento: "/>
                                     <p:datePicker id="fechaN" value="#{empleadoView.empleado.fechaNacimiento}" pattern="dd/MM/yyyy"
                                                   monthNavigator="true" yearNavigator="true" mindate="01/01/1956"
                                                   maxdate="#{empleadoView.darFormato(empleadoView.fechaMax)}"
-                                                  required="true" label="Fecha de nacimiento">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:datePicker>
+                                                  required="true" label="Fecha de nacimiento"/>
 
                                     <p:outputLabel for="genero" style="font-weight: bold; margin-left: 10PX" value="Género: "/>
-                                    <p:inputText id="genero" value="#{empleadoView.empleado.genero}" required="true" label="Género">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputText>
+                                    <p:inputText id="genero" value="#{empleadoView.empleado.genero}" required="true" label="Género"/>
 
                                     <p:outputLabel for="sexo" style="font-weight: bold; margin-left: -10PX;" value="Sexo: "/>
                                     <p:selectOneRadio id="sexo" value="#{empleadoView.empleado.sexo}" required="true" label="Sexo">
-                                        <p:ajax event="blur" update="@this"/>
                                         <f:selectItem itemLabel="Maculino" itemValue="Maculino"/>
                                         <f:selectItem itemLabel="Femenino" itemValue="Femenino"/>
                                         <f:selectItem itemLabel="Otro" itemValue="Otro"/>
@@ -114,20 +96,15 @@
                                     <p:outputLabel style="font-weight: bold; margin-left: -10PX;" for="email" value="Correo: "/>
                                     <p:inputText id="email" value="#{empleadoView.persona.correo}" required="true"
                                                  label="Correo" validatorMessage="Correo no válido"> 
-                                        <p:ajax event="blur" update="@this"/>
                                         <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                     </p:inputText>
 
                                     <p:outputLabel for="direc" style="font-weight: bold; margin-left: -10PX;" value="Dirección: "/>
                                     <p:inputTextarea id="direc" value="#{empleadoView.persona.direccion}" 
-                                                     required="true" label="Dirección">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputTextarea>
+                                                     required="true" label="Dirección"/>
 
                                     <h:outputText style="font-weight: bold; margin-left: -10PX;" value="Detalle(observacion): "/>
-                                    <p:inputTextarea id="detalle" value="#{empleadoView.empleado.detalle}">
-                                        <p:ajax event="blur" update="@this"/>
-                                    </p:inputTextarea>
+                                    <p:inputTextarea id="detalle" value="#{empleadoView.empleado.detalle}"/>
                                 </h:panelGrid>
                             </p:panel>
                         </p:tab>

@@ -182,7 +182,7 @@ public class EmpleadoPuestoController implements Serializable {
      * Evento que carga al empleado sucursal
      * @param idEmpleado Objeto que carga el ID del empleado
      */
-    public void postLoad(int idEmpleado) {
+    public void postLoad() {
             EmpleadoDAO empleadoDAO = new EmpleadoDAO();
             empleadoDAO.setEmpleado((Empleado) httpSession.getAttribute("empleado"));
             empleadoSucursal = empleadoSucursalDAO.buscar(empleadoDAO.getEmpleado());
