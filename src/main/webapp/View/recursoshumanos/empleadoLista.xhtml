@@ -28,7 +28,7 @@
                     <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" var="empleado" value="#{empleadoView.lista}"
                                  reflow="true" size="small" liveResize="true" styleClass="empleados-table"
                                  rowKey="#{empleado.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
-                                 rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                                 rows="10" rowSelectMode="add" paginatorPosition="bottom" filteredValue="#{empresaView.filteredEmpleado}">
 
                         <p:column headerText="Identificación" width="12%" sortBy="#{empleado.persona.identificacion}"
                                   filterBy="#{empleado.persona.identificacion}">
@@ -42,7 +42,7 @@
                                   filterBy="#{empleado.nombres}">
                             <h:outputText value="#{empleado.nombres}"/>
                         </p:column>
-                        <p:column headerText="Ingreso" width="9%" filterMatchMode="range"
+                        <p:column headerText="Ingreso" width="9%"
                                   sortBy="#{empleado.fechaIngreso}">
                             <h:outputText value="#{empleadoView.darFormato(empleado.fechaIngreso)}"/>
                         </p:column>
