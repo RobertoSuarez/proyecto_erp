@@ -30,8 +30,12 @@
                                    <p:selectBooleanButton id="slcbtn"  
                                                           value="#{condicionesMB.check}" 
                                                           onLabel="Deshabilitado"                                                           
-                                                          offLabel="Habilitado" >
-                                        <p:ajax listener="#{condicionesMB.habTabla()}"/>
+                                                          offLabel="Habilitado" 
+                                                          >
+                                        
+                                        <p:ajax listener="#{condicionesMB.habTabla()}" />
+                                        <p:ajax listener="#{condicionesMB.msjHD()}" update="messages"/>
+                                      
                                    </p:selectBooleanButton>   
                               </p:toolbarGroup>  
 
@@ -201,8 +205,8 @@
                                         update=":form:confirmDHab"
                                         oncomplete="PF('DHProveedor').show()"
                                         action="#{condicionesMB.cargarDhab(provee.proveedor)}"
-                                         >
-                                             
+                                        >
+
                                    </p:commandButton>
 
                               </p:column>
@@ -387,7 +391,7 @@
                                                        id ="diaDescuento"                                                       
                                                        maxlength="3"  
                                                        value="#{proveedorDAO.condiciones.diasDescuento}"
-                                                      />
+                                                       />
                                              </div>
                                              <!---Text cant. dias vencidos proveedor-->
                                              <div class="p-field p-col">
@@ -415,7 +419,7 @@
                                                   <p:inputText 
                                                        id ="descripcion" 
                                                        value="#{proveedorDAO.condiciones.descripcion}" 
-                                                     
+
                                                        maxlength="100"/>                                                
                                              </div>    
                                         </div>
@@ -599,7 +603,7 @@
                                                        maxlength="3"
                                                        id ="dias_Neto"
                                                        value="#{proveedorDAO.condiciones.diasNeto}"
-                                                      />
+                                                       />
                                              </div>
                                              <!---Text dias descuento proveedor-->
                                              <div class="p-field p-col">
@@ -613,7 +617,7 @@
                                                        maxlength="3"
                                                        id ="dia_Descuento"
                                                        value="#{proveedorDAO.condiciones.diasDescuento}"
-                                                     />
+                                                       />
                                              </div>
                                              <!---Text cant. días vencidos proveedor-->
                                              <div class="p-field p-col">
@@ -627,7 +631,7 @@
                                                        maxlength="3"
                                                        id="cant_DiasVencidos"
                                                        value="#{proveedorDAO.condiciones.cantDiasVencidos}" 
-                                                      />                                                  
+                                                       />                                                  
                                              </div>                                             
                                         </div>
                                         <!---Sección 7 proveedor-->
@@ -642,7 +646,7 @@
                                                        id ="descripcion_" 
                                                        maxlength="100"
                                                        value="#{proveedorDAO.condiciones.descripcion}" 
-                                                     />                                                
+                                                       />                                                
                                              </div>    
                                         </div>
 
@@ -659,7 +663,7 @@
                                    <p:commandButton value="Cancelar"
                                                     onclick="PF('manageProductDialogEdit').hide()"  
                                                     styleClass="ui-button-danger"
-                                                   />
+                                                    />
                               </f:facet>
                          </p:dialog>
                          <!--- FIN DIALOG EDITAR PROVEEDOR DE DATOS  !-->
@@ -667,11 +671,11 @@
                          <p:confirmDialog id="confirmDHab" widgetVar="DHProveedor" showEffect="fade" width="300"
                                           message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre} ?"
                                           header="Confirmar" severity="warn">
-                             
+
                               <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
                                                styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
                               <p:commandButton value="Cancelar" type="button" 
-                                                 styleClass="ui-button-danger" onclick="PF('DHProveedor').hide()"  />
+                                               styleClass="ui-button-danger" onclick="PF('DHProveedor').hide()"  />
                          </p:confirmDialog> 
                     </h:form>
                </ui:define>
