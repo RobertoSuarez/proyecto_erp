@@ -210,7 +210,7 @@ public class EmpleadoController implements Serializable {
      * @param idEmpleado Objeto que usa el ID del empleado para que pueda ser
      * editado
      */
-    public void postEditarEmpleado(int idEmpleado) {
+    public void postEditarEmpleado() {
         empleadoDAO.setConexion(personaDAO.obtenerConexion());
         empleado = (Empleado) httpSession.getAttribute("empleado");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-empleado");
