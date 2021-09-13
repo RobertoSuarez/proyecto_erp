@@ -19,7 +19,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,271 +42,270 @@ import org.primefaces.model.StreamedContent;
 //@Named(value = "bindGenerarCalendario")
 @ManagedBean(name = "beanGenerarCalendario")
 @RequestScoped
-public class BeanGenerarCalendario  {
+public class BeanGenerarCalendario {
 
-    // Parametro de la vista
-    private LocalDate desde;
-    private LocalDate hasta;
-    private boolean disabled_fecha;
-    private String tipo;
-    private String nombre = EmpresaMatrizDAO.getEmpresa().getNombre();
-    
-    private FacturaDAO facturaDAO;
-    List<Factura> facturas; // datos que se muestran en la tabla.
+     // Parametro de la vista
+     private LocalDate desde;
+     private LocalDate hasta;
+     private boolean disabled_fecha;
+     private String tipo;
+     private String nombre = EmpresaMatrizDAO.getEmpresa().getNombre();
 
-    private StreamedContent file;
-    
-    
+     private FacturaDAO facturaDAO;
+     List<Factura> facturas; // datos que se muestran en la tabla.
 
-    public BeanGenerarCalendario()  {
-        
-    }
-    
-    @PostConstruct
-    public void init() {
-        
-        
-        this.desde = LocalDate.now().withMonth(1).withDayOfMonth(1);
-        this.hasta = LocalDate.now().withMonth(12).withDayOfMonth(31);
-        this.tipo = "2";
-        
-        //facturaDAO = new FacturaDAO();
-        //facturas = facturaDAO.llenar();
-        this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
-        
-        this.disabled_fecha = true;
-        
-        // confi of file
-        //this.file = DefaultStreamedContent.builder().name("reporte.pdf").contentType("aplication/pdf").stream(() -> null).build();
-        //exportar2();
-    }
+     private StreamedContent file;
 
-    public String getNombre() {
-        return nombre;
-    }
+     public BeanGenerarCalendario() {
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+     }
 
-    ////////////////////////////////
-    // GET AND SET DE LOS METODOS //
-    public List<Factura> getFacturas() {
-        return facturas;
-    }
+     @PostConstruct
+     public void init() {
 
-    public void setFacturas(List<Factura> facturas) {
-        this.facturas = facturas;
-    }
+          this.desde = LocalDate.now().withMonth(1).withDayOfMonth(1);
+          this.hasta = LocalDate.now().withMonth(12).withDayOfMonth(31);
+          this.tipo = "2";
 
-    public FacturaDAO getFacturaDAO() {
-        return facturaDAO;
-    }
+          //facturaDAO = new FacturaDAO();
+          //facturas = facturaDAO.llenar();
+          this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
 
-    public void setFacturaDAO(FacturaDAO facturaDAO) {
-        this.facturaDAO = facturaDAO;
-    }
+          this.disabled_fecha = true;
 
-    public LocalDate getDesde() {
-        return desde;
-    }
+          // confi of file
+          //this.file = DefaultStreamedContent.builder().name("reporte.pdf").contentType("aplication/pdf").stream(() -> null).build();
+          //exportar2();
+     }
 
-    public void setDesde(LocalDate desde) {
-        this.desde = desde;
-    }
+     public String getNombre() {
+          return nombre;
+     }
 
-    public LocalDate getHasta() {
-        return hasta;
-    }
+     public void setNombre(String nombre) {
+          this.nombre = nombre;
+     }
 
-    public void setHasta(LocalDate hasta) {
-        this.hasta = hasta;
-    }
+     ////////////////////////////////
+     // GET AND SET DE LOS METODOS //
+     public List<Factura> getFacturas() {
+          return facturas;
+     }
 
-    public boolean isDisabled_fecha() {
-        return disabled_fecha;
-    }
+     public void setFacturas(List<Factura> facturas) {
+          this.facturas = facturas;
+     }
 
-    public void setDisabled_fecha(boolean disabled_fecha) {
-        this.disabled_fecha = disabled_fecha;
-    }
+     public FacturaDAO getFacturaDAO() {
+          return facturaDAO;
+     }
 
-    
+     public void setFacturaDAO(FacturaDAO facturaDAO) {
+          this.facturaDAO = facturaDAO;
+     }
 
-    public String getTipo() {
-        return tipo;
-    }
+     public LocalDate getDesde() {
+          return desde;
+     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-    public static String a_pagar(Float numero) {
-        return String.format("%.02f", numero);
-    }
-    
-    public StreamedContent getFile() {
-        System.out.println("///getFiledata");
-        this.facturas.forEach(fac -> {
-                System.out.println(fac.getProveedor().getNombre());
-                System.out.println(fac.getFecha());
-            });
-        System.out.println("///getFiledata fin");
-        return file;
-    }
+     public void setDesde(LocalDate desde) {
+          this.desde = desde;
+     }
 
-    public void setFile(StreamedContent file) {
-        this.file = file;
-    }
+     public LocalDate getHasta() {
+          return hasta;
+     }
 
-   
-    
+     public void setHasta(LocalDate hasta) {
+          this.hasta = hasta;
+     }
 
-    // METODOS PARA TRABAJAR CON LOS DATOS.
-    ///////////////////////////////////////
-    // Metodo funcional para exportar pdf
-    public void exportpdf() throws IOException, JRException {
-        System.out.println("metodo Export");
-        System.out.println(this.desde);
-        System.out.println(this.hasta);
-        System.out.println(this.tipo);
-        this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
-        
-        System.out.println("Datos que se ingresan al reporte, metodo exportpdf");
-        this.facturas.forEach(fac -> {
-            System.out.println(fac.getProveedor().getNombre());
-            System.out.println(fac.getFecha());
-        });
-        System.out.println("Datos que se ingresan al reporte, metodo exportpdf fin");
-        
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ExternalContext ec = fc.getExternalContext();
+     public boolean isDisabled_fecha() {
+          return disabled_fecha;
+     }
 
-        // Cabecera de la respuesta.
-        ec.responseReset();
-        ec.setResponseContentType("application/pdf");
-        ec.setResponseHeader("Content-disposition", "attachment; filename=Reporte.pdf");
+     public void setDisabled_fecha(boolean disabled_fecha) {
+          this.disabled_fecha = disabled_fecha;
+     }
 
-        // tomamos el stream para llenarlo con el pdf.
-        try (OutputStream stream = ec.getResponseOutputStream()) {
-            ManagerCalendario mc = new ManagerCalendario();
+     public String getTipo() {
+          return tipo;
+     }
 
-            // Parametros para el reporte.
-            Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Reporte desde java");
-            parametros.put("fecha", LocalDate.now().toString());
-            parametros.put("empresa_nombre", this.nombre);
+     public void setTipo(String tipo) {
+          this.tipo = tipo;
+     }
 
-            // leemos la plantilla para el reporte.
-            File filetext = new File(FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .getRealPath("/PlantillasReportes/reporte_cuentas_pagar.jasper"));
+     public static String a_pagar(Float numero) {
+          return String.format("%.02f", numero);
+     }
 
-            // llenamos la plantilla con los datos.
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    filetext.getPath(),
-                    parametros,
-                    new JRBeanCollectionDataSource(this.facturas)
-            );
+     public StreamedContent getFile() {
+          System.out.println("///getFiledata");
+          this.facturas.forEach(fac -> {
+               System.out.println(fac.getProveedor().getNombre());
+               System.out.println(fac.getFecha());
+          });
+          System.out.println("///getFiledata fin");
+          return file;
+     }
 
-            // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+     public void setFile(StreamedContent file) {
+          this.file = file;
+     }
 
-            stream.flush();
-            stream.close();
-        } catch(Exception ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            // enviamos la respuesta.
-            fc.responseComplete();
+     /**
+      * METODOS PARA TRABAJAR CON LOS DATOS. Metodo funcional para exportar pdf
+      */
+     public void exportpdf() throws IOException, JRException {
+          System.out.println("metodo Export");
+          System.out.println(this.desde);
+          System.out.println(this.hasta);
+          System.out.println(this.tipo);
+          this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
 
-            System.out.println("fin proccess");
-        }
+          System.out.println("Datos que se ingresan al reporte, metodo exportpdf");
+          this.facturas.forEach(fac -> {
+               System.out.println(fac.getProveedor().getNombre());
+               System.out.println(fac.getFecha());
+          });
+          System.out.println("Datos que se ingresan al reporte, metodo exportpdf fin");
 
-        
-    }
-    
-    public void exportar2() {
-        // Parametros para el reporte.
-        //this.facturas = Factura.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("titulo", "Reporte desde java");
-        parametros.put("fecha", LocalDate.now().toString());
-        
-        try {
-        
-        
-            File filetext = new File(FacesContext
+          FacesContext fc = FacesContext.getCurrentInstance();
+          ExternalContext ec = fc.getExternalContext();
+
+          // Cabecera de la respuesta.
+          ec.responseReset();
+          ec.setResponseContentType("application/pdf");
+          ec.setResponseHeader("Content-disposition", "attachment; filename=Reporte.pdf");
+
+          // tomamos el stream para llenarlo con el pdf.
+          try (OutputStream stream = ec.getResponseOutputStream()) {
+               ManagerCalendario mc = new ManagerCalendario();
+
+               // Parametros para el reporte.
+               Map<String, Object> parametros = new HashMap<String, Object>();
+               parametros.put("titulo", "Reporte desde java");
+               parametros.put("fecha", LocalDate.now().toString());
+               parametros.put("empresa_nombre", this.nombre);
+
+               // leemos la plantilla para el reporte.
+               File filetext = new File(FacesContext
+                       .getCurrentInstance()
+                       .getExternalContext()
+                       .getRealPath("/PlantillasReportes/reporte_cuentas_pagar.jasper"));
+
+               // llenamos la plantilla con los datos.
+               JasperPrint jasperPrint = JasperFillManager.fillReport(
+                       filetext.getPath(),
+                       parametros,
+                       new JRBeanCollectionDataSource(this.facturas)
+               );
+
+               // exportamos a pdf.
+               JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+               //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+               stream.flush();
+               stream.close();
+          } catch (Exception ex) {
+               System.out.println(ex.getMessage());
+          } finally {
+               // enviamos la respuesta.
+               fc.responseComplete();
+
+               System.out.println("fin proccess");
+          }
+
+     }
+
+     /**
+      * Metodo para exportar pdf
+      */
+     public void exportar2() {
+          // Parametros para el reporte.
+          //this.facturas = Factura.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
+          Map<String, Object> parametros = new HashMap<String, Object>();
+          parametros.put("titulo", "Reporte desde java");
+          parametros.put("fecha", LocalDate.now().toString());
+
+          try {
+
+               File filetext = new File(FacesContext
                        .getCurrentInstance()
                        .getExternalContext()
                        .getRealPath("/PlantillasReportes/practica_reporte.jasper"));
 
-            System.out.println("Datos que se ingresan al reporte");
-            this.facturas.forEach(fac -> {
-                System.out.println(fac.getProveedor().getNombre());
-                System.out.println(fac.getFecha());
-            });
-            
-            // llenamos la plantilla con los datos.
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    filetext.getPath(),
-                    parametros,
-                    new JRBeanCollectionDataSource(this.facturas)
-            );
+               System.out.println("Datos que se ingresan al reporte");
+               this.facturas.forEach(fac -> {
+                    System.out.println(fac.getProveedor().getNombre());
+                    System.out.println(fac.getFecha());
+               });
 
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            
-            // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrint, os);
-            os.flush();
-            os.close();
-            
-            InputStream is = new ByteArrayInputStream(os.toByteArray());
-            
-            this.file = DefaultStreamedContent.builder().name("reportedeexpor.pdf").contentType("application/pdf").stream(() -> is).build();
-        } catch(Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        
-        System.out.println("Fin, proceso de exportar 2");
-    }
-    
-    public float Total() {
-        final float totalPorPagar = 0;
-        
-        
-        return totalPorPagar;
-    }
-    
-    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(severity, summary, detail));
-    }
-    
-    public void generar() {
-        System.out.println(this.desde);
-        System.out.println(this.hasta);
-        System.out.println(this.tipo);
-        
-        if (!this.desde.isBefore(this.hasta)) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error en la fechas", "Fechas mal seleccionadas");
-            PrimeFaces.current().ajax().update(":form:growl");
-            return;
-        }
-        
-        // Tremos los datos desde la base de datos
-        this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
-        addMessage(FacesMessage.SEVERITY_INFO, "Reporte generado", "El reporte fue generado exitosamente");
-        
-        // Actulizamos la tabla, para ver los resultados.
-        PrimeFaces.current().ajax().update(":form:tablafacturas");
-        PrimeFaces.current().ajax().update(":form:growl");
-    }
-    
-    public void on_cambio() {
-        this.disabled_fecha = !"1".equals(this.tipo);
-    }
-    
-    
+               // llenamos la plantilla con los datos.
+               JasperPrint jasperPrint = JasperFillManager.fillReport(
+                       filetext.getPath(),
+                       parametros,
+                       new JRBeanCollectionDataSource(this.facturas)
+               );
+
+               ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+               // exportamos a pdf.
+               JasperExportManager.exportReportToPdfStream(jasperPrint, os);
+               os.flush();
+               os.close();
+
+               InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+               this.file = DefaultStreamedContent.builder().name("reportedeexpor.pdf").contentType("application/pdf").stream(() -> is).build();
+          } catch (Exception ex) {
+               System.out.println(ex.getMessage());
+          }
+
+          System.out.println("Fin, proceso de exportar 2");
+     }
+
+     /**
+      * Total de la factura
+      * @return  totalPorPagar devuelve el valor
+      */
+     public float Total() {
+          final float totalPorPagar = 0;
+
+          return totalPorPagar;
+     }
+
+     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+          FacesContext.getCurrentInstance().
+                  addMessage(null, new FacesMessage(severity, summary, detail));
+     }
+
+     /**
+      * Genera calendario de pago
+      */
+     public void generar() {
+          System.out.println(this.desde);
+          System.out.println(this.hasta);
+          System.out.println(this.tipo);
+
+          if (!this.desde.isBefore(this.hasta)) {
+               addMessage(FacesMessage.SEVERITY_ERROR, "Error en la fechas", "Fechas mal seleccionadas");
+               PrimeFaces.current().ajax().update(":form:growl");
+               return;
+          }
+
+          // Tremos los datos desde la base de datos
+          this.facturas = FacturaDAO.get_fac_pro(this.desde, this.hasta, Integer.parseInt(this.tipo));
+          addMessage(FacesMessage.SEVERITY_INFO, "Reporte generado", "El reporte fue generado exitosamente");
+
+          // Actulizamos la tabla, para ver los resultados.
+          PrimeFaces.current().ajax().update(":form:tablafacturas");
+          PrimeFaces.current().ajax().update(":form:growl");
+     }
+
+     public void on_cambio() {
+          this.disabled_fecha = !"1".equals(this.tipo);
+     }
+
 }

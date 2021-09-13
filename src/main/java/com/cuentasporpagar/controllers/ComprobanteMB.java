@@ -36,7 +36,10 @@ public class ComprobanteMB {
         this.retenciones = retenciones;
     }
     
-    // metodos axiliares
+    /**
+      * Metodos auxiliares
+      * @return this.retenciones.stream().filter(retencion -> estado.equals(retencion.getEstado_retencion())).count() a devolver
+      */
     public long getCountRegister(String estado) {
         return this.retenciones.stream().filter(retencion -> estado.equals(retencion.getEstado_retencion())).count();
     }
