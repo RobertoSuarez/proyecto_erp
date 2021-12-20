@@ -8,19 +8,10 @@
 
     <h:head>
 
-        <link rel="shortcut icon" href="favicon.ico"/>
-
-        <h:outputStylesheet name="css/main.css"/>
-        <h:outputStylesheet name="css/cssLayout.css" />
-        <h:outputStylesheet name="css/default.css"/>
-        <h:outputStylesheet name="css/estilo.css"/>
-        <h:outputStylesheet name="css/estilosCuentasxCobrar.css" />
-        <h:outputStylesheet name="css/primeflex.min.css" />   
-        <h:outputStylesheet name="css/primeflex.min.css.map" />
-        <h:outputStylesheet library="css" name="contabilidad.css"></h:outputStylesheet>
+        <link rel="shortcut icon" href="favicon.ico"/> 
         <title>Sistema ERP Contable</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"/>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+        <h:outputScript name="js/layout.js" library="manhattan-layout"/>
+        <h:outputScript name="js/prism.js" library="manhattan-layout"/>
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
         <script type="text/javascript">
             //no elmimar esta configuración, Talento Humano lo usa para que sempre sea español la pagina.
@@ -64,8 +55,8 @@
                         </a>
                         <h2>ERP CONTABLE</h2> 
                     </div>
-                    
-                    
+
+
                     <div>
                         <p:ajaxStatus style="position: relative;">
                             <f:facet name="start">
@@ -73,7 +64,7 @@
                             </f:facet>
                         </p:ajaxStatus>
                     </div>
-                    
+
                 </div>
             </ui:insert>
 
@@ -219,5 +210,8 @@
                 </div>
             </div>
         </div>
+        <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
+        <h:outputStylesheet name="css/layout-deeppurple-teal.css" library="manhattan-layout" />   
     </h:body>
 </html>

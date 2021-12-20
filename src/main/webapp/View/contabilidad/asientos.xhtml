@@ -206,6 +206,7 @@
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('editarAsiento').hide()"/>
                         </p:confirmDialog>
+                        <p:button value="Primary" styleClass="p-mr-2 p-mb-2"/>
                         <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento"
                                      value="#{asientoManagedBean.asientos}" reflow="true" paginator="true"
                                      selection="#{asientoManagedBean.currentAsiento}"
