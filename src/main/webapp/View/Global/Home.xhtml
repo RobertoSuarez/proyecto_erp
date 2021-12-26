@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+  
+    <ui:define name="title">Home</ui:define>
+
+    <ui:define name="content">
+
+        <div id="principal">
+            <div class="p-grid" >
+                <p:graphicImage name="Inicio.jpeg" library="images" width="420" height="275" 
+                               style="margin-right: 2rem"/>
+                <div class="p-col">
+                    <h1>ERP Contable</h1>
+                    <p>ERP Contable automatiza la planificación de los recursos,
+                        centralizando la gestión empresarial. Control de logística, 
+                        producción, inventario, contabilidad y facturación, son 
+                        algunas de las áreas en las que puede contribuir con la 
+                        incorporación de herramientas que optimizan el control 
+                        de los procesos. Conocer qué es un sistema ERP, 
+                        contribuye a delimitar las opciones a un software 
+                        enfocado en satisfacer las necesidades de la empresa.</p>
+                    <p:button value="Empezar" styleClass="p-mr-2 p-mb-2"/>
+                </div>
+            </div>
+            <div class="p-col" id="second">
+                <h2>Funcionalidades</h2>
+            </div>
+
+            <div class="p-grid dashboard">
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon">
+                            <i class="pi pi-book" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Contabilidad</h3>
+                            <p>El módulo de contabilidad, está ligado a la facturación 
+                                y facilita en gran medida la tarea contable, al facilitar una serie de asientos 
+                                predefinidos que ayudan a reducir considerablemente el trabajo.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon p-grid">
+                            <i class="pi pi-dollar" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3> Cuentas por Pagar</h3>
+                            <p>El modulo de Cuentas por pagar maneja cualquier aporte 
+                                de una parte deudora, que aparece como resultado de una compra 
+                                de bienes o servicios en términos de crédito, 
+                                a una parte acreedora. </p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon">
+                            <i class="pi pi-home" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Activos fijos</h3>
+                            <p>El módulo de Activos Fijos permite el buen manejo 
+                                y control de los activos, ya que mantiene actualizada la
+                                lista de los activos de la organización, así como la
+                                información de la persona responsable y la ubicación
+                                física de los mismos.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon" >
+                            <i class="pi pi-wallet" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Cuentas por Cobrar</h3>
+                            <p>El módulo de Cuentas por Cobrar está diseñado para 
+                                optimizar el control de su cartera de clientes. 
+                                Controla, registra y administra el crédito y la 
+                                cobranza correspondiente a cada cliente, manteniendo 
+                                en línea su historial crediticio para brindarles un 
+                                mejor servicio.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon">
+                            <i class="pi pi-shopping-cart" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Ventas</h3>
+                            <p>El Módulo de Venta contempla todos los puntos necesarios 
+                                para realizar cualquier proceso de ventas, permitirá gestionar cualquier tipo de venta 
+                                que pueda darse en su almacén o almacenes de distribución.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon">
+                            <i class="pi pi-user" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Recursos Humanos</h3>
+                            <p>El módulo de Recursos Humanos permite la gestión del personal
+                                desde el punto de vista de su cualificación profesional, 
+                                facilitando el encaje de las personas con las necesidades de la empresa.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon">
+                            <i class="pi pi-th-large" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Producción</h3>
+                            <p>El módulo de producción soporta la gestión de todo el flujo
+                                productivo de la empresa: programación de la producción, planificación de las necesidades de material, 
+                                lanzamiento y control de órdenes de fabricación, seguimiento de los indicadores 
+                                de producción.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-lg-6 ">
+                    <div class="card p-grid" style="margin: 0.5rem">
+                        <div class="overview-box-icon">
+                            <i class="pi pi-inbox" style="font-size: 3rem"/>
+                        </div>
+                        <div class="p-col">
+                            <h3>Inventario</h3>
+                            <p>El módulo de inventarios se encuentra ligado al 
+                                proceso de compras, ya que a partir de éste se 
+                                aseguran que las entradas de almacén cuenten con 
+                                la autorización debida. En este apartado llevará a 
+                                cabo el registro de los almacenes con los que cuenta la empresa.</p>
+                            <p:button value="Más información" styleClass="p-mr-2 p-mb-2"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h:outputStylesheet name="home.css" library="css"/>
+    </ui:define>
+</ui:composition>
