@@ -1,0 +1,80 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>PrimeFaces - Manhattan</title>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <h:form >
+
+
+            <div class="login-panel">
+
+                <div class="card">
+                    <div class="ui-fluid p-formgrid p-grid">
+
+                        <div class="p-col-12 p-lg-6 left-side">
+                            <p:outputLabel for="name2">Nombres</p:outputLabel>
+                            <p:inputText id="name2" type="text" />
+                        </div>
+                        <div class="p-col-12 p-lg-6 left-side">
+                            <p:outputLabel for="email2">Apellidos</p:outputLabel>
+                            <p:inputText id="email2" type="text" />
+                        </div>                  
+
+                        <div class="p-col-12 p-lg-6 left-side">
+                            <p:outputLabel for="name3">Nombre de Usuario</p:outputLabel>
+                            <p:inputText id="name3" type="text" />
+                        </div>
+                        <div class="p-col-12 p-lg-6 left-side">
+                            <p:outputLabel for="email3">Correo Electrónico</p:outputLabel>
+                            <p:inputText id="email3" type="text" />
+
+                        </div>     
+
+
+
+                        <div  class="p-col-12 p-lg-6 left-side">
+                            <p:outputLabel for="name4">Contraseña</p:outputLabel>
+                            <p:inputText id="name4" type="text" />
+                        </div>
+                        <div  class="p-col-12 p-lg-6 left-side">
+                            <p:outputLabel for="email4">Confirmar contraseña</p:outputLabel>
+                            <p:inputText id="email4" type="text" />
+                        </div>
+
+
+                        <div  class="p-col-12 p-lg-6 button-container">
+                            <br></br>
+                            <p:commandButton type="button" value="Crear cuenta" styleClass="ui-button-raised" />
+
+                        </div>
+                        <div class="p-col-12 p-lg-6 left-side">
+
+                            <p:selectManyCheckbox layout="responsive" columns="1">
+                                <f:selectItem itemLabel="Aceptar terminos y condiciones" itemValue="1" />
+                            </p:selectManyCheckbox>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
+            <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
+            <h:outputStylesheet name="css/login_.css" />
+        </h:form>
+    </h:body>
+</html>
