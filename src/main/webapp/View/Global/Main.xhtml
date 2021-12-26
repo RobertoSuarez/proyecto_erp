@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Main</ui:define>
+
+    <ui:define name="content">
+        <div class="p-grid dashboard">
+            <div class="p-col-12 p-lg-6 p-xl-3">
+                <div class="overview-box overview-box-1">
+                    <div class="overview-box-icon">
+                        <i class="pi pi-book"/>
+                    </div>
+                    <div class="overview-box-content">
+                        <div class="overview-box-title">Contabilidad</div>
+                        <div class="overview-box-stats"></div>
+                        <div class="overview-box-details">Descripción</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-lg-6 p-xl-3">
+                <div class="overview-box overview-box-2">
+                    <div class="overview-box-icon">
+                        <i class="pi pi-dollar"/>
+                    </div>
+                    <div class="overview-box-content">
+                        <div class="overview-box-title">Cuentas por pagar</div>
+                        <div class="overview-box-stats"></div>
+                        <div class="overview-box-details">Descripción</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-lg-6 p-xl-3">
+                <div class="overview-box overview-box-3">
+                    <div class="overview-box-icon">
+                        <i class="pi pi-home"/>
+                    </div>
+                    <div class="overview-box-content">
+                        <div class="overview-box-title">Activos fijos</div>
+                        <div class="overview-box-stats"></div>
+                        <div class="overview-box-details">Descripción</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-lg-6 p-xl-3">
+                <div class="overview-box overview-box-4">
+                    <div class="overview-box-icon">
+                        <i class="pi pi-wallet"/>
+                    </div>
+                    <div class="overview-box-content">
+                        <div class="overview-box-title">Cuentas por cobrar</div>
+                        <div class="overview-box-stats"></div>
+                        <div class="overview-box-details">Descripción</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
