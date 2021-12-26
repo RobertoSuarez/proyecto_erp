@@ -16,41 +16,75 @@
 
     <h:body styleClass="login-body">
         <h:form >
+            
 
+           
 
             <div class="login-panel">
 
                 <div class="card">
                     <div class="ui-fluid p-formgrid p-grid">
 
-                        <div class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="name2">Nombres</p:outputLabel>
-                            <p:inputText id="name2" type="text" />
+                        <div class="p-col-12 p-lg-6 left-side ">
+                            <p:outputLabel for="name1">Nombres</p:outputLabel>
+                            <div class="ui-inputgroup">
+                                <span  class="ui-inputgroup-addon">
+                                     <i class="pi pi-user" />   
+                                </span>
+                            <p:inputText id="name1"  type="text"  />
+                            </div>
                         </div>
                         <div class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="email2">Apellidos</p:outputLabel>
-                            <p:inputText id="email2" type="text" />
+                            <p:outputLabel for="name2">Apellidos</p:outputLabel>
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                      <i class="pi pi-user" /> 
+                                </span> 
+                                <p:inputText id="name2" type="text" />
+                            </div>
+                          
                         </div>                  
 
                         <div class="p-col-12 p-lg-6 left-side">
                             <p:outputLabel for="name3">Nombre de Usuario</p:outputLabel>
-                            <p:inputText id="name3" type="text" />
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                      <i class="pi pi-user" /> 
+                                </span> 
+                                 <p:inputText id="name3" type="text" />
+                            </div>
+                           
                         </div>
-                        <div class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="email3">Correo Electrónico</p:outputLabel>
-                            <p:inputText id="email3" type="text" />
+                        <div class="p-col-12 p-lg-6 left-side">                            
+                            <p:outputLabel for="email1">Correo Electrónico</p:outputLabel>
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                      <i class="pi pi-envelope" /> 
+                                </span> 
+                                 <p:inputText id="email1" type="text" />
+                            </div>                            
 
                         </div>     
 
 
 
                         <div  class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="name4">Contraseña</p:outputLabel>
-                            <p:inputText id="name4" type="text" />
+                            <p:outputLabel for="password">Contraseña</p:outputLabel>
+                             <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                      <i class="pi pi-key" /> 
+                                </span> 
+                                 <p:inputText id="password" type="password" />
+                            </div>
                         </div>
                         <div  class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="email4">Confirmar contraseña</p:outputLabel>
-                            <p:inputText id="email4" type="text" />
+                            <p:outputLabel for="password2">Confirmar contraseña</p:outputLabel>
+                           <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                      <i class="pi pi-key" /> 
+                                </span> 
+                                 <p:inputText id="password2" type="password" />
+                            </div>
                         </div>
 
 

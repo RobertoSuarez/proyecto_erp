@@ -16,12 +16,11 @@
 
     <h:body styleClass="login-body" >
         <h:form>
-            <div class="p-grid p-nogutter">                              
-                <div class="p-col-12" style="text-align:center" >
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <p:graphicImage name="images/erpLogo2.png" class="logo" />
+            <div class="p-grid p-nogutter"> 
+                
+                <div class="p-col-12" style="text-align:center;margin-top:50px"  >
+                  
+                    <p:graphicImage name="images/erpLogo.png" width="85px"/>
                 </div>
             </div>
             <div class="login-panel">
@@ -47,16 +46,15 @@
                             </div>
                         </div>
                         <div class="p-col-12 button-container">
-                            <p:commandButton type="button" value="Iniciar sesión" styleClass="ui-button-raised" />
-                            <p:commandButton type="button" action="../../View/login_and_registro/login.xhtml" value="Crear cuenta" styleClass="ui-button-secondary p-mr-2 p-mb-2" />
-                               
+                            <p:button outcome="/Plantilla/Plantilla" value="Iniciar Sesión"  styleClass="ui-button-raised" />
+
+                            <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2"/>
+
                         </div>
-                        
                         <div class="p-col-12">
                             <p:commandLink value="¿Olvido su contraseña?" />   
                         </div>
-                        
-                        
+
                     </div>
                 </div>
             </div>
