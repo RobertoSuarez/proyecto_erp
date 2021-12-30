@@ -30,7 +30,7 @@ PrimeFaces.widget.Manhattan = PrimeFaces.widget.BaseWidget.extend({
         if(!this.isHorizontal()) {
             this.restoreMenuState();
         }
-
+        console.log("Funciona!");
         this.expandedMenuitems = this.expandedMenuitems||[];
     },
      

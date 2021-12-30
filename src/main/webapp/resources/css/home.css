@@ -10,6 +10,10 @@ h1, h2{color: #5F2C82}
     margin: 0.5rem
 }
 
+.container {
+    width: 95%;
+    margin: auto;
+}
 
 
 body{
