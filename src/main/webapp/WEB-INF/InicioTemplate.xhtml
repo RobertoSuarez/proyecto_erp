@@ -20,38 +20,19 @@
     </h:head>
 
     <h:body styleClass="#{guestPreferences.inputStyleClass}">
-        <div class="layout-wrapper #{guestPreferences.layoutMode} layout-#{guestPreferences.menuColor}">
+        
+        <div class="layout-wrapper layout-horizontal layout-light">
             <div class="layout-main">
-                <ui:include src="./HeaderInicio.xhtml"/>
-
+                <ui:include src="./HeaderPrincipal.xhtml"/>
                 <div class="layout-content">
                     <ui:insert name="content">
                     </ui:insert>
                 </div>
-
-                <ui:include src="./footer.xhtml"/>
-
-                <div class="layout-main-mask"></div>
             </div>
-
-            <ui:include src="./config.xhtml"/>
-            <ui:include src="./rightpanel.xhtml"/>
-            <ui:include src="./sidebar.xhtml"/>
         </div>
-
-        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-            <f:facet name="start">
-                <i class="pi pi-spin pi-spinner layout-ajax-loader-icon" aria-hidden="true"/>
-            </f:facet>
-
-            <f:facet name="complete">
-                <h:outputText value=""/>
-            </f:facet>
-        </p:ajaxStatus>
-
+        
         <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
         <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
-        <h:outputStylesheet name="css/demo.css" library="demo"/>
         <h:outputStylesheet name="css/layout-deeppurple-teal.css" library="manhattan-layout"/>
     </h:body>
 
