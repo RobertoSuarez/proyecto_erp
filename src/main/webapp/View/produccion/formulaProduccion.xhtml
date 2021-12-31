@@ -1,12 +1,209 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../../WEB-INF/InicioTemplate.xhtml">
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+    <ui:define name="title">Formula</ui:define>
+
+    <ui:define name="content">
+        <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+            <p:menuitem value="Inicio" url="#"/>
+            <p:menuitem value="Orden Producción" url="#"/>
+            <p:menuitem value="Formula" url="#"/>
+            <p:menuitem value="Procesos" url="#"/>
+        </p:menubar>
+
+        <h:form id="form" style="margin-top: 4%;">
+            <div class="card">
+                <!-- Boton Crear Formula -->
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            <p:commandButton value="Crear Nueva Formula" 
+                                             styleClass="ui-button-success"
+                                             icon="pi pi-plus" oncomplete="PF('crearFormula').show()">
+                            </p:commandButton>
+                        </div>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <!-- Cuadro de dialogo de formula -->
+                <p:dialog header="Nueva Formula" showEffect="fade" modal="true"
+                          widgetVar="crearFormula" responsive="true" width="80%"
+                          draggable="false" height="550">
+                    <!-- Cuadros de texto de la izquierda -->
+                    <p:outputPanel id="manage-asiento" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
+                            <div class="p-grid p-justify-around">
+                                <div class="p-col-6 p-md-12 p-lg-5">
+                                    <div class="p-grid">
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Producto:"></p:outputLabel>
+                                            <p:inputText value="" placeholder="Buscar" readonly="true"></p:inputText>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Línea:"></p:outputLabel>
+                                            <p:inputText disabled="#"
+                                                         value=""
+                                                         maxlength="24"></p:inputText>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Categoria:"></p:outputLabel>
+                                            <p:inputText disabled="#"
+                                                         value=""
+                                                         maxlength="24"></p:inputText>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Cuadros de texto de la derecha -->
+                                <div class="p-col-6 p-md-12 p-lg-5">
+                                    <div class="p-grid">
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Nombre:"></p:outputLabel>
+                                            <p:calendar value="" 
+                                                        disabled="#">
+                                            </p:calendar>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Código:"></p:outputLabel>
+                                            <p:calendar value="" 
+                                                        disabled="#">
+                                            </p:calendar>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Ruta:"></p:outputLabel>
+                                            <p:selectOneMenu id="diario" value="" editable="false" 
+                                                             disabled="#">
+                                                <f:selectItem itemLabel="Seleccione una Ruta" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="" var="diario" 
+                                                               itemLabel="#" 
+                                                               itemValue="#"></f:selectItems>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-col-11">
+                                    <div class="p-grid">
+                                        <!-- Boton Materia Prima -->
+                                        <div class="p-col-2">
+                                            <p:commandButton value="Materia Prima" process="@this"
+                                                             disabled="#"
+                                                             actionListener="#"
+                                                             icon="pi pi-plus"/>
+                                        </div>
+
+                                        <!-- Tabla de materia prima -->
+                                        <div class="p-col-12">
+                                            <p:dataTable editable="true" reflow="true"
+                                                         editInitEvent="dblclick" editMode="cell"
+                                                         value="">
+
+                                                <p:column headerText="Acciones">
+                                                    <p:commandButton icon="pi pi-times" action="#"  
+                                                                     styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                        <f:setPropertyActionListener value="#" target="#"/>
+                                                        <p:resetInput target=":form:manage-asiento"/>
+                                                    </p:commandButton>
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Numero" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Descripción" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Medida" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Cantidad" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Procesos" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </div>
+                                    <!-- Botones Guardar/Cerrar -->
+                                    <div class="p-grid p-justify-end">
+                                        <div class="p-col-2">
+                                            <p:commandButton value="Guardar"  
+                                                             icon="pi pi-check" 
+                                                             disabled="#" styleClass="ui-button-success"/>
+                                        </div>
+                                        <div class="p-col-2">
+                                            <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                             styleClass="ui-button-danger" process="@this"
+                                                             oncomplete="PF('crearFormula').hide()"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </p:dialog>
+
+
+                <!-- Tabla de datos -->
+                <p:dataTable reflow="true" paginator="true" rows="5" 
+                             rowSelectMode="add" paginatorPosition="bottom">
+                    <!-- Buscador -->
+                    <f:facet name="header">
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            <span style="font-weight: bold; margin-right: 6px;">Formulas</span>
+                            <span class="filter-container ui-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <p:inputText id="globalFilter" placeholder="Buscar"/>
+                            </span>
+                        </div>
+                    </f:facet>
+
+                    <p:column headerText="Numero" filterStyle="display : none">
+                        <h:outputText value="#" />
+                        <p:skeleton rendered="#"></p:skeleton>
+                    </p:column>
+
+                    <p:column headerText="Producto" >
+                        <h:outputText value="#" />
+                        <p:skeleton rendered="#"></p:skeleton>
+                    </p:column>
+
+                    <p:column headerText="Línea" >
+                        <h:outputText value="#" />
+                        <p:skeleton rendered="#"></p:skeleton>
+                    </p:column>
+
+                    <p:column headerText="Categoria" >
+                        <h:outputText value="#" />
+                        <p:skeleton rendered="#"></p:skeleton>
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="pi pi-pencil" action="#"  
+                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                            <f:setPropertyActionListener value="#" target="#"/>
+                            <p:resetInput target=":form:manage-asiento"/>
+                        </p:commandButton>
+                        <p:skeleton rendered="#"></p:skeleton>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
