@@ -6,679 +6,701 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-     <body>
+    <body>
 
-          <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
-               <ui:define name="content">
-                    <h:form id="form">
-                         <p:growl id="messages" showDetail="true"/>
-                         <h1 style="text-align: center; color: black">Proveedores</h1>
-                         <!--- Boton nuevo !--> 
-                         <p:toolbar >         
+            <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
+                    <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
+    
+                    <p:submenu label="Pagos">
+                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" url="#" icon="pi pi-list" />
 
-                              <p:toolbarGroup align="left">                                          
-                                   <div align="left" >
-                                        <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                         actionListener="#{proveedorDAO.openNew()}"
-                                                         update=":form:manage-product-content"
-                                                         oncomplete="PF('manageProductDialog').show()"
-                                                         styleClass="ui-button-success"
-                                                         process="@this">                                        
-                                             <p:resetInput target=":form:manage-product-content"/> 
-                                        </p:commandButton>   </div>
-                                   <p:selectBooleanButton id="slcbtn"  
-                                                          value="#{condicionesMB.check}" 
-                                                          onLabel="Deshabilitado"                                                           
-                                                          offLabel="Habilitado" 
-                                                          >                                        
-                                        <p:ajax listener="#{condicionesMB.habTabla()}" />
-                                        <p:ajax listener="#{condicionesMB.msjHD()}" update="messages"/>                                      
-                                   </p:selectBooleanButton>   
-                              </p:toolbarGroup>  
+                    </p:submenu>
+                    <p:submenu label="Reportes">
+                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+      
+                    </p:submenu>
+                    <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
+                </p:menubar>
+                                    <br></br>
+                    <br></br>
+                    <br></br>
+                <h:form id="form">
+                    <h1 style="text-align: center; color: black">Proveedores</h1>
+                    <p:growl id="messages" showDetail="true"/>
+                    
+                    <!--- Boton nuevo !--> 
+                    <p:toolbar >         
 
-                         </p:toolbar>
+                        <p:toolbarGroup align="left">                                          
+                            <div align="left" >
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                                 actionListener="#{proveedorDAO.openNew()}"
+                                                 update=":form:manage-product-content"
+                                                 oncomplete="PF('manageProductDialog').show()"
+                                                 styleClass="ui-button-success p-mr-2 p-mb-2"
+                                                 process="@this">                                        
+                                    <p:resetInput target=":form:manage-product-content"/> 
+                                </p:commandButton>   </div>
+                            <p:selectBooleanButton id="slcbtn"  
+                                                   value="#{condicionesMB.check}" 
+                                                   onLabel="Deshabilitado"                                                           
+                                                   offLabel="Habilitado" 
+                                                   styleClass="ui-button-help p-mr-2 p-mb-2"
+                                                   >                                        
+                                <p:ajax listener="#{condicionesMB.habTabla()}" />
+                                <p:ajax listener="#{condicionesMB.msjHD()}" update="messages"/>                                      
+                            </p:selectBooleanButton>   
+                        </p:toolbarGroup>  
 
-                         <!--- Lista de Tabal de datos  !-->
-                         <!--- INICIO TABLA DE DATOS  !-->
-                         <!--- Atributos de la Tabal de datos  !-->
-                         <p:dataTable id="dt-products" 
-                                      widgetVar="dtProducts" 
-                                      var="provee" 
-                                      value="#{condicionesMB.listaCondiciones}"
-                                      reflow="true" 
-                                      styleClass="products-table" 
-                                      rowKey="#{proveedorDAO.proveedor.idProveedor}"
-                                      paginator="true" 
-                                      resizableColumns="true" 
-                                      class="p-mt-3"
-                                      rows="5" 
-                                      paginatorPosition="bottom">
+                    </p:toolbar>
 
-                              <!--- Facet de Tabal de datos  !-->
-                              <f:facet name="header"  >
-                                   <div class="products-table-header" align="right">                                      
-                                        <!--- Filtro Pf o boton buscar de Tabal de datos  !-->
-                                        <span class="filter-container ui-input-icon-left">
-                                             <i class="pi pi-search"></i>
-                                             <p:inputText style="align-self: flex-end"
-                                                          id="globalFilter"
-                                                          onkeyup="PF('dtProducts').filter()"
-                                                          placeholder="Buscar" />
-                                        </span>
-                                        <!--- Toggler Pf o boton Columnas de Tabal de datos  !-->
-                                        <span class="filter-container ui-input-icon-left">
-                                             <p:commandButton 
-                                                  id="toggler" 
-                                                  type="burron" 
-                                                  value="Columnas" 
-                                                  process="@this"
-                                                  icon="pi pi-align-justify" />
-                                             <p:columnToggler 
-                                                  datasource="dt-products" 
-                                                  trigger="toggler"/>
-                                        </span>
-                                   </div>
-                              </f:facet>
+                    <!--- Lista de Tabal de datos  !-->
+                    <!--- INICIO TABLA DE DATOS  !-->
+                    <!--- Atributos de la Tabal de datos  !-->
+                    <p:dataTable id="dt-products" 
+                                 widgetVar="dtProducts" 
+                                 var="provee" 
+                                 value="#{condicionesMB.listaCondiciones}"
+                                 reflow="true" 
+                                 styleClass="products-table" 
+                                 rowKey="#{proveedorDAO.proveedor.idProveedor}"
+                                 paginator="true" 
+                                 resizableColumns="true" 
+                                 class="p-mt-3"
+                                 rows="5" 
+                                 paginatorPosition="bottom">
 
-                              <!--  Datos de la tabla proveedor  !-->
-                              <!--  Columna idProveedor!-->
-                              <p:column headerText="idProveedor" 
-                                        visible="false" 
-                                        sortBy="#{provee.proveedor.idProveedor}" 
-                                        filterBy="#{provee.proveedor.idProveedor}">
-                                   <h:outputText 
-                                        value="#{provee.proveedor.idProveedor}"/>
-                              </p:column>
-                              <!--  Columna códigoProveedor!-->
-                              <p:column headerText="Código"
-                                        >
-                                   <h:outputText 
-                                        value="#{provee.proveedor.codigo}"/>
-                              </p:column>
-                              <!--  Columna razon social proveedor !-->
-                              <p:column headerText="RazonSocial" 
-                                        visible="false" 
-                                        sortBy="#{provee.proveedor.razonSocial}" 
-                                        filterBy="#{provee.proveedor.razonSocial}">
-                                   <h:outputText 
-                                        value="#{provee.proveedor.razonSocial}"/>
-                              </p:column>
-                              <!--  Columna ruc proveedor !-->
-                              <p:column headerText="Ruc"  
-                                        visible="false" 
-                                        sortBy="#{provee.proveedor.ruc}" 
-                                        filterBy="#{provee.proveedor.ruc}">
-                                   <h:outputText 
-                                        value="#{provee.proveedor.ruc}"/>
-                              </p:column>
-                              <!--  Columna nombre proveedor !-->
-                              <p:column headerText="Nombre" 
-                                        >
-                                   <h:outputText 
-                                        value="#{provee.proveedor.nombre}"/>
-                              </p:column>
-                              <!--  Columna contacto proveedor !-->
-                              <p:column headerText="Contacto" 
-                                        >
-                                   <h:outputText 
-                                        value="#{provee.proveedor.contacto}"/>
-                              </p:column>
-                              <!--  Columna dirección proveedor !-->
-                              <p:column headerText="Dirección"  
-                                        visible="false">
-                                   <h:outputText 
-                                        value="#{provee.proveedor.direccion}"/>
-                              </p:column>
-                              <!--  Columna e-mail proveedor !-->
-                              <p:column headerText="E-mail" >
-                                   <h:outputText 
-                                        value="#{provee.proveedor.email}"/>
-                              </p:column>
-                              <!--  Columna telefono proveedor !-->
-                              <p:column headerText="Telefono" >
-                                   <h:outputText 
-                                        value="#{provee.proveedor.telefono}"/>
-                              </p:column>
-                              <!--  Columna pagina web proveedor !-->
-                              <p:column headerText="Pagina web"  
-                                        visible="false" 
-                                        sortBy="#{provee.proveedor.webPage}" 
-                                        filterBy="#{provee.proveedor.webPage}">
-                                   <h:outputText 
-                                        value="#{provee.proveedor.webPage}"/>
-                              </p:column>
-                              <!--  Columna estado proveedor !-->
-                              <p:column headerText="Estado"  
-                                        visible="false" 
-                                        sortBy="#{provee.proveedor.estado}" 
-                                        filterBy="#{provee.proveedor.estado}">
-                                   <h:outputText 
-                                        value="#{provee.proveedor.estado}"/>
-                              </p:column>
-                              <!--  Columna días neto proveedor !-->
-                              <p:column headerText="DiasNeto" 
-                                        visible="false" >
-                                   <h:outputText 
-                                        value="#{provee.diasNeto}"/>
-                              </p:column>
-                              <!--  Columna días descuento proveedor !-->
-                              <p:column headerText="DiasDescuento" 
-                                        visible="false">
-                                   <h:outputText
-                                        value="#{provee.diasDescuento}"/>
-                              </p:column>
-                              <!--  Columna cant.días vencidos proveedor !-->
-                              <p:column headerText="cantDiasVencidos"
-                                        visible="false" >
-                                   <h:outputText
-                                        value="#{provee.cantDiasVencidos}"/>
-                              </p:column>
-                              <!--  Columna descripcion proveedor !-->
-                              <p:column headerText="descripcion" 
-                                        visible="false" >
-                                   <h:outputText 
-                                        value="#{provee.descripcion}"/>
-                              </p:column>
-                              <!--  Columna acciones de  proveedor !-->
-                              <p:column exportable="false">
-                                   <!-- Boton editar proveedor  !-->
-                                   <p:commandButton 
-                                        icon="pi pi-pencil" 
-                                        update=":form:manage-product-content-edit"
-                                        actionListener="#{proveedorDAO.cargarEditar(provee.proveedor,provee)}"
-                                        oncomplete="PF('manageProductDialogEdit').show()"
-                                        class="ui-button-warning rounded-button" 
-                                        process="@this">
-                                        <f:setPropertyActionListener 
-                                             value="#{provee.proveedor}" 
-                                             target="#{proveedorDAO.selectedProveedor}"/>
-                                        <p:resetInput 
-                                             target=":form:manage-product-content-edit" />
-                                   </p:commandButton>
-                                   <p:commandButton 
-                                        class="#{condicionesMB.cl}"
-                                        icon="#{condicionesMB.ic}"
+                        <!--- Facet de Tabal de datos  !-->
+                        <f:facet name="header"  >
+                            <div class="products-table-header" align="right">                                      
+                                <!--- Filtro Pf o boton buscar de Tabal de datos  !-->
+                                <span class="filter-container ui-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText style="align-self: flex-end"
+                                                 id="globalFilter"
+                                                 onkeyup="PF('dtProducts').filter()"
+                                                 placeholder="Buscar" />
+                                </span>
+                                <!--- Toggler Pf o boton Columnas de Tabal de datos  !-->
+                                <span class="filter-container ui-input-icon-left">
+                                    <p:commandButton 
+                                        id="toggler" 
+                                        type="burron" 
+                                        value="Columnas" 
                                         process="@this"
-                                        update=":form:confirmDHab"
-                                        oncomplete="PF('DHProveedor').show()"
-                                        action="#{condicionesMB.cargarDhab(provee.proveedor)}"
-                                        >
+                                        styleClass="ui-button-help p-mr-2 p-mb-2"
+                                        icon="pi pi-align-justify" />
+                                    <p:columnToggler 
+                                        datasource="dt-products" 
+                                        trigger="toggler"/>
+                                </span>
+                            </div>
+                        </f:facet>
 
-                                   </p:commandButton>
+                        <!--  Datos de la tabla proveedor  !-->
+                        <!--  Columna idProveedor!-->
+                        <p:column headerText="idProveedor" 
+                                  visible="false" 
+                                  sortBy="#{provee.proveedor.idProveedor}" 
+                                  filterBy="#{provee.proveedor.idProveedor}">
+                            <h:outputText 
+                                value="#{provee.proveedor.idProveedor}"/>
+                        </p:column>
+                        <!--  Columna códigoProveedor!-->
+                        <p:column headerText="Código"
+                                  >
+                            <h:outputText 
+                                value="#{provee.proveedor.codigo}"/>
+                        </p:column>
+                        <!--  Columna razon social proveedor !-->
+                        <p:column headerText="RazonSocial" 
+                                  visible="false" 
+                                  sortBy="#{provee.proveedor.razonSocial}" 
+                                  filterBy="#{provee.proveedor.razonSocial}">
+                            <h:outputText 
+                                value="#{provee.proveedor.razonSocial}"/>
+                        </p:column>
+                        <!--  Columna ruc proveedor !-->
+                        <p:column headerText="Ruc"  
+                                  visible="false" 
+                                  sortBy="#{provee.proveedor.ruc}" 
+                                  filterBy="#{provee.proveedor.ruc}">
+                            <h:outputText 
+                                value="#{provee.proveedor.ruc}"/>
+                        </p:column>
+                        <!--  Columna nombre proveedor !-->
+                        <p:column headerText="Nombre" 
+                                  >
+                            <h:outputText 
+                                value="#{provee.proveedor.nombre}"/>
+                        </p:column>
+                        <!--  Columna contacto proveedor !-->
+                        <p:column headerText="Contacto" 
+                                  >
+                            <h:outputText 
+                                value="#{provee.proveedor.contacto}"/>
+                        </p:column>
+                        <!--  Columna dirección proveedor !-->
+                        <p:column headerText="Dirección"  
+                                  visible="false">
+                            <h:outputText 
+                                value="#{provee.proveedor.direccion}"/>
+                        </p:column>
+                        <!--  Columna e-mail proveedor !-->
+                        <p:column headerText="E-mail" >
+                            <h:outputText 
+                                value="#{provee.proveedor.email}"/>
+                        </p:column>
+                        <!--  Columna telefono proveedor !-->
+                        <p:column headerText="Telefono" >
+                            <h:outputText 
+                                value="#{provee.proveedor.telefono}"/>
+                        </p:column>
+                        <!--  Columna pagina web proveedor !-->
+                        <p:column headerText="Pagina web"  
+                                  visible="false" 
+                                  sortBy="#{provee.proveedor.webPage}" 
+                                  filterBy="#{provee.proveedor.webPage}">
+                            <h:outputText 
+                                value="#{provee.proveedor.webPage}"/>
+                        </p:column>
+                        <!--  Columna estado proveedor !-->
+                        <p:column headerText="Estado"  
+                                  visible="false" 
+                                  sortBy="#{provee.proveedor.estado}" 
+                                  filterBy="#{provee.proveedor.estado}">
+                            <h:outputText 
+                                value="#{provee.proveedor.estado}"/>
+                        </p:column>
+                        <!--  Columna días neto proveedor !-->
+                        <p:column headerText="DiasNeto" 
+                                  visible="false" >
+                            <h:outputText 
+                                value="#{provee.diasNeto}"/>
+                        </p:column>
+                        <!--  Columna días descuento proveedor !-->
+                        <p:column headerText="DiasDescuento" 
+                                  visible="false">
+                            <h:outputText
+                                value="#{provee.diasDescuento}"/>
+                        </p:column>
+                        <!--  Columna cant.días vencidos proveedor !-->
+                        <p:column headerText="cantDiasVencidos"
+                                  visible="false" >
+                            <h:outputText
+                                value="#{provee.cantDiasVencidos}"/>
+                        </p:column>
+                        <!--  Columna descripcion proveedor !-->
+                        <p:column headerText="descripcion" 
+                                  visible="false" >
+                            <h:outputText 
+                                value="#{provee.descripcion}"/>
+                        </p:column>
+                        <!--  Columna acciones de  proveedor !-->
+                        <p:column exportable="false">
+                            <!-- Boton editar proveedor  !-->
+                            <p:commandButton 
+                                icon="pi pi-pencil" 
+                                update=":form:manage-product-content-edit"
+                                actionListener="#{proveedorDAO.cargarEditar(provee.proveedor,provee)}"
+                                oncomplete="PF('manageProductDialogEdit').show()"
+                                class="ui-button-warning rounded-button" 
+                                styleClass="ui-button-info p-mr-2 p-mb-2"
+                                process="@this">
+                                <f:setPropertyActionListener 
+                                    value="#{provee.proveedor}" 
+                                    target="#{proveedorDAO.selectedProveedor}"/>
+                                <p:resetInput 
+                                    target=":form:manage-product-content-edit" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                class="#{condicionesMB.cl}"
+                                icon="#{condicionesMB.ic}"
+                                process="@this"
+                                update=":form:confirmDHab"
+                                oncomplete="PF('DHProveedor').show()"
+                                action="#{condicionesMB.cargarDhab(provee.proveedor)}"
+                                >
 
-                              </p:column>
-                         </p:dataTable>
-                         <!--- FIN TABLA DE DATOS  !-->
+                            </p:commandButton>
 
-                         <!---Dialogo nuevo proveedor-->
-                         <!--- INICIO DIALOG NUEVO PROVEEDOR DE DATOS  !-->
-                         <!--- Atributos del dialog nuevo proveedor de datos  !-->
-                         <p:dialog header="Proveedor" showEffect="fade" 
-                                   modal="true" widgetVar="manageProductDialog" 
-                                   responsive="true" maximizable="true" 
-                                   height="300" width="70%">
-                              <p:outputPanel id="manage-product-content" 
-                                             class="ui-fluid">
-                                   <p:outputPanel> 
-                                        <!---Sección 1 proveedor-->
-                                        <div class="p-formgrid p-grid"> 
-                                             <!---Text código proveedor-->
-                                             <div class="p-field p-col">                                                  
-                                                  <p:outputLabel 
-                                                       for="codProveedor"> 
-                                                       Código: </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="codProveedor" 
-                                                       required="True"
-                                                       style="background: darkgray;
-                                                       color:#000000"
-                                                       value="#{proveedorDAO.proveedor.codigo}"/>
-                                             </div>
-                                             <!---Text estado proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel for="check"> Habilitado:
-                                                  </p:outputLabel>
-                                                  <p:selectBooleanCheckbox
-                                                       id="check" 
-                                                       value="#{proveedorDAO.proveedor.estado}" />
-                                             </div>
-                                        </div>
-                                        <!---Sección 2 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text nombre proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="nomProveedor"> 
-                                                       Nombre:*
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="nomProveedor"
-                                                       maxlength="40"
-                                                       value="#{proveedorDAO.proveedor.nombre}"/>
-                                             </div>
-                                             <!---Text ruc proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="rucProveedor"> 
-                                                       Ruc:*
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="rucProveedor"
-                                                       maxlength="13"                                                       
-                                                       value="#{proveedorDAO.proveedor.ruc}"/>
-                                             </div>
-                                        </div>
-                                        <!---Sección 3 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text dirección proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="dirProveedor"> 
-                                                       Dirección: 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="dirProveedor" 
-                                                       maxlength="100"
-                                                       value="#{proveedorDAO.proveedor.direccion}"/>
-                                             </div>
-                                             <!---Text contacto proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="contacProveedor"> 
-                                                       Contacto: 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="contacProveedor" 
-                                                       required="false" 
-                                                       maxlength="40"
-                                                       value="#{proveedorDAO.proveedor.contacto}"/>
-                                             </div>
-                                        </div>
-                                        <!---Sección 4 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text pagina web proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="webProveedor"> 
-                                                       Pagina web: 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="webProveedor"
-                                                       maxlength="30"
-                                                       required="false" 
-                                                       value="#{proveedorDAO.proveedor.webPage}"/>
-                                             </div>
-                                             <!---Text email proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="emailProveedor">
-                                                       Email: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="emailProveedor"                                                                                                           
-                                                       maxlength="30"
-                                                       value="#{proveedorDAO.proveedor.email}"/>
-                                             </div>
-                                        </div>
-                                        <!---Sección 5 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text razon social proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="rsocialProveedor"> 
-                                                       Razón social: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="rsocialProveedor" 
-                                                       maxlength="40"
-                                                       value="#{proveedorDAO.proveedor.razonSocial}"/>
-                                             </div>
-                                             <!---Text teléfono proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="telProveedor">
-                                                       Telefono: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="telProveedor" 
-                                                       maxlength="10"
-                                                       value="#{proveedorDAO.proveedor.telefono}"/>
-                                             </div>
-                                        </div>
+                        </p:column>
+                    </p:dataTable>
+                    <!--- FIN TABLA DE DATOS  !-->
 
-                                        <h3>Condiciones</h3>
-                                        <!---Sección 6 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text descuento proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="descuento"> 
-                                                       Descuento: * 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="descuento" 
-                                                       value="#{proveedorDAO.condiciones.descuento}"
-                                                       type="number"
-                                                       maxlength="4"/>
-                                             </div>
-                                             <!---Text días neto proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="diasNeto"> 
-                                                       Dias neto: * 
-                                                  </p:outputLabel>
-                                                  <p:inputMask
-                                                       mask="9[999]"
-                                                       validateMask="true"
-                                                       id ="diasNeto" 
-                                                       maxlength="3"                                                     
-                                                       value="#{proveedorDAO.condiciones.diasNeto}"
-                                                       />
-                                             </div>
-                                             <!---Text días descuento proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="diaDescuento" 
-                                                       > 
-                                                       Dias descuento: * 
-                                                  </p:outputLabel>
-                                                  <p:inputMask
-                                                       mask="9[999]"
-                                                       validateMask="true" 
-                                                       id ="diaDescuento"                                                       
-                                                       maxlength="3"  
-                                                       value="#{proveedorDAO.condiciones.diasDescuento}"
-                                                       />
-                                             </div>
-                                             <!---Text cant. dias vencidos proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel
-                                                       for="cantDiasVencidos" >
-                                                       Cantidad días vencido: * 
-                                                  </p:outputLabel>
-                                                  <p:inputMask
-                                                       mask="9[999]"
-                                                       validateMask="true"
-                                                       id="cantDiasVencidos" 
-                                                       maxlength="2"
-                                                       value="#{proveedorDAO.condiciones.cantDiasVencidos}" 
-                                                       />                                                  
-                                             </div>                                             
-                                        </div>
-                                        <!---Sección 7 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text cant. descripción proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="descripcion"> 
-                                                       Descripción:
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="descripcion" 
-                                                       value="#{proveedorDAO.condiciones.descripcion}" 
+                    <!---Dialogo nuevo proveedor-->
+                    <!--- INICIO DIALOG NUEVO PROVEEDOR DE DATOS  !-->
+                    <!--- Atributos del dialog nuevo proveedor de datos  !-->
+                    <p:dialog header="Proveedor" showEffect="fade" 
+                              modal="true" widgetVar="manageProductDialog" 
+                              responsive="true" maximizable="true" 
+                              height="300" width="70%">
+                        <p:outputPanel id="manage-product-content" 
+                                       class="ui-fluid">
+                            <p:outputPanel> 
+                                <!---Sección 1 proveedor-->
+                                <div class="p-formgrid p-grid"> 
+                                    <!---Text código proveedor-->
+                                    <div class="p-field p-col">                                                  
+                                        <p:outputLabel 
+                                            for="codProveedor"> 
+                                            Código: </p:outputLabel>
+                                        <p:inputText 
+                                            id ="codProveedor" 
+                                            required="True"
+                                            style="background: darkgray;
+                                            color:#000000"
+                                            value="#{proveedorDAO.proveedor.codigo}"/>
+                                    </div>
+                                    <!---Text estado proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="check"> Habilitado:
+                                        </p:outputLabel>
+                                        <p:selectBooleanCheckbox
+                                            id="check" 
+                                            value="#{proveedorDAO.proveedor.estado}" />
+                                    </div>
+                                </div>
+                                <!---Sección 2 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text nombre proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="nomProveedor"> 
+                                            Nombre:*
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="nomProveedor"
+                                            maxlength="40"
+                                            value="#{proveedorDAO.proveedor.nombre}"/>
+                                    </div>
+                                    <!---Text ruc proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="rucProveedor"> 
+                                            Ruc:*
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="rucProveedor"
+                                            maxlength="13"                                                       
+                                            value="#{proveedorDAO.proveedor.ruc}"/>
+                                    </div>
+                                </div>
+                                <!---Sección 3 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text dirección proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="dirProveedor"> 
+                                            Dirección: 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="dirProveedor" 
+                                            maxlength="100"
+                                            value="#{proveedorDAO.proveedor.direccion}"/>
+                                    </div>
+                                    <!---Text contacto proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="contacProveedor"> 
+                                            Contacto: 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="contacProveedor" 
+                                            required="false" 
+                                            maxlength="40"
+                                            value="#{proveedorDAO.proveedor.contacto}"/>
+                                    </div>
+                                </div>
+                                <!---Sección 4 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text pagina web proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="webProveedor"> 
+                                            Pagina web: 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="webProveedor"
+                                            maxlength="30"
+                                            required="false" 
+                                            value="#{proveedorDAO.proveedor.webPage}"/>
+                                    </div>
+                                    <!---Text email proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="emailProveedor">
+                                            Email: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="emailProveedor"                                                                                                           
+                                            maxlength="30"
+                                            value="#{proveedorDAO.proveedor.email}"/>
+                                    </div>
+                                </div>
+                                <!---Sección 5 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text razon social proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="rsocialProveedor"> 
+                                            Razón social: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="rsocialProveedor" 
+                                            maxlength="40"
+                                            value="#{proveedorDAO.proveedor.razonSocial}"/>
+                                    </div>
+                                    <!---Text teléfono proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="telProveedor">
+                                            Telefono: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="telProveedor" 
+                                            maxlength="10"
+                                            value="#{proveedorDAO.proveedor.telefono}"/>
+                                    </div>
+                                </div>
 
-                                                       maxlength="100"/>                                                
-                                             </div>    
-                                        </div>
-                                   </p:outputPanel>
-                              </p:outputPanel>
-                              <!---Botones guardar y cancelar proveedor-->
-                              <f:facet name="footer">
-                                   <p:commandButton value="Guardar" 
-                                                    styleClass="ui-button-success"
-                                                    update="manage-product-content, messages"
-                                                    process="manage-product-content @this"
-                                                    actionListener="#{proveedorDAO.insertar()}"
-                                                    onclick="PF('manageProductDialog').hide()"/>
-                                   <p:commandButton value="Cancelar" 
-                                                    styleClass="ui-button-danger"
-                                                    onclick="PF('manageProductDialog').hide()"                                                    
-                                                    oncomplete="location.reload()"/>
-                              </f:facet>
-                         </p:dialog>
-                         <!--- FIN DIALOG NUEVO PROVEEDOR DE DATOS  !-->
+                                <h3>Condiciones</h3>
+                                <!---Sección 6 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text descuento proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="descuento"> 
+                                            Descuento: * 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="descuento" 
+                                            value="#{proveedorDAO.condiciones.descuento}"
+                                            type="number"
+                                            maxlength="4"/>
+                                    </div>
+                                    <!---Text días neto proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="diasNeto"> 
+                                            Dias neto: * 
+                                        </p:outputLabel>
+                                        <p:inputMask
+                                            mask="9[999]"
+                                            validateMask="true"
+                                            id ="diasNeto" 
+                                            maxlength="3"                                                     
+                                            value="#{proveedorDAO.condiciones.diasNeto}"
+                                            />
+                                    </div>
+                                    <!---Text días descuento proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="diaDescuento" 
+                                            > 
+                                            Dias descuento: * 
+                                        </p:outputLabel>
+                                        <p:inputMask
+                                            mask="9[999]"
+                                            validateMask="true" 
+                                            id ="diaDescuento"                                                       
+                                            maxlength="3"  
+                                            value="#{proveedorDAO.condiciones.diasDescuento}"
+                                            />
+                                    </div>
+                                    <!---Text cant. dias vencidos proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel
+                                            for="cantDiasVencidos" >
+                                            Cantidad días vencido: * 
+                                        </p:outputLabel>
+                                        <p:inputMask
+                                            mask="9[999]"
+                                            validateMask="true"
+                                            id="cantDiasVencidos" 
+                                            maxlength="2"
+                                            value="#{proveedorDAO.condiciones.cantDiasVencidos}" 
+                                            />                                                  
+                                    </div>                                             
+                                </div>
+                                <!---Sección 7 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text cant. descripción proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="descripcion"> 
+                                            Descripción:
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="descripcion" 
+                                            value="#{proveedorDAO.condiciones.descripcion}" 
 
-                         <!---Dialogo editar proveedor-->
-                         <!--- INICIO DIALOG EDITAR PROVEEDOR DE DATOS  !-->
-                         <!--- Atributos del dialog edtar proveedor de datos  !-->
-                         <p:dialog header="Proveedor" showEffect="fade" modal="true"
-                                   widgetVar="manageProductDialogEdit" responsive="true"
-                                   maximizable="true" height="300" width="70%">
-                              <p:outputPanel id="manage-product-content-edit" 
-                                             class="ui-fluid">
-                                   <p:outputPanel >              
-                                        <!---Sección 1 proveedor-->
-                                        <div class="p-formgrid p-grid">                                             
-                                             <div class="p-field p-col">
-                                                  <!---Text id proveedor-->
-                                                  <p:inputText 
-                                                       id ="idProveedor" 
-                                                       style="visibility: hidden"
-                                                       value="#{proveedorDAO.proveedor.idProveedor}"/>
-                                                  <!---Text código proveedor-->
-                                                  <p:outputLabel 
-                                                       for="cod_Proveedor">
-                                                       Código:
-                                                  </p:outputLabel>                                                  
-                                                  <p:inputText 
-                                                       id ="cod_Proveedor" 
-                                                       style="background: darkgray;                                                       
-                                                       color:#000000;"
-                                                       value="#{proveedorDAO.proveedor.codigo}"/>
-                                             </div>
-                                             <!---Text estado proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel
-                                                       for="check"> 
-                                                       Habilitado:
-                                                  </p:outputLabel>
-                                                  <p:selectBooleanCheckbox 
-                                                       id="check_edit" 
-                                                       value="#{proveedorDAO.proveedor.estado}" />
-                                             </div>
-                                        </div>  
-                                        <!---Sección 2 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text nombe proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="nom_Proveedor"> 
-                                                       Nombre: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="nom_Proveedor" 
-                                                       value="#{proveedorDAO.proveedor.nombre}" />
-                                             </div>
-                                             <!---Text ruc proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="ruc_Proveedor"> 
-                                                       Ruc: *
-                                                  </p:outputLabel>
-                                                  <p:inputText
-                                                       maxlength="13"
-                                                       id ="ruc_Proveedor" 
-                                                       value="#{proveedorDAO.proveedor.ruc}"/>
-                                             </div>
-                                        </div>
-                                        <!---Sección 3 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text dirección proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="dir_Proveedor"> 
-                                                       Dirección: 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="dir_Proveedor" 
-                                                       value="#{proveedorDAO.proveedor.direccion}"/>
-                                             </div>
-                                             <!---Text contacto proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="contac_Proveedor">
-                                                       Contacto: 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="contac_Proveedor" 
-                                                       value="#{proveedorDAO.proveedor.contacto}"/>
-                                             </div>
-                                        </div>
-                                        <!---Sección 4 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text pagina web proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="web_Proveedor">
-                                                       Página web: 
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="web_Proveedor" 
-                                                       value="#{proveedorDAO.proveedor.webPage}"/>
-                                             </div>
-                                             <!---Text email proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="email_Proveedor">
-                                                       Email: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="email_Proveedor" 
-                                                       value="#{proveedorDAO.proveedor.email}"/>
-                                             </div>
-                                        </div>
-                                        <!---Sección 5 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text razon sacial proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="rsocial_Proveedor"> 
-                                                       Razón social: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="rsocial_Proveedor"
-                                                       value="#{proveedorDAO.proveedor.razonSocial}"/>
-                                             </div>
-                                             <!---Text teléfono proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="tel_Proveedor"> 
-                                                       Telefono: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="tel_Proveedor"
-                                                       maxlength="10"
-                                                       value="#{proveedorDAO.proveedor.telefono}"/>
-                                             </div>
-                                        </div>
+                                            maxlength="100"/>                                                
+                                    </div>    
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <!---Botones guardar y cancelar proveedor-->
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" 
+                                             styleClass="ui-button-success"
+                                             update="manage-product-content, messages"
+                                             process="manage-product-content @this"
+                                             actionListener="#{proveedorDAO.insertar()}"
+                                             onclick="PF('manageProductDialog').hide()"/>
+                            <p:commandButton value="Cancelar" 
+                                             styleClass="ui-button-danger"
+                                             onclick="PF('manageProductDialog').hide()"                                                    
+                                             oncomplete="location.reload()"/>
+                        </f:facet>
+                    </p:dialog>
+                    <!--- FIN DIALOG NUEVO PROVEEDOR DE DATOS  !-->
 
-                                        <h3>Condiciones</h3>
+                    <!---Dialogo editar proveedor-->
+                    <!--- INICIO DIALOG EDITAR PROVEEDOR DE DATOS  !-->
+                    <!--- Atributos del dialog edtar proveedor de datos  !-->
+                    <p:dialog header="Proveedor" showEffect="fade" modal="true"
+                              widgetVar="manageProductDialogEdit" responsive="true"
+                              maximizable="true" height="300" width="70%">
+                        <p:outputPanel id="manage-product-content-edit" 
+                                       class="ui-fluid">
+                            <p:outputPanel >              
+                                <!---Sección 1 proveedor-->
+                                <div class="p-formgrid p-grid">                                             
+                                    <div class="p-field p-col">
+                                        <!---Text id proveedor-->
+                                        <p:inputText 
+                                            id ="idProveedor" 
+                                            style="visibility: hidden"
+                                            value="#{proveedorDAO.proveedor.idProveedor}"/>
+                                        <!---Text código proveedor-->
+                                        <p:outputLabel 
+                                            for="cod_Proveedor">
+                                            Código:
+                                        </p:outputLabel>                                                  
+                                        <p:inputText 
+                                            id ="cod_Proveedor" 
+                                            style="background: darkgray;                                                       
+                                            color:#000000;"
+                                            value="#{proveedorDAO.proveedor.codigo}"/>
+                                    </div>
+                                    <!---Text estado proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel
+                                            for="check"> 
+                                            Habilitado:
+                                        </p:outputLabel>
+                                        <p:selectBooleanCheckbox 
+                                            id="check_edit" 
+                                            value="#{proveedorDAO.proveedor.estado}" />
+                                    </div>
+                                </div>  
+                                <!---Sección 2 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text nombe proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="nom_Proveedor"> 
+                                            Nombre: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="nom_Proveedor" 
+                                            value="#{proveedorDAO.proveedor.nombre}" />
+                                    </div>
+                                    <!---Text ruc proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="ruc_Proveedor"> 
+                                            Ruc: *
+                                        </p:outputLabel>
+                                        <p:inputText
+                                            maxlength="13"
+                                            id ="ruc_Proveedor" 
+                                            value="#{proveedorDAO.proveedor.ruc}"/>
+                                    </div>
+                                </div>
+                                <!---Sección 3 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text dirección proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="dir_Proveedor"> 
+                                            Dirección: 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="dir_Proveedor" 
+                                            value="#{proveedorDAO.proveedor.direccion}"/>
+                                    </div>
+                                    <!---Text contacto proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="contac_Proveedor">
+                                            Contacto: 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="contac_Proveedor" 
+                                            value="#{proveedorDAO.proveedor.contacto}"/>
+                                    </div>
+                                </div>
+                                <!---Sección 4 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text pagina web proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="web_Proveedor">
+                                            Página web: 
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="web_Proveedor" 
+                                            value="#{proveedorDAO.proveedor.webPage}"/>
+                                    </div>
+                                    <!---Text email proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="email_Proveedor">
+                                            Email: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="email_Proveedor" 
+                                            value="#{proveedorDAO.proveedor.email}"/>
+                                    </div>
+                                </div>
+                                <!---Sección 5 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text razon sacial proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="rsocial_Proveedor"> 
+                                            Razón social: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="rsocial_Proveedor"
+                                            value="#{proveedorDAO.proveedor.razonSocial}"/>
+                                    </div>
+                                    <!---Text teléfono proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="tel_Proveedor"> 
+                                            Telefono: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="tel_Proveedor"
+                                            maxlength="10"
+                                            value="#{proveedorDAO.proveedor.telefono}"/>
+                                    </div>
+                                </div>
 
-                                        <!---Sección 6 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text descuento proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="descuento_"> 
-                                                       Descuento: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       type="number"
-                                                       id ="descuento_"
-                                                       value="#{proveedorDAO.condiciones.descuento}"                                                     
-                                                       maxlength="4"/>
-                                             </div>
-                                             <!---Text días neto proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="dias_Neto">
-                                                       Dias neto: *
-                                                  </p:outputLabel>
-                                                  <p:inputMask
-                                                       mask="9[999]"
-                                                       validateMask="true"
-                                                       maxlength="3"
-                                                       id ="dias_Neto"
-                                                       value="#{proveedorDAO.condiciones.diasNeto}"
-                                                       />
-                                             </div>
-                                             <!---Text dias descuento proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="dia_Descuento"> 
-                                                       Dias descuento: *
-                                                  </p:outputLabel>
-                                                  <p:inputMask
-                                                       mask="9[999]"
-                                                       validateMask="true"
-                                                       maxlength="3"
-                                                       id ="dia_Descuento"
-                                                       value="#{proveedorDAO.condiciones.diasDescuento}"
-                                                       />
-                                             </div>
-                                             <!---Text cant. días vencidos proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="cant_DiasVencidos" >
-                                                       Cantidad días vencido: 
-                                                  </p:outputLabel>
-                                                  <p:inputMask
-                                                       mask="9[999]"
-                                                       validateMask="true"
-                                                       maxlength="3"
-                                                       id="cant_DiasVencidos"
-                                                       value="#{proveedorDAO.condiciones.cantDiasVencidos}" 
-                                                       />                                                  
-                                             </div>                                             
-                                        </div>
-                                        <!---Sección 7 proveedor-->
-                                        <div class="p-formgrid p-grid">
-                                             <!---Text descripción proveedor-->
-                                             <div class="p-field p-col">
-                                                  <p:outputLabel 
-                                                       for="descripcion_"> 
-                                                       Descripción: *
-                                                  </p:outputLabel>
-                                                  <p:inputText 
-                                                       id ="descripcion_" 
-                                                       maxlength="100"
-                                                       value="#{proveedorDAO.condiciones.descripcion}" 
-                                                       />                                                
-                                             </div>    
-                                        </div>
+                                <h3>Condiciones</h3>
 
-                                   </p:outputPanel>
-                              </p:outputPanel>
-                              <!---Botones guardar y cancelar proveedor-->
-                              <f:facet name="footer">
-                                   <p:commandButton value="Guardar" 
-                                                    styleClass="ui-button-success"
-                                                    update="manage-product-content-edit, messages"
-                                                    process="manage-product-content-edit @this" 
-                                                    actionListener="#{proveedorDAO.editar()}"
-                                                    />
-                                   <p:commandButton value="Cancelar"
-                                                    onclick="PF('manageProductDialogEdit').hide()"  
-                                                    styleClass="ui-button-danger"
-                                                    />
-                              </f:facet>
-                         </p:dialog>
-                         <!--- FIN DIALOG EDITAR PROVEEDOR DE DATOS  !-->
+                                <!---Sección 6 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text descuento proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="descuento_"> 
+                                            Descuento: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            type="number"
+                                            id ="descuento_"
+                                            value="#{proveedorDAO.condiciones.descuento}"                                                     
+                                            maxlength="4"/>
+                                    </div>
+                                    <!---Text días neto proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="dias_Neto">
+                                            Dias neto: *
+                                        </p:outputLabel>
+                                        <p:inputMask
+                                            mask="9[999]"
+                                            validateMask="true"
+                                            maxlength="3"
+                                            id ="dias_Neto"
+                                            value="#{proveedorDAO.condiciones.diasNeto}"
+                                            />
+                                    </div>
+                                    <!---Text dias descuento proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="dia_Descuento"> 
+                                            Dias descuento: *
+                                        </p:outputLabel>
+                                        <p:inputMask
+                                            mask="9[999]"
+                                            validateMask="true"
+                                            maxlength="3"
+                                            id ="dia_Descuento"
+                                            value="#{proveedorDAO.condiciones.diasDescuento}"
+                                            />
+                                    </div>
+                                    <!---Text cant. días vencidos proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="cant_DiasVencidos" >
+                                            Cantidad días vencido: 
+                                        </p:outputLabel>
+                                        <p:inputMask
+                                            mask="9[999]"
+                                            validateMask="true"
+                                            maxlength="3"
+                                            id="cant_DiasVencidos"
+                                            value="#{proveedorDAO.condiciones.cantDiasVencidos}" 
+                                            />                                                  
+                                    </div>                                             
+                                </div>
+                                <!---Sección 7 proveedor-->
+                                <div class="p-formgrid p-grid">
+                                    <!---Text descripción proveedor-->
+                                    <div class="p-field p-col">
+                                        <p:outputLabel 
+                                            for="descripcion_"> 
+                                            Descripción: *
+                                        </p:outputLabel>
+                                        <p:inputText 
+                                            id ="descripcion_" 
+                                            maxlength="100"
+                                            value="#{proveedorDAO.condiciones.descripcion}" 
+                                            />                                                
+                                    </div>    
+                                </div>
 
-                         <p:confirmDialog id="confirmDHab" widgetVar="DHProveedor" showEffect="fade" width="300"
-                                          message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre} ?"
-                                          header="Confirmar" severity="warn">
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <!---Botones guardar y cancelar proveedor-->
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" 
+                                             styleClass="ui-button-success"
+                                             update="manage-product-content-edit, messages"
+                                             process="manage-product-content-edit @this" 
+                                             actionListener="#{proveedorDAO.editar()}"
+                                             />
+                            <p:commandButton value="Cancelar"
+                                             onclick="PF('manageProductDialogEdit').hide()"  
+                                             styleClass="ui-button-danger"
+                                             />
+                        </f:facet>
+                    </p:dialog>
+                    <!--- FIN DIALOG EDITAR PROVEEDOR DE DATOS  !-->
 
-                              <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
-                                               styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
-                              <p:commandButton value="Cancelar" type="button" 
-                                               styleClass="ui-button-danger" onclick="PF('DHProveedor').hide()"  />
-                         </p:confirmDialog> 
-                    </h:form>
-               </ui:define>
-          </ui:composition>
-     </body>
+                    <p:confirmDialog id="confirmDHab" widgetVar="DHProveedor" showEffect="fade" width="300"
+                                     message="Desea #{condicionesMB.value} el proveedor #{condicionesMB.proveedor.nombre} ?"
+                                     header="Confirmar" severity="warn">
+
+                        <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
+                                         styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
+                        <p:commandButton value="Cancelar" type="button" 
+                                         styleClass="ui-button-danger" onclick="PF('DHProveedor').hide()"  />
+                    </p:confirmDialog> 
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
 </html>
 
 
