@@ -26,16 +26,16 @@
                                     </span>
                                     <p:commandButton style="margin-right: 6px;" value="Nueva Orden de producción" 
                                                      styleClass="ui-button-success"
-                                                     icon="pi pi-plus">
+                                                     icon="pi pi-plus" action="oProduccion.xhtml">
                                     </p:commandButton>
-                                    <p:commandButton style="margin-right: 6px;" value="Filtar" 
-                                                     styleClass="ui-button-warning" oncomplete="PF('crearFormula').show()">
+                                    <p:commandButton style="margin-right: 6px;" value="Filtrar" 
+                                                     styleClass="ui-button-warning" oncomplete="PF('filtro').show()">
                                     </p:commandButton>
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
                         <p:dialog showEffect="fade" modal="true"
-                                  widgetVar="crearFormula" responsive="true" width="20%"
+                                  widgetVar="filtro" responsive="true" width="20%"
                                   draggable="false" height="40%">
                         </p:dialog>
                         <!-- Tabla de datos -->
