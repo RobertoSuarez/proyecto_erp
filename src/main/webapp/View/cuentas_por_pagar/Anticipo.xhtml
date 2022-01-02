@@ -7,21 +7,41 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">  
     <h:body>
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                <h:form class="p-p-3" id="form">
+                                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
+                    <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
+    
+                    <p:submenu label="Pagos">
+                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" url="#" icon="pi pi-list" />
 
+                    </p:submenu>
+                    <p:submenu label="Reportes">
+                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+      
+                    </p:submenu>
+                    <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
+                </p:menubar>
+                
+                <br></br>
+                <br></br>
+                <br></br>
+                <h:form class="p-p-3" id="form">
+<h1 style="text-align: center; color: black">Anticipos</h1>
+                  
                     <p:growl id="growl" showDetail="true"/>
 
                     <div class="p-d-flex p-jc-between p-ai-center">
 
-                        <p class="titulo">Anticipos</p>
+                        
 
                         <div>
                             <p:commandButton 
                                 value="Revertidos" 
                                 actionListener="#{anticipoMB.get_anticipos_revertidos}" 
-                                styleClass="ui-button-raised" 
+                                styleClass="ui-button-help p-mr-2 p-mb-2" 
                                 oncomplete="PF('dialog_revertidos').show()">
 
                             </p:commandButton>
@@ -30,7 +50,7 @@
                                              actionListener="#{anticipoMB.open_new}"
 
                                              oncomplete="PF('manageAnticipoDialog').show()"
-                                             styleClass="ui-button-raised ui-button-success" >
+                                             styleClass="ui-button-success p-mr-2 p-mb-2" >
 
                                 <p:resetInput target=":form:manage-anticipo-content"/>
 
@@ -90,7 +110,7 @@
                             <p:commandButton 
                                 icon="pi pi-pencil" 
                                 oncomplete="PF('manageAnticipoDialog').show()"
-                                styleClass="edit-button rounded-button ui-button-warning" actionListener="#{anticipoMB.anticipo_editar(anticipo)}"
+                                styleClass="ui-button-info p-mr-2 p-mb-2" actionListener="#{anticipoMB.anticipo_editar(anticipo)}"
                                 update=":form:manage-anticipo-content">
 
                                 <p:resetInput target=":form:manage-anticipo-content"/>
