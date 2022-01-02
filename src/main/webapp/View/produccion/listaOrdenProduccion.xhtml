@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="title">Orden de Producción</ui:define>
+            <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Inicio" url="../Global/Main.xhtml"/>
+                    <p:menuitem value="Orden de Producción" url="#"/>
+                    <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
+                    <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
+                </p:menubar><h:form id="form" style="margin-top: 4%;">
+                    <div class="card">
+                        <!-- Boton Crear Formula -->
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText style="margin-right: 6px;" id="globalFilter" placeholder="Buscar"/>
+                                    </span>
+                                    <p:commandButton style="margin-right: 6px;" value="Nueva Orden de producción" 
+                                                     styleClass="ui-button-success"
+                                                     icon="pi pi-plus">
+                                    </p:commandButton>
+                                    <p:commandButton style="margin-right: 6px;" value="Filtar" 
+                                                     styleClass="ui-button-warning" oncomplete="PF('crearFormula').show()">
+                                    </p:commandButton>
+                                </div>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:dialog showEffect="fade" modal="true"
+                                  widgetVar="crearFormula" responsive="true" width="20%"
+                                  draggable="false" height="40%">
+                        </p:dialog>
+                        <!-- Tabla de datos -->
+                        <p:dataTable reflow="true" paginator="true" rows="5" 
+                                     rowSelectMode="add" paginatorPosition="bottom">
+                            <!-- Buscador -->
+                            <f:facet name="header">
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span style="font-weight: bold; margin-right: 6px;">Ordenes de producción</span>
+
+                                </div>
+                            </f:facet>
+                            <p:column headerText="Acción" filterStyle="display : none">
+
+                            </p:column>
+
+                            <p:column headerText="Nº Orden" >
+                                <h:outputText value="#" />
+                            </p:column>
+
+                            <p:column headerText="Emisión" >
+                                <h:outputText value="#" />
+                            </p:column>
+
+                            <p:column headerText="Entrega" >
+                                <h:outputText value="#" />
+                            </p:column>
+                            <p:column headerText="Detalle" >
+                                <h:outputText value="#" />
+                            </p:column>
+                            <p:column headerText="Estado" >
+                                <h:outputText value="#" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
