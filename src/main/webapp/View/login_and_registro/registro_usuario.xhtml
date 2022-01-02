@@ -15,13 +15,10 @@
     </h:head>
 
     <h:body styleClass="login-body">
-        <h:form >
-            
+        <h:form id="formRegistroUsuario" >
 
-           
-
+            <p:growl id="messages" showDetail="true" severity="info, warn"/>
             <div class="login-panel">
-
                 <div class="card">
                     <div class="ui-fluid p-formgrid p-grid">
 
@@ -29,39 +26,39 @@
                             <p:outputLabel for="name1">Nombres</p:outputLabel>
                             <div class="ui-inputgroup">
                                 <span  class="ui-inputgroup-addon">
-                                     <i class="pi pi-user" />   
+                                    <i class="pi pi-user" />   
                                 </span>
-                            <p:inputText id="name1"  type="text"  />
+                                <p:inputText id="name1" value="#{usuarioMB.usuario.nombre}" />
                             </div>
                         </div>
+
                         <div class="p-col-12 p-lg-6 left-side">
                             <p:outputLabel for="name2">Apellidos</p:outputLabel>
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
-                                      <i class="pi pi-user" /> 
+                                    <i class="pi pi-user" /> 
                                 </span> 
-                                <p:inputText id="name2" type="text" />
+                                <p:inputText id="name2" type="text" value="#{usuarioMB.usuario.apellido}" />
                             </div>
-                          
                         </div>                  
 
                         <div class="p-col-12 p-lg-6 left-side">
                             <p:outputLabel for="name3">Nombre de Usuario</p:outputLabel>
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
-                                      <i class="pi pi-user" /> 
+                                    <i class="pi pi-user" /> 
                                 </span> 
-                                 <p:inputText id="name3" type="text" />
+                                <p:inputText id="name3" type="text" value="#{usuarioMB.usuario.username}"/>
                             </div>
-                           
                         </div>
+
                         <div class="p-col-12 p-lg-6 left-side">                            
                             <p:outputLabel for="email1">Correo Electrónico</p:outputLabel>
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
-                                      <i class="pi pi-envelope" /> 
+                                    <i class="pi pi-envelope" /> 
                                 </span> 
-                                 <p:inputText id="email1" type="text" />
+                                <p:inputText id="email1" type="text" />
                             </div>                            
 
                         </div>     
@@ -70,35 +67,54 @@
 
                         <div  class="p-col-12 p-lg-6 left-side">
                             <p:outputLabel for="password">Contraseña</p:outputLabel>
-                             <div class="ui-inputgroup">
+                            <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
-                                      <i class="pi pi-key" /> 
+                                    <i class="pi pi-key" /> 
                                 </span> 
-                                 <p:inputText id="password" type="password" />
+                                <p:password 
+                                    id="password"
+                                    weakLabel="Débil"
+                                    validatorMessage="#{usuarioMB.PFW('Contraseñas no coinciden')}"
+                                    goodLabel="Bueno"
+                                    strongLabel="Fuerte"
+                                    match="password2"
+                                    feedback="true"  
+                                    value="#{usuarioMB.usuario.password}"
+                                    />
+
                             </div>
                         </div>
+
                         <div  class="p-col-12 p-lg-6 left-side">
                             <p:outputLabel for="password2">Confirmar contraseña</p:outputLabel>
-                           <div class="ui-inputgroup">
+                            <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
-                                      <i class="pi pi-key" /> 
+                                    <i class="pi pi-key" /> 
                                 </span> 
-                                 <p:inputText id="password2" type="password" />
+                                <p:password id="password2"/>
+
                             </div>
                         </div>
 
 
                         <div  class="p-col-12 p-lg-6 button-container">
                             <br></br>
-                            <p:commandButton type="button" value="Crear cuenta" styleClass="ui-button-raised" />
+                            <div class="ui-fluid">
+                                <p:commandButton actionListener="#{usuarioMB.registrarUsuario()}" 
+                                                 value="Crear cuenta" 
+                                                 styleClass="ui-button-raised" update="messages"
+                                                 />
 
+                                <p:commandButton  
+                                    type="button" value="Cancelar" 
+                                    styleClass="ui-button-secondary"/>
+                            </div>
                         </div>
-                        <div class="p-col-12 p-lg-6 left-side">
 
+                        <div class="p-col-12 p-lg-6">
                             <p:selectManyCheckbox layout="responsive" columns="1">
                                 <f:selectItem itemLabel="Aceptar terminos y condiciones" itemValue="1" />
                             </p:selectManyCheckbox>
-
                         </div>
 
                     </div>
