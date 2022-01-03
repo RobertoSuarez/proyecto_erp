@@ -8,35 +8,61 @@
 
     <h:body>
         <!-- Vista de generar calendario de pagos -->
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
+                    <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
+
+                    <p:submenu label="Pagos">
+                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" url="#" icon="pi pi-list" />
+
+                    </p:submenu>
+                    <p:submenu label="Reportes">
+                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+
+                    </p:submenu>
+                    <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
+                </p:menubar>
+
+                                   
+                    <br></br>
+                    <br></br>
+                <br></br>
                 <h:form class="p-m-3 " id="form">
-                    
+
+                    <h1 style="text-align: center; color: black">Calendario</h1>
                     <p:growl id="growl" showDetail="true"/>
-                    
+
                     <div class="p-d-flex p-ai-center p-mb-3">
                         <p class="titulo">Reporte de cuentas por pagar</p>
                     </div>
 
                     <div>
-                        <div class="ui-fluid p-formgrid p-grid">
-                            <div class="p-field p-col">
-                                <p:outputLabel for="desde" value="Desde: "/>
-                                <p:datePicker 
+                        <div class="ui-fluid">
+                            <div  class="p-field p-grid">
+                                <p:outputLabel for="desde" styleClass="p-col-12 p-md-1" value="Desde: "/>
+                                <div class="p-col-12 p-md-5">
+                                <p:datePicker  
                                     id="desde" 
                                     value="#{beanGenerarCalendario.desde}" />
+                                </div>
                             </div>
 
-                            <div class="p-field p-col">
-                                <p:outputLabel 
+                            <div class="p-field p-field p-grid">
+                                
+                                <p:outputLabel  styleClass="p-col-12 p-md-1"
                                     for="hasta" 
                                     value="Hasta: "/>
-                                <p:datePicker 
+                                <div class="p-col-12 p-md-5">
+                                <p:datePicker  
                                     id="hasta" 
                                     value="#{beanGenerarCalendario.hasta}" />
+                                </div>
                             </div>
                         </div>    
-                        
+
 
                         <div class="p-field p-mr-2">
 
@@ -65,22 +91,22 @@
                             </p:selectOneButton>
 
                         </div>
-                        
-                        <div class="p-d-flex p-jc-end">
+
+                        <div class="p-d-flex p-ai-start">
                             <p:commandButton 
                                 value="Generar Reporte"
-                                styleClass="ui-button-raised ui-button-success"
+                                styleClass="ui-button-success p-mr-2 p-mb-2"
                                 actionListener="#{beanGenerarCalendario.generar()}" />
 
                             <p:commandButton 
                                 ajax="false"
-                                styleClass="ui-button-raised"
+                                styleClass="ui-button-help p-mr-2 p-mb-2"
                                 actionListener="#{beanGenerarCalendario.exportpdf()}" 
                                 icon="pi pi-file-excel" 
                                 value="Exportar a PDF" />
                         </div>
-                        
-                        
+
+
                     </div>
 
 
@@ -102,6 +128,7 @@
                                             id="toggler" 
                                             type="button" 
                                             value="Columnas" 
+                                            styleClass="ui-button-help p-mr-2 p-mb-2"
                                             icon="pi pi-align-justify"/>
                                         <p:columnToggler 
                                             datasource="tablafacturas" 
