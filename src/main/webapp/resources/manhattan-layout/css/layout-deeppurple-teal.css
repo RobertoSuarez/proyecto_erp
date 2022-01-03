@@ -853,7 +853,8 @@ a {
 .layout-wrapper .layout-main .layout-footer {
   padding: 16px 24px;
   border: 1px solid #dee4e9;
-  background: #ffffff;
+  /*aqui*/
+  background: #2e143f ;
 }
 .layout-wrapper .layout-main .layout-footer img {
   margin-top: 5px;
