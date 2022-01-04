@@ -25,92 +25,72 @@
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
                 </p:menubar>
-
-                                   
-                    <br></br>
-                    <br></br>
-                <br></br>
                 <h:form class="p-m-3 " id="form">
-
-                    <h1 style="text-align: center; color: black">Calendario</h1>
+                    <h1 style="text-align: center; color: black; margin-top: 4%">Calendario de pagos</h1>
                     <p:growl id="growl" showDetail="true"/>
-
-                    <div class="p-d-flex p-ai-center p-mb-3">
-                        <p class="titulo">Reporte de cuentas por pagar</p>
-                    </div>
-
-                    <div>
+                    <div class="card">
                         <div class="ui-fluid">
-                            <div  class="p-field p-grid">
-                                <p:outputLabel for="desde" styleClass="p-col-12 p-md-1" value="Desde: "/>
-                                <div class="p-col-12 p-md-5">
-                                <p:datePicker  
-                                    id="desde" 
-                                    value="#{beanGenerarCalendario.desde}" />
+                            <div  class="p-grid p-justify-end">
+                                <div class="p-col-2">
+                                    <p:outputLabel for="desde" styleClass="p-md-1" value="Desde: "/>
+                                    <p:datePicker  
+                                        style="width: 60%"
+                                        id="desde" 
+                                        value="#{beanGenerarCalendario.desde}" />
                                 </div>
-                            </div>
-
-                            <div class="p-field p-field p-grid">
-                                
-                                <p:outputLabel  styleClass="p-col-12 p-md-1"
-                                    for="hasta" 
-                                    value="Hasta: "/>
-                                <div class="p-col-12 p-md-5">
-                                <p:datePicker  
-                                    id="hasta" 
-                                    value="#{beanGenerarCalendario.hasta}" />
+                                <div class="p-col-2">
+                                    <p:outputLabel  styleClass="p-md-1"
+                                                    for="hasta" 
+                                                    value="Hasta: "/>
+                                    <p:datePicker
+                                        style="width: 60%"
+                                        id="hasta" 
+                                        value="#{beanGenerarCalendario.hasta}" />
+                                </div>
+                                <div class="p-col-3">
+                                    <p:commandButton 
+                                        value="Generar Reporte"
+                                        styleClass="ui-button-success p-mr-2 p-mb-2"
+                                        style="width: 45%"
+                                        actionListener="#{beanGenerarCalendario.generar()}" />
+                                    <p:commandButton 
+                                        ajax="false"
+                                        styleClass="ui-button-help p-mr-2 p-mb-2"
+                                        style="width: 45%"
+                                        actionListener="#{beanGenerarCalendario.exportpdf()}" 
+                                        icon="pi pi-file-excel" 
+                                        value="Exportar a PDF" />
                                 </div>
                             </div>
                         </div>    
+                        <p:divider></p:divider>
+                        <div class="p-grid p-justify-start">
+                            <div class="p-col-8">
+                                <p:selectOneButton onchange=""
+                                                   value="#{beanGenerarCalendario.tipo}">
+                                    <p:ajax 
+                                        update="desde hasta" 
+                                        listener="#{beanGenerarCalendario.on_cambio()}" />
 
-
-                        <div class="p-field p-mr-2">
-
-                            <p:selectOneButton onchange=""
-                                               value="#{beanGenerarCalendario.tipo}">
-                                <p:ajax 
-                                    update="desde hasta" 
-                                    listener="#{beanGenerarCalendario.on_cambio()}" />
-
-                                <f:selectItem itemLabel="No vencidas" itemValue="0" />
-                                <f:selectItem itemLabel="Por fecha" itemValue="1" />
-                                <f:selectItem 
-                                    itemLabel="Vencida en 30 días o menos" 
-                                    itemValue="2" />
-                                <f:selectItem 
-                                    itemLabel="Vencida en 31 días a 60 días" 
-                                    itemValue="3" />
-                                <f:selectItem 
-                                    itemLabel="Vencida en 61 días a 90 días" 
-                                    itemValue="4" />
-                                <f:selectItem 
-                                    itemLabel="Vencidas 91+" 
-                                    itemValue="5" />
-
-
-                            </p:selectOneButton>
+                                    <f:selectItem itemLabel="No vencidas" itemValue="0" />
+                                    <f:selectItem itemLabel="Por fecha" itemValue="1" />
+                                    <f:selectItem 
+                                        itemLabel="Vencida en 30 días o menos" 
+                                        itemValue="2" />
+                                    <f:selectItem 
+                                        itemLabel="Vencida en 31 días a 60 días" 
+                                        itemValue="3" />
+                                    <f:selectItem 
+                                        itemLabel="Vencida en 61 días a 90 días" 
+                                        itemValue="4" />
+                                    <f:selectItem 
+                                        itemLabel="Vencidas 91+" 
+                                        itemValue="5" />
+                                </p:selectOneButton>
+                            </div>
 
                         </div>
-
-                        <div class="p-d-flex p-ai-start">
-                            <p:commandButton 
-                                value="Generar Reporte"
-                                styleClass="ui-button-success p-mr-2 p-mb-2"
-                                actionListener="#{beanGenerarCalendario.generar()}" />
-
-                            <p:commandButton 
-                                ajax="false"
-                                styleClass="ui-button-help p-mr-2 p-mb-2"
-                                actionListener="#{beanGenerarCalendario.exportpdf()}" 
-                                icon="pi pi-file-excel" 
-                                value="Exportar a PDF" />
-                        </div>
-
-
                     </div>
-
-
-
                     <div class="p-mt-3">
                         <p:dataTable 
                             id="tablafacturas"

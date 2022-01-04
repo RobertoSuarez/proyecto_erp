@@ -2,14 +2,15 @@ package com.registroUsuario.models;
 
 import java.util.Date;
 
-public class Usuario {
+public class Usuario{
+
     int idUsuario;
-String nombre;// limte 50
-String apellido;// limte 50
-String username;// limte 15
-String password;// limte 15
-Date fehcaCreacion;
-boolean  habilitado;
+    String nombre;// limte 50
+    String apellido;// limte 50
+    String username;// limte 15
+    String password;// limte 15
+    Date fehcaCreacion;
+    boolean habilitado;
 
     public Usuario() {
     }
@@ -79,6 +80,5 @@ boolean  habilitado;
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
-
 
 }
