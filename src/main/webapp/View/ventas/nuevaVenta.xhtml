@@ -7,43 +7,51 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
-
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+
+            <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                <p:submenu label="Nueva Venta">
+                    <p:menuitem value="Nueva venta"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/nuevaVenta.xhtml" 
+                                icon="pi pi-shopping-cart" />
+                    <p:menuitem value="Lista ventas"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/listaVentas.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Nueva proforma"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/nuevaProforma.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Lista proforma"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/listaProforma.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Regresar Inicio"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/Global/Main.xhtml" 
+                                icon="pi pi-file-o" /> 
+                </p:submenu>
+            </p:menubar>
+            
                 <h:form id="ventaForm">
                     <p:growl id="growl" showDetail="true" />
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
-                    <div style="font-weight: bold; background-color: #036fab; 
-                         color: white; text-align: center; height: 25px;">
-                        <h5>Nueva Venta</h5>
-                    </div>
-                    <br/>
+                    <br/><br/><br/><br/>
                     <div>
-                        <p:panel header="Cliente" style="width: 35%; display: inline-block;" >
-                            
-                            <h:panelGrid columns="2" width="50%" >
-                               
-                                <p:outputLabel value="Identificación: "/>
-                                <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
-                                
-                                <p:outputLabel value="Nombre: "/>
-                                <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
-                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm growl growl-sticky Pagos" />
-                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
-                            </h:panelGrid>
-                        </p:panel>
-
-
-                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 55%; display: inline-block; margin-left: 20px" >
-                            <h:panelGrid columns="3">
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 33%; margin-right: 20px; display: inline-block">
+                            <h:panelGrid columns="2">
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" type="number" />
-                                <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky"/>
-                                <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" />
+                                <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky" style="position: center"/>
+                                <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" style="position: center"/>
                             </h:panelGrid>
-                            <p:divider/>
-                            <h:panelGrid id="detalleProducto" columns="3" >
+                        </p:panel>
+                        
+                        <p:panel id="detalleProducto" header="Producto" style="width: 33%; margin-right: 20px; display: inline-block">
+                            <h:panelGrid columns="3" >
                                 <p:outputLabel value="Producto"/>
                                 <p:inputText id="NombreProducto" value="#{VentaMB.nombreProducto}" disabled="true" />
                                 <div/>
@@ -56,6 +64,19 @@
                                 <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
                             </h:panelGrid>
                         </p:panel>
+                        
+                        <p:panel header="Cliente" style="width: 33%; margin-right: 20px" >
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Identificación: "/>
+                                <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
+                                
+                                <p:outputLabel value="Nombre: "/>
+                                <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
+                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm growl growl-sticky Pagos" />
+                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
+                            </h:panelGrid>
+                        </p:panel>
+
                     </div>
 
 
@@ -112,7 +133,7 @@
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
-                    <p:button value="Generar Factura" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
+                    <p:button  value="Generar Factura" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
                     <div style="margin-top:50px" />
                 </h:form>
 

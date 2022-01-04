@@ -8,46 +8,72 @@
 
     <body>
 
-        <ui:composition template="./../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
-                <div style="font-weight: bold; background-color: #036fab; 
-                     color: white; text-align: center; height: 25px;">
-                    <h5>Listado de Ventas</h5>
-                </div>
 
-                <h:form>
-                    <p:commandButton value="Nueva Venta" action="/View/ventas/nuevaVenta.xhtml" style="margin-top: 10px" />
-                    <p:dataTable var="ListaVentas" value="#{ListaVentaMB.listaVentas}" id="ventasTB">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Lista Ventas">
+                        <p:menuitem value="Nueva venta"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/ventas/nuevaVenta.xhtml" 
+                                    icon="pi pi-shopping-cart" />
+                        <p:menuitem value="Lista ventas"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/ventas/listaVentas.xhtml" 
+                                    icon="pi pi-file-o" />
+                        <p:menuitem value="Nueva proforma"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/ventas/nuevaProforma.xhtml" 
+                                    icon="pi pi-file-o" />
+                        <p:menuitem value="Lista proforma"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/ventas/listaProforma.xhtml" 
+                                    icon="pi pi-file-o" />
+                        <p:menuitem value="Regresar Inicio"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/Global/Main.xhtml" 
+                                icon="pi pi-file-o" /> 
+                    </p:submenu>
+                </p:menubar>
 
-                        <p:column headerText="id Venta" width="10%">
-                            <h:outputText value="#{ListaVentas.idVenta}" />
-                        </p:column>
+                <h:form id="ventaForm">
+                    <p:growl id="growl" showDetail="true" />
+                    <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+                    <br/><br/><br/><br/>
+                    <div>
+                        <p:commandButton value="Nueva Venta" action="/View/ventas/nuevaVenta.xhtml" style="margin-top: 10px" />
+                        <p:dataTable var="ListaVentas" value="#{ListaVentaMB.listaVentas}" id="ventasTB">
 
-                        <p:column headerText="Factura">
-                            <h:outputText value="#{ListaVentas.factura}" />
-                        </p:column>
+                            <p:column headerText="id Venta" width="10%">
+                                <h:outputText value="#{ListaVentas.idVenta}" />
+                            </p:column>
 
-                        <p:column headerText="Cliente">
-                            <h:outputText value="#{ListaVentas.idCliente}" />
-                        </p:column>
+                            <p:column headerText="Factura">
+                                <h:outputText value="#{ListaVentas.factura}" />
+                            </p:column>
 
-                        <p:column headerText="Fecha">
-                            <h:outputText value="#{ListaVentas.fechaVenta}" />
-                        </p:column>
+                            <p:column headerText="Cliente">
+                                <h:outputText value="#{ListaVentas.idCliente}" />
+                            </p:column>
 
-                        <p:column headerText="Total">
-                            <h:outputText value="#{ListaVentas.totalFactura}" >
-                                <f:convertNumber pattern="#0.00" />
-                            </h:outputText>
-                        </p:column>
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{ListaVentas.fechaVenta}" />
+                            </p:column>
 
-                        <p:column headerText="Detalle">
-                            <p:commandButton value="Ver" onclick="PF('DetalleItem').show()" process="@this" 
-                                             actionListener="#{ListaVentaMB.CargarVenta(ListaVentas)}" update="datosFactura" />
-                        </p:column>
+                            <p:column headerText="Total">
+                                <h:outputText value="#{ListaVentas.totalFactura}" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
+                            </p:column>
 
-                    </p:dataTable>
+                            <p:column headerText="Detalle">
+                                <p:commandButton value="Ver" onclick="PF('DetalleItem').show()" process="@this" 
+                                                 actionListener="#{ListaVentaMB.CargarVenta(ListaVentas)}" update="datosFactura" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
                 </h:form>
 
 

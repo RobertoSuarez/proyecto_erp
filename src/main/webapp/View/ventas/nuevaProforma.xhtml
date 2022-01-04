@@ -8,18 +8,40 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                <p:submenu label="Nueva Proforma">
+                    <p:menuitem value="Nueva venta"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/nuevaVenta.xhtml" 
+                                icon="pi pi-shopping-cart" />
+                    <p:menuitem value="Lista ventas"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/listaVentas.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Nueva proforma"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/nuevaProforma.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Lista proforma"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/listaProforma.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Regresar Inicio"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/Global/Main.xhtml" 
+                                icon="pi pi-file-o" /> 
+                </p:submenu>
+            </p:menubar>
+                
                 <h:form id="ventaForm">
                     <p:growl id="growl" showDetail="true" />
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
-                    <div style="font-weight: bold; background-color: #036fab; 
-                         color: white; text-align: center; height: 25px;">
-                        <h2>Nueva Proforma</h2>
-                    </div>
-                    <br/>
+                    <br/><br/><br/><br/>
                     <div>
                         <p:panel header="Cliente" >
                             <h:panelGrid columns="4" width="50%" >
@@ -34,13 +56,13 @@
 
 
                         <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="widht: 45%; position: relative" >
-                            <h:panelGrid columns="3">
+                            <h:panelGrid columns="2">
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{ProformaMB.codigoProducto}" />
                                 <p:commandButton value="Buscar" actionListener="#{ProformaMB.BuscarProducto}" update="detalleProducto"/>
                                 <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" />
                             </h:panelGrid>
-                            <p:divider/>
+                            <p:divider align="vertical"/>
                             <h:panelGrid id="detalleProducto" columns="3" >
                                 <p:outputLabel value="Producto"/>
                                 <p:inputText id="NombreProducto" value="#{ProformaMB.nombreProducto}" disabled="true" />

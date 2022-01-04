@@ -1,0 +1,24 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+        <p:menuitem value="Inicio" url="#"/>
+        <p:menuitem value="Asientos" url="#"/>
+        <p:menuitem value="Diarios" url="#"/>
+        <p:submenu label="Plan de cuentas">
+            <p:menuitem value="Grupo" url="#" icon="pi pi-list" />
+            <p:menuitem value="Subgrupos" url="#" icon="pi pi-list" />
+            <p:menuitem value="Cuentas" url="#" icon="pi pi-list" />
+            <p:menuitem value="Subcuentas" url="#" icon="pi pi-list" />
+        </p:submenu>
+        <p:submenu label="Informes">
+            <p:menuitem value="Balance General" url="#" icon="pi pi-book" />
+            <p:menuitem value="Libro Mayor" url="#" icon="pi pi-bars" />
+        </p:submenu>
+    </p:menubar>
+
+</ui:composition>

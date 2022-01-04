@@ -1,0 +1,267 @@
+[33mcommit 3aac2081850bfc869ebe816de14735c77ddeb51f[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 249c4a4 e5a2d22
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Jan 2 06:27:02 2022 -0500
+
+    Merge branch 'main' of https://github.com/RobertoSuarez/proyecto_erp
+
+[33mcommit 249c4a4748a8772eddf93ccc72f56b262247c4a0[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Jan 2 06:26:56 2022 -0500
+
+    Inicio de la creacion deL MODELO DAO Y CONTROLADOR de registroUsuario
+    
+    Se crearon las respectivas clases conforme a la BD
+
+[33mcommit e5a2d227279f85c0cd5fd609b1bdc8ede197b608[m
+Author: Alejandro <alejandrofulljuegos@gmail.com>
+Date:   Sat Jan 1 23:47:52 2022 -0500
+
+    Diseño en cuentas por pagar
+    
+    correciones
+
+[33mcommit 46690761bc65b60ef6069b73cd55a3ce2ad4d3a9[m
+Author: Alejandro <alejandrofulljuegos@gmail.com>
+Date:   Sat Jan 1 20:51:12 2022 -0500
+
+    Cambio en el diseño cuentas por pagar
+    
+    primeros cambios
+
+[33mcommit 327fdfb8a4f5cfc9b1211844a79e8850f8ea6331[m
+Author: AlexHida <alexhidalgocarrera@gmail.com>
+Date:   Fri Dec 31 00:19:29 2021 -0500
+
+    Update formulaProduccion.xhtml
+
+[33mcommit 44c63ff7786bc16129c40da5be0fddd015b604be[m
+Author: AlexHida <alexhidalgocarrera@gmail.com>
+Date:   Thu Dec 30 14:01:41 2021 -0500
+
+    Update ordenproduccion.xhtml
+
+[33mcommit 4c7803d02cc822a5ef2cb3c98729f61eef40f4c9[m
+Author: Jimlop04 <jimmy.lopez2017@uteq.edu.ec>
+Date:   Thu Dec 30 13:58:34 2021 -0500
+
+    Delete ruta_produccion.xhtml
+
+[33mcommit e19cb6cdc0bf4587e779c1edb41b7df4920efed6[m
+Author: Jimlop04 <jimmy.lopez2017@uteq.edu.ec>
+Date:   Thu Dec 30 13:58:25 2021 -0500
+
+    Delete formula.xhtml
+
+[33mcommit 2ad1e39f501533678a946de7611ed55278db9ce5[m
+Author: Jimlop04 <jimmy.lopez2017@uteq.edu.ec>
+Date:   Thu Dec 30 13:58:07 2021 -0500
+
+    Create procesoProduccion.xhtml
+
+[33mcommit 11a63ff2be299fd84cbf469d1d8b3d1db870a4fc[m
+Author: Jimlop04 <jimmy.lopez2017@uteq.edu.ec>
+Date:   Thu Dec 30 13:57:52 2021 -0500
+
+    Create formulaProduccion.xhtml
+
+[33mcommit 800c69b5563f79d3d17b7a259a28de5c53094be2[m
+Author: Jimlop04 <jimmy.lopez2017@uteq.edu.ec>
+Date:   Thu Dec 30 13:57:10 2021 -0500
+
+    Update Main.xhtml
+    
+    Agregando Orden Producción
+
+[33mcommit 774d68bb03f3985677e61c0bd1ee1f27e6818ea7[m
+Author: AlexHida <alexhidalgocarrera@gmail.com>
+Date:   Thu Dec 30 13:51:20 2021 -0500
+
+    Update Main.xhtml
+    
+    Cambiando Ruta del main
+
+[33mcommit fbbde6f770aaff4831ebf46d8129dcc70de86966[m
+Author: AlexHida <alexhidalgocarrera@gmail.com>
+Date:   Thu Dec 30 13:50:48 2021 -0500
+
+    Create ordenproduccion.xhtml
+    
+    Agregando Orden de Producción
+
+[33mcommit dd50da1b40b3c1b4beb9329a01cd16a41ba00e39[m
+Author: Derian2426 <victor.chun2017@uteq.edu.ec>
+Date:   Thu Dec 30 13:31:48 2021 -0500
+
+    Update Main.xhtml
+    
+    enlace produccion
+
+[33mcommit d618415f39d639319c17a9cb0823e6577d93ec93[m
+Author: AlexHida <alexhidalgocarrera@gmail.com>
+Date:   Thu Dec 30 12:51:43 2021 -0500
+
+    Create formula.xhtml
+
+[33mcommit 83bbc7ab027599d7971b51f8893e57a2b83535c3[m
+Author: Derian2426 <victor.chun2017@uteq.edu.ec>
+Date:   Wed Dec 29 20:58:04 2021 -0500
+
+    Create ruta_produccion.xhtml
+    
+    carpeta produccion
+
+[33mcommit 176992f9a4b6309dec2c5514e7a9d3f35d43246d[m
+Author: neoshock <pideun@gmail.com>
+Date:   Wed Dec 29 20:00:38 2021 -0500
+
+    Cambio de header y diseño de contabilidad asientos.
+
+[33mcommit 67dbd8e1e8899feac126d35f60490c278cbb2d9c[m
+Author: neoshock <pideun@gmail.com>
+Date:   Wed Dec 29 19:15:40 2021 -0500
+
+    Cambio de header y diseño de contabilidad asientos.
+
+[33mcommit 8c4764f6799e0b5a966ccb2f81173d1e1b3fb4c0[m
+Merge: d4002af a880965
+Author: DianaAvilesCh <diana.aviles2017@uteq.edu.ec>
+Date:   Sun Dec 26 23:31:34 2021 -0500
+
+    Merge branch 'main' of https://github.com/RobertoSuarez/proyecto_erp
+
+[33mcommit d4002aff8be538f9bf6b6a48d796d0a61f442071[m
+Author: DianaAvilesCh <diana.aviles2017@uteq.edu.ec>
+Date:   Sun Dec 26 23:31:25 2021 -0500
+
+    Pagina de Inicio
+
+[33mcommit a8809651872e7ba8c49a9fa65f7da0bd1e4b5139[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Dec 26 17:01:55 2021 -0500
+
+    Vistas terminadas
+    
+    Se implementaron las vistas correspondientes al login
+
+[33mcommit 7af6b8f4409f3fc98d38138711d8d26bed465cfd[m
+Merge: e3aeb1e 29e6465
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Dec 26 14:15:06 2021 -0500
+
+    hay conflicto configuration.xml
+    
+    :(
+
+[33mcommit e3aeb1e4bdb9829efb478050cf45ebca84305dd5[m
+Merge: 46c6bd2 0e708f2
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Dec 26 14:14:11 2021 -0500
+
+    Merge branch 'main' of https://github.com/RobertoSuarez/proyecto_erp
+
+[33mcommit 29e646520ea53b404a3368287de1a6b06cc8bedb[m
+Author: DianaAvilesCh <diana.aviles2017@uteq.edu.ec>
+Date:   Sun Dec 26 14:11:36 2021 -0500
+
+    home and main
+    
+    Pagina de inicio
+
+[33mcommit d1fecac174c6477f24dcee6b04333ee790f93d28[m
+Author: DianaAvilesCh <diana.aviles2017@uteq.edu.ec>
+Date:   Sun Dec 26 14:05:35 2021 -0500
+
+    Revert "home & main"
+    
+    This reverts commit 0e708f2fd49bac4f9a8c6e659ece6bc071009e84.
+
+[33mcommit 46c6bd26e0a2ece5b6a6633cca7703447d658742[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Dec 26 13:59:52 2021 -0500
+
+    View login y registro
+    
+    Se implemento la vista del login y registro de usuario correspondiente
+
+[33mcommit 0e708f2fd49bac4f9a8c6e659ece6bc071009e84[m
+Author: DianaAvilesCh <diana.aviles2017@uteq.edu.ec>
+Date:   Sun Dec 26 13:49:22 2021 -0500
+
+    home & main
+    
+    Pagina principal
+
+[33mcommit d30ce9015efc1325ac74f33f32d998fe65844bc1[m
+Author: neoshock <pideun@gmail.com>
+Date:   Sun Dec 19 21:47:49 2021 -0500
+
+    Plantilla Manhatan Implementada.
+
+[33mcommit 4e6d274ba04818857465a39ef4d0e5f9a678e758[m
+Author: neoshock <pideun@gmail.com>
+Date:   Tue Dec 14 09:07:43 2021 -0500
+
+    Fix
+
+[33mcommit 7806b5ad8ffae3d154cd69a0240cdc57764c60a4[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Sep 12 23:44:52 2021 -0500
+
+    java doc sobrantes
+
+[33mcommit ab7dd84cf576b2a3668bb3ae5f1a9452caa0dba5[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Sep 12 23:39:25 2021 -0500
+
+    Java doc
+
+[33mcommit f02d59c2cf7e45644d3e12ea58ee11151ddfb291[m
+Merge: e0c2271 e809d43
+Author: Celso Ricardo Turriago Saltos <celso.turriago2017@uteq.edu.ec>
+Date:   Sun Sep 12 23:32:58 2021 -0500
+
+    Merge branch 'main' of https://github.com/RobertoSuarez/proyecto_erp into main
+
+[33mcommit e0c2271d2337d6edb9c38e4f6f8dfba62a760066[m
+Author: Celso Ricardo Turriago Saltos <celso.turriago2017@uteq.edu.ec>
+Date:   Sun Sep 12 23:32:12 2021 -0500
+
+    Carrigiendo el boton Puesto laboral
+    
+    Se corrigio el error que no cargaba la vista puesto laboral al precionar el boton puesto laboral de la vista emplado
+
+[33mcommit e809d43379286116ed55b7b6b0dfd67b383aa207[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Sep 12 23:26:43 2021 -0500
+
+    retroalimentacion msj
+
+[33mcommit c9ec4faa3a4fe72753cb76af0cf1b8e9bc73add2[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Sep 12 23:03:57 2021 -0500
+
+    conexion
+
+[33mcommit 1d4162035366d2697be70bb63f1a87fdfe2f85fe[m
+Author: eguarangao <69706207+eguarangao@users.noreply.github.com>
+Date:   Sun Sep 12 23:00:42 2021 -0500
+
+    factura
+
+[33mcommit 7d2c939b33defebbd8c0eeb9fed5550aa0d0b5a2[m
+Author: Celso Ricardo Turriago Saltos <celso.turriago2017@uteq.edu.ec>
+Date:   Sun Sep 12 22:29:51 2021 -0500
+
+    haciendo que se quiten elcolor rojo caundo ya se ha ingresado un valor
+
+[33mcommit 44af3ec9e88ad0004a914cc5f7433af31484a206[m
+Author: Celso Ricardo Turriago Saltos <celso.turriago2017@uteq.edu.ec>
+Date:   Sun Sep 12 22:17:19 2021 -0500
+
+    Agregando el firter a la vista
+    
+    se agrego la lista filtere para tratar de solucionar el ordenamiento
+
+[33mcommit 9ea47338eae0cf0b612133340737f63f74132813[m
+Author: Celso R
