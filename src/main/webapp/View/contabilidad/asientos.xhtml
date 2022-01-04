@@ -10,21 +10,7 @@
     <body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="#"/>
-                    <p:menuitem value="Asientos" url="#"/>
-                    <p:menuitem value="Diarios" url="#"/>
-                    <p:submenu label="Plan de cuentas">
-                        <p:menuitem value="Grupo" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Subgrupos" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Cuentas" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Subcuentas" url="#" icon="pi pi-list" />
-                    </p:submenu>
-                    <p:submenu label="Informes">
-                        <p:menuitem value="Balance General" url="#" icon="pi pi-book" />
-                        <p:menuitem value="Libro Mayor" url="#" icon="pi pi-bars" />
-                    </p:submenu>
-                </p:menubar>
+                <ui:include src="./subheadercontabilidad.xhtml"/>
                 <h:form id="form" style="margin-top: 4%;">
                     <p:growl id="msgs" showDetail="true"/>
                     <div class="card">

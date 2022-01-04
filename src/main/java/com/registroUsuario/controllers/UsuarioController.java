@@ -19,7 +19,6 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.ws.rs.core.Context;
-import org.eclipse.jetty.util.log.Log;
 import org.primefaces.PrimeFaces;
 
 @Named(value = "usuarioMB")
