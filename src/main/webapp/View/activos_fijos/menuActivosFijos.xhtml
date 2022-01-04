@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Inicio" url="#"/>
+                    <p:menuitem value="Asientos" url="#"/>
+                    <p:menuitem value="Diarios" url="#"/>
+                    <p:submenu label="Plan de cuentas">
+                        <p:menuitem value="Grupo" url="#" icon="pi pi-list" />
+                        <p:menuitem value="Subgrupos" url="#" icon="pi pi-list" />
+                        <p:menuitem value="Cuentas" url="#" icon="pi pi-list" />
+                        <p:menuitem value="Subcuentas" url="#" icon="pi pi-list" />
+                    </p:submenu>
+                    <p:submenu label="Informes">
+                        <p:menuitem value="Balance General" url="#" icon="pi pi-book" />
+                        <p:menuitem value="Libro Mayor" url="#" icon="pi pi-bars" />
+                    </p:submenu>
+                </p:menubar>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

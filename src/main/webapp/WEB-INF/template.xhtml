@@ -14,6 +14,7 @@
             <meta name="apple-mobile-web-app-capable" content="yes"/>
         </f:facet>
         <title><ui:insert name="title">PrimeFaces Manhattan</ui:insert></title>
+        <!-- Los siguientes archivos no son reconocidos -->
         <h:outputScript name="js/layout.js" library="manhattan-layout"/>
         <h:outputScript name="js/prism.js" library="manhattan-layout"/>
         <ui:insert name="head"/>
@@ -23,20 +24,15 @@
         <div class="layout-wrapper #{guestPreferences.layoutMode} layout-#{guestPreferences.menuColor}">
             <div class="layout-main">
                 <ui:include src="./HeaderInicio.xhtml"/>
-
                 <div class="layout-content">
                     <ui:insert name="content">
                     </ui:insert>
                 </div>
-
                 <ui:include src="./footer.xhtml"/>
-
+                
                 <div class="layout-main-mask"></div>
             </div>
 
-            <ui:include src="./config.xhtml"/>
-            <ui:include src="./rightpanel.xhtml"/>
-            <ui:include src="./sidebar.xhtml"/>
         </div>
 
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
@@ -51,7 +47,6 @@
 
         <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
         <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
-        <h:outputStylesheet name="css/demo.css" library="demo"/>
         <h:outputStylesheet name="css/layout-deeppurple-teal.css" library="manhattan-layout"/>
     </h:body>
 

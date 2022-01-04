@@ -8,9 +8,10 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <body>
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                <h:form id="form">
+                <ui:include src="./subheadercontabilidad.xhtml"/>
+                <h:form id="form" style="margin-top: 4%;">
                     <p:growl id="msgs" showDetail="true"/>
                     <div class="card">
                         <p:toolbar>
@@ -23,27 +24,26 @@
                             </p:toolbarGroup>
                         </p:toolbar>
                         <p:dialog header="Asiento Contable" showEffect="fade" modal="true"
-                                  widgetVar="detalleAsiento" responsive="true" width="75%"
-                                  draggable="false" height="500"> 
+                                  widgetVar="detalleAsiento" responsive="true" width="80%"
+                                  draggable="false" height="550"> 
                             <p:outputPanel id="manage-asiento" class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
-                                    <div class="row justify-content-around">
-                                        <div class="col-md-5 col-xs-12 p-1">
-                                            <div class="row">
-                                                <div class="col-md-12 mb-2">
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Numero de Asiento:"></p:outputLabel>
                                                     <p:inputText value="#{asientoManagedBean.currentAsiento.numero}" 
                                                                  placeholder="Numero de Asiento" readonly="true"></p:inputText>
                                                 </div>
-                                                <div class="col-md-12 mb-2">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Documento: *"></p:outputLabel>
-
                                                     <p:inputText disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
                                                                  value="#{asientoManagedBean.currentAsiento.documento}"
                                                                  maxlength="24"
                                                                  placeholder="Referencia"></p:inputText>
                                                 </div>
-                                                <div class="col-md-12 mb-1">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Detalle: *"></p:outputLabel>
                                                     <p:inputTextarea disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
                                                                      maxlength="250"
@@ -53,23 +53,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-5 p-1">
-                                            <div class="row">
-                                                <div class="col-md-12 mb-2">
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Fecha Creacion: *"></p:outputLabel>
                                                     <p:calendar value="#{asientoManagedBean.currentAsiento.fechaCreacion}" 
                                                                 disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
                                                         <p:ajax event="dateSelect" listener="#{asientoManagedBean.onFechaCreacionSelected}"/>
                                                     </p:calendar>
                                                 </div>
-                                                <div class="col-md-12 mb-2">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Fecha Cierre: *"></p:outputLabel>
                                                     <p:calendar value="#{asientoManagedBean.currentAsiento.fechaCierre}" 
                                                                 disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
                                                         <p:ajax event="dateSelect" listener="#{asientoManagedBean.onFechaCierreSelected}"/>
                                                     </p:calendar>
                                                 </div>
-                                                <div class="col-md-12 mb-2">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Diario:"></p:outputLabel>
                                                     <p:selectOneMenu id="diario" value="#{asientoManagedBean.currentAsiento.idDiario}" editable="false" 
                                                                      disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
@@ -79,7 +79,7 @@
                                                                        itemValue="#{diario.idDiario}"></f:selectItems>
                                                     </p:selectOneMenu>
                                                 </div>
-                                                <div class="col-md-12 mt-2">
+                                                <div class="p-col-12">
                                                     <p:outputLabel value="Estado: *"></p:outputLabel>
                                                     <p:selectOneMenu id="estado" value="#{asientoManagedBean.currentAsiento.estado}" editable="false" 
                                                                      disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
@@ -90,109 +90,111 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3 mb-2">
-                                            <p:commandButton value="Agregar Fila" process="@this"
-                                                             disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
-                                                             oncomplete="PF('dtMovimientos').addRow();"
-                                                             actionListener="#{asientoManagedBean.addNewFila}"
-                                                             icon="pi pi-plus"/>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <p:dataTable id="dtMovimientos" var="movimiento" editable="true"
-                                                         widgetVar="dtMovimientos" reflow="true"
-                                                         editInitEvent="dblclick" editMode="cell"
-                                                         value="#{asientoManagedBean.currentAsiento.movimientos}">
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Agregar Fila" process="@this"
+                                                                     disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
+                                                                     oncomplete="PF('dtMovimientos').addRow();"
+                                                                     actionListener="#{asientoManagedBean.addNewFila}"
+                                                                     icon="pi pi-plus"/>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:dataTable id="dtMovimientos" var="movimiento" editable="true"
+                                                                 widgetVar="dtMovimientos" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="#{asientoManagedBean.currentAsiento.movimientos}">
 
-                                                <p:ajax event="cellEdit" process="@this" update=":form:dtMovimientos"/>
+                                                        <p:ajax event="cellEdit" process="@this" update=":form:dtMovimientos"/>
 
-                                                <p:column headerText="Cuenta Contable">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output">
-                                                            <h:outputText value="#{asientoManagedBean.nombreCuenta(movimiento)}"></h:outputText>
-                                                        </f:facet>
-                                                        <f:facet name="input"> 
-                                                            <p:selectOneMenu id="cuentasContables" value="#{movimiento.idSubcuenta}" filter="true" filterMatchMode="contains">
-                                                                <p:ajax update=":form:dtMovimientos"/>
-                                                                <f:selectItem itemLabel="Seleccione una sub-cuenta" itemValue="0" noSelectionOption="true"/>
-                                                                <f:selectItems value="#{asientoManagedBean.subCuentas}" var="subCuenta" 
-                                                                               itemLabel="#{subCuenta.codigo} #{subCuenta.nombre}" 
-                                                                               itemValue="#{subCuenta.id}"></f:selectItems>
-                                                            </p:selectOneMenu>
-                                                        </f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
-                                                <p:column headerText="Detalle">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output">
-                                                            <h:outputText value="#{movimiento.tipoMovimiento}"></h:outputText>
-                                                        </f:facet>
-                                                        <f:facet name="input"> 
-                                                            <p:inputText required="true" value="#{movimiento.tipoMovimiento}" maxlength="30">
-                                                                <p:ajax event="blur" update=":form:dtMovimientos" process="@this"/>
-                                                            </p:inputText>
-                                                        </f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
+                                                        <p:column headerText="Cuenta Contable">
+                                                            <p:cellEditor>
+                                                                <f:facet name="output">
+                                                                    <h:outputText value="#{asientoManagedBean.nombreCuenta(movimiento)}"></h:outputText>
+                                                                </f:facet>
+                                                                <f:facet name="input"> 
+                                                                    <p:selectOneMenu id="cuentasContables" value="#{movimiento.idSubcuenta}" filter="true" filterMatchMode="contains">
+                                                                        <p:ajax update=":form:dtMovimientos"/>
+                                                                        <f:selectItem itemLabel="Seleccione una sub-cuenta" itemValue="0" noSelectionOption="true"/>
+                                                                        <f:selectItems value="#{asientoManagedBean.subCuentas}" var="subCuenta" 
+                                                                                       itemLabel="#{subCuenta.codigo} #{subCuenta.nombre}" 
+                                                                                       itemValue="#{subCuenta.id}"></f:selectItems>
+                                                                    </p:selectOneMenu>
+                                                                </f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
+                                                        <p:column headerText="Detalle">
+                                                            <p:cellEditor>
+                                                                <f:facet name="output">
+                                                                    <h:outputText value="#{movimiento.tipoMovimiento}"></h:outputText>
+                                                                </f:facet>
+                                                                <f:facet name="input"> 
+                                                                    <p:inputText required="true" value="#{movimiento.tipoMovimiento}" maxlength="30">
+                                                                        <p:ajax event="blur" update=":form:dtMovimientos" process="@this"/>
+                                                                    </p:inputText>
+                                                                </f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
 
-                                                <p:column headerText="Debe">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output">
-                                                            <h:outputText value="#{movimiento.debe}"></h:outputText>
-                                                        </f:facet>
-                                                        <f:facet name="input"> 
-                                                            <p:inputNumber value="#{movimiento.debe}">
-                                                                <p:ajax event="blur" update=":form:dtMovimientos" process="@this" listener="#{asientoManagedBean.updateTotalDebe}"/>
-                                                            </p:inputNumber>
-                                                        </f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
+                                                        <p:column headerText="Debe">
+                                                            <p:cellEditor>
+                                                                <f:facet name="output">
+                                                                    <h:outputText value="#{movimiento.debe}"></h:outputText>
+                                                                </f:facet>
+                                                                <f:facet name="input"> 
+                                                                    <p:inputNumber value="#{movimiento.debe}">
+                                                                        <p:ajax event="blur" update=":form:dtMovimientos" process="@this" listener="#{asientoManagedBean.updateTotalDebe}"/>
+                                                                    </p:inputNumber>
+                                                                </f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
 
-                                                <p:column headerText="Haber">
-                                                    <p:cellEditor>
-                                                        <f:facet name="output">
-                                                            <h:outputText value="#{movimiento.haber}"></h:outputText>
-                                                        </f:facet>
-                                                        <f:facet name="input"> 
-                                                            <p:inputNumber value="#{movimiento.haber}">
-                                                                <p:ajax event="blur" update=":form:dtMovimientos" listener="#{asientoManagedBean.updateTotalHaber}"/>
-                                                            </p:inputNumber>
-                                                        </f:facet>
-                                                    </p:cellEditor>
-                                                </p:column>
+                                                        <p:column headerText="Haber">
+                                                            <p:cellEditor>
+                                                                <f:facet name="output">
+                                                                    <h:outputText value="#{movimiento.haber}"></h:outputText>
+                                                                </f:facet>
+                                                                <f:facet name="input"> 
+                                                                    <p:inputNumber value="#{movimiento.haber}">
+                                                                        <p:ajax event="blur" update=":form:dtMovimientos" listener="#{asientoManagedBean.updateTotalHaber}"/>
+                                                                    </p:inputNumber>
+                                                                </f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
 
-                                                <p:column rendered="#{asientoManagedBean.currentAsiento.estado != 'cerrado'}" width="50">
-                                                    <p:commandButton class="ui-button-danger rounded-button" update="dtMovimientos" 
-                                                                     icon="pi pi-trash" oncomplete="#{asientoManagedBean.deleteFila()}">
-                                                        <f:setPropertyActionListener value="#{movimiento}" target="#{asientoManagedBean.selectedMovimiento}"/>
-                                                    </p:commandButton>
-                                                </p:column>
+                                                        <p:column rendered="#{asientoManagedBean.currentAsiento.estado != 'cerrado'}" width="50">
+                                                            <p:commandButton class="ui-button-danger rounded-button" update="dtMovimientos" 
+                                                                             icon="pi pi-trash" oncomplete="#{asientoManagedBean.deleteFila()}">
+                                                                <f:setPropertyActionListener value="#{movimiento}" target="#{asientoManagedBean.selectedMovimiento}"/>
+                                                            </p:commandButton>
+                                                        </p:column>
 
-                                                <f:facet name="footer">
-                                                    <div class="row justify-content-end" style="width: 90%">
-                                                        <div class="col-md-3">
-                                                            <p:inputNumber id="tDebe" label="Total Debe" value="#{asientoManagedBean.totalDebe}" readonly="true"></p:inputNumber>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <p:inputNumber id="tHaber" label="Total Haber" value="#{asientoManagedBean.totalHaber}" readonly="true"></p:inputNumber>
-                                                        </div>
-                                                    </div>
-                                                </f:facet>
-                                            </p:dataTable>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-end mt-3">
-                                        <div class="col-md-2">
-                                            <p:commandButton value="Guardar" actionListener="#{asientoManagedBean.newAsientoContable}" 
-                                                             icon="pi pi-check" update=":form:manage-asiento, :form:dtAsientos, msgs"
-                                                             disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
-                                                             process="manage-asiento @this" styleClass="ui-button-success"/>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <p:commandButton value="Cerrar" icon="pi pi-times"
-                                                             styleClass="ui-button-danger" process="@this"
-                                                             oncomplete="PF('detalleAsiento').hide()"/>
+                                                        <f:facet name="footer">
+                                                            <div class="p-grid p-justify-end">
+                                                                <div class="p-col-2" style="margin-right: 6%;">
+                                                                    <p:inputNumber id="tDebe" label="Total Debe" value="#{asientoManagedBean.totalDebe}" readonly="true"></p:inputNumber>
+                                                                </div>
+                                                                <div class="p-col-2" style="margin-right: 14%;">
+                                                                    <p:inputNumber id="tHaber" label="Total Haber" value="#{asientoManagedBean.totalHaber}" readonly="true"></p:inputNumber>
+                                                                </div>
+                                                            </div>
+                                                        </f:facet>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar" actionListener="#{asientoManagedBean.newAsientoContable}" 
+                                                                     icon="pi pi-check" update=":form:manage-asiento, :form:dtAsientos, msgs"
+                                                                     disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
+                                                                     process="manage-asiento @this" styleClass="ui-button-success"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('detalleAsiento').hide()"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </p:outputPanel>
@@ -206,7 +208,6 @@
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('editarAsiento').hide()"/>
                         </p:confirmDialog>
-                        <p:button value="Primary" styleClass="p-mr-2 p-mb-2"/>
                         <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento"
                                      value="#{asientoManagedBean.asientos}" reflow="true" paginator="true"
                                      selection="#{asientoManagedBean.currentAsiento}"
@@ -249,16 +250,9 @@
                             </p:column>
 
                             <p:column headerText="Estado" sortBy="#{asiento.estado}">
-                                <p:chip rendered="#{asiento.estado eq 'publicado'}" styleClass="p-mr-2 custom-chip" class="bg-success">
-                                    <h:outputText class="text-light" value="#{asiento.estado}"/>
-                                </p:chip>
-                                <p:chip rendered="#{asiento.estado eq 'pendiente'}" styleClass="p-mr-2 custom-chip" class="bg-warning">
-                                    <h:outputText class="text-light" value="#{asiento.estado}"/>
-                                </p:chip>
-                                <p:chip rendered="#{asiento.estado eq 'cerrado'}" styleClass="p-mr-2 custom-chip" class="bg-danger">
-                                    <h:outputText class="text-light" value="#{asiento.estado}"/>
-                                </p:chip>
-                                <p:skeleton rendered="#{asientoManagedBean.asientos == null}"></p:skeleton>
+                                <p:tag severity="success" value="#{asiento.estado}" rendered="#{asiento.estado eq 'publicado'}"/>
+                                <p:tag severity="warning" value="#{asiento.estado}" rendered="#{asiento.estado eq 'pendiente'}"/>
+                                <p:tag severity="danger" value="#{asiento.estado}" rendered="#{asiento.estado eq 'cerrado'}"/>
                             </p:column>
                             <p:column headerText="Acciones">
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-asiento"

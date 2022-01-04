@@ -3,11 +3,11 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/InicioTemplate.xhtml">
+                template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Home</ui:define>
 
-    <ui:define name="content">
+    <ui:define name="content" >
 
         <div id="principal">
             <div class="p-grid" >
@@ -161,6 +161,19 @@
                 </div>
             </div>
         </div>
+        <div class="Fondo">
+
+            <div id="header">
+                <div id="Contacto">
+                    <h2>Contacto</h2>
+                    <P>Email:</P>
+                    <P>Ejemplo@uteq.edu.ec</P>
+                    <P>Telefono:</P>
+                    <P>+593 99 999 9999 </P>
+                </div>
+            </div>
+        </div>
+
         <h:outputStylesheet name="home.css" library="css"/>
     </ui:define>
 </ui:composition>

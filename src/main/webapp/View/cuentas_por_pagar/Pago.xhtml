@@ -8,9 +8,24 @@
 
     <h:body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
+                    <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
+    
+                    <p:submenu label="Pagos">
+                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" url="#" icon="pi pi-list" />
+
+                    </p:submenu>
+                    <p:submenu label="Reportes">
+                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+      
+                    </p:submenu>
+                    <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
+                </p:menubar>
                 <!--                                Filtra la información de los abono realizados -->
                 <f:event type="preRenderView" listener="#{abonoProveedorMB.show_payment()}"/>
                 <f:event type="preRenderView" listener="#{abonoProveedorMB.show_Supplier()}"/>

@@ -5,15 +5,21 @@
 #second {
     margin-top: 2rem
 }
-h1, h2{color: #5F2C82}
+h1, h2{
+    color: #5F2C82
+}
 .crmargin {
     margin: 0.5rem
 }
 
+.container {
+    width: 95%;
+    margin: auto;
+}
 
 
 body{
-background:#eee;    
+    background:#eee;
 }
 
 .card-box {
@@ -95,4 +101,19 @@ background:#eee;
 }
 .bg-yellow {
     background-color: #D85CE6 !important;
+}
+
+.Fondo #header {
+    background-color: #633ea5;
+    background: url("#{resource['manhattan-layout:images/landing/manhattan-silhouette.svg']}") no-repeat #633ea5;
+    background-position: center bottom;
+    height: 300px;
+}
+.Fondo #Contacto{
+    padding-top: 2%;
+    padding-left: 10%;
+    color: #ffffff;
+}
+.Fondo #Contacto h2{
+    color: #ffffff;
 }

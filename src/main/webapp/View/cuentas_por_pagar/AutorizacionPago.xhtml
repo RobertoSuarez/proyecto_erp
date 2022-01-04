@@ -8,12 +8,27 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
+                    <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
+
+                    <p:submenu label="Pagos">
+                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago"  icon="pi pi-list" />
+
+                    </p:submenu>
+                    <p:submenu label="Reportes">
+                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+
+                    </p:submenu>
+                    <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
+                </p:menubar>
                 <h:form id="form">
                     <p:growl id="messages" showDetail="true"/>
-                    <h1 style="text-align: center; color: black">Autorizar Pagos</h1>
+                    <h1 style="text-align: center; color: black; margin-top: 4%">Autorizar Pagos</h1>
                     <p:dataTable id="dt-facturas" value="#{autorizarPagorMB.listarDatos}" 
                                  var="factura"  
                                  reflow="true" rows="5" paginator="true"
@@ -129,7 +144,7 @@
                                 <p:column headerText="Detalle">
                                     <h:outputText value="#{detalle.detalle}"/>
                                 </p:column>
-                                
+
                                 <p:column headerText="Cuenta contable">
                                     <h:outputText value="#{detalle.cuenta}"/>
                                 </p:column>
