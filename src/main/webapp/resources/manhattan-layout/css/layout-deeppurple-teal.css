@@ -528,7 +528,7 @@ a {
   background: #52b0ad;
 }
 
-@media (min-width: 1281px) {
+@media (min-width: 600px) {
   .layout-wrapper.layout-slim .layout-sidebar, .layout-wrapper.layout-static .layout-sidebar, .layout-wrapper.layout-overlay .layout-sidebar, .layout-wrapper.layout-toggle .layout-sidebar {
     width: 270px;
     height: 100%;
@@ -1644,7 +1644,7 @@ a {
   top: 4px;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 600px) {
   .layout-wrapper .layout-sidebar {
     left: -270px;
     width: 270px;
