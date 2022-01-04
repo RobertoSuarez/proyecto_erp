@@ -15,8 +15,8 @@
                     <p:growl id="growl" showDetail="true" />
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
-                    <div style="font-weight: bold; background-color: #036fab; 
-                         color: white; text-align: center; height: 25px;">
+                    <div style="font-weight: bold; 
+                         color: black; text-align: center; height: 25px;">
                         <h2>Nueva Proforma</h2>
                     </div>
                     <br/>
@@ -34,13 +34,13 @@
 
 
                         <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="widht: 45%; position: relative" >
-                            <h:panelGrid columns="3">
+                            <h:panelGrid columns="2">
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{ProformaMB.codigoProducto}" />
                                 <p:commandButton value="Buscar" actionListener="#{ProformaMB.BuscarProducto}" update="detalleProducto"/>
                                 <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" />
                             </h:panelGrid>
-                            <p:divider/>
+                            <p:divider align="vertical"/>
                             <h:panelGrid id="detalleProducto" columns="3" >
                                 <p:outputLabel value="Producto"/>
                                 <p:inputText id="NombreProducto" value="#{ProformaMB.nombreProducto}" disabled="true" />
