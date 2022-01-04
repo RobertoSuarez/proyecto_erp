@@ -37,7 +37,7 @@
 
                     <br/><br/><br/><br/>
                     <div>
-                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 33%; display: inline-grid; margin-left: 20px; position: 78px" >
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 33%; margin-right: 20px; display: inline-block">
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" type="number" />
@@ -46,7 +46,7 @@
                             </h:panelGrid>
                         </p:panel>
                         
-                        <p:panel id="detalleProducto" header="Producto" style="width: 33%; display: inline-grid; margin-right: 20px">
+                        <p:panel id="detalleProducto" header="Producto" style="width: 33%; margin-right: 20px; display: inline-block">
                             <h:panelGrid columns="3" >
                                 <p:outputLabel value="Producto"/>
                                 <p:inputText id="NombreProducto" value="#{VentaMB.nombreProducto}" disabled="true" />
@@ -61,7 +61,7 @@
                             </h:panelGrid>
                         </p:panel>
                         
-                        <p:panel header="Cliente" style="width: 33%; position: relative" >
+                        <p:panel header="Cliente" style="width: 33%; margin-right: 20px" >
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Identificación: "/>
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
@@ -129,7 +129,7 @@
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
-                    <p:button value="Generar Factura" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
+                    <p:button  value="Generar Factura" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
                     <div style="margin-top:50px" />
                 </h:form>
 
