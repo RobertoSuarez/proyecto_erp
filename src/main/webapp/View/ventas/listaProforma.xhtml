@@ -11,6 +11,28 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                <p:submenu label="Ventas">
+                    <p:menuitem value="Nueva venta"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/nuevaVenta.xhtml" 
+                                icon="pi pi-shopping-cart" />
+                    <p:menuitem value="Lista ventas"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/listaVentas.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Nueva proforma"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/nuevaProforma.xhtml" 
+                                icon="pi pi-file-o" />
+                    <p:menuitem value="Lista proforma"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/ventas/listaProforma.xhtml" 
+                                icon="pi pi-file-o" />
+                </p:submenu>
+            </p:menubar>
+                
                 <h:form id="listaDeProforma" >
                     <p:dataTable var="Lista" id="itemsTable" value="#{ProformaMB.listaProformas}">
                         <p:column headerText="Codigo proforma" width="5%">
