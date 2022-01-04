@@ -11,9 +11,8 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
-                
+
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                <p:submenu label="Nueva Proforma">
                     <p:menuitem value="Nueva venta"
                                 style="display: flex; align-items: center; text-decoration: none;"
                                 outcome="/View/ventas/nuevaVenta.xhtml" 
@@ -34,9 +33,8 @@
                                 style="display: flex; align-items: center; text-decoration: none;"
                                 outcome="/View/Global/Main.xhtml" 
                                 icon="pi pi-file-o" /> 
-                </p:submenu>
-            </p:menubar>
-                
+                </p:menubar>
+
                 <h:form id="ventaForm">
                     <p:growl id="growl" showDetail="true" />
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
@@ -81,8 +79,16 @@
 
                     <div style="height: 30px" />
 
-                    <p:dataTable var="ListaItems" id="itemsTable" value="#{ProformaMB.listaDetalle}" selection="#{ProformaMB.productoSeleccionado}" 
-                                 rowKey="#{ListaItems.producto.codigoAux}" selectionMode="single" >
+                    <p:dataTable var="ListaItems" id="itemsTable" 
+                                 value="#{ProformaMB.listaDetalle}" 
+                                 selection="#{ProformaMB.productoSeleccionado}" 
+                                 rowKey="#{ListaItems.producto.codigoAux}" 
+                                 selectionMode="single" 
+                                 paginator="true" 
+                                 resizableColumns="true" 
+                                 class="p-mt-3"
+                                 rows="5" 
+                                 paginatorPosition="bottom">
 
                         <f:facet name="header">
                             Items
@@ -163,79 +169,79 @@
                         </p:panel>
                     </h:form >
                 </p:dialog>
-                
+
                 <p:dialog header="Busqueda de cliente" widgetVar="BuscarCliente" id="busquedaCliente"
                           minHeight="600" width="70%" showEffect="fade">
                     <h:form>
                         <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{ProformaMB.listaClientes}" 
                                      selection="#{ProformaMB.clienteSeleccionado}" rowKey="#{ListaClientes.idCliente}" >
 
-                        <f:facet name="header">
-                            Clientes Registrados
-                        </f:facet>
+                            <f:facet name="header">
+                                Clientes Registrados
+                            </f:facet>
 
-                        <p:column headerText="Seleccionar" >
-                            <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                             actionListener="#{ProformaMB.SeleccionarCliente(ListaClientes)}" update="ventaForm" oncomplete="PF('BuscarCliente').hide();"/>
-                        </p:column>
+                            <p:column headerText="Seleccionar" >
+                                <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                 actionListener="#{ProformaMB.SeleccionarCliente(ListaClientes)}" update="ventaForm" oncomplete="PF('BuscarCliente').hide();"/>
+                            </p:column>
 
-                        <p:column headerText="Cod">
-                            <h:outputText value="#{ListaClientes.idCliente}" />
-                        </p:column>
+                            <p:column headerText="Cod">
+                                <h:outputText value="#{ListaClientes.idCliente}" />
+                            </p:column>
 
-                        <p:column headerText="Cliente" >
-                            <h:outputText value="#{ListaClientes.nombre}" />
-                        </p:column>
+                            <p:column headerText="Cliente" >
+                                <h:outputText value="#{ListaClientes.nombre}" />
+                            </p:column>
 
-                        <p:column headerText="Identificacion">
-                            <h:outputText value="#{ListaClientes.identificacion}" >
-                            </h:outputText>
-                        </p:column>
-                    </p:dataTable>
+                            <p:column headerText="Identificacion">
+                                <h:outputText value="#{ListaClientes.identificacion}" >
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
                     </h:form>
                 </p:dialog>
-                
+
                 <p:dialog header="Busqueda de productos" widgetVar="BuscarProductos" id="busquedaProducto"
                           minHeight="600" width="70%" showEffect="fade">
                     <h:form>
                         <p:dataTable var="ListaProductos" id="listaProductos" selectionMode="single" value="#{ProformaMB.listaProductos}" 
                                      selection="#{ProformaMB.productoSeleccionado}" rowKey="#{ListaProductos.codigo}" >
 
-                        <f:facet name="header">
-                            Catalogo de productos
-                        </f:facet>
+                            <f:facet name="header">
+                                Catalogo de productos
+                            </f:facet>
 
-                        <p:column headerText="Seleccionar" >
-                            <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                             actionListener="#{ProformaMB.SeleccionarProducto(ListaProductos)}"  update="ventaForm" oncomplete="PF('BuscarProductos').hide();"/>
-                        </p:column>
+                            <p:column headerText="Seleccionar" >
+                                <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                 actionListener="#{ProformaMB.SeleccionarProducto(ListaProductos)}"  update="ventaForm" oncomplete="PF('BuscarProductos').hide();"/>
+                            </p:column>
 
-                        <p:column headerText="Cod">
-                            <h:outputText value="#{ListaProductos.codigoAux}" />
-                        </p:column>
+                            <p:column headerText="Cod">
+                                <h:outputText value="#{ListaProductos.codigoAux}" />
+                            </p:column>
 
-                        <p:column headerText="Producto" >
-                            <h:outputText value="#{ListaProductos.descripcion}" />
-                        </p:column>
+                            <p:column headerText="Producto" >
+                                <h:outputText value="#{ListaProductos.descripcion}" />
+                            </p:column>
 
-                        <p:column headerText="Detalle">
-                            <h:outputText value="#{ListaProductos.detalleAdicional}" >
-                            </h:outputText>
-                        </p:column>
-                        
-                        <p:column headerText="Precio unitario">
-                            <h:outputText value="#{ListaProductos.precioUnitario}" >
-                            </h:outputText>
-                        </p:column>
-                            
-                        <p:column headerText="Stock">
-                            <h:outputText value="#{ListaProductos.stock}" >
-                            </h:outputText>
-                        </p:column>
-                    </p:dataTable>
+                            <p:column headerText="Detalle">
+                                <h:outputText value="#{ListaProductos.detalleAdicional}" >
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Precio unitario">
+                                <h:outputText value="#{ListaProductos.precioUnitario}" >
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Stock">
+                                <h:outputText value="#{ListaProductos.stock}" >
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
                     </h:form>
                 </p:dialog>
-                
+
             </ui:define>
 
         </ui:composition>
