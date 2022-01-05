@@ -43,7 +43,10 @@
                                             <div class="p-grid">
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Producto:"></p:outputLabel>
-                                                    <p:inputText value="" placeholder="Buscar" readonly="true"></p:inputText>
+                                                    <p:commandButton value="Buscar" 
+                                                                     styleClass="ui-button-warning"
+                                                                     icon="pi pi-search" oncomplete="PF('producto').show()">
+                                                    </p:commandButton>
                                                 </div>
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Línea:"></p:outputLabel>
@@ -58,7 +61,6 @@
                                                                  maxlength="24"></p:inputText>
                                                 </div>
                                             </div>
-  
                                         </div>
                                         <!-- Cuadros de texto de la derecha -->
                                         <div class="p-col-6 p-md-12 p-lg-5">
@@ -66,13 +68,13 @@
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Nombre:"></p:outputLabel>
                                                     <p:inputText value="" 
-                                                                disabled="#">
+                                                                 disabled="#">
                                                     </p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Código:"></p:outputLabel>
                                                     <p:inputText value="" 
-                                                                disabled="#">
+                                                                 disabled="#">
                                                     </p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
@@ -95,7 +97,7 @@
                                                     <p:commandButton value="Materia Prima" process="@this"
                                                                      disabled="#"
                                                                      actionListener="#"
-                                                                     icon="pi pi-plus"/>
+                                                                     icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
                                                 </div>
 
                                                 <!-- Tabla de materia prima -->
@@ -108,7 +110,7 @@
                                                             <p:commandButton icon="pi pi-times" action="#"  
                                                                              styleClass="edit-button rounded-button ui-button-info" process="@this">
                                                                 <f:setPropertyActionListener value="#" target="#"/>
-                                                                <p:resetInput target=":form:manage-asiento"/>
+                                                                <p:resetInput target=""/>
                                                             </p:commandButton>
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
@@ -153,13 +155,143 @@
                                                                      oncomplete="PF('crearFormula').hide()"/>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
 
+                        <!-- Cuadro de dialogo Producto -->
+                        <p:dialog header="Seleccionar Producto" showEffect="fade" modal="true"
+                                  widgetVar="producto" responsive="true" width="60%"
+                                  draggable="false" height="500">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-1 p-md-1 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Producto:"></p:outputLabel>
+                                                    <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable editable="true" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="">
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Código" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar"  
+                                                                     icon="pi pi-check" 
+                                                                     disabled="#" styleClass="ui-button-success"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('producto').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <!-- Cuadro de dialogo Materia Prima -->
+                        <p:dialog header="Seleccionar Materia Prima" showEffect="fade" modal="true"
+                                  widgetVar="materiaPrima" responsive="true" width="75%"
+                                  draggable="false" height="500">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-1 p-md-1 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Materia Prima:"></p:outputLabel>
+                                                    <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable editable="true" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="">
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Código" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Medida" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Existencias" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar"  
+                                                                     icon="pi pi-check" 
+                                                                     disabled="#" styleClass="ui-button-success"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('materiaPrima').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
 
                         <!-- Tabla de datos -->
                         <p:dataTable reflow="true" paginator="true" rows="5" 
@@ -175,7 +307,7 @@
                                 </div>
                             </f:facet>
 
-                            <p:column headerText="Numero" filterStyle="display : none">
+                            <p:column headerText="Nº Formula" filterStyle="display : none">
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
