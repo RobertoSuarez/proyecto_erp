@@ -117,3 +117,9 @@ body{
 .Fondo #Contacto h2{
     color: #ffffff;
 }
+
+@media (max-width: 800px) {
+    .container {
+        margin-top: 6%;
+    }
+}
