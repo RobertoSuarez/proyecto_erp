@@ -8,16 +8,15 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
-                <p:card>
-                    <f:facet name="title">
-                        SubCuenta
-                    </f:facet>
-                    <h:form>
+                <ui:include src="./subheadercontabilidad.xhtml"/>       
+                <p:card style="width: 95%; margin-left: 2.5%; margin-top: 2% ">              
+                    
+                    <h:form>  
+                        <h1>SubCuentas</h1>
                         <p:growl id="messages" showDetail="true"/>
-
                         <p:dialog modal="true" draggable="false" id="dialog-form-grupo"
                                   header="Grupo" widgetVar="dialogFormGrupo"
                                   responsive="true" width="45%" closeOnEscape="true">
@@ -41,7 +40,7 @@
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" 
                                                  icon="pi pi-check" 
-                                                 styleClass="ui-button-success"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  update="messages, grupo"
                                                  rendered="#{grupoMB.action eq 'create'}" 
                                                  action="#{planCuentas.registrarGrupo()}" />
@@ -78,7 +77,7 @@
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" 
                                                  icon="pi pi-check" 
-                                                 styleClass="ui-button-success"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  update="messages, subgrupo"
                                                  rendered="#{grupoMB.action eq 'create'}" 
                                                  action="#{planCuentas.registrarSubGrupo()}" />
@@ -111,7 +110,7 @@
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" 
                                                  icon="pi pi-check" 
-                                                 styleClass="ui-button-success"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  update="messages, cuentas"
                                                  rendered="#{grupoMB.action eq 'create'}" 
                                                  action="#{planCuentas.registrarCuenta()}" />
@@ -146,7 +145,7 @@
                                                        itemLabel="#{grupo.nombre}" 
                                                        itemValue="#{grupo.codigo}"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton styleClass="ui-button-success"
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarGrupo()}"
                                                      update="messages, dialog-form-grupo"
@@ -174,7 +173,7 @@
                                                        itemLabel="#{subgrupo.nombre}" 
                                                        itemValue="#{subgrupo.id}"/> <!-- codigo -->
                                     </p:selectOneMenu>
-                                    <p:commandButton styleClass="ui-button-success"
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarSubGrupo()}"
                                                      update="messages, dialog-form-subgrupo"
@@ -202,7 +201,7 @@
                                                        itemLabel="#{cuenta.nombre}" 
                                                        itemValue="#{cuenta.idcuenta}"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton styleClass="ui-button-success"
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarCuenta()}"
                                                      update="messages, dialog-form-cuenta"
@@ -210,7 +209,7 @@
                                     </p:commandButton>
                                 </div>
                             </div>
-                            
+
                             <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Código:"/>
                                 <p:inputText id="codigo" 
@@ -237,11 +236,11 @@
                         </div>
 
                         <p:commandButton value="Guardar" icon="pi pi-check" 
-                                         styleClass="ui-button-success" 
+                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                          action="#{planCuentas.registrarSubCuenta()}"
                                          update="@form" rendered="#{planCuentas.action eq 'create'}"/>
                         <p:commandButton value="Actualizar" icon="pi pi-check" 
-                                         styleClass="ui-button-success" 
+                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                          action="#{planCuentas.actualizarSubCuenta()}"
                                          update="@form" rendered="#{planCuentas.action eq 'update'}"/>
                         <p:commandButton value="Cancelar" icon="pi pi-times" 

@@ -7,9 +7,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <h:form id="form-grupos">
+                    <ui:include src="./subheadercontabilidad.xhtml"/>
                     <p:growl id="messages" showDetail="true" />
                     <p:dialog modal="true" draggable="false" id="dialog-form-grupo"
                               header="Grupo" widgetVar="dialogFormGrupo"
@@ -65,8 +66,8 @@
 
                     <div class="card">
                         <p:toolbar>
-                            <p:toolbarGroup>
-                                <p:commandButton styleClass="ui-button-success"
+                            <p:toolbarGroup style="margin-top: 4%">
+                                <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  icon="pi pi-plus" value="Nuevo"
                                                  action="#{grupoMB.form(false)}"
                                                  update="dialog-form-grupo">
