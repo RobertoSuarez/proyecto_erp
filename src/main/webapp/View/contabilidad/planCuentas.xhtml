@@ -8,16 +8,17 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <h:form id="form">
+                    <ui:include src="./subheadercontabilidad.xhtml"/>
                     <div class="card">
                         <p:growl id="messages" showDetail="true"/>
 
                         <p:toolbar>
-                            <p:toolbarGroup>
+                            <p:toolbarGroup style="margin-top: 5%">
                                 <p:commandButton action="#{planCuentas.formAgregarSubCuenta}" value="Nuevo" icon="pi pi-plus"
-                                                 styleClass="ui-button-success">
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2">
                                     <f:setPropertyActionListener value="create" target="#{planCuentas.action}" />
                                 </p:commandButton>
                             </p:toolbarGroup>
@@ -59,7 +60,7 @@
 
                             <p:column exportable="false">
                                 <p:commandButton icon="pi pi-pencil"
-                                                 styleClass="edit-button rounded-button ui-button-primary"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  action="#{planCuentas.editarCuentaContable(pc)}"
                                                  update=":form:messages"
                                                  >

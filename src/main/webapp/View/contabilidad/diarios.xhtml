@@ -8,13 +8,15 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <h:form id="diario-form">
+                    <ui:include src="./subheadercontabilidad.xhtml"/>
                     <p:growl id="growl" showDetail="true"/>
                     <p:toolbar>
-                        <p:toolbarGroup>
-                            <p:commandButton value="Nuevo" styleClass="ui-button-success" icon="pi pi-plus"
+                        <p:toolbarGroup style="margin-top:5%">
+                            <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                              update=":diario-form:manage-diario-form" actionListener="#{diarioManagedBean.openNewDiario}"
                                              oncomplete="PF('diarioFormDialog').show()"></p:commandButton>
                         </p:toolbarGroup>
@@ -51,8 +53,9 @@
 
                             <p:column exportable="false">
                                 <p:commandButton icon="pi pi-pencil" update=":diario-form:manage-diario-form"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  oncomplete="PF('diarioFormDialog').show()"
-                                                 styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                 process="@this">
                                     <f:setPropertyActionListener value="#{diario}" target="#{diarioManagedBean.onSelectedDiaio}"/>
                                     <p:resetInput target=":diario-form:manage-diario-form"/>
                                 </p:commandButton>
@@ -87,8 +90,9 @@
                                         <div class="p-col-3">
                                             <p:commandButton value="Guardar" actionListener="#{diarioManagedBean.saveDiario}"
                                                              update="manage-diario-form, :diario-form:dtDiarioContable, :diario-form:growl"
-                                                             process="manage-diario-form @this" icon="pi pi-check" 
-                                                             styleClass="ui-button-success"></p:commandButton>
+                                                             process="manage-diario-form @this"
+                                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                             icon="pi pi-check"></p:commandButton>
                                         </div>
                                         <div class="p-col-3">
                                             <p:commandButton value="Cancelar" update="manage-diario-form" 
