@@ -1,103 +1,166 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content" class="Contenido">
-        <h:form id="form" style="width: 105%; margin-left: -23px;">
-            <div class="card crud-demo">
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <span style="font-weight: bold" icon="pi pi-table">CIUDADES</span>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{ciudadView.abrirNuevo}"
-                                             update=":form:manage-ciudad-content" oncomplete="PF('manageCiudadDialog').show()"
-                                             styleClass="ui-button-success" style="margin-right: .5rem">
-                                <p:resetInput target=":form:manage-ciudad-content"/>
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:dataTable id="dt-ciudades" widgetVar="dtCiudades" var="ciudad" value="#{ciudadView.ciudades}"
-                                 reflow="true" size="small" liveResize="true" styleClass="ciudad-table"
-                                 rowKey="#{ciudad.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
-                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        
-                        
-                        <p:column headerText="Ciudad" sortBy="#{ciudad.nombre}" filterBy="#{ciudad.nombre}">
-                            <h:outputText value="#{ciudad.nombre}"/>
-                        </p:column>
-                        <p:column field="nombre" filterBy="#{ciudad.provincia.nombre}" headerText="Provincia" sortBy="#{ciudad.provincia.nombre}"
-                                  filterMatchMode="exact">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('dtCiudades').filter()">
-                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItems value="#{ciudadView.filtroProvincias}" var="provincia"
-                                                   itemLabel="#{provincia.nombre}" itemValue="#{provincia.nombre}" />
-                                </p:selectOneMenu>
-                            </f:facet>
-                            <h:outputText value="#{ciudad.provincia.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Detalle" width="45%" filterBy="#{ciudad.detalle}">
-                            <h:outputText value="#{ciudad.detalle}"/>
-                        </p:column>
-                        <p:column exportable="false" width="5%">
-                            <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content" 
-                                             oncomplete="PF('manageCiudadDialog').show()" actionListener="#{ciudadView.editar(ciudad.id)}"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <f:setPropertyActionListener value="#{ciudad}" target="#{ciudadView.ciudad}"/>
-                                <p:resetInput target=":form:manage-ciudad-content"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog header="Ciudad" showEffect="fade" modal="true"
-                              widgetVar="manageCiudadDialog" responsive="true">
-                        <p:outputPanel id="manage-ciudad-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty ciudadView.ciudad}">
-                                <div class="card">
-                                    <div class="ui-fluid">
-                                        <div class="p-field">
-                                            <p:outputLabel for="horaIngreso" style="font-weight: bold;">Nombre: </p:outputLabel>
-                                            <p:inputText id="horaIngreso" value="#{ciudadView.ciudad.nombre}" label="Nombre"
-                                                         required="true"/>
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:form id="form" style="width: 100%; margin-left: -23px;">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/><br/>
+                        <p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <span style="font-weight: bold" icon="pi pi-table">CIUDADES</span>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{ciudadView.abrirNuevo}"
+                                                     update=":form:manage-ciudad-content" oncomplete="PF('manageCiudadDialog').show()"
+                                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                                        <p:resetInput target=":form:manage-ciudad-content"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="dt-ciudades" widgetVar="dtCiudades" var="ciudad" value="#{ciudadView.ciudades}"
+                                         reflow="true" size="small" liveResize="true" styleClass="ciudad-table"
+                                         rowKey="#{ciudad.id}" paginator="true"
+                                         rows="5" rowSelectMode="add" paginatorPosition="bottom">
+
+
+                                <p:column headerText="Ciudad" sortBy="#{ciudad.nombre}" filterBy="#{ciudad.nombre}">
+                                    <h:outputText value="#{ciudad.nombre}"/>
+                                </p:column>
+                                <p:column field="nombre" filterBy="#{ciudad.provincia.nombre}" headerText="Provincia" sortBy="#{ciudad.provincia.nombre}"
+                                          filterMatchMode="exact">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('dtCiudades').filter()">
+                                            <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{ciudadView.filtroProvincias}" var="provincia"
+                                                           itemLabel="#{provincia.nombre}" itemValue="#{provincia.nombre}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                    <h:outputText value="#{ciudad.provincia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Detalle" width="45%" filterBy="#{ciudad.detalle}">
+                                    <h:outputText value="#{ciudad.detalle}"/>
+                                </p:column>
+                                <p:column exportable="false" width="5%">
+                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content" 
+                                                     oncomplete="PF('manageCiudadDialog').show()" actionListener="#{ciudadView.editar(ciudad.id)}"
+                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                        <f:setPropertyActionListener value="#{ciudad}" target="#{ciudadView.ciudad}"/>
+                                        <p:resetInput target=":form:manage-ciudad-content"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dialog header="Ciudad" showEffect="fade" modal="true"
+                                      widgetVar="manageCiudadDialog" responsive="true">
+                                <p:outputPanel id="manage-ciudad-content" class="ui-fluid">
+                                    <p:outputPanel rendered="#{not empty ciudadView.ciudad}">
+                                        <div class="card">
+                                            <div class="ui-fluid">
+                                                <div class="p-field">
+                                                    <p:outputLabel for="horaIngreso" style="font-weight: bold;">Nombre: </p:outputLabel>
+                                                    <p:inputText id="horaIngreso" value="#{ciudadView.ciudad.nombre}" label="Nombre"
+                                                                 required="true"/>
+                                                </div>
+                                                <div class="p-field">
+                                                    <p:outputLabel for="inProvincia" style="font-weight: bold;" value="Provincia: "/>
+                                                    <p:selectOneMenu id="inProvincia" value="#{ciudadView.ciudad.provincia.id}"
+                                                                     label="Provincia" required="true">
+                                                        <f:selectItem itemLabel="Seleccione una provincia" itemValue="#{0}" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{ciudadView.provincias}" var="provincia" 
+                                                                       itemLabel="#{provincia.nombre}" itemValue="#{provincia.id}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="p-field">
+                                                    <p:outputLabel for="observaciones" style="font-weight: bold">Detalle: </p:outputLabel>
+                                                    <p:inputTextarea id="observaciones" value="#{ciudadView.ciudad.detalle}"/>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="inProvincia" style="font-weight: bold;" value="Provincia: "/>
-                                            <p:selectOneMenu id="inProvincia" value="#{ciudadView.ciudad.provincia.id}"
-                                                             label="Provincia" required="true">
-                                                <f:selectItem itemLabel="Seleccione una provincia" itemValue="#{0}" noSelectionOption="true"/>
-                                                <f:selectItems value="#{ciudadView.provincias}" var="provincia" 
-                                                               itemLabel="#{provincia.nombre}" itemValue="#{provincia.id}"/>
-                                            </p:selectOneMenu>
-                                        </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="observaciones" style="font-weight: bold">Detalle: </p:outputLabel>
-                                            <p:inputTextarea id="observaciones" value="#{ciudadView.ciudad.detalle}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p:outputPanel>
-                        </p:outputPanel>
-                        <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ciudadView.enviar}"
-                                             update="messages manage-ciudad-content" styleClass="ui-button-success"
-                                             process="messages manage-ciudad-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{ciudadView.cancelar()}"
-                                             onclick="PF('manageCiudadDialog').hide()" class="ui-button-secondary"/>
-                        </f:facet>
-                    </p:dialog>
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                         icon="pi pi-times"/>
-                    </p:confirmDialog>
-                </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-</ui:composition>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ciudadView.enviar}"
+                                                     update="messages manage-ciudad-content" styleClass="ui-button-success"
+                                                     process="messages manage-ciudad-content @this"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{ciudadView.cancelar()}"
+                                                     onclick="PF('manageCiudadDialog').hide()" class="ui-button-secondary"/>
+                                </f:facet>
+                            </p:dialog>
+                            <p:confirmDialog global="true" showEffect="fade" width="300">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                                 icon="pi pi-times"/>
+                            </p:confirmDialog>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
