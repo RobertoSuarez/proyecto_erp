@@ -18,15 +18,15 @@
                     <p:menuitem value="Lista ventas"
                                 style="display: flex; align-items: center; text-decoration: none;"
                                 outcome="/View/ventas/listaVentas.xhtml" 
-                                icon="pi pi-file-o" />
+                                icon="pi pi-book" />
                     <p:menuitem value="Nueva proforma"
                                 style="display: flex; align-items: center; text-decoration: none;"
                                 outcome="/View/ventas/nuevaProforma.xhtml" 
-                                icon="pi pi-file-o" />
+                                icon="pi pi-plus-circle" />
                     <p:menuitem value="Lista proforma"
                                 style="display: flex; align-items: center; text-decoration: none;"
                                 outcome="/View/ventas/listaProforma.xhtml" 
-                                icon="pi pi-file-o" />
+                                icon="pi pi-book" />
                 </p:menubar>
 
                 <h:form id="ventaForm">
@@ -35,8 +35,8 @@
 
                     <br/><br/><br/><br/>
                     <div>
-                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="width: 33%; margin-right: 20px; display: inline-block">
-                            <h:panelGrid columns="2">
+                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos">
+                            <h:panelGrid columns="4" width="50%" >
                                 <p:outputLabel value="Codigo: "/>
                                 <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" type="number" />
                                 <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky" style="position: center"/>
@@ -44,8 +44,8 @@
                             </h:panelGrid>
                         </p:panel>
 
-                        <p:panel id="detalleProducto" header="Producto" style="width: 33%; margin-right: 20px; display: inline-block">
-                            <h:panelGrid columns="3" >
+                        <p:panel id="detalleProducto" header="Producto" style="widht: 45%; position: relative">
+                            <h:panelGrid columns="6" >
                                 <p:outputLabel value="Producto"/>
                                 <p:inputText id="NombreProducto" value="#{VentaMB.nombreProducto}" disabled="true" />
                                 <div/>
@@ -57,10 +57,8 @@
                                 <div/>
                                 <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
                             </h:panelGrid>
-                        </p:panel>
-
-                        <p:panel header="Cliente" style="width: 33%; margin-right: 20px" >
-                            <h:panelGrid columns="2">
+                            <p:divider align="vertical"/>
+                            <h:panelGrid columns="4">
                                 <p:outputLabel value="Identificación: "/>
                                 <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
 
@@ -135,8 +133,16 @@
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
-                    <p:button  value="Generar Factura" onclick="PF('NewSale').show()" style="float: right; margin: 20px 0px;" />
-                    <div style="margin-top:50px" />
+                    <p:panel style=" width: 100%">
+                        <h:panelGrid columns="1" >
+                            <p:button  value="Generar Factura" 
+                                       onclick="PF('NewSale').show()" 
+                                       style="float: center; 
+                                       margin: 20px 0px; align-content: center" />
+                            
+                        </h:panelGrid>
+                    </p:panel>
+
                 </h:form>
 
 

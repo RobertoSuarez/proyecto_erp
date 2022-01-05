@@ -6,18 +6,17 @@
     xmlns:p="http://primefaces.org/ui">
 
     <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-        <p:menuitem value="Inicio" url="#"/>
-        <p:menuitem value="Asientos" url="#"/>
-        <p:menuitem value="Diarios" url="#"/>
+        <p:menuitem value="Asientos" outcome="/View/contabilidad/asientos"/>
+        <p:menuitem value="Diarios" outcome="/View/contabilidad/diarios"/>
         <p:submenu label="Plan de cuentas">
-            <p:menuitem value="Grupo" url="#" icon="pi pi-list" />
-            <p:menuitem value="Subgrupos" url="#" icon="pi pi-list" />
-            <p:menuitem value="Cuentas" url="#" icon="pi pi-list" />
-            <p:menuitem value="Subcuentas" url="#" icon="pi pi-list" />
+            <p:menuitem value="Grupo" outcome="/View/contabilidad/pcGrupos" icon="pi pi-list" />
+            <p:menuitem value="Subgrupos" outcome="/View/contabilidad/pcSubgrupos" icon="pi pi-list" />
+            <p:menuitem value="Cuentas" outcome="/View/contabilidad/pcCuentas" icon="pi pi-list" />
+            <p:menuitem value="Subcuentas" outcome="/View/contabilidad/planCuentas" icon="pi pi-list" />
         </p:submenu>
         <p:submenu label="Informes">
-            <p:menuitem value="Balance General" url="#" icon="pi pi-book" />
-            <p:menuitem value="Libro Mayor" url="#" icon="pi pi-bars" />
+            <p:menuitem value="Balance General" outcome="/View/contabilidad/balanceGeneral" icon="pi pi-book" />
+            <p:menuitem value="Libro Mayor" outcome="/View/contabilidad/libroMayor" icon="pi pi-bars" />
         </p:submenu>
     </p:menubar>
 

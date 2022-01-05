@@ -8,15 +8,17 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <h:form id="form">
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <p:commandButton actionListener="#{libroManagedBean.exportpdf}" value="Guardar PDF" ajax="false" icon="pi pi-download" styleClass="ui-button-primary p-mr-2">
+                     <ui:include src="./subheadercontabilidad.xhtml"/>
+                     <p:toolbar>
+                         <p:toolbarGroup style="margin-top: 3.5%">
+                            <p:commandButton actionListener="#{libroManagedBean.exportpdf}" value="Guardar PDF" ajax="false" icon="pi pi-download"
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2">
                             </p:commandButton>
                         </p:toolbarGroup>
-                        <p:toolbarGroup align="right" style="width: 27%;">
+                        <p:toolbarGroup align="right" style="width: 27%; margin-top: 3.5%">
                             <p:selectOneMenu style="width: 100%;" id="labeled" value="#{libroManagedBean.onSelectedDiario.idDiario}" label="Seleccione un diario" editable="false">
                                 <f:selectItem itemLabel="Seleccione un Diario Contable" itemValue="0" noSelectionOption="true"/>
                                 <p:ajax listener="#{libroManagedBean.filtrateLibroMayor()}" update=":form:dt-libros"/>
