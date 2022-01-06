@@ -28,7 +28,7 @@
                                 <span  class="ui-inputgroup-addon">
                                     <i class="pi pi-user" />   
                                 </span>
-                                <p:inputText id="name1" value="#{usuarioMB.usuario.nombre}" />
+                                <p:inputText maxlength="50" id="name1" value="#{usuarioMB.usuario.nombre}" />
                             </div>
                         </div>
 
@@ -38,7 +38,7 @@
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-user" /> 
                                 </span> 
-                                <p:inputText id="name2" type="text" value="#{usuarioMB.usuario.apellido}" />
+                                <p:inputText  maxlength="50" id="name2" type="text" value="#{usuarioMB.usuario.apellido}" />
                             </div>
                         </div>                  
 
@@ -48,7 +48,7 @@
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-user" /> 
                                 </span> 
-                                <p:inputText id="name3" type="text" value="#{usuarioMB.usuario.username}"/>
+                                <p:inputText  maxlength="15" id="name3" type="text" value="#{usuarioMB.usuario.username}"/>
                             </div>
                         </div>
 
@@ -58,7 +58,7 @@
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-envelope" /> 
                                 </span> 
-                                <p:inputText id="email1" type="text" />
+                                <p:inputText  maxlength="100" id="email1" type="text" value="#{usuarioMB.usuario.email}" />
                             </div>                            
 
                         </div>     
@@ -74,6 +74,7 @@
                                 <p:password 
                                     id="password"
                                     weakLabel="Débil"
+                                    maxlength="15"
                                     validatorMessage="#{usuarioMB.PFW('Contraseñas no coinciden')}"
                                     goodLabel="Bueno"
                                     strongLabel="Fuerte"
@@ -91,7 +92,7 @@
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-key" /> 
                                 </span> 
-                                <p:password id="password2"/>
+                                <p:password  maxlength="15" id="password2"/>
 
                             </div>
                         </div>
@@ -100,13 +101,16 @@
                         <div  class="p-col-12 p-lg-6 button-container">
                             <br></br>
                             <div class="ui-fluid">
-                                <p:commandButton actionListener="#{usuarioMB.registrarUsuario()}" 
-                                                 value="Crear cuenta" 
-                                                 styleClass="ui-button-raised" update="messages"
-                                                 />
+                                <p:commandButton
+                                    value="Crear cuenta" 
+                                    actionListener="#{usuarioMB.registrarUsuario()}"
+                                    styleClass="ui-button-raised" update="messages"
 
-                                <p:commandButton  
-                                    type="button" value="Cancelar" 
+                                    />
+
+                                <p:button  
+                                    value="Regresar"
+                                    outcome="/View/login_and_registro/login"
                                     styleClass="ui-button-secondary"/>
                             </div>
                         </div>
