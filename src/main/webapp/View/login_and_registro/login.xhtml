@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-  
+
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="p-col-12 button-container">
-                            <p:commandButton value="Iniciar Sesión"  styleClass="ui-button-raised" actionListener="#{usuarioMB.iniciarSesion()}" />
+                            <p:button value="Iniciar Sesión"  styleClass="ui-button-raised" outcome="/View/Global/Main" />
 
                             <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2"/>
 
