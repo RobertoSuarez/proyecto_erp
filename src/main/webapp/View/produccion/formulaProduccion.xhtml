@@ -33,29 +33,43 @@
 
                         <!-- Cuadro de dialogo de formula -->
                         <p:dialog header="Nueva Formula" showEffect="fade" modal="true"
-                                  widgetVar="crearFormula" responsive="true" width="80%"
+                                  widgetVar="crearFormula" responsive="true" width="90%"
                                   draggable="false" height="550">
                             <!-- Cuadros de texto de la izquierda -->
-                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+
+                            <p:outputPanel class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
+
+                                    <p:toolbar>
+                                        <p:toolbarGroup>
+                                            <div class="p-col-12 p-md-2" style="margin-left: 6%">
+                                                <p:outputLabel value="Nombre" for="@next"/>
+                                            </div>
+                                            <div class="p-col-12 p-md-6">
+                                                <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}"
+                                                                completeMethod="#" readonly="true"/>
+                                            </div>
+                                            <div class="p-col-12 p-md-3">
+                                                <p:commandButton style="margin-right: 6px;" value="Buscar" 
+                                                                 styleClass="ui-button-warning" icon="pi pi-search" oncomplete="PF('producto').show()">
+                                                </p:commandButton>
+                                            </div>
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+                                    <br/>
                                     <div class="p-grid p-justify-around">
                                         <div class="p-col-6 p-md-12 p-lg-5">
                                             <div class="p-grid">
+
+
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Producto:"></p:outputLabel>
-                                                    <p:commandButton value="Buscar" 
-                                                                     styleClass="ui-button-warning"
-                                                                     icon="pi pi-search" oncomplete="PF('producto').show()">
-                                                    </p:commandButton>
-                                                </div>
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Línea:"></p:outputLabel>
+                                                    <p:outputLabel value="Descripción:"></p:outputLabel>
                                                     <p:inputText disabled="#"
                                                                  value=""
                                                                  maxlength="24"></p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Categoria:"></p:outputLabel>
+                                                    <p:outputLabel value="Rendimiento:"></p:outputLabel>
                                                     <p:inputText disabled="#"
                                                                  value=""
                                                                  maxlength="24"></p:inputText>
@@ -66,22 +80,22 @@
                                         <div class="p-col-6 p-md-12 p-lg-5">
                                             <div class="p-grid">
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Nombre:"></p:outputLabel>
-                                                    <p:inputText value="" 
+                                                    <p:outputLabel value="Tipo:"></p:outputLabel>
+                                                    <p:inputText value="" readonly="true"
                                                                  disabled="#">
                                                     </p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Código:"></p:outputLabel>
-                                                    <p:inputText value="" 
+                                                    <p:outputLabel value="Categoria:"></p:outputLabel>
+                                                    <p:inputText value="" readonly="true"
                                                                  disabled="#">
                                                     </p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Ruta:"></p:outputLabel>
+                                                    <p:outputLabel value="Proceso Principal:"></p:outputLabel>
                                                     <p:selectOneMenu id="diario" value="" editable="false" 
                                                                      disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una Ruta" itemValue="" noSelectionOption="true"/>
+                                                        <f:selectItem itemLabel="Seleccione Proceso" itemValue="" noSelectionOption="true"/>
                                                         <f:selectItems value="" var="diario" 
                                                                        itemLabel="#" 
                                                                        itemValue="#"></f:selectItems>
@@ -101,10 +115,45 @@
                                                 </div>
 
                                                 <!-- Tabla de materia prima -->
-                                                <div class="p-col-12">
+                                                <div class="p-col-14">
                                                     <p:dataTable editable="true" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
                                                                  value="">
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Unidad de Medida" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Cantidad" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Precio" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Sub Procesos" filterStyle="display : none">
+                                                            <p:selectOneMenu id="diario" value="" editable="false" 
+                                                                             disabled="#">
+                                                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                                                <f:selectItems value="" var="diario" 
+                                                                               itemLabel="#" 
+                                                                               itemValue="#"></f:selectItems>
+                                                            </p:selectOneMenu>
+                                                        </p:column>
 
                                                         <p:column headerText="Acciones">
                                                             <p:commandButton icon="pi pi-times" action="#"  
@@ -115,30 +164,6 @@
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
 
-                                                        <p:column headerText="Numero" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
-
-                                                        <p:column headerText="Descripción" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
-
-                                                        <p:column headerText="Medida" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
-
-                                                        <p:column headerText="Cantidad" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
-
-                                                        <p:column headerText="Procesos" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
                                                     </p:dataTable>
                                                 </div>
                                             </div>
@@ -187,11 +212,6 @@
                                                             <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
                                                         </p:column>
 
-                                                        <p:column headerText="Código" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
-
                                                         <p:column headerText="Nombre" filterStyle="display : none">
                                                             <h:outputText value="#" />
                                                             <p:skeleton rendered="#"></p:skeleton>
@@ -201,22 +221,20 @@
                                                             <h:outputText value="#" />
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
+
+                                                        <p:column headerText="Tipo" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        
+                                                        <p:column headerText="Existencias" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
                                                     </p:dataTable>
                                                 </div>
                                             </div>
-                                            <!-- Botones Guardar/Cerrar -->
-                                            <div class="p-grid p-justify-end">
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Guardar"  
-                                                                     icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-success"/>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
-                                                                     styleClass="ui-button-danger" process="@this"
-                                                                     oncomplete="PF('producto').hide()"/>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </p:outputPanel>
@@ -277,14 +295,9 @@
                                             <!-- Botones Guardar/Cerrar -->
                                             <div class="p-grid p-justify-end">
                                                 <div class="p-col-2">
-                                                    <p:commandButton value="Guardar"  
+                                                    <p:commandButton value="Confirmar"  
                                                                      icon="pi pi-check" 
                                                                      disabled="#" styleClass="ui-button-success"/>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
-                                                                     styleClass="ui-button-danger" process="@this"
-                                                                     oncomplete="PF('materiaPrima').hide()"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -312,17 +325,12 @@
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
 
-                            <p:column headerText="Producto" >
+                            <p:column headerText="Nombre Formula" >
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
 
-                            <p:column headerText="Línea" >
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
-                            </p:column>
-
-                            <p:column headerText="Categoria" >
+                            <p:column headerText="Descripción" >
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
