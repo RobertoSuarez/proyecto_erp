@@ -4,6 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
+
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -17,9 +18,9 @@
     <h:body styleClass="login-body" >
         <h:form>
             <div class="p-grid p-nogutter"> 
-                
+
                 <div class="p-col-12" style="text-align:center;margin-top:50px"  >
-                  
+
                     <p:graphicImage name="images/erpLogo.png" width="85px"/>
                 </div>
             </div>
@@ -36,18 +37,17 @@
                         <div class="p-col-12">
                             <div class="input-wrapper ui-input-icon-left">
                                 <i class="pi pi-user"/>
-                                <p:inputText type="text" placeholder="Usuario" />
+                                <p:inputText type="text" placeholder="Usuario" value="#{usuarioMB.usuario.username}" />
                             </div>
                         </div>
                         <div class="p-col-12">
                             <div class="input-wrapper ui-input-icon-left">
                                 <i class="pi pi-lock"/>
-                                <p:inputText type="password" placeholder="Contraseña" />
+                                <p:inputText type="password" placeholder="Contraseña" value="#{usuarioMB.usuario.password}" />
                             </div>
                         </div>
                         <div class="p-col-12 button-container">
-                            <p:button outcome="/View/Global/Main.xhtml" value="Iniciar Sesión"  styleClass="ui-button-raised" />
-
+                            <p:commandButton actionListener="#{usuarioMB.iniciarSesion()}" value="Iniciar Sesión"></p:commandButton>
                             <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2"/>
 
                         </div>

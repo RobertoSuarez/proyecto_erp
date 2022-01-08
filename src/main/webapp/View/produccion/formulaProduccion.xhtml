@@ -33,53 +33,69 @@
 
                         <!-- Cuadro de dialogo de formula -->
                         <p:dialog header="Nueva Formula" showEffect="fade" modal="true"
-                                  widgetVar="crearFormula" responsive="true" width="80%"
+                                  widgetVar="crearFormula" responsive="true" width="90%"
                                   draggable="false" height="550">
                             <!-- Cuadros de texto de la izquierda -->
-                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+
+                            <p:outputPanel class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
+
+                                    <p:toolbar>
+                                        <p:toolbarGroup>
+                                            <div class="p-col-12 p-md-2" style="margin-left: 6%">
+                                                <p:outputLabel value="Nombre" for="@next"/>
+                                            </div>
+                                            <div class="p-col-12 p-md-6">
+                                                <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}"
+                                                                completeMethod="#" readonly="true"/>
+                                            </div>
+                                            <div class="p-col-12 p-md-3">
+                                                <p:commandButton style="margin-right: 6px;" value="Buscar" 
+                                                                 styleClass="ui-button-warning" icon="pi pi-search" oncomplete="PF('producto').show()">
+                                                </p:commandButton>
+                                            </div>
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+                                    <br/>
                                     <div class="p-grid p-justify-around">
                                         <div class="p-col-6 p-md-12 p-lg-5">
                                             <div class="p-grid">
+
+
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Producto:"></p:outputLabel>
-                                                    <p:inputText value="" placeholder="Buscar" readonly="true"></p:inputText>
-                                                </div>
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Línea:"></p:outputLabel>
+                                                    <p:outputLabel value="Descripción:"></p:outputLabel>
                                                     <p:inputText disabled="#"
                                                                  value=""
                                                                  maxlength="24"></p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Categoria:"></p:outputLabel>
+                                                    <p:outputLabel value="Rendimiento:"></p:outputLabel>
                                                     <p:inputText disabled="#"
                                                                  value=""
                                                                  maxlength="24"></p:inputText>
                                                 </div>
                                             </div>
-  
                                         </div>
                                         <!-- Cuadros de texto de la derecha -->
                                         <div class="p-col-6 p-md-12 p-lg-5">
                                             <div class="p-grid">
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Nombre:"></p:outputLabel>
-                                                    <p:calendar value="" 
-                                                                disabled="#">
-                                                    </p:calendar>
+                                                    <p:outputLabel value="Tipo:"></p:outputLabel>
+                                                    <p:inputText value="" readonly="true"
+                                                                 disabled="#">
+                                                    </p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Código:"></p:outputLabel>
-                                                    <p:calendar value="" 
-                                                                disabled="#">
-                                                    </p:calendar>
+                                                    <p:outputLabel value="Categoria:"></p:outputLabel>
+                                                    <p:inputText value="" readonly="true"
+                                                                 disabled="#">
+                                                    </p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel value="Ruta:"></p:outputLabel>
+                                                    <p:outputLabel value="Proceso Principal:"></p:outputLabel>
                                                     <p:selectOneMenu id="diario" value="" editable="false" 
                                                                      disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una Ruta" itemValue="" noSelectionOption="true"/>
+                                                        <f:selectItem itemLabel="Seleccione Proceso" itemValue="" noSelectionOption="true"/>
                                                         <f:selectItems value="" var="diario" 
                                                                        itemLabel="#" 
                                                                        itemValue="#"></f:selectItems>
@@ -95,25 +111,16 @@
                                                     <p:commandButton value="Materia Prima" process="@this"
                                                                      disabled="#"
                                                                      actionListener="#"
-                                                                     icon="pi pi-plus"/>
+                                                                     icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
                                                 </div>
 
                                                 <!-- Tabla de materia prima -->
-                                                <div class="p-col-12">
+                                                <div class="p-col-14">
                                                     <p:dataTable editable="true" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
                                                                  value="">
 
-                                                        <p:column headerText="Acciones">
-                                                            <p:commandButton icon="pi pi-times" action="#"  
-                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                            </p:commandButton>
-                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                        </p:column>
-
-                                                        <p:column headerText="Numero" filterStyle="display : none">
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
                                                             <h:outputText value="#" />
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
@@ -123,7 +130,7 @@
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
 
-                                                        <p:column headerText="Medida" filterStyle="display : none">
+                                                        <p:column headerText="Unidad de Medida" filterStyle="display : none">
                                                             <h:outputText value="#" />
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
@@ -133,10 +140,30 @@
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
 
-                                                        <p:column headerText="Procesos" filterStyle="display : none">
+                                                        <p:column headerText="Precio" filterStyle="display : none">
                                                             <h:outputText value="#" />
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
+
+                                                        <p:column headerText="Sub Procesos" filterStyle="display : none">
+                                                            <p:selectOneMenu id="diario" value="" editable="false" 
+                                                                             disabled="#">
+                                                                <f:selectItem itemLabel="Seleccionar" itemValue="" noSelectionOption="true"/>
+                                                                <f:selectItems value="" var="diario" 
+                                                                               itemLabel="#" 
+                                                                               itemValue="#"></f:selectItems>
+                                                            </p:selectOneMenu>
+                                                        </p:column>
+
+                                                        <p:column headerText="Acciones">
+                                                            <p:commandButton icon="pi pi-times" action="#"  
+                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                <p:resetInput target=""/>
+                                                            </p:commandButton>
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
                                                     </p:dataTable>
                                                 </div>
                                             </div>
@@ -153,13 +180,131 @@
                                                                      oncomplete="PF('crearFormula').hide()"/>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
 
+                        <!-- Cuadro de dialogo Producto -->
+                        <p:dialog header="Seleccionar Producto" showEffect="fade" modal="true"
+                                  widgetVar="producto" responsive="true" width="60%"
+                                  draggable="false" height="500">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-1 p-md-1 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Producto:"></p:outputLabel>
+                                                    <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable editable="true" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="">
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Tipo" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        
+                                                        <p:column headerText="Existencias" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <!-- Cuadro de dialogo Materia Prima -->
+                        <p:dialog header="Seleccionar Materia Prima" showEffect="fade" modal="true"
+                                  widgetVar="materiaPrima" responsive="true" width="75%"
+                                  draggable="false" height="500">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-1 p-md-1 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Materia Prima:"></p:outputLabel>
+                                                    <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable editable="true" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="">
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Código" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Medida" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Existencias" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Confirmar"  
+                                                                     icon="pi pi-check" 
+                                                                     disabled="#" styleClass="ui-button-success"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
 
                         <!-- Tabla de datos -->
                         <p:dataTable reflow="true" paginator="true" rows="5" 
@@ -175,22 +320,17 @@
                                 </div>
                             </f:facet>
 
-                            <p:column headerText="Numero" filterStyle="display : none">
+                            <p:column headerText="Nº Formula" filterStyle="display : none">
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
 
-                            <p:column headerText="Producto" >
+                            <p:column headerText="Nombre Formula" >
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
 
-                            <p:column headerText="Línea" >
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
-                            </p:column>
-
-                            <p:column headerText="Categoria" >
+                            <p:column headerText="Descripción" >
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
