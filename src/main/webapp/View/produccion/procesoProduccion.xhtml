@@ -60,7 +60,7 @@
                             <!-- Cuadros de texto de la izquierda -->
 
                             <p:outputPanel class="ui-fluid">
-                                <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
+                                <p:outputPanel>
 
 
                                     <div class="p-col-11 p-md-12 p-lg-10">
@@ -74,7 +74,7 @@
                                             <p:inputText disabled="#" value=""></p:inputText>
                                         </div>    
                                         <div class="p-col-11">
-                                            <p:outputLabel value="Descripción: *"></p:outputLabel>
+                                            <p:outputLabel value="Descripción:"></p:outputLabel>
                                             <p:inputTextarea disabled=""
                                                              maxlength="250"
                                                              placeholder="Descripcion maximo 255 caracteres"
@@ -447,7 +447,7 @@
                             <!-- Buscador -->
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px; font-size: 30px">Procesos</span>
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Procesos</span>
                                     <span class="filter-container ui-input-icon-left">
                                         <i class="pi pi-search"></i>
                                         <p:inputText id="globalFilter" placeholder="Buscar"/>
@@ -455,7 +455,7 @@
                                 </div>
                             </f:facet>
 
-                            <p:column headerText="Codigo" filterStyle="display : none">
+                            <p:column headerText="Código" filterStyle="display : none">
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
