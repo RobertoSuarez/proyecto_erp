@@ -11,20 +11,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
+//import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
 @Named(value = "usuarioMB")
-@ViewScoped
+@SessionScoped
 public class UsuarioController implements Serializable {
     
     Usuario usuario;
-    private  List<Usuario> listaUsuario;
+    private List<Usuario> listaUsuario;
     UsuarioDAO usuarioDAO;
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
+    private FacesContext facesContext = FacesContext.getCurrentInstance();
+    HttpSession httpSession = (HttpSession) facesContext.getExternalContext().getSession(true);
     
     public UsuarioController() {
         usuario = new Usuario();
@@ -69,6 +73,8 @@ public class UsuarioController implements Serializable {
                 
             } else if ("".equals(usuario.getPassword())) {
                 PFW("Ingrese una Contraseña");
+            } else if (usuario.isHabilitado() == false) {
+                PFW("Aceptar los terminos y condiciones");
                 
             } else if (matcher.find() == false) {
                 PFW("Ingrese un email válido");
@@ -83,9 +89,31 @@ public class UsuarioController implements Serializable {
         
     }
     
-    public void iniciarSesion() {
+    public String iniciarSesion() {
         listaUsuario = new ArrayList<>();
-        listaUsuario = usuarioDAO.iniciarSesion(usuario);
+        if (!usuario.getUsername().isEmpty() && !usuario.getPassword().isEmpty()) {
+            listaUsuario = usuarioDAO.iniciarSesion(usuario);
+            if (listaUsuario.get(0).getCode() == -1) {
+                PFW(listaUsuario.get(0).getMsj());
+                return "";
+            } else if (listaUsuario.get(0).getCode() == -2) {
+                PFE(listaUsuario.get(0).getMsj());
+                return "";
+                
+            } else {
+                PFE(listaUsuario.get(0).getMsj());
+                httpSession.setAttribute("usuario", listaUsuario.get(0).getUsername());
+                return "/View/Global/Main.xhtml";
+            }
+            
+        } else if ("".equals(usuario.getUsername())) {
+            PFW("Ingrese un usuario");
+        }else if ("".equals(usuario.getPassword())) {
+            PFW("Ingrese una contraseña");
+        } else {
+            return "";
+        }
+        return null;
     }
     
     public void PFW(String msj) {
@@ -100,6 +128,13 @@ public class UsuarioController implements Serializable {
                 addMessage(null, new FacesMessage(
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
         
+    }
+    
+    public String logOutUser() {
+        httpSession.removeAttribute("usuario");
+        usuarioDAO = new UsuarioDAO();
+        usuario = new Usuario();
+        return "index.xhtml";
     }
     
 }

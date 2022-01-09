@@ -16,7 +16,8 @@
     </h:head>
 
     <h:body styleClass="login-body" >
-        <h:form>
+        <p:growl id="growl" widgetVar="growl" showDetail="true" life="3000"/>  
+        <h:form id="registroPersona">
             <div class="p-grid p-nogutter"> 
 
                 <div class="p-col-12" style="text-align:center;margin-top:50px"  >
@@ -47,7 +48,7 @@
                             </div>
                         </div>
                         <div class="p-col-12 button-container">
-                            <p:commandButton actionListener="#{usuarioMB.iniciarSesion()}" value="Iniciar Sesión"></p:commandButton>
+                            <p:commandButton action="#{usuarioMB.iniciarSesion()}" update=":growl, :registroPersona" value="Iniciar Sesión"></p:commandButton>
                             <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2"/>
 
                         </div>
@@ -58,11 +59,11 @@
                     </div>
                 </div>
             </div>
-        </h:form>
+            </h:form>
 
-        <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
-        <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
-        <h:outputStylesheet name="css/login_.css" />
+            <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
+            <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
+            <h:outputStylesheet name="css/login_.css" />
     </h:body>
 
 </html>
