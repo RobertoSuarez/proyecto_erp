@@ -11,8 +11,27 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
+                    <p:submenu label="Cobranzas" icon="pi pi-dollar">
+                        <p:menuitem value="Nuevo Cobro" outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
+                        <p:menuitem value="Listado Cobro" outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Retenciones" icon="pi pi-file">
+                        <p:menuitem value="Aplicar Retención" outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Reportes" icon="pi pi-book">
+                        <p:menuitem value="Listado de Clientes con/sin deuda" outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
+                        <p:menuitem value="Estado de Cuenta" outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
+                        <p:menuitem value="Facturas Pendientes" outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
+                        <p:menuitem value="Cartera x Edades de Vencimiento" outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
+                    </p:submenu>
+                </p:menubar>
+                <br></br>
+                <br></br>
+                <br></br>
                 <div class="titleView">
-                    <h4>REGISTRO NUEVO COBRO</h4>
+                    <h1 style="text-align: center;">REGISTRO NUEVO COBRO</h1>
                 </div>
                 <p:panel>
                     <div class="card">
@@ -20,7 +39,7 @@
                         <h:form id="form">
                             <div class="ui-grid-row" style="height: 135px;">
                                 <div>
-                                    <div style="float: left; padding-left: 50px;">
+                                    <div style="float: left; padding-left: 10px;">
                                         <p:outputLabel for="identificacionCliente"
                                                        value="Identificación: "
                                                        style="font-weight:bold;"/>
@@ -30,7 +49,7 @@
                                                      placeholder="CI/PA/RUC"
                                                      value="#{abonoController.identificacion}"
                                                      maxlength="13"
-                                                     style="width: 150px;" />
+                                                     style="width: 150px; margin-left: 2px;" />
                                         &nbsp;&nbsp;&nbsp;
                                         <div style="float: right;">
                                             <p:commandButton id="btnconsulta" icon="pi pi-replay" 
@@ -39,7 +58,7 @@
                                                              actionListener="#{abonoController.cargarFacturas()}"/>
                                         </div>
                                     </div>
-                                    <div style="float: left; padding-left: 50px;">
+                                    <div style="float: left; padding-left: 15px">
                                         <p:outputLabel value="N° Factura: " 
                                                        for="optionFactura"
                                                        style="font-weight:bold;" />
@@ -54,7 +73,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div style="float: left; padding-top: 50px; padding-left: 40px;">
+                                    <div style="float: left; padding-left: 10px">
                                         <p:outputLabel value="Nombre Cliente: " 
                                                        for="nombreCliente" 
                                                        style="font-weight:bold;"/>
@@ -68,7 +87,7 @@
                                 </div>
 
                                 <div>
-                                    <div style="float: left; padding-left: 50px;">
+                                    <div style="float: left; padding-left: 10px;">
                                         <p:outputLabel value="Fecha Crédito: " 
                                                        for="fechaEmision" 
                                                        style="font-weight:bold;"/>
@@ -78,7 +97,7 @@
                                                      placeholder="aaaa/mm/dd"
                                                      value="#{abonoController.fechasPlan[0]}"/> 
                                     </div>
-                                    <div style="float: left; padding-left: 73px;">
+                                    <div style="float: left; padding-left: 10px;">
                                         <p:outputLabel value="Fecha Vencida: " 
                                                        for="fechaVencida" 
                                                        style="font-weight:bold;"/>
@@ -88,7 +107,8 @@
                                                      placeholder="aaaa/mm/dd"
                                                      value="#{abonoController.fechasPlan[1]}"/> 
                                     </div>
-                                    <div style="float: left; padding-top: 20px; padding-left: 120px;">
+                                    <div style="ext-align: center;">
+                                    <div style="float: left; padding-top: 20px;">
                                         <p:commandButton value="Cargar Plan de Pagos"
                                                          id="btnDeuda"
                                                          icon="pi pi-replay" 
@@ -96,9 +116,16 @@
                                                          update="growl fechaVencida fechaEmision tblRegistroCobro"
                                                          styleClass="ui-button-secondary"/>
                                     </div>
+                                    <div style="float: left; padding-top: 20px; padding-left: 2px;">
+                                        <p:commandButton value="Nuevo Cobro"
+                                                         ajax="false"
+                                                         actionListener="#{abonoController.nuevoAbono}"
+                                                         icon="pi pi-save" 
+                                                         styleClass="ui-button-success"/>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
-                            <br/><br/><br/><br/><br/>
                             <p:dataTable id="tblRegistroCobro" var="varRegistroCobro"
                                          emptyMessage="No existen Registros." 
                                          scrollable="true" paginator="true" 
@@ -169,15 +196,6 @@
                                     </h:outputText>
                                 </p:column>
                             </p:dataTable>
-                            <br/>
-                            <div style="text-align: center;"> 
-                                <p:commandButton value="Nuevo Cobro"
-                                                 ajax="false"
-                                                 actionListener="#{abonoController.nuevoAbono}"
-                                                 icon="pi pi-save" 
-                                                 styleClass="ui-button-success"/>
-                            </div>
-
                             <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
                                             widgetVar="selecionCliente">
                                 <p:dataTable var="cliente" id="tbcliente" 
@@ -188,7 +206,7 @@
                                              rowSelectMode="add"
                                              paginatorPosition="bottom"
                                              rowKey="#{cliente.idCliente}">
-                                    
+
                                     <p:ajax event="rowSelect" 
                                             listener="#{abonoController.onRowSelect}" 
                                             onsuccess="PF('selecionCliente').hide()" 
