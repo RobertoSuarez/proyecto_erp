@@ -10,7 +10,6 @@
             <ui:define name="title">Orden de Producción</ui:define>
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="../Global/Main.xhtml"/>
                     <p:menuitem value="Orden de Producción" url="#"/>
                     <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
                     <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
@@ -28,9 +27,11 @@
                                                      styleClass="ui-button-primary"
                                                      icon="pi pi-plus" outcome="oProduccion.xhtml">
                                     </p:button>
+                                    <!-- Tabla de datos 
                                     <p:commandButton style="margin-right: 6px;" value="Filtrar" 
-                                                     styleClass="ui-button-warning" oncomplete="PF('filtro').show()">
+                                                     styleClass="ui-button-secondary" oncomplete="PF('filtro').show()">
                                     </p:commandButton>
+                                    -->
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
