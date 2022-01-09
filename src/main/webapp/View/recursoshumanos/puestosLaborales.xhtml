@@ -1,123 +1,223 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
-        <h:form id="form">
-            <div class="card crud-demo">
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <span style="font-weight: bold" icon="pi pi-table">PUESTOS LABORALES</span>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{puestoLaboralView.abrirNuevo}"
-                                             update=":form:manage-puestoLaboral-content" oncomplete="PF('managePuestoLaboralDialog').show()"
-                                             styleClass="ui-button-success" style="margin-right: .5rem">
-                                <p:resetInput target=":form:manage-puestoLaboral-content"/>
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:dataTable id="dt-puestoLaborals" widgetVar="dtPuestoLaborals" var="puestoLaboral" value="#{puestoLaboralView.lista}"
-                                 reflow="true" size="small" liveResize="true" styleClass="puestoLaborals-table"
-                                 rowKey="#{puestoLaboral.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
-                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        
-                        <p:column headerText="Departamento" sortBy="#{puestoLaboral.departamento.nombre}"
-                                  filterBy="#{puestoLaboral.departamento.nombre}">
-                            <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Cargo" sortBy="#{puestoLaboral.cargo.nombre}"
-                                  filterBy="#{puestoLaboral.cargo.nombre}">
-                            <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Creado" width="10%" sortBy="#{puestoLaboral.fecha_creacion}">
-                            <h:outputText value="#{puestoLaboralView.darFormato(puestoLaboral.fecha_creacion)}"/>
-                        </p:column>
-                        <p:column headerText="Descripción" width="30%">
-                            <h:outputText value="#{puestoLaboral.descripcion}"/>
-                        </p:column>
-                        <p:column headerText="Estado" width="13%" field="estado" filterBy="#{puestoLaboral.estado}"
-                                  filterMatchMode="exact">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('dtPuestoLaborals').filter()">
-                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
-                                    <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
-                                </p:selectOneMenu>
-                            </f:facet>
-                            <h:outputText id="inputestado" value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
-                        </p:column>
-                        <p:column exportable="false" width="10%">
-                            <p:commandButton icon="pi pi-pencil" update=":form:manage-puestoLaboral-content"
-                                             oncomplete="PF('managePuestoLaboralDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}"
-                                        update=":form:manage-puestoLaboral-content" />
-                                <f:setPropertyActionListener value="#{puestoLaboral}" target="#{puestoLaboralView.puestoLaboral}"/>
-                                <p:resetInput target=":form:manage-puestoLaboral-content"/>
-                            </p:commandButton>
-                            <p:commandButton icon="pi pi-#{puestoLaboral.estado? 'times' : 'check'}"
-                                             styleClass="edit-button rounded-button ui-button-success" 
-                                             actionListener="#{puestoLaboralView.cambiarEstado(puestoLaboral)}"
-                                             update="dt-puestoLaborals" process="dt-puestoLaborals @this">
-                                <f:setPropertyActionListener value="#{!puestoLaboral.estado}" target="#{puestoLaboral.estado}"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog header="Puesto Laboral" showEffect="fade" modal="true"
-                              widgetVar="managePuestoLaboralDialog" responsive="true">
-                        <p:outputPanel id="manage-puestoLaboral-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty puestoLaboralView.puestoLaboral}">
-                                <div class="card">
-                                    <div class="ui-fluid">
-                                        <div class="p-field">
-                                            <p:outputLabel for="depart" value="Departamento: "/>
-                                            <p:selectOneMenu id="depart" value="#{puestoLaboralView.idDepartamento}"
-                                                             required="true" label="Departamento">
-                                                <f:selectItem itemLabel="Selecione un departamento" itemValue="#{0}" noSelectionOption="true"/>
-                                                <f:selectItems value="#{puestoLaboralView.departamentos}" var="departamento" 
-                                                               itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
-                                            </p:selectOneMenu>
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>>
+                <h:form id="form">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/><br/>
+                        <p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <span style="font-weight: bold" 
+                                          icon="pi pi-table">PUESTOS LABORALES</span>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Nuevo" 
+                                                     icon="pi pi-plus" 
+                                                     actionListener="#{puestoLaboralView.abrirNuevo}"
+                                                     update=":form:manage-puestoLaboral-content" 
+                                                     oncomplete="PF('managePuestoLaboralDialog').show()"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                        <p:resetInput target=":form:manage-puestoLaboral-content"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="dt-puestoLaborals" 
+                                         widgetVar="dtPuestoLaborals" 
+                                         var="puestoLaboral" value="#{puestoLaboralView.lista}"
+                                         reflow="true" size="small" 
+                                         liveResize="true" styleClass="puestoLaborals-table"
+                                         rowKey="#{puestoLaboral.id}" paginator="true"
+                                         rows="5" rowSelectMode="add" 
+                                         paginatorPosition="bottom">
+
+                                <p:column headerText="Departamento" 
+                                          sortBy="#{puestoLaboral.departamento.nombre}"
+                                          filterBy="#{puestoLaboral.departamento.nombre}">
+                                    <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Cargo" sortBy="#{puestoLaboral.cargo.nombre}"
+                                          filterBy="#{puestoLaboral.cargo.nombre}">
+                                    <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Creado" width="10%" 
+                                          sortBy="#{puestoLaboral.fecha_creacion}">
+                                    <h:outputText 
+                                        value="#{puestoLaboralView.darFormato(puestoLaboral.fecha_creacion)}"/>
+                                </p:column>
+                                <p:column headerText="Descripción" width="30%">
+                                    <h:outputText value="#{puestoLaboral.descripcion}"/>
+                                </p:column>
+                                <p:column headerText="Estado" width="13%" 
+                                          field="estado" filterBy="#{puestoLaboral.estado}"
+                                          filterMatchMode="exact">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('dtPuestoLaborals').filter()">
+                                            <f:selectItem itemLabel="Todo" 
+                                                          itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Deshabilitados" 
+                                                          itemValue="#{false}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                    <h:outputText id="inputestado" 
+                                                  value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
+                                </p:column>
+                                <p:column exportable="false" width="10%">
+                                    <p:commandButton icon="pi pi-pencil" 
+                                                     update=":form:manage-puestoLaboral-content"
+                                                     oncomplete="PF('managePuestoLaboralDialog').show()"
+                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                        <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}"
+                                                update=":form:manage-puestoLaboral-content" />
+                                        <f:setPropertyActionListener value="#{puestoLaboral}" 
+                                                                     target="#{puestoLaboralView.puestoLaboral}"/>
+                                        <p:resetInput target=":form:manage-puestoLaboral-content"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="pi pi-#{puestoLaboral.estado? 'times' : 'check'}"
+                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     actionListener="#{puestoLaboralView.cambiarEstado(puestoLaboral)}"
+                                                     update="dt-puestoLaborals" 
+                                                     process="dt-puestoLaborals @this">
+                                        <f:setPropertyActionListener value="#{!puestoLaboral.estado}" 
+                                                                     target="#{puestoLaboral.estado}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dialog header="Puesto Laboral" showEffect="fade" modal="true"
+                                      widgetVar="managePuestoLaboralDialog" responsive="true">
+                                <p:outputPanel id="manage-puestoLaboral-content" class="ui-fluid">
+                                    <p:outputPanel rendered="#{not empty puestoLaboralView.puestoLaboral}">
+                                        <div class="card">
+                                            <div class="ui-fluid">
+                                                <div class="p-field">
+                                                    <p:outputLabel for="depart" 
+                                                                   value="Departamento: "/>
+                                                    <p:selectOneMenu id="depart" 
+                                                                     value="#{puestoLaboralView.idDepartamento}"
+                                                                     required="true" 
+                                                                     label="Departamento">
+                                                        <f:selectItem itemLabel="Selecione un departamento" itemValue="#{0}" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{puestoLaboralView.departamentos}" var="departamento" 
+                                                                       itemLabel="#{departamento.nombre}" itemValue="#{departamento.id}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="p-field">
+                                                    <p:outputLabel for="inputcargo" 
+                                                                   value="Cargo: "/>
+                                                    <p:selectOneMenu id="inputcargo" 
+                                                                     value="#{puestoLaboralView.idCargo}"
+                                                                     required="true" 
+                                                                     label="Cargo">
+                                                        <f:selectItem itemLabel="Selecione un cargo" 
+                                                                      itemValue="#{0}" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{puestoLaboralView.cargos}" var="cargo" 
+                                                                       itemLabel="#{cargo.nombre}" 
+                                                                       itemValue="#{cargo.id}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="p-field">
+                                                    <p:outputLabel for="description" 
+                                                                   style="font-weight: bold">Descripción</p:outputLabel>
+                                                    <p:inputTextarea id="description" 
+                                                                     value="#{puestoLaboralView.puestoLaboral.descripcion}" 
+                                                                     required="true" 
+                                                                     label="Descripción"/>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="inputcargo" value="Cargo: "/>
-                                            <p:selectOneMenu id="inputcargo" value="#{puestoLaboralView.idCargo}"
-                                                             required="true" label="Cargo">
-                                                <f:selectItem itemLabel="Selecione un cargo" itemValue="#{0}" noSelectionOption="true"/>
-                                                <f:selectItems value="#{puestoLaboralView.cargos}" var="cargo" 
-                                                               itemLabel="#{cargo.nombre}" itemValue="#{cargo.id}"/>
-                                            </p:selectOneMenu>
-                                        </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
-                                            <p:inputTextarea id="description" value="#{puestoLaboralView.puestoLaboral.descripcion}" 
-                                                             required="true" label="Descripción"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p:outputPanel>
-                        </p:outputPanel>
-                        <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{puestoLaboralView.enviar}"
-                                             update="messages manage-puestoLaboral-content" styleClass="ui-button-success"
-                                             process="messages manage-puestoLaboral-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('managePuestoLaboralDialog').hide()"
-                                             process="@none" styleClass="p-mr-2" resetValues="true" />
-                        </f:facet>
-                    </p:dialog>
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                         icon="pi pi-times"/>
-                    </p:confirmDialog>
-                </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-</ui:composition>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                                     actionListener="#{puestoLaboralView.enviar}"
+                                                     update="messages manage-puestoLaboral-content" 
+                                                     styleClass="ui-button-success"
+                                                     process="messages manage-puestoLaboral-content @this"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                     onclick="PF('managePuestoLaboralDialog').hide()"
+                                                     process="@none" styleClass="p-mr-2" 
+                                                     resetValues="true" />
+                                </f:facet>
+                            </p:dialog>
+                            <p:confirmDialog global="true" showEffect="fade" width="300">
+                                <p:commandButton value="Yes" type="button" 
+                                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                                <p:commandButton value="No" type="button" 
+                                                 styleClass="ui-confirmdialog-no ui-button-secondary"
+                                                 icon="pi pi-times"/>
+                            </p:confirmDialog>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

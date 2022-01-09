@@ -1,92 +1,185 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content" class="Contenido">
-        <div class="card">
-            <h:form id="form" style="width: 105%; margin-left: -23px;">
-                <p:toolbar>
-                    <p:toolbarGroup>
-                        <span style="font-weight: bold" icon="pi pi-table">Registro de asistencia</span>
-                    </p:toolbarGroup>
-                </p:toolbar>
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel id="dt-asistencia" class="ui-fluid">
-                    <h:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
-                                 styleClass="ui-panelgrid-blank ui-fluid"
-                                 style="border:0px none; background-color:transparent; width: 100%;">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <div class="card">
+                    <h:form id="form" style="width: 100%;">
+                        <br/><br/><br/><br/>
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <span style="font-weight: bold" 
+                                      icon="pi pi-table">Registro de asistencia</span>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:growl id="messages" showDetail="true"/>
+                        
+                        <p:panel id="dt-asistencia" class="ui-fluid">
+                            <h:panelGrid columns="4" 
+                                         columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+                                         styleClass="ui-panelgrid-blank ui-fluid"
+                                         style="border:0px none; 
+                                         background-color:transparent; width: 100%;">
 
 
-                        <h:outputLabel for="inempleado" value="Empleado: "/>
-                        <p:selectOneMenu id="inempleado" style="width: 100%" value="#{asistenciaView.asistencia.empleadoPuesto.empleado.id}"
-                                         required="true" requiredMessage="Debe seleccionar un empleado"
-                                         filter="true" filterMatchMode="startsWith">
-                            <p:ajax listener="#{asistenciaView.empleadoSeleccionado}" update="inhorario dt-asistencias"/>
-                            <f:selectItem itemLabel="Selecione a un empleado" itemValue="#{0}" noSelectionOption="true"/>
-                            <f:selectItems value="#{asistenciaView.empleados}" 
-                                           var="empleado" itemLabel="#{empleado.nombreCompleto()}" itemValue="#{empleado.id}"/>
-                        </p:selectOneMenu>
+                                <h:outputLabel for="inempleado" value="Empleado: "/>
+                                <p:selectOneMenu id="inempleado" style="width: 100%" 
+                                                 value="#{asistenciaView.asistencia.empleadoPuesto.empleado.id}"
+                                                 required="true" 
+                                                 requiredMessage="Debe seleccionar un empleado"
+                                                 filter="true" 
+                                                 filterMatchMode="startsWith">
+                                    <p:ajax listener="#{asistenciaView.empleadoSeleccionado}" 
+                                            update="inhorario dt-asistencias"/>
+                                    <f:selectItem itemLabel="Selecione a un empleado" 
+                                                  itemValue="#{0}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{asistenciaView.empleados}" 
+                                                   var="empleado" 
+                                                   itemLabel="#{empleado.nombreCompleto()}" 
+                                                   itemValue="#{empleado.id}"/>
+                                </p:selectOneMenu>
 
-                        <h:outputLabel for="inhorario" style="margin-left: 10PX" value="Horario: "/>
-                        <p:selectOneMenu id="inhorario" value="#{asistenciaView.asistencia.detalleHorario.id}"
-                                         required="true" label="Horario">
-                            <p:ajax listener="#{asistenciaView.cargarDatos}" update="iningreso insalida dt-asistencias"/>
-                            <f:selectItem itemLabel="Selecione el horario" itemValue="#{0}" noSelectionOption="true"/>
-                            <f:selectItems value="#{asistenciaView.horarios}" var="horario" 
-                                           itemLabel="#{horario.ingresoSalida.resumen()}" itemValue="#{horario.id}">
-                            </f:selectItems>
-                        </p:selectOneMenu>
-                    </h:panelGrid>
-                    <h:panelGrid columns="7" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-3"
-                                 styleClass="ui-panelgrid-blank ui-fluid"
-                                 style="border:0px none; background-color:transparent; width: 100%;">
+                                <h:outputLabel for="inhorario" style="margin-left: 10PX" 
+                                               value="Horario: "/>
+                                <p:selectOneMenu id="inhorario" 
+                                                 value="#{asistenciaView.asistencia.detalleHorario.id}"
+                                                 required="true" label="Horario">
+                                    <p:ajax listener="#{asistenciaView.cargarDatos}" 
+                                            update="iningreso insalida dt-asistencias"/>
+                                    <f:selectItem itemLabel="Selecione el horario" 
+                                                  itemValue="#{0}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{asistenciaView.horarios}" var="horario" 
+                                                   itemLabel="#{horario.ingresoSalida.resumen()}" 
+                                                   itemValue="#{horario.id}">
+                                    </f:selectItems>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid columns="7" 
+                                         columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-3"
+                                         styleClass="ui-panelgrid-blank ui-fluid"
+                                         style="border:0px none; 
+                                         background-color:transparent; width: 100%;">
 
-                        <h:outputLabel for="fecha" value="Fecha: "/>
-                        <p:datePicker id="fecha" value="#{asistenciaView.asistencia.fecha}"
-                                      monthNavigator="true" yearNavigator="true" mindate="01/01/1960"
-                                      pattern="dd/MM/yyyy" required="true" label="Fecha">
-                            <p:ajax listener="#{asistenciaView.cargarDatos}" update="inhorario iningreso insalida dt-asistencias"/>
-                        </p:datePicker>
+                                <h:outputLabel for="fecha" value="Fecha: "/>
+                                <p:datePicker id="fecha" value="#{asistenciaView.asistencia.fecha}"
+                                              monthNavigator="true" yearNavigator="true" 
+                                              mindate="01/01/1960"
+                                              pattern="dd/MM/yyyy" required="true" label="Fecha">
+                                    <p:ajax listener="#{asistenciaView.cargarDatos}" 
+                                            update="inhorario iningreso insalida dt-asistencias"/>
+                                </p:datePicker>
 
-                        <h:outputLabel for="iningreso" style="margin-left: 10PX" value="Hora de ingreso: "/>
-                        <p:datePicker  id="iningreso" style="margin-left: -20PX" value="#{asistenciaView.asistencia.ingreso}"
-                                      timeOnly="true" pattern="HH:mm:ss" mindate="#{asistenciaView.minTimeI}"
-                                      maxdate="#{asistenciaView.maxTimeI}"/>
+                                <h:outputLabel for="iningreso" style="margin-left: 10PX" 
+                                               value="Hora de ingreso: "/>
+                                <p:datePicker  id="iningreso" style="margin-left: -20PX" 
+                                               value="#{asistenciaView.asistencia.ingreso}"
+                                               timeOnly="true" pattern="HH:mm:ss" 
+                                               mindate="#{asistenciaView.minTimeI}"
+                                               maxdate="#{asistenciaView.maxTimeI}"/>
 
-                        <h:outputLabel for="insalida" style="margin-left: 10PX" value="Hora de salida: "/>
-                        <p:datePicker id="insalida" value="#{asistenciaView.asistencia.salida}"  style="margin-left: -20PX" 
-                                      timeOnly="true" pattern="HH:mm:ss" mindate="#{asistenciaView.minTimeS}"
-                                      maxdate="#{asistenciaView.maxTimeS}" />
+                                <h:outputLabel for="insalida" style="margin-left: 10PX" 
+                                               value="Hora de salida: "/>
+                                <p:datePicker id="insalida" value="#{asistenciaView.asistencia.salida}" 
+                                              style="margin-left: -20PX" 
+                                              timeOnly="true" pattern="HH:mm:ss" 
+                                              mindate="#{asistenciaView.minTimeS}"
+                                              maxdate="#{asistenciaView.maxTimeS}" />
 
-                        <p:commandButton value="Guardar" style="align-content: center; width: 62%;" icon="pi pi-save"
-                                         actionListener="#{asistenciaView.guardar()}"
-                                         update="dt-asistencia dt-asistencias" styleClass="p-mr-2 ui-button-success"
-                                         process="dt-asistencia @this">
-                        </p:commandButton>
-                    </h:panelGrid>
-                </p:panel>
-                <p:dataTable id="dt-asistencias" widgetVar="dtAsistencias" var="asistencia" value="#{asistenciaView.asistencias}"
-                             reflow="true" size="small" liveResize="true" styleClass="asistencias-table"
-                             paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom"
-                             rowsPerPageTemplate="3,5,10,{ShowAll|'All'}">
-                    <p:column headerText="Horario" sortBy="#{asistencia.detalleHorario.ingresoSalida.resumen()}">
-                        <h:outputText value="#{asistencia.detalleHorario.ingresoSalida.resumen()}"/>
-                    </p:column>
-                    <p:column headerText="Fecha" sortBy="#{asistencia.fecha}" width="20%">
-                        <h:outputText value="#{asistencia.fecha}"/>
-                    </p:column>
-                    <p:column headerText="Hora de Ingreso" sortBy="#{asistencia.ingreso}" width="20%">
-                        <h:outputText value="#{asistencia.ingreso}"/>
-                    </p:column>
-                    <p:column headerText="Hora de Salida" sortBy="#{asistencia.salida}" width="20%">
-                        <h:outputText value="#{asistencia.salida}"/>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </div>
-    </ui:define>
-</ui:composition>
+                                <p:commandButton value="Guardar" style="align-content: center; 
+                                                 width: 62%;" icon="pi pi-save"
+                                                 actionListener="#{asistenciaView.guardar()}"
+                                                 update="dt-asistencia dt-asistencias" 
+                                                 styleClass="p-mr-2 ui-button-success"
+                                                 process="dt-asistencia @this">
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable id="dt-asistencias" widgetVar="dtAsistencias" 
+                                     var="asistencia" value="#{asistenciaView.asistencias}"
+                                     reflow="true" size="small" liveResize="true" 
+                                     styleClass="asistencias-table"
+                                     paginator="true" rows="10" rowSelectMode="add" 
+                                     paginatorPosition="bottom">
+                            <p:column headerText="Horario" sortBy="#{asistencia.detalleHorario.ingresoSalida.resumen()}">
+                                <h:outputText value="#{asistencia.detalleHorario.ingresoSalida.resumen()}"/>
+                            </p:column>
+                            <p:column headerText="Fecha" sortBy="#{asistencia.fecha}" width="20%">
+                                <h:outputText value="#{asistencia.fecha}"/>
+                            </p:column>
+                            <p:column headerText="Hora de Ingreso" sortBy="#{asistencia.ingreso}" width="20%">
+                                <h:outputText value="#{asistencia.ingreso}"/>
+                            </p:column>
+                            <p:column headerText="Hora de Salida" sortBy="#{asistencia.salida}" width="20%">
+                                <h:outputText value="#{asistencia.salida}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

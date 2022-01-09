@@ -24,7 +24,7 @@
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <p:commandButton value="Crear Nueva Formula" 
-                                                     styleClass="ui-button-success"
+                                                     styleClass="ui-button-primary"
                                                      icon="pi pi-plus" oncomplete="PF('crearFormula').show()">
                                     </p:commandButton>
                                 </div>
@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="p-col-12 p-md-3">
                                                 <p:commandButton style="margin-right: 6px;" value="Buscar" 
-                                                                 styleClass="ui-button-warning" icon="pi pi-search" oncomplete="PF('producto').show()">
+                                                                 styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('producto').show()">
                                                 </p:commandButton>
                                             </div>
                                         </p:toolbarGroup>
@@ -157,7 +157,7 @@
 
                                                         <p:column headerText="Acciones">
                                                             <p:commandButton icon="pi pi-times" action="#"  
-                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                                             styleClass="edit-button rounded-button ui-button-danger" process="@this">
                                                                 <f:setPropertyActionListener value="#" target="#"/>
                                                                 <p:resetInput target=""/>
                                                             </p:commandButton>
