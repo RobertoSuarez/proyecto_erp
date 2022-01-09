@@ -22,11 +22,11 @@
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <p:button style="margin-right: 6px;" value="Buscar" 
-                                              styleClass="ui-button-warning" icon="pi pi-search" outcome="listaOrdenProduccion.xhtml">
+                                              styleClass="ui-button-secondary" icon="pi pi-search" outcome="listaOrdenProduccion.xhtml">
                                     </p:button>
-                                    <p:button style="margin-right: 6px;" value="Guardar" styleClass="ui-button-secondary" icon="pi pi-save"/>
-                                    <p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-info" icon="pi pi-plus-circle"/>
-                                    <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-success" icon="pi pi-pencil"/>
+                                    <p:button style="margin-right: 6px;" value="Guardar" styleClass="ui-button-success" icon="pi pi-save"/>
+                                    <p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-success" icon="pi pi-plus-circle"/>
+                                    <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-info" icon="pi pi-pencil"/>
                                     <p:button style="margin-right: 6px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"/>
                                 </div>
                             </p:toolbarGroup>
@@ -35,11 +35,11 @@
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <p:commandButton style="margin-right: 6px;" value="Requisición detallada" 
-                                                     styleClass="ui-button-warning"
+                                                     styleClass="ui-button-secondary"
                                                      icon="pi pi-search" oncomplete="PF('materiaprima').show()">
                                     </p:commandButton>
                                     <p:button style="margin-right: 6px;" value="Extracción detallada de materiales" 
-                                              styleClass="ui-button-warning" icon="pi pi-search">
+                                              styleClass="ui-button-secondary" icon="pi pi-search">
                                     </p:button>
                                 </div>
                             </p:toolbarGroup>
@@ -94,7 +94,7 @@
                                             <p:outputLabel value="buscar" for="@next" style="color: white"/>
 
                                             <p:commandButton value="Buscar" 
-                                                             styleClass="ui-button-warning"
+                                                             styleClass="ui-button-secondary"
                                                              icon="pi pi-search" oncomplete="PF('producto').show()">
                                             </p:commandButton>
                                         </div>
@@ -216,7 +216,6 @@
                                                     <p:dataTable editable="true" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
                                                                  value="">
-
 
 
                                                         <p:column headerText="Código" filterStyle="display : none">
