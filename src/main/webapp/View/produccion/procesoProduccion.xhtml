@@ -17,115 +17,83 @@
                 </p:menubar>
                 <h:form id="form" style="margin-top: 4%;">
                     <div class="card">
-                        <!-- Boton Crear Formula -->
+
                         <p:toolbar>
+                            <!-- Botones del menu Principal -->
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <p:commandButton value="Nuevo Principal" 
+                                    <!-- Boton Nuevo Proceso -->
+                                    <p:commandButton value="Nuevo Proceso" 
                                                      styleClass="ui-button-success"
-                                                     icon="pi pi-plus" oncomplete="PF('NuevoPrincipal').show()"
+                                                     icon="pi pi-plus" 
+                                                     oncomplete="PF('nuevoProceso').show()"
                                                      style=" margin-right: .6rem">
                                     </p:commandButton>
-                                    <p:commandButton value="Nuevo Inferior" 
+                                    <!-- Boton Nuevo SubProceso -->
+                                    <p:commandButton value="Nuevo Subproceso" 
                                                      styleClass="ui-button-success"
-                                                     icon="pi pi-plus" oncomplete="PF('NuevoInferior').show()"
+                                                     icon="pi pi-plus"
+                                                     oncomplete="PF('nuevoSubproceso').show()"
                                                      style=" margin-right: .6rem">
                                     </p:commandButton>
-                                    <p:commandButton value="Proceso" 
+                                    <!-- Boton Agregar Costo -->
+                                    <p:commandButton value="Agregar Costos" 
                                                      styleClass="ui-button-success"
-                                                     icon="pi pi-plus" oncomplete="PF('NuevoProceso').show()">
+                                                     icon="pi pi-plus" 
+                                                     oncomplete="PF('agregarCostos').show()"
+                                                     style=" margin-right: .6rem">
+                                    </p:commandButton>                                 
+                                    <!-- Boton Agregar Centro de Costo -->
+                                    <p:commandButton value=" Agregar Centro de Costos" 
+                                                     styleClass="ui-button-success"
+                                                     icon="pi pi-plus" 
+                                                     oncomplete="PF('agregarCentroDeCostos').show()">
                                     </p:commandButton>
 
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
 
-                        <!-- Cuadro de dialogo Nuevo Principal -->
-                        <p:dialog header="Nuevo Principal" showEffect="fade" modal="true"
-                                  widgetVar="NuevoPrincipal" responsive="true" width="35%"
+                        <!-- Cuadro de dialogo Nuevo Proceso  -->
+                        <p:dialog header="Nuevo Proceso" showEffect="fade" modal="true"
+                                  widgetVar="nuevoProceso" responsive="true" width="35%"
                                   draggable="false" height="540">
                             <!-- Cuadros de texto de la izquierda -->
                             <p:outputPanel id="manage-asiento" class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
                                     <div class="p-grid ">
                                         <div class="p-col-11 p-md-12 p-lg-10">
+                                            <div class="p-col-6">
+                                                <p:outputLabel value="Codigo:"></p:outputLabel>
+                                                <p:inputText value="" ></p:inputText>                                                
+                                            </div>
 
-                                                <div class="p-col-6">
-                                                   <p:outputLabel value="Codigo:"></p:outputLabel>
-                                                    <p:inputText value="" ></p:inputText>
-                                                    
-                                                </div>
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Nombre:"></p:outputLabel>
+                                                <p:inputText disabled="#" value=""></p:inputText>
+                                            </div>    
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Descripción: *"></p:outputLabel>
+                                                <p:inputTextarea disabled=""
+                                                                 maxlength="250"
+                                                                 placeholder="Descripcion maximo 255 caracteres"
+                                                                 value="" 
+                                                                 rows="5" 
+                                                                 cols="33" 
+                                                                 autoResize="false"/>
+                                            </div>
 
-                                   
-                                                <div class="p-col-11">
-                                                    <p:outputLabel value="Descripción:"></p:outputLabel>
-                                                    <p:inputText disabled="#"
-                                                                 value=""
-                                                                 ></p:inputText>
-                                                </div>
-                                                <div class="p-col-11">
-                                                    <p:outputLabel value="Detalle Tecnico del Proceso:"></p:outputLabel>
-                                                    <p:inputText disabled="#"
-                                                                 value=""
-                                                                ></p:inputText>
-                                                </div>
-                                          
                                         </div>
                                         <!-- Botones Guardar/Cerrar -->
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Guardar"  
-                                                                     icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-success"/>
-                                                </div>
-                                                <div class="p-col-3">
-                                                    <p:commandButton value="Modificar" icon="pi pi-times"
-                                                                     styleClass="ui-button-danger" process="@this"
-                                                                     oncomplete="PF('Proceso').hide()"/>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="p-col-12">
-                                            
-                                            <div class="p-grid">
-                                              
-                                                <div class="p-col-2">
-                                                      <p:outputLabel> Propiedades : </p:outputLabel>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    
-                                                    <p:selectBooleanCheckbox id="check11" value="" />
-                                                    <p:outputLabel for="check11"> Activo  </p:outputLabel>
-                                                </div>
-
-                                                <div class="p-col-2"> 
-                                                    <p:selectBooleanCheckbox id="check22" value="" />
-                                                    <p:outputLabel for="check22"> Grupo  </p:outputLabel>   
-                                                </div>
-
-                                                <div class="p-col-2"> 
-                                                    <p:selectBooleanCheckbox id="check33" value="" />
-                                                    <p:outputLabel for="check33"> Movimiento  </p:outputLabel>
+                                                    <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-success"/>
                                                 </div>
 
                                             </div>
-
                                         </div>
 
-                                        <div class="p-col-11">
-                                            <div class="p-grid">
-                                                <!-- Boton Auditoria -->
-                                                <div class="p-col-3">
-                                                    <p:commandButton value="Auditoria" process="@this"
-                                                                     disabled="#"
-                                                                     actionListener="#"
-                                                                     icon="pi pi-plus"/>
-                                                </div>
-                                            </div>
-                                        </div>
 
                                         <div class="p-col-11"> 
                                             <p:outputLabel> Codigo : </p:outputLabel>
@@ -157,50 +125,48 @@
                             </p:outputPanel>
                         </p:dialog>
 
-                        
-                                 <!-- Cuadro de dialogo Nuevo Inferior -->
-                        <p:dialog header="Nuevo Inferior" showEffect="fade" modal="true"
-                                  widgetVar="NuevoInferior" responsive="true" width="35%"
+                        <!-- Cuadro de dialogo Subproceso -->
+                        <p:dialog header="Nuevo SubProceso" showEffect="fade" modal="true"
+                                  widgetVar="nuevoSubproceso" responsive="true" width="35%"
                                   draggable="false" height="300">
                             <!-- Cuadros de texto de la izquierda -->
                             <p:outputPanel id="manage-asiento" class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
                                     <div class="p-grid ">
-                                        <div class="p-col-11 p-md-12 p-lg-10">
+                                        <div class="p-col-12 p-md-12 p-lg-10">
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Codigo:"></p:outputLabel>
+                                                <div class="p-grid">
 
-                                                <div class="p-col-6">
-                                                   <p:outputLabel value="Codigo:"></p:outputLabel>
-                                                    <p:inputText value="" ></p:inputText>
-                                                    
-                                                </div>
+                                                    <div class="p-col-4">
+                                                        <p:inputText value="" ></p:inputText>   
+                                                    </div>
+                                                    <div class="p-col-4">
+                                                        <p:inputText value="" ></p:inputText>   
+                                                    </div>
 
-                                   
-                                                <div class="p-col-11">
-                                                    <p:outputLabel value="Descripción:"></p:outputLabel>
-                                                    <p:inputText disabled="#"
-                                                                 value=""
-                                                                 ></p:inputText>
                                                 </div>
-                                                <div class="p-col-11">
-                                                    <p:outputLabel value="Detalle Tecnico del Proceso:"></p:outputLabel>
-                                                    <p:inputText disabled="#"
-                                                                 value=""
-                                                                ></p:inputText>
-                                                </div>
-                                          
+                                            </div>
+
+
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Nombre:"></p:outputLabel>
+                                                <p:inputText disabled="#" value=""  ></p:inputText>
+                                            </div>
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Descripción: "></p:outputLabel>
+                                                <p:inputText disabled="#" value="" ></p:inputText>
+                                            </div>
+
                                         </div>
                                         <!-- Botones Guardar/Cerrar -->
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Guardar"  
-                                                                     icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-success"/>
+                                                    <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-success"/>
                                                 </div>
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Modificar" icon="pi pi-times"
-                                                                     styleClass="ui-button-danger" process="@this"
-                                                                     oncomplete="PF('Proceso').hide()"/>
+                                                    <p:commandButton value="Modificar" icon="pi pi-times" styleClass="ui-button-danger" process="@this" oncomplete="PF('Proceso').hide()"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -209,11 +175,11 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
-                        
-                        
-                           <!-- Cuadro de dialogo Nuevo Proceso -->
-                        <p:dialog header="Nuevo Proceso" showEffect="fade" modal="true"
-                                  widgetVar="NuevoProceso" responsive="true" width="35%"
+
+
+                        <!-- Cuadro de dialogo Agregar Costos -->
+                        <p:dialog header="Agregar Costos" showEffect="fade" modal="true"
+                                  widgetVar="agregarCostos" responsive="true" width="35%"
                                   draggable="false" height="300">
                             <!-- Cuadros de texto de la izquierda -->
                             <p:outputPanel id="manage-asiento" class="ui-fluid">
@@ -221,39 +187,32 @@
                                     <div class="p-grid ">
                                         <div class="p-col-11 p-md-12 p-lg-10">
 
-                                                <div class="p-col-6">
-                                                   <p:outputLabel value="Codigo:"></p:outputLabel>
-                                                    <p:inputText value="" ></p:inputText>
-                                                    
-                                                </div>
+                                            <div class="p-col-6">
+                                                <p:outputLabel value="Codigo:"></p:outputLabel>
+                                                <p:inputText value="" ></p:inputText>
 
-                                   
-                                                <div class="p-col-11">
-                                                    <p:outputLabel value="Descripción:"></p:outputLabel>
-                                                    <p:inputText disabled="#"
-                                                                 value=""
-                                                                 ></p:inputText>
-                                                </div>
-                                                <div class="p-col-11">
-                                                    <p:outputLabel value="Detalle Tecnico del Proceso:"></p:outputLabel>
-                                                    <p:inputText disabled="#"
-                                                                 value=""
-                                                                ></p:inputText>
-                                                </div>
-                                          
+                                            </div>
+
+
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Descripción:"></p:outputLabel>
+                                                <p:inputText disabled="#"  value=""></p:inputText>
+                                            </div>
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Detalle Tecnico del Proceso:"></p:outputLabel>
+                                                <p:inputText disabled="#" value="" ></p:inputText>
+                                            </div>
+
                                         </div>
                                         <!-- Botones Guardar/Cerrar -->
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Guardar"  
-                                                                     icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-success"/>
+                                                    <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-success"/>
                                                 </div>
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Modificar" icon="pi pi-times"
-                                                                     styleClass="ui-button-danger" process="@this"
-                                                                     oncomplete="PF('Proceso').hide()"/>
+                                                    <p:commandButton value="Modificar" icon="pi pi-times"   styleClass="ui-button-danger" 
+                                                                     process="@this" oncomplete="PF('Proceso').hide()"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -262,13 +221,59 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
-                                
-                                 
-                                 
-                                 
-                        
-                        
-                        
+
+
+
+                        <!-- Cuadro de dialogo Agregar centro de Costo -->
+                        <p:dialog header="Agregar Centro de Costo" showEffect="fade" modal="true"
+                                  widgetVar="agregarCentroDeCostos" responsive="true" width="35%"
+                                  draggable="false" height="300">
+                            <!-- Cuadros de texto de la izquierda -->
+                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+                                <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
+                                    <div class="p-grid ">
+                                        <div class="p-col-11 p-md-12 p-lg-10">
+
+                                            <div class="p-col-6">
+                                                <p:outputLabel value="Codigo:"></p:outputLabel>
+                                                <p:inputText value="" ></p:inputText>
+
+                                            </div>
+
+
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Descripción:"></p:outputLabel>
+                                                <p:inputText disabled="#"  value=""></p:inputText>
+                                            </div>
+                                            <div class="p-col-11">
+                                                <p:outputLabel value="Detalle Tecnico del Proceso:"></p:outputLabel>
+                                                <p:inputText disabled="#" value="" ></p:inputText>
+                                            </div>
+
+                                        </div>
+                                        <!-- Botones Guardar/Cerrar -->
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-3">
+                                                    <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-success"/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:commandButton value="Modificar" icon="pi pi-times"   styleClass="ui-button-danger" 
+                                                                     process="@this" oncomplete="PF('Proceso').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+
+
+
+
                         <!-- Tabla de datos -->
                         <p:dataTable reflow="true" paginator="true" rows="5" 
                                      rowSelectMode="add" paginatorPosition="bottom">
@@ -301,10 +306,7 @@
                                 </p:commandButton>
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
-                            
-                            
-                            
-                            
+
                         </p:dataTable>
                     </div>
                 </h:form>
