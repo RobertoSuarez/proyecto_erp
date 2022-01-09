@@ -10,44 +10,44 @@
         <a href="../Global/Main.xhtml">
             <p:graphicImage name="erpLogo.png" library="images" style="width: 4%; position: relative; top: -15px;" />
         </a>
-        <div class="layout-topbar-menu-wrapper">            
-            <ul class="topbar-menu fadeInDown">
-                <li class="profile-item">
-                    <a href="#">                            
-                        <p:graphicImage name="images/avatar.png" library="manhattan-layout" />
-                        <span class="topbar-item-name profile-name">Nombre de usuario</span>
-                    </a>
-
-                    <ul class="fadeInDown animated">
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="pi pi-fw pi-user"/>
-                                <span>Profile</span>
-                                <span class="topbar-badge">5</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="pi pi-fw pi-lock"/>
-                                <span>Privacy</span>
-                                <span class="topbar-badge">2</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="pi pi-fw pi-cog"/>
-                                <span>Settings</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="pi pi-fw pi-sign-out"/>
-                                <span>Logout</span>
-                            </a>
-                        </li>
-                    </ul>
+        <div class="layout-topbar-menu-wrapper">        
+            <ul class="topbar-menu navbar">
+                <li class="menu">               
+                    <p:graphicImage name="images/avatar.png" library="manhattan-layout" />
+                    <span class="topbar-item-name profile-name">Nombre de usuario</span>
+                    <div class="submenu">
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    <i class="pi pi-user"/>
+                                    <span>Perfil</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="pi pi-cog"/>
+                                    <span>Ajustes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="pi pi-sign-out"/>
+                                    <span>Salir</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>
-    </div>
+    </div>	
+    <script>
+        var dd_main = document.querySelector(".menu");
+
+        dd_main.addEventListener("click", function () {
+            this.classList.toggle("active");
+        })
+    </script>
+
+    <h:outputStylesheet name="header.css" library="css"/>
 </ui:composition>

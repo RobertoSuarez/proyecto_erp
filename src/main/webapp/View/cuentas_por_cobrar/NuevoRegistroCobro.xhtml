@@ -119,6 +119,7 @@
                                     <div style="float: left; padding-top: 20px; padding-left: 2px;">
                                         <p:commandButton value="Nuevo Cobro"
                                                          ajax="false"
+                                                         disabled="#{(abonoController.getFechasPlan()[0] == null)}"
                                                          actionListener="#{abonoController.nuevoAbono}"
                                                          icon="pi pi-save" 
                                                          styleClass="ui-button-success"/>

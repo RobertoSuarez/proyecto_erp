@@ -72,70 +72,70 @@
                                                          oncomplete="PF('clienteInactivo').show();"
                                                          update=":frmCI:tblClientesInactivos"/>
                                     </span>
-                                </div>
-                                <div style="float: right;">
-                                    <span class="filter-container ui-input-icon-left">
-                                        <i class="pi pi-search"></i>
-                                        <p:inputText id="globalFilter" 
-                                                     onkeyup="PF('dtClientes').filter()" 
-                                                     placeholder="Buscar"/>
-                                    </span>
+                                    <div style="float: right;">
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" 
+                                                         onkeyup="PF('dtClientes').filter()" 
+                                                         placeholder="Buscar"/>
+                                        </span>
+                                    </div>
                                 </div>
                                 <br/>
                             </f:facet>
-                            <p:column class="tamanoInput" style="text-align: center;"
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%"
                                       headerText="Identificación"
                                       filterBy="#{varClientes.identificacion}"
                                       sortBy="#{varClientes.identificacion}">
                                 <h:outputText value="#{varClientes.identificacion}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;"
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%"
                                       headerText="Tipo de Identificación"
                                       filterBy="#{varClientes.descrIdentificacion}"
                                       sortBy="#{varClientes.descrIdentificacion}">
                                 <h:outputText value="#{varClientes.descrIdentificacion}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;"    
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%"    
                                       headerText="Cliente"
                                       filterBy="#{varClientes.razonNombre}" 
                                       sortBy="#{varClientes.razonNombre}">
                                 <h:outputText value="#{varClientes.razonNombre}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;" 
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%" 
                                       headerText="Dirección" 
                                       sortBy="#{varClientes.direccion}" >
                                 <h:outputText value="#{varClientes.direccion}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;"  
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%"  
                                       headerText="Teléfono"
                                       sortBy="#{varClientes.tlf1}">
                                 <h:outputText value="#{varClientes.tlf1}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;"  
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%"  
                                       headerText="Correo"
                                       sortBy="#{varClientes.correo}">
                                 <h:outputText value="#{varClientes.correo}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;"  
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%"  
                                       headerText="Tipo de Cliente"
                                       sortBy="#{varClientes.descrTipoCliente}" >
                                 <h:outputText value="#{varClientes.descrTipoCliente}"/>
                             </p:column>
 
-                            <p:column class="tamanoInput" style="text-align: center;" 
+                            <p:column class="tamanoInput" style="text-align: center; width: 100%" 
                                       headerText="Estado"
                                       sortBy="#{varClientes.estado}">
                                 <h:outputText value="#{varClientes.descrEstado}"
                                               styleClass="#{varClientes.createLabel()}"/>
                             </p:column>
 
-                            <p:column class="tamanoColumnActions" style="text-align: center;" 
+                            <p:column class="tamanoColumnActions" style="text-align: center; width: 100%" 
                                       headerText="Acciones">
                                 <p:commandButton actionListener="#{personaController.cargarClientes(varClientes)}" 
                                                  class="tamanoButtonActions"
