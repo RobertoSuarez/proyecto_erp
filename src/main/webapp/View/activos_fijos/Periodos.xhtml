@@ -10,44 +10,46 @@
 
     <h:body>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
-
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
+                    <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
+                    <p:menuitem value="Reporte" url="#"/>
+                </p:menubar>
                 <h:form id="periodos">
                     <p:growl id="growl" showDetail="true" />
-                    <div >
-                        <p:panel >
-                            <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
-                            <p:dataTable id="listarperiodo"
-                                         value="#{periodosactivosfijosMB.listaPeriodosActivosFijos}" 
-                                         var="periodoactivofijo"
-                                         rowKey="#{periodoactivofijo.anio}" editable="true" 
-                                         rowIndexVar="row" >
-                                <p:column headerText="Fecha Inicio">
-                                    <h:outputText value="#{periodoactivofijo.inicio}"/>
-                                </p:column>
-                                <p:column headerText="Fecha Fin">
-                                    <h:outputText value="#{periodoactivofijo.fin}"/>
-                                </p:column>
-                                <p:column headerText="Monto" >
-                                    <h:outputText value="#{periodoactivofijo.monto_total}">
+                    <p:panel>
+                        <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
+                        <p:dataTable id="listarperiodo"
+                                     value="#{periodosactivosfijosMB.listaPeriodosActivosFijos}" 
+                                     var="periodoactivofijo"
+                                     rowKey="#{periodoactivofijo.anio}" editable="true" 
+                                     rowIndexVar="row" >
+                            <p:column headerText="Fecha Inicio">
+                                <h:outputText value="#{periodoactivofijo.inicio}"/>
+                            </p:column>
+                            <p:column headerText="Fecha Fin">
+                                <h:outputText value="#{periodoactivofijo.fin}"/>
+                            </p:column>
+                            <p:column headerText="Monto" >
+                                <h:outputText value="#{periodoactivofijo.monto_total}">
                                     <f:convertNumber currencySymbol="$" type="currency"/>
-                                    </h:outputText>
-                                </p:column>
-                                <p:column headerText="Año" >
-                                    <h:outputText value="#{periodoactivofijo.anio}" />  
-                                </p:column>
-                                <p:column headerText="Reporte" exportValue="false">
-                                    <p:commandButton
-                                        value="Exportar PDF" 
-                                        ajax="false"
-                                        actionListener="#{periodosactivosfijosMB.exportpdf(periodoactivofijo.anio)}"
-                                        icon="pi pi-file-pdf" 
-                                        styleClass="ui-button-raised" />
-                                </p:column>
-                            </p:dataTable>
-                        </p:panel>
-                    </div>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Año" >
+                                <h:outputText value="#{periodoactivofijo.anio}" />  
+                            </p:column>
+                            <p:column headerText="Reporte" exportValue="false">
+                                <p:commandButton
+                                    value="Exportar PDF" 
+                                    ajax="false"
+                                    actionListener="#{periodosactivosfijosMB.exportpdf(periodoactivofijo.anio)}"
+                                    icon="pi pi-file-pdf" 
+                                    styleClass="ui-button-raised" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
                 </h:form>
             </ui:define>
         </ui:composition>

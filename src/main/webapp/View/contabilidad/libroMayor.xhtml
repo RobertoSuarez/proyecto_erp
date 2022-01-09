@@ -86,17 +86,17 @@
                                 <h:outputText value="#{libro.saldo}" />
                             </p:column>
                             <f:facet name="footer">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
+                                <div class="p-grid">
+                                    <div class="p-col-8">
                                         <h4>Saldo total</h4>
                                     </div>
-                                    <div class="col-md-2 col-sm-12" style="margin-left: 2%">
+                                    <div class="p-col-1" style="margin-left: 2%">
                                         <h:outputText value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.totalSaldoDebe)}"></h:outputText>
                                     </div>
-                                    <div class="col-md-2 col-sm-12" style="margin-left: 2%">
+                                    <div class="p-col-1" style="margin-left: 2%">
                                         <h:outputText value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.totalSaldoHaber)}"></h:outputText>
                                     </div>
-                                    <div class="col-md-1 col-sm-12" style="margin-left: 2%">
+                                    <div class="p-col-1" style="margin-left: 2%">
                                         <h:outputText value="#{libroManagedBean.ConverTwoDecimal(libroManagedBean.saldoTotal)}"></h:outputText>
                                     </div>
                                 </div>

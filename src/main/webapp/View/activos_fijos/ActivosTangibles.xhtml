@@ -8,10 +8,13 @@
 
 
     <h:body>
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
-
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Tangibles" url="#"/>
+                    <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
+                    <p:menuitem value="Reporte" url="./Periodos.xhtml"/>
+                </p:menubar>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">Tangibles</h1>
                     <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
@@ -27,15 +30,13 @@
                                                 <h:form id="botonNuevoDepreciables">
                                                     <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                                      oncomplete="PF('NuevoDepreciable').show()"   
-                                                                     styleClass="ui-button-success" 
+                                                                     styleClass="ui-button-primary" 
                                                                      style="margin-right: .3rem">                               
                                                     </p:commandButton>
                                                     <p:commandButton value="Deshabilitados" 
-
-
                                                                      icon="pi pi-pencil"
                                                                      oncomplete="PF('deshabilitadosdepreciables').show()"  
-                                                                     styleClass="ui-button-info" 
+                                                                     styleClass="ui-button-secondary" 
                                                                      style="margin-right: .3rem " >                                
                                                     </p:commandButton>
                                                 </h:form>
@@ -87,14 +88,12 @@
                                                     <h:outputText value="#{depreciable.proveedor}"/>
                                                 </p:column>
 
-                                                <p:column headerText="Opciones" colspan="2">
-
+                                                <p:column headerText="Opciones">
                                                     <p:commandButton  
                                                         actionListener="#{activosFijosMB.obtenerdatos(depreciable)}"
                                                         update="editarDepreciable"
                                                         icon="pi pi-pencil"
-                                                        oncomplete="PF('EditarDepreciable').show()" 
-                                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >  
+                                                        oncomplete="PF('EditarDepreciable').show()">  
                                                     </p:commandButton>
                                                 </p:column>
                                             </p:dataTable>
@@ -174,26 +173,26 @@
                                             <div  style="display: flex;justify-content: center" class="p-grid">
                                                 <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
                                                     <p:overlayPanel for="proveedor" dynamic="true" 
-                                                                     style="width:600px" widgetVar="moviePicker">
-                                                         <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
-                                                                      rows="5" paginator="true" selectionMode="single"
-                                                                      selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
-                                                             <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
-                                                                     oncomplete="PF('moviePicker').hide()" 
-                                                                     update="@formnuevoDepreciable" 
-                                                                     />
- 
-                                                             <p:column headerText="Proveedor">
-                                                                 <h:outputText value="#{proveedor.codigo}"/>
-                                                             </p:column>
-                                                             <p:column headerText="Nombre">
-                                                                 <h:outputText value="#{proveedor.nombre}"/>
-                                                             </p:column>
-                                                             <p:column headerText="Ruc">
-                                                                 <h:outputText value="#{proveedor.ruc}"/>
-                                                             </p:column>
-                                                         </p:dataTable>
-                                                     </p:overlayPanel>
+                                                                    style="width:600px" widgetVar="moviePicker">
+                                                        <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
+                                                                     rows="5" paginator="true" selectionMode="single"
+                                                                     selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
+                                                            <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
+                                                                    oncomplete="PF('moviePicker').hide()" 
+                                                                    update="@formnuevoDepreciable" 
+                                                                    />
+
+                                                            <p:column headerText="Proveedor">
+                                                                <h:outputText value="#{proveedor.codigo}"/>
+                                                            </p:column>
+                                                            <p:column headerText="Nombre">
+                                                                <h:outputText value="#{proveedor.nombre}"/>
+                                                            </p:column>
+                                                            <p:column headerText="Ruc">
+                                                                <h:outputText value="#{proveedor.ruc}"/>
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </p:overlayPanel>
                                                     <h:panelGrid columns="4" class="p-col" >
                                                         <p:outputLabel for="@next" value="Descripción: "/>
                                                         <p:inputText  value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true" >
@@ -219,7 +218,7 @@
 
                                                         <p:outputLabel for="proveedor"  value="Proveedor: "/>
                                                         <p:inputText   id="proveedor" type="button" value="#{activosFijosMB.activosFijos.proveedor}" required="true" />
-                                                      
+
                                                         <p:outputLabel value="Fecha de Adquisición:    " />
                                                         <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
 
@@ -334,15 +333,13 @@
                                             <p:toolbarGroup>
                                                 <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                                  oncomplete="PF('NuevoNoDepreciable').show()"   
-                                                                 styleClass="ui-button-success" 
+                                                                 styleClass="ui-button-primary" 
                                                                  style="margin-right: .3rem">                               
                                                 </p:commandButton>
                                                 <p:commandButton value="Deshabilitados" 
-
-
                                                                  icon="pi pi-pencil"
                                                                  oncomplete="PF('deshabilitadosnodepreciables').show()"  
-                                                                 styleClass="ui-button-info" 
+                                                                 styleClass="ui-button-secondary" 
                                                                  style="margin-right: .3rem " >                                
                                                 </p:commandButton>
 
@@ -390,14 +387,12 @@
                                                     <h:outputText value="#{nodepreciable.proveedor}"/>
                                                 </p:column>
                                                 <p:column headerText="Opciones  ">
-
                                                     <p:commandButton 
                                                         actionListener="#{activosFijosMB.obtenerdatosNodepreciables(nodepreciable)}"
                                                         update="formeditarNoDepreciable"
                                                         icon="pi pi-pencil"
                                                         oncomplete="PF('EditarNoDepreciable').show()"  
-                                                        styleClass="ui-button-info" 
-                                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >                                
+                                                        styleClass="ui-button-primary">                                
                                                     </p:commandButton>
                                                 </p:column>
                                             </p:dataTable>
@@ -577,15 +572,13 @@
                                             <p:toolbarGroup>
                                                 <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                                  oncomplete="PF('NuevoAgotable').show()"   
-                                                                 styleClass="ui-button-success" 
+                                                                 styleClass="ui-button-primary" 
                                                                  style="margin-right: .3rem">                               
                                                 </p:commandButton>
                                                 <p:commandButton value="Deshabilitados" 
-
-
                                                                  icon="pi pi-pencil"
                                                                  oncomplete="PF('deshabilitadosagotables').show()"  
-                                                                 styleClass="ui-button-info" 
+                                                                 styleClass="ui-button-secondary" 
                                                                  style="margin-right: .3rem " >                                
                                                 </p:commandButton>
 
@@ -627,8 +620,7 @@
                                                         update="formeditarAgotable"
                                                         icon="pi pi-pencil"
                                                         oncomplete="PF('EditarAgotable').show()"  
-                                                        styleClass="ui-button-info" 
-                                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >                                
+                                                        styleClass="ui-button-primary">                                
                                                     </p:commandButton>
                                                 </p:column>
                                             </p:dataTable>

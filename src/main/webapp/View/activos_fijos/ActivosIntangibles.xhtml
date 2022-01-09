@@ -13,10 +13,16 @@ and open the template in the editor.
       xmlns:f="http://xmlns.jcp.org/jsf/core">  
 
     <h:body>
-
-        <ui:composition template="menuActivosFijos.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
+                    <p:menuitem value="Intangibles" url="#"/>
+                    <p:menuitem value="Reporte" url="./Periodos.xhtml"/>
+                </p:menubar>
+
                 <h:form id="formintangible" >
+
                     <p:panel>
                         <h1 style="text-align: center; color: black;">Intangibles</h1>
 
@@ -27,15 +33,14 @@ and open the template in the editor.
 
                                     <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                      oncomplete="PF('NuevoIntangible').show()"   
-                                                     styleClass="ui-button-success" 
+                                                     styleClass="ui-button-primary" 
                                                      style="margin-right: .3rem">                               
                                     </p:commandButton>
                                     <p:commandButton value="Deshabilitados" 
-
                                                      update="formintangible"
                                                      icon="pi pi-pencil"
                                                      oncomplete="PF('deshabilitadosintangible').show()"  
-                                                     styleClass="ui-button-info" 
+                                                     styleClass="ui-button-secondary" 
                                                      style="margin-right: .3rem " >                                
                                     </p:commandButton>
 
@@ -72,7 +77,6 @@ and open the template in the editor.
                                         update=":formintangible:paneleditar"
                                         actionListener="#{activosintangilesMB.obtenerdatosIntangibles(intangible)}"
                                         oncomplete="PF('EditarIntangible').show()" 
-                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px "
                                         process="@this" />
                                 </p:column>
                             </p:dataTable>
@@ -86,40 +90,40 @@ and open the template in the editor.
                                   modal="true" widgetVar="deshabilitadosintangible"
                                   id="dialogoingresarNodepreciable">
                             <div  style="display: flex;justify-content: center">
-                                
-                                    <p:dataTable id="verListaIntangiblesdeshabilitados"
-                                                 value="#{activosintangilesMB.intangibledao.listaragotablesdeshabilitados()}" var="intangible" 
-                                                 rowKey="#{intangible.id_activo_fijo}" editable="true" >
-                                        <p:column headerText="Descripción"  >
-                                            <h:outputText value="#{intangible.detalle_de_activo}"/>
-                                        </p:column>
 
-                                        <p:column headerText="Costo de Adquisición" >
-                                            <h:outputText value="#{intangible.valor_adquisicion}">
-                                                <f:convertNumber currencySymbol="$" type="currency"/>
-                                            </h:outputText>
-                                        </p:column>                       
+                                <p:dataTable id="verListaIntangiblesdeshabilitados"
+                                             value="#{activosintangilesMB.intangibledao.listaragotablesdeshabilitados()}" var="intangible" 
+                                             rowKey="#{intangible.id_activo_fijo}" editable="true" >
+                                    <p:column headerText="Descripción"  >
+                                        <h:outputText value="#{intangible.detalle_de_activo}"/>
+                                    </p:column>
 
-                                        <p:column headerText="Fecha de Adquisición">
-                                            <h:outputText value="#{intangible.fecha_adquisicion}" />
-                                        </p:column>
-                                        <p:column headerText="N° Factura"  >
-                                            <h:outputText value="#{intangible.numero_factura}"/>
-                                        </p:column>
-                                        <p:column headerText="Proveedor"  >
-                                            <h:outputText value="#{intangible.proveedor}"/>
-                                        </p:column>
-                                        <p:column headerText="Habilitar  ">
-                                            <p:commandButton action="#{activosintangilesMB.setHabilitarintangible(intangible.id_activo_fijo)}" 
-                                                            
-                                                             icon="pi pi-check"
-                                                             styleClass="rounded-button" 
-                                                             style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px "
-                                                             process="@this" >                                
-                                            </p:commandButton>
-                                        </p:column>
-                                    </p:dataTable>
-                                
+                                    <p:column headerText="Costo de Adquisición" >
+                                        <h:outputText value="#{intangible.valor_adquisicion}">
+                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                        </h:outputText>
+                                    </p:column>                       
+
+                                    <p:column headerText="Fecha de Adquisición">
+                                        <h:outputText value="#{intangible.fecha_adquisicion}" />
+                                    </p:column>
+                                    <p:column headerText="N° Factura"  >
+                                        <h:outputText value="#{intangible.numero_factura}"/>
+                                    </p:column>
+                                    <p:column headerText="Proveedor"  >
+                                        <h:outputText value="#{intangible.proveedor}"/>
+                                    </p:column>
+                                    <p:column headerText="Habilitar  ">
+                                        <p:commandButton action="#{activosintangilesMB.setHabilitarintangible(intangible.id_activo_fijo)}" 
+
+                                                         icon="pi pi-check"
+                                                         styleClass="rounded-button" 
+                                                         style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px "
+                                                         process="@this" >                                
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+
                             </div>
                         </p:dialog> 
 

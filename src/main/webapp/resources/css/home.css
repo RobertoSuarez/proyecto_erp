@@ -75,6 +75,9 @@ body{
     width: 100%;
     text-decoration: none;
 }
+.card-box .card-box-footer i{
+    padding-left: 2px;
+}
 .card-box:hover .card-box-footer {
     background: rgba(0, 0, 0, 0.3);
 }
@@ -116,4 +119,10 @@ body{
 }
 .Fondo #Contacto h2{
     color: #ffffff;
+}
+
+@media (max-width: 800px) {
+    .container {
+        margin-top: 6%;
+    }
 }

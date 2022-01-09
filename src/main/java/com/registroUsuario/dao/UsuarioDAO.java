@@ -67,36 +67,27 @@ public class UsuarioDAO {
         String sentencia = "";
         if (conexion.isEstado()) {
             try {
-                sentencia = "SELECT public.iniciarsesion"
-                        + "('" + u.getUsername() + "',"
-                        + "'" + u.getPassword() + "')";
+                sentencia = String.format("SELECT * from public.iniciarsesion('%1$s','%2$s')", u.getUsername(), u.getPassword()) ;
                 result = conexion.ejecutarConsulta(sentencia);
                 
                 while (result.next()) {
                     
-                    lsitaUsuarios.add(new Usuario(result.getInt(1),
-                            result.getString(2),
-                            result.getInt(3),
-                            result.getString(4),
-                            result.getString(5),
-                            result.getString(6),
-                            result.getString(7),
-                            result.getString(8)
+                    lsitaUsuarios.add(new Usuario(result.getInt("code"),
+                            result.getString("reslt"),
+                            result.getInt("iduser"),
+                            result.getString("name"),
+                            result.getString("surname"),
+                            result.getString("usrnm"),
+                            result.getString("pssword"),
+                            result.getString("mail")
                     ));
 
                     // System.out.print(lsitaUsuarios.toString());
                 }
                 
             } catch (SQLException e) {
-                lsitaUsuarios.toString();
-                for (int x = 0; x < lsitaUsuarios.size(); x++) {
-                    System.out.print(lsitaUsuarios.get(x) + "Guaranga");
-                }
-                
                 System.out.println(e.toString() + "EBERT");
-                return lsitaUsuarios;
             } finally {
-                
                 conexion.cerrarConexion();
             }
         }
