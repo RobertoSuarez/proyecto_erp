@@ -15,6 +15,7 @@ h1, h2{
 .container {
     width: 95%;
     margin: auto;
+    padding-top: 2rem;
 }
 
 

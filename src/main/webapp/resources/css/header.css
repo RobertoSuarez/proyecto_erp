@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    font-family: 'Jost', sans-serif;
+    
+}
+
+.menu img {
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
+.menu span {
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 6px;
+}
+
+.navbar .submenu {
+    position: fixed;
+    right: 110px;
+    top: 65px;
+    display: flex;
+    background: #fff;
+    border-radius: 15px;
+    display: none;
+}
+
+.navbar .submenu{
+    padding: 15px 30px;
+}
+
+.navbar .submenu li{
+    margin-bottom: 10px;
+    color: #868686;
+    
+}
+
+.navbar .menu.active .submenu{
+    display: flex;
+}
