@@ -64,7 +64,7 @@
 
 
                                     <div class="p-col-11 p-md-12 p-lg-10">
-                                        <div class="p-col-6">
+                                        <div class="p-col-11">
                                             <p:outputLabel value="Codigo:"></p:outputLabel>
                                             <p:inputText value="" ></p:inputText>                                                
                                         </div>
@@ -93,6 +93,10 @@
                                             <div class="p-col-3">
                                                 <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-primary"/>
                                             </div>
+                                            <div class="p-col-3">
+                                                <p:commandButton value="Cerrar" icon="pi pi-check" disabled="#" styleClass="ui-button-danger"/>
+                                            </div>
+
 
                                         </div>
                                     </div>
@@ -112,14 +116,14 @@
                                 <p:outputPanel>
                                     <div class="p-grid ">
                                         <div class="p-col-12 p-md-12 p-lg-10">
-                                            <div class="p-col-11">
+                                            <div class="p-col-12">
                                                 <p:outputLabel value="Codigo:"></p:outputLabel>
                                                 <div class="p-grid">
 
-                                                    <div class="p-col-4">
+                                                    <div class="p-col-6">
                                                         <p:inputText value="" ></p:inputText>   
                                                     </div>
-                                                    <div class="p-col-4">
+                                                    <div class="p-col-6">
                                                         <p:inputText value="" ></p:inputText>   
                                                     </div>
 
@@ -127,11 +131,11 @@
                                             </div>
 
 
-                                            <div class="p-col-11">
+                                            <div class="p-col-12">
                                                 <p:outputLabel value="Nombre:"></p:outputLabel>
                                                 <p:inputText disabled="#" value=""  ></p:inputText>
                                             </div>
-                                            <div class="p-col-11">
+                                            <div class="p-col-12">
                                                 <p:outputLabel value="Descripción: "></p:outputLabel>
                                                 <p:inputText disabled="#" value="" ></p:inputText>
                                             </div>
@@ -194,7 +198,7 @@
                                                 <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-primary"/>
                                             </div>
                                             <div class="p-col-3">
-                                                <p:commandButton value="Modificar" icon="pi pi-times" styleClass="ui-button-primary" process="@this" oncomplete="PF('Proceso').hide()"/>
+                                                <p:commandButton value="Cerrar" icon="pi pi-times" styleClass="ui-button-danger" process="@this" oncomplete="PF('Proceso').hide()"/>
                                             </div>
                                         </div>
                                     </div>
@@ -312,7 +316,7 @@
                                                     <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"/>
                                                 </div>
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Modificar" icon="pi pi-times"   styleClass="ui-button-primary" 
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"   styleClass="ui-button-danger" 
                                                                      process="@this" oncomplete="PF('Proceso').hide()"/>
                                                 </div>
                                             </div>
@@ -425,7 +429,7 @@
                                                     <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"/>
                                                 </div>
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Modificar" icon="pi pi-times"   styleClass="ui-button-primary" 
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"   styleClass="ui-button-danger" 
                                                                      process="@this" oncomplete="PF('Proceso').hide()"/>
                                                 </div>
                                             </div>
