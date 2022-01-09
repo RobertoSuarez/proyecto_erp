@@ -11,13 +11,32 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
+                    <p:submenu label="Cobranzas" icon="pi pi-dollar">
+                        <p:menuitem value="Nuevo Cobro" outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
+                        <p:menuitem value="Listado Cobro" outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Retenciones" icon="pi pi-file">
+                        <p:menuitem value="Aplicar Retención" outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Reportes" icon="pi pi-book">
+                        <p:menuitem value="Listado de Clientes con/sin deuda" outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
+                        <p:menuitem value="Estado de Cuenta" outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
+                        <p:menuitem value="Facturas Pendientes" outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
+                        <p:menuitem value="Cartera x Edades de Vencimiento" outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
+                    </p:submenu>
+                </p:menubar>
+                <br></br>
+                <br></br>
+                <br></br>
                 <div class="titleView">
-                    <h4>LISTADO DE COBRO</h4>
+                    <h1 style="text-align: center;">LISTADO DE COBRO</h1>
                 </div>
                 <p:panel>
                     <p:growl id="growl" widgetVar="growl" showDetail="true" life="1500"/> 
                     <h:form id="formListaCobros">
-                        <div style="float: left; padding-left: 50px; margin-top: 10px;">
+                        <div style="float: left; padding-left: 50px;">
                             <p:outputLabel value="Identificación: " for="txtidentificacion" 
                                            style="font-weight: bold; padding: 10px;"/>
                             <br/>
@@ -25,7 +44,7 @@
                             <p:inputText id="txtidentificacion" 
                                          placeholder="CI/PA/RUC"
                                          value="#{plan_PagoController.identificacion}"
-                                         style="width: 150px;"/> 
+                                         style="width: 150px; margin-left: 2px;"/> 
                             &nbsp;
                             <p:commandButton id="btnconsulta" icon="pi pi-replay" 
                                              styleClass="rounded-button ui-button-secondary"
