@@ -8,11 +8,30 @@
 
     <body>
 
-        <ui:composition template="../../Plantilla/Plantilla.xhtml">
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
+                    <p:submenu label="Cobranzas" icon="pi pi-dollar">
+                        <p:menuitem value="Nuevo Cobro" outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
+                        <p:menuitem value="Listado Cobro" outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Retenciones" icon="pi pi-file">
+                        <p:menuitem value="Aplicar Retención" outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Reportes" icon="pi pi-book">
+                        <p:menuitem value="Listado de Clientes con/sin deuda" outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
+                        <p:menuitem value="Estado de Cuenta" outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
+                        <p:menuitem value="Facturas Pendientes" outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
+                        <p:menuitem value="Cartera x Edades de Vencimiento" outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
+                    </p:submenu>
+                </p:menubar>
+                <br></br>
+                <br></br>
+                <br></br>
                 <div class="titleView">
-                    <h4>MANTENIMIENTO A CLIENTES</h4>
+                    <h1 style="text-align: center;">MANTENIMIENTO A CLIENTES</h1>
                 </div>
                 <p:panel>
                     <p:growl id="growl" showDetail="true" life="1500"/> 
@@ -37,11 +56,21 @@
                                                          icon="fa fa-fw fa-user" 
                                                          value="Agregar Cliente Natural" 
                                                          styleClass="ui-button-success"/>
+                                    </span>
+                                    <span>
                                         <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
                                                          actionListener="#{personaController.nuevoClienteJ()}"
                                                          value="Agregar Cliente Jurídico" 
                                                          icon="fa fa-fw fa-building" 
                                                          styleClass="ui-button-success"/>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span style="margin-left: 2px">
+                                        <p:commandButton value="Inactivos" 
+                                                         icon="pi pi-user-minus"
+                                                         oncomplete="PF('clienteInactivo').show();"
+                                                         update=":frmCI:tblClientesInactivos"/>
                                     </span>
                                 </div>
                                 <div style="float: right;">
@@ -52,20 +81,11 @@
                                                      placeholder="Buscar"/>
                                     </span>
                                 </div>
-                                <div>
-                                    <span>
-                                        <p:commandButton value="Inactivos" 
-                                                         icon="pi pi-user-minus"
-                                                         oncomplete="PF('clienteInactivo').show();"
-                                                         update=":frmCI:tblClientesInactivos"/>
-                                    </span>
-                                </div>
                                 <br/>
                             </f:facet>
                             <p:column class="tamanoInput" style="text-align: center;"
                                       headerText="Identificación"
                                       filterBy="#{varClientes.identificacion}"
-                                      filterStyle="display : none"
                                       sortBy="#{varClientes.identificacion}">
                                 <h:outputText value="#{varClientes.identificacion}"/>
                             </p:column>
@@ -73,7 +93,6 @@
                             <p:column class="tamanoInput" style="text-align: center;"
                                       headerText="Tipo de Identificación"
                                       filterBy="#{varClientes.descrIdentificacion}"
-                                      filterStyle="display : none"
                                       sortBy="#{varClientes.descrIdentificacion}">
                                 <h:outputText value="#{varClientes.descrIdentificacion}"/>
                             </p:column>
@@ -81,7 +100,6 @@
                             <p:column class="tamanoInput" style="text-align: center;"    
                                       headerText="Cliente"
                                       filterBy="#{varClientes.razonNombre}" 
-                                      filterStyle="display : none"
                                       sortBy="#{varClientes.razonNombre}">
                                 <h:outputText value="#{varClientes.razonNombre}"/>
                             </p:column>
@@ -125,6 +143,7 @@
                                                  styleClass="rounded-button"/> 
                                 <p:commandButton actionListener="#{personaController.inactivarCliente(varClientes.idCliente)}" 
                                                  class="tamanoButtonActions" 
+                                                 style="margin-left: 2px;"
                                                  styleClass="rounded-button ui-button-danger" 
                                                  icon="pi pi-times-circle"
                                                  update=":growl, :frmtblClientes:tblClientes">

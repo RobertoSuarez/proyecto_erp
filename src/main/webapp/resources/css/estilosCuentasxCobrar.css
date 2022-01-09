@@ -1,4 +1,6 @@
 .titleView{
+    width: 100%; 
+    margin-top: 10px;
     font-weight: bold; 
     background-color: #036fab; 
     color: white; 

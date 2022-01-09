@@ -12,20 +12,24 @@
 
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="#"/>
-                    <p:menuitem value="Asientos" url="#"/>
-                    <p:menuitem value="Diarios" url="#"/>
-                    <p:submenu label="Plan de cuentas">
-                        <p:menuitem value="Grupo" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Subgrupos" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Cuentas" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Subcuentas" url="#" icon="pi pi-list" />
+                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
+                    <p:submenu label="Cobranzas" icon="pi pi-dollar">
+                        <p:menuitem value="Nuevo Cobro" outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
+                        <p:menuitem value="Listado Cobro" outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
                     </p:submenu>
-                    <p:submenu label="Informes">
-                        <p:menuitem value="Balance General" url="#" icon="pi pi-book" />
-                        <p:menuitem value="Libro Mayor" url="#" icon="pi pi-bars" />
+                    <p:submenu label="Retenciones" icon="pi pi-file">
+                        <p:menuitem value="Aplicar Retención" outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
+                    </p:submenu>
+                    <p:submenu label="Reportes" icon="pi pi-book">
+                        <p:menuitem value="Listado de Clientes con/sin deuda" outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
+                        <p:menuitem value="Estado de Cuenta" outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
+                        <p:menuitem value="Facturas Pendientes" outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
+                        <p:menuitem value="Cartera x Edades de Vencimiento" outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
                     </p:submenu>
                 </p:menubar>
+                <br></br>
+                <br></br>
+                <br></br>
                 <p:panel style="margin-top: 4%;">
                     <p:growl id="growl" widgetVar="growl" showDetail="true" life="1500"/> 
                     <h:form id="frmprincipal">
@@ -36,12 +40,12 @@
                                                    value="Identificación: "
                                                    style="font-weight:bold;"/>
                                     <br/> <br/>
-                                    <p:commandButton value="Buscar"  id="buscarC"/>
+                                    <p:commandButton styleClass="ui-button-help p-mr-2 p-mb-2" value="Buscar"  id="buscarC"/>
                                     <p:inputText id="identificacionCliente" 
                                                  placeholder="CI/PA/RUC"
                                                  maxlength="13"
                                                  value="#{retencionController.identificacion}"
-                                                 style="width: 150px;"/>
+                                                 style="width: 150px; margin-left: 2px;"/>
                                     &nbsp;&nbsp;
                                     <div style="float: right;">
                                         <p:commandButton id="btnconsulta" icon="pi pi-replay" 
