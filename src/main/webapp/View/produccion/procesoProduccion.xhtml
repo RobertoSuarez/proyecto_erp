@@ -10,7 +10,6 @@
             <ui:define name="title">Procesos de producción</ui:define>
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="../Global/Main.xhtml"/>
                     <p:menuitem value="Orden de Producción" url="listaOrdenProduccion.xhtml"/>
                     <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
                     <p:menuitem value="Procesos" url="#"/>
@@ -54,26 +53,177 @@
                             </p:toolbarGroup>
                         </p:toolbar>
 
-                        <!-- Cuadro de dialogo Nuevo Proceso  -->
+                        <!-- Cuadro de dialogo Nuevo Proceso -->
                         <p:dialog header="Nuevo Proceso" showEffect="fade" modal="true"
                                   widgetVar="nuevoProceso" responsive="true" width="35%"
-                                  draggable="false" height="540">
+                                  draggable="false" height="400" >
                             <!-- Cuadros de texto de la izquierda -->
-                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+
+
+                                    <div class="p-col-11 p-md-12 p-lg-10">
+                                        <div class="p-col-11">
+                                            <p:outputLabel value="Codigo:"></p:outputLabel>
+                                            <p:inputText value="" ></p:inputText>                                                
+                                        </div>
+
+                                        <div class="p-col-11">
+                                            <p:outputLabel value="Nombre:"></p:outputLabel>
+                                            <p:inputText disabled="#" value=""></p:inputText>
+                                        </div>    
+                                        <div class="p-col-11">
+                                            <p:outputLabel value="Descripción:"></p:outputLabel>
+                                            <p:inputTextarea disabled=""
+                                                             maxlength="250"
+                                                             placeholder="Descripcion maximo 255 caracteres"
+                                                             value="" 
+                                                             rows="5" 
+                                                             cols="33" 
+                                                             autoResize="false"/>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Botones Guardar-->
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-3">
+                                                <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-primary"/>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:commandButton value="Cerrar" icon="pi pi-check" disabled="#" styleClass="ui-button-danger"/>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+
+                        <!-- Cuadro de dialogo Nuevo SubProceso -->
+                        <p:dialog header="Nuevo Subproceso" showEffect="fade" modal="true"
+                                  widgetVar="nuevoSubproceso" responsive="true" width="50%"
+                                  draggable="false" height="540">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid ">
+                                        <div class="p-col-12 p-md-12 p-lg-10">
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Codigo:"></p:outputLabel>
+                                                <div class="p-grid">
+
+                                                    <div class="p-col-6">
+                                                        <p:inputText value="" ></p:inputText>   
+                                                    </div>
+                                                    <div class="p-col-6">
+                                                        <p:inputText value="" ></p:inputText>   
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Nombre:"></p:outputLabel>
+                                                <p:inputText disabled="#" value=""  ></p:inputText>
+                                            </div>
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Descripción: "></p:outputLabel>
+                                                <p:inputText disabled="#" value="" ></p:inputText>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <p:toolbar>
+                                        <p:toolbarGroup>
+
+
+                                            <div class="p-d-flex p-jc-between p-ai-center">
+                                                <span style="font-weight: bold; margin-right: 6px;">Intregración de Costos</span>
+                                            </div>
+
+                                            <p:dataTable reflow="true" paginator="true" rows="5" 
+                                                         rowSelectMode="add" paginatorPosition="bottom">
+                                                <!-- Buscador -->
+                                                <f:facet name="header">
+                                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                                        <span style="font-weight: bold; margin-right: 6px;">Costos Indirectos</span>
+
+                                                    </div>
+                                                </f:facet>
+
+                                                <p:column headerText="Codigo" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Descripción" >
+                                                    <h:outputText value="#" />
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                                <p:column headerText="Acciones">
+                                                    <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                     styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                        <f:setPropertyActionListener value="#" target="#"/>
+                                                        <p:resetInput target=":form:manage-asiento"/>
+                                                    </p:commandButton>
+                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                </p:column>
+
+                                            </p:dataTable>
+
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+
+                                    <!-- Botones Guardar/Cerrar -->
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-3">
+                                                <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-primary"/>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:commandButton value="Cerrar" icon="pi pi-times" styleClass="ui-button-danger" process="@this" oncomplete="PF('Proceso').hide()"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <!-- Cuadro de dialogo Agregar Costos -->
+                        <p:dialog header="Agregar Costos" showEffect="fade" modal="true"
+                                  widgetVar="agregarCostos" responsive="true" width="60%"
+                                  draggable="false" height="630">
+
+                            <p:outputPanel class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-grid ">
                                         <div class="p-col-11 p-md-12 p-lg-10">
-                                            <div class="p-col-6">
-                                                <p:outputLabel value="Codigo:"></p:outputLabel>
-                                                <p:inputText value="" ></p:inputText>                                                
-                                            </div>
 
                                             <div class="p-col-11">
-                                                <p:outputLabel value="Nombre:"></p:outputLabel>
-                                                <p:inputText disabled="#" value=""></p:inputText>
-                                            </div>    
+                                                <p:outputLabel value="Nombre: "></p:outputLabel>
+                                                <p:inputText disabled="#"  value=""></p:inputText>
+                                            </div>
                                             <div class="p-col-11">
-                                                <p:outputLabel value="Descripción: *"></p:outputLabel>
+                                                <p:outputLabel value="Descripción: "></p:outputLabel>
                                                 <p:inputTextarea disabled=""
                                                                  maxlength="250"
                                                                  placeholder="Descripcion maximo 255 caracteres"
@@ -84,39 +234,91 @@
                                             </div>
 
                                         </div>
+
+                                        <div class="p-col-12 p-md-12 p-lg-10">
+                                            <div class="p-col-11">
+
+                                                <div class="p-grid">
+
+                                                    <div class="p-col-6">
+                                                        <p:outputLabel value="Fecha de Creación:"></p:outputLabel>
+                                                        <p:datePicker  
+                                                            style=""
+                                                            id="Creacion" 
+                                                            value="" />
+                                                    </div>
+
+                                                    <div class="p-col-6">
+                                                        <p:outputLabel value="Fecha de Modificacion: "></p:outputLabel>
+                                                        <p:datePicker  
+                                                            style=""
+                                                            id="Modificacion" 
+                                                            value="" />
+                                                    </div>
+
+                                                </div>
+
+                                            </div>                                  
+
+                                        </div>
+
+                                        <p:toolbar>
+                                            <p:toolbarGroup>
+
+
+                                                <p:dataTable reflow="true" paginator="true" rows="5" 
+                                                             rowSelectMode="add" paginatorPosition="bottom">
+                                                    <!-- Buscador -->
+                                                    <f:facet name="header">
+                                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                                            <span style="font-weight: bold; margin-right: 6px;">Lista de Costos</span>
+
+                                                        </div>
+                                                    </f:facet>
+
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                    <p:column headerText="Descripción" >
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+                                                    <p:column headerText="Fecha Creación" >
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+                                                    <p:column headerText="Fecha Modificación" >
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                    <p:column headerText="Acciones">
+                                                        <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                            <f:setPropertyActionListener value="#" target="#"/>
+                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                        </p:commandButton>
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                </p:dataTable>
+
+                                            </p:toolbarGroup>
+                                        </p:toolbar>
+
+
                                         <!-- Botones Guardar/Cerrar -->
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-3">
-                                                    <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-success"/>
+                                                    <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"/>
                                                 </div>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div class="p-col-11"> 
-                                            <p:outputLabel> Codigo : </p:outputLabel>
-                                            <div class="p-grid">
-                                                <div class="p-col-5">
-                                                    <p:inputText value=""  ></p:inputText> 
+                                                <div class="p-col-3">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"   styleClass="ui-button-danger" 
+                                                                     process="@this" oncomplete="PF('Proceso').hide()"/>
                                                 </div>
-
-                                                <div class="p-col-5"> 
-                                                    <p:inputText value="" ></p:inputText>
-                                                </div>
-
-                                            </div>
-                                            <p:outputLabel> Descripcion : </p:outputLabel>
-                                            <div class="p-grid ">
-                                                <div class="p-col-5">
-                                                    <p:inputText value=""  ></p:inputText> 
-                                                </div>
-
-                                                <div class="p-col-5"> 
-                                                    <p:inputText value="" ></p:inputText>
-                                                </div>
-
                                             </div>
                                         </div>
 
@@ -125,13 +327,127 @@
                             </p:outputPanel>
                         </p:dialog>
 
+
+                        <!-- Cuadro de dialogo Materia Agregar Centros de Costo -->
+                        <p:dialog header="Agregar Centro de Costos" showEffect="fade" modal="true"
+                                  widgetVar="agregarCentroDeCostos" responsive="true" width="45%"
+                                  draggable="false" height="580">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid ">
+
+
+                                        <div class="p-col-12 p-md-12 p-lg-12">
+                                            <div class="p-col-11">
+
+                                                <div class="p-grid">
+
+                                                    <div class="p-col-8">
+                                                        <p:outputLabel value="Nombre: "></p:outputLabel>
+                                                        <p:inputText disabled="#"  value=""></p:inputText>  
+                                                        <p:outputLabel value="Descripción: "></p:outputLabel>
+                                                        <p:inputTextarea disabled=""
+                                                                         maxlength="250"
+                                                                         placeholder="Descripcion maximo 255 caracteres"
+                                                                         value="" 
+                                                                         rows="5" 
+                                                                         cols="33" 
+                                                                         autoResize="false"/>
+                                                    </div>
+                                                    <div class="p-col-4">
+                                                        <p:outputLabel value="Tipo: "></p:outputLabel>
+                                                        <p:selectOneMenu id="TipoCentroCosto" 
+                                                                         value="" 
+                                                                         class=""
+                                                                         required="true"
+                                                                         requiredMessage="Ingrese Tipo de Costo">                            
+                                                            <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
+                                                            <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
+                                                            <f:selectItem itemLabel="Directo" itemValue="Directo"/>
+
+                                                        </p:selectOneMenu>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>                                  
+
+                                        </div>
+
+                                        <p:toolbar>
+                                            <p:toolbarGroup>
+
+
+                                                <p:dataTable reflow="true" paginator="true" rows="5" 
+                                                             rowSelectMode="add" paginatorPosition="bottom">
+                                                    <!-- Buscador -->
+                                                    <f:facet name="header">
+                                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                                            <span style="font-weight: bold; margin-right: 6px;">Lista de Centro de Costos</span>
+
+                                                        </div>
+                                                    </f:facet>
+
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                    <p:column headerText="Descripción" >
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                    <p:column headerText="Tipo">
+                                                        <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                            <f:setPropertyActionListener value="#" target="#"/>
+                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                        </p:commandButton>
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+                                                    <p:column headerText="Acciones">
+                                                        <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                            <f:setPropertyActionListener value="#" target="#"/>
+                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                        </p:commandButton>
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                </p:dataTable>
+
+                                            </p:toolbarGroup>
+                                        </p:toolbar>
+
+
+                                        <!-- Botones Guardar/Cerrar -->
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-3">
+                                                    <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"   styleClass="ui-button-danger" 
+                                                                     process="@this" oncomplete="PF('Proceso').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+
+                        </p:dialog>
+
                         <!-- Tabla de datos -->
                         <p:dataTable reflow="true" paginator="true" rows="5" 
                                      rowSelectMode="add" paginatorPosition="bottom">
                             <!-- Buscador -->
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px;">Procesos</span>
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Procesos</span>
                                     <span class="filter-container ui-input-icon-left">
                                         <i class="pi pi-search"></i>
                                         <p:inputText id="globalFilter" placeholder="Buscar"/>
@@ -139,7 +455,7 @@
                                 </div>
                             </f:facet>
 
-                            <p:column headerText="Codigo" filterStyle="display : none">
+                            <p:column headerText="Código" filterStyle="display : none">
                                 <h:outputText value="#" />
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
@@ -149,11 +465,12 @@
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
 
+
                             <p:column headerText="Acciones">
-                                <p:commandButton icon="pi pi-pencil" action="#"  
-                                                 styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                <p:commandButton icon="pi pi-times" action="#"  
+                                                 styleClass="edit-button rounded-button ui-button-danger" process="@this">
                                     <f:setPropertyActionListener value="#" target="#"/>
-                                    <p:resetInput target=":form:manage-asiento"/>
+                                    <p:resetInput target=""/>
                                 </p:commandButton>
                                 <p:skeleton rendered="#"></p:skeleton>
                             </p:column>
