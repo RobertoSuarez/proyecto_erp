@@ -36,6 +36,13 @@
 
                 <p:panel>
                     <h:form id="frmFacturas">
+                        <div style="padding-top: 10px;" class="alinearBotones">  
+                            <p:commandButton id="btnPdf" ajax="false" 
+                                             value="GENERAR PDF" icon="pi pi-file-pdf"
+                                             actionListener="#{cartera_X_EdadesController.exportarPDF()}"
+                                             style="background: red;">
+                            </p:commandButton>
+                        </div>
                         <div class="card">
                             <p:dataTable id="tblFacturasPendientes"
                                          var="facPendientes"
@@ -47,6 +54,15 @@
                                          style="font-size: 14px;">
                                 <f:facet name="header">
                                     <div>
+                                        <div style="float: left;" class="alinearBotones">
+                                            <span>
+                                                <p:commandButton id="btnPdf" ajax="false"
+                                                                 actionListener="#{facturas_PendientesController.exportarPDF()}"
+                                                                 value="GENERAR PDF" icon="pi pi-file-pdf"
+                                                                 style="background: red;">
+                                                </p:commandButton>
+                                            </span>
+                                        </div>
                                         <span style="float: right;">
                                             <p:outputLabel value="Total Venta: " 
                                                            for="txttotalventa" 
@@ -119,15 +135,6 @@
                                     <h:outputText value="#{facPendientes.diasMora}" />
                                 </p:column>
                             </p:dataTable>
-                        </div>
-                        <div class="alinearBotones">
-                            <span>
-                                <p:commandButton id="btnPdf" ajax="false"
-                                                 actionListener="#{facturas_PendientesController.exportarPDF()}"
-                                                 value="GENERAR PDF" icon="pi pi-file-pdf"
-                                                 style="background: red;">
-                                </p:commandButton>
-                            </span>
                         </div>
                     </h:form>
                 </p:panel>
