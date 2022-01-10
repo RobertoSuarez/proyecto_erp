@@ -6,7 +6,6 @@ package com.registroUsuario.controllers;
 
 import com.registroUsuario.dao.UsuarioDAO;
 import com.registroUsuario.models.Usuario;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +14,8 @@ import java.util.regex.Pattern;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-//import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.primefaces.PrimeFaces;
 
 @Named(value = "usuarioMB")
 @SessionScoped
