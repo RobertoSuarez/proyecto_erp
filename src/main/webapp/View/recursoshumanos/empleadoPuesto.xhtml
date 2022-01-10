@@ -1,84 +1,152 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
-        <h:head>
-            <f:metadata>
-                <f:event type="preRenderView" listener="#{empleadoPuestoView.postLoad}" />
-            </f:metadata>
-        </h:head>
-        <div class="card">
-            <h:form id="form">
-                <p:panel id="dt-puesto" header="#{empleadoPuestoView.empleadoPuesto.empleado.nombreCompleto()}">
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <span style="font-weight: bold" icon="pi pi-table">Puesto Laboral</span>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:linkButton value="Regresar" icon="pi pi-times" outcome="Empleado"
-                                          styleClass="ui-button-success" style="margin-right: .5rem"/>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:growl id="messages" showDetail="true"/>
-                    <p:panel >
-                        <p:messages/>
-                        <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-                                     styleClass="ui-panelgrid-blank ui-fluid"
-                                     style="border:0px none; background-color:transparent; width: 100%;">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
-                            <p:outputLabel for="puestoL" value="Puesto de Trabajo: "/>
-                            <p:selectOneMenu id="puestoL" value="#{empleadoPuestoView.idPuesto}" 
-                                             required="true" label="Puesto de Trabajo">
-                                <f:selectItem itemLabel="Selecione un puesto" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{empleadoPuestoView.puestos}" var="puesto" 
-                                               itemLabel="#{puesto.resumen()}" itemValue="#{puesto.id}"/>
-                            </p:selectOneMenu>
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:head>
+                    <f:metadata>
+                        <f:event type="preRenderView" listener="#{empleadoPuestoView.postLoad}" />
+                    </f:metadata>
+                </h:head>
+                <div class="card">
+                    <h:form id="form">
+                        <br/><br/><br/>
+                        <p:panel id="dt-puesto" header="#{empleadoPuestoView.empleadoPuesto.empleado.nombreCompleto()}">
+                            <p:toolbar>
+                                
+                                <p:toolbarGroup>
+                                    <span style="font-weight: bold" 
+                                          icon="pi pi-table">Puesto Laboral</span>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:linkButton value="Regresar" icon="pi pi-times" outcome="Empleado"
+                                                  styleClass="ui-button-success" 
+                                                  style="margin-right: .5rem"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:growl id="messages" showDetail="true"/>
+                            <p:panel >
+                                <p:messages/>
+                                <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
 
-                            <p:outputLabel for="horarioL" style="margin-left: 10px;" value="Horario Laboral: "/>
-                            <p:selectOneMenu id="horarioL" value="#{empleadoPuestoView.idHorario}"
-                                             rendered="true" label="Horario Laboral">
-                                <f:selectItem itemLabel="Selecione un horario" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{empleadoPuestoView.horarios}" var="horario" 
-                                               itemLabel="#{horario.nombre}" itemValue="#{horario.id}"/>
-                            </p:selectOneMenu>
-                        </h:panelGrid>
-                        <h:panelGrid columns="2"  columnClasses="ui-grid-col-2,ui-grid-col-10"
-                                     styleClass="ui-panelgrid-blank ui-fluid"
-                                     style="border:0px none; background-color:transparent; width: 100%;">
+                                    <p:outputLabel for="puestoL" value="Puesto de Trabajo: "/>
+                                    <p:selectOneMenu id="puestoL" value="#{empleadoPuestoView.idPuesto}" 
+                                                     required="true" label="Puesto de Trabajo">
+                                        <f:selectItem itemLabel="Selecione un puesto" itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{empleadoPuestoView.puestos}" var="puesto" 
+                                                       itemLabel="#{puesto.resumen()}" itemValue="#{puesto.id}"/>
+                                    </p:selectOneMenu>
 
-                            <h:outputText value="Observacion (puesto): "/>
-                            <p:inputTextarea value="#{empleadoPuestoView.empleadoPuesto.observaciones}"/>
+                                    <p:outputLabel for="horarioL" style="margin-left: 10px;" value="Horario Laboral: "/>
+                                    <p:selectOneMenu id="horarioL" value="#{empleadoPuestoView.idHorario}"
+                                                     rendered="true" label="Horario Laboral">
+                                        <f:selectItem itemLabel="Selecione un horario" itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{empleadoPuestoView.horarios}" var="horario" 
+                                                       itemLabel="#{horario.nombre}" itemValue="#{horario.id}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2"  columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
 
-                            <p:outputLabel for="sucursalE" value="Sucursal: "/>
-                            <p:selectOneMenu id="sucursalE" value="#{empleadoPuestoView.idSucursal}"
-                                             rendered="true" label="Sucursal">
-                                <f:selectItem itemLabel="Selecione una sucursal" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{empleadoPuestoView.sucursales}" var="sucursal" 
-                                               itemLabel="#{sucursal.resumen()}" itemValue="#{sucursal.id}"/>
-                            </p:selectOneMenu>
+                                    <h:outputText value="Observacion (puesto): "/>
+                                    <p:inputTextarea value="#{empleadoPuestoView.empleadoPuesto.observaciones}"/>
 
-                            <h:outputText value="Observacion (sucursal): "/>
-                            <p:inputTextarea value="#{empleadoPuestoView.empleadoSucursal.detalle}"/>
+                                    <p:outputLabel for="sucursalE" value="Sucursal: "/>
+                                    <p:selectOneMenu id="sucursalE" value="#{empleadoPuestoView.idSucursal}"
+                                                     rendered="true" label="Sucursal">
+                                        <f:selectItem itemLabel="Selecione una sucursal" itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{empleadoPuestoView.sucursales}" var="sucursal" 
+                                                       itemLabel="#{sucursal.resumen()}" itemValue="#{sucursal.id}"/>
+                                    </p:selectOneMenu>
 
-                        </h:panelGrid>
-                    </p:panel>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="Empleado" actionListener="#{empleadoPuestoView.guardar}"
-                                             update="messages dt-puesto" styleClass="p-mr-2 ui-button-success"
-                                             process="messages dt-puesto @this">
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                </p:panel>
-            </h:form>
-        </div>
-    </ui:define>
-</ui:composition>
+                                    <h:outputText value="Observacion (sucursal): "/>
+                                    <p:inputTextarea value="#{empleadoPuestoView.empleadoSucursal.detalle}"/>
+
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                                     action="Empleado" actionListener="#{empleadoPuestoView.guardar}"
+                                                     update="messages dt-puesto" 
+                                                     styleClass="p-mr-2 ui-button-success"
+                                                     process="messages dt-puesto @this">
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </p:panel>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
