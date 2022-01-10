@@ -72,10 +72,10 @@ public class UsuarioController implements Serializable {
 
             } else if ("".equals(usuario.getPassword())) {
                 PFW("Ingrese una Contraseña");
-            } else if (usuario.isHabilitado() == false) {
+            }/* else if (usuario.isHabilitado() == false) {
                 PFW("Aceptar los terminos y condiciones");
 
-            } else if (matcher.find() == false) {
+            } */else if (matcher.find() == false) {
                 PFW("Ingrese un email válido");
             } else {
                 this.usuarioDAO.registrarUsuario(usuario);
