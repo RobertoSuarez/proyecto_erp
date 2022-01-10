@@ -84,7 +84,7 @@ public class UsuarioDAO {
                             result.getString("name"),
                             result.getString("surname"),
                             result.getString("usrnm"),
-                            null,
+                            result.getString("pswrd"),
                             result.getString("mail")
                     ));
 
