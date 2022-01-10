@@ -92,8 +92,7 @@
                                          var="departamento" value="#{departamentoView.lista}"
                                          reflow="true" size="small" liveResize="true" 
                                          styleClass="departamentos-table"
-                                         rowKey="#{departamento.id}" paginator="true" 
-                                         rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
+                                         rowKey="#{departamento.id}" paginator="true"
                                          rows="5" rowSelectMode="add" paginatorPosition="bottom">
                                 <p:column headerText="Departamento" sortBy="#{departamento.nombre}" 
                                           filterBy="#{departamento.nombre}">
@@ -117,13 +116,16 @@
                                             <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
                                         </p:selectOneMenu>
                                     </f:facet>
-                                    <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
+                                    <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" 
+                                                  style="width:100%"/>
                                 </p:column>
                                 <p:column exportable="false" width="10%">
                                     <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
                                                      oncomplete="PF('manageDepartamentoDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                        <f:setPropertyActionListener value="#{departamento}" target="#{departamentoView.departamento}"/>
+                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     process="@this">
+                                        <f:setPropertyActionListener value="#{departamento}" 
+                                                                     target="#{departamentoView.departamento}"/>
                                         <p:resetInput target=":form:manage-departamento-content"/>
                                     </p:commandButton>
                                     <p:commandButton icon="pi pi-#{departamento.estado? 'times' : 'check'}"
