@@ -84,8 +84,9 @@
                                          styleClass="ui-panelgrid-blank ui-fluid"
                                          style="width: 100%;">
 
+
                                 <p:outputLabel for="ruc" style="font-weight: bold;">RUC: </p:outputLabel>
-                                <h:outputText id="ruc" value="#{empresaView.empresa.ruc}"/>
+                                <h:outputText id="ruc" style="margin-top:5px" value="#{empresaView.empresa.ruc}"/>
 
                                 <p:outputLabel for="nombreC" style="font-weight: bold; margin-left: 10px;">Nombre Comercial: </p:outputLabel>
                                 <h:outputText id="nombreC" value="#{empresaView.empresa.nombre}"/>
@@ -164,19 +165,20 @@
                                      reflow="true" size="small" liveResize="true" styleClass="sucursales-table"
                                      rowKey="#{sucursal.id}" paginator="true"
                                      rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                            <p:column headerText="Ciudad" width="20%" sortBy="#{sucursal.ciudad.nombre}">
+                            <p:column headerText="Ciudad" width="20%">
                                 <h:outputText value="#{sucursal.ciudad.nombre}" title="#{sucursal.ciudad.resumen()}"/>
                             </p:column>
-                            <p:column headerText="Dirección" sortBy="#{sucursal.direccion}">
+                            <p:column headerText="Dirección">
                                 <h:outputText value="#{sucursal.direccion}"/>
                             </p:column>
-                            <p:column headerText="Detalle" sortBy="#{sucursal.detalle}">
+                            <p:column headerText="Detalle">
                                 <h:outputText value="#{sucursal.detalle}"/>
                             </p:column>
                             <p:column exportable="false" width="5%">
-                                <p:commandButton icon="pi pi-pencil" update=":form:manage-sucursal-content"
+                                <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 icon="pi pi-pencil" update=":form:manage-sucursal-content"
                                                  oncomplete="PF('manageSucursalDialog').show()"
-                                                 styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
+                                                 process="@this">
                                     <p:ajax listener="#{empresaView.editarSucursal(sucursal.ciudad.provincia.id, sucursal.ciudad.id)}"
                                             update=":form:manage-sucursal-content" />
                                     <f:setPropertyActionListener value="#{sucursal}" target="#{empresaView.sucursal}"/>

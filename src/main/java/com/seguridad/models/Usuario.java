@@ -1,4 +1,4 @@
-package com.registroUsuario.models;
+package com.seguridad.models;
 
 import java.io.Serializable;
 import java.util.Date;
