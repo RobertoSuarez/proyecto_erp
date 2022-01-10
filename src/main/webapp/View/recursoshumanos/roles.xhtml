@@ -1,70 +1,142 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content" class="Contenido">
-        <h:head>
-            <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoLista}" />
-            </f:metadata>
-        </h:head>
-        <h:form id="form" style="width: 105%; margin-left: -23px;">
-            <div class="card  crud-demo">
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel>
-                    <h2>Roles de Pagos</h2>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <h:outputLabel for="empleadolist" value="Empleado: "/>
-                            <p:selectOneMenu style="margin-left: 30px;" id="empleadolist" value="#{rolDePagoView.idEmpleado}"
-                                             required="true" requiredMessage="Debe seleccionar un empleado" label="Empleado"
-                                             filter="true" filterMatchMode="startsWith">
-                                <p:ajax update="dt-roles"/>
-                                <f:selectItem itemLabel="Seleccione a un empleado" itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{rolDePagoView.empleados}" var="empleado"
-                                               itemLabel="#{empleado.nombreCompleto()}" itemValue="#{empleado.id}"/>
-                            </p:selectOneMenu>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" action="CrearRol" actionListener="#{rolDePagoView.nuevoRoldePago}"
-                                             styleClass="ui-button-success" update="messages empleadolist" style="margin-right: .5rem">
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" value="#{rolDePagoView.pagos}"
-                                 reflow="true" size="small" liveResize="true" styleClass="roles-table"
-                                 paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom"
-                                 rowsPerPageTemplate="3,5,10,{ShowAll|'All'}">
-                        <p:column headerText="Código" width="30%">
-                            <h:outputText value="#{rolPago.codigo}"/>
-                        </p:column>
-                        <p:column headerText="Valor" width="10%">
-                            <h:outputText value="$ #{rolPago.valor}"/>
-                        </p:column>
-                        <p:column headerText="Generado" width="10%">
-                            <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaGenerado)}"/>
-                        </p:column>
-                        <p:column headerText="Aprobado" width="10%">
-                            <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaAprobacion)}"/>
-                        </p:column>
-                        <p:column headerText="Pagado" width="10%">
-                            <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaPago)}"/>
-                        </p:column>
-                        <p:column headerText="Estado" width="10%">
-                            <h:outputText value="#{rolPago.estado}"/>
-                        </p:column>
-                        <p:column exportable="false">
-                            <p:commandButton icon="pi pi-eye" action="RolDePago" update="dt-roles" actionListener="#{rolDePagoView.verRoldePago(rolPago)}"
-                                             styleClass="edit-button rounded-button ui-button-success" process="dt-roles @this">
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-</ui:composition>
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:head>
+                    <f:metadata>
+                        <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoLista}" />
+                    </f:metadata>
+                </h:head>
+                <h:form id="form" style="width: 100%;">
+                    <div class="card  crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel>
+                            <h2>Roles de Pagos</h2>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <h:outputLabel for="empleadolist" value="Empleado: "/>
+                                    <p:selectOneMenu style="margin-left: 30px;" 
+                                                     id="empleadolist" value="#{rolDePagoView.idEmpleado}"
+                                                     required="true" requiredMessage="Debe seleccionar un empleado" label="Empleado"
+                                                     filter="true" filterMatchMode="startsWith">
+                                        <p:ajax update="dt-roles"/>
+                                        <f:selectItem itemLabel="Seleccione a un empleado" 
+                                                      itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{rolDePagoView.empleados}" var="empleado"
+                                                       itemLabel="#{empleado.nombreCompleto()}" 
+                                                       itemValue="#{empleado.id}"/>
+                                    </p:selectOneMenu>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" 
+                                                     action="CrearRol" actionListener="#{rolDePagoView.nuevoRoldePago}"
+                                                     styleClass="ui-button-success" 
+                                                     update="messages empleadolist" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" 
+                                         value="#{rolDePagoView.pagos}"
+                                         reflow="true" size="small" liveResize="true" 
+                                         styleClass="roles-table"
+                                         paginator="true" rows="10" rowSelectMode="add" 
+                                         paginatorPosition="bottom">
+                                <p:column headerText="Código" width="30%">
+                                    <h:outputText value="#{rolPago.codigo}"/>
+                                </p:column>
+                                <p:column headerText="Valor" width="10%">
+                                    <h:outputText value="$ #{rolPago.valor}"/>
+                                </p:column>
+                                <p:column headerText="Generado" width="10%">
+                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaGenerado)}"/>
+                                </p:column>
+                                <p:column headerText="Aprobado" width="10%">
+                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaAprobacion)}"/>
+                                </p:column>
+                                <p:column headerText="Pagado" width="10%">
+                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaPago)}"/>
+                                </p:column>
+                                <p:column headerText="Estado" width="10%">
+                                    <h:outputText value="#{rolPago.estado}"/>
+                                </p:column>
+                                <p:column exportable="false">
+                                    <p:commandButton icon="pi pi-eye" action="RolDePago" 
+                                                     update="dt-roles" actionListener="#{rolDePagoView.verRoldePago(rolPago)}"
+                                                     styleClass="edit-button rounded-button ui-button-success" process="dt-roles @this">
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
