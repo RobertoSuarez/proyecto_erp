@@ -1,102 +1,190 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content" class="Contenido">
-        <h:form id="form" style="width: 105%; margin-left: -23px;">
-            <div class="card crud-demo">
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <span style="font-weight: bold" icon="pi pi-table">departamentl</span>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{departamentoView.abrirNuevo}"
-                                             update=":form:manage-departamento-content" oncomplete="PF('manageDepartamentoDialog').show()"
-                                             styleClass="ui-button-success" style="margin-right: .5rem">
-                                <p:resetInput target=":form:manage-departamento-content"/>
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:dataTable id="dt-departamentos" widgetVar="dtDepartamentos" var="departamento" value="#{departamentoView.lista}"
-                                 reflow="true" size="small" liveResize="true" styleClass="departamentos-table"
-                                 rowKey="#{departamento.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
-                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column headerText="Departamento" sortBy="#{departamento.nombre}" filterBy="#{departamento.nombre}">
-                            <h:outputText value="#{departamento.nombre}"/>
-                        </p:column>
-                        <p:column headerText="Descripción" width="35%">
-                            <h:outputText value="#{departamento.descripcion}"/>
-                        </p:column>
-                        <p:column headerText="Creado" width="10%" sortBy="#{departamento.fecha_creacion}">
-                            <h:outputText value="#{departamentoView.darFormato(departamento.fecha_creacion)}"/>
-                        </p:column>
-                        <p:column headerText="Estado" width="12%" field="estado" filterBy="#{departamento.estado}"
-                                  filterMatchMode="exact">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('dtDepartamentos').filter()">
-                                    <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
-                                    <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
-                                </p:selectOneMenu>
-                            </f:facet>
-                            <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
-                        </p:column>
-                        <p:column exportable="false" width="10%">
-                            <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
-                                             oncomplete="PF('manageDepartamentoDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <f:setPropertyActionListener value="#{departamento}" target="#{departamentoView.departamento}"/>
-                                <p:resetInput target=":form:manage-departamento-content"/>
-                            </p:commandButton>
-                            <p:commandButton icon="pi pi-#{departamento.estado? 'times' : 'check'}"
-                                             styleClass="edit-button rounded-button ui-button-success" 
-                                             actionListener="#{departamentoView.cambiarEstado(departamento)}"
-                                             update="dt-departamentos" process="dt-departamentos @this">
-                                <f:setPropertyActionListener value="#{!departamento.estado}" target="#{departamento.estado}"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog header="Departamento" showEffect="fade" modal="true"
-                              widgetVar="manageDepartamentoDialog" responsive="true">
-                        <p:outputPanel id="manage-departamento-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty departamentoView.departamento}">
-                                <div class="card">
-                                    <div class="ui-fluid">
-                                        <div class="p-field">
-                                            <p:outputLabel for="departamento" style="font-weight: bold">Nombre</p:outputLabel>
-                                            <p:inputText id="departamento" value="#{departamentoView.departamento.nombre}" 
-                                                         required="true" requiredMessage="Campo requerido"/>
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:form id="form" style="width: 100%;">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <span style="font-weight: bold" 
+                                          icon="pi pi-table">departamentl</span>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                                     actionListener="#{departamentoView.abrirNuevo}"
+                                                     update=":form:manage-departamento-content" 
+                                                     oncomplete="PF('manageDepartamentoDialog').show()"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                        <p:resetInput target=":form:manage-departamento-content"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="dt-departamentos" widgetVar="dtDepartamentos" 
+                                         var="departamento" value="#{departamentoView.lista}"
+                                         reflow="true" size="small" liveResize="true" 
+                                         styleClass="departamentos-table"
+                                         rowKey="#{departamento.id}" paginator="true"
+                                         rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                                <p:column headerText="Departamento" sortBy="#{departamento.nombre}" 
+                                          filterBy="#{departamento.nombre}">
+                                    <h:outputText value="#{departamento.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Descripción" width="35%">
+                                    <h:outputText value="#{departamento.descripcion}"/>
+                                </p:column>
+                                <p:column headerText="Creado" width="10%" 
+                                          sortBy="#{departamento.fecha_creacion}">
+                                    <h:outputText 
+                                        value="#{departamentoView.darFormato(departamento.fecha_creacion)}"/>
+                                </p:column>
+                                <p:column headerText="Estado" width="12%" field="estado" 
+                                          filterBy="#{departamento.estado}"
+                                          filterMatchMode="exact">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('dtDepartamentos').filter()">
+                                            <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
+                                            <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                    <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" 
+                                                  style="width:100%"/>
+                                </p:column>
+                                <p:column exportable="false" width="10%">
+                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
+                                                     oncomplete="PF('manageDepartamentoDialog').show()"
+                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     process="@this">
+                                        <f:setPropertyActionListener value="#{departamento}" 
+                                                                     target="#{departamentoView.departamento}"/>
+                                        <p:resetInput target=":form:manage-departamento-content"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="pi pi-#{departamento.estado? 'times' : 'check'}"
+                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     actionListener="#{departamentoView.cambiarEstado(departamento)}"
+                                                     update="dt-departamentos" process="dt-departamentos @this">
+                                        <f:setPropertyActionListener value="#{!departamento.estado}" target="#{departamento.estado}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dialog header="Departamento" showEffect="fade" modal="true"
+                                      widgetVar="manageDepartamentoDialog" responsive="true">
+                                <p:outputPanel id="manage-departamento-content" class="ui-fluid">
+                                    <p:outputPanel rendered="#{not empty departamentoView.departamento}">
+                                        <div class="card">
+                                            <div class="ui-fluid">
+                                                <div class="p-field">
+                                                    <p:outputLabel for="departamento" 
+                                                                   style="font-weight: bold">Nombre</p:outputLabel>
+                                                    <p:inputText id="departamento" 
+                                                                 value="#{departamentoView.departamento.nombre}" 
+                                                                 required="true" 
+                                                                 requiredMessage="Campo requerido"/>
+                                                </div>
+                                                <div class="p-field">
+                                                    <p:outputLabel for="description" 
+                                                                   style="font-weight: bold">Descripción</p:outputLabel>
+                                                    <p:inputTextarea id="description" 
+                                                                     value="#{departamentoView.departamento.descripcion}" 
+                                                                     required="true" 
+                                                                     requiredMessage="Campo requerido"/>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="p-field">
-                                            <p:outputLabel for="description" style="font-weight: bold">Descripción</p:outputLabel>
-                                            <p:inputTextarea id="description" value="#{departamentoView.departamento.descripcion}" 
-                                                             required="true" requiredMessage="Campo requerido"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p:outputPanel>
-                        </p:outputPanel>
-                        <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{departamentoView.enviar}"
-                                             update="messages manage-departamento-content" styleClass="ui-button-success"
-                                             process="messages manage-departamento-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDepartamentoDialog').hide()"
-                                             process="@none" styleClass="p-mr-2" resetValues="true" />
-                        </f:facet>
-                    </p:dialog>
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                         icon="pi pi-times"/>
-                    </p:confirmDialog>
-                </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-</ui:composition>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                                     actionListener="#{departamentoView.enviar}"
+                                                     update="messages manage-departamento-content" 
+                                                     styleClass="ui-button-success"
+                                                     process="messages manage-departamento-content @this"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                     onclick="PF('manageDepartamentoDialog').hide()"
+                                                     process="@none" styleClass="p-mr-2" 
+                                                     resetValues="true" />
+                                </f:facet>
+                            </p:dialog>
+                            <p:confirmDialog global="true" showEffect="fade" width="300">
+                                <p:commandButton value="Yes" type="button" 
+                                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                                <p:commandButton value="No" type="button" 
+                                                 styleClass="ui-confirmdialog-no ui-button-secondary"
+                                                 icon="pi pi-times"/>
+                            </p:confirmDialog>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

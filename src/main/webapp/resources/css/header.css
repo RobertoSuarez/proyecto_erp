@@ -25,12 +25,14 @@
 .navbar .submenu {
     position: fixed;
     right: 110px;
+    width: 300px;
     top: 65px;
     display: flex;
     background: #fff;
     border-radius: 15px;
     display: none;
-    font-size: 16px;
+    font-size: 18px;
+    
 }
 
 .navbar .submenu{
@@ -40,14 +42,14 @@
 .navbar .submenu li{
     margin-bottom: 2px;
     color: #868686;
-}
-.navbar .submenu li:hover {
-    box-shadow: 0 0 10px 100px #dee2e6 inset;
+    transition: all .3s;
 }
 
+.navbar .submenu li:hover {
+    background: #ccc;
+    box-shadow: 0 0 10px 100px #dee2e6 inset;
+}
 
 .navbar .menu.active .submenu{
     display: flex;
 }
-
-
