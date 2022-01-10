@@ -26,25 +26,36 @@
     position: fixed;
     right: 110px;
     top: 65px;
-    display: flex;
     background: #fff;
-    border-radius: 15px;
+    border-radius: 5px;
     display: none;
     font-size: 18px;
-    
 }
 
 .navbar .submenu{
-    padding: 15px 30px;
+    padding: 6px 0;
+    width: 15%;
+    box-shadow: 3px 1px 6px rgba(0,0,0,0.3);
 }
 
 .navbar .submenu li{
     margin-bottom: 2px;
     color: #868686;
+    list-style: none;
+    padding: 6px 12px;
+    transition: all 0.3s;
+}
+
+.navbar .submenu li a{
+    color: #000;
+}
+
+.navbar .submenu li a span{
+    font-weight: 300;
 }
 
 .navbar .submenu li:hover {
-    box-shadow: 0 0 10px 100px #dee2e6 inset;
+    background: #dddddd
 }
 
 .navbar .menu.active .submenu{
