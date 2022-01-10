@@ -1,16 +1,241 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
-        <div>TODO write content</div>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="title">Procesos de producción</ui:define>
+            <ui:define name="content">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:menuitem value="Orden de Producción" url="listaOrdenProduccion.xhtml"/>
+                    <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
+                    <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
+                </p:menubar>
+                <h:form id="form" style="margin-top: 4%;">
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <div class="p-d-flex p-jc-between p-ai-center" style="font-size: 24px">
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Nuevo SubProceso</span>
+                                </div>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <div class="card ui-fluid ">
+                                    <div class="p-formgrid p-grid">
+
+                                        <div class="p-col-12">
+                                            <div class="p-grid">
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="Codigo Subproceso: "></p:outputLabel>
+                                                    <p:inputText disabled="#"  value=""></p:inputText> 
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="Codigo Proceso: "></p:outputLabel>
+                                                    <p:inputText disabled="#"  value=""></p:inputText> 
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="p-field p-col-12 ">
+                                            <div class="p-grid">
+                                                <div class="p-col-8">
+                                                    <p:outputLabel value="Nombre: "></p:outputLabel>
+                                                    <p:inputText disabled="#"  value=""></p:inputText>  
+                                                    <p:outputLabel value="Descripción: "></p:outputLabel>
+                                                    <p:inputTextarea disabled=""
+                                                                     maxlength="250"
+                                                                     placeholder="Descripcion maximo 255 caracteres"
+                                                                     value="" 
+                                                                     rows="5" 
+                                                                     cols="33" 
+                                                                     autoResize="false"/>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <p:toolbar>
+                                            <p:toolbarGroup>
+
+                                                <div class="p-d-flex p-jc-between p-ai-center">
+                                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Integración de Costo</span>
+
+                                                </div>
+
+                                                <div class="p-formgrid p-grid">
+
+
+                                                    <div class="p-field p-col-12 p-md-6">
+                                                        <div>
+                                                            <p:toolbar>
+                                                                <p:toolbarGroup>
+
+
+                                                                    <p:dataTable reflow="true" paginator="true" rows="5" 
+                                                                                 rowSelectMode="add" paginatorPosition="bottom">
+                                                                        <!-- Buscador -->
+                                                                        <f:facet name="header">
+                                                                            <div class="p-d-flex p-jc-between p-ai-center">
+                                                                                <span style="font-weight: bold; margin-right: 6px;">Costos Indirectos</span>
+
+                                                                            </div>
+                                                                        </f:facet>
+
+                                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                                            <h:outputText value="#" />
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+
+                                                                        <p:column headerText="Descripción" >
+                                                                            <h:outputText value="#" />
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+
+                                                                        <p:column headerText="Tipo">
+                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                                <p:resetInput target=":form:manage-asiento"/>
+                                                                            </p:commandButton>
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+                                                                        <p:column headerText="Acciones">
+                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                                <p:resetInput target=":form:manage-asiento"/>
+                                                                            </p:commandButton>
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+
+                                                                    </p:dataTable>
+
+                                                                </p:toolbarGroup>
+                                                            </p:toolbar>
+
+                                                        </div>
+
+
+                                                        <div class="p-field p-grid p-jc-xl-end">
+
+                                                            <div class="p-col-4">
+                                                                <p:outputLabel value="Total : "></p:outputLabel>
+                                                                <p:inputText disabled="#"  value=""></p:inputText>  
+                                                                <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                                                <p:inputText disabled="#"  value=""></p:inputText>
+
+                                                            </div>
+
+                                                        </div> 
+
+                                                    </div>
+
+
+
+                                                    <div class="p-field p-col-12 p-md-6">
+                                                        <div>
+                                                            <p:toolbar>
+                                                                <p:toolbarGroup>
+
+
+                                                                    <p:dataTable reflow="true" paginator="true" rows="5" 
+                                                                                 rowSelectMode="add" paginatorPosition="bottom">
+                                                                        <!-- Buscador -->
+                                                                        <f:facet name="header">
+                                                                            <div class="p-d-flex p-jc-between p-ai-center">
+                                                                                <span style="font-weight: bold; margin-right: 6px;">Costos Directos</span>
+
+                                                                            </div>
+                                                                        </f:facet>
+
+                                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                                            <h:outputText value="#" />
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+
+                                                                        <p:column headerText="Descripción" >
+                                                                            <h:outputText value="#" />
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+
+                                                                        <p:column headerText="Tipo">
+                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                                <p:resetInput target=":form:manage-asiento"/>
+                                                                            </p:commandButton>
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+                                                                        <p:column headerText="Acciones">
+                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                                <p:resetInput target=":form:manage-asiento"/>
+                                                                            </p:commandButton>
+                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        </p:column>
+
+                                                                    </p:dataTable>
+
+
+                                                                </p:toolbarGroup>
+                                                            </p:toolbar>
+
+                                                        </div>
+                                                        <div class="p-field p-grid p-jc-xl-end">
+
+                                                            <div class="p-col-4">
+                                                                <p:outputLabel value="Total : "></p:outputLabel>
+                                                                <p:inputText disabled="#"  value=""></p:inputText>  
+                                                                <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                                                <p:inputText disabled="#"  value=""></p:inputText>
+
+                                                            </div>
+
+                                                        </div> 
+
+                                                    </div>
+                                                    
+
+                                                </div>
+
+
+
+                                            </p:toolbarGroup>
+                                        </p:toolbar>
+
+                                    </div>
+                                </div>
+                                <!-- Botones Guardar/Cerrar -->            
+
+                                <div class="p-col-11">
+                                    <div class="p-grid">
+                                        <div class="p-col-4">
+                                            <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"  style=" margin-right: .6rem"/>
+                                             <p:button  value="Cerrar" styleClass="ui-button-danger" icon="pi pi-plus" outcome="procesoProduccion.xhtml">
+                                    </p:button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                    </div>
+
+
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
     </body>
 </html>

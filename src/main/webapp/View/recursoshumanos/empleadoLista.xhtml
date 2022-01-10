@@ -73,88 +73,78 @@
                                  listener="#{empleadoView.postLista()}" />
                     </f:metadata>
                 </h:head>
-                <h:form id="form" style="width: 100%;">
-                    <div class="card crud-demo">
-                        <p:growl id="messages" showDetail="true"/>
-                        <br/><br/><br/><br/>
-                        <p:panel>
-                            <p:toolbar>
-                                <p:toolbarGroup>
-                                    <span style="font-weight: bold" 
-                                          icon="pi pi-table">EMPLEADOS</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:linkButton value="Nuevo Empleado" 
-                                                  icon="pi pi-user-plus" outcome="CrearEmpleado"
-                                                  styleClass="ui-button-success" 
-                                                  style="margin-right: .5rem"/>
-                                </p:toolbarGroup>
-                            </p:toolbar>
-                            <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" 
-                                         var="empleado" value="#{empleadoView.lista}"
-                                         reflow="true" size="small" liveResize="true" 
-                                         styleClass="empleados-table"
-                                         rowKey="#{empleado.id}" paginator="true"
-                                         rows="10" rowSelectMode="add" 
-                                         paginatorPosition="bottom" 
-                                         filteredValue="#{empresaView.filteredEmpleado}">
 
-                                <p:column headerText="Identificación" width="12%" 
-                                          sortBy="#{empleado.persona.identificacion}"
-                                          filterBy="#{empleado.persona.identificacion}">
-                                    <h:outputText value="#{empleado.persona.identificacion}"/>
-                                </p:column>
-                                <p:column headerText="Apellidos" sortBy="#{empleado.apellidos}"
-                                          filterBy="#{empleado.apellidos}">
-                                    <h:outputText value="#{empleado.apellidos}"/>
-                                </p:column>
-                                <p:column headerText="Nombres" sortBy="#{empleado.nombres}"
-                                          filterBy="#{empleado.nombres}">
-                                    <h:outputText value="#{empleado.nombres}"/>
-                                </p:column>
-                                <p:column headerText="Ingreso" width="9%"
-                                          sortBy="#{empleado.fechaIngreso}">
-                                    <h:outputText value="#{empleadoView.darFormato(empleado.fechaIngreso)}"/>
-                                </p:column>
-                                <p:column headerText="Salida" width="9%"
-                                          sortBy="#{empleado.fechaEgreso}">
-                                    <h:outputText value="#{empleadoView.darFormato(empleado.fechaEgreso)}"/>
-                                </p:column>
-                                <p:column headerText="Estado" width="12%" 
-                                          field="estado" filterBy="#{empleado.persona.estado}"
-                                          filterMatchMode="exact">
-                                    <f:facet name="filter">
-                                        <p:selectOneMenu onchange="PF('dtEmpleados').filter()">
-                                            <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
-                                    <h:outputText value="#{empleado.persona.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
-                                </p:column>
-                                <p:column exportable="false" width="9%">
-                                    <p:commandButton icon="pi pi-eye" action="Empleado" actionListener="#{empleadoView.verEmpleado(empleado)}"
-                                                     styleClass="ui-button-secondary p-mr-2 p-mb-2" process="@this">
-                                    </p:commandButton>
-                                    <p:commandButton icon="pi pi-#{empleado.persona.estado? 'times' : 'check'}"
-                                                     styleClass="ui-button-danger" 
-                                                     actionListener="#{empleadoView.cambiarEstado(empleado)}"
-                                                     update="dt-empleados" process="dt-empleados @this">
-                                        <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                            <p:confirmDialog global="true" showEffect="fade" width="300">
-                                <p:commandButton value="Yes" label="Si" 
-                                                 type="button" styleClass="ui-confirmdialog-yes" 
-                                                 icon="pi pi-check"/>
-                                <p:commandButton value="No" label="No" 
-                                                 type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                                 icon="pi pi-times"/>
-                            </p:confirmDialog>
-                        </p:panel>
-                    </div>
-                </h:form>
+                <div class="card crud-demo">
+                    <p:growl id="messages" showDetail="true"/>
+                    <br/><br/><br/>
+                    <p:panel>
+                        <p:toolbar>
+                            <p:toolbarGroup style="margin-top:2%">
+                                    <span style="font-weight: bold; font-size: 25px" > Empleados </span>
+                                
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <f:facet name="header">
+
+                            <p:commandButton value="Nuevo Empleado" icon="pi pi-plus"
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                             ></p:commandButton>
+                        </f:facet>
+                        <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" 
+                                     var="empleado" value="#{empleadoView.lista}"
+                                     reflow="true" size="small" liveResize="true" 
+                                     styleClass="empleados-table"
+                                     rowKey="#{empleado.id}" paginator="true"
+                                     rows="10" rowSelectMode="add" 
+                                     paginatorPosition="bottom" 
+                                     filteredValue="#{empresaView.filteredEmpleado}">
+
+                            <p:column headerText="Identificación" width="12%" >
+                                <h:outputText value="#{empleado.persona.identificacion}"/>
+                            </p:column>
+                            <p:column headerText="Apellidos">
+                                <h:outputText value="#{empleado.apellidos}"/>
+                            </p:column>
+                            <p:column headerText="Nombres">
+                                <h:outputText value="#{empleado.nombres}"/>
+                            </p:column>
+                            
+                            
+                            
+                            <p:column headerText="Ingreso" width="9%">
+                                <h:outputText value="#{empleadoView.darFormato(empleado.fechaIngreso)}"/>
+                            </p:column>
+                            <p:column headerText="Salida" width="9%">
+                                <h:outputText value="#{empleadoView.darFormato(empleado.fechaEgreso)}"/>
+                            </p:column>
+                            <p:column headerText="Estado" width="12%">
+
+                                <h:outputText value="#{empleado.persona.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
+                            </p:column>
+                            <p:column exportable="false" width="9%">
+                                <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 icon="pi pi-pencil" action="Empleado" actionListener="#{empleadoView.verEmpleado(empleado)}"
+                                                 process="@this">
+                                </p:commandButton>
+                                <p:commandButton class="ui-button-danger rounded-button"
+                                                 icon="pi pi-pi pi-trash"
+                                                 actionListener="#{empleadoView.cambiarEstado(empleado)}"
+                                                 update="dt-empleados" process="dt-empleados @this">
+                                    <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:confirmDialog global="true" showEffect="fade" width="300">
+                            <p:commandButton value="Yes" label="Si" 
+                                             type="button" styleClass="ui-confirmdialog-yes" 
+                                             icon="pi pi-check"/>
+                            <p:commandButton value="No" label="No" 
+                                             type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                             icon="pi pi-times"/>
+                        </p:confirmDialog>
+                    </p:panel>
+                </div>
+
             </ui:define>
         </ui:composition>
     </body>
