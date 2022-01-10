@@ -1,158 +1,244 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content" class="Contenido">
-        <h:head>
-            <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoCrear}" />
-            </f:metadata>
-        </h:head>
-        <div class="card">
-            <h:form id="form" style="width: 105%; margin-left: -23px;">
-                <p:panel id="todo" class="card ui-fluid">
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <span style="font-weight: bold;">ROL DE PAGO</span>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:linkButton value="Cancelar" icon="pi pi-times" outcome="ListaRoles"
-                                          styleClass="ui-button-success" style="margin-right: .5rem"/>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:panel >
-                        <h:panelGrid columns="5" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3"
-                                     styleClass="ui-panelgrid-blank ui-fluid"
-                                     style="border:0px none; background-color:transparent; width: 100%;">
-                            <h:outputText style="font-weight: bold; margin-right: -15px;" value="Empleado: "/>
-                            <h:outputText style="margin-left: 15px;" value="#{rolDePagoView.empleado.nombreCompleto()}"/>
-                            <h:outputText style="font-weight: bold;" value="Fecha: "/>
-                            <p:datePicker id="mes" style="margin-left: -10px;" value="#{rolDePagoView.fechaPago}"
-                                          monthNavigator="true" yearNavigator="true">
-                                <p:ajax listener="#{rolDePagoView.obtenerDatos}"/>
-                            </p:datePicker>
-                            <h:outputText style="margin-left: 20px; font-weight: bold;" value="Sueldo $#{rolDePagoView.sueldo.valor}"/>
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
-                        </h:panelGrid>
-                    </p:panel>
-                    <p:panel id="DATOS" class="ui-fluid">
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <span style="font-weight: bold;">DETALLE</span>
-                            </p:toolbarGroup>
-                        </p:toolbar>
-                        <p:panel>
-                            <h:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3"
-                                         styleClass="ui-panelgrid-blank ui-fluid"
-                                         style="border:0px none; background-color:transparent; width: 100%;">
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:head>
+                    <f:metadata>
+                        <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePagoCrear}" />
+                    </f:metadata>
+                </h:head>
+                <div class="card">
+                    <h:form id="form" style="width: 100%;">
+                        <p:panel id="todo" class="card ui-fluid">
+                            <br/><br/><br/>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <span style="font-weight: bold;">ROL DE PAGO</span>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:linkButton value="Cancelar" icon="pi pi-times" 
+                                                  outcome="ListaRoles"
+                                                  styleClass="ui-button-success" 
+                                                  style="margin-right: .5rem"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:panel >
+                                <h:panelGrid columns="5" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-2,ui-grid-col-3"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
+                                    <h:outputText style="font-weight: bold; 
+                                                  margin-right: -15px;" value="Empleado: "/>
+                                    <h:outputText style="margin-left: 15px;" 
+                                                  value="#{rolDePagoView.empleado.nombreCompleto()}"/>
+                                    <h:outputText style="font-weight: bold;" value="Fecha: "/>
+                                    <p:datePicker id="mes" style="margin-left: -10px;" value="#{rolDePagoView.fechaPago}"
+                                                  monthNavigator="true" yearNavigator="true">
+                                        <p:ajax listener="#{rolDePagoView.obtenerDatos}"/>
+                                    </p:datePicker>
+                                    <h:outputText style="margin-left: 20px; font-weight: bold;" 
+                                                  value="Sueldo $#{rolDePagoView.sueldo.valor}"/>
 
-                                <h:outputText value="Horas Laboradas: #{rolDePagoView.horasLaboradas} " style="font-weight: bold;" />
-                                <h:outputText value="$ #{rolDePagoView.montoHLabboradas} = #{rolDePagoView.horasLaboradas} * ((#{rolDePagoView.sueldo.valor}/30)/8)" />
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel id="DATOS" class="ui-fluid">
+                                <p:toolbar>
+                                    <p:toolbarGroup>
+                                        <span style="font-weight: bold;">DETALLE</span>
+                                    </p:toolbarGroup>
+                                </p:toolbar>
+                                <p:panel>
+                                    <h:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="border:0px none; 
+                                                 background-color:transparent; width: 100%;">
 
-                                <h:outputText value="Horas Suplementarias: #{rolDePagoView.horasSuplementarias} " style="font-weight: bold;" />
-                                <h:outputText value="$ #{rolDePagoView.montoHSuplem} = #{rolDePagoView.horasSuplementarias} * ((#{rolDePagoView.sueldo.valor}/30)/8) * 1.5" />
+                                        <h:outputText value="Horas Laboradas: #{rolDePagoView.horasLaboradas} " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText value="$ #{rolDePagoView.montoHLabboradas} = #{rolDePagoView.horasLaboradas} * ((#{rolDePagoView.sueldo.valor}/30)/8)" />
 
-                                <h:outputText value="Horas Extras: " style="font-weight: bold;" />
-                                <h:outputText value="$ 0 = 0 * (((#{rolDePagoView.sueldo.valor}/30)/8) * 2)" />
+                                        <h:outputText value="Horas Suplementarias: #{rolDePagoView.horasSuplementarias} " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText value="$ #{rolDePagoView.montoHSuplem} = #{rolDePagoView.horasSuplementarias} * ((#{rolDePagoView.sueldo.valor}/30)/8) * 1.5" />
 
-                                <h:outputText value="Fondos de Reserva: " style="font-weight: bold;" />
-                                <h:outputText value="$ #{rolDePagoView.fondosReserva} (#{rolDePagoView.empleadoReserva.getFormaPago() == 1 ? 'ANUAL' : 'MENSUAL'})" />
-                            </h:panelGrid>
-                            <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-                                         styleClass="ui-panelgrid-blank ui-fluid"
-                                         style="border:0px none; background-color:transparent; width: 100%;">
+                                        <h:outputText value="Horas Extras: " style="font-weight: bold;" />
+                                        <h:outputText value="$ 0 = 0 * (((#{rolDePagoView.sueldo.valor}/30)/8) * 2)" />
 
-                                <h:outputLabel for="cuarto" style="font-weight: bold;" value="Decimo Tercer Sueldo:"/>
-                                <p:selectBooleanCheckbox id="cuarto" style="margin-left: 16.5%;" value="#{rolDePagoView.checkdDecimoTercero}"
-                                                         itemLabel="  $ #{rolDePagoView.decimoTercero}">
-                                    <p:ajax event="change" process="subTotal toltal @this" update="subTotal toltal"/>
-                                </p:selectBooleanCheckbox>
+                                        <h:outputText value="Fondos de Reserva: " style="font-weight: bold;" />
+                                        <h:outputText value="$ #{rolDePagoView.fondosReserva} (#{rolDePagoView.empleadoReserva.getFormaPago() == 1 ? 'ANUAL' : 'MENSUAL'})" />
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="border:0px none; 
+                                                 background-color:transparent; width: 100%;">
 
-                                <h:outputLabel for="tercero" style="font-weight: bold;" value="Decimo Cuarto Sueldo: "/>
-                                <p:selectBooleanCheckbox id="tercero" style="margin-left: 16.5%;" value="#{rolDePagoView.checkdDecimoCuarto}"
-                                                         itemLabel="  $ #{rolDePagoView.decimoCuarto}">
-                                    <p:ajax event="change" process="subTotal iess toltal @this" update="subTotal iess toltal"/>
-                                </p:selectBooleanCheckbox>
-                            </h:panelGrid>
+                                        <h:outputLabel for="cuarto" style="font-weight: bold;" 
+                                                       value="Decimo Tercer Sueldo:"/>
+                                        <p:selectBooleanCheckbox id="cuarto" style="margin-left: 16.5%;" 
+                                                                 value="#{rolDePagoView.checkdDecimoTercero}"
+                                                                 itemLabel="  $ #{rolDePagoView.decimoTercero}">
+                                            <p:ajax event="change" process="subTotal toltal @this" 
+                                                    update="subTotal toltal"/>
+                                        </p:selectBooleanCheckbox>
+
+                                        <h:outputLabel for="tercero" style="font-weight: bold;" 
+                                                       value="Decimo Cuarto Sueldo: "/>
+                                        <p:selectBooleanCheckbox id="tercero" style="margin-left: 16.5%;" 
+                                                                 value="#{rolDePagoView.checkdDecimoCuarto}"
+                                                                 itemLabel="  $ #{rolDePagoView.decimoCuarto}">
+                                            <p:ajax event="change" process="subTotal iess toltal @this" 
+                                                    update="subTotal iess toltal"/>
+                                        </p:selectBooleanCheckbox>
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:toolbar id="subTotal">
+                                    <p:toolbarGroup>
+                                        <span>( HL + HS + FR + DTS + DCS )</span>
+                                    </p:toolbarGroup>
+                                    <p:toolbarGroup align="right">
+                                        <h:outputLabel style="font-weight: bold;" 
+                                                       value="Sub Total: #{rolDePagoView.subTotal}"/>
+                                    </p:toolbarGroup>
+                                </p:toolbar>
+                                <p:panel id="parte2">
+                                    <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                                        <h:outputText value="Aporte al IESS: " style="font-weight: bold;" />
+                                        <h:outputText id="iess" style="margin-left: 30PX;" 
+                                                      value="$ #{rolDePagoView.aportesIESS}"/>
+
+                                        <h:outputText value="Multa: " style="font-weight: bold;" />
+                                        <p:selectBooleanCheckbox value="#{rolDePagoView.checkedMulta}"
+                                                                 itemLabel="  $ #{rolDePagoView.multa.valor}">
+                                            <p:ajax event="change" process="toltal @this" update="toltal"/>
+                                        </p:selectBooleanCheckbox>
+
+                                        <h:outputText value="Suspención: dias #{rolDePagoView.suspencion.cantidadDias}"
+                                                      style="font-weight: bold;" />
+                                        <p:selectBooleanCheckbox value="#{rolDePagoView.checkedSuspencion}"
+                                                                 itemLabel="  $ #{rolDePagoView.suspencion.valor}">
+                                            <p:ajax event="change" process="toltal @this" update="toltal"/>
+                                        </p:selectBooleanCheckbox>
+
+                                        <h:outputText value="Amonestación: " style="font-weight: bold;" />
+                                        <p:selectBooleanCheckbox value="#{rolDePagoView.checkedAmonestacion}"
+                                                                 itemLabel="  $ #{rolDePagoView.amonestacion.valor}">
+                                            <p:ajax event="change" process="toltal @this" update="toltal"/>
+                                        </p:selectBooleanCheckbox>
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:toolbar>
+                                    <p:toolbarGroup>
+                                        <span>( Sub Total - ( IESS + ML + SP + AM ) )</span>
+                                    </p:toolbarGroup>
+                                    <p:toolbarGroup align="right">
+                                        <h:outputLabel id="toltal" style="font-weight: bold;"  
+                                                       value="Total: #{rolDePagoView.total}"/>
+                                    </p:toolbarGroup>
+                                </p:toolbar>
+                                <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; 
+                                             background-color:transparent; width: 100%;">
+                                    <h:outputText style="font-weight: bold;" value="Detalle (Observación)"/>
+                                    <p:inputText value="#{rolDePagoView.rolPagos.detalle}" label="Detalle"/>
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Generar" icon="pi pi-save" 
+                                                     action="RolDePago" actionListener="#{rolDePagoView.guardar}"
+                                                     update="todo" styleClass="p-mr-2 ui-button-success"
+                                                     process="todo @this">
+                                        <p:confirm header="CONFIRMACIÓN" 
+                                                   message="¿Estás seguro que deseas Generar el Rol de Pago?"
+                                                   icon="pi pi-exclamation-triangle"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <span>
+                                <span>HL = Horas Laboradas    HS = Horas Suplementarias    FR = Fondes de Reserva    DTS = Decimo Tercer Sueldo    DCS = Decimo Cuarto Sueldo</span>
+                                <span>IESS = Aporte al IESS    ML = Multa     SP = Suspención    AM = Amonestación</span>
+                            </span>
+                            <p:confirmDialog global="true" showEffect="fade" width="300">
+                                <p:commandButton value="Yes" label="Si" type="button" 
+                                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                                <p:commandButton value="No" label="No" type="button" 
+                                                 styleClass="ui-confirmdialog-no ui-button-secondary"
+                                                 icon="pi pi-times"/>
+                            </p:confirmDialog>
                         </p:panel>
-                        <p:toolbar id="subTotal">
-                            <p:toolbarGroup>
-                                <span>( HL + HS + FR + DTS + DCS )</span>
-                            </p:toolbarGroup>
-                            <p:toolbarGroup align="right">
-                                <h:outputLabel style="font-weight: bold;" value="Sub Total: #{rolDePagoView.subTotal}"/>
-                            </p:toolbarGroup>
-                        </p:toolbar>
-                        <p:panel id="parte2">
-                            <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-                                         styleClass="ui-panelgrid-blank ui-fluid"
-                                         style="border:0px none; background-color:transparent; width: 100%;">
-
-                                <h:outputText value="Aporte al IESS: " style="font-weight: bold;" />
-                                <h:outputText id="iess" style="margin-left: 30PX;" value="$ #{rolDePagoView.aportesIESS}"/>
-
-                                <h:outputText value="Multa: " style="font-weight: bold;" />
-                                <p:selectBooleanCheckbox value="#{rolDePagoView.checkedMulta}"
-                                                         itemLabel="  $ #{rolDePagoView.multa.valor}">
-                                    <p:ajax event="change" process="toltal @this" update="toltal"/>
-                                </p:selectBooleanCheckbox>
-
-                                <h:outputText value="Suspención: dias #{rolDePagoView.suspencion.cantidadDias}"
-                                              style="font-weight: bold;" />
-                                <p:selectBooleanCheckbox value="#{rolDePagoView.checkedSuspencion}"
-                                                         itemLabel="  $ #{rolDePagoView.suspencion.valor}">
-                                    <p:ajax event="change" process="toltal @this" update="toltal"/>
-                                </p:selectBooleanCheckbox>
-
-                                <h:outputText value="Amonestación: " style="font-weight: bold;" />
-                                <p:selectBooleanCheckbox value="#{rolDePagoView.checkedAmonestacion}"
-                                                         itemLabel="  $ #{rolDePagoView.amonestacion.valor}">
-                                    <p:ajax event="change" process="toltal @this" update="toltal"/>
-                                </p:selectBooleanCheckbox>
-                            </h:panelGrid>
-                        </p:panel>
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <span>( Sub Total - ( IESS + ML + SP + AM ) )</span>
-                            </p:toolbarGroup>
-                            <p:toolbarGroup align="right">
-                                <h:outputLabel id="toltal" style="font-weight: bold;"  value="Total: #{rolDePagoView.total}"/>
-                            </p:toolbarGroup>
-                        </p:toolbar>
-                        <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
-                                     styleClass="ui-panelgrid-blank ui-fluid"
-                                     style="border:0px none; background-color:transparent; width: 100%;">
-                            <h:outputText style="font-weight: bold;" value="Detalle (Observación)"/>
-                            <p:inputText value="#{rolDePagoView.rolPagos.detalle}" label="Detalle"/>
-                        </h:panelGrid>
-                    </p:panel>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Generar" icon="pi pi-save" action="RolDePago" actionListener="#{rolDePagoView.guardar}"
-                                             update="todo" styleClass="p-mr-2 ui-button-success"
-                                             process="todo @this">
-                                <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas Generar el Rol de Pago?"
-                                           icon="pi pi-exclamation-triangle"/>
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <span>
-                        <span>HL = Horas Laboradas    HS = Horas Suplementarias    FR = Fondes de Reserva    DTS = Decimo Tercer Sueldo    DCS = Decimo Cuarto Sueldo</span>
-                        <span>IESS = Aporte al IESS    ML = Multa     SP = Suspención    AM = Amonestación</span>
-                    </span>
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" label="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="No" label="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                         icon="pi pi-times"/>
-                    </p:confirmDialog>
-                </p:panel>
-            </h:form>
-        </div>
-    </ui:define>
-</ui:composition>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
