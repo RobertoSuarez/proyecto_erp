@@ -35,6 +35,16 @@
                 </div>
                 <p:panel id="all">
                     <h:form id="formCarteraVencida">
+                        
+                        <div style="float: left; width: 100%" class="alinearBotones">  
+                            <p:commandButton id="btnPdf" ajax="false" 
+                                             value="GENERAR PDF" icon="pi pi-file-pdf"
+                                             actionListener="#{cartera_X_EdadesController.exportarPDF()}"
+                                             style="background: red;">
+                            </p:commandButton>
+                        </div>
+                        <br />
+                        <br />
                         <p:dataTable id="tblCarteraVencimiento" 
                                      var="varCarteraVencimiento"
                                      widgetVar="carteraVencimiento"

@@ -36,13 +36,6 @@
 
                 <p:panel>
                     <h:form id="frmFacturas">
-                        <div style="padding-top: 10px;" class="alinearBotones">  
-                            <p:commandButton id="btnPdf" ajax="false" 
-                                             value="GENERAR PDF" icon="pi pi-file-pdf"
-                                             actionListener="#{cartera_X_EdadesController.exportarPDF()}"
-                                             style="background: red;">
-                            </p:commandButton>
-                        </div>
                         <div class="card">
                             <p:dataTable id="tblFacturasPendientes"
                                          var="facPendientes"
