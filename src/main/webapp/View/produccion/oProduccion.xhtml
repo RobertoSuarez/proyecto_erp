@@ -10,47 +10,37 @@
             <ui:define name="title">Orden de Producción</ui:define>
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="../Global/Main.xhtml"/>
-                    <p:menuitem value="Orden de Producción" url="#"/>
+                    <p:menuitem value="Orden de Producción" url="listaOrdenProduccion.xhtml"/>
                     <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
                     <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
                 </p:menubar>
                 <h:form id="form" style="margin-top: 4%;">
                     <div class="card">
-                        <!-- Boton Crear Formula -->
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <div class="p-d-flex p-jc-between p-ai-center">
-                                    <p:button style="margin-right: 6px;" value="Buscar" 
-                                              styleClass="ui-button-secondary" icon="pi pi-search" outcome="listaOrdenProduccion.xhtml">
-                                    </p:button>
-                                    <p:button style="margin-right: 6px;" value="Guardar" styleClass="ui-button-success" icon="pi pi-save"/>
-                                    <p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-success" icon="pi pi-plus-circle"/>
-                                    <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-info" icon="pi pi-pencil"/>
-                                    <p:button style="margin-right: 6px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"/>
-                                </div>
-                            </p:toolbarGroup>
-                        </p:toolbar>
                         <p:toolbar>
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <p:commandButton style="margin-right: 6px;" value="Requisición detallada" 
                                                      styleClass="ui-button-secondary"
-                                                     icon="pi pi-search" oncomplete="PF('materiaprima').show()">
+                                                     icon="pi pi-book" oncomplete="PF('materiaprima').show()">
                                     </p:commandButton>
+                                    <!--
                                     <p:button style="margin-right: 6px;" value="Extracción detallada de materiales" 
                                               styleClass="ui-button-secondary" icon="pi pi-search">
                                     </p:button>
+                                    -->
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
+
+
+
                         <p:toolbar>
                             <p:toolbarGroup>
                                 <div class="card ui-fluid ">
                                     <div class="p-formgrid p-grid">
                                         <div class="p-field p-col-12 p-md-4">
                                             <p:outputLabel value="Nº Orden" for="@next"/>
-                                            <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}"
+                                            <p:autoComplete id="idNOrden" value="#{autoCompleteView.txt1}"
                                                             completeMethod="#{autoCompleteView.completeText}" scrollHeight="250"/>
                                         </div>
                                         <div class="p-field p-col-12 p-md-4">
@@ -67,12 +57,12 @@
                                         </div>
                                         <div class="p-field p-col-12 p-md-4">
                                             <p:outputLabel value="Detalle" for="@next"/>
-                                            <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}"
+                                            <p:autoComplete id="idDetalle" value="#{autoCompleteView.txt1}"
                                                             completeMethod="#{autoCompleteView.completeText}" scrollHeight="250"/>
                                         </div>
                                         <div class="p-field p-col-12 p-md-4">
                                             <p:outputLabel value="Descripción" for="@next"/>
-                                            <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}"
+                                            <p:autoComplete id="idDescripcion" value="#{autoCompleteView.txt1}"
                                                             completeMethod="#{autoCompleteView.completeText}" scrollHeight="250"/>
                                         </div>
                                         <div class="p-field p-col-12 p-md-4">
@@ -87,7 +77,7 @@
                                         </div>
                                         <div class="p-field p-col-12 p-md-4">
                                             <p:outputLabel value="Producto a elaborar" for="@next"/>
-                                            <p:autoComplete id="acSimple" value="#{autoCompleteView.txt1}"
+                                            <p:autoComplete id="odProductoElabo" value="#{autoCompleteView.txt1}"
                                                             completeMethod="#{autoCompleteView.completeText}" scrollHeight="250"/>
                                         </div>
                                         <div class="p-field p-col-12 p-md-2">
@@ -104,10 +94,10 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </p:toolbarGroup>
                         </p:toolbar>
+
+
                         <p:dialog header="Seleccione un producto" showEffect="fade" modal="true"
                                   widgetVar="producto" responsive="true" width="80%"
                                   draggable="false" height="550">
@@ -179,9 +169,14 @@
                                             <!-- Botones Guardar/Cerrar -->
                                             <div class="p-grid p-justify-end">
                                                 <div class="p-col-2">
-                                                    <p:commandButton value="Guardar"  
+                                                    <p:commandButton value="Confirmar"  
                                                                      icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-success"/>
+                                                                     disabled="#" styleClass="ui-button-primary"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('producto').hide()"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -195,30 +190,19 @@
 
                             <p:outputPanel class="ui-fluid">
                                 <p:outputPanel>
-                                    <div class="p-grid p-justify-around">
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-info" icon="pi pi-plus-circle"/>
+                                    <div class="p-grid p-justify-start">
+                                        <div class="p-field p-col-12 p-md-3">
+                                            <p:button style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle"/>
 
-                                        </div>
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-success" icon="pi pi-pencil"/>
-
-                                        </div>
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:button style="margin-right: 6px;" value="Eliminar" styleClass="ui-button-danger" icon="pi pi-trash"/>
                                         </div>
 
                                         <div class="p-col-11">
                                             <div class="p-grid">
 
-
                                                 <div class="p-col-12">
                                                     <p:dataTable editable="true" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
                                                                  value="">
-
-
-
                                                         <p:column headerText="Código" filterStyle="display : none">
                                                             <h:outputText value="#" />
                                                             <p:skeleton rendered="#"></p:skeleton>
@@ -243,6 +227,22 @@
                                                         </p:column>
                                                         <p:column headerText="Tipo" filterStyle="display : none">
                                                             <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Acciones">
+                                                            <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                             styleClass="edit-button rounded-button ui-button-primary" process=""
+                                                                             oncomplete="">
+                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                <p:resetInput target=""/>
+                                                            </p:commandButton>
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                            <p:commandButton icon="pi pi-times" action="#"  
+                                                                             styleClass="edit-button rounded-button ui-button-danger" process="@this"
+                                                                             oncomplete="">
+                                                                <f:setPropertyActionListener value="#" target="#"/>
+                                                                <p:resetInput target=""/>
+                                                            </p:commandButton>
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
                                                     </p:dataTable>
@@ -287,6 +287,21 @@
                                 <h:outputText value="#" />
                             </p:column>
                         </p:dataTable>
+
+
+                        <div class="p-grid p-justify-end">
+                            <!--<p:button style="margin-right: 6px;" value="Buscar" 
+                                      styleClass="ui-button-secondary" icon="pi pi-search" outcome="listaOrdenProduccion.xhtml">
+                            </p:button>-->
+                            <p:button style="margin-right: 6px;" value="Guardar" styleClass="ui-button-primary" icon="pi pi-save"/>
+                            <!--<p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-primary" icon="pi pi-plus-circle"/>-->
+                            <!-- <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-info" icon="pi pi-pencil"/> -->
+                            <p:button style="margin-right: 6px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"
+                                      outcome="listaOrdenProduccion.xhtml"/>
+                        </div>
+
+
+
                     </div>
                 </h:form>
             </ui:define>

@@ -10,7 +10,6 @@
             <ui:define name="title">Orden de Producción</ui:define>
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="../Global/Main.xhtml"/>
                     <p:menuitem value="Orden de Producción" url="#"/>
                     <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
                     <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
@@ -24,13 +23,15 @@
                                         <i class="pi pi-search"></i>
                                         <p:inputText style="margin-right: 6px;" id="globalFilter" placeholder="Buscar"/>
                                     </span>
-                                    <p:button style="margin-right: 6px;" value="Nueva Orden de producción" 
+                                    <p:button style="margin-right: 6px;" value="Nueva Orden de producción"
                                                      styleClass="ui-button-primary"
                                                      icon="pi pi-plus" outcome="oProduccion.xhtml">
                                     </p:button>
-                                    <p:commandButton style="margin-right: 6px;" value="Filtrar" 
-                                                     styleClass="ui-button-warning" oncomplete="PF('filtro').show()">
+                                    <!-- Tabla de datos
+                                    <p:commandButton style="margin-right: 6px;" value="Filtrar"
+                                                     styleClass="ui-button-secondary" oncomplete="PF('filtro').show()">
                                     </p:commandButton>
+                                    -->
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -39,11 +40,11 @@
                                   draggable="false" height="40%">
                         </p:dialog>
                         <!-- Tabla de datos -->
-                        <p:dataTable reflow="true" paginator="true" rows="5" 
+                        <p:dataTable reflow="true" paginator="true" rows="5"
                                      rowSelectMode="add" paginatorPosition="bottom">
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px;">Ordenes de producción</span>
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Ordenes de Producción</span>
 
                                 </div>
                             </f:facet>
