@@ -1,77 +1,157 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content" class="Contenido">
-        <h:form id="form" class="content-section implementation" style="width: 105%; margin-left: -23px;">
-            <div class="card crud-demo">
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel>
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <span style="font-weight: bold" icon="pi pi-table">Dias / Semanas</span>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{diaSemanaView.abrirNuevo}"
-                                             update=":form:manage-diaSemana-content" oncomplete="PF('manageDiaSemanaDialog').show()"
-                                             styleClass="ui-button-success" style="margin-right: .5rem">
-                                <p:resetInput target=":form:manage-diaSemana-content"/>
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:dataTable id="dt-diaSemanas" widgetVar="dtDiaSemanas" var="diaSemana" value="#{diaSemanaView.lista}"
-                                 reflow="true" size="small" liveResize="true" styleClass="diaSemanas-table"
-                                 rowKey="#{diaSemana.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
-                                 rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                        <p:column exportable="false" width="10%">
-                        </p:column>
-                        <p:column headerText="Nombre" sortBy="#{diaSemana.nombre}" filterBy="#{diaSemana.nombre}">
-                            <h:outputText value="#{diaSemana.nombre}"/>
-                        </p:column>
-                        <p:column exportable="false" width="5%">
-                            <p:commandButton icon="pi pi-pencil" update=":form:manage-diaSemana-content"
-                                             oncomplete="PF('manageDiaSemanaDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
-                                <f:setPropertyActionListener value="#{diaSemana}" target="#{diaSemanaView.diaSemana}"/>
-                                <p:resetInput target=":form:manage-diaSemana-content"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog header="Dia/Semana" showEffect="fade" modal="true"
-                              widgetVar="manageDiaSemanaDialog" responsive="true">
-                        <p:outputPanel id="manage-diaSemana-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty diaSemanaView.diaSemana}">
-                                <div class="card">
-                                    <div class="ui-fluid">
-                                        <div class="p-field">
-                                            <p:outputLabel for="nombre" style="font-weight: bold">Nombre: </p:outputLabel>
-                                            <p:inputText id="nombre" value="#{diaSemanaView.diaSemana.nombre}"
-                                                         required="true" label="Nombre"/>
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:form id="form" class="content-section implementation" style="width: 100%;">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <span style="font-weight: bold" 
+                                          icon="pi pi-table">Dias / Semanas</span>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                                     actionListener="#{diaSemanaView.abrirNuevo}"
+                                                     update=":form:manage-diaSemana-content" 
+                                                     oncomplete="PF('manageDiaSemanaDialog').show()"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                        <p:resetInput target=":form:manage-diaSemana-content"/>
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="dt-diaSemanas" widgetVar="dtDiaSemanas" 
+                                         var="diaSemana" value="#{diaSemanaView.lista}"
+                                         reflow="true" size="small" liveResize="true" 
+                                         styleClass="diaSemanas-table"
+                                         rowKey="#{diaSemana.id}" paginator="true"
+                                         rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                                <p:column exportable="false" width="10%">
+                                </p:column>
+                                <p:column headerText="Nombre" sortBy="#{diaSemana.nombre}" 
+                                          filterBy="#{diaSemana.nombre}">
+                                    <h:outputText value="#{diaSemana.nombre}"/>
+                                </p:column>
+                                <p:column exportable="false" width="5%">
+                                    <p:commandButton icon="pi pi-pencil" 
+                                                     update=":form:manage-diaSemana-content"
+                                                     oncomplete="PF('manageDiaSemanaDialog').show()"
+                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                        <f:setPropertyActionListener value="#{diaSemana}" 
+                                                                     target="#{diaSemanaView.diaSemana}"/>
+                                        <p:resetInput target=":form:manage-diaSemana-content"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dialog header="Dia/Semana" showEffect="fade" modal="true"
+                                      widgetVar="manageDiaSemanaDialog" responsive="true">
+                                <p:outputPanel id="manage-diaSemana-content" class="ui-fluid">
+                                    <p:outputPanel rendered="#{not empty diaSemanaView.diaSemana}">
+                                        <div class="card">
+                                            <div class="ui-fluid">
+                                                <div class="p-field">
+                                                    <p:outputLabel for="nombre" 
+                                                                   style="font-weight: bold">Nombre: </p:outputLabel>
+                                                    <p:inputText id="nombre" 
+                                                                 value="#{diaSemanaView.diaSemana.nombre}"
+                                                                 required="true" label="Nombre"/>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </p:outputPanel>
-                        </p:outputPanel>
-                        <f:facet name="footer">
-                            <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{diaSemanaView.enviar}"
-                                             update="messages manage-diaSemana-content" styleClass="ui-button-success"
-                                             process="messages manage-diaSemana-content @this"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDiaSemanaDialog').hide()"
-                                             class="ui-button-secondary"/>
-                        </f:facet>
-                    </p:dialog>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                                     actionListener="#{diaSemanaView.enviar}"
+                                                     update="messages manage-diaSemana-content" 
+                                                     styleClass="ui-button-success"
+                                                     process="messages manage-diaSemana-content @this"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                     onclick="PF('manageDiaSemanaDialog').hide()"
+                                                     class="ui-button-secondary"/>
+                                </f:facet>
+                            </p:dialog>
 
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                         icon="pi pi-times"/>
-                    </p:confirmDialog>
-                </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-</ui:composition>
+                            <p:confirmDialog global="true" showEffect="fade" width="300">
+                                <p:commandButton value="Yes" type="button" 
+                                                 styleClass="ui-confirmdialog-yes" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="No" type="button" 
+                                                 styleClass="ui-confirmdialog-no ui-button-secondary"
+                                                 icon="pi pi-times"/>
+                            </p:confirmDialog>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
