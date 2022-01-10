@@ -17,7 +17,7 @@
 
     <h:body styleClass="login-body" >
         <p:growl id="growl" widgetVar="growl" showDetail="true" life="3000"/>  
-        <h:form id="registroPersona">
+        <h:form id="registroPersona"  >
             <div class="p-grid p-nogutter"> 
 
                 <div class="p-col-12" style="text-align:center;margin-top:50px"  >
@@ -38,17 +38,17 @@
                         <div class="p-col-12">
                             <div class="input-wrapper ui-input-icon-left">
                                 <i class="pi pi-user"/>
-                                <p:inputText type="text" placeholder="Usuario" value="#{usuarioMB.usuario.username}" />
+                                <p:inputText type="text"  id="user"  placeholder="Usuario" value="#{usuarioMB.usuario.username}" />
                             </div>
                         </div>
                         <div class="p-col-12">
                             <div class="input-wrapper ui-input-icon-left">
                                 <i class="pi pi-lock"/>
-                                <p:inputText type="password" placeholder="Contraseña" value="#{usuarioMB.usuario.password}" />
+                                <p:inputText type="password" id="pass" placeholder="Contraseña" value="#{usuarioMB.usuario.password}" />
                             </div>
                         </div>
                         <div class="p-col-12 button-container">
-                            <p:commandButton action="#{usuarioMB.iniciarSesion()}" update=":growl, :registroPersona" value="Iniciar Sesión"></p:commandButton>
+                            <p:commandButton action="#{usuarioMB.iniciarSesion()}" update=":growl" value="Iniciar Sesión"></p:commandButton>
                             <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2"/>
 
                         </div>

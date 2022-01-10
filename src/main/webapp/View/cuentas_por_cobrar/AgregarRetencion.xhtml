@@ -54,14 +54,14 @@
                                                          actionListener="#{retencionController.cargarFacturas()}"/>
                                     </div>
                                 </div>
-                                <div style="float: left; padding-left: 80px;">
+                                <div style="float: left;">
                                     <p:outputLabel value="N° Factura: " 
                                                    for="optionFactura"
-                                                   style="font-weight:bold;" />
+                                                   style="font-weight:bold; padding-left: 10px;"/>
                                     <br/> <br/>
                                     <p:selectOneMenu id="optionFactura" 
                                                      value="#{retencionController.idFactura}"
-                                                     style="height: 40px; width: 185px !important;"
+                                                     style="height: 40px; width: 185px !important; padding-left: 10px;"
                                                      filter="true" filterMatchMode="startsWith">                            
                                         <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                         <f:selectItems value="#{retencionController.listaVentas}"/>
@@ -69,14 +69,14 @@
                                 </div>
                             </div>
                             <div>
-                                <div style="float: left; padding-left: 80px;">
+                                <div style="float: left;">
                                     <p:outputLabel value="Fecha Emisión: " for="fechaEmision" 
-                                                   style="font-weight:bold;"/>
+                                                   style="font-weight:bold; padding-left: 10px;"/>
                                     <br/> <br/> 
                                     <p:inputText id="fechaEmision" 
                                                  readonly="true"
                                                  value="#{retencionController.retencion.fechaEmision}"
-                                                 style="height: 40px; width: 130px;"/>
+                                                 style="height: 40px; width: 50px; padding-left: 10px;"/>
                                 </div>
                             </div>
                         </div>
