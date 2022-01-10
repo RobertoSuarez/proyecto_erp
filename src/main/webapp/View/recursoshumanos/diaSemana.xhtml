@@ -104,7 +104,7 @@
                                     <p:commandButton icon="pi pi-pencil" 
                                                      update=":form:manage-diaSemana-content"
                                                      oncomplete="PF('manageDiaSemanaDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
                                         <f:setPropertyActionListener value="#{diaSemana}" 
                                                                      target="#{diaSemanaView.diaSemana}"/>
                                         <p:resetInput target=":form:manage-diaSemana-content"/>
