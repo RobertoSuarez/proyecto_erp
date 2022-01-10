@@ -1,7 +1,7 @@
-package com.registroUsuario.dao;
+package com.seguridad.dao;
 
 import com.global.config.Conexion;
-import com.registroUsuario.models.Usuario;
+import com.seguridad.models.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
