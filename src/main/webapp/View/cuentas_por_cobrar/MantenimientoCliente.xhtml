@@ -49,7 +49,7 @@
 
                             <f:facet name="header">
                                 <!-- Botones para agregar cliente natural y juridico!-->
-                                <div style="float: left;">
+                                <div style="float: left; text-align: center; width: 100%">
                                     <span>
                                         <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
                                                          actionListener="#{personaController.nuevoClienteN()}"
@@ -57,15 +57,13 @@
                                                          value="Agregar Cliente Natural" 
                                                          styleClass="ui-button-success"/>
                                     </span>
-                                    <span>
+                                    <span >
                                         <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
                                                          actionListener="#{personaController.nuevoClienteJ()}"
                                                          value="Agregar Cliente Jurídico" 
                                                          icon="fa fa-fw fa-building" 
                                                          styleClass="ui-button-success"/>
                                     </span>
-                                </div>
-                                <div>
                                     <span style="margin-left: 2px">
                                         <p:commandButton value="Inactivos" 
                                                          icon="pi pi-user-minus"
@@ -81,7 +79,8 @@
                                         </span>
                                     </div>
                                 </div>
-                                <br/>
+                                <br />
+                                <br />
                             </f:facet>
                             <p:column class="tamanoInput" style="text-align: center; width: 100%"
                                       headerText="Identificación"
