@@ -134,7 +134,7 @@
                                     <p:commandButton icon="pi pi-pencil" 
                                                      update=":form:manage-puestoLaboral-content"
                                                      oncomplete="PF('managePuestoLaboralDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
                                         <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}"
                                                 update=":form:manage-puestoLaboral-content" />
                                         <f:setPropertyActionListener value="#{puestoLaboral}" 
@@ -142,7 +142,7 @@
                                         <p:resetInput target=":form:manage-puestoLaboral-content"/>
                                     </p:commandButton>
                                     <p:commandButton icon="pi pi-#{puestoLaboral.estado? 'times' : 'check'}"
-                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     styleClass="ui-button-danger" 
                                                      actionListener="#{puestoLaboralView.cambiarEstado(puestoLaboral)}"
                                                      update="dt-puestoLaborals" 
                                                      process="dt-puestoLaborals @this">

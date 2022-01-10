@@ -95,7 +95,7 @@
                             </h:panelGrid>
                             <p:commandButton value="Editar" icon="pi pi-pencil" update=":form:manage-empresa-content"
                                              oncomplete="PF('manageEmpresaDialog').show()"
-                                             styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                             styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
                                 <p:resetInput target=":form:manage-empresa-content"/>
                             </p:commandButton>
                         </h:panelGrid>
@@ -176,7 +176,7 @@
                             <p:column exportable="false" width="5%">
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-sucursal-content"
                                                  oncomplete="PF('manageSucursalDialog').show()"
-                                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                                 styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
                                     <p:ajax listener="#{empresaView.editarSucursal(sucursal.ciudad.provincia.id, sucursal.ciudad.id)}"
                                             update=":form:manage-sucursal-content" />
                                     <f:setPropertyActionListener value="#{sucursal}" target="#{empresaView.sucursal}"/>

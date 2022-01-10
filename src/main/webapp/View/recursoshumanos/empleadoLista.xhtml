@@ -134,10 +134,10 @@
                                 </p:column>
                                 <p:column exportable="false" width="9%">
                                     <p:commandButton icon="pi pi-eye" action="Empleado" actionListener="#{empleadoView.verEmpleado(empleado)}"
-                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                                     styleClass="ui-button-secondary p-mr-2 p-mb-2" process="@this">
                                     </p:commandButton>
                                     <p:commandButton icon="pi pi-#{empleado.persona.estado? 'times' : 'check'}"
-                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     styleClass="ui-button-danger" 
                                                      actionListener="#{empleadoView.cambiarEstado(empleado)}"
                                                      update="dt-empleados" process="dt-empleados @this">
                                         <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>

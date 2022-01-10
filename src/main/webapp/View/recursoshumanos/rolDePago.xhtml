@@ -1,150 +1,225 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                template="/Plantilla/Plantilla.xhtml">
-    <ui:define name="content" class="Contenido">
-        <h:head>
-            <f:metadata>
-                <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePago}" />
-            </f:metadata>
-            <h:outputScript library="primefaces" name="jquery/jquery.js"/>
-            <h:outputScript library="js" name="jspdf.umd.min.js"/>
-            <h:outputScript library="js" name="recursosHumanos.js"/>
-        </h:head>
-        <h:form id="form" class="content-section implementation" enctype="multipart/form-data" style="width: 105%; margin-left: -23px;">
-            <div class="card crud-demo">
-                <p:growl id="messages" showDetail="true"/>
-                <p:panel >
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:commandButton value="Volver a la lista" icon="pi pi-list" action="ListaRoles"
-                                             update="dt-rolPago" process="dt-rolPago @this"
-                                             styleClass="ui-button-success" style="margin-right: .5rem">
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
-                    <p:panel id="dt-rolPago" class="ui-fluid">
-                        <div class="navbar-principal p-d-flex p-ai-center p-jc-between" >
-                            <div class="p-d-flex p-ai-center p-jc-start">
-                                <h:graphicImage name="images/erpLogo.png"  height="60px" class="p-mr-1"/>
-                                <h2>ROL DE PAGO</h2> 
-                            </div>
-                        </div>
-                        <p:panel>
-                            <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
-                                         styleClass="ui-panelgrid-blank ui-fluid"
-                                         style="width: 100%;">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-                                <h:outputText value="Código: " style="font-weight: bold;" />
-                                <h:outputText value="#{rolDePagoView.rolPagos.codigo}" />
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
-                                <h:outputText value="Valor: " style="font-weight: bold;" />
-                                <h:outputText id="outsueldo" value="$ #{rolDePagoView.rolPagos.valor}" />
-
-                                <h:outputText value="#{rolDePagoView.rolPagos.empleado.persona.tipoIdentificacion}: " style="font-weight: bold;" />
-                                <h:outputText value="#{rolDePagoView.rolPagos.empleado.persona.identificacion}" />
-
-                                <h:outputText value="Empleado: " style="font-weight: bold;" />
-                                <h:outputText value="#{rolDePagoView.rolPagos.empleado.nombreCompleto()}" />
-
-                            </h:panelGrid>
-                            <h:panelGrid columns="8" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2"
-                                         styleClass="ui-panelgrid-blank ui-fluid"
-                                         style="border:0px none; background-color:transparent; width: 100%;">
-
-                                <h:outputText value="Estado: " style="font-weight: bold;" />
-                                <h:outputText value="#{rolDePagoView.rolPagos.estado}" />
-
-                                <h:outputText value="Generado: " style="font-weight: bold;" />
-                                <h:outputText value="#{rolDePagoView.darFormato(rolDePagoView.rolPagos.fechaGenerado)}" />
-
-                                <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaAprobacion}" value="Aprobado: " style="font-weight: bold;" />
-                                <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaAprobacion}" value="#{rolDePagoView.darFormato(rolDePagoView.rolPagos.fechaAprobacion)}" />
-
-                                <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaPago}" value="Pagado: " style="font-weight: bold;" />
-                                <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaPago}" value="#{rolDePagoView.darFormato(rolDePagoView.rolPagos.fechaAprobacion)}" />
-
-                            </h:panelGrid>
-                        </p:panel>
-                        <p:panel>
-                            <h4 style="display: grid; align-items: center; justify-content: center;">DETALLE</h4>
-                            <p:panel>
-                                <h:panelGrid columns="6" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1"
-                                             styleClass="ui-panelgrid-blank ui-fluid"
-                                             style="border:0px none; background-color:transparent; width: 100%;">
-
-                                    <h:outputText value="Holas Laboradas: #{rolDePagoView.horasLaboradas}" style="font-weight: bold;" />
-                                    <h:outputText value="$ #{rolDePagoView.rolPagos.horasLaboradas}" />
-
-                                    <h:outputText value="Holas Suplementarias: #{rolDePagoView.horasSuplementarias}" style="font-weight: bold;" />
-                                    <h:outputText value="$ #{rolDePagoView.rolPagos.horasSuplemetarias}" />
-
-                                    <h:outputText value="Fondos de Reserva: " style="font-weight: bold;" />
-                                    <h:outputText value="$ #{rolDePagoView.fondosReserva}" />
-
-                                    <h:outputText rendered="#{rolDePagoView.decimoTercero > 0 ? true: false}" value="Decimo Tercer Sueldo: " style="font-weight: bold;" />
-                                    <h:outputText rendered="#{rolDePagoView.decimoTercero > 0 ? true: false}" value="$ #{rolDePagoView.decimoTercero}" />
-
-                                    <h:outputText rendered="#{rolDePagoView.decimoCuarto > 0 ? true: false}" value="Decimo Cuarto Sueldo: " style="font-weight: bold;" />
-                                    <h:outputText rendered="#{rolDePagoView.decimoCuarto > 0 ? true: false}" value="$ #{rolDePagoView.decimoCuarto}" />
-
-                                </h:panelGrid>
-                            </p:panel>
-                            <p:toolbar id="subTotal">
-                                <p:toolbarGroup>
-                                    <span>(HL + HS + FR + DTS + DCS)</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <h:outputLabel style="font-weight: bold;" value="Sub Total: #{rolDePagoView.subTotal}"/>
-                                </p:toolbarGroup>
-                            </p:toolbar>
-                            <p:panel>
-                                <h:panelGrid columns="6" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1"
-                                             styleClass="ui-panelgrid-blank ui-fluid"
-                                             style="border:0px none; background-color:transparent; width: 100%;">
-
-                                    <h:outputText value="Aporte al IESS: " style="font-weight: bold;" />
-                                    <h:outputText value="$ #{rolDePagoView.aportesIESS}" />
-
-                                    <h:outputText rendered="#{rolDePagoView.suspencion.id > 0 ? true: false}" value="Suspención: " style="font-weight: bold;" />
-                                    <h:outputText rendered="#{rolDePagoView.suspencion.id > 0 ? true: false}" value="$ #{rolDePagoView.suspencion.valor}" />
-
-                                    <h:outputText rendered="#{rolDePagoView.amonestacion.id > 0 ? true: false}" value="Amonestación: " style="font-weight: bold;" />
-                                    <h:outputText rendered="#{rolDePagoView.amonestacion.id > 0 ? true: false}" value="$ #{rolDePagoView.amonestacion.valor}" />
-
-                                    <h:outputText rendered="#{rolDePagoView.multa.id > 0 ? true: false}" value="Multa: " style="font-weight: bold;" />
-                                    <h:outputText rendered="#{rolDePagoView.multa.id > 0 ? true: false}" value="$ #{rolDePagoView.multa.valor}" />
-
-                                </h:panelGrid>
-                            </p:panel>
+            <ui:define name="content" class="Contenido">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                    <p:submenu label="Empresa">
+                        <p:menuitem value="Datos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empresa.xhtml"
+                                    icon="pi pi-home"/>
+                        <p:menuitem value="Ciudades"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ciudad.xhtml"
+                                    icon="pi pi-globe"/>
+                        <p:menuitem value="Provincias"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/provincia.xhtml"
+                                    icon="pi pi-globe"/>
+                    </p:submenu>
+                    <p:submenu label="Personal">
+                        <p:menuitem value="Empleados"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
+                                    icon="pi pi-users"/>
+                        <p:menuitem value="Asistencia"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/asistencia.xhtml"
+                                    icon="pi pi-clock"/>
+                    </p:submenu>
+                    <p:submenu label="Areas">
+                        <p:menuitem value="Puestos Laborales"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
+                                    icon="pi pi-clone"/>
+                        <p:menuitem value="Cargos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/cargo.xhtml"
+                                    icon="pi pi-briefcase"/>
+                        <p:menuitem value="Departamentos"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/departamentos.xhtml"
+                                    icon="pi pi-sitemap"/>
+                    </p:submenu>
+                    <p:submenu label="Horarios">
+                        <p:menuitem value="Horario Laboral"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
+                                    icon="pi pi-calendar"/>
+                        <p:menuitem value="Ingreso y Salida"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
+                                    icon="pi pi-clock"/>
+                        <p:menuitem value="Dia/Semana"
+                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
+                                    icon="pi pi-align-center"/>
+                    </p:submenu>
+                    <p:menuitem value="Roles de Pago"
+                                style="display: flex; align-items: center; text-decoration: none;"
+                                outcome="/View/recursoshumanos/roles.xhtml" 
+                                icon="pi pi-money-bill"/>
+                </p:menubar>
+                <h:head>
+                    <f:metadata>
+                        <f:event type="preRenderView" listener="#{rolDePagoView.postRolDePago}" />
+                    </f:metadata>
+                    <h:outputScript library="primefaces" name="jquery/jquery.js"/>
+                    <h:outputScript library="js" name="jspdf.umd.min.js"/>
+                    <h:outputScript library="js" name="recursosHumanos.js"/>
+                </h:head>
+                <h:form id="form" class="content-section implementation" 
+                        enctype="multipart/form-data" style="width: 100%;">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel >
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <span>(Sub Total - ( IESS + ML + SP + AM ))</span>
                                 </p:toolbarGroup>
                                 <p:toolbarGroup align="right">
-                                    <h:outputLabel id="toltal" style="font-weight: bold;"  value="Total: #{rolDePagoView.total}"/>
+                                    <p:commandButton value="Volver a la lista" icon="pi pi-list" 
+                                                     action="ListaRoles"
+                                                     update="dt-rolPago" process="dt-rolPago @this"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <p:panel id="dt-rolPago" class="ui-fluid">
+                                <div class="navbar-principal p-d-flex p-ai-center p-jc-between" >
+                                    <div class="p-d-flex p-ai-center p-jc-start">
+                                        <h:graphicImage name="images/erpLogo.png"  
+                                                        height="60px" class="p-mr-1"/>
+                                        <h2>ROL DE PAGO</h2> 
+                                    </div>
+                                </div>
+                                <p:panel>
+                                    <h:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="width: 100%;">
+
+                                        <h:outputText value="Código: " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText value="#{rolDePagoView.rolPagos.codigo}" />
+
+                                        <h:outputText value="Valor: " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText id="outsueldo" 
+                                                      value="$ #{rolDePagoView.rolPagos.valor}" />
+
+                                        <h:outputText value="#{rolDePagoView.rolPagos.empleado.persona.tipoIdentificacion}: " style="font-weight: bold;" />
+                                        <h:outputText value="#{rolDePagoView.rolPagos.empleado.persona.identificacion}" />
+
+                                        <h:outputText value="Empleado: " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText value="#{rolDePagoView.rolPagos.empleado.nombreCompleto()}" />
+
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="8" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2"
+                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                 style="border:0px none; background-color:transparent; width: 100%;">
+
+                                        <h:outputText value="Estado: " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText value="#{rolDePagoView.rolPagos.estado}" />
+
+                                        <h:outputText value="Generado: " 
+                                                      style="font-weight: bold;" />
+                                        <h:outputText value="#{rolDePagoView.darFormato(rolDePagoView.rolPagos.fechaGenerado)}" />
+
+                                        <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaAprobacion}" value="Aprobado: " style="font-weight: bold;" />
+                                        <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaAprobacion}" value="#{rolDePagoView.darFormato(rolDePagoView.rolPagos.fechaAprobacion)}" />
+
+                                        <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaPago}" value="Pagado: " style="font-weight: bold;" />
+                                        <h:outputText rendered="#{not empty rolDePagoView.rolPagos.fechaPago}" value="#{rolDePagoView.darFormato(rolDePagoView.rolPagos.fechaAprobacion)}" />
+
+                                    </h:panelGrid>
+                                </p:panel>
+                                <p:panel>
+                                    <h4 style="display: grid; align-items: center; justify-content: center;">DETALLE</h4>
+                                    <p:panel>
+                                        <h:panelGrid columns="6" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1"
+                                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                                            <h:outputText value="Holas Laboradas: #{rolDePagoView.horasLaboradas}" style="font-weight: bold;" />
+                                            <h:outputText value="$ #{rolDePagoView.rolPagos.horasLaboradas}" />
+
+                                            <h:outputText value="Holas Suplementarias: #{rolDePagoView.horasSuplementarias}" style="font-weight: bold;" />
+                                            <h:outputText value="$ #{rolDePagoView.rolPagos.horasSuplemetarias}" />
+
+                                            <h:outputText value="Fondos de Reserva: " style="font-weight: bold;" />
+                                            <h:outputText value="$ #{rolDePagoView.fondosReserva}" />
+
+                                            <h:outputText rendered="#{rolDePagoView.decimoTercero > 0 ? true: false}" value="Decimo Tercer Sueldo: " style="font-weight: bold;" />
+                                            <h:outputText rendered="#{rolDePagoView.decimoTercero > 0 ? true: false}" value="$ #{rolDePagoView.decimoTercero}" />
+
+                                            <h:outputText rendered="#{rolDePagoView.decimoCuarto > 0 ? true: false}" value="Decimo Cuarto Sueldo: " style="font-weight: bold;" />
+                                            <h:outputText rendered="#{rolDePagoView.decimoCuarto > 0 ? true: false}" value="$ #{rolDePagoView.decimoCuarto}" />
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                    <p:toolbar id="subTotal">
+                                        <p:toolbarGroup>
+                                            <span>(HL + HS + FR + DTS + DCS)</span>
+                                        </p:toolbarGroup>
+                                        <p:toolbarGroup align="right">
+                                            <h:outputLabel style="font-weight: bold;" value="Sub Total: #{rolDePagoView.subTotal}"/>
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+                                    <p:panel>
+                                        <h:panelGrid columns="6" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-1"
+                                                     styleClass="ui-panelgrid-blank ui-fluid"
+                                                     style="border:0px none; background-color:transparent; width: 100%;">
+
+                                            <h:outputText value="Aporte al IESS: " 
+                                                          style="font-weight: bold;" />
+                                            <h:outputText value="$ #{rolDePagoView.aportesIESS}" />
+
+                                            <h:outputText rendered="#{rolDePagoView.suspencion.id > 0 ? true: false}" value="Suspención: " style="font-weight: bold;" />
+                                            <h:outputText rendered="#{rolDePagoView.suspencion.id > 0 ? true: false}" value="$ #{rolDePagoView.suspencion.valor}" />
+
+                                            <h:outputText rendered="#{rolDePagoView.amonestacion.id > 0 ? true: false}" value="Amonestación: " style="font-weight: bold;" />
+                                            <h:outputText rendered="#{rolDePagoView.amonestacion.id > 0 ? true: false}" value="$ #{rolDePagoView.amonestacion.valor}" />
+
+                                            <h:outputText rendered="#{rolDePagoView.multa.id > 0 ? true: false}" value="Multa: " style="font-weight: bold;" />
+                                            <h:outputText rendered="#{rolDePagoView.multa.id > 0 ? true: false}" value="$ #{rolDePagoView.multa.valor}" />
+
+                                        </h:panelGrid>
+                                    </p:panel>
+                                    <p:toolbar>
+                                        <p:toolbarGroup>
+                                            <span>(Sub Total - ( IESS + ML + SP + AM ))</span>
+                                        </p:toolbarGroup>
+                                        <p:toolbarGroup align="right">
+                                            <h:outputLabel id="toltal" style="font-weight: bold;"  value="Total: #{rolDePagoView.total}"/>
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+                                </p:panel>
+                                <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
+                                             styleClass="ui-panelgrid-blank ui-fluid"
+                                             style="border:0px none; background-color:transparent; width: 100%;">
+
+                                    <h:outputText value="Observaciones: " style="font-weight: bold;" />
+                                    <h:outputText value="#{rolDePagoView.rolPagos.detalle}" />
+                                </h:panelGrid>
+
+                                <div><strong>HL = </strong>Horas Laboradas    <strong>HS = </strong>Horas Suplementarias    <strong>FR = </strong>Fondes de Reserva    <strong>DTS = </strong>Decimo Tercer Sueldo    <strong>DCS = </strong>Decimo Cuarto Sueldo</div>
+                                <div><strong>IESS = </strong>Aporte al IESS    <strong>ML = </strong>Multa     <strong>SP = </strong>Suspención    <strong>AM = </strong>Amonestación</div>
+                            </p:panel>
                         </p:panel>
-                        <h:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10"
-                                     styleClass="ui-panelgrid-blank ui-fluid"
-                                     style="border:0px none; background-color:transparent; width: 100%;">
-
-                            <h:outputText value="Observaciones: " style="font-weight: bold;" />
-                            <h:outputText value="#{rolDePagoView.rolPagos.detalle}" />
-                        </h:panelGrid>
-
-                        <div><strong>HL = </strong>Horas Laboradas    <strong>HS = </strong>Horas Suplementarias    <strong>FR = </strong>Fondes de Reserva    <strong>DTS = </strong>Decimo Tercer Sueldo    <strong>DCS = </strong>Decimo Cuarto Sueldo</div>
-                        <div><strong>IESS = </strong>Aporte al IESS    <strong>ML = </strong>Multa     <strong>SP = </strong>Suspención    <strong>AM = </strong>Amonestación</div>
-                    </p:panel>
-                </p:panel>
-            </div>
-        </h:form>
-    </ui:define>
-    <div id="elementh"></div>
-</ui:composition>
+                    </div>
+                </h:form>
+            </ui:define>
+            <div id="elementh"></div>
+        </ui:composition>
+    </body>
+</html>

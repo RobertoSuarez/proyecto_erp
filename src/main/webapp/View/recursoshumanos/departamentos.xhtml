@@ -75,7 +75,7 @@
                             <p:toolbar>
                                 <p:toolbarGroup>
                                     <span style="font-weight: bold" 
-                                          icon="pi pi-table">departamentl</span>
+                                          icon="pi pi-table">Departamentos</span>
                                 </p:toolbarGroup>
                                 <p:toolbarGroup align="right">
                                     <p:commandButton value="Nuevo" icon="pi pi-plus" 
@@ -122,14 +122,14 @@
                                 <p:column exportable="false" width="10%">
                                     <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
                                                      oncomplete="PF('manageDepartamentoDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     styleClass="ui-button-info p-mr-2 p-mb-2" 
                                                      process="@this">
                                         <f:setPropertyActionListener value="#{departamento}" 
                                                                      target="#{departamentoView.departamento}"/>
                                         <p:resetInput target=":form:manage-departamento-content"/>
                                     </p:commandButton>
                                     <p:commandButton icon="pi pi-#{departamento.estado? 'times' : 'check'}"
-                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     styleClass="ui-button-danger" 
                                                      actionListener="#{departamentoView.cambiarEstado(departamento)}"
                                                      update="dt-departamentos" process="dt-departamentos @this">
                                         <f:setPropertyActionListener value="#{!departamento.estado}" target="#{departamento.estado}"/>
