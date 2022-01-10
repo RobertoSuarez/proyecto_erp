@@ -10,11 +10,24 @@
         <a href="../Global/Main.xhtml">
             <p:graphicImage name="erpLogo.png" library="images" style="width: 4%; position: relative; top: -15px;" />
         </a>
-        <div class="layout-topbar-menu-wrapper">        
+        <div class="layout-topbar-menu-wrapper">
+            <h:form>
+                <div class="p-grid">
+                    <div class="p-col-12" style="display: flex; align-items: center">
+                        <p:graphicImage style="width: 20%" name="images/avatar.png" library="manhattan-layout" />
+                        <p:menuButton value="Nombre Usuario" styleClass="myCustomStyle">
+                            <p:menuitem value="Perfil"></p:menuitem>
+                            <p:menuitem value="Configuracion"></p:menuitem>
+                            <p:menuitem value="Salir"></p:menuitem>
+                        </p:menuButton>
+                    </div>
+                </div>
+
+            </h:form>
             <ul class="topbar-menu navbar">
                 <li class="menu">               
-                    <p:graphicImage name="images/avatar.png" library="manhattan-layout" />
-                    <span class="topbar-item-name profile-name">Nombre de usuario</span>
+
+
                     <div class="submenu">
                         <ul>
                             <li>

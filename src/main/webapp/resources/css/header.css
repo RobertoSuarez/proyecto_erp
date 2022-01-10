@@ -2,9 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    list-style: none;
-    font-family: 'Jost', sans-serif;
-    
+    list-style: none; 
 }
 
 .menu img {
@@ -20,6 +18,10 @@
     margin-left: 6px;
 }
 
+.menu .user {
+    color: #fff;
+}
+
 .navbar .submenu {
     position: fixed;
     right: 110px;
@@ -28,6 +30,7 @@
     background: #fff;
     border-radius: 15px;
     display: none;
+    font-size: 16px;
 }
 
 .navbar .submenu{
@@ -35,11 +38,16 @@
 }
 
 .navbar .submenu li{
-    margin-bottom: 10px;
+    margin-bottom: 2px;
     color: #868686;
-    
 }
+.navbar .submenu li:hover {
+    box-shadow: 0 0 10px 100px #dee2e6 inset;
+}
+
 
 .navbar .menu.active .submenu{
     display: flex;
 }
+
+
