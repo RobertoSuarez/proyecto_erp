@@ -142,21 +142,23 @@
                                                                      cols="33" 
                                                                      autoResize="false"/>
                                                 </div>
-                                                <div class="p-col-4">
-                                                    <p:outputLabel value="Fecha de Creación:"></p:outputLabel>
-                                                    <p:datePicker  
-                                                        style=""
-                                                        id="Creacion" 
-                                                        value="" />
+                                               
+                                                  <div class="p-col-4">
+                                                        <p:outputLabel value="Tipo: "></p:outputLabel>
+                                                        <p:selectOneMenu id="TipoCentroCosto" 
+                                                                         value="" 
+                                                                         class=""
+                                                                         required="true"
+                                                                         requiredMessage="Ingrese Tipo de Costo">                            
+                                                            <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
+                                                            <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
+                                                            <f:selectItem itemLabel="Directo" itemValue="Directo"/>
 
-                                                    <p:outputLabel value="Fecha de Modificacion: "></p:outputLabel>
-                                                    <p:datePicker  
-                                                        style=""
-                                                        id="Modificacion" 
-                                                        value="" />
+                                                        </p:selectOneMenu>
 
-                                                </div>
-
+                                                    </div>
+                                                
+                   
                                             </div>
                                         </div>    
 
@@ -182,7 +184,7 @@
                                                         </div>
                                                     </f:facet>
 
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                     <p:column headerText="Nombre" filterStyle="display : none">
                                                         <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
@@ -191,15 +193,15 @@
                                                         <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
-                                                    <p:column headerText="Fecha Creación" >
-                                                        <h:outputText value="#" />
-                                                        <p:skeleton rendered="#"></p:skeleton>
-                                                    </p:column>
-                                                    <p:column headerText="Fecha Modificación" >
-                                                        <h:outputText value="#" />
-                                                        <p:skeleton rendered="#"></p:skeleton>
-                                                    </p:column>
 
+                                                    <p:column headerText="Tipo">
+                                                        <p:commandButton icon="pi pi-pencil" action="#"  
+                                                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                                            <f:setPropertyActionListener value="#" target="#"/>
+                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                        </p:commandButton>
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
                                                     <p:column headerText="Acciones">
                                                         <p:commandButton icon="pi pi-pencil" action="#"  
                                                                          styleClass="edit-button rounded-button ui-button-info" process="@this">
@@ -208,6 +210,7 @@
                                                         </p:commandButton>
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
+                                                    
 
                                                 </p:dataTable>
 
@@ -260,20 +263,23 @@
                                                                          cols="33" 
                                                                          autoResize="false"/>
                                                     </div>
-                                                    <div class="p-col-4">
-                                                        <p:outputLabel value="Tipo: "></p:outputLabel>
-                                                        <p:selectOneMenu id="TipoCentroCosto" 
-                                                                         value="" 
-                                                                         class=""
-                                                                         required="true"
-                                                                         requiredMessage="Ingrese Tipo de Costo">                            
-                                                            <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
-                                                            <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
-                                                            <f:selectItem itemLabel="Directo" itemValue="Directo"/>
+                                                     <div class="p-col-4">
+                                                    <p:outputLabel value="Fecha de Creación:"></p:outputLabel>
+                                                    <p:datePicker  
+                                                        style=""
+                                                        id="Creacion" 
+                                                        value="" />
 
-                                                        </p:selectOneMenu>
+                                                    <p:outputLabel value="Fecha de Modificacion: "></p:outputLabel>
+                                                    <p:datePicker  
+                                                        style=""
+                                                        id="Modificacion" 
+                                                        value="" />
 
-                                                    </div>
+                                                </div>
+
+                                                    
+                                                  
 
                                                 </div>                                                                   
 
@@ -292,8 +298,9 @@
 
                                                         </div>
                                                     </f:facet>
-
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                    
+                                                    
+                                                      <p:column headerText="Nombre" filterStyle="display : none">
                                                         <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
@@ -302,15 +309,15 @@
                                                         <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
-
-                                                    <p:column headerText="Tipo">
-                                                        <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                         styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                            <f:setPropertyActionListener value="#" target="#"/>
-                                                            <p:resetInput target=":form:manage-asiento"/>
-                                                        </p:commandButton>
+                                                    <p:column headerText="Fecha Creación" >
+                                                        <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
+                                                    <p:column headerText="Fecha Modificación" >
+                                                        <h:outputText value="#" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
                                                     <p:column headerText="Acciones">
                                                         <p:commandButton icon="pi pi-pencil" action="#"  
                                                                          styleClass="edit-button rounded-button ui-button-info" process="@this">
@@ -319,7 +326,8 @@
                                                         </p:commandButton>
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
-
+                                                    
+                                                    
                                                 </p:dataTable>
 
                                             </p:toolbarGroup>
