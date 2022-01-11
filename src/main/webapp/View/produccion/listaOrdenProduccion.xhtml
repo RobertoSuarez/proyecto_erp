@@ -10,7 +10,8 @@
             <ui:define name="title">Orden de Producción</ui:define>
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Orden de Producción" url="#"/>
+                    <p:menuitem value="Solicitud orden de producción" url="solicitudOrden.xhtml"/>
+                    <p:menuitem value="Orden de Trabajo" url="#"/>
                     <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
                     <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
                 </p:menubar>
@@ -23,10 +24,10 @@
                                         <i class="pi pi-search"></i>
                                         <p:inputText style="margin-right: 6px;" id="globalFilter" placeholder="Buscar"/>
                                     </span>
-                                    <p:button style="margin-right: 6px;" value="Nueva Orden de producción"
-                                                     styleClass="ui-button-primary"
-                                                     icon="pi pi-plus" outcome="oProduccion.xhtml">
-                                    </p:button>
+                                    <!-- comment<p:button style="margin-right: 6px;" value="Nueva Orden de producción"
+                                                         styleClass="ui-button-primary"
+                                                         icon="pi pi-plus" outcome="oProduccion.xhtml">
+                                        </p:button> -->
                                     <!-- Tabla de datos
                                     <p:commandButton style="margin-right: 6px;" value="Filtrar"
                                                      styleClass="ui-button-secondary" oncomplete="PF('filtro').show()">
@@ -35,23 +36,16 @@
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:dialog showEffect="fade" modal="true"
-                                  widgetVar="filtro" responsive="true" width="20%"
-                                  draggable="false" height="40%">
-                        </p:dialog>
                         <!-- Tabla de datos -->
-                        <p:dataTable reflow="true" paginator="true" rows="5"
-                                     rowSelectMode="add" paginatorPosition="bottom">
+                        <p:dataTable editable="true" reflow="true"
+                                     editInitEvent="dblclick" editMode="cell"
+                                     value="">
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Ordenes de Producción</span>
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Ordenes de Trabajo</span>
 
                                 </div>
                             </f:facet>
-                            <p:column headerText="Acción" filterStyle="display : none">
-
-                            </p:column>
-
                             <p:column headerText="Nº Orden" >
                                 <h:outputText value="#" />
                             </p:column>
@@ -68,6 +62,9 @@
                             </p:column>
                             <p:column headerText="Estado" >
                                 <h:outputText value="#" />
+                            </p:column>
+                            <p:column headerText="Acción" filterStyle="display : none">
+                                <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml"/>
                             </p:column>
                         </p:dataTable>
                     </div>

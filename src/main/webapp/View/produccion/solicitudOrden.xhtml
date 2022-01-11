@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="title">Solicitud orden de producción</ui:define>
+            <ui:define name="content">
+                <ui:include src="subheaderProduccion.xhtml"/>
+                <h:form id="form" style="margin-top: 4%;">
+                    <div class="card">
+
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <div class="card ui-fluid ">
+                                    <div class="p-formgrid p-grid">
+                                        <div class="p-field p-col-12 p-md-4">
+                                            <p:outputLabel value="Nº Orden" for="@next"/>
+                                            <p:inputText/>
+                                        </div>
+                                        <div class="p-field p-col-12 p-md-4">
+                                            <p:outputLabel value="Fecha Inicio producción" for="@next"/>
+                                            <p:calendar value="" 
+                                                        disabled="#">
+                                            </p:calendar>
+                                        </div>
+                                        <div class="p-field p-col-12 p-md-4">
+                                            <p:outputLabel value="Fecha Fin producción" for="@next"/>
+                                            <p:calendar value="" 
+                                                        disabled="#">
+                                            </p:calendar>
+                                        </div>
+                                        <div class="p-field p-col-12 p-md-4">
+                                            <p:outputLabel value="Descripción" for="@next"/>
+                                            <p:inputText/>
+                                        </div>
+
+                                        <div class="p-field p-col-12 p-md-2">
+                                            <p:outputLabel value="buscar" for="@next" style="color: white"/>
+                                            <p:commandButton value="Buscar Producto" 
+                                                             styleClass="ui-button-secondary"
+                                                             icon="pi pi-search" oncomplete="PF('producto').show()">
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+
+                        <p:dialog header="Seleccione un producto" showEffect="fade" modal="true"
+                                  widgetVar="producto" responsive="true" width="80%"
+                                  draggable="false" height="550">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-1 p-md-1 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Nombre Producto:"></p:outputLabel>
+                                                    <p:inputText value="" placeholder="Buscar"></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable editable="true" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="">
+
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Código" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Cantidad" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Precio" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                        </p:column>
+                                                        <p:column headerText="Tipo" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Confirmar"  
+                                                                     icon="pi pi-check" 
+                                                                     disabled="#" styleClass="ui-button-primary"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('producto').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <!-- Tabla de datos -->
+                        <p:dataTable editable="true" reflow="true"
+                                     editInitEvent="dblclick" editMode="cell"
+                                     value="">
+                            <!-- Buscador -->
+                            <f:facet name="header">
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span style="font-weight: bold; margin-right: 6px;">Solicitud productos a fabricar</span>
+
+                                </div>
+                            </f:facet>
+                            <p:column headerText="Código" filterStyle="display : none">
+                                <h:outputText value="#" />
+                            </p:column>
+
+                            <p:column headerText="Nombre" >
+                                <h:outputText value="#" />
+                            </p:column>
+
+                            <p:column headerText="Cantidad" >
+                                <p:inputText disabled="#"  value=""></p:inputText>
+                            </p:column>
+
+                            <p:column headerText="Unidad de Medida" >
+                                <h:outputText value="#" />
+                            </p:column>
+                            <p:column headerText="Tipo" >
+                                <h:outputText value="#" />
+                            </p:column>
+                        </p:dataTable>
+                        <div class="p-grid p-justify-end">
+                            <!--<p:button style="margin-right: 6px;" value="Buscar" 
+                                      styleClass="ui-button-secondary" icon="pi pi-search" outcome="listaOrdenProduccion.xhtml">
+                            </p:button>-->
+                            <p:button style="margin-right: 6px;margin-top: 15px;" value="Guardar" styleClass="ui-button-primary" icon="pi pi-save"/>
+                            <!--<p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-primary" icon="pi pi-plus-circle"/>-->
+                            <!-- <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-info" icon="pi pi-pencil"/> -->
+                            <p:button style="margin-right: 6px;margin-top: 15px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"
+                                      outcome="listaOrdenProduccion.xhtml"/>
+                        </div>
+                    </div>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
