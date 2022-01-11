@@ -1,5 +1,6 @@
 package com.seguridad.dao;
 
+import com.global.config.AES;
 import com.global.config.Conexion;
 import com.seguridad.models.Usuario;
 import java.sql.ResultSet;
@@ -13,6 +14,11 @@ public class UsuarioDAO {
     boolean isTrue = true;
     Usuario usuario = new Usuario();
     Conexion conexion = new Conexion();
+    private AES encryptAES;
+    
+    public UsuarioDAO(){
+        encryptAES = new AES();
+    }
     
     public void registrarUsuario(Usuario user) {
         
@@ -21,7 +27,7 @@ public class UsuarioDAO {
             
             String sentencia = "SELECT public.registrarusuario('" + user.getNombre() + "',"
                     + "'" + user.getApellido() + "','" + user.getEmail() + "',"
-                    + "'" + user.getUsername() + "','" + user.getPassword() + "')";
+                    + "'" + user.getUsername() + "','" + encryptAES.getAESEncrypt(user.getPassword()) + "')";
             conexion.Ejecutar2(sentencia);
             conexion.cerrarConexion();
             
@@ -67,7 +73,7 @@ public class UsuarioDAO {
         String sentencia = "";
         if (conexion.isEstado()) {
             try {
-                sentencia = String.format("SELECT * from public.iniciarsesion('%1$s','%2$s')", u.getUsername(), u.getPassword()) ;
+                sentencia = String.format("SELECT * from public.iniciarsesion('%1$s','%2$s')", u.getUsername(), encryptAES.getAESEncrypt(u.getPassword())) ;
                 result = conexion.ejecutarConsulta(sentencia);
                 
                 while (result.next()) {
@@ -78,7 +84,7 @@ public class UsuarioDAO {
                             result.getString("name"),
                             result.getString("surname"),
                             result.getString("usrnm"),
-                            result.getString("pssword"),
+                            result.getString("pswrd"),
                             result.getString("mail")
                     ));
 
