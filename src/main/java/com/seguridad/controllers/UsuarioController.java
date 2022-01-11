@@ -51,7 +51,7 @@ public class UsuarioController implements Serializable {
         this.usuarioDAO = usuarioDAO;
     }
 
-    public void registrarUsuario() throws Exception {
+    public String registrarUsuario() throws Exception {
 
         Pattern pattern = Pattern
                 .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -80,12 +80,12 @@ public class UsuarioController implements Serializable {
             } else {
                 this.usuarioDAO.registrarUsuario(usuario);
                 PFE("Usuario registrado");
-
+                return "/View/login_and_registro/login.xhtml";
             }
         } catch (Exception e) {
 
         }
-
+        return "";
     }
 
     public String iniciarSesion() {
