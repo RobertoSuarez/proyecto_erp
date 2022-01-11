@@ -25,6 +25,7 @@
 .navbar .submenu {
     position: fixed;
     right: 110px;
+    width: 300px;
     top: 65px;
     background: #fff;
     border-radius: 5px;

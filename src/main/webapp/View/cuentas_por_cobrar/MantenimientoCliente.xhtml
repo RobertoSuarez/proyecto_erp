@@ -49,56 +49,55 @@
 
                             <f:facet name="header">
                                 <!-- Botones para agregar cliente natural y juridico!-->
-                                <div style="float: left; text-align: center; width: 100%">
-                                    <span>
-                                        <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
-                                                         actionListener="#{personaController.nuevoClienteN()}"
-                                                         icon="fa fa-fw fa-user" 
-                                                         value="Agregar Cliente Natural" 
-                                                         styleClass="ui-button-success"/>
-                                    </span>
-                                    <span >
-                                        <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
-                                                         actionListener="#{personaController.nuevoClienteJ()}"
-                                                         value="Agregar Cliente Jurídico" 
-                                                         icon="fa fa-fw fa-building" 
-                                                         styleClass="ui-button-success"/>
-                                    </span>
-                                    <span style="margin-left: 2px">
-                                        <p:commandButton value="Inactivos" 
-                                                         icon="pi pi-user-minus"
-                                                         oncomplete="PF('clienteInactivo').show();"
-                                                         update=":frmCI:tblClientesInactivos"/>
-                                    </span>
-                                    <div style="float: right;">
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" 
-                                                         onkeyup="PF('dtClientes').filter()" 
-                                                         placeholder="Buscar"/>
+                                <div class="p-grid">
+                                    <div class="p-col-8">
+                                        <span>
+                                            <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
+                                                             actionListener="#{personaController.nuevoClienteN()}"
+                                                             icon="fa fa-fw fa-user" 
+                                                             value="Agregar Cliente Natural"/>
+                                        </span>
+
+                                        <span >
+                                            <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
+                                                             actionListener="#{personaController.nuevoClienteJ()}"
+                                                             value="Agregar Cliente Jurídico" 
+                                                             icon="fa fa-fw fa-building" />
+                                        </span>
+                                        <span style="margin-left: 2px">
+                                            <p:commandButton value="Inactivos" 
+                                                             icon="pi pi-user-minus"
+                                                             oncomplete="PF('clienteInactivo').show();"
+                                                             update=":frmCI:tblClientesInactivos"/>
                                         </span>
                                     </div>
+                                    <div class="p-col-4">
+                                        <div style="float: right;">
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" 
+                                                             onkeyup="PF('dtClientes').filter()" 
+                                                             placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                <br />
-                                <br />
                             </f:facet>
                             <p:column class="tamanoInput" style="text-align: center; width: 100%"
                                       headerText="Identificación"
-                                      filterBy="#{varClientes.identificacion}"
                                       sortBy="#{varClientes.identificacion}">
                                 <h:outputText value="#{varClientes.identificacion}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center; width: 100%"
                                       headerText="Tipo de Identificación"
-                                      filterBy="#{varClientes.descrIdentificacion}"
                                       sortBy="#{varClientes.descrIdentificacion}">
                                 <h:outputText value="#{varClientes.descrIdentificacion}"/>
                             </p:column>
 
                             <p:column class="tamanoInput" style="text-align: center; width: 100%"    
                                       headerText="Cliente"
-                                      filterBy="#{varClientes.razonNombre}" 
                                       sortBy="#{varClientes.razonNombre}">
                                 <h:outputText value="#{varClientes.razonNombre}"/>
                             </p:column>

@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.registroUsuario.controllers;
+package com.seguridad.controllers;
 
-import com.registroUsuario.dao.UsuarioDAO;
-import com.registroUsuario.models.Usuario;
+import com.seguridad.dao.UsuarioDAO;
+import com.seguridad.models.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +21,9 @@ import javax.servlet.http.HttpSession;
 @SessionScoped
 public class UsuarioController implements Serializable {
 
-    Usuario usuario;
+    private Usuario usuario;
     private List<Usuario> listaUsuario;
-    UsuarioDAO usuarioDAO;
+    private UsuarioDAO usuarioDAO;
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -51,7 +51,7 @@ public class UsuarioController implements Serializable {
         this.usuarioDAO = usuarioDAO;
     }
 
-    public void registrarUsuario() throws Exception {
+    public String registrarUsuario() throws Exception {
 
         Pattern pattern = Pattern
                 .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -72,20 +72,20 @@ public class UsuarioController implements Serializable {
 
             } else if ("".equals(usuario.getPassword())) {
                 PFW("Ingrese una Contraseña");
-            } else if (usuario.isHabilitado() == false) {
+            }/* else if (usuario.isHabilitado() == false) {
                 PFW("Aceptar los terminos y condiciones");
 
-            } else if (matcher.find() == false) {
+            } */else if (matcher.find() == false) {
                 PFW("Ingrese un email válido");
             } else {
                 this.usuarioDAO.registrarUsuario(usuario);
                 PFE("Usuario registrado");
-
+                return "/View/login_and_registro/login.xhtml";
             }
         } catch (Exception e) {
 
         }
-
+        return "";
     }
 
     public String iniciarSesion() {
