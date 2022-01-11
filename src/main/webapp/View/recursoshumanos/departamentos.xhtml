@@ -72,64 +72,51 @@
                         <p:growl id="messages" showDetail="true"/>
                         <br/><br/><br/>
                         <p:panel>
+
                             <p:toolbar>
-                                <p:toolbarGroup>
-                                    <span style="font-weight: bold" 
-                                          icon="pi pi-table">Departamento</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                     actionListener="#{departamentoView.abrirNuevo}"
-                                                     update=":form:manage-departamento-content" 
-                                                     oncomplete="PF('manageDepartamentoDialog').show()"
-                                                     styleClass="ui-button-success" 
-                                                     style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-departamento-content"/>
-                                    </p:commandButton>
+                                <p:toolbarGroup style="margin-top:2%">
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Departamentos </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 ></p:commandButton>
+                            </f:facet>
                             <p:dataTable id="dt-departamentos" widgetVar="dtDepartamentos" 
                                          var="departamento" value="#{departamentoView.lista}"
                                          reflow="true" size="small" liveResize="true" 
                                          styleClass="departamentos-table"
                                          rowKey="#{departamento.id}" paginator="true"
                                          rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                                <p:column headerText="Departamento" sortBy="#{departamento.nombre}" 
-                                          filterBy="#{departamento.nombre}">
+                                <p:column headerText="Departamento" >
                                     <h:outputText value="#{departamento.nombre}"/>
                                 </p:column>
                                 <p:column headerText="Descripción" width="35%">
                                     <h:outputText value="#{departamento.descripcion}"/>
                                 </p:column>
-                                <p:column headerText="Creado" width="10%" 
-                                          sortBy="#{departamento.fecha_creacion}">
+                                <p:column headerText="Creado" width="10%">
                                     <h:outputText 
                                         value="#{departamentoView.darFormato(departamento.fecha_creacion)}"/>
                                 </p:column>
-                                <p:column headerText="Estado" width="12%" field="estado" 
-                                          filterBy="#{departamento.estado}"
-                                          filterMatchMode="exact">
-                                    <f:facet name="filter">
-                                        <p:selectOneMenu onchange="PF('dtDepartamentos').filter()">
-                                            <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
+                                <p:column headerText="Estado" width="12%">
                                     <h:outputText id="inputmarca" value="#{departamento.estado ? 'Habilitado': 'Deshabilitado'}" 
                                                   style="width:100%"/>
                                 </p:column>
                                 <p:column exportable="false" width="10%">
-                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-departamento-content"
-                                                     oncomplete="PF('manageDepartamentoDialog').show()"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" 
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                     icon="pi pi-pencil" update=":form:manage-departamento-content"
+                                                     oncomplete="PF('manageDepartamentoDialog').show()" 
                                                      process="@this">
                                         <f:setPropertyActionListener value="#{departamento}" 
                                                                      target="#{departamentoView.departamento}"/>
                                         <p:resetInput target=":form:manage-departamento-content"/>
                                     </p:commandButton>
-                                    <p:commandButton icon="pi pi-#{departamento.estado? 'times' : 'check'}"
-                                                     styleClass="ui-button-danger" 
+                                    <p:commandButton class="ui-button-danger rounded-button"
+                                                     icon="pi pi-pi pi-trash"
                                                      actionListener="#{departamentoView.cambiarEstado(departamento)}"
                                                      update="dt-departamentos" process="dt-departamentos @this">
                                         <f:setPropertyActionListener value="#{!departamento.estado}" target="#{departamento.estado}"/>
