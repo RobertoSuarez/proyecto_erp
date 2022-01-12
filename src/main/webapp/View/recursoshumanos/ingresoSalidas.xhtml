@@ -74,31 +74,32 @@
                         <p:panel>
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <span style="font-weight: bold" icon="pi pi-table">HORARIOS DE INGRESO Y SALIDA</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                     actionListener="#{ingresosSalidasView.abrirNuevo}"
-                                                     update=":form:manage-ingresosSalidas-content" 
-                                                     oncomplete="PF('manageIngresosSalidasDialog').show()"
-                                                     styleClass="ui-button-success" 
-                                                     style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-ingresosSalidas-content"/>
-                                    </p:commandButton>
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Horarios de Ingresos y Salidas </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 actionListener="#{ingresosSalidasView.abrirNuevo}"
+                                                 update=":form:manage-ingresosSalidas-content" 
+                                                 oncomplete="PF('manageIngresosSalidasDialog').show()"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2">
+                                    <p:resetInput target=":form:manage-ingresosSalidas-content"/>
+
+                                </p:commandButton>
+                            </f:facet>
                             <p:dataTable id="dt-ingresosSalidas" widgetVar="dtIngresosSalidas" 
                                          var="ingresoSalida" value="#{ingresosSalidasView.lista}"
                                          reflow="true" size="small" liveResize="true" 
                                          styleClass="ingresosSalidas-table"
                                          rowKey="#{ingresoSalida.id}" paginator="true"
                                          rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                                <p:column headerText="Ingreso" sortBy="#{ingresoSalida.horaIngreso}"
-                                          filterBy="#{ingresoSalida.horaIngreso}">
+                                <p:column headerText="Ingreso">
                                     <h:outputText value="#{ingresoSalida.horaIngreso}"/>
                                 </p:column>
-                                <p:column headerText="Salida" sortBy="#{ingresoSalida.horaSalida}"
-                                          filterBy="#{ingresoSalida.horaSalida}">
+                                <p:column headerText="Salida">
                                     <h:outputText value="#{ingresoSalida.horaSalida}"/>
                                 </p:column>
                                 <p:column headerText="Observaciones" width="45%">
@@ -108,7 +109,7 @@
                                     <p:commandButton icon="pi pi-pencil" 
                                                      update=":form:manage-ingresosSalidas-content"
                                                      oncomplete="PF('manageIngresosSalidasDialog').show()"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" 
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                      process="@this">
                                         <f:setPropertyActionListener value="#{ingresoSalida}" 
                                                                      target="#{ingresosSalidasView.ingresosSalidas}"/>
@@ -151,14 +152,13 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      actionListener="#{ingresosSalidasView.enviar}"
-                                                     update="messages manage-ingresosSalidas-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-ingresosSalidas-content"
                                                      process="messages manage-ingresosSalidas-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageIngresosSalidasDialog').hide()"
-                                                     class="ui-button-secondary"/>
+                                                     class="ui-button-danger"/>
                                 </f:facet>
                             </p:dialog>
                             <p:confirmDialog global="true" showEffect="fade" 
