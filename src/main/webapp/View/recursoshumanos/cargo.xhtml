@@ -72,22 +72,25 @@
                         <p:growl id="messages" showDetail="true"/>
                         <br/><br/><br/>
                         <p:panel>
+
                             <p:toolbar>
-                                <p:toolbarGroup>
-                                    <span style="font-weight: bold" 
-                                          icon="pi pi-table">CARGOS</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                     actionListener="#{cargoView.abrirNuevo}"
-                                                     update=":form:manage-cargo-content" 
-                                                     oncomplete="PF('manageCargoDialog').show()"
-                                                     styleClass="ui-button-success" 
-                                                     style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-cargo-content"/>
-                                    </p:commandButton>
+                                <p:toolbarGroup style="margin-top:2%">
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Cargos </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 actionListener="#{cargoView.abrirNuevo}"
+                                                 update=":form:manage-cargo-content" 
+                                                 oncomplete="PF('manageCargoDialog').show()" >
+                                    <p:resetInput target=":form:manage-cargo-content"/>
+                                </p:commandButton>
+                            </f:facet>
+
                             <p:dataTable id="dt-cargos" widgetVar="dtCargos" 
                                          var="cargo" value="#{cargoView.lista}"
                                          reflow="true" size="small" liveResize="true" 
@@ -98,15 +101,15 @@
 
                                 <p:column width="10%">
                                 </p:column>
-                                <p:column headerText="Nombre" sortBy="#{cargo.nombre}" 
-                                          filterBy="#{cargo.nombre}">
+                                <p:column headerText="Nombre" style="font-size: 15px">
                                     <h:outputText value="#{cargo.nombre}"/>
                                 </p:column>
                                 <p:column exportable="false" width="10%">
-                                    <p:commandButton icon="pi pi-pencil" 
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                     icon="pi pi-pencil" 
                                                      update=":form:manage-cargo-content"
                                                      oncomplete="PF('manageCargoDialog').show()"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
+                                                     process="@this">
                                         <f:setPropertyActionListener value="#{cargo}" 
                                                                      target="#{cargoView.cargo}"/>
                                         <p:resetInput target=":form:manage-cargo-content"/>
