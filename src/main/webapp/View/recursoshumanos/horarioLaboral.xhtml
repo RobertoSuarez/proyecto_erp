@@ -73,21 +73,23 @@
                         <br/><br/><br/>
                         <p:panel>
                             <p:toolbar>
-                                <p:toolbarGroup>
-                                    <span style="font-weight: bold" 
-                                          icon="pi pi-table">HORARIOS LABORALES</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                     actionListener="#{horarioLaboralView.nuevoHorario}"
-                                                     update=":form:manage-horarioLaboral-content" 
-                                                     oncomplete="PF('manageHorarioLaboralDialog').show()"
-                                                     styleClass="ui-button-success" 
-                                                     style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-horarioLaboral-content"/>
-                                    </p:commandButton>
+                                <p:toolbarGroup style="margin-top:2%">
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Horarios Laborales </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 actionListener="#{horarioLaboralView.nuevoHorario}"
+                                                 update=":form:manage-horarioLaboral-content" 
+                                                 oncomplete="PF('manageHorarioLaboralDialog').show()">
+                                    <p:resetInput target=":form:manage-horarioLaboral-content"/>
+                                </p:commandButton>
+                            </f:facet>
+
                             <p:dataTable id="dt-horarioLaborales" widgetVar="dtHorarioLaborales" 
                                          var="horarioLaboral" value="#{horarioLaboralView.lista}"
                                          reflow="true" size="small" liveResize="true" 
@@ -95,52 +97,38 @@
                                          rowKey="#{horarioLaboral.id}" paginator="true"
                                          rows="5" rowSelectMode="add" paginatorPosition="bottom">
 
-                                <p:column headerText="Nombre del horario" 
-                                          sortBy="#{horarioLaboral.nombre}"
-                                          filterBy="#{horarioLaboral.nombre}">
+                                <p:column headerText="Nombre del horario" >
                                     <h:outputText value="#{horarioLaboral.nombre}"/>
                                 </p:column>
                                 <p:column headerText="Observaciones" width="35%">
                                     <h:outputText value="#{horarioLaboral.observaciones}"/>
                                 </p:column>
-                                <p:column headerText="Creado" width="10%" 
-                                          sortBy="#{horarioLaboral.fechaVigencia}">
+                                <p:column headerText="Creado" width="10%">
                                     <h:outputLabel 
                                         value="#{horarioLaboralView.darFormato(horarioLaboral.fechaVigencia)}"/>
                                 </p:column>
-                                <p:column headerText="Estado" width="13%" field="estado" 
-                                          filterBy="#{horarioLaboral.estado}"
-                                          filterMatchMode="exact">
-                                    <f:facet name="filter">
-                                        <p:selectOneMenu onchange="PF('dtHorarioLaborales').filter()">
-                                            <f:selectItem itemLabel="Todo" 
-                                                          itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItem itemLabel="Habilitados" 
-                                                          itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Deshabilitados" 
-                                                          itemValue="#{false}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
+                                <p:column headerText="Estado" width="13%">
                                     <h:outputText id="inputmarca" value="#{horarioLaboral.estado ? 'Habilitado': 'Deshabilitado'}" style="width:100%"/>
                                 </p:column>
                                 <p:column exportable="false" width="14%">
-                                    <p:commandButton icon="pi pi-pencil" 
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                     icon="pi pi-pencil" 
                                                      update=":form:manage-horarioLaboral-content"
-                                                     oncomplete="PF('manageHorarioLaboralDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                                     oncomplete="PF('manageHorarioLaboralDialog').show()" 
+                                                     process="@this">
                                         <f:setPropertyActionListener value="#{horarioLaboral}" 
                                                                      target="#{horarioLaboralView.horarioLaboral}"/>
                                         <p:resetInput target=":form:manage-horarioLaboral-content"/>
                                     </p:commandButton>
-                                    <p:commandButton icon="pi pi-#{horarioLaboral.estado? 'times' : 'check'}"
-                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                    <p:commandButton class="ui-button-danger rounded-button"
+                                                     icon="pi pi-pi pi-trash"
                                                      actionListener="#{horarioLaboralView.cambiarEstado(horarioLaboral)}"
                                                      update="dt-horarioLaborales" 
                                                      process="dt-horarioLaborales @this">
                                         <f:setPropertyActionListener value="#{!horarioLaboral.estado}" 
                                                                      target="#{horarioLaboral.estado}"/>
                                     </p:commandButton>
-                                    <p:commandButton icon="pi pi-list" action="DetalleHorario" 
+                                    <p:commandButton icon="pi pi-list" action="DetalleHorario" style="left:5px" 
                                                      actionListener="#{horarioLaboralView.verDetalle}"
                                                      styleClass="edit-button rounded-button ui-button-success" process="@this">
                                         <f:setPropertyActionListener value="#{horarioLaboral}" 
@@ -180,15 +168,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      action="DetalleHorario" actionListener="#{horarioLaboralView.guardarHorario}"
-                                                     update="messages manage-horarioLaboral-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-horarioLaboral-content"
                                                      process="messages manage-horarioLaboral-content @this">
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageHorarioLaboralDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" 
+                                                     process="@none" class="ui-button-danger" 
                                                      resetValues="true" />
                                 </f:facet>
                             </p:dialog>

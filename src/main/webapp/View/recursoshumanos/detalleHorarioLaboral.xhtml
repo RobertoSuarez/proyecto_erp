@@ -81,19 +81,29 @@
                             <p:toolbarGroup>
                                 <h:panelGrid columns="2" columnClasses="label, value">
                                     <p:outputLabel for="inputobs" 
-                                                   style="font-weight: bold">Descripción: </p:outputLabel>
+                                                   style="font-weight: bold;font-size: 20px" >Descripción </p:outputLabel>
                                     <h:outputText id="inputobs" 
                                                   value="#{horarioLaboralView.horarioLaboral.observaciones}"/>
 
                                     <p:outputLabel for="inputestado" 
-                                                   style="font-weight: bold">Estado: </p:outputLabel>
+                                                   style="font-weight: bold;font-size: 18px">Estado: </p:outputLabel>
                                     <h:outputText id="inputestado" 
+                                                  style="font-size: 18px"
                                                   value="#{horarioLaboralView.horarioLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
                                 </h:panelGrid>
                             </p:toolbarGroup>
                             <p:toolbarGroup align="right">
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                                 actionListener="#{horarioLaboralView.nuevoDetalle}"
+                                                 update=":form:manage-detalleHorario-content" 
+                                                 oncomplete="PF('manageDetalleHorarioDialog').show()"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-" 
+                                                 style="margin-right: .5rem">
+                                    <p:resetInput target=":form:manage-detalleHorario-content"/>
+                                </p:commandButton>
+
                                 <p:linkButton id="volverBtn" outcome="HorarioLaboral" value="Volver"
-                                              icon="pi pi-list" styleClass="ui-button-success">
+                                              icon="pi pi-undo" styleClass="ui-button-success">
                                     <p:ajax listener="#{horarioLaboralView.volver}"/>
                                 </p:linkButton>
                             </p:toolbarGroup>
@@ -102,18 +112,11 @@
                     <p:panel>
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <span style="font-weight: bold" 
+                                <span style="font-weight: bold;font-size: 25px" 
                                       icon="pi pi-table">DETALLE</span>
                             </p:toolbarGroup>
                             <p:toolbarGroup align="right">
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                 actionListener="#{horarioLaboralView.nuevoDetalle}"
-                                                 update=":form:manage-detalleHorario-content" 
-                                                 oncomplete="PF('manageDetalleHorarioDialog').show()"
-                                                 styleClass="ui-button-success" 
-                                                 style="margin-right: .5rem">
-                                    <p:resetInput target=":form:manage-detalleHorario-content"/>
-                                </p:commandButton>
+
                             </p:toolbarGroup>
                         </p:toolbar>
                         <p:dataTable id="dt-detalleHorarios" widgetVar="dtDetalleHorarios" 
@@ -122,27 +125,16 @@
                                      styleClass="detalleHorarios-table"
                                      rowKey="#{detalleHorario.id}" paginator="true"
                                      rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                            <p:column headerText="Dia" width="20%" sortBy="#{detalleHorario.diaSemana.nombre}"
-                                      filterBy="#{detalleHorario.diaSemana.nombre}">
+                            <p:column headerText="Dia" width="20%">
                                 <h:outputText value="#{detalleHorario.diaSemana.nombre}"/>
                             </p:column>
                             <p:column headerText="Observaciones" width="24%">
                                 <h:outputText value="#{detalleHorario.ingresoSalida.observaciones}"/>
                             </p:column>
-                            <p:column headerText="Horario" width="13%" 
-                                      sortBy="#{detalleHorario.ingresoSalida.horario()}">
+                            <p:column headerText="Horario" width="13%">
                                 <h:outputText value="#{detalleHorario.ingresoSalida.horario()}"/>
                             </p:column>
-                            <p:column headerText="Estado" width="13%" field="estado" 
-                                      filterBy="#{detalleHorario.estado}"
-                                      filterMatchMode="exact">
-                                <f:facet name="filter">
-                                    <p:selectOneMenu onchange="PF('dtDetalleHorarios').filter()">
-                                        <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                        <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
-                                        <f:selectItem itemLabel="Deshabilitados" itemValue="#{false}" />
-                                    </p:selectOneMenu>
-                                </f:facet>
+                            <p:column headerText="Estado" width="13%">
                                 <h:outputText id="inputmarca" value="#{detalleHorario.estado ? 'Habilitado': 'Deshabilitado'}"/>
                             </p:column>
                             <p:column exportable="false" width="10%">
@@ -193,14 +185,13 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" icon="pi pi-save" 
+                                <p:commandButton value="Guardar" icon="pi pi-check" 
                                                  actionListener="#{horarioLaboralView.enviar}"
                                                  update="messages manage-detalleHorario-content" 
-                                                 styleClass="ui-button-success"
                                                  process="messages manage-detalleHorario-content @this"/>
                                 <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                  onclick="PF('manageDetalleHorarioDialog').hide()"
-                                                 process="@none" styleClass="p-mr-2" 
+                                                 process="@none" class="ui-button-danger" 
                                                  resetValues="true" />
                             </f:facet>
                         </p:dialog>

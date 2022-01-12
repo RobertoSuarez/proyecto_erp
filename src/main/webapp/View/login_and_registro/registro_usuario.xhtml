@@ -15,64 +15,90 @@
     </h:head>
 
     <h:body styleClass="login-body">
-        <h:form id="formRegistroUsuario" >
-
+        <h:form>
             <p:growl id="messages" showDetail="true" severity="info, warn"/>
-            <div class="login-panel">
-                <div class="card">
-                    <div class="ui-fluid p-formgrid p-grid">
 
-                        <div class="p-col-12 p-lg-6 left-side ">
-                            <p:outputLabel for="name1">Nombres</p:outputLabel>
+            <div class="modal" >
+                <div class="modal__container">
+                    <div class="modal__featured" >
+                        <p:button icon="pi pi-arrow-circle-left" 
+                                  outcome="/View/login_and_registro/login" 
+                                  class="button--transparent button--close">
+                        </p:button>
+                        <div class="modal__circle"></div>
+
+                    </div>
+                    <div class="modal__content">
+
+                        <div class="ui-fluid">
+                            <h1 style="padding-left: 120px;">Bienvenido !</h1>
+                            <h3 style="padding-left: 20px;" >
+                                Regístrate en ERP contable</h3>
+                        </div>
+
+
+                        <div class="ui-fluid">
                             <div class="ui-inputgroup">
-                                <span  class="ui-inputgroup-addon">
+                                <span  
+                                    class="ui-inputgroup-addon">
                                     <i class="pi pi-user" />   
                                 </span>
-                                <p:inputText maxlength="50" id="name1" value="#{usuarioMB.usuario.nombre}" />
+                                <p:inputText 
+                                    placeholder="Nombres" 
+                                    maxlength="50" id="name1" 
+                                    value="#{usuarioMB.usuario.nombre}" />
                             </div>
                         </div>
-
-                        <div class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="name2">Apellidos</p:outputLabel>
+                        <br></br>
+                        <div class="ui-fluid">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-user" /> 
                                 </span> 
-                                <p:inputText  maxlength="50" id="name2" type="text" value="#{usuarioMB.usuario.apellido}" />
+                                <p:inputText 
+                                    placeholder="Apellidos" 
+                                    maxlength="50" 
+                                    id="name2" 
+                                    type="text" 
+                                    value="#{usuarioMB.usuario.apellido}" />
                             </div>
                         </div>                  
-
-                        <div class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="name3">Nombre de Usuario</p:outputLabel>
+                        <br></br>
+                        <div class="ui-fluid">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-user" /> 
                                 </span> 
-                                <p:inputText  maxlength="15" id="name3" type="text" value="#{usuarioMB.usuario.username}"/>
+                                <p:inputText 
+                                    placeholder="Nombre usuario" 
+                                    maxlength="15" id="name3" 
+                                    type="text"
+                                    value="#{usuarioMB.usuario.username}"/>
                             </div>
                         </div>
-
-                        <div class="p-col-12 p-lg-6 left-side">                            
-                            <p:outputLabel for="email1">Correo Electrónico</p:outputLabel>
+                        <br></br>
+                        <div class="ui-fluid">                            
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-envelope" /> 
                                 </span> 
-                                <p:inputText  maxlength="100" id="email1" type="text" value="#{usuarioMB.usuario.email}" />
-                            </div>                            
-
+                                <p:inputText 
+                                    placeholder="E-mail"  
+                                    maxlength="100" 
+                                    id="email1" 
+                                    type="text" 
+                                    value="#{usuarioMB.usuario.email}" />
+                            </div>           
                         </div>     
-
-
-
-                        <div  class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="password">Contraseña</p:outputLabel>
+                        <br></br>
+                        <div  class="ui-fluid">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-key" /> 
                                 </span> 
                                 <p:password 
                                     id="password"
+                                    placeholder="Contraseña"
                                     weakLabel="Débil"
                                     maxlength="15"
                                     validatorMessage="#{usuarioMB.PFW('Contraseñas no coinciden')}"
@@ -85,50 +111,48 @@
 
                             </div>
                         </div>
-
-                        <div  class="p-col-12 p-lg-6 left-side">
-                            <p:outputLabel for="password2">Confirmar contraseña</p:outputLabel>
+                        <br></br>
+                        <div  class="ui-fluid">
                             <div class="ui-inputgroup">
                                 <span class="ui-inputgroup-addon">
                                     <i class="pi pi-key" /> 
                                 </span> 
-                                <p:password  maxlength="15" id="password2"/>
+                                <p:password 
+                                    placeholder="Confirmar contraseña"
+                                    maxlength="15" id="password2"/>
 
                             </div>
                         </div>
 
-
-                        <div  class="p-col-12 p-lg-6 button-container">
-                            <br></br>
-                            <div class="ui-fluid">
-                                <p:commandButton
-                                    value="Crear cuenta" 
-                                    actionListener="#{usuarioMB.registrarUsuario()}"
-                                    styleClass="ui-button-raised" update="messages"
-
-                                    />
-
-                                <p:button  
-                                    value="Regresar"
-                                    outcome="/View/login_and_registro/login"
-                                    styleClass="ui-button-secondary"/>
-                            </div>
-                        </div>
-
-                        <div class="p-col-12 p-lg-6">
-                            <p:selectManyCheckbox layout="responsive" columns="1">
-                                <f:selectItem itemLabel="Aceptar terminos y condiciones" itemValue="1" />
+                        <div class="ui-fluid">
+                            <p:selectManyCheckbox 
+                                layout="responsive" columns="1">
+                                <f:selectItem
+                                    itemLabel="Aceptar terminos y condiciones" 
+                                    itemValue="1" />
                             </p:selectManyCheckbox>
                         </div>
 
+
+                        <div  class="ui-fluid" 
+                              style="padding-left: 100px">     
+                            <p:commandButton
+                                value="Crear cuenta" 
+                                actionListener="#{usuarioMB.registrarUsuario()}"
+                                styleClass="ui-button-raised" update="messages"
+                                />
+                        </div>
                     </div>
                 </div>
-
-
             </div>
-            <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
-            <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
+
+
+            <h:outputStylesheet name="css/primeicons.css" 
+                                library="manhattan-layout"/>
+            <h:outputStylesheet name="css/primeflex.min.css" 
+                                library="manhattan-layout"/>
             <h:outputStylesheet name="css/login_.css" />
+            <h:outputStylesheet name="css/registro.css" />
         </h:form>
     </h:body>
 </html>

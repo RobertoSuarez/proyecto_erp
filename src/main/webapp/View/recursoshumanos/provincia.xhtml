@@ -70,38 +70,49 @@
                 <h:form id="form" style="width: 100%;">
                     <div class="card crud-demo">
                         <p:growl id="messages" showDetail="true"/>
-                        <br/><br/><br/><br/>
+                        <br/><br/><br/>
                         <p:panel>
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <span style="font-weight: bold" icon="pi pi-table">PROVINCIAS</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{provinciaView.nuevo}"
-                                                     update=":form:manage-provincia-content" oncomplete="PF('manageProvinciaDialog').show()"
-                                                     styleClass="ui-button-success" style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-provincia-content"/>
-                                    </p:commandButton>
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Provincias </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
-                            <p:dataTable id="dt-provincias" widgetVar="dtProvincias" var="provincia" value="#{provinciaView.provincias}"
-                                         size="small" liveResize="true" styleClass="provincia-table" rowKey="#{provincia.id}"
-                                         paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                            <f:facet name="header">
 
-                                <p:column exportable="false" width="20%"></p:column>
-                                <p:column headerText="Provincia" sortBy="#{provincia.nombre}" filterBy="#{provincia.nombre}">
-                                    <h:outputText value="#{provincia.nombre}"/>
-                                </p:column>
-                                <p:column exportable="false" width="10%">
-                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-provincia-content"
-                                                     oncomplete="PF('manageProvinciaDialog').show()"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
-                                        <f:setPropertyActionListener value="#{provincia}" target="#{provinciaView.provincia}"/>
-                                        <p:resetInput target=":form:manage-provincia-content"/>
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column exportable="false" width="20%"></p:column>
-                            </p:dataTable>
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
+                                                 actionListener="#{provinciaView.nuevo}"
+                                                 update=":form:manage-provincia-content" oncomplete="PF('manageProvinciaDialog').show()">
+                                    <p:resetInput target=":form:manage-provincia-content"/>
+                                </p:commandButton>
+                            </f:facet>
+
+                            <br/>
+                            <div  style="width:700px;height: 500px;margin: 0 auto">
+                                <p:dataTable id="dt-provincias" widgetVar="dtProvincias" var="provincia" value="#{provinciaView.provincias}"
+                                             size="small" liveResize="true" styleClass="provincia-table" rowKey="#{provincia.id}"
+                                             style="width: 700px"
+                                             paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
+
+                                    <p:column exportable="false" width="20%"></p:column>
+                                    <p:column headerText="Provincia" style="font-size: 17px" filterBy="#{provincia.nombre}">
+
+                                        <h:outputText value="#{provincia.nombre}"/>
+
+                                    </p:column>
+                                    <p:column exportable="false" width="10%">
+                                        <p:commandButton icon="pi pi-pencil" update=":form:manage-provincia-content"
+                                                         oncomplete="PF('manageProvinciaDialog').show()"
+                                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
+                                            <f:setPropertyActionListener value="#{provincia}" target="#{provinciaView.provincia}"/>
+                                            <p:resetInput target=":form:manage-provincia-content"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column exportable="false" width="20%"></p:column>
+                                </p:dataTable>
+                            </div>
                             <p:dialog header="Provincia" showEffect="fade" modal="true"
                                       widgetVar="manageProvinciaDialog" responsive="true">
                                 <p:outputPanel id="manage-provincia-content" class="ui-fluid">
@@ -118,11 +129,10 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{provinciaView.enviar}"
-                                                     update="messages manage-provincia-content" styleClass="ui-button-success"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{provinciaView.enviar}"
+                                                     update="messages manage-provincia-content"
                                                      process="messages manage-provincia-content @this"/>
-                                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageProvinciaDialog').hide()"
-                                                     class="ui-button-secondary"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageProvinciaDialog').hide()" class="ui-button-danger"/>
                                 </f:facet>
                             </p:dialog>
                             <p:confirmDialog global="true" showEffect="fade" width="300">
