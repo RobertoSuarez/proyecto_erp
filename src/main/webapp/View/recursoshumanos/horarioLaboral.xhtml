@@ -168,15 +168,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      action="DetalleHorario" actionListener="#{horarioLaboralView.guardarHorario}"
-                                                     update="messages manage-horarioLaboral-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-horarioLaboral-content"
                                                      process="messages manage-horarioLaboral-content @this">
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageHorarioLaboralDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" 
+                                                     process="@none" class="ui-button-danger" 
                                                      resetValues="true" />
                                 </f:facet>
                             </p:dialog>
