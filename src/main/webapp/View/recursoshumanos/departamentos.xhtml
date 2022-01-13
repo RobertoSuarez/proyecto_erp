@@ -80,10 +80,12 @@
                                 </p:toolbarGroup>
                             </p:toolbar>
                             <f:facet name="header">
-
-                                <p:commandButton value="Nuevo" icon="pi pi-plus"
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                 ></p:commandButton>
+                                 <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{departamentoView.abrirNuevo}"
+                                             update=":form:manage-departamento-content" oncomplete="PF('manageDepartamentoDialog').show()"
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem">
+                                <p:resetInput target=":form:manage-departamento-content"/>
+                            </p:commandButton>
+                                
                             </f:facet>
                             <p:dataTable id="dt-departamentos" widgetVar="dtDepartamentos" 
                                          var="departamento" value="#{departamentoView.lista}"
