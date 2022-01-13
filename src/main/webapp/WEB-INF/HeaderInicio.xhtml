@@ -6,15 +6,15 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:pa="http://primefaces.org/manhattan">
 
-    <div>
-        <div class="" style="width: 100%; background: #fff; height: 70px;">
-            <div class="p-grid p-ai-center" style="width: 75%;">
-                <div class="p-col-3">
-                    <h:graphicImage name="images/erpLogo.png" width="65px"  style="left: 100px"/>
+    <div style="margin-bottom: 3%">
+        <div>
+            <div class="p-grid p-ai-center p-justify-between" style="width: 100%; background: #fff; margin: 0; box-shadow: 1px 3px 6px rgba(0,0,0,0.1)">
+                <div class="p-col-3" style="padding: 0">
+                    <h:graphicImage name="images/erpLogo.png" width="65px" style="margin-left:  3%"/>
                 </div>
-                <div class="p-col-9">
-                    <p:button outcome="/View/login_and_registro/login" value="Iniciar Sesión"  styleClass="p-mr-2 p-mb-2" style="left: 1000px"/>
-                    <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2" style="left: 1010px"/>
+                <div class="p-col-6" style="padding: 0; display: flex; margin-right: 3%; justify-content: flex-end;">
+                    <p:button outcome="/View/login_and_registro/login" value="Iniciar Sesión" style="margin: 0px 1%;"/>
+                    <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary" style="margin: 0px 1%;"/>
                 </div>
             </div>
         </div>
