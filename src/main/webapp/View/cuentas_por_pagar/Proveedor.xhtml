@@ -207,7 +207,7 @@
                                 actionListener="#{proveedorDAO.cargarEditar(provee.proveedor,provee)}"
                                 oncomplete="PF('manageProductDialogEdit').show()"
                                 class="ui-button-warning rounded-button" 
-                                styleClass="ui-button-info p-mr-2 p-mb-2"
+                                styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                 process="@this">
                                 <f:setPropertyActionListener 
                                     value="#{provee.proveedor}" 
@@ -451,7 +451,7 @@
                                              actionListener="#{proveedorDAO.insertar()}"
                                              onclick="PF('manageProductDialog').hide()"/>
                             <p:commandButton value="Cancelar" 
-                                             styleClass="ui-button-danger"
+                                             styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                              onclick="PF('manageProductDialog').hide()"                                                    
                                              oncomplete="location.reload()"/>
                         </f:facet>
@@ -679,7 +679,7 @@
                                              />
                             <p:commandButton value="Cancelar"
                                              onclick="PF('manageProductDialogEdit').hide()"  
-                                             styleClass="ui-button-danger"
+                                             styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                              />
                         </f:facet>
                     </p:dialog>
@@ -692,7 +692,7 @@
                         <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
                                          styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
                         <p:commandButton value="Cancelar" type="button" 
-                                         styleClass="ui-button-danger" onclick="PF('DHProveedor').hide()"  />
+                                         styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" onclick="PF('DHProveedor').hide()"  />
                     </p:confirmDialog> 
                 </h:form>
             </ui:define>

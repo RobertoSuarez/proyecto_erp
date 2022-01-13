@@ -110,7 +110,7 @@
                             <p:commandButton 
                                 icon="pi pi-pencil" 
                                 oncomplete="PF('manageAnticipoDialog').show()"
-                                styleClass="ui-button-info p-mr-2 p-mb-2" actionListener="#{anticipoMB.anticipo_editar(anticipo)}"
+                                styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" actionListener="#{anticipoMB.anticipo_editar(anticipo)}"
                                 update=":form:manage-anticipo-content">
 
                                 <p:resetInput target=":form:manage-anticipo-content"/>
@@ -254,7 +254,7 @@
 
                                 <p:commandButton 
                                     value="Cancelar" 
-                                    styleClass="ui-button-raised ui-button-danger"
+                                    styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                     onclick="PF('manageAnticipoDialog').hide()"/>
                             </div>
 

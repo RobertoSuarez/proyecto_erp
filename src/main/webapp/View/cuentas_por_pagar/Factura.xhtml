@@ -100,7 +100,7 @@
                                    <p:commandButton icon="pi pi-pencil" update=":form:outputedit"
                                                     oncomplete="PF('editFactura').show()"
                                                     
-                                                    styleClass="ui-button-info p-mr-2 p-mb-2"
+                                                    styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                     actionListener="#{facturaMB.cargarEditar(factura)}"
                                                     process="@this">
                                    </p:commandButton>
@@ -273,7 +273,8 @@
                                    <p:commandButton value="Guardar" styleClass="ui-button-success"
                                                     actionListener="#{facturaMB.insertarfactura}"
                                                     process="outputnuevo @this" update=":form:messages"/>
-                                   <p:commandButton value="Cancelar" styleClass="ui-button-danger"
+                                   <p:commandButton value="Cancelar" 
+                                                    styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                     onclick="PF('newFactura').hide()"
                                                     actionListener="#{facturaMB.reset('outputnuevo')}" 
                                                     process="@this"/>
@@ -442,7 +443,7 @@
                                    <p:commandButton value="Guardar" styleClass="ui-button-success"
                                                     actionListener="#{facturaMB.editarfactura}"
                                                     process="outputedit @this"/>
-                                   <p:commandButton value="Cancelar" styleClass="ui-button-danger"
+                                   <p:commandButton value="Cancelar" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                     onclick="PF('editFactura').hide()"
                                                     action="#{facturaMB.reset('outputedit')}" 
                                                     process="@this"/>
@@ -561,7 +562,7 @@
                                    <p:commandButton value="Guardar" styleClass="ui-button-success"
                                                     actionListener="#{facturaMB.revertirfactura}"
                                                     process="outputrev @this"/>
-                                   <p:commandButton value="Cancelar" styleClass="ui-button-danger"
+                                   <p:commandButton value="Cancelar" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                     onclick="PF('revFactura').hide()"
                                                     action="#{facturaMB.reset('outputrev')}" 
                                                     process="@this"/>
