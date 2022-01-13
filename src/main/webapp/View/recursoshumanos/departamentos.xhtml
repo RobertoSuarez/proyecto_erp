@@ -149,14 +149,13 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      actionListener="#{departamentoView.enviar}"
-                                                     update="messages manage-departamento-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-departamento-content"
                                                      process="messages manage-departamento-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageDepartamentoDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" 
+                                                     process="@none" class="ui-button-danger" 
                                                      resetValues="true" />
                                 </f:facet>
                             </p:dialog>

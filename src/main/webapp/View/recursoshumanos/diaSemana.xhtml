@@ -70,24 +70,26 @@
                 <h:form id="form" class="content-section implementation" style="width: 100%;">
                     <div class="card crud-demo">
                         <p:growl id="messages" showDetail="true"/>
-                        <br/><br/><br/>
+                        <br/><br/>
                         <p:panel>
+
                             <p:toolbar>
-                                <p:toolbarGroup>
-                                    <span style="font-weight: bold" 
-                                          icon="pi pi-table">Dias / Semanas</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                     actionListener="#{diaSemanaView.abrirNuevo}"
-                                                     update=":form:manage-diaSemana-content" 
-                                                     oncomplete="PF('manageDiaSemanaDialog').show()"
-                                                     styleClass="ui-button-success" 
-                                                     style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-diaSemana-content"/>
-                                    </p:commandButton>
+                                <p:toolbarGroup style="margin-top:2%">
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Días/Semanas </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 actionListener="#{diaSemanaView.abrirNuevo}"
+                                                 update=":form:manage-diaSemana-content" 
+                                                 oncomplete="PF('manageDiaSemanaDialog').show()">
+                                    <p:resetInput target=":form:manage-diaSemana-content"/>
+                                </p:commandButton>
+                            </f:facet>
                             <p:dataTable id="dt-diaSemanas" widgetVar="dtDiaSemanas" 
                                          var="diaSemana" value="#{diaSemanaView.lista}"
                                          reflow="true" size="small" liveResize="true" 
@@ -96,15 +98,14 @@
                                          rows="5" rowSelectMode="add" paginatorPosition="bottom">
                                 <p:column exportable="false" width="10%">
                                 </p:column>
-                                <p:column headerText="Nombre" sortBy="#{diaSemana.nombre}" 
-                                          filterBy="#{diaSemana.nombre}">
+                                <p:column headerText="Nombre">
                                     <h:outputText value="#{diaSemana.nombre}"/>
                                 </p:column>
-                                <p:column exportable="false" width="5%">
+                                <p:column exportable="false" width="10%">
                                     <p:commandButton icon="pi pi-pencil" 
                                                      update=":form:manage-diaSemana-content"
                                                      oncomplete="PF('manageDiaSemanaDialog').show()"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
                                         <f:setPropertyActionListener value="#{diaSemana}" 
                                                                      target="#{diaSemanaView.diaSemana}"/>
                                         <p:resetInput target=":form:manage-diaSemana-content"/>
@@ -129,14 +130,13 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      actionListener="#{diaSemanaView.enviar}"
-                                                     update="messages manage-diaSemana-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-diaSemana-content"
                                                      process="messages manage-diaSemana-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageDiaSemanaDialog').hide()"
-                                                     class="ui-button-secondary"/>
+                                                     class="ui-button-danger"/>
                                 </f:facet>
                             </p:dialog>
 

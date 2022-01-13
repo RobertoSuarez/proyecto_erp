@@ -138,14 +138,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarCargaFamiliar}"
-                                                     update="messages manage-cargaFamiliar-content" styleClass="ui-button-success"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{empleadoView.guardarCargaFamiliar}"
+                                                     update="messages manage-cargaFamiliar-content"
                                                      process="messages manage-cargaFamiliar-content @this">
                                         <p:confirm header="CONFIRMACIÓN" message="¿Seguro que deseas guardar los cambios?"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageCargaFamiliarDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" class="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Fondos de Reserva" minHeight="40" width="350" showEffect="fade" modal="true"
@@ -174,14 +174,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarReserva}"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{empleadoView.guardarReserva}"
                                                      update="messages manage-reserva-content" styleClass="ui-button-success"
                                                      process="messages manage-reserva-content @this">
                                         <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar los cambios?"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageReservaDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" class="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Multa" minHeight="40" width="350" showEffect="fade" modal="true"
@@ -206,14 +206,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarMulta}"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{empleadoView.guardarMulta}"
                                                      update="messages manage-multa-content" styleClass="ui-button-success"
                                                      process="messages manage-multa-content @this">
                                         <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar la multa?"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageMultaDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" class="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Amonestación" minHeight="40" width="350" showEffect="fade" modal="true"
@@ -242,14 +242,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarAmonestacion}"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{empleadoView.guardarAmonestacion}"
                                                      update="messages manage-amonestacion-content" styleClass="ui-button-success"
                                                      process="messages manage-amonestacion-content @this">
                                         <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar la amonestación?"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageAmonestacionDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" class="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Suspención" minHeight="40" width="350" showEffect="fade" modal="true"
@@ -275,14 +275,14 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{empleadoView.guardarSuspencion}"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{empleadoView.guardarSuspencion}"
                                                      update="messages manage-suspencion-content" styleClass="ui-button-success"
                                                      process="messages manage-suspencion-content @this">
                                         <p:confirm header="CONFIRMACIÓN" message="¿Estás seguro que deseas guardar la amonestación?"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:commandButton>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSuspencionDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" class="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Sueldos" showEffect="fade" modal="true"
@@ -294,21 +294,13 @@
                                                      rowKey="#{sueldo.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                                      rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
-                                            <p:column headerText="Monto" sortBy="#{sueldo.valor}">
+                                            <p:column headerText="Monto">
                                                 <h:outputText value="#{sueldo.valor}"/>
                                             </p:column>
-                                            <p:column headerText="Fecha" sortBy="#{sueldo.fechaActualizacion}">
+                                            <p:column headerText="Fecha">
                                                 <h:outputText value="#{empleadoView.darFormato(sueldo.fechaActualizacion)}"/>
                                             </p:column>
-                                            <p:column headerText="Estado" width="12%" field="estado" filterBy="#{sueldo.estado}"
-                                                      filterMatchMode="exact">
-                                                <f:facet name="filter">
-                                                    <p:selectOneMenu onchange="PF('dtSueldos').filter()">
-                                                        <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Actual" itemValue="#{true}" />
-                                                        <f:selectItem itemLabel="Antigüos" itemValue="#{false}" />
-                                                    </p:selectOneMenu>
-                                                </f:facet>
+                                            <p:column headerText="Estado" width="12%">
                                                 <h:outputText value="#{sueldo.estado ? 'Actual': 'Antigüo'}" style="width:100%"/>
                                             </p:column>
                                         </p:dataTable>
@@ -316,7 +308,7 @@
                                 </p:outputPanel>
                                 <f:facet name="footer">
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSueldosDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" class="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Multas" showEffect="fade" modal="true"
@@ -328,24 +320,16 @@
                                                      rowKey="#{multa.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                                      rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
-                                            <p:column headerText="Porcentaje" sortBy="#{multa.porcentaje}">
+                                            <p:column headerText="Porcentaje">
                                                 <h:outputText value="#{multa.porcentaje}"/>
                                             </p:column>
-                                            <p:column headerText="Monto" sortBy="#{multa.valor}">
+                                            <p:column headerText="Monto">
                                                 <h:outputText value="#{multa.valor}"/>
                                             </p:column>
-                                            <p:column headerText="Detalle" sortBy="#{multa.detalle}">
+                                            <p:column headerText="Detalle">
                                                 <h:outputText value="#{multa.detalle}"/>
                                             </p:column>
-                                            <p:column headerText="Estado" width="12%" field="estado" filterBy="#{multa.estado}"
-                                                      filterMatchMode="exact">
-                                                <f:facet name="filter">
-                                                    <p:selectOneMenu onchange="PF('dtMultas').filter()">
-                                                        <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="No pagadas" itemValue="#{true}" />
-                                                        <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
-                                                    </p:selectOneMenu>
-                                                </f:facet>
+                                            <p:column headerText="Estado" width="12%">
                                                 <h:outputText value="#{multa.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
                                             </p:column>
                                         </p:dataTable>
@@ -353,7 +337,7 @@
                                 </p:outputPanel>
                                 <f:facet name="footer">
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageMultasDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" styleClass="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Amonestaciones" showEffect="fade" modal="true"
@@ -366,21 +350,13 @@
                                                      rowKey="#{amonestaciones.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                                      rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
-                                            <p:column headerText="Monto" sortBy="#{amonestacion.valor}">
+                                            <p:column headerText="Monto">
                                                 <h:outputText value="#{amonestacion.valor}"/>
                                             </p:column>
-                                            <p:column headerText="Detalle" sortBy="#{amonestacion.detalle}">
+                                            <p:column headerText="Detalle">
                                                 <h:outputText value="#{amonestacion.detalle}"/>
                                             </p:column>
-                                            <p:column headerText="Estado" width="12%" field="estado" filterBy="#{amonestacion.estado}"
-                                                      filterMatchMode="exact">
-                                                <f:facet name="filter">
-                                                    <p:selectOneMenu onchange="PF('dtAmonestaciones').filter()">
-                                                        <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="No pagadas" itemValue="#{true}" />
-                                                        <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
-                                                    </p:selectOneMenu>
-                                                </f:facet>
+                                            <p:column headerText="Estado" width="12%">
                                                 <h:outputText value="#{amonestacion.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
                                             </p:column>
                                         </p:dataTable>
@@ -388,7 +364,7 @@
                                 </p:outputPanel>
                                 <f:facet name="footer">
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageAmonestacionesDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" styleClass="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:dialog header="Suspenciones" showEffect="fade" modal="true"
@@ -401,24 +377,16 @@
                                                      rowKey="#{suspenciones.id}" paginator="true" rowsPerPageTemplate="3,5,10,{ShowAll|'All'}"
                                                      rows="10" rowSelectMode="add" paginatorPosition="bottom">
 
-                                            <p:column headerText="Días #" sortBy="#{suspencion.cantidadDias}">
+                                            <p:column headerText="Días #">
                                                 <h:outputText value="#{suspencion.cantidadDias}"/>
                                             </p:column>
-                                            <p:column headerText="Monto" sortBy="#{suspencion.valor}">
+                                            <p:column headerText="Monto">
                                                 <h:outputText value="#{suspencion.valor}"/>
                                             </p:column>
-                                            <p:column headerText="Detalle" sortBy="#{suspencion.detalle}">
+                                            <p:column headerText="Detalle">
                                                 <h:outputText value="#{suspencion.detalle}"/>
                                             </p:column>
-                                            <p:column headerText="Estado" width="12%" field="estado" filterBy="#{suspencion.estado}"
-                                                      filterMatchMode="exact">
-                                                <f:facet name="filter">
-                                                    <p:selectOneMenu onchange="PF('dtSuspenciones').filter()">
-                                                        <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="No pagadas" itemValue="#{true}" />
-                                                        <f:selectItem itemLabel="Pagados" itemValue="#{false}" />
-                                                    </p:selectOneMenu>
-                                                </f:facet>
+                                            <p:column headerText="Estado" width="12%">
                                                 <h:outputText value="#{suspencion.estado ? 'Debe': 'Pagado'}" style="width:100%"/>
                                             </p:column>
                                         </p:dataTable>
@@ -426,7 +394,7 @@
                                 </p:outputPanel>
                                 <f:facet name="footer">
                                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageSuspencionesDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" resetValues="true" />
+                                                     process="@none" styleClass="ui-button-danger" resetValues="true" />
                                 </f:facet>
                             </p:dialog>
                             <p:toolbar>
@@ -434,9 +402,9 @@
                                     <span style="font-weight: bold" icon="pi pi-table">#{empleadoView.sueldo.empleado.nombreCompleto()}</span>
                                 </p:toolbarGroup>
                                 <p:toolbarGroup align="right">
-                                    <p:commandButton value="Editar" icon="pi pi-user-edit" action="EditarEmpleado"
+                                    <p:commandButton value="Editar" icon="pi pi-pencil" action="EditarEmpleado"
                                                      actionListener="#{empleadoView.verEmpleado}" process="@this"
-                                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem">
                                     </p:commandButton>
                                     <p:linkButton value="Volver a la lista" icon="pi pi-list" outcome="ListaEmpleado"
                                                   styleClass="ui-button-success" style="margin-right: .5rem"/>
