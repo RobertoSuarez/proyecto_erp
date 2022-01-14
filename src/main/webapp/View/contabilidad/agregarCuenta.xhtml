@@ -145,11 +145,13 @@
                                                        itemLabel="#{grupo.nombre}" 
                                                        itemValue="#{grupo.codigo}"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    <p:commandButton 
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarGrupo()}"
                                                      update="messages, dialog-form-grupo"
-                                                     rendered="#{planCuentas.action eq 'create'}">
+                                                     rendered="#{planCuentas.action eq 'create'}"
+                                                     >
                                     </p:commandButton>
                                 </div>
                             </div>
