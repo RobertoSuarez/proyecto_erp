@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -33,6 +34,19 @@ public class UsuarioController implements Serializable {
         usuario = new Usuario();
         usuarioDAO = new UsuarioDAO();
         listaUsuario = new ArrayList<>();
+        System.out.println("########## Pasa algo");
+    }
+
+    @PostConstruct
+    public void init() {
+        //httpSession.removeAttribute("username");
+        System.out.println("########## Pasa algo");
+        try {
+            Usuario userResult = (Usuario) httpSession.getAttribute("username");
+            System.out.println("########## " + userResult.getNombre());
+        } catch (Exception e) {
+            System.out.println("########## Error al traer los datos");
+        }
     }
 
     public Usuario getUsuario() {
@@ -75,7 +89,7 @@ public class UsuarioController implements Serializable {
             }/* else if (usuario.isHabilitado() == false) {
                 PFW("Aceptar los terminos y condiciones");
 
-            } */else if (matcher.find() == false) {
+            } */ else if (matcher.find() == false) {
                 PFW("Ingrese un email válido");
             } else {
                 this.usuarioDAO.registrarUsuario(usuario);
@@ -107,7 +121,7 @@ public class UsuarioController implements Serializable {
 
             } else {
                 PFE(listaUsuario.get(0).getMsj());
-                httpSession.setAttribute("username", listaUsuario);
+                httpSession.setAttribute("username", listaUsuario.get(0));
                 return "/View/Global/Main?faces-redirect=true";
             }
 
@@ -129,6 +143,5 @@ public class UsuarioController implements Serializable {
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
 
     }
-
 
 }
