@@ -9,12 +9,7 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="title">Orden de Producción</ui:define>
             <ui:define name="content">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Solicitud orden de producción" url="solicitudOrden.xhtml"/>
-                    <p:menuitem value="Orden de Trabajo" url="#"/>
-                    <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
-                    <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
-                </p:menubar>
+                <ui:include src="subheaderProduccion.xhtml"/>
                 <h:form id="form" style="margin-top: 4%;">
                     <div class="card">
                         <p:toolbar>

@@ -11,11 +11,7 @@
             <ui:define name="title">Fórmula</ui:define>
 
             <ui:define name="content">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Orden de Producción" url="listaOrdenProduccion.xhtml"/>
-                    <p:menuitem value="Fórmula" url="#"/>
-                    <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
-                </p:menubar>
+                <ui:include src="subheaderProduccion.xhtml"/>
                 <h:form id="form" style="margin-top: 4%;">
                     <div class="card">
                         <!-- Boton Crear Formula -->
@@ -38,29 +34,19 @@
 
                             <p:outputPanel class="ui-fluid">
                                 <p:outputPanel>
-
-                                    <p:toolbar>
-                                        <p:toolbarGroup>
-                                            <div class="p-col-12 p-md-2" style="margin-left: 6%">
-                                                <p:outputLabel value="Nombre" for="@next"/>
-                                            </div>
-                                            <div class="p-col-12 p-md-6">
-                                                <p:autoComplete id="acSimple" value=""
-                                                                completeMethod="#" readonly="true"/>
-                                            </div>
-                                            <div class="p-col-12 p-md-3">
-                                                <p:commandButton style="margin-right: 6px;" value="Buscar" 
-                                                                 styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('producto').show()">
-                                                </p:commandButton>
-                                            </div>
-                                        </p:toolbarGroup>
-                                    </p:toolbar>
-                                    <br/>
                                     <div class="p-grid p-justify-around">
                                         <div class="p-col-6 p-md-12 p-lg-5">
                                             <div class="p-grid">
-
-
+                                                <div class="p-col-6">
+                                                    <p:outputLabel value="Nombre" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+                                                <div class="p-col-6">
+                                                    <p:outputLabel value="." style="color: white"/>
+                                                    <p:commandButton style="margin-right: 6px;" value="Buscar" 
+                                                                     styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('producto').show()">
+                                                    </p:commandButton>
+                                                </div>
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Descripción:"></p:outputLabel>
                                                     <p:inputText disabled="#"
@@ -73,11 +59,6 @@
                                                                  value=""
                                                                  maxlength="24"></p:inputText>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- Cuadros de texto de la derecha -->
-                                        <div class="p-col-6 p-md-12 p-lg-5">
-                                            <div class="p-grid">
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Tipo:"></p:outputLabel>
                                                     <p:inputText value="" readonly="true"
@@ -90,18 +71,42 @@
                                                                  disabled="#">
                                                     </p:inputText>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <!-- Cuadros de texto de la derecha -->
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Producción tipo costo:"></p:outputLabel>
+                                                    <p:selectOneRadio id="console" value="#{radioView.console}" unselectable="true">
+                                                        <f:selectItem itemLabel="Detallado" itemValue="Option1"/>
+                                                        <f:selectItem itemLabel="Estandar" itemValue="Option2"/>
+                                                    </p:selectOneRadio>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="MOD"></p:outputLabel>
+                                                    <p:inputText value="" readonly="true"
+                                                                 disabled="#">
+                                                    </p:inputText>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="CIF:"></p:outputLabel>
+                                                    <p:inputText disabled="#"
+                                                                 value=""
+                                                                 maxlength="24"></p:inputText>
+                                                </div>
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Proceso Principal:"></p:outputLabel>
                                                     <p:selectOneMenu id="procesoPrincipal" 
-                                                                                 value="" 
-                                                                                 class=""
-                                                                                 required="true"
-                                                                                 requiredMessage="Seleccionar Proceso">                            
-                                                                    <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
-                                                                    <f:selectItem itemLabel="Proceso Princiapal 1" itemValue="Prin 1"/>
-                                                                    <f:selectItem itemLabel="Proceso Princiapal 2" itemValue="Prin 2"/>
-                                                                </p:selectOneMenu>
-                                                    
+                                                                     value="" 
+                                                                     class=""
+                                                                     required="true"
+                                                                     requiredMessage="Seleccionar Proceso">                            
+                                                        <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
+                                                        <f:selectItem itemLabel="Proceso Princiapal 1" itemValue="Prin 1"/>
+                                                        <f:selectItem itemLabel="Proceso Princiapal 2" itemValue="Prin 2"/>
+                                                    </p:selectOneMenu>
+
                                                 </div>
                                             </div>
                                         </div>

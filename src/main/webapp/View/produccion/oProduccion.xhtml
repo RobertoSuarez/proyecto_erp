@@ -19,11 +19,13 @@
                                                      styleClass="ui-button-secondary"
                                                      icon="pi pi-book" oncomplete="PF('materiaprima').show()">
                                     </p:commandButton>
-                                    <!--
-                                    <p:button style="margin-right: 6px;" value="Extracción detallada de materiales" 
-                                              styleClass="ui-button-secondary" icon="pi pi-search">
-                                    </p:button>
-                                    -->
+
+
+                                    <p:commandButton style="margin-right: 6px;" value="Detalle Producción" 
+                                                     styleClass="ui-button-secondary"
+                                                     icon="pi pi-book" oncomplete="PF('detalleProduccion').show()">
+                                    </p:commandButton>
+
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -97,6 +99,141 @@
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
+                        <p:dialog header="Detalle Costos de producción" showEffect="fade" modal="true"
+                                  widgetVar="detalleProduccion" responsive="true" width="90%"
+                                  draggable="false" height="550">
+                            <p:toolbar>
+
+                                <p:toolbarGroup>
+
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Materia Prima</span>
+
+                                    </div>
+                                    <p:outputPanel class="ui-fluid">
+
+                                        <p:outputPanel>
+
+                                            <div class="p-grid p-justify-around">
+                                                <p:dataTable editable="true" reflow="true"
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="">
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Precio" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+                                                    <p:column headerText="Cantidad Requerida" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+                                                    <p:column headerText="Total" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+
+                                                </p:dataTable>
+                                            </div>
+
+
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+
+
+                            <p:toolbar style="margin-top: 2em">
+                                <p:toolbarGroup>
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Costos directos e indirectos</span>
+
+                                    </div>
+
+
+                                    <p:outputPanel class="ui-fluid">
+
+                                        <p:outputPanel>
+
+                                            <div class="p-grid p-justify-around">
+                                                <p:dataTable editable="true" reflow="true"
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="">
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Tiempo" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+                                                    <p:column headerText="Costo Directo" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+                                                    <p:column headerText="Costo Indirecto" filterStyle="display : none">
+                                                        <h:outputText value="#" />
+                                                    </p:column>
+
+                                                </p:dataTable>
+                                            </div>
+
+
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+
+
+
+                            <p:outputPanel class="ui-fluid" style="margin-top: 2em">
+
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-6 p-md-12 p-lg-12">
+                                            <div class="p-grid">
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Materia Prima" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Costo directo" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Costo Indirecto" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Costo Total" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+
+                                            </div>
+                                            <div class="p-grid">
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Producto Terminado" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Cantidad Producida" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Costo Unitario" for="@next"/>
+                                                    <p:inputText/>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </p:outputPanel>
+                            </p:outputPanel>
+
+
+
+                        </p:dialog>
                         <p:dialog header="Consumo de materia prima" showEffect="fade" modal="true"
                                   widgetVar="materiaprima" responsive="true" width="80%"
                                   draggable="false" height="550">
@@ -105,11 +242,11 @@
                                 <p:outputPanel>
                                     <div class="p-grid p-justify-start">
                                         <div class="p-field p-col-12 p-md-3">
-                                            <p:button style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle"/>
+                                            <p:commandButton style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle" oncomplete="PF('aggproducto').show()"/>
 
                                         </div>
 
-                                        <div class="p-col-11">
+                                        <div class="p-col-14">
                                             <div class="p-grid">
 
                                                 <div class="p-col-12">
@@ -144,7 +281,7 @@
                                                             <p:commandButton icon="pi pi-times" action="#"  
                                                                              styleClass="edit-button rounded-button ui-button-danger" process="@this"
                                                                              oncomplete="">
-                                                                
+
                                                             </p:commandButton>
                                                             <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
@@ -153,6 +290,74 @@
                                             </div>
                                             <!-- Botones Guardar/Cerrar -->
 
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+                        <p:dialog header="Seleccionar Producto" showEffect="fade" modal="true"
+                                  widgetVar="aggproducto" responsive="true" width="60%"
+                                  draggable="false" height="500">
+
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-1 p-md-1 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Materia Prima:"></p:outputLabel>
+                                                    <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable editable="true" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="">
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Código" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Unidad Medida" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                        <p:column headerText="Existencias" filterStyle="display : none">
+                                                            <h:outputText value="#" />
+                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Confirmar"  
+                                                                     icon="pi pi-check" 
+                                                                     disabled="#" styleClass="ui-button-primary"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('materiaPrima').hide()"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </p:outputPanel>

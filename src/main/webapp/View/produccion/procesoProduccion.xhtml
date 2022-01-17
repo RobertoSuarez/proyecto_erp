@@ -9,11 +9,7 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="title">Procesos de producción</ui:define>
             <ui:define name="content">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Orden de Producción" url="listaOrdenProduccion.xhtml"/>
-                    <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
-                    <p:menuitem value="Procesos" url="#"/>
-                </p:menubar>
+                <ui:include src="subheaderProduccion.xhtml"/>
                 <h:form id="form" style="margin-top: 4%;">
                     <div class="card">
 
@@ -28,13 +24,13 @@
                                                      oncomplete="PF('nuevoProceso').show()"
                                                      style=" margin-right: .6rem">
                                     </p:commandButton>
-                                    <!--Boton Nuevo SubProceso -->
+                                    <!--Boton Nuevo SubProceso 
                                     <p:button  value="Nuevo Subproceso"
                                                styleClass="ui-button-primary"
                                                icon="pi pi-plus" 
                                                style="margin-right: 6px;"
                                               outcome="NuevoSubProceso.xhtml">
-                                    </p:button>
+                                    </p:button>-->
                                     <!-- Boton Agregar Costo -->
                                     <p:commandButton value="Agregar Costos" 
                                                      styleClass="ui-button-primary"
