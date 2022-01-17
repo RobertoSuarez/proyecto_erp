@@ -145,11 +145,13 @@
                                                        itemLabel="#{grupo.nombre}" 
                                                        itemValue="#{grupo.codigo}"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    <p:commandButton 
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarGrupo()}"
                                                      update="messages, dialog-form-grupo"
-                                                     rendered="#{planCuentas.action eq 'create'}">
+                                                     rendered="#{planCuentas.action eq 'create'}"
+                                                     >
                                     </p:commandButton>
                                 </div>
                             </div>
@@ -173,7 +175,7 @@
                                                        itemLabel="#{subgrupo.nombre}" 
                                                        itemValue="#{subgrupo.id}"/> <!-- codigo -->
                                     </p:selectOneMenu>
-                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarSubGrupo()}"
                                                      update="messages, dialog-form-subgrupo"
@@ -201,7 +203,7 @@
                                                        itemLabel="#{cuenta.nombre}" 
                                                        itemValue="#{cuenta.idcuenta}"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarCuenta()}"
                                                      update="messages, dialog-form-cuenta"

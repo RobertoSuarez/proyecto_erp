@@ -70,47 +70,43 @@
                 <h:form id="form" style="width: 100%; margin-left: -23px;">
                     <div class="card crud-demo">
                         <p:growl id="messages" showDetail="true"/>
-                        <br/><br/><br/><br/>
+                        <br/><br/><br/>
                         <p:panel>
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <span style="font-weight: bold" icon="pi pi-table">CIUDADES</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{ciudadView.abrirNuevo}"
-                                                     update=":form:manage-ciudad-content" oncomplete="PF('manageCiudadDialog').show()"
-                                                     styleClass="ui-button-success" style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-ciudad-content"/>
-                                    </p:commandButton>
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Ciudades </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
+                                                 actionListener="#{ciudadView.abrirNuevo}"
+                                                 update=":form:manage-ciudad-content" oncomplete="PF('manageCiudadDialog').show()">
+                                    <p:resetInput target=":form:manage-ciudad-content"/>
+                                </p:commandButton>
+                            </f:facet>
                             <p:dataTable id="dt-ciudades" widgetVar="dtCiudades" var="ciudad" value="#{ciudadView.ciudades}"
                                          reflow="true" size="small" liveResize="true" styleClass="ciudad-table"
                                          rowKey="#{ciudad.id}" paginator="true"
                                          rows="5" rowSelectMode="add" paginatorPosition="bottom">
 
 
-                                <p:column headerText="Ciudad" sortBy="#{ciudad.nombre}" filterBy="#{ciudad.nombre}">
+                                <p:column headerText="Ciudad">
                                     <h:outputText value="#{ciudad.nombre}"/>
                                 </p:column>
-                                <p:column field="nombre" filterBy="#{ciudad.provincia.nombre}" headerText="Provincia" sortBy="#{ciudad.provincia.nombre}"
-                                          filterMatchMode="exact">
-                                    <f:facet name="filter">
-                                        <p:selectOneMenu onchange="PF('dtCiudades').filter()">
-                                            <f:selectItem itemLabel="Todo" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItems value="#{ciudadView.filtroProvincias}" var="provincia"
-                                                           itemLabel="#{provincia.nombre}" itemValue="#{provincia.nombre}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
+                                <p:column  headerText="Provincia">
                                     <h:outputText value="#{ciudad.provincia.nombre}"/>
                                 </p:column>
-                                <p:column headerText="Detalle" width="45%" filterBy="#{ciudad.detalle}">
+                                <p:column headerText="Detalle" width="45%">
                                     <h:outputText value="#{ciudad.detalle}"/>
                                 </p:column>
                                 <p:column exportable="false" width="5%">
                                     <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content" 
                                                      oncomplete="PF('manageCiudadDialog').show()" actionListener="#{ciudadView.editar(ciudad.id)}"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
                                         <f:setPropertyActionListener value="#{ciudad}" target="#{ciudadView.ciudad}"/>
                                         <p:resetInput target=":form:manage-ciudad-content"/>
                                     </p:commandButton>
@@ -145,11 +141,11 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" actionListener="#{ciudadView.enviar}"
-                                                     update="messages manage-ciudad-content" styleClass="ui-button-success"
+                                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{ciudadView.enviar}"
+                                                     update="messages manage-ciudad-content"
                                                      process="messages manage-ciudad-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{ciudadView.cancelar()}"
-                                                     onclick="PF('manageCiudadDialog').hide()" class="ui-button-secondary"/>
+                                                     onclick="PF('manageCiudadDialog').hide()" class="ui-button-danger"/>
                                 </f:facet>
                             </p:dialog>
                             <p:confirmDialog global="true" showEffect="fade" width="300">

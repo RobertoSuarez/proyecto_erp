@@ -70,25 +70,25 @@
                 <h:form id="form">
                     <div class="card crud-demo">
                         <p:growl id="messages" showDetail="true"/>
-                        <br/><br/><br/><br/>
+                        <br/><br/>
                         <p:panel>
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <span style="font-weight: bold" 
-                                          icon="pi pi-table">PUESTOS LABORALES</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" 
-                                                     icon="pi pi-plus" 
-                                                     actionListener="#{puestoLaboralView.abrirNuevo}"
-                                                     update=":form:manage-puestoLaboral-content" 
-                                                     oncomplete="PF('managePuestoLaboralDialog').show()"
-                                                     styleClass="ui-button-success" 
-                                                     style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-puestoLaboral-content"/>
-                                    </p:commandButton>
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Puestos Laborales </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 actionListener="#{puestoLaboralView.abrirNuevo}"
+                                                 update=":form:manage-puestoLaboral-content" 
+                                                 oncomplete="PF('managePuestoLaboralDialog').show()" >
+                                    <p:resetInput target=":form:manage-puestoLaboral-content"/>
+                                </p:commandButton>
+                            </f:facet>
                             <p:dataTable id="dt-puestoLaborals" 
                                          widgetVar="dtPuestoLaborals" 
                                          var="puestoLaboral" value="#{puestoLaboralView.lista}"
@@ -98,51 +98,36 @@
                                          rows="5" rowSelectMode="add" 
                                          paginatorPosition="bottom">
 
-                                <p:column headerText="Departamento" 
-                                          sortBy="#{puestoLaboral.departamento.nombre}"
-                                          filterBy="#{puestoLaboral.departamento.nombre}">
+                                <p:column headerText="Departamento">
                                     <h:outputText value="#{puestoLaboral.departamento.nombre}"/>
                                 </p:column>
-                                <p:column headerText="Cargo" sortBy="#{puestoLaboral.cargo.nombre}"
-                                          filterBy="#{puestoLaboral.cargo.nombre}">
+                                <p:column headerText="Cargo">
                                     <h:outputText value="#{puestoLaboral.cargo.nombre}"/>
                                 </p:column>
-                                <p:column headerText="Creado" width="10%" 
-                                          sortBy="#{puestoLaboral.fecha_creacion}">
+                                <p:column headerText="Creado" width="10%">
                                     <h:outputText 
                                         value="#{puestoLaboralView.darFormato(puestoLaboral.fecha_creacion)}"/>
                                 </p:column>
                                 <p:column headerText="Descripción" width="30%">
                                     <h:outputText value="#{puestoLaboral.descripcion}"/>
                                 </p:column>
-                                <p:column headerText="Estado" width="13%" 
-                                          field="estado" filterBy="#{puestoLaboral.estado}"
-                                          filterMatchMode="exact">
-                                    <f:facet name="filter">
-                                        <p:selectOneMenu onchange="PF('dtPuestoLaborals').filter()">
-                                            <f:selectItem itemLabel="Todo" 
-                                                          itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItem itemLabel="Habilitados" itemValue="#{true}" />
-                                            <f:selectItem itemLabel="Deshabilitados" 
-                                                          itemValue="#{false}" />
-                                        </p:selectOneMenu>
-                                    </f:facet>
+                                <p:column headerText="Estado" width="13%">
                                     <h:outputText id="inputestado" 
                                                   value="#{puestoLaboral.estado ? 'Habilitado': 'Deshabilitado'}"/>
                                 </p:column>
                                 <p:column exportable="false" width="10%">
-                                    <p:commandButton icon="pi pi-pencil" 
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                     icon="pi pi-pencil" 
                                                      update=":form:manage-puestoLaboral-content"
-                                                     oncomplete="PF('managePuestoLaboralDialog').show()"
-                                                     styleClass="ui-button-info p-mr-2 p-mb-2" process="@this">
+                                                     oncomplete="PF('managePuestoLaboralDialog').show()" process="@this">
                                         <p:ajax listener="#{puestoLaboralView.abrirEditar(puestoLaboral.cargo.id, puestoLaboral.departamento.id)}"
                                                 update=":form:manage-puestoLaboral-content" />
                                         <f:setPropertyActionListener value="#{puestoLaboral}" 
                                                                      target="#{puestoLaboralView.puestoLaboral}"/>
                                         <p:resetInput target=":form:manage-puestoLaboral-content"/>
                                     </p:commandButton>
-                                    <p:commandButton icon="pi pi-#{puestoLaboral.estado? 'times' : 'check'}"
-                                                     styleClass="ui-button-danger" 
+                                    <p:commandButton class="ui-button-danger rounded-button"
+                                                     icon="pi pi-pi pi-trash" 
                                                      actionListener="#{puestoLaboralView.cambiarEstado(puestoLaboral)}"
                                                      update="dt-puestoLaborals" 
                                                      process="dt-puestoLaborals @this">
@@ -196,14 +181,13 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      actionListener="#{puestoLaboralView.enviar}"
-                                                     update="messages manage-puestoLaboral-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-puestoLaboral-content"
                                                      process="messages manage-puestoLaboral-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('managePuestoLaboralDialog').hide()"
-                                                     process="@none" styleClass="p-mr-2" 
+                                                     process="@none" class="ui-button-danger" 
                                                      resetValues="true" />
                                 </f:facet>
                             </p:dialog>

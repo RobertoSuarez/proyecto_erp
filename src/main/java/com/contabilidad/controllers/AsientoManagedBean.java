@@ -7,6 +7,7 @@ import com.contabilidad.models.Asiento;
 import com.contabilidad.models.Diario;
 import com.contabilidad.models.Movimiento;
 import com.contabilidad.models.SubCuenta;
+import com.seguridad.models.Usuario;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,9 +16,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
@@ -40,6 +43,10 @@ public class AsientoManagedBean implements Serializable {
     private double totalHaber;
     List<Diario> diarios = new ArrayList<>();
 
+    private FacesContext facesContext = FacesContext.getCurrentInstance();
+    HttpSession httpSession = (HttpSession) facesContext.getExternalContext().getSession(true);
+    private ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+
     @PostConstruct
     public void main() {
         asientoDAO = new AsientoDAO();
@@ -48,6 +55,19 @@ public class AsientoManagedBean implements Serializable {
         asientos = new ArrayList<>();
         currentAsiento = new Asiento();
         loadElements();
+
+        System.out.println("########## Pasa algo");
+        try {
+            Usuario userResult = (Usuario) httpSession.getAttribute("username");
+            System.out.println("########## " + userResult.getNombre());
+        } catch (Exception e) {
+            try {
+                ec.redirect("/proyecto_erp");
+            } catch (Exception ex) {
+                
+            }
+            System.out.println("########## Error al traer los datos");
+        }
     }
 
     @Asynchronous

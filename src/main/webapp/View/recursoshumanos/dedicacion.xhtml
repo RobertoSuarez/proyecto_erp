@@ -74,16 +74,21 @@
                         <p:panel>
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <span style="font-weight: bold" icon="pi pi-table">DEDICACION DE LA EMPRESA</span>
-                                </p:toolbarGroup>
-                                <p:toolbarGroup align="right">
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{dedicacionView.abrirNuevo}"
-                                                     update=":form:manage-dedicacion-content" oncomplete="PF('manageDedicacionDialog').show()"
-                                                     styleClass="ui-button-success" style="margin-right: .5rem">
-                                        <p:resetInput target=":form:manage-dedicacion-content"/>
-                                    </p:commandButton>
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px" > Dedicación de la Empresa </span>
+                                    </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
+                            <f:facet name="header">
+
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 actionListener="#{dedicacionView.abrirNuevo}"
+                                                 update=":form:manage-dedicacion-content" 
+                                                 oncomplete="PF('manageDedicacionDialog').show()" >
+                                    <p:resetInput target=":form:manage-dedicacion-content"/>
+                                </p:commandButton>
+                            </f:facet>
                             <p:dataTable id="dt-dedicaciones" widgetVar="dtDedicaciones" 
                                          var="dedicacion" value="#{dedicacionView.lista}"
                                          reflow="true" size="small" liveResize="true" styleClass="dedicacion-table"
@@ -101,7 +106,7 @@
                                 <p:column exportable="false" width="5%">
                                     <p:commandButton icon="pi pi-pencil" update=":form:manage-dedicacion-content"
                                                      oncomplete="PF('manageDedicacionDialog').show()"
-                                                     styleClass="edit-button rounded-button ui-button-success" 
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                      process="@this">
                                         <f:setPropertyActionListener value="#{dedicacion}" target="#{dedicacionView.dedicacion}"/>
                                         <p:resetInput target=":form:manage-dedicacion-content"/>
@@ -137,14 +142,13 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      actionListener="#{dedicacionView.enviar}"
                                                      update="manage-dedicacion-content" 
-                                                     styleClass="ui-button-success" 
                                                      process="manage-dedicacion-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageDedicacionDialog').hide()"
-                                                     class="ui-button-secondary"/>
+                                                     class="ui-button-danger"/>
                                 </f:facet>
                             </p:dialog>
                             <p:confirmDialog global="true" showEffect="fade" width="300">

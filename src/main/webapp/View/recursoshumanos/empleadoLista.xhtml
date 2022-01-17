@@ -80,15 +80,14 @@
                     <p:panel>
                         <p:toolbar>
                             <p:toolbarGroup>
-                                    <span style="font-weight: bold; font-size: 25px" > Empleados </span>
-                                
+                                <span style="font-weight: bold; font-size: 25px" > Empleados </span>
+
                             </p:toolbarGroup>
                         </p:toolbar>
                         <f:facet name="header">
+                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" outcome="CrearEmpleado"
+                                          class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem"/>
 
-                            <p:commandButton value="Nuevo Empleado" icon="pi pi-plus"
-                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                             ></p:commandButton>
                         </f:facet>
                         <p:dataTable id="dt-empleados" widgetVar="dtEmpleados" 
                                      var="empleado" value="#{empleadoView.lista}"
@@ -108,9 +107,9 @@
                             <p:column headerText="Nombres">
                                 <h:outputText value="#{empleado.nombres}"/>
                             </p:column>
-                            
-                            
-                            
+
+
+
                             <p:column headerText="Ingreso" width="9%">
                                 <h:outputText value="#{empleadoView.darFormato(empleado.fechaIngreso)}"/>
                             </p:column>

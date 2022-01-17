@@ -20,19 +20,17 @@
         <ui:insert name="head"/>
     </h:head>
 
-    <h:body styleClass="#{guestPreferences.inputStyleClass}">
-        <div class="layout-wrapper #{guestPreferences.layoutMode} layout-#{guestPreferences.menuColor}">
+    <h:body styleClass="">
+        <div class="layout-wrapper ">
             <div class="layout-main">
-                <ui:include src="./HeaderInicio.xhtml"/>
+                <ui:include src="./HeaderInicio.xhtml"></ui:include>
                 <div class="layout-content">
                     <ui:insert name="content">
                     </ui:insert>
                 </div>
                 <ui:include src="./footer.xhtml"/>
-                
                 <div class="layout-main-mask"></div>
             </div>
-
         </div>
 
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">

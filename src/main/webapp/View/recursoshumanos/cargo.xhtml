@@ -135,14 +135,13 @@
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Guardar" icon="pi pi-save" 
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
                                                      actionListener="#{cargoView.enviar}"
-                                                     update="messages manage-cargo-content" 
-                                                     styleClass="ui-button-success"
+                                                     update="messages manage-cargo-content"
                                                      process="messages manage-cargo-content @this"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('manageCargoDialog').hide()"
-                                                     class="ui-button-secondary"/>
+                                                     class="ui-button-danger"/>
                                 </f:facet>
                             </p:dialog>
 
