@@ -67,8 +67,9 @@ public class UsuarioDAO {
     ResultSet result;
     // RETURNS TABLE(code integer, reslt character varying, iduser integer, name character varying, surname character varying, usrnm character varying, pssword character varying, mail character varying) 
 
-    public List<Usuario> iniciarSesion(Usuario u) {
-        lsitaUsuarios = new ArrayList<>();
+    public Usuario iniciarSesion(Usuario u) {
+        
+        Usuario usuarioAcceso = null;
         
         String sentencia = "";
         if (conexion.isEstado()) {
@@ -78,7 +79,7 @@ public class UsuarioDAO {
                 
                 while (result.next()) {
                     
-                    lsitaUsuarios.add(new Usuario(result.getInt("code"),
+                    usuarioAcceso = new Usuario(result.getInt("code"),
                             result.getString("reslt"),
                             result.getInt("iduser"),
                             result.getString("name"),
@@ -86,9 +87,8 @@ public class UsuarioDAO {
                             result.getString("usrnm"),
                             result.getString("pswrd"),
                             result.getString("mail")
-                    ));
+                    );
 
-                    // System.out.print(lsitaUsuarios.toString());
                 }
                 
             } catch (SQLException e) {
@@ -96,13 +96,14 @@ public class UsuarioDAO {
             } finally {
                 conexion.cerrarConexion();
             }
+            this.usuario = usuarioAcceso;
         }
-        return lsitaUsuarios;
+        return usuarioAcceso;
     }
     
     public void verifica(String user, String pass) {
         lsitaUsuarios = new ArrayList<>();
-        lsitaUsuarios = iniciarSesion(usuario);
+        usuario = iniciarSesion(usuario);
         lsitaUsuarios.get(2).toString();
     }
 }

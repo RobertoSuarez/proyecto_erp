@@ -103,7 +103,7 @@ public class UsuarioController implements Serializable {
     }
 
     public String iniciarSesion() {
-        listaUsuario = new ArrayList<>();
+        Usuario usuarioSesion = new Usuario();
         if ("".equals(usuario.getUsername())) {
             PFW("Ingrese un usuario");
         }
@@ -111,23 +111,30 @@ public class UsuarioController implements Serializable {
             PFW("Ingrese una contraseña");
         }
         if (!usuario.getUsername().isEmpty() && !usuario.getPassword().isEmpty()) {
-            listaUsuario = usuarioDAO.iniciarSesion(usuario);
-            if (listaUsuario.get(0).getCode() == -1) {
-                PFW(listaUsuario.get(0).getMsj());
-                return "";
-            } else if (listaUsuario.get(0).getCode() == -2) {
-                PFE(listaUsuario.get(0).getMsj());
-                return "";
+            usuarioSesion = usuarioDAO.iniciarSesion(usuario);
 
+            if (usuarioSesion != null) {
+                if (usuarioSesion.getCode() < 1) {
+                    PFW(usuarioSesion.getMsj());
+                    return "";
+                } else {
+                    PFE(usuarioSesion.getMsj());
+
+                    usuario = usuarioSesion;
+                    
+                    //Registrar usuario en HttpSession
+                    httpSession.setAttribute("username", usuarioSesion);
+
+                    //Registrar usuario en Session de JSF
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", usuarioSesion);
+
+                    return "/View/Global/Main?faces-redirect=true";
+                }
             } else {
-                PFE(listaUsuario.get(0).getMsj());
-                httpSession.setAttribute("username", listaUsuario.get(0));
-                return "/View/Global/Main?faces-redirect=true";
+                PFE("Error de conexión al intentar iniciar sesión.");
             }
-
-        } else {
-            return "";
         }
+        return null;
     }
 
     public void PFW(String msj) {
