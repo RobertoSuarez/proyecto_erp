@@ -121,12 +121,12 @@ public class UsuarioController implements Serializable {
                     PFE(usuarioSesion.getMsj());
 
                     usuario = usuarioSesion;
-                    
+
                     //Registrar usuario en HttpSession
                     httpSession.setAttribute("username", usuarioSesion);
 
                     //Registrar usuario en Session de JSF
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", usuarioSesion);
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuarioSesion);
 
                     return "/View/Global/Main?faces-redirect=true";
                 }
@@ -149,6 +149,18 @@ public class UsuarioController implements Serializable {
                 addMessage(null, new FacesMessage(
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
 
+    }
+
+    public void verificarSesion() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Usuario usuarioSesion = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+        try {
+            if (usuarioSesion == null || usuarioSesion.getIdUsuario() < 1) {
+                context.getExternalContext().redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
