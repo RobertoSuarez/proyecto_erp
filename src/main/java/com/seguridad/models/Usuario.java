@@ -3,7 +3,7 @@ package com.seguridad.models;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Usuario implements Serializable{
+public class Usuario implements Serializable {
 
     int idUsuario;
     String msj;
@@ -24,6 +24,13 @@ public class Usuario implements Serializable{
 
     public Usuario() {
 
+    }
+
+    public Usuario(int code, String result, String usuario, String password) {
+        this.code = code;
+        this.msj = result;
+        this.password = password;
+        this.username = usuario;
     }
 
     public String getMsj() {

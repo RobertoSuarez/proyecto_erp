@@ -7,20 +7,20 @@
     xmlns:pa="http://primefaces.org/manhattan">
 
     <div class="layout-topbar">
-            <a href="../Global/Main.xhtml"  >
-                <p:graphicImage name="erpLogo.png" library="images"
-                                 style="width: 55px; height: 55px; 
-                                 vertical-align: middle; margin-top: -12px"/>
-            </a>
+        <a href="../Global/Main.xhtml"  >
+            <p:graphicImage name="erpLogo.png" library="images"
+                            style="width: 55px; height: 55px;
+                            vertical-align: middle; margin-top: -12px"/>
+        </a>
         <div class="layout-topbar-menu-wrapper">        
-            <ul class="topbar-menu navbar">
+            <ul class="topbar-menu navbar" style="z-index: 100">
                 <li class="menu">               
                     <p:graphicImage name="images/avatar.png" library="manhattan-layout"/>
                     <span class="user">Nombre de usuario</span>
                     <div class="submenu">
                         <ul style="width: 100%">
                             <li>
-                                <a href="#">
+                                <a href="">
                                     <i class="pi pi-user"/>
                                     <span>Perfil</span>
                                 </a>
@@ -31,12 +31,19 @@
                                     <span>Ajustes</span>
                                 </a>
                             </li>
+
+
                             <li>
-                                <a href="../../">
-                                    <i class="pi pi-sign-out"/>
-                                    <span>Salir</span>
-                                </a>
+                                <h:form>
+                                    <a>
+                                        <i class="pi pi-sign-out" />
+                                        <p:commandLink action="#{usuarioMB.cerrarSession()}" style="margin-right:20px; text-decoration: none">
+                                            <h:outputText value="Salir" style="font-size: 18px;"/>
+                                        </p:commandLink>
+                                    </a>
+                                </h:form>
                             </li>
+
                         </ul>
                     </div>
                 </li>

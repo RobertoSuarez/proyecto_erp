@@ -6,9 +6,8 @@ package com.seguridad.controllers;
 
 import com.seguridad.dao.UsuarioDAO;
 import com.seguridad.models.Usuario;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
@@ -16,6 +15,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Named(value = "usuarioMB")
@@ -23,30 +23,21 @@ import javax.servlet.http.HttpSession;
 public class UsuarioController implements Serializable {
 
     private Usuario usuario;
-    private List<Usuario> listaUsuario;
     private UsuarioDAO usuarioDAO;
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
-    HttpSession httpSession = (HttpSession) facesContext.getExternalContext().getSession(true);
+    HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+    HttpSession session = req.getSession(true);
 
     public UsuarioController() {
         usuario = new Usuario();
         usuarioDAO = new UsuarioDAO();
-        listaUsuario = new ArrayList<>();
-        System.out.println("########## Pasa algo");
     }
 
     @PostConstruct
     public void init() {
-        //httpSession.removeAttribute("username");
-        System.out.println("########## Pasa algo");
-        try {
-            Usuario userResult = (Usuario) httpSession.getAttribute("username");
-            System.out.println("########## " + userResult.getNombre());
-        } catch (Exception e) {
-            System.out.println("########## Error al traer los datos");
-        }
+
     }
 
     public Usuario getUsuario() {
@@ -77,7 +68,6 @@ public class UsuarioController implements Serializable {
             if ("".equals(usuario.getNombre())) {
                 PFW("Ingrese un Nombre");
 
-                //  PrimeFaces.current().ajax().update("form:messages");
             } else if ("".equals(usuario.getApellido())) {
                 PFW("Ingrese un Apellido");
 
@@ -102,32 +92,53 @@ public class UsuarioController implements Serializable {
         return "";
     }
 
-    public String iniciarSesion() {
-        listaUsuario = new ArrayList<>();
-        if ("".equals(usuario.getUsername())) {
-            PFW("Ingrese un usuario");
-        }
-        if ("".equals(usuario.getPassword())) {
-            PFW("Ingrese una contraseña");
-        }
-        if (!usuario.getUsername().isEmpty() && !usuario.getPassword().isEmpty()) {
-            listaUsuario = usuarioDAO.iniciarSesion(usuario);
-            if (listaUsuario.get(0).getCode() == -1) {
-                PFW(listaUsuario.get(0).getMsj());
-                return "";
-            } else if (listaUsuario.get(0).getCode() == -2) {
-                PFE(listaUsuario.get(0).getMsj());
-                return "";
+    public void iniciarSesion() throws IOException {
+
+        String ruta = "";
+        try {
+            if ("".equals(usuario.getUsername())) {
+                PFW("Ingrese un usuario");
+            }
+            if ("".equals(usuario.getPassword())) {
+                PFW("Ingrese una contraseña");
+            }
+            if (!usuario.getUsername().isEmpty() && !usuario.getPassword().isEmpty()) {
+                usuario = usuarioDAO.iniciarSesion(usuario);
+                if (usuario.getCode() == -1) {
+                    PFW(usuario.getMsj());
+
+                } else if (usuario.getCode() == -2) {
+                    PFE(usuario.getMsj());
+
+                } else {
+
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario.getUsername());
+                    System.out.println(session.getAttribute("usuario") + "Holas ini");
+
+                    facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
+                    System.out.println(session.getAttribute("usuario") + "Holas retur");
+
+                    PFE(usuario.getMsj());
+                }
 
             } else {
-                PFE(listaUsuario.get(0).getMsj());
-                httpSession.setAttribute("username", listaUsuario.get(0));
-                return "/View/Global/Main?faces-redirect=true";
+
             }
 
-        } else {
-            return "";
+        } catch (IOException e) {
+            e.fillInStackTrace().toString();
         }
+
+    }
+
+    public void cerrarSession() throws IOException {
+        System.out.println(session.getAttribute("usuario") + "Holas CESION");
+        session.removeAttribute("usuario");
+        System.out.println(session.getAttribute("usuario") + "Holas CESION");
+        facesContext.getExternalContext().redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+        usuario.setPassword("");
+        usuario.setUsername("");
+        System.out.println(session.getAttribute("usuario") + "Holas CESION");
     }
 
     public void PFW(String msj) {
@@ -144,4 +155,20 @@ public class UsuarioController implements Serializable {
 
     }
 
+    public void verifica() throws IOException {
+        String uri = req.getRequestURI();
+        System.out.println(uri);
+        if (session.getAttribute("usuario") != null && "/proyecto_erp/View/Global/Main.xhtml".equals(uri)) {
+            System.out.println(uri + "::::::::::: IF");
+            System.out.println(session.getAttribute("usuario") + "IF");
+            facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
+
+        } else {
+
+            System.out.println(uri + "::: ELSE");
+            System.out.println(session.getAttribute("usuario") + "ELSE");
+
+        }
+
+    }
 }
