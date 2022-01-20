@@ -16,6 +16,7 @@ public class ProcesoProduccion {
     private String descripcion;
     private Date fechaCreacion;
     private Date fechaModificacion;
+    
 
     public String getNombre() {
         return nombre;
@@ -48,6 +49,4 @@ public class ProcesoProduccion {
     public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
-    
-    
 }
