@@ -1,0 +1,485 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:panel>
+                        <h1 style="text-align: center; color: black;">Articulos</h1>
+                        <div>
+                            <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                     oncomplete="PF('ProveedorNew').show()"   
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .3rem">                               
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Editar" 
+                                                     icon="pi pi-pencil" 
+                                                     oncomplete="PF('ProveedorEdit').show()"  
+                                                     styleClass="ui-button-secondary" 
+                                                     style="margin-right: .3rem" >                                
+                                    </p:commandButton>
+
+                                    <p:commandButton id="delete-products-button"
+                                                     value="Deshabilitar" 
+                                                     icon="pi pi-times"                                            
+                                                     styleClass="ui-button-danger"  
+                                                     style="margin-right: .3rem">
+                                        <p:confirm  header="Confirmation"
+                                                    message="Dese eliminar el 
+                                                    proveedor seleccionado?"
+                                                    icon="pi pi-exclamation-triangle" />
+
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Buscar" 
+                                                     icon="pi pi-search" 
+                                                     oncomplete="PF('BuscarProveedor').show()"  
+                                                     styleClass="ui-button-warning" 
+                                                     style="margin-right: .3rem">                           
+                                    </p:commandButton>
+
+                                </p:toolbarGroup>                       
+                            </p:toolbar> 
+                            <!-- Tabla visual de datos  !-->
+                            <p:dataTable>
+                                <p:column headerText="Codigo"  >
+                                    <h:outputText value=""/>
+                                </p:column>
+
+                                <p:column headerText="Articulo" >
+                                    <h:outputText value=""/>
+                                </p:column>                       
+
+                                <p:column headerText="Descripción" >
+                                    <h:outputText value="" style="font-weight: 700">
+                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Bodega">
+                                    <h:outputText value=""/>
+                                </p:column>
+
+                                <p:column headerText="Categoría">
+                                    <h:outputText value=""/>
+                                </p:column>
+
+                                <p:column headerText="Tipo">
+                                    <h:outputText styleClass="product-badge"
+                                                  value=""/>
+                                </p:column>
+                                <p:column headerText="Cantidad">
+                                    <h:outputText styleClass="product-badge"
+                                                  value=""/>
+                                </p:column>
+                                <p:column headerText="Costo">
+                                    <h:outputText styleClass="product-badge"
+                                                  value=""/>
+                                </p:column>
+                                <p:column headerText="IVA">
+                                    <h:outputText styleClass="product-badge"
+                                                  value=""/>
+                                </p:column>
+                                <p:column headerText="ICE">
+                                    <h:outputText styleClass="product-badge"
+                                                  value=""/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        <!-- Model para agregar un nuevo articulo !-->
+                        <p:dialog header="Nuevo articulo"  minHeight="40" 
+                                  height="auto" width="800px" showEffect="fade"
+                                  modal="true" widgetVar="ProveedorNew">
+                            <h:form >
+                                <p:outputPanel  class="ui-fluid">
+                                    <div class="ui-fluid p-formgrid p-grid">
+                                        <label for="Proveedor" style="width:500px;">
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 18px">
+                                                    Código: 
+                                                </label>                                            
+                                                <p:inputText id="IdArticulo" 
+                                                             type="text" 
+                                                             disabled="true" 
+                                                             style="width: 200px;
+                                                             background-color:silver;
+                                                             margin: 3px"/> 
+                                                <label style="padding-left: 10px">
+                                                    Articulo: 
+                                                </label>
+                                                <p:inputText id="nombreArticulo"
+                                                             type="text" 
+                                                             style="width: 250px; 
+                                                             margin: 3px;"/> 
+
+                                            </div>
+                                            <br/>
+                                            <div class="p-field p-col-12 p-md-3">
+
+                                                <label style="padding-left: 10px">
+                                                    Categoría:  
+                                                </label>  
+                                                <p:selectOneMenu style=
+                                                                 "min-width: 12rem;
+                                                                 width: 50px;
+                                                                 height: 40px;"
+                                                                 placeholder="Seleccione">
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="1"/>
+                                                    <f:selectItem 
+                                                        itemLabel="2" 
+                                                        itemValue="2"/>
+                                                    <f:selectItem 
+                                                        itemLabel="3" 
+                                                        itemValue="3"/>
+                                                </p:selectOneMenu>
+                                                <label style="padding-left: 10px">
+                                                    Tipo:  
+                                                </label>  
+                                                <p:selectOneMenu style=
+                                                                 "min-width: 10rem;
+                                                                 width: 50px;
+                                                                 height: 40px;"
+                                                                 placeholder="Seleccione">
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="1"/>
+                                                    <f:selectItem 
+                                                        itemLabel="2" 
+                                                        itemValue="2"/>
+                                                    <f:selectItem 
+                                                        itemLabel="3" 
+                                                        itemValue="3"/>
+                                                </p:selectOneMenu>
+                                                <label style="padding-left: 10px">
+                                                    Bodega:  
+                                                </label>  
+                                                <p:selectOneMenu style=
+                                                                 "min-width: 8rem;
+                                                                 width: 50px;
+                                                                 height: 40px;"
+                                                                 placeholder="Seleccione">
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="Elija.."/>
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="Elija.."/>
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="Elija.."/>
+                                                </p:selectOneMenu>
+
+
+                                            </div>
+                                            <br/>
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 10px">
+                                                    Cant Máxima:
+                                                </label>
+                                                <p:inputText id="cantMaxima"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/> 
+                                                <label style="padding-left: 10px">
+                                                    Cant Mínima:
+                                                </label>
+                                                <p:inputText id="cantMinima"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/> 
+                                                <label style="padding-left: 10px">
+                                                    Cant:
+                                                </label>
+                                                <p:inputText id="cant"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/>
+                                                <label style="padding-left: 10px">
+                                                    Costo:
+                                                </label>
+                                                <p:inputText id="costo"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/>
+
+                                            </div>
+
+
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 5px">
+                                                    Descripción: 
+                                                </label>
+                                                <p:inputText id="contactoProveedor"
+                                                             type="text" 
+                                                             style="width: 300px;
+                                                             height: 40px;
+                                                             margin: 3px;"/> 
+
+                                                <label style="padding-left: 65px">
+                                                    IVA: 
+                                                </label>
+                                                <p:toggleSwitch  />
+                                                <label style="padding-left: 10px">
+                                                    ICE: 
+                                                </label>
+                                                <p:toggleSwitch  />
+                                                <label style="padding-left: 10px">
+                                                </label>
+                                                <p:inputText id="impIce"
+                                                             type="text" 
+                                                             style="width: 40px;  
+                                                             margin: 3px;"/>
+                                            </div>
+                                        </label>
+
+                                    </div>
+                                </p:outputPanel>
+                            </h:form>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="Cancel" icon="pi pi-times" 
+                                                 onclick="PF('Proveedornew').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog>
+                        <p:dialog header="Editar artículo"  minHeight="40" 
+                                  height="auto" width="800px" showEffect="fade"
+                                  modal="true" widgetVar="ProveedorEdit">
+                            <h:form >
+                                <p:outputPanel  class="ui-fluid">
+                                    <div class="ui-fluid p-formgrid p-grid">
+                                        <label for="Proveedor" style="width:500px;">
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 18px">
+                                                    Código: 
+                                                </label>                                            
+                                                <p:inputText id="IdArticulo" 
+                                                             type="text" 
+                                                             disabled="true" 
+                                                             style="width: 200px;
+                                                             background-color:silver;
+                                                             margin: 3px"/> 
+                                                <label style="padding-left: 10px">
+                                                    Articulo: 
+                                                </label>
+                                                <p:inputText id="nombreArticulo"
+                                                             type="text" 
+                                                             style="width: 250px; 
+                                                             margin: 3px;"/> 
+
+                                            </div>
+                                            <br/>
+                                            <div class="p-field p-col-12 p-md-3">
+
+                                                <label style="padding-left: 10px">
+                                                    Categoría:  
+                                                </label>  
+                                                <p:selectOneMenu style=
+                                                                 "min-width: 12rem;
+                                                                 width: 50px;
+                                                                 height: 40px;"
+                                                                 placeholder="Seleccione">
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="1"/>
+                                                    <f:selectItem 
+                                                        itemLabel="2" 
+                                                        itemValue="2"/>
+                                                    <f:selectItem 
+                                                        itemLabel="3" 
+                                                        itemValue="3"/>
+                                                </p:selectOneMenu>
+                                                <label style="padding-left: 10px">
+                                                    Tipo:  
+                                                </label>  
+                                                <p:selectOneMenu style=
+                                                                 "min-width: 10rem;
+                                                                 width: 50px;
+                                                                 height: 40px;"
+                                                                 placeholder="Seleccione">
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="1"/>
+                                                    <f:selectItem 
+                                                        itemLabel="2" 
+                                                        itemValue="2"/>
+                                                    <f:selectItem 
+                                                        itemLabel="3" 
+                                                        itemValue="3"/>
+                                                </p:selectOneMenu>
+                                                <label style="padding-left: 10px">
+                                                    Bodega:  
+                                                </label>  
+                                                <p:selectOneMenu style=
+                                                                 "min-width: 8rem;
+                                                                 width: 50px;
+                                                                 height: 40px;"
+                                                                 placeholder="Seleccione">
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="Elija.."/>
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="Elija.."/>
+                                                    <f:selectItem 
+                                                        itemLabel="Elija.." 
+                                                        itemValue="Elija.."/>
+                                                </p:selectOneMenu>
+
+
+                                            </div>
+                                            <br/>
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 10px">
+                                                    Cant Máxima:
+                                                </label>
+                                                <p:inputText id="cantMaxima"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/> 
+                                                <label style="padding-left: 10px">
+                                                    Cant Mínima:
+                                                </label>
+                                                <p:inputText id="cantMinima"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/> 
+                                                <label style="padding-left: 10px">
+                                                    Cant:
+                                                </label>
+                                                <p:inputText id="cant"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/>
+                                                <label style="padding-left: 10px">
+                                                    Costo:
+                                                </label>
+                                                <p:inputText id="costo"
+                                                             type="text" 
+                                                             style="width: 80px;  
+                                                             margin: 3px;"/>
+
+                                            </div>
+
+
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 5px">
+                                                    Descripción: 
+                                                </label>
+                                                <p:inputText id="contactoProveedor"
+                                                             type="text" 
+                                                             style="width: 300px;
+                                                             height: 40px;
+                                                             margin: 3px;"/> 
+
+                                                <label style="padding-left: 65px">
+                                                    IVA: 
+                                                </label>
+                                                <p:toggleSwitch value="" />
+                                                <label style="padding-left: 10px">
+                                                    ICE: 
+                                                </label>
+                                                <p:toggleSwitch value="" />
+                                                <label style="padding-left: 10px">
+                                                </label>
+                                                <p:inputText id="impIce"
+                                                             type="text" 
+                                                             style="width: 40px;  
+                                                             margin: 3px;"/>
+                                            </div>
+                                        </label>
+
+                                    </div>
+                                </p:outputPanel>
+                            </h:form>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="Cancel" icon="pi pi-times" 
+                                                 onclick="PF('ProveedorEdit').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog>
+
+                        <p:dialog header="Buscar Artículo" widgetVar="BuscarProveedor"  
+                                  minHeight="40" height="200px" width="400px"
+                                  showEffect="fade" modal="true">
+
+                            <h:form style="height: 200px">
+                                <div class="p-field p-col-12 p-md-3">
+                                    <label for="BReferencia" 
+                                           style="position: relative;top:0px;left:15px;">                                 
+                                        <h5 class="p-mt-0">Busacar por:</h5>
+                                        <p:selectOneRadio id="console" value="" 
+                                                          unselectable="true">
+                                            <f:selectItem itemLabel="Código" 
+                                                          itemValue="Option1"/>
+                                            <f:selectItem itemLabel="Nombre"
+                                                          itemValue="Option2"/>                                     
+                                        </p:selectOneRadio>
+                                    </label>
+                                </div>
+                                <div class="p-field p-col-12 p-md-3">
+                                    <label for="BProveedor" style="position: relative;
+                                           top: 10px;left: 15px;">    
+
+                                        <p:inputText id="BProveedor" type="text" 
+                                                     style="width: 200px;"/>
+                                        <p:commandButton icon="pi pi-search"                                                    
+                                                         styleClass="ui-button-warning" 
+                                                         style="margin-right: .6rem;
+                                                         width: 40px">
+                                        </p:commandButton>
+                                    </label>
+                                </div>                        
+                            </h:form>
+                            <f:facet name="footer">
+                                <p:commandButton value="Ok" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="Cancel" icon="pi pi-times" 
+                                                 onclick="PF('BuscarProveedor').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog>
+                        <p:confirmDialog widgetVar="deleteProveedorDialog" showEffect="fade" 
+                                         width="300" message="Delete the proveedor?" 
+                                         header="Confirm" severity="warn">
+                            <p:commandButton value="Yes" icon="pi pi-check" 
+                                             oncomplete="PF('deleteProveedorDialog').hide()"/>
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-button-secondary" 
+                                             icon="pi pi-times"
+                                             onclick="PF('deleteProveedorDialog').hide()"/>
+                        </p:confirmDialog>
+
+                        <p:confirmDialog global="true" showEffect="fade" width="300">
+                            <p:commandButton value="Yes" type="button" 
+                                             styleClass="ui-confirmdialog-yes" 
+                                             icon="pi pi-check"/>
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-confirmdialog-no ui-button-secondary"
+                                             icon="pi pi-times"/>
+                        </p:confirmDialog>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
