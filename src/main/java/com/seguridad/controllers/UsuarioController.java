@@ -6,6 +6,7 @@ package com.seguridad.controllers;
 
 import com.seguridad.dao.UsuarioDAO;
 import com.seguridad.models.Usuario;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +40,8 @@ public class UsuarioController implements Serializable {
 
     @PostConstruct
     public void init() {
-        //httpSession.removeAttribute("username");
-        System.out.println("########## Pasa algo");
-        try {
-            Usuario userResult = (Usuario) httpSession.getAttribute("username");
-            System.out.println("########## " + userResult.getNombre());
-        } catch (Exception e) {
-            System.out.println("########## Error al traer los datos");
-        }
+        
+       
     }
 
     public Usuario getUsuario() {
@@ -102,7 +97,7 @@ public class UsuarioController implements Serializable {
         return "";
     }
 
-    public String iniciarSesion() {
+    public void iniciarSesion() throws IOException {
         Usuario usuarioSesion = new Usuario();
         if ("".equals(usuario.getUsername())) {
             PFW("Ingrese un usuario");
@@ -116,7 +111,7 @@ public class UsuarioController implements Serializable {
             if (usuarioSesion != null) {
                 if (usuarioSesion.getCode() < 1) {
                     PFW(usuarioSesion.getMsj());
-                    return "";
+                 
                 } else {
                     PFE(usuarioSesion.getMsj());
 
@@ -128,13 +123,22 @@ public class UsuarioController implements Serializable {
                     //Registrar usuario en Session de JSF
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuarioSesion);
 
-                    return "/View/Global/Main?faces-redirect=true";
+                    facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
+                    
                 }
             } else {
                 PFE("Error de conexión al intentar iniciar sesión.");
             }
         }
-        return null;
+    }
+ public void cerrarSession() throws IOException {
+        System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
+        httpSession.removeAttribute("usuario");
+        System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
+        facesContext.getExternalContext().redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+        usuario.setPassword("");
+        usuario.setUsername("");
+        System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
     }
 
     public void PFW(String msj) {
