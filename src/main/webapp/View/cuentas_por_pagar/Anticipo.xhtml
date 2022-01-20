@@ -9,33 +9,33 @@
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
-    
+
                     <p:submenu label="Pagos">
                         <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
-                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" url="#" icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
                     </p:submenu>
                     <p:submenu label="Reportes">
                         <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
-      
+
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
                 </p:menubar>
-                
+
                 <br></br>
                 <br></br>
                 <br></br>
                 <h:form class="p-p-3" id="form" style="padding-left: 30px; padding-right: 30px">
                     <h1 style="text-align: center; color: black">Listado de Anticipos</h1>
-                  
+
                     <p:growl id="growl" showDetail="true"/>
 
                     <div class="p-d-flex p-jc-between p-ai-center">
 
-                        
+
 
                         <div>
                             <p:commandButton 
@@ -279,7 +279,7 @@
                             value="#{anticipoMB.anticipos_revertidos}" 
                             rowKey="#{anticipor.id_anticipo}" 
                             var="anticipor">
-                            
+
                             <p:column headerText="Fecha Registro" sortBy="#{anticipor.fecha}" filterBy="#{anticipor.fecha}" filterStyle="display : none">
                                 <h:outputText value="#{anticipoMB.FormatoFecha(anticipor.fecha)}"/>
                             </p:column>
@@ -292,7 +292,7 @@
                             <p:column headerText="Importe" sortBy="#{anticipor.importe}" filterBy="#{anticipor.importe}" filterStyle="display : none">
                                 <h:outputText value="#{anticipor.importe}"/>
                             </p:column>
-                            
+
                             <p:column headerText="Referencia" sortBy="#{anticipor.referencia}" filterBy="#{anticipor.referencia}" filterStyle="display : none">
                                 <h:outputText value="#{anticipor.referencia}"/>
                             </p:column>
