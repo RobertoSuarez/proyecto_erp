@@ -13,18 +13,7 @@
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
         <title>Login</title>
-
-
     </h:head>
-    <script type="text/javascript">
-        function preventbackbutton() {
-            window.history.forward();
-        }
-        setTimeout("preventbackbutton()", 0);
-        window.onunload = function () {
-            null
-        };
-    </script>
 
     <h:body styleClass="login-body" >
         <p:growl id="growl" widgetVar="growl" showDetail="true" life="3000"/>  
@@ -56,15 +45,15 @@
                             <p:button outcome="/View/login_and_registro/registro_usuario" value="Registrarse" styleClass="ui-button-secondary p-mr-2 p-mb-2"/>
 
                         </div>
-
+                       
                     </div>
                 </div>
             </div>
-        </h:form>
+            </h:form>
 
-        <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
-        <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
-        <h:outputStylesheet name="css/login_.css" />
+            <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
+            <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
+            <h:outputStylesheet name="css/login_.css" />
     </h:body>
 
 </html>
