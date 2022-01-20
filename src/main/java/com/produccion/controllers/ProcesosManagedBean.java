@@ -5,10 +5,15 @@
  */
 package com.produccion.controllers;
 
+import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
+
 /**
  *
  * @author Alex
  */
-public class ProcesosManagedBean {
-    
+@ManagedBean(name = "procesoMB")
+@ViewScoped
+public class ProcesosManagedBean implements Serializable{
 }
