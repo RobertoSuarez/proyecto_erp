@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">  
+    <h:body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="./subheaderinventario.xhtml"/>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:panel>
+                        <h1 style="text-align: center; color: black;">Transferencia</h1>
+                        <div>
+                            <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Nueva Transferencia" icon="pi pi-plus"   
+                                                     oncomplete="PF('transferenciaNew').show()"   
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .3rem">                               
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Crear Bodega" 
+                                                     icon="pi pi-pencil" 
+                                                     oncomplete="PF('ProveedorEdit').show()"  
+                                                     styleClass="ui-button-secondary" 
+                                                     style="margin-right: .3rem" >                                
+                                    </p:commandButton>
+
+                                    <p:commandButton id="delete-products-button"
+                                                     value="Deshabilitar" 
+                                                     icon="pi pi-times"                                            
+                                                     styleClass="ui-button-danger"  
+                                                     style="margin-right: .3rem">
+                                        <p:confirm  header="Confirmation"
+                                                    message="Dese deshabiitar la transferencia?"
+                                                    icon="pi pi-exclamation-triangle" />
+
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Buscar" 
+                                                     icon="pi pi-search" 
+                                                     oncomplete="PF('BuscarProveedor').show()"  
+                                                     styleClass="ui-button-warning" 
+                                                     style="margin-right: .3rem">                           
+                                    </p:commandButton>
+
+                                </p:toolbarGroup> 
+
+
+
+
+                                <!-- ok final -->
+                            </p:toolbar>
+
+<!--                            <div class="ui-fluid p-formgrid p-grid">
+                                <label for="Proveedor" style="width:500px;">
+                                    <div class="p-field p-col-12 p-md-3">
+                                        <label style="padding-left: 18px">
+                                            Nro de Documento: 
+                                        </label>                                            
+                                        <p:inputText id="IdArticulo" 
+                                                     type="text" 
+                                                     disabled="true" 
+                                                     style="width: 200px;
+                                                     background-color:silver;
+                                                     margin: 3px"/> 
+                                        <label style="padding-left: 10px">
+                                            Fecha: 
+                                        </label>
+                                        <p:datePicker  showIcon="true"
+                                                       style="width: 300px"/> 
+                                    </div>
+                                    <br/>
+                                    <div class="p-field p-col-12 p-md-3">
+
+                                        <label style="padding-left: 10px">
+                                            Bodega de entrada:  
+                                        </label>  
+                                        <p:inputText id="BodegaEntrada" type="text" 
+                                                     style="width: 250px;" 
+                                                     disabled="true"/>
+                                        <p:commandButton icon="pi pi-folder-open" 
+                                                         oncomplete="PF('bodeEntrada').show()"
+                                                         styleClass="ui-button-warning" 
+                                                         style="margin-right: .5rem;
+                                                         width: 40px">
+                                        </p:commandButton>
+                                        <label style="padding-left: 10px">
+                                            Bodega de salida:  
+                                        </label>  
+                                        <p:inputText id="BodegaSalida" type="text" 
+                                                     style="width: 250px;" 
+                                                     disabled="true"/>
+                                        <p:commandButton icon="pi pi-folder-open" 
+                                                         oncomplete="PF('bodeEntrada').show()"
+                                                         styleClass="ui-button-warning" 
+                                                         style="margin-right: .5rem;
+                                                         width: 40px">
+                                        </p:commandButton>
+                                    </div>
+                                    <br/>
+                                    <div class="p-field p-col-12 p-md-3">
+                                        <label style="padding-left: 90px">
+                                            Artículo:  
+                                        </label>  
+                                        <p:inputText id="articulo" type="text" 
+                                                     style="width: 250px;" 
+                                                     disabled="true"/>
+                                        <p:commandButton icon="pi pi-folder-open" 
+                                                         oncomplete="PF('articulos').show()"
+                                                         styleClass="ui-button-warning" 
+                                                         style="margin-right: .5rem;
+                                                         width: 40px">
+                                        </p:commandButton>
+                                        <label style="padding-left: 10px">
+                                            Cantidad:  
+                                        </label>  
+                                        <p:inputText id="cantArticulo" type="text" 
+                                                     style="width: 50px;" 
+                                                     disabled="false"/>
+                                        <label style="padding-left: 5px">
+                                            Motivo: 
+                                        </label>
+                                        <p:inputText id="motivo"
+                                                     type="text" 
+                                                     style="width: 300px;
+                                                     height: 60px;
+                                                     margin: 3px;"/> 
+                                    </div>
+                                    <br/>
+                                </label>
+
+                            </div>-->
+
+                            <!-- Tabla visual de datos  !-->
+                            <p:dataTable>
+                                <f:facet name="header">
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Productos en bodega</span>
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
+                                        </span>
+                                    </div>
+                                </f:facet>
+                                <p:column headerText="Codigo"  >
+                                    <h:outputText value=""/>
+                                </p:column>
+
+                                <p:column headerText="Nombre" >
+                                    <h:outputText value=""/>
+                                </p:column>                       
+
+                                <p:column headerText="Provincia" >
+                                    <h:outputText value="" style="font-weight: 700">
+                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Ciudad">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="Dirección">
+                                    <h:outputText value=""/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+
+                        <p:dialog header="Bodegas"  minHeight="100" 
+                                  height="auto" width="600px" showEffect="fade"
+                                  modal="true" widgetVar="bodeEntrada">
+                            <h:form >
+                                <p:outputPanel  class="ui-fluid">
+                                    <div class="ui-fluid p-formgrid p-grid">
+
+                                        <label for="BusquedaBodega" style="width:500px;">
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 10px">
+                                                    Código:  
+                                                </label> 
+                                                <label for="BProveedor" style="position: relative;
+                                                       top: 10px;left: 15px;">    
+
+                                                    <p:inputText id="BBodega" type="text" 
+                                                                 style="width: 200px;"/>
+                                                    <p:commandButton icon="pi pi-search"                                                    
+                                                                     styleClass="ui-button-warning" 
+                                                                     style="margin-right: .6rem;
+                                                                     width: 40px">
+                                                    </p:commandButton>
+                                                </label>
+                                            </div> 
+                                            <br/>
+                                            <div class="p-field p-col-12 p-md-3">
+
+
+                                                <p:dataTable>
+                                                    <p:column headerText="Codigo"  >
+                                                        <h:outputText value=""/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Nombre" >
+                                                        <h:outputText value=""/>
+                                                    </p:column>                       
+
+                                                    <p:column headerText="Provincia" >
+                                                        <h:outputText value="" style="font-weight: 700">
+                                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        </h:outputText>
+                                                    </p:column>
+
+                                                    <p:column headerText="Ciudad">
+                                                        <h:outputText value=""/>
+                                                    </p:column>
+                                                    <p:column headerText="Dirección">
+                                                        <h:outputText value=""/>
+                                                    </p:column>
+
+                                                </p:dataTable>
+                                            </div> 
+
+
+
+
+                                        </label>
+                                    </div>
+                                </p:outputPanel>
+                            </h:form>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Aceptar" 
+                                                 icon="pi pi-check"
+                                                 class="ui-button-success"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                 onclick="PF('bodeEntrada').hide()"
+                                                 class="ui-button-danger"/>
+                            </f:facet>
+                        </p:dialog> 
+
+                        <p:dialog header="Artículos"  minHeight="100" 
+                                  height="auto" width="600px" showEffect="fade"
+                                  modal="true" widgetVar="articulos">
+                            <h:form >
+                                <p:outputPanel  class="ui-fluid">
+                                    <div class="ui-fluid p-formgrid p-grid">
+
+                                        <label for="BusquedaArticulo" style="width:500px;">
+                                            <div class="p-field p-col-12 p-md-3">
+                                                <label style="padding-left: 10px">
+                                                    Código:  
+                                                </label> 
+                                                <label for="BProveedor" style="position: relative;
+                                                       top: 10px;left: 15px;">    
+
+                                                    <p:inputText id="BBodega" type="text" 
+                                                                 style="width: 200px;"/>
+                                                    <p:commandButton icon="pi pi-search"                                                    
+                                                                     styleClass="ui-button-warning" 
+                                                                     style="margin-right: .6rem;
+                                                                     width: 40px">
+                                                    </p:commandButton>
+                                                </label>
+                                            </div> 
+                                            <br/>
+                                            <div class="p-field p-col-12 p-md-3">
+
+
+                                                <p:dataTable>
+                                                    <p:column headerText="Codigo"  >
+                                                        <h:outputText value=""/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Articulo" >
+                                                        <h:outputText value=""/>
+                                                    </p:column>
+                                                    <p:column headerText="Cantidad">
+                                                        <h:outputText styleClass="product-badge"
+                                                                      value=""/>
+                                                    </p:column>
+                                                    <p:column headerText="Costo">
+                                                        <h:outputText styleClass="product-badge"
+                                                                      value=""/>
+
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div> 
+
+
+
+
+                                        </label>
+                                    </div>
+                                </p:outputPanel>
+                            </h:form>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Aceptar" 
+                                                 icon="pi pi-check"
+                                                 class="ui-button-success"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                 onclick="PF('articulos').hide()"
+                                                 class="ui-button-danger"/>
+                            </f:facet>
+                        </p:dialog> 
+
+
+                        <p:dialog header="Productos" showEffect="fade" modal="true"
+                                  widgetVar="transferenciaNew" responsive="true" width="80%"
+                                  draggable="false" height="550"> 
+                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+                                <p:outputPanel >
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Código: "></p:outputLabel>
+                                                    <p:inputText value="" 
+                                                                 disabled="true"  style="background-color:silver;"></p:inputText>
+                                                </div>
+
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Bodega de entrada: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:inputText  />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+
+                                                    <p:outputLabel value="Fecha: *"></p:outputLabel>
+                                                    <p:calendar value="" 
+                                                                disabled="">
+                                                    </p:calendar>
+
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Bodega de salida: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+   
+                                                <div class="p-col-2">
+                                                    <p:outputLabel value="Producto:*"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                                <div class="p-col-5">
+                                                    <p:outputLabel value="Motivo:  *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                    <p:inputTextarea disabled=""
+                                                                     maxlength="350"
+                                                                     placeholder="Motivo"
+                                                                     value="" 
+                                                                     rows="3" cols="33" autoResize="false"/>      
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                                <div class="p-col-1">
+                                                    <p:outputLabel value="Cantidad:"></p:outputLabel>
+                                                    <p:inputText value=""></p:inputText>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Agregar" process="@this"
+                                                                     disabled=""
+                                                                     oncomplete=""
+                                                                     icon="pi pi-plus"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Otro Producto" process="@this"
+                                                                     disabled=""
+                                                                     oncomplete=""
+                                                                     icon="pi pi-plus" 
+                                                                     styleClass="ui-button-success p-mr-2 p-mb-2"/>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:dataTable >
+
+                                                        <p:column headerText="Producto" width="12%" >
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Categoría"  width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Tipo" width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Cantidad" width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Costo" width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="IVA" width="4%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+
+                                                        <p:column exportable="false" width="9%">
+                                                            <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                                             icon="pi pi-pencil" 
+                                                                             process="@this">
+                                                            </p:commandButton>
+                                                            <p:commandButton class="ui-button-danger rounded-button"
+                                                                             icon="pi pi-pi pi-trash">
+                                                            </p:commandButton>
+                                                        </p:column>
+                                                    </p:dataTable>
+
+
+                                                </div>
+                                            </div>
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar" 
+                                                                     icon="pi pi-check"
+                                                                     disabled=""
+                                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('transferenciaNew').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

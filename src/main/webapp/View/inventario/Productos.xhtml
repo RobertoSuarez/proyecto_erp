@@ -26,7 +26,7 @@
                                                      style="margin-right: .3rem">                               
                                     </p:commandButton>
 
-                                    <p:commandButton value="Editar" 
+<!--                                    <p:commandButton value="Editar" 
                                                      icon="pi pi-pencil" 
                                                      oncomplete="PF('ProveedorEdit').show()"  
                                                      styleClass="ui-button-secondary" 
@@ -50,7 +50,7 @@
                                                      oncomplete="PF('BuscarProveedor').show()"  
                                                      styleClass="ui-button-warning" 
                                                      style="margin-right: .3rem">                           
-                                    </p:commandButton>
+                                    </p:commandButton>-->
 
                                 </p:toolbarGroup>                       
                             </p:toolbar> 
@@ -111,7 +111,7 @@
                                 </p:column>
                                 <p:column headerText="Acción" filterStyle="display : none">
                                     <p:button icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"/>
-                                    <p:commandButton icon="pi pi-pencil" oncomplete="PF('ProveedorEdit').show()"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                    <p:commandButton icon="pi pi-pencil" oncomplete="PF('productosEdit').show()"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
                                     <p:commandButton icon="pi pi-trash"  styleClass="rounded-button ui-button-danger">
                                                                                 <p:confirm  header="Confirmation"
                                                     message="Desea deshabilitar el 
@@ -462,7 +462,166 @@
                         <!-- Modelo de editar articulo -->
                         
        
-                        
+                                <p:dialog header="Editar Producto" showEffect="fade" modal="true"
+                                  widgetVar="productosEdit" responsive="true" width="80%"
+                                  draggable="false" height="550"> 
+                            <p:outputPanel id="edit-asiento" class="ui-fluid">
+                                <p:outputPanel >
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Código: "></p:outputLabel>
+                                                    <p:inputText value="" 
+                                                                 disabled="true"  style="background-color:silver;"></p:inputText>
+                                                </div>
+
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Producto: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+
+                                                            <p:inputText  />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Descripcion *"></p:outputLabel>
+                                                    <p:calendar value="" 
+                                                                disabled="">
+                                                    </p:calendar>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Bodega: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-2">
+                                                    <p:outputLabel value="Categoría: *"></p:outputLabel>
+                                                    <p:selectOneMenu id="categoria2" value="" editable="false" 
+                                                                     disabled="">
+                                                        <f:selectItem itemLabel="Primero" itemValue=""/>
+                                                        <f:selectItem itemLabel="Segundo" itemValue=""/>
+                                                        <f:selectItem itemLabel="Tercero" itemValue=""/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:outputLabel value="Tipo de Producto: *"></p:outputLabel>
+                                                    <p:selectOneMenu id="tipo2" value="" editable="false" 
+                                                                     disabled="">
+                                                        <f:selectItem itemLabel="Tipo 1" itemValue=""/>
+                                                        <f:selectItem itemLabel="Tipo 2" itemValue=""/>
+                                                        <f:selectItem itemLabel="Tipo 3" itemValue=""/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="p-col-1">
+                                                    <p:outputLabel value="Cant Máxima:*"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                                <div class="p-col-1">
+                                                    <p:outputLabel value="Cant Mínima:  *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:outputLabel value="Cantidad:"></p:outputLabel>
+                                                    <p:inputText value=""></p:inputText>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:outputLabel value="Costo:"></p:outputLabel>
+                                                    <p:inputText value=""></p:inputText>
+                                                </div>
+
+                                                <div class="p-col-1">
+                                                    <h6>IVA</h6>
+                                                    <p:inputSwitch />
+                                                </div>
+                                                <div class="p-col-1">
+                                                    <h6>ICE</h6>
+                                                    <p:inputSwitch />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+
+                                                <div class="p-col-12">
+                                                    <p:dataTable >
+
+                                                        <p:column headerText="Producto" width="12%" >
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Categoría"  width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Tipo" width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Cantidad" width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="Costo" width="12%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+                                                        <p:column headerText="IVA" width="4%">
+                                                            <h:outputText value=""/>
+                                                        </p:column>
+
+                                                        <p:column exportable="false" width="9%">
+                                                            <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                                             icon="pi pi-pencil" 
+                                                                             process="@this">
+                                                            </p:commandButton>
+                                                            <p:commandButton class="ui-button-danger rounded-button"
+                                                                             icon="pi pi-pi pi-trash">
+                                                            </p:commandButton>
+                                                        </p:column>
+                                                    </p:dataTable>
+
+
+                                                </div>
+                                            </div>
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar" 
+                                                                     icon="pi pi-check"
+                                                                     disabled=""
+                                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('productosEdit').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>                
                         
 <!--                        <p:dialog header="Editar artículo"  minHeight="40" 
                                   height="auto" width="800px" showEffect="fade"
