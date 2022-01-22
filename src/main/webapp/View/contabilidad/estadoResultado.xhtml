@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="./subheadercontabilidad.xhtml"/>
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup style="margin-top: 3%; width: 15%" align="Left">
+                                <p:commandButton ajax="false"
+                                                 value="Generar PDF" icon="pi pi-download"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                            </p:toolbarGroup>
+                            <div class="ui-fluid">
+                                <p:toolbarGroup style="margin-top: 3%; width: 25%">
+                                    <p:outputLabel  for="button" value="Fecha desde: "/>
+                                    <p:datePicker style="margin-top: 1%" id="button" value="" showIcon="true"/>
+                                </p:toolbarGroup> 
+                            </div>
+                            <div class="ui-fluid">
+                                <p:toolbarGroup style="margin-top: 3%; width: 25%">
+
+                                    <p:outputLabel for="button2" value="Fecha hasta: "/>
+                                    <p:datePicker style="margin-top: 1%" id="button2" value="" showIcon="true"/>
+
+
+                                </p:toolbarGroup>
+                            </div>
+                            <p:toolbarGroup style="margin-top: 3%; width: 15%">
+                                <p:selectOneButton  style="margin-top: 1%" value="">
+                                    <f:selectItem itemLabel="Anual" itemValue="1"/>
+                                </p:selectOneButton>                       
+                            </p:toolbarGroup>
+                            
+                            <p:toolbarGroup style="margin-top: 3%; width: 15%">
+                                <p:commandButton value="Aceptar"  style=" margin-top: 1%"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 />                            
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>            
+</html>              
+
+
