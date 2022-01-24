@@ -81,7 +81,7 @@
                             </p:toolbar>
                             <f:facet name="header">
 
-                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" disabled="#{rolMB.rol()}"
                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
                                                  actionListener="#{ciudadView.abrirNuevo}"
                                                  update=":form:manage-ciudad-content" oncomplete="PF('manageCiudadDialog').show()">
@@ -104,7 +104,7 @@
                                     <h:outputText value="#{ciudad.detalle}"/>
                                 </p:column>
                                 <p:column exportable="false" width="5%">
-                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content" 
+                                    <p:commandButton icon="pi pi-pencil" update=":form:manage-ciudad-content" disabled="#{rolMB.rol()}"
                                                      oncomplete="PF('manageCiudadDialog').show()" actionListener="#{ciudadView.editar(ciudad.id)}"
                                                      class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
                                         <f:setPropertyActionListener value="#{ciudad}" target="#{ciudadView.ciudad}"/>
