@@ -7,6 +7,8 @@ package com.recursoshumanos.Controller;
 
 import com.recursoshumanos.Model.DAO.CargoDAO;
 import com.recursoshumanos.Model.Entidad.Cargo;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
@@ -39,6 +42,9 @@ public class CargoControlller implements Serializable {
     private Cargo cargo;
     private final CargoDAO cargoDAO;
     private List<Cargo> lista;
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se crean las nuevas variables para ser 
@@ -47,6 +53,18 @@ public class CargoControlller implements Serializable {
     public CargoControlller() {
         cargoDAO = new CargoDAO(new Cargo());
         lista = new ArrayList<>();
+        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
+                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
+                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
+                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
+            System.out.println("Ingreso exitoso");
+        else{
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+
+            }
+        }
     }
 
     /**

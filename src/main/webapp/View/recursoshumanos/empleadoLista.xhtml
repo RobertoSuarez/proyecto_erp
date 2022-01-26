@@ -14,6 +14,7 @@
                         <p:menuitem value="Datos"
                                     style="display: flex; align-items: center; text-decoration: none;"
                                     outcome="/View/recursoshumanos/empresa.xhtml"
+                                    rendered="#{rolMB.rendered()}"
                                     icon="pi pi-home"/>
                         <p:menuitem value="Ciudades"
                                     style="display: flex; align-items: center; text-decoration: none;"
@@ -85,7 +86,7 @@
                             </p:toolbarGroup>
                         </p:toolbar>
                         <f:facet name="header">
-                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" outcome="CrearEmpleado"
+                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" outcome="CrearEmpleado" disabled="#{rolMB.rol()}"
                                           class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem"/>
 
                         </f:facet>
@@ -123,12 +124,12 @@
                             <p:column exportable="false" width="9%">
                                 <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  icon="pi pi-pencil" action="Empleado" actionListener="#{empleadoView.verEmpleado(empleado)}"
-                                                 process="@this">
+                                                 process="@this" disabled="#{rolMB.rol()}">
                                 </p:commandButton>
                                 <p:commandButton class="ui-button-danger rounded-button"
                                                  icon="pi pi-pi pi-trash"
                                                  actionListener="#{empleadoView.cambiarEstado(empleado)}"
-                                                 update="dt-empleados" process="dt-empleados @this">
+                                                 update="dt-empleados" process="dt-empleados @this" disabled="#{rolMB.rol()}">
                                     <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>
                                 </p:commandButton>
                             </p:column>

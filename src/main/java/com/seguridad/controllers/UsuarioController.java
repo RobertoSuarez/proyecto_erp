@@ -116,13 +116,16 @@ public class UsuarioController implements Serializable {
                     PFE(usuarioSesion.getMsj());
 
                     usuario = usuarioSesion;
+                    
 
                     //Registrar usuario en HttpSession
                     httpSession.setAttribute("username", usuarioSesion);
 
                     //Registrar usuario en Session de JSF
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuarioSesion);
-
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                            .put("usuario", usuarioSesion);
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                            .put("usuario_rol", usuarioDAO.rolRRHH(usuarioSesion.getIdUsuario()));
                     facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
                     
                 }

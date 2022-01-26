@@ -13,6 +13,7 @@
                     <p:submenu label="Empresa">
                         <p:menuitem value="Datos"
                                     style="display: flex; align-items: center; text-decoration: none;"
+                                    rendered="#{rolMB.rendered()}"
                                     outcome="/View/recursoshumanos/empresa.xhtml"
                                     icon="pi pi-home"/>
                         <p:menuitem value="Ciudades"
@@ -96,7 +97,7 @@
                                 <p:toolbarGroup align="right">
                                     <p:commandButton value="Nuevo Rol de Pago" icon="pi pi-plus" 
                                                      action="CrearRol" actionListener="#{rolDePagoView.nuevoRoldePago}"
-                                                     styleClass="ui-button-success" 
+                                                     styleClass="ui-button-success" disabled="#{rolMB.rol()}"
                                                      update="messages empleadolist" 
                                                      style="margin-right: .5rem">
                                     </p:commandButton>

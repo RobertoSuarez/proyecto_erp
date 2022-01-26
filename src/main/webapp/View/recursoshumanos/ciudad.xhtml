@@ -12,7 +12,8 @@
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:submenu label="Empresa">
                         <p:menuitem value="Datos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
+                                    style="display: flex; align-items: center; text-decoration: none"
+                                    rendered="#{rolMB.rendered()}"
                                     outcome="/View/recursoshumanos/empresa.xhtml"
                                     icon="pi pi-home"/>
                         <p:menuitem value="Ciudades"

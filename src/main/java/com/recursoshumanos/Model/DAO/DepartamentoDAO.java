@@ -185,6 +185,7 @@ public class DepartamentoDAO implements IDAO<Departamento> {
                             result.getString("descripcion")
                     ));
                 }
+                conexion.cerrarConexion();
                 result.close();
                 return departamentos;
             } catch (SQLException ex) {

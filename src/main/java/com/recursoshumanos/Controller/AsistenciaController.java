@@ -12,6 +12,8 @@ import com.recursoshumanos.Model.DAO.EmpleadoPuestoDAO;
 import com.recursoshumanos.Model.Entidad.Asistencia;
 import com.recursoshumanos.Model.Entidad.DetalleHorario;
 import com.recursoshumanos.Model.Entidad.Empleado;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -53,6 +56,9 @@ public class AsistenciaController implements Serializable {
     private List<Asistencia> asistencias;
     private List<Empleado> empleados;
     private Date minTimeI, maxTimeI, minTimeS, maxTimeS, minT;
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se crea las nuevas variables para asignarlos
@@ -66,6 +72,19 @@ public class AsistenciaController implements Serializable {
         asistencia = new Asistencia();
         empleados = new ArrayList<>();
         horarios = new ArrayList<>();
+        
+        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
+                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
+                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
+                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
+            System.out.println("Ingreso exitoso");
+        else{
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+
+            }
+        }
     }
 
     /**

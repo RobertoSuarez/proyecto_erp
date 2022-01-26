@@ -13,6 +13,8 @@ import com.recursoshumanos.Model.Entidad.DetalleHorario;
 import com.recursoshumanos.Model.Entidad.DiaSemana;
 import com.recursoshumanos.Model.Entidad.HorarioLaboral;
 import com.recursoshumanos.Model.Entidad.IngresosSalidas;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -39,6 +42,9 @@ import javax.servlet.http.HttpSession;
 @ViewScoped
 public class HorarioLaboralController implements Serializable {
 
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     /**
      * Se declaran las variables que usará el Controlador de horario laboral.
      */
@@ -72,6 +78,19 @@ public class HorarioLaboralController implements Serializable {
         horas = new ArrayList<>();
         lista = new ArrayList<>();
         horarios = new ArrayList<>();
+        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
+                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
+                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
+                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
+            System.out.println("Ingreso exitoso");
+        else{
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+
+            }
+        }
+        
     }
 
     /**

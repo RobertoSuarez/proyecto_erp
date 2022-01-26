@@ -13,6 +13,7 @@
                     <p:submenu label="Empresa">
                         <p:menuitem value="Datos"
                                     style="display: flex; align-items: center; text-decoration: none;"
+                                    rendered="#{rolMB.rendered()}"
                                     outcome="/View/recursoshumanos/empresa.xhtml"
                                     icon="pi pi-home"/>
                         <p:menuitem value="Ciudades"
@@ -84,6 +85,7 @@
                                 <p:commandButton value="Nuevo" icon="pi pi-plus"
                                                  actionListener="#{ingresosSalidasView.abrirNuevo}"
                                                  update=":form:manage-ingresosSalidas-content" 
+                                                 disabled="#{rolMB.rol()}"
                                                  oncomplete="PF('manageIngresosSalidasDialog').show()"
                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2">
                                     <p:resetInput target=":form:manage-ingresosSalidas-content"/>
@@ -106,7 +108,7 @@
                                     <h:outputText value="#{ingresoSalida.observaciones}"/>
                                 </p:column>
                                 <p:column exportable="false" width="5%">
-                                    <p:commandButton icon="pi pi-pencil" 
+                                    <p:commandButton icon="pi pi-pencil" disabled="#{rolMB.rol()}"
                                                      update=":form:manage-ingresosSalidas-content"
                                                      oncomplete="PF('manageIngresosSalidasDialog').show()"
                                                      class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 

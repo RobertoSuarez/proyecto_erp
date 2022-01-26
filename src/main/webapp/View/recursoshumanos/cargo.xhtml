@@ -13,6 +13,7 @@
                     <p:submenu label="Empresa">
                         <p:menuitem value="Datos"
                                     style="display: flex; align-items: center; text-decoration: none;"
+                                    rendered="#{rolMB.rendered()}"
                                     outcome="/View/recursoshumanos/empresa.xhtml"
                                     icon="pi pi-home"/>
                         <p:menuitem value="Ciudades"
@@ -84,7 +85,7 @@
 
                                 <p:commandButton value="Nuevo" icon="pi pi-plus"
                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                 actionListener="#{cargoView.abrirNuevo}"
+                                                 actionListener="#{cargoView.abrirNuevo}" disabled="#{rolMB.rol()}"
                                                  update=":form:manage-cargo-content" 
                                                  oncomplete="PF('manageCargoDialog').show()" >
                                     <p:resetInput target=":form:manage-cargo-content"/>
@@ -106,7 +107,7 @@
                                 </p:column>
                                 <p:column exportable="false" width="10%">
                                     <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                     icon="pi pi-pencil" 
+                                                     icon="pi pi-pencil" disabled="#{rolMB.rol()}"
                                                      update=":form:manage-cargo-content"
                                                      oncomplete="PF('manageCargoDialog').show()"
                                                      process="@this">

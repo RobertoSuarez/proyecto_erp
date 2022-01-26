@@ -7,11 +7,14 @@ package com.recursoshumanos.Controller;
 
 import com.recursoshumanos.Model.DAO.DedicacionDAO;
 import com.recursoshumanos.Model.Entidad.Dedicacion;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -30,6 +33,10 @@ import org.primefaces.PrimeFaces;
 @Named(value = "dedicacionView")
 @ViewScoped
 public class DedicacionController implements Serializable {
+    
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se declaran las variables del modelo Controlador de
@@ -45,6 +52,19 @@ public class DedicacionController implements Serializable {
     public DedicacionController() {
         dedicacionDAO = new DedicacionDAO(new Dedicacion());
         lista = new ArrayList<>();
+        
+        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
+                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
+                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
+                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
+            System.out.println("Ingreso exitoso");
+        else{
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+
+            }
+        }
     }
 
     /**

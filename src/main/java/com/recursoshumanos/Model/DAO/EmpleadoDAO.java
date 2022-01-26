@@ -203,6 +203,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
                             result.getDate("fecha_egreso")
                     ));
                 }
+                conexion.cerrarConexion();
                 result.close();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());

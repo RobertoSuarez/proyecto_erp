@@ -7,6 +7,8 @@ package com.recursoshumanos.Controller;
 
 import com.recursoshumanos.Model.DAO.DepartamentoDAO;
 import com.recursoshumanos.Model.Entidad.Departamento;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -40,6 +43,10 @@ public class DepartamentoControlller implements Serializable {
     private Departamento departamento;
     private final DepartamentoDAO departamentoDAO;
     private List<Departamento> lista;
+    
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se crea las nuevas variables para asignarlos
@@ -48,6 +55,19 @@ public class DepartamentoControlller implements Serializable {
         departamento = new Departamento();
         departamentoDAO = new DepartamentoDAO(new Departamento());
         lista = new ArrayList<>();
+        
+        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
+                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
+                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
+                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
+            System.out.println("Ingreso exitoso");
+        else{
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+
+            }
+        }
     }
 
     /**
