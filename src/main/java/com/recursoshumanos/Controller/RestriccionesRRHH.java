@@ -9,13 +9,14 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author ninat
  */
-@ManagedBean(name = "rolMB")
+@Named(value = "rolMB")
 @ViewScoped
 public class RestriccionesRRHH implements Serializable {
     
