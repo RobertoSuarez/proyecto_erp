@@ -104,8 +104,9 @@
                                                     action="#{facturaMB.cargarEditar(factura)}"/>
                               </p:column>
                          </p:dataTable>
+                         
+                         
                          <!-- DIALOG 1 NUEVA FACTURA-->
-
                          <p:dialog  header="Nueva Factura" showEffect="fade" modal="true"
                                     widgetVar="newFactura" maximizable="true" height="350" 
                                     closable="false" width="70%">
@@ -120,9 +121,6 @@
                                                                value="#{BuscarMB.nom}" />
                                              </div>
 
-
-
-
                                              <div class="p-field p-col">
                                                   <p:outputLabel for="nfactura">No. Factura:</p:outputLabel>
                                                   <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" 
@@ -134,6 +132,13 @@
                                                   <p:inputText type="number" id="importe" value="#{facturaMB.factura.importe}" 
                                                                required="true"/>
                                              </div>
+                                            
+                                            <div class="p-field p-col">
+                                                  <p:outputLabel for="saldofavor">Saldo a favor:</p:outputLabel>
+                                                  <p:inputText type="number" id="saldofavor" value="#{facturaMB.factura.pagado}" 
+                                                               required="true"/>
+                                             </div>
+                                            
                                              <div class="p-field p-col">
                                                   <p:inputText id="hola" value="#{BuscarMB.cod}" type="hidden" />
                                                   <p:outputLabel value="#{facturaMB.factura.ruc=BuscarMB.cod}" style="visibility: hidden"/>

@@ -4,7 +4,9 @@
  */
 package com.seguridad.controllers;
 
+import com.seguridad.dao.RolDAO;
 import com.seguridad.dao.UsuarioDAO;
+import com.seguridad.models.Rol;
 import com.seguridad.models.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
@@ -30,10 +32,12 @@ public class UsuarioController implements Serializable {
     String infMsj = "Exito";
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
     HttpSession httpSession = (HttpSession) facesContext.getExternalContext().getSession(true);
+    RolDAO rolDao;
 
     public UsuarioController() {
         usuario = new Usuario();
         usuarioDAO = new UsuarioDAO();
+        rolDao = new RolDAO();
         listaUsuario = new ArrayList<>();
         System.out.println("########## Pasa algo");
     }
@@ -114,8 +118,9 @@ public class UsuarioController implements Serializable {
                  
                 } else {
                     PFE(usuarioSesion.getMsj());
-
+                    
                     usuario = usuarioSesion;
+                    List<Rol> rolesSesion = rolDao.getRolesByUsers(usuarioSesion.getIdUsuario());
                     
 
                     //Registrar usuario en HttpSession
@@ -124,6 +129,8 @@ public class UsuarioController implements Serializable {
                     //Registrar usuario en Session de JSF
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                             .put("usuario", usuarioSesion);
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+                            .put("roles", rolesSesion);
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                             .put("usuario_rol", usuarioDAO.rolRRHH(usuarioSesion.getIdUsuario()));
                     facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
@@ -134,7 +141,8 @@ public class UsuarioController implements Serializable {
             }
         }
     }
- public void cerrarSession() throws IOException {
+    
+    public void cerrarSession() throws IOException {
         System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
         httpSession.removeAttribute("usuario");
         System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
@@ -158,7 +166,9 @@ public class UsuarioController implements Serializable {
 
     }
 
-    public void verificarSesion() {
+    
+    
+    public void verificarInicioSesion() {
         FacesContext context = FacesContext.getCurrentInstance();
         Usuario usuarioSesion = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
         try {
@@ -169,5 +179,50 @@ public class UsuarioController implements Serializable {
             e.printStackTrace();
         }
     }
+    
+    public boolean verificarSesion(){
+        Usuario user = new Usuario();
+        try{
+            user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        if(user != null && user.getIdUsuario() > 0){
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean verificarPermisoNombre(List<String> rolesPermitidos, int codigoModulo){
+        try{
+            List<Rol> rolesSesion = (List<Rol>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("roles");
+            for(String rolPermitido:rolesPermitidos){
+                for(Rol rolCompare:rolesSesion){
+                    if(rolPermitido.equals(rolCompare.getNombre())){
+                        return true;
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean verificarPermisoCodigo(List<Integer> rolesPermitidos, int codigoModulo){
+        try{
+            List<Rol> rolesSesion = (List<Rol>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("roles");
+            for(int rolPermitido:rolesPermitidos){
+                for(Rol rolCompare:rolesSesion){
+                    if(rolPermitido == rolCompare.getId()){
+                        return true;
+                    }
+                }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }   
 
 }
