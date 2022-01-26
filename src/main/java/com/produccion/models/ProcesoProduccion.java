@@ -6,17 +6,36 @@
 package com.produccion.models;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  *
  * @author Alex
  */
 public class ProcesoProduccion {
+    private int codigo_proceso;
     private String nombre;
     private String descripcion;
-    private Date fechaCreacion;
-    private Date fechaModificacion;
-    
+    private String identificador;
+
+    public ProcesoProduccion() {
+    }
+
+    public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion, 
+            String identificador) {
+        this.codigo_proceso = codigo_proceso;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.identificador = identificador;
+    }
+
+    public int getCodigo_proceso() {
+        return codigo_proceso;
+    }
+
+    public void setCodigo_proceso(int codigo_proceso) {
+        this.codigo_proceso = codigo_proceso;
+    }
 
     public String getNombre() {
         return nombre;
@@ -34,19 +53,40 @@ public class ProcesoProduccion {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaCreacion() {
-        return fechaCreacion;
+    public String getIdentificador() {
+        return identificador;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
     }
 
-    public Date getFechaModificacion() {
-        return fechaModificacion;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.codigo_proceso;
+        return hash;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
-        this.fechaModificacion = fechaModificacion;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProcesoProduccion other = (ProcesoProduccion) obj;
+        if (this.codigo_proceso != other.codigo_proceso) {
+            return false;
+        }
+        return true;
     }
+
+
+    
+    
 }

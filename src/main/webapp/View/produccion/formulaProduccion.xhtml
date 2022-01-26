@@ -526,7 +526,8 @@
 
                         <!-- Tabla de datos -->
                         <p:dataTable reflow="true" paginator="true" rows="4" 
-                                     rowSelectMode="add" paginatorPosition="bottom">
+                                     rowSelectMode="add" paginatorPosition="bottom" id="DTformula"
+                                     value="#{formulaMB.listaFormula}" var="Tablaformula">
                             <!-- Buscador -->
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
@@ -539,35 +540,37 @@
                             </f:facet>
 
                             <p:column headerText="Nº Fórmula" filterStyle="display : none">
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
+                                <h:outputText value="#{Tablaformula.codigo_formula}" />
+                               
                             </p:column>
 
                             <p:column headerText="Nombre Fórmula" >
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
+                                <h:outputText value="#{Tablaformula.nombre_formula}" />
+                               
                             </p:column>
 
                             <p:column headerText="Descripción" >
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
+                                <h:outputText value="#{Tablaformula.descripcion}" />
+                                
                             </p:column>
 
                             <p:column headerText="Acciones">
                                 <p:commandButton icon="pi pi-pencil" action="#"  
                                                  styleClass="edit-button rounded-button ui-button-primary" process=""
-                                                 oncomplete="PF('modificarForm').show()">
+                                                 oncomplete="PF('modificarForm').show()"
+                                                 >
                                     <f:setPropertyActionListener value="#" target="#"/>
                                     <p:resetInput target=""/>
                                 </p:commandButton>
                                 <p:skeleton rendered="#"></p:skeleton>
                                 <p:commandButton icon="pi pi-trash" action="#"  
                                                  styleClass="edit-button rounded-button ui-button-danger" process="@this"
-                                                 oncomplete="PF('eliminarForm').show()">
+                                                 oncomplete="PF('eliminarForm').show()"
+                                                 style="margin-left: 6px;">
                                     <f:setPropertyActionListener value="#" target="#"/>
                                     <p:resetInput target=""/>
                                 </p:commandButton>
-                                <p:skeleton rendered="#"></p:skeleton>
+                           
                             </p:column>
                         </p:dataTable>
 

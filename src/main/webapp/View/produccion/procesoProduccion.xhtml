@@ -10,7 +10,8 @@
             <ui:define name="title">Procesos de producción</ui:define>
             <ui:define name="content">
                 <ui:include src="subheaderProduccion.xhtml"/>
-                <h:form id="form" style="margin-top: 4%;">
+                <h:form id="form-princ" style="margin-top: 4%;">
+                    <p:growl id="growl" showDetail="true"/>
                     <div class="card">
 
                         <p:toolbar>
@@ -18,19 +19,21 @@
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <!-- Boton Nuevo Proceso -->
-                                    <p:commandButton value="Nuevo Proceso" 
-                                                     styleClass="ui-button-primary"
+                                    <p:commandButton value="Nuevo Proceso" styleClass="ui-button-primary"
+                                                     actionListener="#{procesoMB.openNew()}"
+                                                     update=":form-princ:manage-nuevoProceso-form"
                                                      icon="pi pi-plus" 
-                                                     oncomplete="PF('nuevoProceso').show()"
-                                                     style=" margin-right: .6rem">
+                                                     oncomplete="PF('nuevoProcesoPrincDialog').show()"
+                                                     style=" margin-right: .6rem" process="@this">
+                                        <p:resetInput target=":form-princ:manage-nuevoProceso-form"/>
                                     </p:commandButton>
-                                    
+
                                     <!--Boton Nuevo SubProceso-->
                                     <p:button  value="Nuevo Subproceso"
                                                styleClass="ui-button-primary"
                                                icon="pi pi-plus" 
                                                style="margin-right: 6px;"
-                                              outcome="CrearSubProceso">
+                                               outcome="CrearSubProceso">
                                     </p:button> 
                                     <!-- Boton Agregar Costo -->
                                     <p:commandButton value="Agregar Costos" 
@@ -50,68 +53,94 @@
                             </p:toolbarGroup>
                         </p:toolbar>
 
-                        <!-- Cuadro de dialogo Nuevo Proceso -->
-                        <p:dialog header="Nuevo Proceso" showEffect="fade" modal="true"
-                                  widgetVar="nuevoProceso" responsive="true" width="25%"
+                        <!-- Dialogo Nuevo Proceso Principal -->
+                        <p:dialog header="Proceso Principal" showEffect="fade" modal="true"
+                                  widgetVar="nuevoProcesoPrincDialog" responsive="true" width="35%"
                                   draggable="false" height="370" >
-                            <!-- Cuadros de texto de la izquierda -->
 
-                            <p:toolbar>
-                                <p:toolbarGroup>
+                            <p:outputPanel id="manage-nuevoProceso-form" class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-field">
+                                        <p:outputLabel for="codProceso">Código: *</p:outputLabel>
+                                        <p:inputText id="codProceso" value="#{procesoMB.procesoProduccion.identificador}" 
+                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
+                                                     color:#000000"></p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="nameProceso">Nombre: *</p:outputLabel>
+                                        <p:inputText id="nameProceso" value="#{procesoMB.procesoProduccion.nombre}" maxlength="25"
+                                                     placeholder="Maximo 25 caracteres" ></p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel for="descrProceso">Descripción:</p:outputLabel>
+                                        <p:inputTextarea maxlength="50" id="descrProceso"
+                                                         placeholder="Descripcion maximo 50 caracteres"
+                                                         value="#{procesoMB.procesoProduccion.descripcion}"
+                                                         rows="5" 
+                                                         cols="33" 
+                                                         autoResize="false"/>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
 
-                                    <p:outputPanel class="ui-fluid">
-                                        <p:outputPanel>
-
-                                            <div class="p-col-12 p-lg-12">
-                                              
-                                                    <p:outputLabel value="Codigo:"></p:outputLabel>
-                                                    <p:inputText value="" ></p:inputText>                                                
-                                      
-
-                                                
-                                                    <p:outputLabel value="Nombre:"></p:outputLabel>
-                                                    <p:inputText disabled="#" value=""></p:inputText>
-                                               
-                                               
-                                                    <p:outputLabel value="Descripción:"></p:outputLabel>
-                                                    <p:inputTextarea disabled=""
-                                                                     maxlength="250"
-                                                                     placeholder="Descripcion maximo 255 caracteres"
-                                                                     value="" 
-                                                                     rows="5" 
-                                                                     cols="33" 
-                                                                     autoResize="false"/>
-
-                                            </div>
-
-                                            <!-- Botones Guardar-->
-                                            <div class="p-col-12">
-                                                <div class="p-grid">
-                                                    <div class="p-col-4">
-                                                        <p:commandButton value="Guardar" icon="pi pi-check" disabled="#" styleClass="ui-button-primary"/>
-                                                    </div>
-                                                    <div class="p-col-4">
-                                                        <p:commandButton value="Cerrar" icon="pi pi-check" disabled="#" styleClass="ui-button-danger"/>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-                                        </p:outputPanel>
-                                    </p:outputPanel>
-
-
-                                </p:toolbarGroup>
-                            </p:toolbar>
-
-
-
-
+                            <!-- Boton Guardar/Cancelar-->
+                            <f:facet name="footer">
+                                <p:commandButton value="Guardar" actionListener="#{procesoMB.insertar()}"
+                                                 update="dtProcesoPrin, form-princ"
+                                                 process="manage-nuevoProceso-form @this"
+                                                 onclick ="PF('nuevoProcesoPrincDialog').hide()"
+                                                 icon="pi pi-check" styleClass="ui-button-primary"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-check"
+                                                 onclick ="PF('nuevoProcesoPrincDialog').hide()" 
+                                                 styleClass="ui-button-danger"/>
+                            </f:facet>
                         </p:dialog>
 
 
+                        <!-- Dialogo edotar Proceso Principal -->
+                        <p:dialog header="Proceso Principal" showEffect="fade" modal="true"
+                                  widgetVar="procesoPrincDialog" responsive="true" width="35%"
+                                  draggable="false" height="370" >
 
+                            <p:outputPanel id="manage-editarProceso-form" class="ui-fluid">
+                                <p:outputPanel rendered="#{not empty procesoMB.procesoProduccion}">
+                                    <div class="p-field">
+                                        <p:outputLabel value="Codigo: *"></p:outputLabel>
+                                        <p:inputText value="#{procesoMB.procesoProduccion.identificador}" 
+                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
+                                                     color:#000000"></p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel value="Nombre: *"></p:outputLabel>
+                                        <p:inputText value="#{procesoMB.procesoProduccion.nombre}" maxlength="25"
+                                                     placeholder="Maximo 25 caracteres" ></p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel value="Descripción:"></p:outputLabel>
+                                        <p:inputTextarea maxlength="50"
+                                                         placeholder="Descripcion maximo 50 caracteres"
+                                                         value="#{procesoMB.procesoProduccion.descripcion}"
+                                                         rows="5" 
+                                                         cols="33" 
+                                                         autoResize="false"/>
+                                    </div>
+                                    <!-- Boton Guardar/Cancelar-->
+                                    <div class="p-grid p-jc-end">
+                                        <div class="p-col-3">
+                                            <p:commandButton value="Guardar" actionListener="#{procesoMB.editar()}"
+                                                             update="manage-editarProceso-form, growl"
+                                                             process="manage-editarProceso-form @this"
+                                                             onclick ="PF('procesoPrincDialog').hide()"
+                                                             icon="pi pi-check" styleClass="ui-button-primary"/>
+                                        </div>
+                                        <div class="p-col-3">
+                                            <p:commandButton value="Cancelar" icon="pi pi-check"
+                                                             onclick ="PF('procesoPrincDialog').hide()" styleClass="ui-button-danger"/>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
 
 
                         <!-- Cuadro de dialogo Agregar Costos -->
@@ -139,33 +168,20 @@
                                                                      cols="33" 
                                                                      autoResize="false"/>
                                                 </div>
-                                               
-                                                  <div class="p-col-4">
-                                                        <p:outputLabel value="Tipo: "></p:outputLabel>
-                                                        <p:selectOneMenu id="TipoCentroCosto" 
-                                                                         value="" 
-                                                                         class=""
-                                                                         required="true"
-                                                                         requiredMessage="Ingrese Tipo de Costo">                            
-                                                            <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
-                                                            <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
-                                                            <f:selectItem itemLabel="Directo" itemValue="Directo"/>
 
-                                                        </p:selectOneMenu>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="Tipo: "></p:outputLabel>
+                                                    <p:selectOneMenu id="TipoCentroCosto" 
+                                                                     value="" 
+                                                                     class="">                            
+                                                        <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
+                                                        <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
+                                                        <f:selectItem itemLabel="Directo" itemValue="Directo"/>
 
-                                                    </div>
-                                                
-                   
+                                                    </p:selectOneMenu>
+                                                </div>
                                             </div>
                                         </div>    
-
-
-
-
-
-
-
-
 
                                         <p:toolbar>
                                             <p:toolbarGroup>
@@ -181,7 +197,7 @@
                                                         </div>
                                                     </f:facet>
 
-                                                     <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
                                                         <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
@@ -195,7 +211,7 @@
                                                         <p:commandButton icon="pi pi-pencil" action="#"  
                                                                          styleClass="edit-button rounded-button ui-button-info" process="@this">
                                                             <f:setPropertyActionListener value="#" target="#"/>
-                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                            <p:resetInput target=""/>
                                                         </p:commandButton>
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
@@ -203,11 +219,11 @@
                                                         <p:commandButton icon="pi pi-pencil" action="#"  
                                                                          styleClass="edit-button rounded-button ui-button-info" process="@this">
                                                             <f:setPropertyActionListener value="#" target="#"/>
-                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                            <p:resetInput target=""/>
                                                         </p:commandButton>
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
-                                                    
+
 
                                                 </p:dataTable>
 
@@ -245,22 +261,22 @@
 
 
                                         <div class="p-col-12 p-md-12 p-lg-12">
- 
-                                                <div class="p-grid">
 
-                                                    <div class="p-col-8">
-                                                        <p:outputLabel value="Nombre: "></p:outputLabel>
-                                                        <p:inputText disabled="#"  value=""></p:inputText>  
-                                                        <p:outputLabel value="Descripción: "></p:outputLabel>
-                                                        <p:inputTextarea disabled=""
-                                                                         maxlength="250"
-                                                                         placeholder="Descripcion maximo 255 caracteres"
-                                                                         value="" 
-                                                                         rows="5" 
-                                                                         cols="33" 
-                                                                         autoResize="false"/>
-                                                    </div>
-                                                     <div class="p-col-4">
+                                            <div class="p-grid">
+
+                                                <div class="p-col-8">
+                                                    <p:outputLabel value="Nombre: "></p:outputLabel>
+                                                    <p:inputText disabled="#"  value=""></p:inputText>  
+                                                    <p:outputLabel value="Descripción: "></p:outputLabel>
+                                                    <p:inputTextarea disabled=""
+                                                                     maxlength="250"
+                                                                     placeholder="Descripcion maximo 255 caracteres"
+                                                                     value="" 
+                                                                     rows="5" 
+                                                                     cols="33" 
+                                                                     autoResize="false"/>
+                                                </div>
+                                                <div class="p-col-4">
                                                     <p:outputLabel value="Fecha de Creación:"></p:outputLabel>
                                                     <p:datePicker  
                                                         style=""
@@ -272,13 +288,9 @@
                                                         style=""
                                                         id="Modificacion" 
                                                         value="" />
-
                                                 </div>
 
-                                                    
-                                                  
-
-                                                </div>                                                                   
+                                            </div>                                                                   
 
                                         </div>
 
@@ -295,9 +307,9 @@
 
                                                         </div>
                                                     </f:facet>
-                                                    
-                                                    
-                                                      <p:column headerText="Nombre" filterStyle="display : none">
+
+
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
                                                         <h:outputText value="#" />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
@@ -319,12 +331,12 @@
                                                         <p:commandButton icon="pi pi-pencil" action="#"  
                                                                          styleClass="edit-button rounded-button ui-button-info" process="@this">
                                                             <f:setPropertyActionListener value="#" target="#"/>
-                                                            <p:resetInput target=":form:manage-asiento"/>
+                                                            <p:resetInput target=""/>
                                                         </p:commandButton>
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
-                                                    
-                                                    
+
+
                                                 </p:dataTable>
 
                                             </p:toolbarGroup>
@@ -351,8 +363,8 @@
                         </p:dialog>
 
                         <!-- Tabla de datos -->
-                        <p:dataTable id="dt-procesoPrin" widgetVar="w-dt-procesoPrin" reflow="true" paginator="true" rows="5" 
-                                     rowSelectMode="add" paginatorPosition="bottom" value="#{procesoMB.listaProcesos}">
+                        <p:dataTable id="dtProcesoPrin" widgetVar="w-dt-procesoPrin" reflow="true" paginator="true" rows="5" 
+                                     rowSelectMode="add" paginatorPosition="bottom" var="procesoProduccion" value="#{procesoMB.listaProcesos}">
                             <!-- Buscador -->
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
@@ -365,23 +377,30 @@
                             </f:facet>
 
                             <p:column headerText="Código" filterStyle="display : none">
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
+                                <h:outputText value="#{procesoProduccion.identificador}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{procesoProduccion.nombre}" />
                             </p:column>
 
                             <p:column headerText="Descripción" >
-                                <h:outputText value="#" />
-                                <p:skeleton rendered="#"></p:skeleton>
+                                <h:outputText value="#{procesoProduccion.descripcion}" />
                             </p:column>
 
 
-                            <p:column headerText="Acciones">
-                                <p:commandButton icon="pi pi-times" action="#"  
-                                                 styleClass="edit-button rounded-button ui-button-danger" process="@this">
-                                    <f:setPropertyActionListener value="#" target="#"/>
-                                    <p:resetInput target=""/>
+                            <p:column exportable="false">
+                                <p:commandButton icon="pi pi-pencil" update=":form-princ:manage-editarProceso-form"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 oncomplete="PF('procesoPrincDialog').show()"
+                                                 process="@this">
+                                    <f:setPropertyActionListener value="#{procesoProduccion}" target="#{procesoMB.procesoProduccion}"/>
+                                    <p:resetInput target=":form-princ:manage-editarProceso-form"/>
                                 </p:commandButton>
-                                <p:skeleton rendered="#"></p:skeleton>
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                 oncomplete="#">
+                                    <f:setPropertyActionListener value="" target=""/>
+                                </p:commandButton>
                             </p:column>
 
                         </p:dataTable>
