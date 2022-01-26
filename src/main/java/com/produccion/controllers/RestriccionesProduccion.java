@@ -63,10 +63,10 @@ public class RestriccionesProduccion implements Serializable {
 
     public void redireccion() throws IOException {
 
-        if (!"Gerente".equals(listaRoles.get(0).getNombre())
-                || !"Jefe de Producción".equals(listaRoles.get(0).getNombre())
-                || !"Operario".equals(listaRoles.get(0).getNombre())) {
-            //externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+        if (!"Jefe de Producción".equals(listaRoles.get(0).getNombre())&&
+                !"Operario".equals(listaRoles.get(0).getNombre())
+                && !"Gerente".equals(listaRoles.get(0).getNombre())) {
+            externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
         }
     }
 
