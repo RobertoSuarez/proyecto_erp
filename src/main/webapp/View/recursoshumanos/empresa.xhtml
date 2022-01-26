@@ -7,8 +7,8 @@
 
     <body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
-
             <ui:define name="content" class="Contenido">
+                <f:event type="preRenderView" listener="#{empresaView.inicio()}"/>
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:submenu label="Empresa">
                         <p:menuitem value="Datos"

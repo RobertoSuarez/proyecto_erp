@@ -13,6 +13,7 @@ public class Roles {
     int idRol;
     String nombre;
     String detalle;
+    String URL;
 
     public int getIdRol() {
         return idRol;
@@ -36,6 +37,18 @@ public class Roles {
 
     public void setDetalle(String detalle) {
         this.detalle = detalle;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+    
+    public Roles(){
+        
     }
 
     public Roles(int idRol, String nombre, String detalle) {

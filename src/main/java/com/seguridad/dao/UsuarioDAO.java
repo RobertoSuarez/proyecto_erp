@@ -135,4 +135,9 @@ public class UsuarioDAO {
         usuario = iniciarSesion(usuario);
         lsitaUsuarios.get(2).toString();
     }
+    public String url (){
+        Roles roles = new Roles();
+        roles.setURL("/proyecto_erp/View/Global/Main.xhtml");
+        return roles.getURL();
+    }
 }

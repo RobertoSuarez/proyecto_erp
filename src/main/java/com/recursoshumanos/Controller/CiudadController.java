@@ -63,7 +63,6 @@ public class CiudadController implements Serializable {
         provincias = new ArrayList<>();
         provinciaDAO = new ProvinciaDAO();
         filtroProvincias = new ArrayList<>();
-        
         if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
                 "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
                 "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
