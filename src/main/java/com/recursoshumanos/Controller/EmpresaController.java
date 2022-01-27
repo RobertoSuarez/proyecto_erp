@@ -15,7 +15,6 @@ import com.recursoshumanos.Model.Entidad.Provincia;
 import com.recursoshumanos.Model.Entidad.Sucursal;
 import com.seguridad.models.Roles;
 import com.seguridad.models.Usuario;
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,11 +27,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author kestradalp
@@ -49,7 +43,6 @@ public class EmpresaController implements Serializable {
 
     FacesContext context = FacesContext.getCurrentInstance();
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    HttpSession httpSession = (HttpSession) context.getExternalContext().getSession(true);
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     Usuario usuarioSesion = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
@@ -71,7 +64,7 @@ public class EmpresaController implements Serializable {
     /**
      * Se crea las nuevas variables para asignarlos
      */
-    public EmpresaController(){
+    public EmpresaController() {
         provinciaDAO = new ProvinciaDAO();
         sucursalDAO = new SucursalDAO();
         empresaDAO = new EmpresaDAO();
@@ -80,15 +73,24 @@ public class EmpresaController implements Serializable {
         provincias = new ArrayList<>();
         ciudades = new ArrayList<>();
     }
-     public void inicio() throws IOException {
+
+    public void inicio() throws IOException {
         if (usuarioSesion == null || usuarioSesion.getIdUsuario() < 1) {
             externalContext.redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
         }
-        if (!"Gerente".equals(listaRoles.get(0).getNombre()) || 
-                !"Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
-                !"Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())){
-            System.out.println(httpSession.getLastAccessedTime());
-                PrimeFaces.current().executeScript("history.back(-1)");}
+        if ("Asistente de recursos humanos".equals(listaRoles.get(0).getNombre())) {
+            try {
+                externalContext.redirect("/proyecto_erp/View/recursoshumanos/ciudad.xhtml");
+            } catch (IOException ex) {
+            }
+        } else if (!"Gerente".equals(listaRoles.get(0).getNombre())
+                || !"Administrador de la empresa".equals(listaRoles.get(0).getNombre())
+                || !"Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())) {
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+            }
+        }
     }
 
     /**

@@ -42,9 +42,6 @@ public class CargoControlller implements Serializable {
     private Cargo cargo;
     private final CargoDAO cargoDAO;
     private List<Cargo> lista;
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se crean las nuevas variables para ser 
@@ -53,18 +50,6 @@ public class CargoControlller implements Serializable {
     public CargoControlller() {
         cargoDAO = new CargoDAO(new Cargo());
         lista = new ArrayList<>();
-        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
-                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
-                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
-                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
-            System.out.println("Ingreso exitoso");
-        else{
-            try {
-                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
-            } catch (IOException ex) {
-
-            }
-        }
     }
 
     /**

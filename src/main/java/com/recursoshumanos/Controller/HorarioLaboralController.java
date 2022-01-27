@@ -42,9 +42,6 @@ import javax.servlet.http.HttpSession;
 @ViewScoped
 public class HorarioLaboralController implements Serializable {
 
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     /**
      * Se declaran las variables que usará el Controlador de horario laboral.
      */
@@ -78,18 +75,6 @@ public class HorarioLaboralController implements Serializable {
         horas = new ArrayList<>();
         lista = new ArrayList<>();
         horarios = new ArrayList<>();
-        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
-                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
-                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
-                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
-            System.out.println("Ingreso exitoso");
-        else{
-            try {
-                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
-            } catch (IOException ex) {
-
-            }
-        }
         
     }
 

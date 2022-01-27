@@ -54,9 +54,6 @@ import org.primefaces.model.StreamedContent;
 @ViewScoped
 public class RolDePagoController implements Serializable {
     
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se declaran las variables del modelo Controlador de
@@ -140,18 +137,6 @@ public class RolDePagoController implements Serializable {
         detalles = new ArrayList<>();
         pagos = new ArrayList<>();
         
-        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
-                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
-                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
-                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
-            System.out.println("Ingreso exitoso");
-        else{
-            try {
-                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
-            } catch (IOException ex) {
-
-            }
-        }
     }
 
     /**

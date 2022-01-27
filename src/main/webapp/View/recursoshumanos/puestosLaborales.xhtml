@@ -9,65 +9,7 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content" class="Contenido">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:submenu label="Empresa">
-                        <p:menuitem value="Datos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    rendered="#{rolMB.rendered()}"
-                                    outcome="/View/recursoshumanos/empresa.xhtml"
-                                    icon="pi pi-home"/>
-                        <p:menuitem value="Ciudades"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/ciudad.xhtml"
-                                    icon="pi pi-globe"/>
-                        <p:menuitem value="Provincias"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/provincia.xhtml"
-                                    icon="pi pi-globe"/>
-                    </p:submenu>
-                    <p:submenu label="Personal">
-                        <p:menuitem value="Empleados"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
-                                    icon="pi pi-users"/>
-                        <p:menuitem value="Asistencia"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/asistencia.xhtml"
-                                    icon="pi pi-clock"/>
-                    </p:submenu>
-                    <p:submenu label="Areas">
-                        <p:menuitem value="Puestos Laborales"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
-                                    icon="pi pi-clone"/>
-                        <p:menuitem value="Cargos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/cargo.xhtml"
-                                    icon="pi pi-briefcase"/>
-                        <p:menuitem value="Departamentos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/departamentos.xhtml"
-                                    icon="pi pi-sitemap"/>
-                    </p:submenu>
-                    <p:submenu label="Horarios">
-                        <p:menuitem value="Horario Laboral"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
-                                    icon="pi pi-calendar"/>
-                        <p:menuitem value="Ingreso y Salida"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
-                                    icon="pi pi-clock"/>
-                        <p:menuitem value="Dia/Semana"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
-                                    icon="pi pi-align-center"/>
-                    </p:submenu>
-                    <p:menuitem value="Roles de Pago"
-                                style="display: flex; align-items: center; text-decoration: none;"
-                                outcome="/View/recursoshumanos/roles.xhtml" 
-                                icon="pi pi-money-bill"/>
-                </p:menubar>>
+                <ui:include src="menuRRHH.xhtml"/>
                 <h:form id="form">
                     <div class="card crud-demo">
                         <p:growl id="messages" showDetail="true"/>

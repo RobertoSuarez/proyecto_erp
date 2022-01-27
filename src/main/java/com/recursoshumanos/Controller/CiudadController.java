@@ -48,10 +48,6 @@ public class CiudadController implements Serializable {
     private List<Provincia> filtroProvincias;
     
     private int idProvincia;
-    
-    FacesContext context = FacesContext.getCurrentInstance();
-    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
     /**
      * Se crea las nuevas variables para asignarlos
@@ -63,18 +59,6 @@ public class CiudadController implements Serializable {
         provincias = new ArrayList<>();
         provinciaDAO = new ProvinciaDAO();
         filtroProvincias = new ArrayList<>();
-        if ("Gerente".equals(listaRoles.get(0).getNombre()) || 
-                "Administrador de la empresa".equals(listaRoles.get(0).getNombre())|| 
-                "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())||
-                "Asistente de recursos humanos".equals(listaRoles.get(0).getNombre()))
-            System.out.println("Ingreso exitoso");
-        else{
-            try {
-                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
-            } catch (IOException ex) {
-
-            }
-        }
     }
 
     /**
