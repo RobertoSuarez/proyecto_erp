@@ -50,7 +50,7 @@ public class FormulaProduccionDAO {
                         resultSet.getInt("rendimiento"),
                         resultSet.getString("estado"),
                         resultSet.getInt("codigo_producto")));
-
+                
             }
 
         } catch (Exception e) {
@@ -71,18 +71,45 @@ public class FormulaProduccionDAO {
     public void insertarFormula(FormulaProduccion f) {
         try {
             this.conexion.Conectar();
-            String cadena = "INSERT INTO public.FormulaProduccion(\n"
-                    + " codigo_formula, nombre_formula,descripcion,rendimiento,estado)\n"
-                    + " VALUES ('" + f.getCodigo_formula() + "','" + f.getNombre_formula() + "'"
-                    + ",'" + f.getDescripcion() + "','" + f.getRendimiento() + "','" + f.getEstado() + "');";
+            
+            String cadena = "INSERT INTO public.formula( codigo_formula, codigo_proceso, nombre_formula, descripcion, rendimiento, estado, codigo_producto)\n" +
+           " VALUES ('" +f.getCodigo_formula()+ "', '" + f.getCodigo_proceso()+ "', '" + f.getNombre_formula()+ "','" +f.getDescripcion()+ "',"
+                    + "'" +f.getRendimiento()+ "','" +f.getEstado()+ "','" + f.getCodigo_producto()+ "')";
+            
             conexion.Ejecutar2(cadena);
             conexion.cerrarConexion();
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
         } finally {
             conexion.cerrarConexion();
         }
     }
+    
+    public void update(FormulaProduccion formula, int cod_f) throws SQLException{
+    
+        try {
+            
+            this.conexion.Conectar();
+            String sql = "UPDATE public.FormulaProduccion\n"
+                    + "SET nombre_formula='"+formula.getNombre_formula()+"',"
+                    +" descripcion='"+formula.getNombre_formula()+"',"
+                    +" rendimiento='"+formula.getNombre_formula()+"',"
+                    +"estado='"+formula.getNombre_formula()+"',"
+                    + "where codigo_formula= "+cod_f+"";
+              
+            conexion.ejecutar(sql);
+            conexion.cerrarConexion();
+            
+        } catch (SQLException e) {
+            
+            throw e;
+        } finally {
+             this.conexion.cerrarConexion();
+        }
+    
+    
+    }
+    
 
     
 }
