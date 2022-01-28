@@ -12,7 +12,8 @@
 
             <ui:define name="content">
                 <ui:include src="subheaderProduccion.xhtml"/>
-                <h:form id="form-principalFormula" style="margin-top: 4%;">
+                <h:form id="form-princFormula" style="margin-top: 4%;">
+                    <p:growl id="growl" showDetail="true"/>
                     <div class="card">
                         <!-- Boton Crear Formula -->
                         <p:toolbar>
@@ -30,18 +31,18 @@
                         <p:dialog header="Nueva Fórmula" showEffect="fade" modal="true"
                                   widgetVar="crearFormulaDialog" responsive="true" width="90%"
                                   draggable="false" height="550">
-
-
                             <!-- Cuadros de texto de la izquierda -->
-                            <p:outputPanel  id="manage-nuevaFormula-form"  class="ui-fluid">
-                                <p:outputPanel>
+
+                            <p:outputPanel id="manage-agregarFormula-form" class="ui-fluid">
+                                <p:outputPanel  rendered="#{not empty formulaMB.formulaProduccion}">
                                     <div class="p-grid p-justify-around">
                                         <div class="p-col-6 p-md-12 p-lg-5">
                                             <div class="p-grid">
                                                 <div class="p-col-6">
-                                                    <p:outputLabel for="nombreFormula"> Nombre: </p:outputLabel>
-                                                    <p:inputText id="nombreFormula" value="#{formulaMB.formulaProduccion.nombre_formula}" maxlength="50"
-                                                                 placeholder="Maximo 50 caracteres"></p:inputText>
+
+                                                    <p:outputLabel value="Nombre: "></p:outputLabel>
+                                                    <p:inputText value="#{formulaMB.formulaProduccion.nombre_formula}" ></p:inputText>
+
                                                 </div>
                                                 <div class="p-col-6">
                                                     <p:outputLabel value="." style="color: white"/>
@@ -50,16 +51,18 @@
                                                     </p:commandButton>
                                                 </div>
                                                 <div class="p-col-12">
-
-                                                    <p:outputLabel for="descripcionFormula">Descripcion: </p:outputLabel>
-                                                    <p:inputText id="descripcionFormula" value="#{formulaMB.formulaProduccion.descripcion}" maxlength="50"
-                                                                 placeholder="Maximo 50 caracteres" ></p:inputText>
-
+                                                    <p:outputLabel value="Descripción :"></p:outputLabel>
+                                                    <p:inputTextarea maxlength="50"
+                                                                     placeholder="Descripcion maximo 50 caracteres"
+                                                                     value="#{formulaMB.formulaProduccion.descripcion}"
+                                                                     rows="5" 
+                                                                     cols="33" 
+                                                                     autoResize="false"/>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:outputLabel for="rendimientoFormula">Rendimiento : </p:outputLabel>
-                                                    <p:inputText id="rendimientoFormula" value="#{formulaMB.formulaProduccion.rendimiento}" maxlength="25"
-                                                                 placeholder="Maximo 25 caracteres" ></p:inputText>
+                                                    <p:outputLabel value="Rendimiento: "></p:outputLabel>
+                                                    <p:inputText value="#{formulaMB.formulaProduccion.rendimiento}" 
+                                                                 ></p:inputText>
                                                 </div>
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Tipo:"></p:outputLabel>
@@ -105,8 +108,8 @@
                                                                      required="true"
                                                                      requiredMessage="Seleccionar Proceso">                            
                                                         <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
-                                                        <f:selectItem itemLabel="Proceso Principal 1" itemValue="Prin 1"/>
-                                                        <f:selectItem itemLabel="Proceso Principal 2" itemValue="Prin 2"/>
+                                                        <f:selectItem itemLabel="Proceso Princiapal 1" itemValue="Prin 1"/>
+                                                        <f:selectItem itemLabel="Proceso Princiapal 2" itemValue="Prin 2"/>
                                                     </p:selectOneMenu>
 
                                                 </div>
@@ -183,19 +186,18 @@
                                             </div>
                                             <!-- Botones Guardar/Cerrar -->
                                             <div class="p-grid p-justify-end">
-                                                <div class="p-col-2">                                                
-                                                    <p:commandButton value="Guardar" actionListener="#{formulaMB.insertar()}"
-                                                                     update="dtformulaPrin, form-principalFormula"
-                                                                     process="manage-nuevaFormula-form @this"
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar" actionListener="#{formulaMB.insertarFormula()}"
+                                                                     update="dtFormulaPrin, form-princFormula"
+                                                                     process="manage-agregarFormula-form @this"
                                                                      onclick ="PF('crearFormulaDialog').hide()"
                                                                      icon="pi pi-check" styleClass="ui-button-primary"/>
 
                                                 </div>
                                                 <div class="p-col-2">
-                                                    <p:commandButton value="Cerrar" icon="pi pi-check"
-                                                                     onclick ="PF('crearFormulaDialog').hide()" 
-                                                                     styleClass="ui-button-danger"/>
-
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('crearFormula').hide()"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -531,8 +533,8 @@
                         </p:dialog>
 
                         <!-- Tabla de datos -->
-                        <p:dataTable reflow="true" paginator="true" rows="4" 
-                                     rowSelectMode="add" paginatorPosition="bottom" id="dtformulaPrin"
+                        <p:dataTable id="dtFormulaPrin" reflow="true" paginator="true" rows="4" 
+                                     rowSelectMode="add" paginatorPosition="bottom" 
                                      value="#{formulaMB.listaFormula}" var="Tablaformula">
                             <!-- Buscador -->
                             <f:facet name="header">
@@ -560,14 +562,17 @@
 
                             </p:column>
 
-                            <p:column headerText="Acciones">
-                                <p:commandButton icon="pi pi-pencil" action="#"  
-                                                 styleClass="edit-button rounded-button ui-button-primary" process=""
-                                                 oncomplete="PF('modificarForm').show()"
-                                                 >
-                                    <f:setPropertyActionListener value="#" target="#"/>
-                                    <p:resetInput target=""/>
+                            <p:column exportable="false">
+                                <p:commandButton icon="pi pi-pencil" update=":form-princFormula:manage-agregarFormula-form"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 oncomplete="PF('crearFormulaDialog').show()"
+                                                 process="@this">
+                                    <f:setPropertyActionListener value="#{formulaProduccion}" target="#{formulaMB.formulaProduccion}"/>
+                                    <p:resetInput target=":form-princFormula:manage-agregarFormula-form"/>
                                 </p:commandButton>
+                                
+                                
+                                
                                 <p:skeleton rendered="#"></p:skeleton>
                                 <p:commandButton icon="pi pi-trash" action="#"  
                                                  styleClass="edit-button rounded-button ui-button-danger" process="@this"

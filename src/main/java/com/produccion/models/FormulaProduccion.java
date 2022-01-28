@@ -20,10 +20,6 @@ public class FormulaProduccion {
     private int rendimiento;
     private String estado;
     private int codigo_producto;
-    
-    
-    
-    
 
     public FormulaProduccion() {
     }
@@ -101,10 +97,8 @@ public class FormulaProduccion {
     }
     
     
+ 
     
-
-    
-  
   
     
 }
