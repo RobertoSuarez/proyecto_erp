@@ -6,10 +6,10 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <body>
-        
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="title">Solicitud orden de producción</ui:define>
             <ui:define name="content">
+                <f:event type="preRenderView" listener="#{restriccionesProduccion.redireccionInternas()}"/>
                 <ui:include src="subheaderProduccion.xhtml"/>
                 <h:form id="form" style="margin-top: 4%;">
                     <div class="card">

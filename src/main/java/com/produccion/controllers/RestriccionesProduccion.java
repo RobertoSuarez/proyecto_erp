@@ -34,31 +34,29 @@ public class RestriccionesProduccion implements Serializable {
         usuarioDAO = new UsuarioDAO();
     }
 
-    public String rendered() {
-        if (listaRoles.get(0).getNombre().equals("Asistente de recursos humanos")) {
+    public String renderedMproduccion() {
+        if (listaRoles.get(0).getNombre().equals("Operario")) {
             return "false";
         } else {
             return "true";
         }
     }
 
-    public void restriccionUser() {
-        try {
-
-            if ("Jefe de Producción".equals(listaRoles.get(0).getNombre())
+    public String restriccionUser() {
+        if (listaRoles.get(0).getNombre().equals("Jefe de Producción")) {
+            return "/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml";
+        } else {
+            return "/proyecto_erp/View/produccion/procesoProduccion.xhtml";
+        }
+    }
+    public String renMenu() {
+        if ("Jefe de Producción".equals(listaRoles.get(0).getNombre())
                     || "Operario".equals(listaRoles.get(0).getNombre())
                     || "Gerente".equals(listaRoles.get(0).getNombre())) {
-                externalContext.redirect("/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml");
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Solo los Administradores y personal "
-                                + "encargado de producción pueden ingresar al módulo."));
-            }
-        } catch (IOException e) {
-
+            return "true";
+        } else {
+            return "false";
         }
-
-        System.out.println("Holaaaaa" + listaRoles.get(0).getNombre());
     }
 
     public void redireccion() throws IOException {
@@ -67,6 +65,12 @@ public class RestriccionesProduccion implements Serializable {
                 !"Operario".equals(listaRoles.get(0).getNombre())
                 && !"Gerente".equals(listaRoles.get(0).getNombre())) {
             externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+        }
+    }
+    public void redireccionInternas() throws IOException {
+
+        if ("Operario".equals(listaRoles.get(0).getNombre())) {
+            externalContext.redirect("/proyecto_erp/View/produccion/procesoProduccion.xhtml");
         }
     }
 
