@@ -5,36 +5,32 @@
  */
 package com.produccion.models;
 
-import java.util.Date;
-import java.util.Objects;
-
 /**
  *
  * @author Alex
  */
-public class ProcesoProduccion {
-    private int codigo_proceso;
+public class CentroCosto {
+    private int codigo_centroc;
     private String nombre;
     private String descripcion;
     private String identificador;
 
-    public ProcesoProduccion() {
-    }
-
-    public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion, 
-            String identificador) {
-        this.codigo_proceso = codigo_proceso;
+    public CentroCosto(int codigo_centroc, String nombre, String descripcion, String identificador) {
+        this.codigo_centroc = codigo_centroc;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.identificador = identificador;
     }
 
-    public int getCodigo_proceso() {
-        return codigo_proceso;
+    public CentroCosto() {
     }
 
-    public void setCodigo_proceso(int codigo_proceso) {
-        this.codigo_proceso = codigo_proceso;
+    public int getCodigo_centroc() {
+        return codigo_centroc;
+    }
+
+    public void setCodigo_centroc(int codigo_centroc) {
+        this.codigo_centroc = codigo_centroc;
     }
 
     public String getNombre() {
@@ -63,8 +59,8 @@ public class ProcesoProduccion {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + this.codigo_proceso;
+        int hash = 5;
+        hash = 73 * hash + this.codigo_centroc;
         return hash;
     }
 
@@ -79,10 +75,12 @@ public class ProcesoProduccion {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ProcesoProduccion other = (ProcesoProduccion) obj;
-        if (this.codigo_proceso != other.codigo_proceso) {
+        final CentroCosto other = (CentroCosto) obj;
+        if (this.codigo_centroc != other.codigo_centroc) {
             return false;
         }
         return true;
     }
+    
+    
 }
