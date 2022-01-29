@@ -21,65 +21,48 @@ import org.primefaces.PrimeFaces;
  *
  * @author Jimmy
  */
-/** Solo a los controladores se les pone implements serializable*/
+/**
+ * Solo a los controladores se les pone implements serializable
+ */
+@ManagedBean(name = "formulaMB")
 
-@ManagedBean (name = "formulaMB")
-
-/** ViewScoped consuntar*/
 @ViewScoped
 
-public class FormulaProduccionManagedBean implements Serializable{
-    
-    private FormulaProduccion formulaProduccion=new FormulaProduccion();
+public class FormulaProduccionManagedBean implements Serializable {
+
+    private FormulaProduccion formulaProduccion = new FormulaProduccion();
     private FormulaProduccionDAO formulaProduccionDAO = new FormulaProduccionDAO();
-    private List<FormulaProduccion> listaFormula=new ArrayList<>();
-    
+    private List<FormulaProduccion> listaFormula = new ArrayList<>();
+
     @PostConstruct
     public void init() {
         System.out.println("PostConstruct");
-        listaFormula=formulaProduccionDAO.getFormula();
+        listaFormula = formulaProduccionDAO.getFormula();
     }
     
-    public void closeDialogModalf(){
+      public void closeDialogModal() {
         PrimeFaces.current().executeScript("PF('crearFormulaDialog').hide()");
     }
-    
-    public void insertarFormula(){
-    
+      
+       public void insertar() {
+           System.err.println("Entro ......");
         try {
-            if("".equals(formulaProduccion.getNombre_formula())){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Advertencia","Ingresar Nombre")); 
-            }
-            else if("".equals(formulaProduccion.getDescripcion())){
-                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Advertencia","Ingresar descripcion")); 
-            }else if("".equals(formulaProduccion.getRendimiento())){
-                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Advertencia","Ingresar rendimiento")); 
-            }else {
-            this.formulaProduccionDAO.insertarF(formulaProduccion);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Exito","Formula Agregada"));
-            }
-            
-                    
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Error no se guardo"));
-        }
-        closeDialogModalf();
-        PrimeFaces.current().ajax().update("form-prinFormula:dtFormulaPrin");
-
-    }
-    
-    public void editarFormula() {
-        try {
-            if ("".equals(formulaProduccion.getNombre_formula())) {
+            if ("".equals(formulaProduccion.getCodigo_proceso())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(formulaProduccion.getNombre_formula())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
             } else if ("".equals(formulaProduccion.getDescripcion())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Descripción"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else if ("".equals(formulaProduccion.getRendimiento())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Rendimiento"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else if ("".equals(formulaProduccion.getEstado())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else if ("".equals(formulaProduccion.getCodigo_producto())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
-                this.formulaProduccionDAO.actualizar(formulaProduccion, formulaProduccion.getCodigo_formula());
+                this.formulaProduccionDAO.insertarFormula(formulaProduccion);
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Guardado"));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
             }
 
         } catch (Exception e) {
@@ -87,11 +70,40 @@ public class FormulaProduccionManagedBean implements Serializable{
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
-        PrimeFaces.current().executeScript("PF('crearFormulaDialog').hide()");
-        PrimeFaces.current().ajax().update("form:dtFormulaPrin", "form:growl");
+        closeDialogModal();
+        PrimeFaces.current().ajax().update("form-princFormula:dtformulaPrin");
     }
-    
-    
+     
+         public void editar() {
+             System.err.println("Entro en editar......");
+        try {
+            if ("".equals(formulaProduccion.getCodigo_proceso())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(formulaProduccion.getNombre_formula())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
+            } else if ("".equals(formulaProduccion.getDescripcion())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else if ("".equals(formulaProduccion.getRendimiento())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else if ("".equals(formulaProduccion.getEstado())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else if ("".equals(formulaProduccion.getCodigo_producto())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else {
+                this.formulaProduccionDAO.update(formulaProduccion);
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
+            }
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                            "Error al guardar"));
+        }
+        PrimeFaces.current().executeScript("PF('crearFormulaDialg').hide()");
+        PrimeFaces.current().ajax().update("form:dtFormulaPrin", "form:growl");
+    } 
+       
     public FormulaProduccion getFormulaProduccion() {
         return formulaProduccion;
     }
@@ -115,13 +127,11 @@ public class FormulaProduccionManagedBean implements Serializable{
     public void setListaFormula(List<FormulaProduccion> listaFormula) {
         this.listaFormula = listaFormula;
     }
-    
-     /**
-      * Cargar metodo que permite cargar la infomracion de la formula  
-      */
+
+  
     
     
     
     
-    
+
 }
