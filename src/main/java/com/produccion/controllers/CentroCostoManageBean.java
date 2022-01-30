@@ -23,8 +23,8 @@ import org.primefaces.PrimeFaces;
  */
 @ManagedBean(name = "centroMB")
 @ViewScoped
-public class CentroCostoManageBean implements Serializable{
-    
+public class CentroCostoManageBean implements Serializable {
+
     private List<CentroCosto> listaCentro = new ArrayList<>();
     private CentroCostoDAO centroCostoDAO;
     private CentroCosto centroCosto;
@@ -34,13 +34,13 @@ public class CentroCostoManageBean implements Serializable{
         centroCosto = new CentroCosto();
         centroCostoDAO = new CentroCostoDAO();
     }
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         System.out.println("PostConstruct");
         listaCentro = centroCostoDAO.getCentroCosots();
     }
-    
+
     public void insertar() {
         try {
             if ("".equals(centroCosto.getIdentificador())) {
@@ -52,7 +52,9 @@ public class CentroCostoManageBean implements Serializable{
             } else {
                 this.centroCostoDAO.insertarc(centroCosto);
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Dato Agregado"));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Agregados"));
+                PrimeFaces.current().executeScript("PF('agregarCentroDeCostos').hide()");
+                //PrimeFaces.current().ajax().update("dtCentroCosto");
             }
 
         } catch (Exception e) {
@@ -60,10 +62,9 @@ public class CentroCostoManageBean implements Serializable{
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
-        //PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
-        PrimeFaces.current().ajax().update("dtCentroCosto");
+
     }
-    
+
     public void editar() {
         try {
             if ("".equals(centroCosto.getIdentificador())) {
@@ -74,10 +75,9 @@ public class CentroCostoManageBean implements Serializable{
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.centroCostoDAO.updatec(centroCosto);
-                System.out.println(centroCosto.getCodigo_centroc());
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Guardado"));
-                PrimeFaces.current().executeScript("PF('centroEditDialog').hide()");
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Guardados"));
+                PrimeFaces.current().executeScript("PF('agregarCentroDeCostos').hide()");
             }
 
         } catch (Exception e) {
@@ -85,15 +85,16 @@ public class CentroCostoManageBean implements Serializable{
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
-        
+
         PrimeFaces.current().ajax().update(":form-princ:dtProcesoPrin");
     }
-    
+
     public void eliminar() {
         try {
             this.centroCostoDAO.deletec(centroCosto, centroCosto.getIdentificador());
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Eliminado"));
+            PrimeFaces.current().executeScript("PF('agregarCentroDeCostos').hide()");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
@@ -108,13 +109,13 @@ public class CentroCostoManageBean implements Serializable{
     public void setListaCentro(List<CentroCosto> listaCentro) {
         this.listaCentro = listaCentro;
     }
-    
+
     public void aleatorioIdentiCosto() {
         String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
         String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
         this.centroCosto.setIdentificador("CC-" + uuid + uuid2);
     }
-    
+
     public void openNew() {
         this.selectCosto = new CentroCosto();
         aleatorioIdentiCosto();
@@ -143,6 +144,5 @@ public class CentroCostoManageBean implements Serializable{
     public void setSelectCosto(CentroCosto selectCosto) {
         this.selectCosto = selectCosto;
     }
-    
-    
+
 }

@@ -14,15 +14,17 @@ public class Costo {
     private String nombre;
     private String descripcion;
     private String tipo;
+    private String identificador;
 
     public Costo() {
     }
 
-    public Costo(int codigo_costos, String nombre, String descripcion, String tipo) {
+    public Costo(int codigo_costos, String nombre, String descripcion, String tipo, String identificador) {
         this.codigo_costos = codigo_costos;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
+        this.identificador = identificador;
     }
 
     public int getCodigo_costos() {
@@ -56,4 +58,13 @@ public class Costo {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getIdentificador() {
+        return identificador;
+    }
+
+    public void setIdentificador(String identificador) {
+        this.identificador = identificador;
+    }
+    
 }

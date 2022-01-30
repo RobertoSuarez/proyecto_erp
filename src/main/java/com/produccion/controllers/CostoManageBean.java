@@ -11,8 +11,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -26,15 +29,87 @@ public class CostoManageBean implements Serializable{
     private Costo costo;
     private Costo selectCosto;
 
-    public CostoManageBean(CostoDAO costoDAO, Costo costo) {
-        this.costoDAO = costoDAO;
-        this.costo = costo;
+    public CostoManageBean() {
+        costoDAO = new CostoDAO();
+        costo = new Costo();
     }
     
     @PostConstruct
     public void init(){
         System.out.println("PostConstruct");
         listaCosto = costoDAO.getCosto();
+    }
+    
+    public void insertar() {
+        try {
+            if ("".equals(costo.getIdentificador())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(costo.getNombre())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
+            } else if ("".equals(costo.getDescripcion())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else {
+                this.costoDAO.insertarCosto(costo);
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Agregados"));
+                PrimeFaces.current().executeScript("PF('agregarCostos').hide()");
+            }
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                            "Error al guardar"));
+        }
+        //PrimeFaces.current().executeScript("PF('agregarCostos').hide()");
+        //PrimeFaces.current().ajax().update("dtCosto");
+    }
+    
+    public void editar() {
+        try {
+            if ("".equals(costo.getIdentificador())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Codigo"));
+            } else if ("".equals(costo.getNombre())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
+            } else if ("".equals(costo.getDescripcion())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else {
+                this.costoDAO.updateCosto(costo);
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Guardados"));
+                PrimeFaces.current().executeScript("PF('costoEditDialog').hide()");
+            }
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                            "Error al guardar"));
+        }
+        
+        PrimeFaces.current().ajax().update(":form-princ:dtCosto");
+    }
+    
+    public void eliminar() {
+        try {
+            this.costoDAO.deletecosto(costo, costo.getIdentificador());
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Eliminado"));
+            PrimeFaces.current().executeScript("PF('agregarCostos').hide()");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                            "Error al eliminar"));
+        }
+    }
+    
+    public void aleatorioIdentiCosto() {
+        String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
+        String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
+        this.costo.setIdentificador("CT-" + uuid + uuid2);
+    }
+    
+    public void openNew() {
+        this.selectCosto = new Costo();
+        aleatorioIdentiCosto();
     }
 
     public CostoDAO getCostoDAO() {

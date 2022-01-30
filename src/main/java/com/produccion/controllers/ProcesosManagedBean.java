@@ -90,7 +90,7 @@ public class ProcesosManagedBean implements Serializable {
                             "Error al guardar"));
         }
         
-        PrimeFaces.current().ajax().update("form-princ:dtProcesoPrin", "form-princ:growl");
+        PrimeFaces.current().ajax().update("@form");
     }
 
     public void editar() {
@@ -106,8 +106,9 @@ public class ProcesosManagedBean implements Serializable {
                 System.out.println(procesoProduccion.getCodigo_proceso());
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Guardado"));
-                PrimeFaces.current().executeScript("PF('procesoEditDialog').hide()");
                 PrimeFaces.current().ajax().update("form-princ:dtProcesoPrin");
+                PrimeFaces.current().executeScript("PF('procesoEditDialog').hide()");
+                
             }
 
         } catch (Exception e) {
