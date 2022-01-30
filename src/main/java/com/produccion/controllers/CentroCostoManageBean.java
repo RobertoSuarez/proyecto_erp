@@ -51,10 +51,10 @@ public class CentroCostoManageBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.centroCostoDAO.insertarc(centroCosto);
+                
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Agregados"));
-                PrimeFaces.current().executeScript("PF('agregarCentroDeCostos').hide()");
-                //PrimeFaces.current().ajax().update("dtCentroCosto");
+                listaCentro = centroCostoDAO.getCentroCosots();
             }
 
         } catch (Exception e) {
@@ -75,9 +75,10 @@ public class CentroCostoManageBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.centroCostoDAO.updatec(centroCosto);
+                listaCentro = centroCostoDAO.getCentroCosots();
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Guardados"));
-                PrimeFaces.current().executeScript("PF('agregarCentroDeCostos').hide()");
+                PrimeFaces.current().executeScript("PF('centroEditDialog').hide()");
             }
 
         } catch (Exception e) {
@@ -85,16 +86,15 @@ public class CentroCostoManageBean implements Serializable {
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
-
-        PrimeFaces.current().ajax().update(":form-princ:dtProcesoPrin");
     }
 
     public void eliminar() {
         try {
             this.centroCostoDAO.deletec(centroCosto, centroCosto.getIdentificador());
+            listaCentro = centroCostoDAO.getCentroCosots();
+            PrimeFaces.current().executeScript("PF('deleteCentroDialog').hide()");
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Eliminado"));
-            PrimeFaces.current().executeScript("PF('agregarCentroDeCostos').hide()");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
