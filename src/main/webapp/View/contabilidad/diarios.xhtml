@@ -60,7 +60,8 @@
                                     <p:resetInput target=":diario-form:manage-diario-form"/>
                                 </p:commandButton>
                                 <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
-                                                 oncomplete="PF('deleteDiarioDialog').show()">
+                                                 oncomplete="PF('deleteDiarioDialog').show()"
+                                                 disabled="#{rolcontMB.rol()}">
                                     <f:setPropertyActionListener value="#{diario}" target="#{diarioManagedBean.onSelectedDiaio}"/>
                                 </p:commandButton>
                             </p:column>
