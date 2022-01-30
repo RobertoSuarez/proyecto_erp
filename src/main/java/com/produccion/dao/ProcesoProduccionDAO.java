@@ -47,17 +47,13 @@ public class ProcesoProduccionDAO {
 
     public void insertarp(ProcesoProduccion proceso) {
         try {
-            this.conexion.Conectar();
 
             String sql = "INSERT INTO public.proceso_produccion(nombre, descripcion, identificador)\n"
                     + "	VALUES ('" + proceso.getNombre() + "', '" + proceso.getDescripcion() + "', '" + proceso.getIdentificador() + "')";
 
             conexion.Ejecutar2(sql);
-            conexion.cerrarConexion();
 
         } catch (Exception e) {
-        } finally {
-            conexion.cerrarConexion();
         }
     }
 

@@ -79,6 +79,7 @@ public class ProcesosManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.procesoProduccionDAO.insertarp(procesoProduccion);
+                listaProcesos = procesoProduccionDAO.getProcesosProduccion();
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
                 PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
