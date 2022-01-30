@@ -39,7 +39,7 @@ public class FormulaProduccionDAO {
         List<FormulaProduccion> formula = new ArrayList<>();
         String sql = String.format("Select * from formula");
         try {
-            conexion.conectar();
+
             resultSet = conexion.ejecutarSql(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
@@ -55,9 +55,6 @@ public class FormulaProduccionDAO {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-
-        } finally {
-           conexion.desconectar();
         }
         return formula;
     }
@@ -68,21 +65,38 @@ public class FormulaProduccionDAO {
      *
      * @param f objeto formula
      */
-    public void insertarFormula(FormulaProduccion f) {
+    public int insertarFormula(FormulaProduccion f) {
         try {
-            this.conexion.Conectar();
-            String cadena = "INSERT INTO public.FormulaProduccion(\n"
-                    + " codigo_formula, nombre_formula,descripcion,rendimiento,estado)\n"
-                    + " VALUES ('" + f.getCodigo_formula() + "','" + f.getNombre_formula() + "'"
-                    + ",'" + f.getDescripcion() + "','" + f.getRendimiento() + "','" + f.getEstado() + "');";
-            conexion.Ejecutar2(cadena);
-            conexion.cerrarConexion();
-        } catch (SQLException e) {
+            String cadena = "INSERT INTO public.formula(\n"
+                    + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto)\n"
+                    + "	VALUES ( 6, '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', 6);";
+            return conexion.insertar(cadena);
 
-        } finally {
-            conexion.cerrarConexion();
+        } catch (Exception e) {
+            return -1;
         }
     }
 
-    
+    public void update(FormulaProduccion formula) throws SQLException {
+        try {
+            this.conexion.Conectar();
+            String sql = "UPDATE public.formula\n"
+                    + " SET codigo_proceso='" + formula.getCodigo_proceso() + "',"
+                    + " nombre_formula='" + formula.getNombre_formula() + "', "
+                    + " descripcion='" + formula.getDescripcion() + "', "
+                    + " rendimiento='" + formula.getRendimiento() + "', "
+                    + " estado='" + formula.getEstado() + "', "
+                    + " codigo_producto='" + formula.getCodigo_producto() + "', "
+                    + "Where codigo_formula= ";
+
+            conexion.ejecutar(sql);
+            conexion.cerrarConexion();
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            this.conexion.cerrarConexion();
+        }
+    }
+
 }

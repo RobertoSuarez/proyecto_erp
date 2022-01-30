@@ -31,9 +31,9 @@
                                 </p:toolbarGroup>                       
                             </p:toolbar> 
                             <!-- Tabla visual de datos  !-->
-                            <p:dataTable editable="true" reflow="true"
+                            <p:dataTable id="dtArticulosPrin" editable="true" reflow="true"
                                      editInitEvent="dblclick" editMode="cell"
-                                     value="">
+                                     value="#{articulosMB.listaArticulos}" var="TablaArticulos">
                                 <f:facet name="header">
                                     <div class="p-d-flex p-jc-between p-ai-center">
                                         <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Productos</span>
@@ -44,46 +44,45 @@
                                     </div>
                                 </f:facet>
                                 <p:column headerText="Codigo"  >
-                                    <h:outputText value="---"/>
+                                    <h:outputText value="#{TablaArticulos.id}"/>
                                 </p:column>
 
                                 <p:column headerText="Articulo" >
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{TablaArticulos.nombre}"/>
                                 </p:column>                       
 
-                                <p:column headerText="Descripción" >
-                                    <h:outputText value="" style="font-weight: 700">
-                                        <f:convertNumber currencySymbol="$" type="currency"/>
-                                    </h:outputText>
-                                </p:column>
+                               <p:column headerText="Descripcion" >
+                                   <h:outputText value="#{TablaArticulos.descripcion}" />
+
+                            </p:column>
 
                                 <p:column headerText="Bodega">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{TablaArticulos.id_bodega}"/>
                                 </p:column>
 
                                 <p:column headerText="Categoría">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{TablaArticulos.id_categoria}"/>
                                 </p:column>
 
                                 <p:column headerText="Tipo">
                                     <h:outputText styleClass="product-badge"
-                                                  value=""/>
+                                                  value="#{TablaArticulos.id_tipo}"/>
                                 </p:column>
                                 <p:column headerText="Cantidad">
                                     <h:outputText styleClass="product-badge"
-                                                  value=""/>
+                                                  value="#{TablaArticulos.cantidad}"/>
                                 </p:column>
                                 <p:column headerText="Costo">
                                     <h:outputText styleClass="product-badge"
-                                                  value=""/>
+                                                  value="#{TablaArticulos.costo}"/>
                                 </p:column>
                                 <p:column headerText="IVA">
                                     <h:outputText styleClass="product-badge"
-                                                  value=""/>
+                                                  value="#{TablaArticulos.iva}"/>
                                 </p:column>
                                 <p:column headerText="ICE">
                                     <h:outputText styleClass="product-badge"
-                                                  value=""/>
+                                                  value="#{TablaArticulos.ice}"/>
                                 </p:column>
                                 <p:column headerText="Acción" filterStyle="display : none">
                                     <p:button icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"/>

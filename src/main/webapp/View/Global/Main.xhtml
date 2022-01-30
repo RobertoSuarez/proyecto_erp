@@ -115,28 +115,9 @@
                         </a>
                     </div>
                 </ui:fragment>
-                <div class="p-col-12 p-lg-6 p-xl-3">
-                    <!-- comment <a href="../produccion/listaOrdenProduccion.xhtml">
-                        <div class="card-box bg-yellow">
-                            <div class="inner">
-                                <h3> Producción </h3>
-                                <p> Descripción </p>
-                            </div>
-                            <div class="icon">
-                                <i class="pi pi-th-large" aria-hidden="true"></i>
-                            </div>
-                            <div class="card-box-footer">Ingresar
-                                <i class="pi pi-arrow-circle-right"/>
-                            </div>
-
-                        </div>
-                    </a>-->
-
-
-
-                    <h:form>
-                        <p:growl id="mensaje" severity="info, fatal" showDetail="true" showSummary="false"></p:growl>
-                        <p:commandLink action="#{restriccionesProduccion.restriccionUser()}" update="mensaje" style="text-decoration: none;">
+                <ui:fragment rendered="#{restriccionesProduccion.renMenu()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="#{restriccionesProduccion.restriccionUser()}">
                             <div class="card-box bg-yellow">
                                 <div class="inner">
                                     <h3> Producción </h3>
@@ -150,9 +131,10 @@
                                 </div>
 
                             </div>
-                        </p:commandLink>
-                    </h:form>
-                </div>
+                        </a>
+                    </div>
+                </ui:fragment>
+
                 <div class="p-col-12 p-lg-6 p-xl-3">
                     <a href="../inventario/entradaProducto.xhtml" >
                         <div class="card-box bg-deeppurple">
