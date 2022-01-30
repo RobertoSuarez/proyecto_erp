@@ -11,6 +11,8 @@ import com.recursoshumanos.Model.DAO.PuestoLaboralDAO;
 import com.recursoshumanos.Model.Entidad.Cargo;
 import com.recursoshumanos.Model.Entidad.Departamento;
 import com.recursoshumanos.Model.Entidad.PuestoLaboral;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -61,6 +64,7 @@ public class PuestoLaboralController implements Serializable {
         lista = new ArrayList<>();
         departamentos = new ArrayList<>();
         cargos = new ArrayList<>();
+        
     }
 
     /**

@@ -7,11 +7,14 @@ package com.recursoshumanos.Controller;
 
 import com.recursoshumanos.Model.DAO.IngresosSalidasDAO;
 import com.recursoshumanos.Model.Entidad.IngresosSalidas;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;

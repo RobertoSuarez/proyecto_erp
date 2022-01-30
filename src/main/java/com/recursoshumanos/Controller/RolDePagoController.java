@@ -22,6 +22,8 @@ import com.recursoshumanos.Model.Entidad.RolPagos;
 import com.recursoshumanos.Model.Entidad.Sueldo;
 import com.recursoshumanos.Model.Entidad.Suspencion;
 import com.recursoshumanos.Model.Entidad.TipoRubro;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -50,6 +53,7 @@ import org.primefaces.model.StreamedContent;
 @Named(value = "rolDePagoView")
 @ViewScoped
 public class RolDePagoController implements Serializable {
+    
 
     /**
      * Se declaran las variables del modelo Controlador de
@@ -132,6 +136,7 @@ public class RolDePagoController implements Serializable {
         empleados = new ArrayList<>();
         detalles = new ArrayList<>();
         pagos = new ArrayList<>();
+        
     }
 
     /**

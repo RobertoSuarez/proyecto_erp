@@ -1,4 +1,4 @@
-    <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -97,39 +97,44 @@
                     </a>
                 </div>
 
-                <div class="p-col-12 p-lg-6 p-xl-3">
-                    <a href="../recursoshumanos/empresa.xhtml">
-                        <div class="card-box bg-darkpink">
-                            <div class="inner">
-                                <h3> Recursos Humanos</h3>
-                                <p> Descripción </p>
+                <ui:fragment rendered="#{rolMB.menu()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="#{rolMB.vista()}">
+                            <div class="card-box bg-darkpink">
+                                <div class="inner">
+                                    <h3> Recursos Humanos</h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-user" aria-hidden="true"></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="pi pi-user" aria-hidden="true"></i>
-                            </div>
-                            <div class="card-box-footer">Ingresar
-                                <i class="pi pi-arrow-circle-right"/>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="p-col-12 p-lg-6 p-xl-3">
-                    <a href="../produccion/listaOrdenProduccion.xhtml">
-                        <div class="card-box bg-yellow">
-                            <div class="inner">
-                                <h3> Producción </h3>
-                                <p> Descripción </p>
-                            </div>
-                            <div class="icon">
-                                <i class="pi pi-th-large" aria-hidden="true"></i>
-                            </div>
-                            <div class="card-box-footer">Ingresar
-                                <i class="pi pi-arrow-circle-right"/>
-                            </div>
+                        </a>
+                    </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{restriccionesProduccion.renMenu()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="#{restriccionesProduccion.restriccionUser()}">
+                            <div class="card-box bg-yellow">
+                                <div class="inner">
+                                    <h3> Producción </h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-th-large" aria-hidden="true"></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
 
-                        </div>
-                    </a>
-                </div>
+                            </div>
+                        </a>
+                    </div>
+                </ui:fragment>
+
                 <div class="p-col-12 p-lg-6 p-xl-3">
                     <a href="../inventario/entradaProducto.xhtml" >
                         <div class="card-box bg-deeppurple">

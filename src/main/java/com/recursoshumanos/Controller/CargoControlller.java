@@ -7,6 +7,8 @@ package com.recursoshumanos.Controller;
 
 import com.recursoshumanos.Model.DAO.CargoDAO;
 import com.recursoshumanos.Model.Entidad.Cargo;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;

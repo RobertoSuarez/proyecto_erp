@@ -2,11 +2,13 @@ package com.seguridad.dao;
 
 import com.global.config.AES;
 import com.global.config.Conexion;
+import com.seguridad.models.Roles;
 import com.seguridad.models.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import com.seguridad.models.Rol;
 
 public class UsuarioDAO {
 
@@ -15,6 +17,7 @@ public class UsuarioDAO {
     Usuario usuario = new Usuario();
     Conexion conexion = new Conexion();
     private AES encryptAES;
+    List<Roles> listaRoles;
 
     public UsuarioDAO() {
         encryptAES = new AES();
@@ -101,29 +104,44 @@ public class UsuarioDAO {
         return usuarioAcceso;
     }
 
-    public int rolRRHH(int user) {
+    
+
+    //--------------------------------IMPLEMENTADO POR RECURSOS HUMANOS--------------------------------
+    public List<Roles> rolRRHH(int user) {
+        listaRoles = new ArrayList<>();
         String sentencia = "";
-        int id=0;
+        int id = 0;
         try {
             this.conexion.Conectar();
-            sentencia = "SELECT \"idRol\" FROM public.\"rolUsuario\" where \"idUsuario\" = "+user+";";
+            sentencia = "select rol.\"idRol\",rol.\"nombreRol\",rol.\"detalleRol\" from public.usuario inner join public.\"rolUsuario\" on usuario.\"idUsuario\" = \"rolUsuario\".\"idUsuario\" \n"
+                    + "	inner join public.rol on \"rolUsuario\".\"idRol\" = rol.\"idRol\" where usuario.\"idUsuario\" =" + user;
             result = conexion.ejecutarConsulta(sentencia);
             while (result.next()) {
-                id=result.getInt("idRol");
-                }
+                listaRoles.add(new Roles(
+                        result.getInt("idRol"),
+                        result.getString("nombreRol"),
+                        result.getString("detalleRol")));
+            }
             conexion.cerrarConexion();
         } catch (SQLException e) {
             e.toString();
+            conexion.cerrarConexion();
             System.out.print(sentencia);
         } finally {
             conexion.cerrarConexion();
         }
-        return id;
+        return listaRoles;
     }
 
     public void verifica(String user, String pass) {
         lsitaUsuarios = new ArrayList<>();
         usuario = iniciarSesion(usuario);
         lsitaUsuarios.get(2).toString();
+    }
+
+    public String url() {
+        Roles roles = new Roles();
+        roles.setURL("/proyecto_erp/View/Global/Main.xhtml");
+        return roles.getURL();
     }
 }

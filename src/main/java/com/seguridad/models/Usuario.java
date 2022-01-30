@@ -1,7 +1,9 @@
 package com.seguridad.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Usuario implements Serializable{
 
@@ -15,6 +17,9 @@ public class Usuario implements Serializable{
     boolean habilitado;
     String email;
     int code;
+    
+    List<Rol> roles;
+    
 // RETURNS TABLE(code integer, 
 //reslt character varying, 
 //iduser integer, name character varying, 
@@ -23,7 +28,7 @@ public class Usuario implements Serializable{
 //mail character varying) 
 
     public Usuario() {
-
+        this.roles = new ArrayList<>();
     }
 
     public String getMsj() {
@@ -133,4 +138,12 @@ public class Usuario implements Serializable{
         this.email = email;
     }
 
+    public List<Rol> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Rol> roles) {
+        this.roles = roles;
+    }
+    
 }

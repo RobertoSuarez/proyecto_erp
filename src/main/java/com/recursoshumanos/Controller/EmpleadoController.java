@@ -31,12 +31,15 @@ import com.recursoshumanos.Model.Entidad.Multa;
 import com.recursoshumanos.Model.Entidad.Persona;
 import com.recursoshumanos.Model.Entidad.Sueldo;
 import com.recursoshumanos.Model.Entidad.Suspencion;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -58,6 +61,7 @@ import org.primefaces.event.FlowEvent;
 @Named(value = "empleadoView")
 @ViewScoped
 public class EmpleadoController implements Serializable {
+
 
     /**
      * Se declaran las variables del modelo Controlador de la parte de Empleado
@@ -160,6 +164,7 @@ public class EmpleadoController implements Serializable {
         sucursales = new ArrayList<>();
         filteredEmpleado = new ArrayList<>();
         fechaMax = new Date();
+        
     }
 
     /**

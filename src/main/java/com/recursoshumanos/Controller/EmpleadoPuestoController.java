@@ -17,11 +17,14 @@ import com.recursoshumanos.Model.Entidad.EmpleadoSucursal;
 import com.recursoshumanos.Model.Entidad.HorarioLaboral;
 import com.recursoshumanos.Model.Entidad.PuestoLaboral;
 import com.recursoshumanos.Model.Entidad.Sucursal;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -86,6 +89,7 @@ public class EmpleadoPuestoController implements Serializable {
         puestos = new ArrayList<>();
         horarios = new ArrayList<>();
         sucursales = new ArrayList<>();
+
     }
 
     /**

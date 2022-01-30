@@ -13,11 +13,16 @@ import com.recursoshumanos.Model.Entidad.Ciudad;
 import com.recursoshumanos.Model.Entidad.Empresa;
 import com.recursoshumanos.Model.Entidad.Provincia;
 import com.recursoshumanos.Model.Entidad.Sucursal;
+import com.seguridad.models.Roles;
+import com.seguridad.models.Usuario;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -28,13 +33,18 @@ import org.primefaces.PrimeFaces;
  * @author ClasK7
  * @author rturr
  *
- * Clase tipo CONTROLLER que se encargará de proporcionar ciertas funcionalidades para
- * todo lo que tenga que ver con la Empresa. Y se encarga de administrar las
- * sentencias de la BD, utilizando las clases de los modelos
+ * Clase tipo CONTROLLER que se encargará de proporcionar ciertas
+ * funcionalidades para todo lo que tenga que ver con la Empresa. Y se encarga
+ * de administrar las sentencias de la BD, utilizando las clases de los modelos
  */
 @Named(value = "empresaView")
 @ViewScoped
 public class EmpresaController implements Serializable {
+
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+    List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
+    Usuario usuarioSesion = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
 
     /**
      * Se declaran las variables del modelo Controlador de la parte de empresa.
@@ -62,6 +72,25 @@ public class EmpresaController implements Serializable {
         sucursales = new ArrayList<>();
         provincias = new ArrayList<>();
         ciudades = new ArrayList<>();
+    }
+
+    public void inicio() throws IOException {
+        if (usuarioSesion == null || usuarioSesion.getIdUsuario() < 1) {
+            externalContext.redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+        }
+        if ("Asistente de recursos humanos".equals(listaRoles.get(0).getNombre())) {
+            try {
+                externalContext.redirect("/proyecto_erp/View/recursoshumanos/ciudad.xhtml");
+            } catch (IOException ex) {
+            }
+        } else if (!"Gerente".equals(listaRoles.get(0).getNombre())
+                || !"Administrador de la empresa".equals(listaRoles.get(0).getNombre())
+                || !"Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())) {
+            try {
+                externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            } catch (IOException ex) {
+            }
+        }
     }
 
     /**

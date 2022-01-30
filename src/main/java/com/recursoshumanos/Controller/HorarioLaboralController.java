@@ -13,6 +13,8 @@ import com.recursoshumanos.Model.Entidad.DetalleHorario;
 import com.recursoshumanos.Model.Entidad.DiaSemana;
 import com.recursoshumanos.Model.Entidad.HorarioLaboral;
 import com.recursoshumanos.Model.Entidad.IngresosSalidas;
+import com.seguridad.models.Roles;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -72,6 +75,7 @@ public class HorarioLaboralController implements Serializable {
         horas = new ArrayList<>();
         lista = new ArrayList<>();
         horarios = new ArrayList<>();
+        
     }
 
     /**

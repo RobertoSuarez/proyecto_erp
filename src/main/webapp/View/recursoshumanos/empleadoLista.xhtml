@@ -9,64 +9,7 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content" class="Contenido">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:submenu label="Empresa">
-                        <p:menuitem value="Datos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/empresa.xhtml"
-                                    icon="pi pi-home"/>
-                        <p:menuitem value="Ciudades"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/ciudad.xhtml"
-                                    icon="pi pi-globe"/>
-                        <p:menuitem value="Provincias"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/provincia.xhtml"
-                                    icon="pi pi-globe"/>
-                    </p:submenu>
-                    <p:submenu label="Personal">
-                        <p:menuitem value="Empleados"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/empleadoLista.xhtml"
-                                    icon="pi pi-users"/>
-                        <p:menuitem value="Asistencia"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/asistencia.xhtml"
-                                    icon="pi pi-clock"/>
-                    </p:submenu>
-                    <p:submenu label="Areas">
-                        <p:menuitem value="Puestos Laborales"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/puestosLaborales.xhtml"
-                                    icon="pi pi-clone"/>
-                        <p:menuitem value="Cargos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/cargo.xhtml"
-                                    icon="pi pi-briefcase"/>
-                        <p:menuitem value="Departamentos"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/departamentos.xhtml"
-                                    icon="pi pi-sitemap"/>
-                    </p:submenu>
-                    <p:submenu label="Horarios">
-                        <p:menuitem value="Horario Laboral"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/horarioLaboral.xhtml" 
-                                    icon="pi pi-calendar"/>
-                        <p:menuitem value="Ingreso y Salida"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/ingresoSalidas.xhtml" 
-                                    icon="pi pi-clock"/>
-                        <p:menuitem value="Dia/Semana"
-                                    style="display: flex; align-items: center; text-decoration: none;"
-                                    outcome="/View/recursoshumanos/diaSemana.xhtml" 
-                                    icon="pi pi-align-center"/>
-                    </p:submenu>
-                    <p:menuitem value="Roles de Pago"
-                                style="display: flex; align-items: center; text-decoration: none;"
-                                outcome="/View/recursoshumanos/roles.xhtml" 
-                                icon="pi pi-money-bill"/>
-                </p:menubar>
+                <ui:include src="menuRRHH.xhtml"/>
                 <h:head>
                     <f:metadata>
                         <f:event type="preRenderView" 
@@ -85,7 +28,7 @@
                             </p:toolbarGroup>
                         </p:toolbar>
                         <f:facet name="header">
-                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" outcome="CrearEmpleado"
+                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" outcome="CrearEmpleado" disabled="#{rolMB.rol()}"
                                           class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem"/>
 
                         </f:facet>
@@ -123,12 +66,12 @@
                             <p:column exportable="false" width="9%">
                                 <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                                  icon="pi pi-pencil" action="Empleado" actionListener="#{empleadoView.verEmpleado(empleado)}"
-                                                 process="@this">
+                                                 process="@this" disabled="#{rolMB.rol()}">
                                 </p:commandButton>
                                 <p:commandButton class="ui-button-danger rounded-button"
                                                  icon="pi pi-pi pi-trash"
                                                  actionListener="#{empleadoView.cambiarEstado(empleado)}"
-                                                 update="dt-empleados" process="dt-empleados @this">
+                                                 update="dt-empleados" process="dt-empleados @this" disabled="#{rolMB.rol()}">
                                     <f:setPropertyActionListener value="#{!empleado.persona.estado}" target="#{empleado.persona.estado}"/>
                                 </p:commandButton>
                             </p:column>
