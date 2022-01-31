@@ -1,0 +1,311 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="./subheaderinventario.xhtml"/>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:panel>
+                        <h1 style="text-align: center; color: black;">Bodegas</h1>
+                        <div>
+                            <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                     oncomplete="PF('productosNew').show()"   
+                                                     styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                     style="margin-right: .3rem">                               
+                                    </p:commandButton>
+
+
+
+                                </p:toolbarGroup>                       
+                            </p:toolbar> 
+                            <!-- Tabla visual de datos  !-->
+                            <p:dataTable id="dtBodegaPrin" editable="true" reflow="true"
+                                         editInitEvent="dblclick" editMode="cell"
+                                         value="#{bodegaMB.listaBodega}" var="TablaArticulos">
+                                <f:facet name="header">
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Bodegas</span>
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
+                                        </span>
+                                    </div>
+                                </f:facet>
+                                <p:column headerText="Nombre"  >
+                                    <h:outputText value="#{TablaArticulos.nomBodega}"/>
+                                </p:column>
+
+                                <p:column headerText="Ciudad" >
+                                    <h:outputText value="#{TablaArticulos.nomCiudad}"/>
+                                </p:column>                       
+
+                                <p:column headerText="Dirección" >
+                                    <h:outputText value="#{TablaArticulos.direccion}" />
+
+                                </p:column>
+
+                                <p:column headerText="Teléfono">
+                                    <h:outputText value="#{TablaArticulos.telefono}"/>
+                                </p:column>
+
+                                <p:column headerText="Acción" filterStyle="display : none">
+                                    <p:commandButton icon="pi pi-pencil" oncomplete="PF('bodegaEdit').show()"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                    <p:commandButton icon="pi pi-trash"  styleClass="rounded-button ui-button-danger">
+                                        <p:confirm  header="Confirmation"
+                                                    message="Desea deshabilitar el 
+                                                    producto seleccionado?"
+                                                    icon="pi pi-exclamation-triangle" />
+
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        <!-- Model para agregar un nuevo articulo !-->
+
+                        <p:dialog header=" Agregar Bodega" showEffect="fade" modal="true"
+                                  widgetVar="productosNew" responsive="true" width="50%"
+                                  draggable="false" height="300"> 
+                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+                                <p:outputPanel >
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Código: "></p:outputLabel>
+                                                    <p:inputText value="" 
+                                                                 disabled="true"  style="background-color:silver;"></p:inputText>
+                                                </div>
+
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Ciudad: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Teléfono: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup"> 
+                                                            <p:inputText  /> 
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Nombre: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+
+                                                            <p:inputText  />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Dirección: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:inputTextarea disabled=""
+                                                                             maxlength="60"
+                                                                             value="" 
+                                                                             rows="3" cols="20" autoResize="false"/>
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="p-col-11">
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar" 
+                                                                     icon="pi pi-check"
+                                                                     disabled=""
+                                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('productosNew').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+
+
+                        <!-- Modelo de editar articulo -->
+
+
+                        <p:dialog header="Editar Bodega" showEffect="fade" modal="true"
+                                  widgetVar="bodegaEdit" responsive="true" width="50%"
+                                  draggable="false" height="300"> 
+                            <p:outputPanel id="edit-asiento" class="ui-fluid">
+                                <p:outputPanel >
+                                    <div class="p-grid p-justify-around">
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Código: "></p:outputLabel>
+                                                    <p:inputText value="" 
+                                                                 disabled="true"  style="background-color:silver;"></p:inputText>
+                                                </div>
+
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Ciudad: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:inputText />        
+                                                        </div>
+                                                    </h:form>
+
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Teléfono: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup"> 
+                                                            <p:inputText  /> 
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-col-6 p-md-12 p-lg-5">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Nombre: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+
+                                                            <p:inputText  />        
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Dirección: *"></p:outputLabel>
+                                                    <h:form>
+                                                        <div class="ui-inputgroup">
+                                                            <p:inputTextarea disabled=""
+                                                                             maxlength="60"
+                                                                             value="" 
+                                                                             rows="3" cols="20" autoResize="false"/>
+                                                        </div>
+                                                    </h:form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="p-col-11">
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Guardar" 
+                                                                     icon="pi pi-check"
+                                                                     disabled=""
+                                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('productosNew').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>                
+
+
+
+                        <p:dialog header="Buscar Artículo" widgetVar="BuscarProveedor"  
+                                  minHeight="40" height="200px" width="400px"
+                                  showEffect="fade" modal="true">
+
+                            <h:form style="height: 200px">
+                                <div class="p-field p-col-12 p-md-3">
+                                    <label for="BReferencia" 
+                                           style="position: relative;top:0px;left:15px;">                                 
+                                        <h5 class="p-mt-0">Busacar por:</h5>
+                                        <p:selectOneRadio id="console" value="" 
+                                                          unselectable="true">
+                                            <f:selectItem itemLabel="Código" 
+                                                          itemValue="Option1"/>
+                                            <f:selectItem itemLabel="Nombre"
+                                                          itemValue="Option2"/>                                     
+                                        </p:selectOneRadio>
+                                    </label>
+                                </div>
+                                <div class="p-field p-col-12 p-md-3">
+                                    <label for="BProveedor" style="position: relative;
+                                           top: 10px;left: 15px;">    
+
+                                        <p:inputText id="BProveedor" type="text" 
+                                                     style="width: 200px;"/>
+                                        <p:commandButton icon="pi pi-search"                                                    
+                                                         styleClass="ui-button-warning" 
+                                                         style="margin-right: .6rem;
+                                                         width: 40px">
+                                        </p:commandButton>
+                                    </label>
+                                </div>                        
+                            </h:form>
+                            <f:facet name="footer">
+                                <p:commandButton value="Ok" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="Cancel" icon="pi pi-times" 
+                                                 onclick="PF('BuscarProveedor').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog>
+                        <p:confirmDialog widgetVar="deleteProveedorDialog" showEffect="fade" 
+                                         width="300" message="Delete the proveedor?" 
+                                         header="Confirm" severity="warn">
+                            <p:commandButton value="Yes" icon="pi pi-check" 
+                                             oncomplete="PF('deleteProveedorDialog').hide()"/>
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-button-secondary" 
+                                             icon="pi pi-times"
+                                             onclick="PF('deleteProveedorDialog').hide()"/>
+                        </p:confirmDialog>
+
+                        <p:confirmDialog global="true" showEffect="fade" width="300">
+                            <p:commandButton value="Yes" type="button" 
+                                             styleClass="ui-confirmdialog-yes" 
+                                             icon="pi pi-check"/>
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-confirmdialog-no ui-button-secondary"
+                                             icon="pi pi-times"/>
+                        </p:confirmDialog>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
