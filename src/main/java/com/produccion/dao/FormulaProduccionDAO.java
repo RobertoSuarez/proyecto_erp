@@ -69,7 +69,7 @@ public class FormulaProduccionDAO {
         try {
             String cadena = "INSERT INTO public.formula(\n"
                     + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto)\n"
-                    + "	VALUES ( 6, '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', 6);";
+                    + "	VALUES ( 5, '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', 6);";
             return conexion.insertar(cadena);
 
         } catch (Exception e) {
