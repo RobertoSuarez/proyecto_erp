@@ -17,12 +17,12 @@ public class SubProceso {
 
     public SubProceso() {
     }
-    //Detalle proceso produccion
-    public SubProceso(int codigo_subproceso, int id_codigo_proceso) {
+
+    public SubProceso(int codigo_subproceso) {
         this.codigo_subproceso = codigo_subproceso;
-        this.id_codigo_proceso = id_codigo_proceso;
     }
-    //Subproceso
+
+
     public SubProceso(int codigo_subproceso, String nombre, String descripcion) {
         this.codigo_subproceso = codigo_subproceso;
         this.nombre = nombre;
@@ -60,6 +60,6 @@ public class SubProceso {
     public void setId_codigo_proceso(int id_codigo_proceso) {
         this.id_codigo_proceso = id_codigo_proceso;
     }
-    
-    
+
+
 }

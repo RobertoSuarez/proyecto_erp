@@ -10,7 +10,7 @@
             <ui:define name="title">Procesos de producción</ui:define>
             <ui:define name="content">
                 <ui:include src="subheaderProduccion.xhtml"/>
-                <h:form id="form" style="margin-top: 4%;">
+                <h:form id="form_subproceso" style="margin-top: 4%;">
                     <div class="card">
                         <p:toolbar>
                             <p:toolbarGroup>
@@ -30,11 +30,17 @@
                                             <div class="p-grid">
                                                 <div class="p-col-4">
                                                     <p:outputLabel value="Codigo Subproceso: "></p:outputLabel>
-                                                    <p:inputText disabled="#"  value=""></p:inputText> 
+                                                    <p:inputText disabled="#"  value="#{subprocesoMB.idSubproceso}"></p:inputText> 
                                                 </div>
                                                 <div class="p-col-4">
-                                                    <p:outputLabel value="Codigo Proceso: "></p:outputLabel>
-                                                    <p:inputText disabled="#"  value=""></p:inputText> 
+
+                                                    <p:outputLabel value="Proceso Principal:"/>
+                                                    <p:selectOneMenu id="proceso" value="#{subprocesoMB.procesoProduccion.codigo_proceso}" 
+                                                                     alwaysDisplayLabel="true">
+                                                        <f:selectItems value="#{subprocesoMB.listaProceso}" var="proceso"
+                                                                       itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
+
+                                                    </p:selectOneMenu>
                                                 </div>
 
 
@@ -81,7 +87,13 @@
                                                                         <f:facet name="header">
                                                                             <div class="p-d-flex p-jc-between p-ai-center">
                                                                                 <span style="font-weight: bold; margin-right: 0.5em;">Costos Indirectos</span>
+                                                                                <p:selectOneMenu id="proceso" value="#{subprocesoMB.costoProduccion.codigo_costos}" 
+                                                                                                 alwaysDisplayLabel="true">
+                                                                                    <f:selectItems value="#{subprocesoMB.listaCostoIndirecto}" var="costoIndirecto"
+                                                                                                   itemLabel="#{costoIndirecto.nombre}" itemValue="#{costoIndirecto.codigo_costos}"/>
 
+                                                                                </p:selectOneMenu>
+                                                                                <p:commandButton type="button" icon="pi pi-check" />
                                                                             </div>
                                                                         </f:facet>
 
@@ -95,13 +107,8 @@
                                                                             <p:skeleton rendered="#"></p:skeleton>
                                                                         </p:column>
 
-                                                                        <p:column headerText="Tipo">
-                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                                            </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        <p:column headerText="Costo">
+                                                                            
                                                                         </p:column>
                                                                         <p:column headerText="Acciones">
                                                                             <p:commandButton icon="pi pi-pencil" action="#"  
@@ -148,12 +155,19 @@
                                                                         <f:facet name="header">
                                                                             <div class="p-d-flex p-jc-between p-ai-center">
                                                                                 <span style="font-weight: bold; margin-right: 0.5em;">Costos Directos</span>
+                                                                                
+                                                                                <p:selectOneMenu id="costoDirecto" value="#{subprocesoMB.idSubproceso}" 
+                                                                                                 alwaysDisplayLabel="true" >
+                                                                                    <p:ajax listener="#{subprocesoMB.listarDirectos}"/>
+                                                                                    <f:selectItems value="#{subprocesoMB.listaCostoDirecto}" var="costo"
+                                                                                                   itemLabel="#{costo.nombre}" itemValue="#{costo.codigo_costos}"/>
 
+                                                                                </p:selectOneMenu>
                                                                             </div>
                                                                         </f:facet>
 
                                                                         <p:column headerText="Nombre" filterStyle="display : none">
-                                                                            <h:outputText value="#" />
+                                                                            <h:outputText value="#" id="codigo"/>
                                                                             <p:skeleton rendered="#"></p:skeleton>
                                                                         </p:column>
 
@@ -162,21 +176,15 @@
                                                                             <p:skeleton rendered="#"></p:skeleton>
                                                                         </p:column>
 
-                                                                        <p:column headerText="Tipo">
-                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                                            </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                        <p:column headerText="Costo">
+                                                                            
                                                                         </p:column>
                                                                         <p:column headerText="Acciones">
                                                                             <p:commandButton icon="pi pi-pencil" action="#"  
                                                                                              styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
+                                                                                
                                                                             </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                                            
                                                                         </p:column>
 
                                                                     </p:dataTable>
@@ -199,7 +207,7 @@
                                                         </div> 
 
                                                     </div>
-                                                    
+
 
                                                 </div>
 
@@ -216,8 +224,8 @@
                                     <div class="p-grid">
                                         <div class="p-col-4">
                                             <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"  style=" margin-right: 0.5em"/>
-                                             <p:button  value="Cerrar" styleClass="ui-button-danger" icon="pi pi-plus" outcome="procesoProduccion.xhtml">
-                                    </p:button>
+                                            <p:button  value="Cerrar" styleClass="ui-button-danger" icon="pi pi-plus" outcome="procesoProduccion.xhtml">
+                                            </p:button>
                                         </div>
                                     </div>
                                 </div>

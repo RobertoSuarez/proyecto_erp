@@ -86,24 +86,30 @@
 
 
 
-                        <p:column headerText="Fecha Registro" width="210px" sortBy="#{anticipo.fecha}" filterBy="#{anticipo.fecha}" filterStyle="display : none">
+                        <p:column headerText="Fecha Registro" width="210px" 
+                                  sortBy="#{anticipo.fecha}" filterBy="#{anticipo.fecha}" 
+                                  filterStyle="display : none">
                             <h:outputText value="#{anticipoMB.FormatoFecha(anticipo.fecha)}"/>
                         </p:column>
 
 
-                        <p:column headerText="Descripción" sortBy="#{anticipo.descripcion}" filterBy="#{anticipo.descripcion}" filterStyle="display : none">
+                        <p:column headerText="Descripción" sortBy="#{anticipo.descripcion}" 
+                                  filterBy="#{anticipo.descripcion}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.descripcion}"/>
                         </p:column>
 
-                        <p:column headerText="Importe" width="150px" sortBy="#{anticipo.importe}" filterBy="#{anticipo.importe}" filterStyle="display : none">
+                        <p:column headerText="Importe" width="150px" sortBy="#{anticipo.importe}" 
+                                  filterBy="#{anticipo.importe}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.importe}"/>
                         </p:column>
 
-                        <p:column headerText="Proveedor" sortBy="#{anticipo.proveedor.nombre}" filterBy="#{anticipo.proveedor.nombre}" filterStyle="display : none">
+                        <p:column headerText="Proveedor" sortBy="#{anticipo.proveedor.nombre}" 
+                                  filterBy="#{anticipo.proveedor.nombre}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.proveedor.nombre}"/>
                         </p:column>
 
-                        <p:column headerText="Ruc" sortBy="#{anticipo.proveedor.ruc}" filterBy="#{anticipo.proveedor.ruc}" filterStyle="display : none">
+                        <p:column headerText="Ruc" sortBy="#{anticipo.proveedor.ruc}" 
+                                  filterBy="#{anticipo.proveedor.ruc}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.proveedor.ruc}"/>
                         </p:column>
 
@@ -126,7 +132,8 @@
                                 styleClass="ui-button-danger rounded-button" 
                                 update=":form:delete_dialog">
 
-                                <f:setPropertyActionListener value="#{anticipo}" target="#{anticipoMB.selected_anticipo}"/>
+                                <f:setPropertyActionListener value="#{anticipo}" 
+                                                             target="#{anticipoMB.selected_anticipo}"/>
                             </p:commandButton>
 
                         </p:column>
