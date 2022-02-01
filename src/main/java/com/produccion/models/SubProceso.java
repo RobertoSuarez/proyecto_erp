@@ -17,6 +17,11 @@ public class SubProceso {
     public SubProceso() {
     }
 
+    public SubProceso(int codigo_subproceso) {
+        this.codigo_subproceso = codigo_subproceso;
+    }
+    
+
     public SubProceso(int codigo_subproceso, String nombre, String descripcion) {
         this.codigo_subproceso = codigo_subproceso;
         this.nombre = nombre;
