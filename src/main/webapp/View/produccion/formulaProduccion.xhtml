@@ -351,15 +351,73 @@
                                     </p:outputPanel>
                                 </p:dialog>
 
-                                <!-- Cuadro de dialogo Confirmar Eliminación -->
-                                <p:confirmDialog widgetVar="EliminarFormulaDialog" showEffect="fade" width="40%"
-                                                 message="Seguro desea eliminar la Formula seleccionada?" header="Eliminar Formula" severity="warn">
+                                <!-- Cuadro de dialogo SELECCIONAR PRODUCTO DE INVENTARIO para Formula -->
+
+                                <p:confirmDialog id="manage-selectProductoFormula-form" widgetVar="selectProductoFormulaDialog" showEffect="fade" width="40%" 
+                                                 message="Seguro desea seleccionar este Producto? 
+                                                 " header="Seleccionar Producto" severity="warn">
+                                    <p:outputPanel class="ui-fluid">
+                                        <div class="p-grid" style="text-align: left">
+                                            <div class="p-col-6 p-field">
+                                                <p:outputLabel value="Nombre: "></p:outputLabel>
+                                                <p:inputText disabled="false" value="#{articulosMB.articulosInventario.nombre}" 
+                                                             style="background: #B0F1F5;
+                                                             color:#000000"></p:inputText>  
+                                            </div>
+                                            <div class="p-col-6 p-field">
+                                                <p:outputLabel value="Tipo: "></p:outputLabel>
+                                                <p:inputText disabled="false" value="#{articulosMB.articulosInventario.id_tipo}" 
+                                                             style="background: #B0F1F5;
+                                                             color:#000000"></p:inputText>
+                                            </div>
+                                            <div class="p-col-6 p-field">
+                                                <p:outputLabel value="Categoria: "></p:outputLabel>
+                                                <p:inputText disabled="false" value="#{articulosMB.articulosInventario.id_categoria}"
+                                                             style="background: #B0F1F5;
+                                                             color:#000000"></p:inputText>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+
                                     <p:commandButton value="Si" icon="pi pi-check" actionListener="#"
-                                                     
-                                                     process="@this" oncomplete="PF('EliminarFormulaDialog').hide()"/>
+                                                     update="dtBuscarMateriaPrima"
+                                                     process="manage-selectProductoFormula-form @this" oncomplete="PF('selectProductoFormulaDialog').hide()"/>
                                     <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                                     onclick="PF('EliminarFormulaDialog').hide()"/>
+                                                     onclick="PF('selectProductoFormulaDialog').hide()"/>
                                 </p:confirmDialog>
+                                
+
+                                <!-- Cuadro de dialogo Confirmar Eliminación de Formula -->
+
+                                <p:confirmDialog id="manage-eliminarFormula-form" widgetVar="eliminarFormulaDialog" showEffect="fade" width="40%" 
+                                                 message="Seguro desea eliminar la Formula  que fue seleccionada? 
+                                                 " header="Eliminar Formula" severity="warn">
+                                    <p:outputPanel class="ui-fluid">
+                                        <div class="p-grid" style="text-align: left">
+                                            <div class="p-col-6 p-field">
+                                                <p:outputLabel >Nombre Formula: </p:outputLabel>
+                                                <p:inputText disabled="false" value="#{formulaMB.formulaProduccion.nombre_formula}" 
+                                                             style="background: #B0F1F5;
+                                                             color:#000000"></p:inputText>
+                                            </div>
+                                            <div class="p-col-6 p-field">
+                                                <p:outputLabel value="Descripcion : "></p:outputLabel>
+                                                <p:inputText disabled="false" value="#{formulaMB.formulaProduccion.descripcion}"
+                                                             style="background: #B0F1F5;
+                                                             color:#000000"></p:inputText>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+
+                                    <p:commandButton value="Si" icon="pi pi-check" actionListener="#{formulaMB.eliminarFormula()}"
+                                                     update="dtformulaPrin"
+                                                     process="manage-eliminarFormula-form @this" oncomplete="PF('eliminarFormulaDialog').hide()"/>
+                                    <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                                     onclick="PF('eliminarFormulaDialog').hide()"/>
+                                </p:confirmDialog>
+
+
+
 
                                 <!-- Cuadro de dialogo Producto -->
                                 <p:dialog header="Seleccionar Producto" showEffect="fade" modal="true"
@@ -380,11 +438,21 @@
                                                 <div class="p-col-11">
                                                     <div class="p-grid">
                                                         <div class="p-col-12">
-                                                            <p:dataTable id="dtBuscarMateriaPrima" editable="true" reflow="true"
+                                                            <p:dataTable id="dtBuscarMateriaPrima" reflow="true" paginator="true" rows="4" 
+                                                                         rowSelectMode="add" paginatorPosition="bottom" 
                                                                          editInitEvent="dblclick" editMode="cell"
                                                                          value="#{articulosMB.listaArticulos}" var="TablaBuscarMateriaPrima">
                                                                 <p:column headerText="Acciones">
-                                                                    <p:selectBooleanCheckbox value="" />
+                                                                    <p:commandButton update=":form-princFormula:manage-selectProductoFormula-form"
+                                                                                     class="rounded-button"
+                                                                                     process="@this"
+                                                                                     icon="pi pi-check" 
+                                                                                     oncomplete="PF('selectProductoFormulaDialog').show()">
+                                                                        <f:setPropertyActionListener value="#{TablaBuscarMateriaPrima}" 
+                                                                                                     target="#{articulosMB.articulosInventario}"/>
+                                                                        <p:resetInput target=":form-princFormula:manage-selectProductoFormula-form"/>
+
+                                                                    </p:commandButton>
                                                                 </p:column>
 
                                                                 <p:column headerText="Nombre" filterStyle="display : none">
@@ -542,13 +610,17 @@
                                     <f:setPropertyActionListener value="#{formulaProduccion}" target="#{formulaMB.formulaProduccion}"/>
                                     <p:resetInput target=":form-princ:manage-editarProceso-form"/>
                                 </p:commandButton>
-                                <p:skeleton rendered="#"></p:skeleton>
-                                <p:commandButton icon="pi pi-trash" action="#"  
-                                                 styleClass="edit-button rounded-button ui-button-danger" process="@this"
-                                                 oncomplete="PF('EliminarFormulaDialog').show()"
-                                                 style="margin-left: 6px;">
-                                    <f:setPropertyActionListener value="#" target="#"/>
-                                    <p:resetInput target=""/>
+
+                                <p:commandButton 
+                                    update=":form-princFormula:manage-eliminarFormula-form"
+                                    class="rounded-button ui-button-danger" 
+                                    process="@this"
+                                    icon="pi pi-trash" 
+                                    oncomplete="PF('eliminarFormulaDialog').show()"
+                                    style="margin-left: 6px;">
+                                    <f:setPropertyActionListener value="#{Tablaformula}" 
+                                                                 target="#{formulaMB.formulaProduccion}"/>
+                                    <p:resetInput target=":form-princFormula:manage-eliminarFormula-form"/>
                                 </p:commandButton>
 
                             </p:column>

@@ -104,6 +104,20 @@ public class FormulaProduccionManagedBean implements Serializable {
         PrimeFaces.current().executeScript("PF('crearFormulaDialg').hide()");
         PrimeFaces.current().ajax().update("form:dtFormulaPrin", "form:growl");
     } 
+         
+    public void eliminarFormula(){
+        try {
+            this.formulaProduccionDAO.eliminarF(formulaProduccion, formulaProduccion.getNombre_formula());
+            listaFormula = formulaProduccionDAO.getFormula();
+            PrimeFaces.current().executeScript("PF('eliminarFormulaDialog').hide()");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Exito", "Formula Eliminada"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Error al Eliminar la Formula"));
+            
+        }
+        
+    }     
+    
        
     public FormulaProduccion getFormulaProduccion() {
         return formulaProduccion;
