@@ -11,11 +11,14 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+                
+                <f:event type="preRenderView" listener="#{seguridadCtasPagar.verificarPermiso()}"/>
+                
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
-                    <p:submenu label="Pagos">
+                    <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
                         <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago"  icon="pi pi-list" />
 
@@ -26,6 +29,7 @@
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
                 </p:menubar>
+                
                 <h:form id="form" style="padding-left: 30px; padding-right: 30px">
                     <p:growl id="messages" showDetail="true"/>
                     <h1 style="text-align: center; color: black; margin-top: 4%">Autorización de Pagos</h1>
@@ -56,7 +60,7 @@
                         <p:column headerText="Proveedor" >
                             <h:outputText value="#{factura.nombre}"/>
                         </p:column>
-                        <p:column headerText="Acciones">
+                        <p:column headerText="Acciones" rendered="#{seguridadCtasPagar.renderForGerente()}">
                             <p:commandButton icon="pi pi-eye" update=":form:outputvisu"
                                              oncomplete="PF('eyeFactura').show()"
                                              styleClass="rounded-button ui-button-secondary ui-button-flat"
@@ -77,7 +81,7 @@
                     <!-- Dialogo Visualizar-->
                     <p:dialog  header="Detalle Factura" showEffect="fade" modal="true"
                                widgetVar="eyeFactura" height="350"
-                               width="70%" closable="false">
+                               width="70%" closable="false" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:outputPanel id="outputvisu" class="ui-fluid">
 
                             <!-- CAMPOS DEL DIALOG-->

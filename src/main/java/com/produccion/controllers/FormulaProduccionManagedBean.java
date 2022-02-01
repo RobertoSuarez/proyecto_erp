@@ -45,7 +45,7 @@ public class FormulaProduccionManagedBean implements Serializable {
     }
       
        public void insertar() {
-           System.out.println("Si entro pilas");
+           System.err.println("Entro ......");
         try {
             if ("".equals(formulaProduccion.getCodigo_proceso())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
@@ -61,7 +61,6 @@ public class FormulaProduccionManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.formulaProduccionDAO.insertarFormula(formulaProduccion);
-                listaFormula = formulaProduccionDAO.getFormula();
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
             }

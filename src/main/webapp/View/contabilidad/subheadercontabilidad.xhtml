@@ -5,7 +5,6 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
 
-    <f:event type="preRenderView" listener="#{rolcontMB.red()}"/>
     <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
         <p:menuitem value="Asientos" outcome="/View/contabilidad/asientos"/>
         <p:menuitem value="Diarios" outcome="/View/contabilidad/diarios"/>
@@ -16,11 +15,9 @@
             <p:menuitem value="Subcuentas" outcome="/View/contabilidad/planCuentas" icon="pi pi-list" />
         </p:submenu>
         <p:submenu label="Informes">
-            <p:menuitem value="Balance General" outcome="/View/contabilidad/balanceGeneral" icon="pi pi-book" 
-                        rendered="#{rolcontMB.rendered()}"/>
+            <p:menuitem value="Balance General" outcome="/View/contabilidad/balanceGeneral" icon="pi pi-book" />
             <p:menuitem value="Libro Mayor" outcome="/View/contabilidad/libroMayor" icon="pi pi-bars" />
-            <p:menuitem value="Estado de resultados" outcome="/View/contabilidad/estadoResultado" icon="pi pi-file-o"
-                        rendered="#{rolcontMB.rendered()}"/>
+            <p:menuitem value="Estado de resultados" outcome="/View/contabilidad/estadoResultado" icon="pi pi-file-o" />
         </p:submenu>
     </p:menubar>
 

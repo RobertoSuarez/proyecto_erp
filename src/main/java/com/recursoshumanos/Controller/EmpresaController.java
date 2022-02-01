@@ -86,7 +86,7 @@ public class EmpresaController implements Serializable {
         } else if ("Gerente".equals(listaRoles.get(0).getNombre())
                 || "Administrador de la empresa".equals(listaRoles.get(0).getNombre())
                 || "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())) {
-            System.out.println("Ingreso exitoso");
+            System.out.println("Ingreso correctamente");
         } else {
             try {
                 externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");

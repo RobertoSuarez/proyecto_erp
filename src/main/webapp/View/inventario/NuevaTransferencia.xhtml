@@ -1,0 +1,223 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">  
+    <h:body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+                <h:form id="transferMarker" >
+                    <ui:include src="./subheaderinventario.xhtml"/>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:panel>
+                        <h1 style="text-align: center ; color: black;">Transferencia</h1>
+                        <p:outputPanel id="manage-asiento" class="ui-fluid">
+                            <p:outputPanel >
+                                <div class="titleView">
+                                    <h2><b>Nueva Transferencia</b></h2>
+                                </div>
+                                <div class="p-col-11">
+                                    <div class="p-grid">
+                                        <div class="p-col-1">
+                                            <p:outputLabel value="Código:"></p:outputLabel>
+                                            <p:inputText value=""></p:inputText>
+                                        </div>
+                                        <div class="p-col-2">
+                                            <p:outputLabel value="Fecha: *"></p:outputLabel>
+                                            <p:calendar value="" 
+                                                        disabled="">
+                                            </p:calendar>
+                                        </div>
+                                        <div class="p-col-3">
+                                            <p:outputLabel value="Bodega de Origen: *"></p:outputLabel>
+                                            <h:form>
+                                                <div class="ui-inputgroup">
+                                                    <p:commandButton type="button" icon="pi pi-search" onclick="PF('BuscarBodega').show()" style="position: center"/>
+                                                    <p:inputText id="BodOrigen" value="#{transferenciaMB.nombreBodegaOrigen}" disabled="true" />       
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                        <div class="p-col-3">
+                                            <p:outputLabel value="Bodega de Destino: *"></p:outputLabel>
+                                            <h:form>
+                                                <div class="ui-inputgroup">
+                                                    <p:commandButton type="button" icon="pi pi-search" onclick="PF('BuscarBodega1').show()" style="position: center"/>
+                                                    <p:inputText id="BodDestino" value="#{transferenciaMB.nombreBodegaDestino}" disabled="true" />       
+
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                        <div class="p-col-3">
+                                            <p:outputLabel value="Motivo: *"></p:outputLabel>
+                                            <p:inputTextarea disabled=""
+                                                             maxlength="150"
+                                                             value="" 
+                                                             rows="3" cols="6" autoResize="false"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-col-11">
+                                    <div class="p-grid">
+                                        <div class="p-col-3">
+                                            <p:outputLabel value="Producto:*"></p:outputLabel>
+                                            <h:form>
+                                                <div class="ui-inputgroup">
+                                                    <p:commandButton icon="pi pi-search"  onclick="PF('BuscarArticulo').show()" style="position: center"/> 
+                                                    <p:inputText id="articulo" value="#{transferenciaMB.nombreArticulo}" disabled="true" />        
+                                                </div>
+                                            </h:form>
+                                        </div>
+                                        <div class="p-col-1">
+                                            <p:outputLabel value="Código:"></p:outputLabel>
+                                            <p:inputText id="codarticulo" value="#{transferenciaMB.codArticulo}" disabled="true" />
+                                        </div>
+                                        <div class="p-col-1">
+                                            <p:outputLabel value="Cantidad:"></p:outputLabel>
+                                            <p:inputText value=""></p:inputText>
+                                        </div>
+                                        <div class="p-col-1">
+                                            <br/>
+                                            <p:commandButton value="Agregar" process="@this"
+                                                             disabled=""
+                                                             oncomplete=""
+                                                             icon="pi pi-plus"/>
+                                        </div>
+                                        <div class="p-col-1">
+                                            <br/>
+                                            <p:commandButton value="Otro" process="@this"
+                                                             disabled=""
+                                                             oncomplete=""
+                                                             icon="pi pi-plus" 
+                                                             styleClass="ui-button-success p-mr-2 p-mb-2"/>
+                                        </div>
+                                        <div class="p-col-1">
+                                            <br/>
+                                            <p:commandButton value="Nuevo" process="@this"
+                                                             disabled=""
+                                                             oncomplete=""
+                                                             icon="pi pi-plus" 
+                                                             styleClass="ui-button-success p-mr-2 p-mb-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-col-11">
+                                    <div class="p-grid">
+                                        <div class="p-col-12">
+                                            <p:dataTable >
+
+                                                <p:column headerText="Código" width="12%" >
+                                                    <h:outputText value=""/>
+                                                </p:column>
+                                                <p:column headerText="Producto"  width="12%">
+                                                    <h:outputText value=""/>
+                                                </p:column>
+                                                <p:column headerText="Cantidad a transferir" width="12%">
+                                                    <h:outputText value=""/>
+                                                </p:column>
+                                                <p:column headerText="Costo" width="12%">
+                                                    <h:outputText value=""/>
+                                                </p:column>
+
+                                                <p:column exportable="false" width="9%">
+                                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                                     icon="pi pi-pencil" 
+                                                                     process="@this">
+                                                    </p:commandButton>
+                                                    <p:commandButton class="ui-button-danger rounded-button"
+                                                                     icon="pi pi-pi pi-trash">
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="p-grid p-justify-end">
+                                        <div class="p-col-1">
+                                            <p:commandButton value="Guardar" 
+                                                             icon="pi pi-check"
+                                                             disabled=""
+                                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                        <p:dialog header="Busqueda de bodega" widgetVar="BuscarBodega" id="busquedaProducto"
+                                  minHeight="30" width="30%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable var="ListaBodega" id="listaProductos" selectionMode="single" value="#{transferenciaMB.listaBodega}" 
+                                             selection="#{transferenciaMB.bodegaseleccionada}" rowKey="#{ListaBodega.cod}" >
+
+                                    <f:facet name="header">
+                                        Bodegas
+                                    </f:facet>
+                                    <p:column headerText="Codigo">
+                                        <h:outputText value="#{ListaBodega.cod}" />
+                                    </p:column>
+
+                                    <p:column headerText="Bodega" >
+                                        <h:outputText value="#{ListaBodega.nomBodega}" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{transferenciaMB.SeleccionarBodegaOrigen(ListaBodega)}"  update="transferMarker" oncomplete="PF('BuscarBodega').hide();"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+                        <p:dialog header="Busqueda de bodega" widgetVar="BuscarBodega1" id="busquedaProducto1"
+                                  minHeight="30" width="30%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable var="ListaBodega" id="listaProductos1" selectionMode="single" value="#{transferenciaMB.listaBodega}" 
+                                             selection="#{transferenciaMB.bodegaseleccionada}" rowKey="#{ListaBodega.cod}" >
+
+                                    <f:facet name="header">
+                                        Bodegas
+                                    </f:facet>
+                                    <p:column headerText="Codigo">
+                                        <h:outputText value="#{ListaBodega.cod}" />
+                                    </p:column>
+
+                                    <p:column headerText="Bodega" >
+                                        <h:outputText value="#{ListaBodega.nomBodega}" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{transferenciaMB.SeleccionarBodegaDestino(ListaBodega)}"  update="transferMarker" oncomplete="PF('BuscarBodega1').hide();"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+                        <p:dialog header="Busqueda de articulos" widgetVar="BuscarArticulo" id="busquedaProducto2"
+                                  minHeight="30" width="30%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable var="ListaArticulos" id="listaArticulo" selectionMode="single" value="#{transferenciaMB.listaArticulos}" 
+                                             selection="#{transferenciaMB.prodselecionado}" rowKey="#{ListaArticulos.cod}" >
+
+                                    <f:facet name="header">
+                                        Articulos
+                                    </f:facet>
+                                    <p:column headerText="Codigo">
+                                        <h:outputText value="#{ListaArticulos.cod}" />
+                                    </p:column>
+
+                                    <p:column headerText="Articulo" >
+                                        <h:outputText value="#{ListaArticulos.nombre}" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{transferenciaMB.SeleccionarArticulo(ListaArticulos)}"  update="transferMarker" oncomplete="PF('BuscarArticulo').hide();"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
