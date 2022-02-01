@@ -83,9 +83,11 @@ public class EmpresaController implements Serializable {
                 externalContext.redirect("/proyecto_erp/View/recursoshumanos/ciudad.xhtml");
             } catch (IOException ex) {
             }
-        } else if (!"Gerente".equals(listaRoles.get(0).getNombre())
-                || !"Administrador de la empresa".equals(listaRoles.get(0).getNombre())
-                || !"Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())) {
+        } else if ("Gerente".equals(listaRoles.get(0).getNombre())
+                || "Administrador de la empresa".equals(listaRoles.get(0).getNombre())
+                || "Jefe de recursos humanos".equals(listaRoles.get(0).getNombre())) {
+            System.out.println("Ingreso correctamente");
+        } else {
             try {
                 externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
             } catch (IOException ex) {
