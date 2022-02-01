@@ -9,11 +9,14 @@
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+
+                <f:event type="preRenderView" listener="#{seguridadCtasPagar.verificarPermiso()}"/>
+
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
-                    <p:submenu label="Pagos">
+                    <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
                         <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
@@ -48,7 +51,7 @@
 
                             <p:commandButton value="Nuevo" icon="pi pi-plus" 
                                              actionListener="#{anticipoMB.open_new}"
-
+                                             rendered="#{seguridadCtasPagar.renderForGerente()}"
                                              oncomplete="PF('manageAnticipoDialog').show()"
                                              styleClass="ui-button-success p-mr-2 p-mb-2" >
 
@@ -83,28 +86,34 @@
 
 
 
-                        <p:column headerText="Fecha Registro" width="210px" sortBy="#{anticipo.fecha}" filterBy="#{anticipo.fecha}" filterStyle="display : none">
+                        <p:column headerText="Fecha Registro" width="210px" 
+                                  sortBy="#{anticipo.fecha}" filterBy="#{anticipo.fecha}" 
+                                  filterStyle="display : none">
                             <h:outputText value="#{anticipoMB.FormatoFecha(anticipo.fecha)}"/>
                         </p:column>
 
 
-                        <p:column headerText="Descripción" sortBy="#{anticipo.descripcion}" filterBy="#{anticipo.descripcion}" filterStyle="display : none">
+                        <p:column headerText="Descripción" sortBy="#{anticipo.descripcion}" 
+                                  filterBy="#{anticipo.descripcion}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.descripcion}"/>
                         </p:column>
 
-                        <p:column headerText="Importe" width="150px" sortBy="#{anticipo.importe}" filterBy="#{anticipo.importe}" filterStyle="display : none">
+                        <p:column headerText="Importe" width="150px" sortBy="#{anticipo.importe}" 
+                                  filterBy="#{anticipo.importe}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.importe}"/>
                         </p:column>
 
-                        <p:column headerText="Proveedor" sortBy="#{anticipo.proveedor.nombre}" filterBy="#{anticipo.proveedor.nombre}" filterStyle="display : none">
+                        <p:column headerText="Proveedor" sortBy="#{anticipo.proveedor.nombre}" 
+                                  filterBy="#{anticipo.proveedor.nombre}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.proveedor.nombre}"/>
                         </p:column>
 
-                        <p:column headerText="Ruc" sortBy="#{anticipo.proveedor.ruc}" filterBy="#{anticipo.proveedor.ruc}" filterStyle="display : none">
+                        <p:column headerText="Ruc" sortBy="#{anticipo.proveedor.ruc}" 
+                                  filterBy="#{anticipo.proveedor.ruc}" filterStyle="display : none">
                             <h:outputText value="#{anticipo.proveedor.ruc}"/>
                         </p:column>
 
-                        <p:column exportable="false">
+                        <p:column exportable="false" rendered="#{seguridadCtasPagar.renderForGerente()}">
 
                             <!-- Boton de editar -->
                             <p:commandButton 
@@ -123,7 +132,8 @@
                                 styleClass="ui-button-danger rounded-button" 
                                 update=":form:delete_dialog">
 
-                                <f:setPropertyActionListener value="#{anticipo}" target="#{anticipoMB.selected_anticipo}"/>
+                                <f:setPropertyActionListener value="#{anticipo}" 
+                                                             target="#{anticipoMB.selected_anticipo}"/>
                             </p:commandButton>
 
                         </p:column>
@@ -137,7 +147,8 @@
                         showEffect="fade" 
                         modal="true" height="400"
                         responsive="true" id="dialogo_anticipo" 
-                        widgetVar="manageAnticipoDialog">
+                        widgetVar="manageAnticipoDialog"
+                        rendered="#{seguridadCtasPagar.renderForGerente()}">
 
                         <p:outputPanel 
                             id="manage-anticipo-content" 
@@ -311,7 +322,7 @@
                     </p:dialog>
 
                     <p:confirmDialog id="delete_dialog"  widgetVar="delete_anticipo_dialog" showEffect="fade" width="700"
-                                     header="Confirmar" severity="warn">
+                                     header="Confirmar" severity="warn" rendered="#{seguridadCtasPagar.renderForGerente()}">
 
                         <f:facet name="message">
                             <h4>¿Desea revertir este anticipo?</h4>

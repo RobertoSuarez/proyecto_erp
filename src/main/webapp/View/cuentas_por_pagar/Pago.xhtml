@@ -11,10 +11,13 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
-                                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+
+                <f:event type="preRenderView" listener="#{seguridadCtasPagar.verificarPermiso()}"/>
+
+                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
-    
+
                     <p:submenu label="Pagos">
                         <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
                         <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
@@ -22,7 +25,7 @@
                     </p:submenu>
                     <p:submenu label="Reportes">
                         <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
-      
+
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
                 </p:menubar>
@@ -34,7 +37,7 @@
                     <h1 style="text-align: center; color: black; font-size: 30px">Listado de Pagos</h1>
 
                     <!--                Botones que se presentan en la pantalla principal-->
-                    <p:toolbar>
+                    <p:toolbar rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:toolbarGroup>
                             <p:commandButton value="Nuevo" icon="pi pi-plus" 
                                              update=":form:pago-content" oncomplete="PF('managePagoDialog').show()"
@@ -89,7 +92,7 @@
                         <p:column headerText="Periodo" sortBy="#{pago.periodo}">
                             <h:outputText value="#{pago.periodo}"/>
                         </p:column>
-                        <p:column exportable="false">
+                        <p:column exportable="false" rendered="#{seguridadCtasPagar.renderForGerente()}">
                             <p:commandButton icon="pi pi-trash" update=":form:pago-content-edit"
                                              oncomplete="PF('dataPagoDialog').show()"
                                              styleClass="ui-button-danger rounded-button"
@@ -101,7 +104,7 @@
                     </p:dataTable>
                     <!-- Dialogo Nuevo-->
                     <p:dialog id="pago" header="Detalle de Pago" showEffect="fade" modal="true"
-                              widgetVar="managePagoDialog" responsive="true" height="400" width="70%"  closable="false">
+                              widgetVar="managePagoDialog" responsive="true" height="400" width="70%"  closable="false" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:outputPanel id="pago-content" class="ui-fluid" >
 
                             <div class="p-formgrid p-grid">
@@ -274,7 +277,7 @@
 
                     </p:dialog>
                     <!-- Dialogo Deshablitar-->
-                    <p:dialog id="pago-edit" header="Detalle de Pago" showEffect="fade" modal="true"
+                    <p:dialog id="pago-edit" header="Detalle de Pago" showEffect="fade" modal="true" rendered="#{seguridadCtasPagar.renderForGerente()}"
                               widgetVar="managePagoDialog-desh" responsive="true" height="400" width="70%"  closable="false">
                         <p:outputPanel id="pago-content-edit" class="ui-fluid" >
 

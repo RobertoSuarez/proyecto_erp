@@ -59,8 +59,7 @@
                                 </p:commandButton>
 
                                 <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
-                                                 oncomplete="PF('deleteCuentaDialog').show()"
-                                                 disabled="#{rolcontMB.rol()}">
+                                                 oncomplete="PF('deleteCuentaDialog').show()" disabled="#{rolcontMB.rol()}">
                                     <f:setPropertyActionListener value="#{cuenta}" target="#{cuentaMB.onselectedCuenta}"/>
                                 </p:commandButton>
                             </p:column>

@@ -55,6 +55,8 @@ public class FormulaProduccionDAO {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        } finally{
+            conexion.desconectar();
         }
         return formula;
     }
@@ -69,7 +71,7 @@ public class FormulaProduccionDAO {
         try {
             String cadena = "INSERT INTO public.formula(\n"
                     + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto)\n"
-                    + "	VALUES ( 5, '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', 6);";
+                    + "	VALUES ( 6, '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', 6);";
             return conexion.insertar(cadena);
 
         } catch (Exception e) {
@@ -98,5 +100,26 @@ public class FormulaProduccionDAO {
             this.conexion.cerrarConexion();
         }
     }
+    
+    // Parte de Elimar formula 
+   public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException{
+       try {
+           
+           this.conexion.Conectar();
+           String sql=("DELETE FROM public.formula WHERE nombre_formula = '"+aux+"'");
+           conexion.ejecutar(sql);
+           conexion.cerrarConexion();
+           
+       } catch (Exception e) {
+           throw e;
+       } finally{
+       this.conexion.cerrarConexion();
+       
+       }
+   
+        
+   }
+    
+    
 
 }

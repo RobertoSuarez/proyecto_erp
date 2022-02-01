@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.contabilidad.controllers;
 
 import com.seguridad.dao.UsuarioDAO;
@@ -9,9 +14,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+
 /**
  *
- * @author rturr
+ * @author pideu
  */
 @Named(value = "rolcontMB")
 @ViewScoped

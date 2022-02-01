@@ -10,9 +10,8 @@
             <ui:define name="title">Procesos de producción</ui:define>
             <ui:define name="content">
                 <ui:include src="subheaderProduccion.xhtml"/>
-                <p:growl id="growl" showDetail="true"/>
                 <h:form id="form-princ" style="margin-top: 4%;">
-                    <p:growl id="messages" showDetail="true"/>
+                    <p:growl id="growl" showDetail="true"/>
                     <div class="card">
 
                         <p:toolbar>
@@ -28,7 +27,6 @@
                                                      style=" margin-right: .6rem" process="@this">
                                         <p:resetInput target=":form-princ:manage-nuevoProceso-form"/>
                                     </p:commandButton>
-
 
                                     <p:button  value="Nuevo Subproceso"
                                                styleClass="ui-button-primary"
@@ -183,6 +181,7 @@
                                             <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
                                             <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
                                             <f:selectItem itemLabel="Directo" itemValue="Directo"/>
+
                                         </p:selectOneMenu>
                                     </div>
                                 </p:outputPanel>
@@ -202,7 +201,7 @@
                         </p:dialog>
 
                         <!-- Dialogo editar Proceso Principal -->
-                        <p:dialog header="Editar Proceso Principal" showEffect="fade" modal="true"
+                        <p:dialog header="Proceso Principal" showEffect="fade" modal="true"
                                   widgetVar="procesoEditDialog" responsive="true" width="35%"
                                   draggable="false" height="370" >
 
@@ -431,6 +430,7 @@
                                 <p:commandButton value="Guardar" actionListener="#{centroMB.insertar()}"
                                                  
                                                  process="manage-nuevoCentro-form @this"
+                                                 oncomplete="PF('agregarCentroDeCostos').hide()"
                                                  icon="pi pi-check" styleClass="ui-button-primary"/>
                                 <p:commandButton value="Cancelar" icon="pi pi-check"
                                                  onclick ="PF('agregarCentroDeCostos').hide()" 
@@ -516,7 +516,7 @@
                             </p:outputPanel>
                             <p:commandButton value="Si" icon="pi pi-check" actionListener="#{centroMB.eliminar()}"
                                              update="dtCosto"
-                                             process="manage-eliminarCentro-form @this"/>
+                                             process="manage-eliminarCentro-form @this" oncomplete="PF('deleteCentroDialog').hide()"/>
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('deleteCentroDialog').hide()"/>
                         </p:confirmDialog>

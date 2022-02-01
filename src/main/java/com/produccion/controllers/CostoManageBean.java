@@ -52,7 +52,7 @@ public class CostoManageBean implements Serializable{
                 this.costoDAO.insertarCosto(costo);
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Agregados"));
-                listaCosto = costoDAO.getCosto();
+                PrimeFaces.current().executeScript("PF('agregarCostos').hide()");
             }
 
         } catch (Exception e) {
@@ -60,6 +60,8 @@ public class CostoManageBean implements Serializable{
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
+        //PrimeFaces.current().executeScript("PF('agregarCostos').hide()");
+        //PrimeFaces.current().ajax().update("dtCosto");
     }
     
     public void editar() {
@@ -75,7 +77,6 @@ public class CostoManageBean implements Serializable{
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Guardados"));
                 PrimeFaces.current().executeScript("PF('costoEditDialog').hide()");
-                listaCosto = costoDAO.getCosto();
             }
 
         } catch (Exception e) {
@@ -83,17 +84,16 @@ public class CostoManageBean implements Serializable{
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
+        
+        PrimeFaces.current().ajax().update(":form-princ:dtCosto");
     }
     
     public void eliminar() {
         try {
             this.costoDAO.deletecosto(costo, costo.getIdentificador());
-            listaCosto = costoDAO.getCosto();
-            PrimeFaces.current().executeScript("PF('deleteCostoDialog').hide()");
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Eliminado"));
-            
-            
+            PrimeFaces.current().executeScript("PF('agregarCostos').hide()");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",

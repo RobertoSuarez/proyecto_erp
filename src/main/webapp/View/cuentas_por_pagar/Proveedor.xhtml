@@ -11,25 +11,32 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
+
+                <f:event type="preRenderView" listener="#{seguridadCtasPagar.verificarPermiso()}"/>
+                
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
-    
-                    <p:submenu label="Pagos">
-                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
-                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
+
+                    <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
+                        <p:menuitem value="Autorizar Pago" 
+                                    outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  
+                                    outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
                     </p:submenu>
                     <p:submenu label="Reportes">
-                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
-      
+                        <p:menuitem value="Generar calendario de pagos" 
+                                    outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
                 </p:menubar>
+
                 <h:form id="form" style="padding-left: 30px; padding-right: 30px">
                     <h1 style="text-align: center; color: black; margin-top: 4%;">Listado de Proveedores</h1>
                     <p:growl id="messages" showDetail="true"/>
-                    
+
                     <!--- Boton nuevo !--> 
                     <p:toolbar >         
 
@@ -40,11 +47,12 @@
                                                  update=":form:manage-product-content"
                                                  oncomplete="PF('manageProductDialog').show()"
                                                  styleClass="ui-button-success p-mr-2 p-mb-2"
-                                                 process="@this">                                        
+                                                 process="@this"
+                                                 rendered="#{seguridadCtasPagar.renderForGerente()}">                                        
                                     <p:resetInput target=":form:manage-product-content"/> 
                                 </p:commandButton>   </div>
                             <p:selectBooleanButton id="slcbtn"  
-                                                   value="#{condicionesMB.check}" 
+                                                   value="#{condicionesMB.check}"
                                                    onLabel="Deshabilitado"                                                           
                                                    offLabel="Habilitado" 
                                                    styleClass="ui-button-help p-mr-2 p-mb-2"
@@ -199,7 +207,7 @@
                                 value="#{provee.descripcion}"/>
                         </p:column>
                         <!--  Columna acciones de  proveedor !-->
-                        <p:column exportable="false">
+                        <p:column exportable="false" rendered="#{seguridadCtasPagar.renderForGerente()}">
                             <!-- Boton editar proveedor  !-->
                             <p:commandButton 
                                 icon="pi pi-pencil" 
@@ -236,7 +244,7 @@
                     <p:dialog header="Proveedor" showEffect="fade" 
                               modal="true" widgetVar="manageProductDialog" 
                               responsive="true" maximizable="true" 
-                              height="300" width="70%">
+                              height="300" width="70%" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:outputPanel id="manage-product-content" 
                                        class="ui-fluid">
                             <p:outputPanel> 
@@ -463,7 +471,7 @@
                     <!--- Atributos del dialog edtar proveedor de datos  !-->
                     <p:dialog header="Proveedor" showEffect="fade" modal="true"
                               widgetVar="manageProductDialogEdit" responsive="true"
-                              maximizable="true" height="300" width="70%">
+                              maximizable="true" height="300" width="70%" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:outputPanel id="manage-product-content-edit" 
                                        class="ui-fluid">
                             <p:outputPanel >              
@@ -690,9 +698,11 @@
                                      header="Confirmar" severity="warn">
 
                         <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
-                                         styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
+                                         styleClass="ui-button-success" process="confirmDHab @this" 
+                                         oncomplete="PF('DHProveedor').hide()"/>
                         <p:commandButton value="Cancelar" type="button" 
-                                         styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" onclick="PF('DHProveedor').hide()"  />
+                                         styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                         onclick="PF('DHProveedor').hide()"  />
                     </p:confirmDialog> 
                 </h:form>
             </ui:define>

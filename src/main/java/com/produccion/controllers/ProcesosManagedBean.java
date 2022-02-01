@@ -130,7 +130,6 @@ public class ProcesosManagedBean implements Serializable {
             } else {
                 this.procesoProduccionDAO.update(procesoProduccion);
                 System.out.println(procesoProduccion.getCodigo_proceso());
-                listaProcesos = procesoProduccionDAO.getProcesosProduccion();
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Guardado"));
                 PrimeFaces.current().ajax().update("form-princ:dtProcesoPrin");

@@ -8,12 +8,17 @@
     <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
         <p:menuitem value="" outcome="/View/inventario/entradaProducto"/>
         <p:menuitem value="Productos" outcome="/View/inventario/Productos"/>
+        <p:menuitem value="Bodegas" outcome="/View/inventario/Bodegas"/>
         <p:submenu label="Operaciones">
             <p:menuitem value="Entrada de producto" outcome="/View/inventario/entradaProducto" icon="pi pi-list" />
             <p:menuitem value="Salida de producto" outcome="/View/inventario/salidaProducto" icon="pi pi-list" />
         </p:submenu>
-        <p:menuitem value="Transferencia" outcome="/View/inventario/Transferencias"/>
+        <p:submenu label="Transferencia">
+            <p:menuitem value="Lista Transferencias" outcome="/View/inventario/Transferencias" icon="pi pi-list" />
+            <p:menuitem value="Nueva Transferencia" outcome="/View/inventario/NuevaTransferencia" icon="pi pi-list" />
+        </p:submenu>
         <p:menuitem value="Ajuste de Inventario" outcome="/View/inventario/ajusteInventario"/>
+       
     </p:menubar>
 
 </ui:composition>

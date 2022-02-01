@@ -12,40 +12,43 @@
         <div class="container">
             <div class="p-grid">
                 <ui:fragment rendered="#{rolcontMB.menu()}">
-                <div class="p-col-12 p-lg-6 p-xl-3">
-                    <a href="../contabilidad/asientos.xhtml" >
-                        <div class="card-box bg-blue">
-                            <div class="inner">
-                                <h3> Contabilidad </h3>
-                                <p> Descripción </p>
-                            </div>
-                            <div class="icon">
-                                <i class="pi pi-book" aria-hidden="true" ></i>
-                            </div>
-                            <div class="card-box-footer">Ingresar 
-                                <i class="pi pi-arrow-circle-right"/>
-                            </div>
-                        </div>                        
-                    </a>
-                </div>
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="../contabilidad/asientos.xhtml" >
+                            <div class="card-box bg-blue"> 
+                                <div class="inner">
+                                    <h3> Contabilidad </h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-book" aria-hidden="true" ></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar 
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
+                            </div>                        
+                        </a>
+                    </div>
                 </ui:fragment>
 
-                <div class="p-col-12 p-lg-6 p-xl-3">
-                    <a href="../cuentas_por_pagar/Proveedor.xhtml">
-                        <div class="card-box bg-green">
-                            <div class="inner">
-                                <h3> Cuentas por pagar </h3>
-                                <p> Descripción </p>
+                <ui:fragment rendered="#{seguridadCtasPagar.renderForEveryone()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="../cuentas_por_pagar/Proveedor.xhtml">
+                            <div class="card-box bg-green">
+                                <div class="inner">
+                                    <h3> Cuentas por pagar </h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-dollar" aria-hidden="true"></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="pi pi-dollar" aria-hidden="true"></i>
-                            </div>
-                            <div class="card-box-footer">Ingresar
-                                <i class="pi pi-arrow-circle-right"/>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                </ui:fragment>
+
                 <div class="p-col-12 p-lg-6 p-xl-3">
                     <a href="../activos_fijos/ActivosTangibles.xhtml">
                         <div class="card-box bg-orange">
@@ -78,10 +81,7 @@
                         </div>
                     </a>
                 </div>
-            </div>
 
-
-            <div class="p-grid">
                 <div class="p-col-12 p-lg-6 p-xl-3">
                     <a href="../ventas/nuevaVenta.xhtml">
                         <div class="card-box bg-cyan">

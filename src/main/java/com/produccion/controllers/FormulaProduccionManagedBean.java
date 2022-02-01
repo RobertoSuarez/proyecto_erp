@@ -45,7 +45,7 @@ public class FormulaProduccionManagedBean implements Serializable {
     }
       
        public void insertar() {
-           System.out.println("Si entro pilas");
+           System.err.println("Entro ......");
         try {
             if ("".equals(formulaProduccion.getCodigo_proceso())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
@@ -61,7 +61,6 @@ public class FormulaProduccionManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.formulaProduccionDAO.insertarFormula(formulaProduccion);
-                listaFormula = formulaProduccionDAO.getFormula();
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
             }
@@ -104,6 +103,20 @@ public class FormulaProduccionManagedBean implements Serializable {
         PrimeFaces.current().executeScript("PF('crearFormulaDialg').hide()");
         PrimeFaces.current().ajax().update("form:dtFormulaPrin", "form:growl");
     } 
+         
+    public void eliminarFormula(){
+        try {
+            this.formulaProduccionDAO.eliminarF(formulaProduccion, formulaProduccion.getNombre_formula());
+            listaFormula = formulaProduccionDAO.getFormula();
+            PrimeFaces.current().executeScript("PF('eliminarFormulaDialog').hide()");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Exito", "Formula Eliminada"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Error al Eliminar la Formula"));
+            
+        }
+        
+    }     
+    
        
     public FormulaProduccion getFormulaProduccion() {
         return formulaProduccion;

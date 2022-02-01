@@ -5,10 +5,6 @@
  */
 package com.inventario.models;
 
-/**
- *
- * @author Jimmy
- */
 public class ArticulosInventario {
     
     private int id;

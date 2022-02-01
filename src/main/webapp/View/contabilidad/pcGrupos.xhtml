@@ -107,8 +107,7 @@
                                     <f:setPropertyActionListener value="update" target="#{grupoMB.action}" />
                                 </p:commandButton>
                                 <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
-                                                 oncomplete="PF('deleteDialogGrupo').show()"
-                                                 disabled="#{rolcontMB.rol()}">
+                                                 oncomplete="PF('deleteDialogGrupo').show()" disabled="#{rolcontMB.rol()}">
                                     <f:setPropertyActionListener value="#{grupo}" target="#{grupoMB.grupo}"/>
                                 </p:commandButton>
                             </p:column>
