@@ -34,6 +34,10 @@ public class FormulaProduccionDAO {
         conexion = new Conexion();
         this.formulaProduccion = formulaProduccion;
     }
+    
+    public void getProcess(int cod){
+        
+    }
 
     public List<FormulaProduccion> getFormula() {
         List<FormulaProduccion> formula = new ArrayList<>();

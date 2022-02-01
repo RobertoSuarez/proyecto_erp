@@ -25,7 +25,7 @@ public class SubProcesoDAO {
     
     public List<SubProceso> getSubProceso() {
         List<SubProceso> sub = new ArrayList<>();
-        String sql = String.format("select * from getProcesosProduccion();");
+        String sql = String.format("SELECT * FROM public.subproceso;");
         try {
             conexion.conectar();
             resultSet = conexion.ejecutarSql(sql);

@@ -20,8 +20,11 @@
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <p:commandButton value="Crear Nueva Fórmula" 
-                                                     styleClass="ui-button-primary"
+                                                     actionListener="#{formulaMB.openNew()}"
+                                                     update=":form-princFormula:manage-nuevaFormula-form"
+                                                     styleClass="ui-button-primary" process="@this"
                                                      icon="pi pi-plus" oncomplete="PF('crearFormulaDialog').show()">
+                                        <p:resetInput target=":form-princFormula:manage-nuevaFormula-form"/>
                                     </p:commandButton>
 
                                 </div>
@@ -99,16 +102,17 @@
                                             <div class="p-col-12">
                                                 <p:outputLabel value="Proceso Principal:"></p:outputLabel>
                                                 <p:selectOneMenu id="procesoPrincipal" 
-                                                                 value="" 
-                                                                 class=""
-                                                                 required="true"
-                                                                 requiredMessage="Seleccionar Proceso">                            
-                                                    <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
-                                                    <f:selectItem itemLabel="Proceso Princiapal 1" itemValue="Prin 1"/>
-                                                    <f:selectItem itemLabel="Proceso Princiapal 2" itemValue="Prin 2"/>
+                                                                 value="#{formulaMB.formulaProduccion.codigo_proceso}" 
+                                                                 editable="false">                            
+                                                    <f:selectItem itemLabel="Seleccionar Proceso" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
+                                                                   itemLabel="#{proceso.codigo_proceso}"
+                                                                   itemValue="#{proceso.codigo_proceso}"/>
+                                                    <p:ajax event = "itemSelect" update = "selectedItemText" />
                                                 </p:selectOneMenu>
 
                                             </div>
+                                            <h:outputText id = "selectedItemText" value = "#{formulaMB.formulaProduccion.codigo_formula}" />
                                         </div>
                                     </div>
 
@@ -156,13 +160,13 @@
                                                     <p:column headerText="Sub Procesos" filterStyle="display : none">
                                                         <div class="p-col-4">
                                                             <p:selectOneMenu id="subProceso" 
-                                                                             value="" 
+                                                                             value="#{formulaMB.formulaProduccion.codigo_proceso}" 
                                                                              class=""
                                                                              required="true"
                                                                              requiredMessage="Ingrese Tipo de Costo">                            
                                                                 <f:selectItem itemLabel="Seleccionar " itemValue=""/>
-                                                                <f:selectItem itemLabel="Sub Proceso 1" itemValue="Sub 1"/>
-                                                                <f:selectItem itemLabel="Sub Proceso 2" itemValue="Sub 2"/>
+                                                                <f:selectItems value="#{formulaMB.listSubProceso}" var="subProceso" 
+                                                                               itemLabel="#{subProceso.nombre}" itemValue="#{subProceso.codigo_subproceso}"/>
                                                             </p:selectOneMenu>
                                                         </div>
                                                     </p:column>

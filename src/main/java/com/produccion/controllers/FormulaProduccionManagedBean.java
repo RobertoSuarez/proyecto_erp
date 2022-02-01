@@ -6,7 +6,11 @@
 package com.produccion.controllers;
 
 import com.produccion.dao.FormulaProduccionDAO;
+import com.produccion.dao.ProcesoProduccionDAO;
+import com.produccion.dao.SubProcesoDAO;
 import com.produccion.models.FormulaProduccion;
+import com.produccion.models.ProcesoProduccion;
+import com.produccion.models.SubProceso;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +37,31 @@ public class FormulaProduccionManagedBean implements Serializable {
     private FormulaProduccion formulaProduccion = new FormulaProduccion();
     private FormulaProduccionDAO formulaProduccionDAO = new FormulaProduccionDAO();
     private List<FormulaProduccion> listaFormula = new ArrayList<>();
+    
+    private ProcesoProduccion procesoProduccion;
+    private ProcesoProduccionDAO procesoProduccionDao;
+    List<ProcesoProduccion> listProceso = new ArrayList<>();
+    
+    private SubProceso subProceso;
+    private SubProcesoDAO subProcesoDAO;
+    List <SubProceso> listSubProceso = new ArrayList<>();
+    List <SubProceso> listTempSubPro = new ArrayList<>();
 
     @PostConstruct
     public void init() {
         System.out.println("PostConstruct");
+        procesoProduccionDao = new ProcesoProduccionDAO();
+        subProceso = new SubProceso();
+        subProcesoDAO = new SubProcesoDAO();
         listaFormula = formulaProduccionDAO.getFormula();
     }
+    
+    public void openNew() {
+        this.procesoProduccion = new ProcesoProduccion();
+        listProceso = procesoProduccionDao.getProcesosProduccion();
+        listSubProceso = subProcesoDAO.getSubProceso();
+    }
+    
     
       public void closeDialogModal() {
         PrimeFaces.current().executeScript("PF('crearFormulaDialog').hide()");
@@ -126,6 +149,38 @@ public class FormulaProduccionManagedBean implements Serializable {
 
     public void setListaFormula(List<FormulaProduccion> listaFormula) {
         this.listaFormula = listaFormula;
+    }
+
+    public List<ProcesoProduccion> getListProceso() {
+        return listProceso;
+    }
+
+    public void setListProceso(List<ProcesoProduccion> listProceso) {
+        this.listProceso = listProceso;
+    }
+
+    public ProcesoProduccion getProcesoProduccion() {
+        return procesoProduccion;
+    }
+
+    public void setProcesoProduccion(ProcesoProduccion procesoProduccion) {
+        this.procesoProduccion = procesoProduccion;
+    }
+
+    public List<SubProceso> getListSubProceso() {
+        return listSubProceso;
+    }
+
+    public void setListSubProceso(List<SubProceso> listSubProceso) {
+        this.listSubProceso = listSubProceso;
+    }
+
+    public List<SubProceso> getListTempSubPro() {
+        return listTempSubPro;
+    }
+
+    public void setListTempSubPro(List<SubProceso> listTempSubPro) {
+        this.listTempSubPro = listTempSubPro;
     }
 
   

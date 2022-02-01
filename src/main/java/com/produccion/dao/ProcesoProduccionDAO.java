@@ -28,7 +28,7 @@ public class ProcesoProduccionDAO {
 
     public List<ProcesoProduccion> getProcesosProduccion() {
         List<ProcesoProduccion> procesos = new ArrayList<>();
-        String sql = String.format("select * from getProcesosProduccion();");
+        String sql = String.format("SELECT * FROM public.proceso_produccion");
         try {
             conexion.conectar();
             resultSet = conexion.ejecutarSql(sql);
