@@ -10,14 +10,18 @@ import com.inventario.models.Bodega;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.ManagedBean;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author Jimmy
  */
+@ManagedBean
+@RequestScoped
 public class BodegaDAO {
 
-    Conexion conexion = new Conexion();
+    Conexion conexion;
     private Bodega bodega;
     private ResultSet resultSet;
     private List<Bodega> listaBodegas;
@@ -31,6 +35,14 @@ public class BodegaDAO {
 
     public BodegaDAO(Bodega b) {
         conexion = new Conexion();
+        this.bodega = b;
+    }
+
+    public Bodega getBod() {
+        return bodega;
+    }
+
+    public void setBod(Bodega b) {
         this.bodega = b;
     }
 
@@ -54,6 +66,42 @@ public class BodegaDAO {
             System.out.println(e.getMessage());
         }
         return ListaBodega;
+    }
+
+    public Bodega obtenerBodega(int codigo) {
+        ResultSet rs;
+        Bodega temp = new Bodega();
+        try {
+            String id = String.valueOf(codigo);
+            conexion.abrirConexion();
+            rs = conexion.ejecutarConsulta("select*from bodega where cod= " + id.trim());
+
+            if (rs == null) {
+                System.out.println("No existe registro");
+            } else {
+                System.out.println("Existen registros");
+                
+                while (rs.next()){
+                    System.out.print("bodega "+rs.getInt(1));
+                    temp.setCod(rs.getInt(1));
+                    temp.setNomBodega(rs.getString(2));
+                    temp.setDireccion(rs.getString(3));
+                    temp.setCodCiudad(rs.getInt(4));
+                    temp.setTelefono(rs.getString(5));
+                }
+                
+            }
+            conexion.cerrarConexion();
+            return temp;
+
+        } catch (Exception e) {
+            if (conexion.isEstado()) {
+                conexion.cerrarConexion();
+            }
+        } finally {
+            conexion.cerrarConexion();
+        }
+        return null;
     }
 
 }

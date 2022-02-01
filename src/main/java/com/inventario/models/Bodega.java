@@ -5,10 +5,6 @@
  */
 package com.inventario.models;
 
-/**
- *
- * @author Jimmy
- */
 public class Bodega {
     
     private int cod;
@@ -37,6 +33,7 @@ public class Bodega {
     public void setCod(int cod) {
         this.cod = cod;
     }
+
 
     public String getNomBodega() {
         return nomBodega;
