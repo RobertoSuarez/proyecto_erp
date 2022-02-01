@@ -19,12 +19,15 @@
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
                     <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
-                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
-                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
+                        <p:menuitem value="Autorizar Pago" 
+                                    outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  
+                                    outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
                     </p:submenu>
                     <p:submenu label="Reportes">
-                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+                        <p:menuitem value="Generar calendario de pagos" 
+                                    outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
 
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
@@ -695,9 +698,11 @@
                                      header="Confirmar" severity="warn">
 
                         <p:commandButton value="Guardar" actionListener="#{condicionesMB.dhProveedor()}"
-                                         styleClass="ui-button-success" process="confirmDHab @this" oncomplete="PF('DHProveedor').hide()"/>
+                                         styleClass="ui-button-success" process="confirmDHab @this" 
+                                         oncomplete="PF('DHProveedor').hide()"/>
                         <p:commandButton value="Cancelar" type="button" 
-                                         styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" onclick="PF('DHProveedor').hide()"  />
+                                         styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                         onclick="PF('DHProveedor').hide()"  />
                     </p:confirmDialog> 
                 </h:form>
             </ui:define>
