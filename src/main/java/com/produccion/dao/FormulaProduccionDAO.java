@@ -34,6 +34,10 @@ public class FormulaProduccionDAO {
         conexion = new Conexion();
         this.formulaProduccion = formulaProduccion;
     }
+    
+    public void getProcess(int cod){
+        
+    }
 
     public List<FormulaProduccion> getFormula() {
         List<FormulaProduccion> formula = new ArrayList<>();
@@ -55,6 +59,8 @@ public class FormulaProduccionDAO {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        } finally{
+            conexion.desconectar();
         }
         return formula;
     }
@@ -98,5 +104,26 @@ public class FormulaProduccionDAO {
             this.conexion.cerrarConexion();
         }
     }
+    
+    // Parte de Elimar formula 
+   public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException{
+       try {
+           
+           this.conexion.Conectar();
+           String sql=("DELETE FROM public.formula WHERE nombre_formula = '"+aux+"'");
+           conexion.ejecutar(sql);
+           conexion.cerrarConexion();
+           
+       } catch (Exception e) {
+           throw e;
+       } finally{
+       this.conexion.cerrarConexion();
+       
+       }
+   
+        
+   }
+    
+    
 
 }

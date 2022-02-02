@@ -10,6 +10,27 @@
     <ui:define name="content">  
         <div class="container">
             <div class="p-grid">
+<<<<<<< HEAD
+=======
+                <ui:fragment rendered="#{rolcontMB.menu()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="../contabilidad/asientos.xhtml" >
+                            <div class="card-box bg-blue"> 
+                                <div class="inner">
+                                    <h3> Contabilidad </h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-book" aria-hidden="true" ></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar 
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
+                            </div>                        
+                        </a>
+                    </div>
+                </ui:fragment>
+>>>>>>> c0cbd5f6c1f073f338279dd947faef9335b05fbc
 
                 <c:if test="${ usuarioMB.rolesDAO.rolExist('Vendedor') == true }"> 
                     <div class="p-col-12 p-lg-6 p-xl-3">
