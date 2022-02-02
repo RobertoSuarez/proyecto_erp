@@ -101,7 +101,8 @@ public class ProvinciaDAO implements IDAO<Provincia> {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("provincia",
-                    "provincia = '" + provincia.getNombre() + "'",
+                    "provincia = '" + provincia.getNombre() + "',"
+                    + "detalle = '" + provincia.getDetailsProvincia()+"'",
                     "cod = " + provincia.getId());
         }
         return -1;
