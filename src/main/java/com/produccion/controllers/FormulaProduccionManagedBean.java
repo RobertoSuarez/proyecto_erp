@@ -59,7 +59,6 @@ public class FormulaProduccionManagedBean implements Serializable {
     public void openNew() {
         this.procesoProduccion = new ProcesoProduccion();
         listProceso = procesoProduccionDao.getProcesosProduccion();
-        listSubProceso = subProcesoDAO.getSubProceso();
     }
     
     

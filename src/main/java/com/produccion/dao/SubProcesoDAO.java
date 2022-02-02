@@ -14,10 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Alex
- */
+
 public class SubProcesoDAO {
 
     private Conexion conexion;
@@ -27,10 +24,26 @@ public class SubProcesoDAO {
     public SubProcesoDAO() {
         conexion = new Conexion();
     }
+    
 
-    public List<SubProceso> getSubProceso() {
-        List<SubProceso> sub = new ArrayList<>();
-        String sql = String.format("SELECT * FROM public.subproceso;");
+
+    public List<ProcesoProduccion> getProcesosProduccion() {
+        List<ProcesoProduccion> procesos = new ArrayList<>();
+        sentenciaSql = String.format("select * from getProcesosProduccion();");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                procesos.add(new ProcesoProduccion(resultSet.getInt("codigo_proceso"), resultSet.getString("nombre"),
+                        resultSet.getString("descripcion"), resultSet.getString("identificador")));
+            }
+        } catch (SQLException e) {
+        }
+        return procesos;
+    }
+    public List<Costo> getCosto(String tipo) {
+        List<Costo> costo = new ArrayList<>();
+        sentenciaSql = String.format("select * from costos where tipo='"+tipo+"';");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -42,7 +55,7 @@ public class SubProcesoDAO {
         }
         return costo;
     }
-
+    
 
     public int idSubproceso() {
         try {

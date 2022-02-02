@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.produccion.controllers;
 
 import com.produccion.dao.SubProcesoDAO;
@@ -17,14 +12,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
 
-/**
- *
- * @author Alex
- */
 @ManagedBean(name = "subprocesoMB")
 @ViewScoped
 public class SubProcesoManageBean implements Serializable {
-    
+
     private List<SubProceso> listaSubProceso;
     private List<ProcesoProduccion> listaProceso;
     private SubProcesoDAO subProcesoDAO;
@@ -42,12 +33,10 @@ public class SubProcesoManageBean implements Serializable {
     public void setId_subproceso(int id_subproceso) {
         this.id_subproceso = id_subproceso;
     }
-    
 
     public List<Costo> getListaCostoDirecto() {
         return listaCostoDirecto;
     }
-    
 
     public void setListaCostoDirecto(List<Costo> listaCostoDirecto) {
         this.listaCostoDirecto = listaCostoDirecto;
@@ -60,8 +49,6 @@ public class SubProcesoManageBean implements Serializable {
     public void setListaCostoIndirecto(List<Costo> listaCostoIndirecto) {
         this.listaCostoIndirecto = listaCostoIndirecto;
     }
-
-    
 
     public Costo getCostoProduccion() {
         return costoProduccion;
@@ -111,17 +98,16 @@ public class SubProcesoManageBean implements Serializable {
     @PostConstruct
     public void init() {
         listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto=subProcesoDAO.getCosto("Directo");
-        listaCostoIndirecto=subProcesoDAO.getCosto("Indirecto");
+        listaCostoDirecto = subProcesoDAO.getCosto("Directo");
+        listaCostoIndirecto = subProcesoDAO.getCosto("Indirecto");
 
     }
-  
 
-      public void listarDirectos(){
+    public void listarDirectos() {
         System.out.println(this.idSubproceso);
-        
-        
+
     }
+
     public List<SubProceso> getListaSubProceso() {
         return listaSubProceso;
     }

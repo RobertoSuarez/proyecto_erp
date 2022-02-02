@@ -11,13 +11,10 @@ import com.produccion.models.SubProceso;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -26,7 +23,7 @@ import org.primefaces.model.TreeNode;
  * @author HP
  */
 @Named(value = "procesosMBean")
-@RequestScoped
+@ViewScoped
 public class ProcesosMBean implements Serializable {
 //Eliminar urgente este BEAN
     private int idSubproceso;
