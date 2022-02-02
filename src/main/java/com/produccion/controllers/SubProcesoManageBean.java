@@ -110,9 +110,9 @@ public class SubProcesoManageBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto=subProcesoDAO.getCosto("Directo");
-        listaCostoIndirecto=subProcesoDAO.getCosto("Indirecto");
+        //listaProceso = subProcesoDAO.getProcesosProduccion();
+        //listaCostoDirecto=subProcesoDAO.getCosto("Directo");
+        //listaCostoIndirecto=subProcesoDAO.getCosto("Indirecto");
 
     }
   

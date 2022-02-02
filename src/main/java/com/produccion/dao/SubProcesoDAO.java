@@ -28,7 +28,7 @@ public class SubProcesoDAO {
         conexion = new Conexion();
     }
 
-    public List<SubProceso> getSubProceso() {
+    /*public List<SubProceso> getSubProceso() {
         List<SubProceso> sub = new ArrayList<>();
         String sql = String.format("SELECT * FROM public.subproceso;");
         try {
@@ -41,7 +41,7 @@ public class SubProcesoDAO {
         } catch (SQLException e) {
         }
         return costo;
-    }
+    }*/
 
 
     public int idSubproceso() {
