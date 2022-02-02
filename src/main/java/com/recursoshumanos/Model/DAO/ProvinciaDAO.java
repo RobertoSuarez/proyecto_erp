@@ -70,8 +70,9 @@ public class ProvinciaDAO implements IDAO<Provincia> {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            provincia.setId(conexion.insertar("provincia", "provincia",
-                    "'" + provincia.getNombre() + "'", "cod"));
+            provincia.setId(conexion.insertar("provincia", "provincia, detalle ",
+                    "'" + provincia.getNombre() + "','" 
+                    + provincia.getDetailsProvincia() +"'" , "cod"));
             return provincia.getId();
         }
         return -1;
