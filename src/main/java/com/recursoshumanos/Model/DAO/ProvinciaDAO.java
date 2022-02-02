@@ -158,13 +158,14 @@ public class ProvinciaDAO implements IDAO<Provincia> {
             ResultSet result;
             List<Provincia> lista;
             try {
-                result = conexion.selecionar("provincia", "cod, provincia",
+                result = conexion.selecionar("provincia", "cod, provincia,detalle",
                         restricciones, OrdenarAgrupar);
                 lista = new ArrayList<>();
                 while (result.next()) {
                     lista.add(new Provincia(
                             result.getInt("cod"),
-                            result.getString("provincia")
+                            result.getString("provincia"),
+                            result.getString("detalle")
                     ));
                 }
                 result.close();

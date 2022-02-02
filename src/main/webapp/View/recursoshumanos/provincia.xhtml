@@ -45,6 +45,13 @@
                                         <h:outputText value="#{provincia.nombre}"/>
 
                                     </p:column>
+                                    
+                                    <p:column headerText="Detalle" style="font-size: 17px" width="25%">
+
+                                        <h:outputText value="#{provincia.detailsProvincia}"/>
+
+                                    </p:column>
+                                    
                                     <p:column exportable="false" width="10%">
                                         <p:commandButton icon="pi pi-pencil" update=":form:manage-provincia-content" disabled="#{rolMB.rol()}"
                                                          oncomplete="PF('manageProvinciaDialog').show()"
@@ -65,6 +72,9 @@
                                                 <div class="p-field">
                                                     <p:outputLabel for="inProvincia" style="font-weight: bold">Provincia: </p:outputLabel>
                                                     <p:inputText style="width: 100%;" id="inProvincia" value="#{provinciaView.provincia.nombre}"
+                                                                 required="true" label="Provincia"/>
+                                                    <p:outputLabel style="font-weight: bold">Detalle: </p:outputLabel>
+                                                    <p:inputText style="width: 100%;" value="#{provinciaView.provincia.detailsProvincia}"
                                                                  required="true" label="Provincia"/>
                                                 </div>
                                             </div>
