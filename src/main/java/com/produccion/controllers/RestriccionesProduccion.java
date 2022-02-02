@@ -23,7 +23,7 @@ import org.primefaces.PrimeFaces;
  * @author HP
  */
 @Named(value = "restriccionesProduccion")
-@SessionScoped
+@ViewScoped
 public class RestriccionesProduccion implements Serializable {
 
     private UsuarioDAO usuarioDAO;
