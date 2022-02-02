@@ -4,6 +4,7 @@
  */
 package com.seguridad.controllers;
 
+import com.inventario.DAO.Clases.RolesDAO;
 import com.seguridad.dao.RolDAO;
 import com.seguridad.dao.UsuarioDAO;
 import com.seguridad.models.Rol;
@@ -20,6 +21,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.collections4.list.AbstractLinkedList;
 
 @Named(value = "usuarioMB")
 @SessionScoped
@@ -33,23 +35,36 @@ public class UsuarioController implements Serializable {
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
     HttpSession httpSession = (HttpSession) facesContext.getExternalContext().getSession(true);
     RolDAO rolDao;
+    RolesDAO rolesDAO;
+
+    public RolesDAO getRolesDAO() {
+        return rolesDAO;
+    }
+
+    public void setRolesDAO(RolesDAO rolesDAO) {
+        this.rolesDAO = rolesDAO;
+    }
 
     public UsuarioController() {
         usuario = new Usuario();
         usuarioDAO = new UsuarioDAO();
         rolDao = new RolDAO();
+        rolesDAO = new RolesDAO();
         listaUsuario = new ArrayList<>();
         System.out.println("########## Pasa algo");
     }
 
     @PostConstruct
     public void init() {
-        
-       
+
     }
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public boolean rolExist(String rol) {
+        return rolesDAO.rolExist(rol);
     }
 
     public void setUsuario(Usuario usuario) {
@@ -115,14 +130,13 @@ public class UsuarioController implements Serializable {
             if (usuarioSesion != null) {
                 if (usuarioSesion.getCode() < 1) {
                     PFW(usuarioSesion.getMsj());
-                 
+
                 } else {
                     PFE(usuarioSesion.getMsj());
-                    
+
                     usuario = usuarioSesion;
                     List<Rol> rolesSesion = rolDao.getRolesByUsers(usuarioSesion.getIdUsuario());
-                    
-
+                    rolesDAO = new RolesDAO(rolesSesion);
                     //Registrar usuario en HttpSession
                     httpSession.setAttribute("username", usuarioSesion);
 
@@ -130,18 +144,18 @@ public class UsuarioController implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                             .put("usuario", usuarioSesion);
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                            .put("roles", rolesSesion);
+                            .put("roles", rolesDAO);
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                             .put("usuario_rol", usuarioDAO.rolRRHH(usuarioSesion.getIdUsuario()));
                     facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
-                    
+
                 }
             } else {
                 PFE("Error de conexión al intentar iniciar sesión.");
             }
         }
     }
-    
+
     public void cerrarSession() throws IOException {
         System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
         httpSession.removeAttribute("usuario");
@@ -166,8 +180,6 @@ public class UsuarioController implements Serializable {
 
     }
 
-    
-    
     public void verificarInicioSesion() {
         FacesContext context = FacesContext.getCurrentInstance();
         Usuario usuarioSesion = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
@@ -179,50 +191,50 @@ public class UsuarioController implements Serializable {
             e.printStackTrace();
         }
     }
-    
-    public boolean verificarSesion(){
+
+    public boolean verificarSesion() {
         Usuario user = new Usuario();
-        try{
+        try {
             user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(user != null && user.getIdUsuario() > 0){
+        if (user != null && user.getIdUsuario() > 0) {
             return true;
         }
         return false;
     }
-    
-    public boolean verificarPermisoNombre(List<String> rolesPermitidos, int codigoModulo){
-        try{
+
+    public boolean verificarPermisoNombre(List<String> rolesPermitidos, int codigoModulo) {
+        try {
             List<Rol> rolesSesion = (List<Rol>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("roles");
-            for(String rolPermitido:rolesPermitidos){
-                for(Rol rolCompare:rolesSesion){
-                    if(rolPermitido.equals(rolCompare.getNombre())){
+            for (String rolPermitido : rolesPermitidos) {
+                for (Rol rolCompare : rolesSesion) {
+                    if (rolPermitido.equals(rolCompare.getNombre())) {
                         return true;
                     }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-    
-    public boolean verificarPermisoCodigo(List<Integer> rolesPermitidos, int codigoModulo){
-        try{
+
+    public boolean verificarPermisoCodigo(List<Integer> rolesPermitidos, int codigoModulo) {
+        try {
             List<Rol> rolesSesion = (List<Rol>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("roles");
-            for(int rolPermitido:rolesPermitidos){
-                for(Rol rolCompare:rolesSesion){
-                    if(rolPermitido == rolCompare.getId()){
+            for (int rolPermitido : rolesPermitidos) {
+                for (Rol rolCompare : rolesSesion) {
+                    if (rolPermitido == rolCompare.getId()) {
                         return true;
                     }
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
-    }   
+    }
 
 }
