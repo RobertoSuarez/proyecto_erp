@@ -191,8 +191,6 @@ public class Conexion implements Serializable {
             result = statement.executeQuery(sql);
         } catch (SQLException ex) {
             System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
-        }finally{
-            cerrarConexion();
         }
         return result;
     }
