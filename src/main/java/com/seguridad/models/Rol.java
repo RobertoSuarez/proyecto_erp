@@ -1,7 +1,9 @@
 
 package com.seguridad.models;
 
-public class Rol {
+import java.io.Serializable;
+
+public class Rol implements Serializable {
     private int id;
     private String nombre;
     private String detalle;

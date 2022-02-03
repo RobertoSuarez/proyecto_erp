@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:head>
 
@@ -46,6 +47,7 @@
         </script>
     </h:head>
     <h:body>
+        
         <div>
             <ui:insert name="top">
                 <div class="navbar-principal p-d-flex p-ai-center p-jc-between" >
@@ -220,10 +222,15 @@
                 <div class="p-col-12 p-md-12 p-lg-9">
                     <ui:insert name="content"></ui:insert>
                 </div>
+
             </div>
         </div>
         <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
         <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
         <h:outputStylesheet name="css/layout-deeppurple-teal.css" library="manhattan-layout" />   
     </h:body>
+     <h1>HOLA</h1>
+    <div>
+       
+    </div>
 </html>

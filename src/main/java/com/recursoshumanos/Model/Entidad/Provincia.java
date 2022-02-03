@@ -23,6 +23,8 @@ public class Provincia implements Serializable {
     private int id;
 
     private String Nombre;
+    
+    private String detailsProvincia;
 
     /**
      * Constructores para la amonestación
@@ -30,11 +32,21 @@ public class Provincia implements Serializable {
     public Provincia() {
         this.id = 0;
         this.Nombre = "";
+        this.detailsProvincia="";
     }
 
-    public Provincia(int id, String Nombre) {
+    public Provincia(int id, String Nombre, String detailsProvincia) {
         this.id = id;
         this.Nombre = Nombre;
+        this.detailsProvincia= detailsProvincia;
+    }
+
+    public String getDetailsProvincia() {
+        return detailsProvincia;
+    }
+
+    public void setDetailsProvincia(String detailsProvincia) {
+        this.detailsProvincia = detailsProvincia;
     }
 
     /**
