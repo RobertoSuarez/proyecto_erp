@@ -15,9 +15,20 @@ public class Costo {
     private String descripcion;
     private String tipo;
     private String identificador;
+    private float costo;
 
     public Costo() {
     }
+
+    public Costo(int codigo_costos, String nombre, String descripcion, String tipo, String identificador, float costo) {
+        this.codigo_costos = codigo_costos;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.tipo = tipo;
+        this.identificador = identificador;
+        this.costo = costo;
+    }
+    
 
     public Costo(int codigo_costos, String nombre, String descripcion, String tipo, String identificador) {
         this.codigo_costos = codigo_costos;
@@ -26,6 +37,15 @@ public class Costo {
         this.tipo = tipo;
         this.identificador = identificador;
     }
+
+    public float getCosto() {
+        return costo;
+    }
+
+    public void setCosto(float costo) {
+        this.costo = costo;
+    }
+    
 
     public int getCodigo_costos() {
         return codigo_costos;

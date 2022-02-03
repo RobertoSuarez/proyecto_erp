@@ -1,9 +1,11 @@
 package com.produccion.controllers;
 
 import com.produccion.dao.SubProcesoDAO;
+import com.produccion.dao.dSubprocesoDAO;
 import com.produccion.models.Costo;
 import com.produccion.models.ProcesoProduccion;
 import com.produccion.models.SubProceso;
+import com.produccion.models.dSubproceso;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,53 @@ public class SubProcesoManageBean implements Serializable {
     private List<Costo> listaCostoDirecto;
     private List<Costo> listaCostoIndirecto;
     private int id_subproceso;
+    private int idCostoIndirecto;
+    private int idCostoDirecto;
+    private dSubproceso dsubproceso;
+    private dSubprocesoDAO subproDAO;
+
+    public dSubprocesoDAO getSubproDAO() {
+        return subproDAO;
+    }
+
+    public void setSubproDAO(dSubprocesoDAO subproDAO) {
+        this.subproDAO = subproDAO;
+    }
+
+    private List<Costo> costos = new ArrayList<>();
+    int indiceI = 0;
+
+    public dSubproceso getDsubproceso() {
+        return dsubproceso;
+    }
+
+    public void setDsubproceso(dSubproceso dsubproceso) {
+        this.dsubproceso = dsubproceso;
+    }
+
+    public List<Costo> getCostos() {
+        return costos;
+    }
+
+    public void setCostos(List<Costo> costos) {
+        this.costos = costos;
+    }
+
+    public int getIdCostoDirecto() {
+        return idCostoDirecto;
+    }
+
+    public void setIdCostoDirecto(int idCostoDirecto) {
+        this.idCostoDirecto = idCostoDirecto;
+    }
+
+    public int getIdCostoIndirecto() {
+        return idCostoIndirecto;
+    }
+
+    public void setIdCostoIndirecto(int idCostoIndirecto) {
+        this.idCostoIndirecto = idCostoIndirecto;
+    }
 
     public int getId_subproceso() {
         return id_subproceso;
@@ -84,27 +133,62 @@ public class SubProcesoManageBean implements Serializable {
     }
 
     public SubProcesoManageBean() {
-        subProceso = new SubProceso();
         subProcesoDAO = new SubProcesoDAO();
         listaSubProceso = new ArrayList<>();
         listaProceso = new ArrayList<>();
         procesoProduccion = new ProcesoProduccion();
-        idSubproceso = (subProcesoDAO.idSubproceso());
+        idSubproceso = subProcesoDAO.idSubproceso();
         costoProduccion = new Costo();
         listaCostoDirecto = new ArrayList<>();
         listaCostoIndirecto = new ArrayList<>();
+        subproDAO = new dSubprocesoDAO();
+        dsubproceso = new dSubproceso();
     }
 
     @PostConstruct
     public void init() {
+        subProceso = new SubProceso();
         listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto = subProcesoDAO.getCosto("Directo");
-        listaCostoIndirecto = subProcesoDAO.getCosto("Indirecto");
+        listaCostoDirecto = subproDAO.getCosto("Directo");
+        listaCostoIndirecto = subproDAO.getCosto("Indirecto");
 
     }
 
     public void listarDirectos() {
         System.out.println(this.idSubproceso);
+
+    }
+
+    public void aggCostoIndirecto() {
+
+        Costo costoI = new Costo();
+        costoI.setCodigo_costos(costoIndirecto().getCodigo_costos());
+        costoI.setNombre(costoIndirecto().getNombre());
+        costoI.setDescripcion(costoIndirecto().getDescripcion());
+        costoI.setTipo(costoIndirecto().getTipo());
+        costoI.setIdentificador(costoIndirecto().getIdentificador());
+        costos.add(indiceI, costoI);
+        indiceI++;
+        System.out.println(indiceI);
+    }
+
+    public Costo costoIndirecto() {
+        costoProduccion = new Costo();
+        for (Costo costoI : listaCostoIndirecto) {
+            if (costoI.getCodigo_costos() == idCostoIndirecto) {
+                costoProduccion = new Costo(costoI.getCodigo_costos(), costoI.getNombre(),
+                        costoI.getDescripcion(), costoI.getTipo(), costoI.getIdentificador());
+            }
+        }
+        return costoProduccion;
+    }
+
+    
+
+    public void insertSubproceso() {
+        subProceso.setCodigo_subproceso(idSubproceso);
+        System.out.println(" " + subProceso.getNombre() + subProceso.getDescripcion());
+        subProcesoDAO.insertarSubproceso(subProceso);
 
     }
 
