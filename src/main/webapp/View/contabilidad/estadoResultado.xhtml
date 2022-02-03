@@ -12,39 +12,187 @@
                     <ui:include src="./subheadercontabilidad.xhtml"/>
                     <div class="card">
                         <p:toolbar>
-                            <p:toolbarGroup style="margin-top: 3%; width: 15%" align="Left">
-                                <p:commandButton ajax="false"
-                                                 value="Generar PDF" icon="pi pi-download"
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                            <p:toolbarGroup 
+                                style="margin-top: 3%; width: 15%"
+                                align="Left">
+                                <p:commandButton
+                                    ajax="false"
+                                    actionListener="#{estadoResultadolMB.exportpdf()}"                                                
+                                    value="Generar PDF"
+                                    icon="pi pi-download"
+                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
                             </p:toolbarGroup>
                             <div class="ui-fluid">
-                                <p:toolbarGroup style="margin-top: 3%; width: 25%">
-                                    <p:outputLabel  for="button" value="Fecha desde: "/>
-                                    <p:datePicker style="margin-top: 1%" id="button" value="" showIcon="true"/>
+                                <p:toolbarGroup
+                                    style="margin-top: 3%; width: 25%">
+                                    <p:outputLabel
+                                        for="button" 
+                                        value="Fecha desde: "/>
+                                    <p:datePicker
+                                        style="margin-top: 1%" 
+                                        locale="es"
+                                        id="button"
+                                        value="#{estadoResultadolMB.fecha}"
+                                        showIcon="true"/>
                                 </p:toolbarGroup> 
                             </div>
                             <div class="ui-fluid">
-                                <p:toolbarGroup style="margin-top: 3%; width: 25%">
+                                <p:toolbarGroup 
+                                    style="margin-top: 3%; width: 25%">
 
-                                    <p:outputLabel for="button2" value="Fecha hasta: "/>
-                                    <p:datePicker style="margin-top: 1%" id="button2" value="" showIcon="true"/>
-
-
+                                    <p:outputLabel
+                                        for="button2" 
+                                        value="Fecha hasta: "/>
+                                    <p:datePicker 
+                                        style="margin-top: 1%"  
+                                        id="button2" 
+                                        locale="es"
+                                        value="#{estadoResultadolMB.fecha2}"
+                                        showIcon="true"/>
                                 </p:toolbarGroup>
                             </div>
-                            <p:toolbarGroup style="margin-top: 3%; width: 15%">
-                                <p:selectOneButton  style="margin-top: 1%" value="">
-                                    <f:selectItem itemLabel="Anual" itemValue="1"/>
+                            <p:toolbarGroup 
+                                style="margin-top: 3%; width: 15%">
+                                <p:selectOneButton 
+                                    style="margin-top: 1%" >
+                                    <f:selectItem
+                                        itemLabel="Anual" 
+                                        itemValue="1"/>
                                 </p:selectOneButton>                       
                             </p:toolbarGroup>
-                            
-                            <p:toolbarGroup style="margin-top: 3%; width: 15%">
-                                <p:commandButton value="Aceptar"  style=" margin-top: 1%"
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                 />                            
+
+                            <p:toolbarGroup 
+                                style="margin-top: 3%; 
+                                width: 15%">
+                                <p:commandButton 
+                                    value="Aceptar" 
+                                    style=" margin-top: 1%"
+                                    action="#{estadoResultadolMB.recibiendoFecha()}"
+                                    update="dt-libros, dt-libros2,dt-libros3"
+                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    />                            
                             </p:toolbarGroup>
                         </p:toolbar>
+                        <p:dataTable 
+                            id="dt-libros" 
+                            widgetVar="dtBalance" 
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                            var="pYg" 
+                            value="#{estadoResultadolMB.estadoResultadoIn}">
+                            <f:facet name="header">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 style="font-weight: bold;">
+                                            Al <h:outputText
+                                                value="#{estadoResultadolMB.fecha}">
+                                                <f:convertDateTime
+                                                    pattern="dd/MM/yyyy" />
+                                            </h:outputText>
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-6">
 
+                                    </div>
+                                </div>
+                            </f:facet>
+                            <p:column colspan="8" headerText="Cuenta Contable" responsivePriority="4">
+                                <h:outputText value="#{pYg.nombre}" rendered="#{estadoResultadolMB.getBold(pYg.nombre)}"  style="font-weight: bold" />
+                                <h:outputText value="#{pYg.nombre}" rendered="#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
+                            </p:column>
+
+                            <p:column colspan="2" headerText="Saldo" responsivePriority="2">
+                                <h:outputText value="#{pYg.saldo}" rendered="#{estadoResultadolMB.getBold(pYg.nombre)}" style="font-weight: bold" />
+                                <h:outputText value="#{pYg.saldo}" rendered="#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
+                            </p:column>
+                            <f:facet name="footer">
+                                <div class="p-grid">
+                                    <div class="p-col-9">Total, Ingresos</div>
+                                    <div class="p-col-3" style="text-align: left">
+                                        <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.ingresos}"/></p>
+                                    </div>
+                                </div>
+                            </f:facet>
+                        </p:dataTable>
+
+
+                    </div>
+                    <div class="card">
+                        <p:dataTable
+                            id="dt-libros2" widgetVar="dtBalance2"
+                            var="egresos"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                            value="#{estadoResultadolMB.estadoResultadoEg}"
+                            paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 
+                                        style="font-weight: bold;">
+
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                    </div>
+                                </div>
+                            </f:facet>
+                            <p:column colspan="8" headerText="Cuenta Contable" responsivePriority="4">
+                                <h:outputText value="#{egresos.nombre}" rendered="#{estadoResultadolMB.getBold(egresos.nombre)}" style="font-weight: bold" />
+                                <h:outputText value="#{egresos.nombre}" rendered="#{!estadoResultadolMB.getBold(egresos.nombre)}"  />
+                            </p:column>
+
+                            <p:column colspan="2" headerText="Saldo" responsivePriority="2">
+                                <h:outputText value="#{egresos.saldo}" rendered="#{estadoResultadolMB.getBold(balance.nombre)}" style="font-weight: bold" />
+                                <h:outputText value="#{egresos.saldo}" rendered="#{!estadoResultadolMB.getBold(balance.nombre)}" />
+
+                            </p:column>
+                            <f:facet name="footer">
+                                <div class="p-grid">
+                                    <div class="p-col-9">Total, Egresos</div>
+                                    <div class="p-col-3" style="text-align: left">
+                                        <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.egresos}"/></p>
+                                    </div>
+                                </div>
+                            </f:facet>
+                        </p:dataTable>
+                    </div>
+                    <div class="card">
+                        <p:dataTable id="dt-libros3" widgetVar="dtBalance3"
+                                     var="compra"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                                     value="#{estadoResultadolMB.estadoResultadoVen}"
+                                     paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 style="font-weight: bold;">
+
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                    </div>
+                                </div>
+                            </f:facet>
+                            <p:column colspan="8" headerText="Cuenta Contable" responsivePriority="4">
+                                <h:outputText value="#{compra.nombre}" rendered="#{estadoResultadolMB.getBold(compra.nombre)}" style="font-weight: bold" />
+                                <h:outputText value="#{compra.nombre}" rendered="#{!estadoResultadolMB.getBold(compra.nombre)}"  />
+                            </p:column>
+
+                            <p:column colspan="2" headerText="Saldo" responsivePriority="2">
+                                <h:outputText value="#{compra.saldo}" rendered="#{estadoResultadolMB.getBold(compra.nombre)}" style="font-weight: bold" />
+                                <h:outputText value="#{compra.saldo}" rendered="#{!estadoResultadolMB.getBold(compra.nombre)}" />
+
+                            </p:column>
+                            <f:facet name="footer">
+                                <div class="p-grid">
+                                    <div class="p-col-9">Total, Costo ventas</div>
+                                    <div class="p-col-3" style="text-align: left">
+                                        <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.ventas}"/></p>
+                                    </div>
+                                </div>
+                            </f:facet>
+                        </p:dataTable>
                     </div>
                 </h:form>
             </ui:define>

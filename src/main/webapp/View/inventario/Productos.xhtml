@@ -21,6 +21,7 @@
                             <p:toolbar>
                                 <p:toolbarGroup>
                                     <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                     disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" 
                                                      oncomplete="PF('productosNew').show()"   
                                                      styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                      style="margin-right: .3rem">                               
@@ -86,8 +87,8 @@
                                 </p:column>
                                 <p:column headerText="Acción" filterStyle="display : none">
                                     <p:button icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"/>
-                                    <p:commandButton icon="pi pi-pencil" oncomplete="PF('productosEdit').show()"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
-                                    <p:commandButton icon="pi pi-trash"  styleClass="rounded-button ui-button-danger">
+                                    <p:commandButton icon="pi pi-pencil" disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" oncomplete="PF('productosEdit').show()"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                    <p:commandButton icon="pi pi-trash" disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}"  styleClass="rounded-button ui-button-danger">
                                                                                 <p:confirm  header="Confirmation"
                                                     message="Desea deshabilitar el 
                                                     producto seleccionado?"
