@@ -19,11 +19,12 @@ public class MovimientoDAO {
         try {
             conexion.conectar();
             resultSet = conexion.ejecutarSql(sql);
+            PeriodoFiscalDAO periodoFiscalDAO = new PeriodoFiscalDAO();
             //Llena la lista de los datos
             while (resultSet.next()) {
                 movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
                         resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idAsient"),
-                        resultSet.getInt("idSubcuenta")));
+                        resultSet.getInt("idSubcuenta"), periodoFiscalDAO.buscarPorId(resultSet.getInt("periodo_fiscal"))));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -39,11 +40,12 @@ public class MovimientoDAO {
         try {
             conexion.conectar();
             resultSet = conexion.ejecutarSql(sql);
+            PeriodoFiscalDAO periodoFiscalDAO = new PeriodoFiscalDAO();
             //Llena la lista de los datos
             while (resultSet.next()) {
                 movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
                         resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idasiento"),
-                        resultSet.getInt("idSubcuenta")));
+                        resultSet.getInt("idSubcuenta"), periodoFiscalDAO.buscarPorId(resultSet.getInt("periodo_fiscal"))));
             }
             return movimientos;
         } catch (Exception e) {

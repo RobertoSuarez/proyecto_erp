@@ -8,22 +8,30 @@ public class Movimiento {
     double haber;
     int idAsiento;
     int idSubcuenta;
+    PeriodoFiscal periodoFiscal;
 
     public Movimiento(int idMovimiento, String tipoMovimiento, double debe, double haber, int idAsiento, 
-            int idSubcuenta) {
+            int idSubcuenta, PeriodoFiscal periodoFiscal) {
         this.idMovimiento = idMovimiento;
         this.tipoMovimiento = tipoMovimiento;
         this.debe = debe;
         this.haber = haber;
         this.idAsiento = idAsiento;
         this.idSubcuenta = idSubcuenta;
+        this.periodoFiscal = periodoFiscal;
     }
 
-    public Movimiento() {
+    public Movimiento(String tipoMovimiento, double debe, double haber, int idAsiento, int idSubcuenta, PeriodoFiscal periodoFiscal) {
+        this.tipoMovimiento = tipoMovimiento;
+        this.debe = debe;
+        this.haber = haber;
+        this.idAsiento = idAsiento;
+        this.idSubcuenta = idSubcuenta;
+        this.periodoFiscal = periodoFiscal;
     }
-    
-    
 
+    public Movimiento() { }
+       
     public int getIdMovimiento() {
         return idMovimiento;
     }
@@ -71,6 +79,12 @@ public class Movimiento {
     public void setIdSubcuenta(int idSubcuenta) {
         this.idSubcuenta = idSubcuenta;
     }
-    
-    
+
+    public PeriodoFiscal getPeriodoFiscal() {
+        return periodoFiscal;
+    }
+
+    public void setPeriodoFiscal(PeriodoFiscal periodoFiscal) {
+        this.periodoFiscal = periodoFiscal;
+    }
 }
