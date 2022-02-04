@@ -90,16 +90,18 @@
                                                                      disabled="#">
                                                         </p:inputText>
 
-                                                        <p:outputLabel for="@next" value="Proceso Principal:"/>
-                                                        <p:selectOneMenu id="ElegirProceso" value="#"
-                                                                         hideNoSelectionOption="#">
-                                                            <p:ajax update="@this" process="@this"/>
-                                                            <f:selectItem itemLabel="Seleccionar Proceso" itemValue="#" noSelectionOption="true"/>
-                                                            <f:selectItem itemLabel="Proceso principal 1" itemValue="Proceso principal 1"/>
-                                                            <f:selectItem itemLabel="Proceso principal 1" itemValue="Proceso principal 1"/>
+                                                        <p:outputLabel value="Proceso Principal:"></p:outputLabel>
+                                                        <p:selectOneMenu id="procesoPrincipal"
+                                                                         value="#{formulaMB.formulaProduccion.codigo_proceso}"
+                                                                         editable="false">
+                                                            <f:selectItem itemLabel="Seleccionar Proceso" itemValue="" noSelectionOption="true"/>
+                                                            <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
+                                                                           itemLabel="#{proceso.codigo_proceso}"
+                                                                           itemValue="#{proceso.codigo_proceso}"/>
+                                                               <p:ajax event = "itemSelect" update = "selectedItemText" /> 
 
                                                         </p:selectOneMenu>
-
+                                                        <h:outputText id = "selectedItemText" value = "#{formulaMB.formulaProduccion.codigo_formula}" />
 
                                                     </div>
 
@@ -385,7 +387,7 @@
                                     <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                                      onclick="PF('selectProductoFormulaDialog').hide()"/>
                                 </p:confirmDialog>
-                                
+
 
                                 <!-- Cuadro de dialogo Confirmar Eliminación de Formula -->
 

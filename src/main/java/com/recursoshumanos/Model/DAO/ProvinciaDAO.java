@@ -70,8 +70,9 @@ public class ProvinciaDAO implements IDAO<Provincia> {
     @Override
     public int insertar() {
         if (conexion.isEstado()) {
-            provincia.setId(conexion.insertar("provincia", "provincia",
-                    "'" + provincia.getNombre() + "'", "cod"));
+            provincia.setId(conexion.insertar("provincia", "provincia, detalle ",
+                    "'" + provincia.getNombre() + "','" 
+                    + provincia.getDetailsProvincia() +"'" , "cod"));
             return provincia.getId();
         }
         return -1;
@@ -101,7 +102,8 @@ public class ProvinciaDAO implements IDAO<Provincia> {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("provincia",
-                    "provincia = '" + provincia.getNombre() + "'",
+                    "provincia = '" + provincia.getNombre() + "',"
+                    + "detalle = '" + provincia.getDetailsProvincia()+"'",
                     "cod = " + provincia.getId());
         }
         return -1;
@@ -158,13 +160,14 @@ public class ProvinciaDAO implements IDAO<Provincia> {
             ResultSet result;
             List<Provincia> lista;
             try {
-                result = conexion.selecionar("provincia", "cod, provincia",
+                result = conexion.selecionar("provincia", "cod, provincia,detalle",
                         restricciones, OrdenarAgrupar);
                 lista = new ArrayList<>();
                 while (result.next()) {
                     lista.add(new Provincia(
                             result.getInt("cod"),
-                            result.getString("provincia")
+                            result.getString("provincia"),
+                            result.getString("detalle")
                     ));
                 }
                 result.close();

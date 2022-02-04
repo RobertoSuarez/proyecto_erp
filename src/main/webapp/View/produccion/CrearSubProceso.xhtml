@@ -10,7 +10,8 @@
             <ui:define name="title">Procesos de producción</ui:define>
             <ui:define name="content">
                 <ui:include src="subheaderProduccion.xhtml"/>
-                <h:form id="form" style="margin-top: 4%;">
+                <h:form id="form_subproceso" style="margin-top: 4%;">
+                    <p:growl id="growl" showDetail="true" />
                     <div class="card">
                         <p:toolbar>
                             <p:toolbarGroup>
@@ -19,213 +20,191 @@
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
-
-
-                        <p:toolbar>
-                            <p:toolbarGroup>
-                                <div class="card ui-fluid ">
-                                    <div class="p-formgrid p-grid">
-
-                                        <div class="p-col-12">
-                                            <div class="p-grid">
-                                                <div class="p-col-4">
-                                                    <p:outputLabel value="Codigo Subproceso: "></p:outputLabel>
-                                                    <p:inputText disabled="#"  value=""></p:inputText> 
-                                                </div>
-                                                <div class="p-col-4">
-                                                    <p:outputLabel value="Codigo Proceso: "></p:outputLabel>
-                                                    <p:inputText disabled="#"  value=""></p:inputText> 
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                        <div class="p-field p-col-12 ">
-                                            <div class="p-grid">
-                                                <div class="p-col-8">
-                                                    <p:outputLabel value="Nombre: "></p:outputLabel>
-                                                    <p:inputText disabled="#"  value=""></p:inputText>  
-                                                    <p:outputLabel value="Descripción: "></p:outputLabel>
-                                                    <p:inputTextarea disabled=""
-                                                                     maxlength="250"
-                                                                     placeholder="Descripcion maximo 255 caracteres maximo"
-                                                                     value="" 
-                                                                     rows="5" 
-                                                                     cols="33" 
-                                                                     autoResize="false"/>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <p:toolbar>
-                                            <p:toolbarGroup>
-
-                                                <div class="p-d-flex p-jc-between p-ai-center">
-                                                    <span style="font-weight: bold; margin-right: 6em; font-size: 2em">Integración de Costo</span>
-
-                                                </div>
-
-                                                <div class="p-formgrid p-grid">
-
-
-                                                    <div class="p-field p-col-12 p-md-6">
-                                                        <div>
-                                                            <p:toolbar>
-                                                                <p:toolbarGroup>
-
-
-                                                                    <p:dataTable reflow="true" paginator="true" rows="5" 
-                                                                                 rowSelectMode="add" paginatorPosition="bottom">
-                                                                        <!-- Buscador -->
-                                                                        <f:facet name="header">
-                                                                            <div class="p-d-flex p-jc-between p-ai-center">
-                                                                                <span style="font-weight: bold; margin-right: 0.5em;">Costos Indirectos</span>
-
-                                                                            </div>
-                                                                        </f:facet>
-
-                                                                        <p:column headerText="Nombre" filterStyle="display : none">
-                                                                            <h:outputText value="#" />
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-
-                                                                        <p:column headerText="Descripción" >
-                                                                            <h:outputText value="#" />
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-
-                                                                        <p:column headerText="Tipo">
-                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                                            </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-                                                                        <p:column headerText="Acciones">
-                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                                            </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-
-                                                                    </p:dataTable>
-
-                                                                </p:toolbarGroup>
-                                                            </p:toolbar>
-
-                                                        </div>
-
-
-                                                        <div class="p-field p-grid p-jc-xl-end">
-
-                                                            <div class="p-col-4">
-                                                                <p:outputLabel value="Total : "></p:outputLabel>
-                                                                <p:inputText disabled="#"  value=""></p:inputText>  
-                                                                <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                                                <p:inputText disabled="#"  value=""></p:inputText>
-
-                                                            </div>
-
-                                                        </div> 
-
-                                                    </div>
-
-
-
-                                                    <div class="p-field p-col-12 p-md-6">
-                                                        <div>
-                                                            <p:toolbar>
-                                                                <p:toolbarGroup>
-
-
-                                                                    <p:dataTable reflow="true" paginator="true" rows="5" 
-                                                                                 rowSelectMode="add" paginatorPosition="bottom">
-                                                                        <!-- Buscador -->
-                                                                        <f:facet name="header">
-                                                                            <div class="p-d-flex p-jc-between p-ai-center">
-                                                                                <span style="font-weight: bold; margin-right: 0.5em;">Costos Directos</span>
-
-                                                                            </div>
-                                                                        </f:facet>
-
-                                                                        <p:column headerText="Nombre" filterStyle="display : none">
-                                                                            <h:outputText value="#" />
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-
-                                                                        <p:column headerText="Descripción" >
-                                                                            <h:outputText value="#" />
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-
-                                                                        <p:column headerText="Tipo">
-                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                                            </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-                                                                        <p:column headerText="Acciones">
-                                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                                             styleClass="edit-button rounded-button ui-button-info" process="@this">
-                                                                                <f:setPropertyActionListener value="#" target="#"/>
-                                                                                <p:resetInput target=":form:manage-asiento"/>
-                                                                            </p:commandButton>
-                                                                            <p:skeleton rendered="#"></p:skeleton>
-                                                                        </p:column>
-
-                                                                    </p:dataTable>
-
-
-                                                                </p:toolbarGroup>
-                                                            </p:toolbar>
-
-                                                        </div>
-                                                        <div class="p-field p-grid p-jc-xl-end">
-
-                                                            <div class="p-col-4">
-                                                                <p:outputLabel value="Total : "></p:outputLabel>
-                                                                <p:inputText disabled="#"  value=""></p:inputText>  
-                                                                <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                                                <p:inputText disabled="#"  value=""></p:inputText>
-
-                                                            </div>
-
-                                                        </div> 
-
-                                                    </div>
-                                                    
-
-                                                </div>
-
-
-
-                                            </p:toolbarGroup>
-                                        </p:toolbar>
-
-                                    </div>
-                                </div>
-                                <!-- Botones Guardar/Cerrar -->            
-
-                                <div class="p-col-11">
+                        <p:outputPanel id="subProceso" class="ui-fluid">
+                            <div class="p-grid p-justify-around">
+                                <div class="p-col-6 p-md-12 p-lg-5">
                                     <div class="p-grid">
-                                        <div class="p-col-4">
-                                            <p:commandButton value="Guardar"   icon="pi pi-check"  disabled="#" styleClass="ui-button-primary"  style=" margin-right: 0.5em"/>
-                                             <p:button  value="Cerrar" styleClass="ui-button-danger" icon="pi pi-plus" outcome="procesoProduccion.xhtml">
-                                    </p:button>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Codigo Subproceso:"/>
+                                            <p:inputText value="#{SubProcesoMB.sproceso.codigo_subproceso}" readonly="true"/>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Proceso Principal:"/>
+                                            <p:selectOneMenu id="proceso" value="#{SubProcesoMB.sproceso.id_codigo_proceso}" 
+                                                             alwaysDisplayLabel="true">
+                                                <f:selectItems value="#{SubProcesoMB.listaProceso}" var="proceso"
+                                                               itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
+
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Nombre:"></p:outputLabel>
+                                            <p:inputText value="#{SubProcesoMB.sproceso.nombre}"/>
+                                        </div>
+                                        <div class="p-col-12">
+                                            <p:outputLabel value="Descripcion:"></p:outputLabel>
+                                            <p:inputTextarea  value="#{SubProcesoMB.sproceso.descripcion}"
+                                                              maxlength="250"
+                                                              placeholder="Descripcion maximo 255 caracteres maximo"
+                                                              rows="5" 
+                                                              autoResize="false"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-col-6 p-md-12 p-lg-5">
+                                    <div class="p-grid">
+                                        <div class="p-col-12">
+
+                                            <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
+                                            <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
+                                                         mask="99:99:99" 
+                                                         required="true"/>
+
+                                        </div>
+                                        <div class="p-col-12">
+
+                                            <p:outputLabel value="Rendimiento:"></p:outputLabel>
+                                            <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
+
                                         </div>
                                     </div>
                                 </div>
 
 
-                            </p:toolbarGroup>
-                        </p:toolbar>
 
+                            </div>
+                        </p:outputPanel>
+
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            <span style="font-weight: bold; margin-right: 6em; font-size: 2em">Integración de Costo</span>
+
+                        </div>
+                        <div class="p-formgrid p-grid">
+
+
+                            <div class="p-field p-col-12 p-md-6">
+                                <p:dataTable id="costoIndirecto" reflow="true" paginator="true" rows="2" 
+                                             rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoIndirecto}" var="nIndirecto"
+                                             >
+                                    <!-- Buscador -->
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 0.5em;">Costos Indirectos</span>
+                                            <p:selectOneMenu id="costoindirectoP" value="#{SubProcesoMB.costo.codigo_costos}" 
+                                                             editable="false">
+                                                <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
+
+                                                <f:selectItems value="#{SubProcesoMB.listaCostoIndirecto}" var="cIndirecto"
+                                                               itemLabel="#{cIndirecto.nombre}" itemValue="#{cIndirecto.codigo_costos}">
+                                                </f:selectItems>
+                                                <p:ajax listener="#{SubProcesoMB.addIndirecto()}" update=":form_subproceso:costoIndirecto"/>
+                                            </p:selectOneMenu>
+
+                                        </div>
+                                    </f:facet>
+
+                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                        <h:outputText value="#{nIndirecto.nombre}" />
+                                        <p:skeleton rendered="#"></p:skeleton>
+                                    </p:column>
+
+                                    <p:column headerText="Descripción" >
+                                        <h:outputText value="#{nIndirecto.descripcion}" />
+                                        <p:skeleton rendered="#"></p:skeleton>
+                                    </p:column>
+
+                                    <p:column headerText="Costo">
+                                        <p:inputNumber required="true" value="#{nIndirecto.costo}" maxlength="5">
+                                            <p:ajax event="blur" update=":form_subproceso:costoIndirecto"/>
+                                            <p:ajax event="blur" update=":form_subproceso:totalIndirectos" process="@this" listener="#{SubProcesoMB.sumarIndirectos()}"/>
+                                        </p:inputNumber>
+
+                                    </p:column>
+                                    <p:column headerText="Acciones">
+                                        <p:commandButton class="ui-button-danger rounded-button"
+                                                         icon="pi pi-trash" actionListener="#{SubProcesoMB.deleteFilaIndirecto(nIndirecto)}" 
+                                                         update=":form_subproceso:costoIndirecto, :form_subproceso:totalIndirectos" process="@this">
+                                        </p:commandButton>
+
+                                    </p:column>
+
+                                </p:dataTable>
+                                <p:outputPanel id="totalIndirectos">
+                                    <p:outputLabel value="Total : "></p:outputLabel>
+                                    <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>  
+                                    <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                    <p:inputText disabled="#"  value=""></p:inputText>
+                                </p:outputPanel>
+
+
+
+
+                            </div>
+
+                            <div class="p-field p-col-12 p-md-6">
+                                <p:dataTable id="costoDirecto" reflow="true" paginator="true" rows="2" 
+                                             rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoDirecto}" var="nDirecto">
+                                    <!-- Buscador -->
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 0.5em;">Costos Directos</span>
+
+                                            <p:selectOneMenu id="costoD" value="#{SubProcesoMB.costo.codigo_costos}" editable="false">
+                                                <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
+                                                <p:ajax listener="#{SubProcesoMB.addDirecto()}" 
+                                                        update=":form_subproceso:costoDirecto" process="@this"/>
+                                                <f:selectItems value="#{SubProcesoMB.listaCostoDirecto}" var="cDirecto"
+                                                               itemLabel="#{cDirecto.nombre}" itemValue="#{cDirecto.codigo_costos}">
+
+                                                </f:selectItems>
+
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </f:facet>
+
+                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                        <h:outputText value="#{nDirecto.nombre}" id="codigo"/>
+                                    </p:column>
+
+                                    <p:column headerText="Descripción" >
+                                        <h:outputText value="#{nDirecto.descripcion}" />
+                                    </p:column>
+
+
+                                    <p:column headerText="Costo">
+                                        <p:inputNumber required="true" value="#{nDirecto.costo}" maxlength="10">
+                                            <p:ajax event="blur" update=":form_subproceso:costoDirecto"/>
+                                            <p:ajax event="blur" update=":form_subproceso:totalDirectos" process="@this" listener="#{SubProcesoMB.sumarDirectos()}"/>
+
+                                        </p:inputNumber>
+                                    </p:column>
+
+
+
+
+                                    <p:column headerText="Acciones">
+                                        <p:commandButton class="ui-button-danger rounded-button"
+                                                         icon="pi pi-trash" actionListener="#{SubProcesoMB.deleteFila(nDirecto)}" 
+                                                         update=":form_subproceso:costoDirecto, :form_subproceso:totalDirectos" process="@this">
+                                        </p:commandButton>
+
+                                    </p:column>
+
+                                </p:dataTable>
+                                <p:outputPanel id="totalDirectos">
+
+                                    <p:outputLabel value="Total : "></p:outputLabel>
+                                    <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true">
+                                    </p:inputNumber>  
+                                    <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                    <p:inputText disabled="#"  value=""></p:inputText>
+
+                                </p:outputPanel>
+
+                            </div>
+
+                        </div>
+                        <p:commandButton action="#{SubProcesoMB.insertarSubProceso()}" value="Guardar" process="subProceso @this" update=":form_subproceso:growl"/>
                     </div>
 
 

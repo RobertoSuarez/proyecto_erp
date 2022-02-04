@@ -28,13 +28,14 @@
                                         <p:resetInput target=":form-princ:manage-nuevoProceso-form"/>
                                     </p:commandButton>
 
-                                    Boton Nuevo SubProceso
                                     <p:button  value="Nuevo Subproceso"
                                                styleClass="ui-button-primary"
                                                icon="pi pi-plus" 
                                                style="margin-right: 6px;"
-                                               outcome="CrearSubProceso">
-                                    </p:button>
+                                               outcome="CrearSubProceso?p=#{procesoMB.procesoProduccion.codigo_proceso}"
+                                               target=""
+                                               >
+                                    </p:button> 
                                     <!-- Boton Agregar Costo -->
                                     <p:commandButton value="Agregar Costos" 
                                                      actionListener="#{costoMB.openNew()}"
@@ -67,15 +68,15 @@
                             <p:outputPanel id="manage-nuevoProceso-form" class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-field">
-                                        <p:outputLabel for="codProceso">Código: *</p:outputLabel>
+                                        <p:outputLabel for="codProceso">Código: </p:outputLabel>
                                         <p:inputText id="codProceso" value="#{procesoMB.procesoProduccion.identificador}" 
                                                      placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000"></p:inputText>
+                                                     color:#000000" required="true"></p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="nameProceso">Nombre: *</p:outputLabel>
+                                        <p:outputLabel for="nameProceso">Nombre: </p:outputLabel>
                                         <p:inputText id="nameProceso" value="#{procesoMB.procesoProduccion.nombre}" maxlength="25"
-                                                     placeholder="Maximo 25 caracteres" ></p:inputText>
+                                                     placeholder="Maximo 25 caracteres" required="true"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="descrProceso">Descripción:</p:outputLabel>
@@ -92,9 +93,11 @@
                             <!-- Boton Guardar/Cancelar-->
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" action="#{procesoMB.insertar()}"
-                                                 update="dtProcesoPrin"
+                                                 update=":form-princ:dtProcesoPrin"
                                                  process="manage-nuevoProceso-form @this"
-                                                 icon="pi pi-check" styleClass="ui-button-primary"/>
+                                                 icon="pi pi-check" styleClass="ui-button-primary"
+                                                 >
+                                </p:commandButton>
                                 <p:commandButton value="Cancelar" icon="pi pi-check"
                                                  onclick ="PF('nuevoProcesoPrincDialog').hide()" 
                                                  styleClass="ui-button-danger"/>
@@ -204,7 +207,7 @@
                                   draggable="false" height="370" >
 
                             <p:outputPanel id="manage-editarProceso-form" class="ui-fluid">
-                                <p:outputPanel rendered="#{not empty procesoMB.procesoProduccion}">
+                                <p:outputPanel>
                                     <div class="p-field">
                                         <p:outputLabel for="codProces" value="Codigo: *"></p:outputLabel>
                                         <p:inputText id="codProces" value="#{procesoMB.procesoProduccion.identificador}" 
@@ -426,7 +429,7 @@
                             </p:outputPanel>
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" actionListener="#{centroMB.insertar()}"
-                                                 update="dtCentroCosto"
+
                                                  process="manage-nuevoCentro-form @this"
                                                  oncomplete="PF('agregarCentroDeCostos').hide()"
                                                  icon="pi pi-check" styleClass="ui-button-primary"/>
@@ -435,7 +438,7 @@
                                                  styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
-                        
+
                         <!-- Dialogo Eliminar Costo -->
                         <p:confirmDialog id="manage-eliminarCosto-form" widgetVar="deleteCostoDialog" showEffect="fade" width="40%" 
                                          message="Seguro desea eliminar el Proceso que fue seleccionado? 
@@ -520,9 +523,13 @@
                         </p:confirmDialog>
 
                         <!-- Tabla de datos -->
-                        <p:dataTable id="dtProcesoPrin" widgetVar="w-dt-procesoPrin" reflow="true" paginator="true" rows="5" 
-                                     rowSelectMode="add" paginatorPosition="bottom" var="procesoProduccion" value="#{procesoMB.listaProcesos}">
-                            <!-- Buscador -->
+                        <p:treeTable id="dtProcesoPrin" value="#{procesoMB.root}" var="document" paginator="true" 
+                                     paginatorPosition="bottom" rows="5" editable="true" editInitEvent="dblclick" editMode="cell">
+                            <!-- comment <p:ajax event="select" listener="#"
+                                    update=":form-princ:messages"/>-->
+                            <p:ajax event="cellEdit" process="@this" update=":form-princ:dtProcesoPrin"/>
+
+
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Procesos</span>
@@ -532,24 +539,43 @@
                                     </span>
                                 </div>
                             </f:facet>
-                            <p:column headerText="Codigo Proceso" visible="false">
-                                <h:outputText value="#{procesoProduccion.codigo_proceso}"/>
+                            <p:column headerText="Código principal">
+                                <h:outputText value="#{document.codigo_proceso}"/>
                             </p:column>
-
-                            <p:column headerText="Código" filterStyle="display : none">
-                                <h:outputText value="#{procesoProduccion.identificador}" />
-                            </p:column>
-
                             <p:column headerText="Nombre">
-                                <h:outputText value="#{procesoProduccion.nombre}" />
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{document.nombre}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{document.nombre}" 
+                                                     style="width:100%">
+                                            <p:ajax event="blur" update=":form-princ:dtProcesoPrin" process="@this" 
+                                                    listener="#{procesoMB.procesoProduccion.nombre}"/>
+                                        </p:inputText>
+
+                                    </f:facet>
+                                </p:cellEditor>
                             </p:column>
+                            <p:column headerText="Descripción">
 
-                            <p:column headerText="Descripción" >
-                                <h:outputText value="#{procesoProduccion.descripcion}" />
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{document.descripcion}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{document.descripcion}" 
+                                                     style="width:100%">
+                                            <p:ajax event="blur" update=":form-princ:dtProcesoPrin" process="@this" 
+                                                    listener="#{procesoMB.procesoProduccion.descripcion}"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
                             </p:column>
-
-
-                            <p:column exportable="false">
+                            <p:column headerText="Código secundario">
+                                <h:outputText value="#{document.identificador}"/>
+                            </p:column>
+                            <!-- comment <p:column exportable="false">
                                 <p:commandButton icon="pi pi-pencil" update=":form-princ:manage-editarProceso-form"
                                                  class="ui-button-primary rounded-button p-mr-2 p-mb-2"
                                                  oncomplete="PF('procesoEditDialog').show()"
@@ -559,19 +585,15 @@
                                         target="#{procesoMB.procesoProduccion}"/>
                                     <p:resetInput target=":form-princ:manage-editarProceso-form"/>
                                 </p:commandButton>
-
-                                <p:commandButton class="ui-button-danger rounded-button" 
-                                                 update=":form-princ:manage-eliminarProceso-form"
-                                                 icon="pi pi-trash" process="@this"
-                                                 oncomplete="PF('deleteProcDialog').show()">
-                                    <f:setPropertyActionListener 
-                                        value="#{procesoProduccion}" 
-                                        target="#{procesoMB.procesoProduccion}"/>
-                                    <p:resetInput target=":form-princ:manage-eliminarProceso-form"/>
+                            </p:column>-->
+                            <p:column style="width:6rem">
+                                <p:commandButton icon="pi pi-pencil" update=":form-princ:dtProcesoPrin, :form-princ:growl"
+                                                 class="ui-button-primary rounded-button p-mr-2 p-mb-2"
+                                                 process="@this" actionListener="#{procesoMB.edit2(document)}">
+                                    <p:resetInput target=":form-princ:dtProcesoPrin"/>
                                 </p:commandButton>
                             </p:column>
-
-                        </p:dataTable>
+                        </p:treeTable>
                     </div>
                 </h:form>
 

@@ -5,14 +5,12 @@
  */
 package com.produccion.models;
 
-import java.util.Date;
-import java.util.Objects;
-
 /**
  *
  * @author Alex
  */
 public class ProcesoProduccion {
+
     private int codigo_proceso;
     private String nombre;
     private String descripcion;
@@ -21,7 +19,17 @@ public class ProcesoProduccion {
     public ProcesoProduccion() {
     }
 
-    public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion, 
+    public ProcesoProduccion(int codigo_proceso) {
+        this.codigo_proceso = codigo_proceso;
+    }
+
+    public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion) {
+        this.codigo_proceso = codigo_proceso;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
+    public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion,
             String identificador) {
         this.codigo_proceso = codigo_proceso;
         this.nombre = nombre;
@@ -85,4 +93,6 @@ public class ProcesoProduccion {
         }
         return true;
     }
+
+    
 }
