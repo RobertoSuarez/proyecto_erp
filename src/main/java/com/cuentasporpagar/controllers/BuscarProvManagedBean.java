@@ -7,7 +7,9 @@ package com.cuentasporpagar.controllers;
 
 import com.cuentasporpagar.daos.BuscarProvDAO;
 import com.cuentasporpagar.daos.AbonoProveedorDAO;
+import com.cuentasporpagar.daos.AnticipoDAO;
 import com.cuentasporpagar.models.AbonoProveedor;
+import com.cuentasporpagar.models.Anticipo;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
@@ -44,6 +46,8 @@ public class BuscarProvManagedBean implements Serializable {
     private AbonoProveedorManagedBean abonoMB;
     private AbonoProveedor abonoproveedor;
     private AbonoProveedorDAO abonoDAO;
+    private List<Anticipo> anticiposFavorables;
+    private int totalAnticipo;
 
     public BuscarProvManagedBean() {
         proveedor = new Proveedor();
@@ -55,6 +59,8 @@ public class BuscarProvManagedBean implements Serializable {
         factura = new Factura();
         abonoDAO = new AbonoProveedorDAO();
         abonoproveedor = new AbonoProveedor();
+        anticiposFavorables = new ArrayList<>();
+        totalAnticipo = 0;
     }
 
     public Proveedor getProveedor() {
@@ -85,6 +91,12 @@ public class BuscarProvManagedBean implements Serializable {
         String msg2 = event.getObject().getNombre();
         String msg3 = event.getObject().getRuc();
         int msg4 = event.getObject().getVence();
+        int idProv = event.getObject().getIdProveedor();
+        AnticipoDAO antiDao = new AnticipoDAO();
+        List<Anticipo> anticipos = antiDao.getAncitipoByProveedor(idProv);
+        for(int i = 0; i < anticipos.size(); i++){
+            this.totalAnticipo += anticipos.get(i).getImporte();
+        }
         System.out.println("Nombre: " + msg2);
         System.out.println("Ruc: " + msg3);
         System.out.println("Vence: " + msg4);
@@ -95,6 +107,16 @@ public class BuscarProvManagedBean implements Serializable {
         setVence(getFec().plusDays(msg4));
         System.out.println(getFec() + "----" + getVence());
     }
+
+    public int getTotalAnticipo() {
+        return totalAnticipo;
+    }
+
+    public void setTotalAnticipo(int totalAnticipo) {
+        this.totalAnticipo = totalAnticipo;
+    }
+    
+    
     
     public void onRowSelect2(SelectEvent<Proveedor> event) {
         LocalDate fecha = (LocalDate) event.getComponent().getAttributes().get("fech");

@@ -119,6 +119,7 @@
 
                                 <!-- CAMPOS DEL DIALOG-->
                                 <div class="p-formgrid p-grid">
+                                    
                                     <div class="p-field p-col">
                                         <p:outputLabel for="proveedor">Proveedor: *</p:outputLabel>
                                         <p:inputText type="button" id="proveedor"
@@ -138,8 +139,8 @@
                                     </div>
 
                                     <div class="p-field p-col">
-                                        <p:outputLabel for="saldofavor">Saldo a favor:</p:outputLabel>
-                                        <p:inputText type="number" id="saldofavor" value="#{facturaMB.factura.pagado}" 
+                                        <p:outputLabel for="saldofavor">Anticipos favorables:</p:outputLabel>
+                                        <p:inputText type="number" id="saldofavor" value="#{BuscarMB.totalAnticipo}" 
                                                      required="true"/>
                                     </div>
 
