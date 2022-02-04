@@ -75,9 +75,6 @@ public class EmpresaController implements Serializable {
     }
 
     public void inicio() throws IOException {
-        if (usuarioSesion == null || usuarioSesion.getIdUsuario() < 1) {
-            externalContext.redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
-        }
         if ("Asistente de recursos humanos".equals(listaRoles.get(0).getNombre())) {
             try {
                 externalContext.redirect("/proyecto_erp/View/recursoshumanos/ciudad.xhtml");
