@@ -56,13 +56,15 @@
                                         <div class="p-col-12">
 
                                             <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
-                                            <p:inputText value="#{SubProcesoMB.sproceso.hora}"/>
+                                            <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
+                                                         mask="99:99:99" 
+                                                         required="true"/>
 
                                         </div>
                                         <div class="p-col-12">
 
                                             <p:outputLabel value="Rendimiento:"></p:outputLabel>
-                                            <p:inputText value="#{SubProcesoMB.sproceso.rendimiento}"/>
+                                            <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
 
                                         </div>
                                     </div>
