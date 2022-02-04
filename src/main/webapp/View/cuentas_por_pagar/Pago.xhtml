@@ -18,8 +18,8 @@
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
-                    <p:submenu label="Pagos">
-                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                    <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
+                        <p:menuitem value="Autorizar Factura" outcome="/View/cuentas_por_pagar/AutorizacionFactura.xhtml"  icon="pi pi-list" />
                         <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
                     </p:submenu>
