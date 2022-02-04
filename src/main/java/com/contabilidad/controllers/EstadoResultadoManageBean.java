@@ -49,6 +49,7 @@ public class EstadoResultadoManageBean implements Serializable {
     private double ingresos;
     private double egresos;
     private double ventas;
+    private double total;
     private String empresa;
 
     public EstadoResultadoManageBean() {
@@ -70,7 +71,7 @@ public class EstadoResultadoManageBean implements Serializable {
         ingresos = estadoResultadoDAO.sumaIngresos(dateFormat.format(fecha), dateFormat.format(fecha2));
         egresos = estadoResultadoDAO.sumaegresos(dateFormat.format(fecha), dateFormat.format(fecha2));
         ventas = estadoResultadoDAO.costoventa(dateFormat.format(fecha), dateFormat.format(fecha2));
-
+        total = ingresos - (ventas + egresos);
     }
 
     public void recibiendoFecha() {
@@ -82,7 +83,7 @@ public class EstadoResultadoManageBean implements Serializable {
         ingresos = estadoResultadoDAO.sumaIngresos(dateFormat.format(fecha), dateFormat.format(fecha2));
         egresos = estadoResultadoDAO.sumaegresos(dateFormat.format(fecha), dateFormat.format(fecha2));
         ventas = estadoResultadoDAO.costoventa(dateFormat.format(fecha), dateFormat.format(fecha2));
-
+        total = ingresos - (ventas + egresos);
     }
 
     public void exportpdf() throws IOException, JRException {
@@ -93,7 +94,7 @@ public class EstadoResultadoManageBean implements Serializable {
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
         ec.setResponseHeader("Content-disposition", "attachment; "
-                + "filename=balance-general-" + LocalDateTime.now().toString() + ".pdf");
+                + "filename=estado-resultado-" + LocalDateTime.now().toString() + ".pdf");
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
@@ -109,16 +110,16 @@ public class EstadoResultadoManageBean implements Serializable {
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/BalanceGeneral.jasper"));
+                    .getRealPath("/PlantillasReportes/EstadoResultado.jasper"));
 
             // llenamos la plantilla con los datos.
-            JasperPrint jasperPrint = JasperFillManager.fillReport(filetext.getPath(),
+            JasperPrint jasperPrintIn = JasperFillManager.fillReport(filetext.getPath(),
                     parametros,
                     new JRBeanCollectionDataSource(this.estadoResultadoIn)
             );
 
             // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            JasperExportManager.exportReportToPdfStream(jasperPrintIn, stream);
             //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
 
             stream.flush();
@@ -205,6 +206,14 @@ public class EstadoResultadoManageBean implements Serializable {
 
     public void setEstadoResultadoVen(List<EstadoResultado> estadoResultadoVen) {
         this.estadoResultadoVen = estadoResultadoVen;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 
 }
