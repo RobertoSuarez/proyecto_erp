@@ -144,7 +144,7 @@ public class UsuarioController implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                             .put("usuario", usuarioSesion);
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                            .put("roles", rolesDAO);
+                            .put("roles", rolesSesion);
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                             .put("usuario_rol", usuarioDAO.rolRRHH(usuarioSesion.getIdUsuario()));
                     facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");

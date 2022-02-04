@@ -40,6 +40,8 @@ public class ProcesoProduccionDAO {
                         resultSet.getString("descripcion")));
             }
         } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
         }
         return procesos;
     }
@@ -55,6 +57,8 @@ public class ProcesoProduccionDAO {
                         resultSet.getString("descripcion"), resultSet.getString("identificador")));
             }
         } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
         }
         return procesos;
     }
@@ -65,14 +69,29 @@ public class ProcesoProduccionDAO {
                     + "	VALUES ('" + proceso.getNombre() + "', '" + proceso.getDescripcion() + "', '" + proceso.getIdentificador() + "')";
             conexion.ejecutar(sentenciaSql);
         } catch (Exception e) {
+        } finally {
+            conexion.desconectar();
         }
     }
 
-    public void update(ProcesoProduccion proceso) throws SQLException {
-        sentenciaSql = "UPDATE public.proceso_produccion\n"
-                + "	SET nombre='" + proceso.getNombre() + "', descripcion='" + proceso.getDescripcion() + "', identificador='" + proceso.getIdentificador() + "'\n"
-                + "	WHERE identificador = '" + proceso.getIdentificador() + "'";
-        conexion.ejecutar(sentenciaSql);
+//    public int update(ProcesoProduccion proceso) throws SQLException {
+//        sentenciaSql = "UPDATE public.proceso_produccion\n"
+//                + "	SET nombre='" + proceso.getNombre() + "', descripcion='" + proceso.getDescripcion() + " WHERE codigo_proceso = " + proceso.getCodigo_proceso();
+//        return conexion.ejecutar(sentenciaSql);
+//    }
+
+    public int actualizarProceso(ProcesoProduccion proceso) {
+        try {
+            sentenciaSql = "UPDATE public.proceso_produccion\n"
+                + "	SET nombre='"+proceso.getNombre()+"', descripcion='"+ proceso.getDescripcion()+"'\n"
+                + "	WHERE codigo_proceso="+proceso.getCodigo_proceso()+";";
+            return conexion.ejecutar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+        
     }
 
     public void delete(ProcesoProduccion proceso, String aux) throws SQLException {

@@ -9,27 +9,24 @@ import com.global.config.Conexion;
 import com.produccion.models.Costo;
 import com.produccion.models.ProcesoProduccion;
 import com.produccion.models.SubProceso;
+import com.produccion.models.dSubproceso;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SubProcesoDAO {
 
     private Conexion conexion;
     private ResultSet resultSet;
-    private String sentenciaSql;
-
+    
     public SubProcesoDAO() {
         conexion = new Conexion();
     }
-    
-
 
     public List<ProcesoProduccion> getProcesosProduccion() {
         List<ProcesoProduccion> procesos = new ArrayList<>();
-        sentenciaSql = String.format("select * from getProcesosProduccion();");
+        String sentenciaSql = String.format("select * from getProcesosProduccion();");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -38,30 +35,56 @@ public class SubProcesoDAO {
                         resultSet.getString("descripcion"), resultSet.getString("identificador")));
             }
         } catch (SQLException e) {
+        }finally {
+            conexion.desconectar();
         }
         return procesos;
     }
-    public List<Costo> getCosto(String tipo) {
-        List<Costo> costo = new ArrayList<>();
-        sentenciaSql = String.format("select * from costos where tipo='"+tipo+"';");
+
+    public int insertardSubproceso(SubProceso proceso) {
         try {
-            resultSet = conexion.ejecutarSql(sentenciaSql);
-            //Llena la lista de los datos
-            while (resultSet.next()) {
-                costo.add(new Costo(resultSet.getInt("codigo_costos"), resultSet.getString("nombre"),
-                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getString("identificador")));
-            }
-        } catch (SQLException e) {
+            String sentenciaSql = "INSERT INTO public.detalle_proceso_p(\n"
+                    + "	codigo_proceso, codigo_subproceso, horas, cantidad_estimada)\n"
+                    + "	VALUES (" + proceso.getId_codigo_proceso() + "," + proceso.getCodigo_subproceso() + ",'"+proceso.getHora()+"',"+proceso.getRendimiento()+");";
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        }finally {
+            conexion.desconectar();
         }
-        return costo;
     }
-    
+    public int insertarDetalleSubproceso(dSubproceso subproceso) {
+        try {
+            String sentenciaSql = "INSERT INTO public.detalle_subproceso(\n" +
+"	codigo_subproceso, codigo_costos, costo_mano_obra, costo_indirecto, hora_costo)\n" +
+"	VALUES ("+subproceso.getCodigo_subproceso()+", "+subproceso.getCodigo_costos()+", "+subproceso.getCosto_mano_obra()+", "+subproceso.getCosto_indirecto()+", "+
+                    subproceso.getHora_costo()+");";
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        }finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int insertarSubproceso(SubProceso proceso) {
+        try {
+            String sentenciaSql = "INSERT INTO public.subproceso(\n"
+                    + "	codigo_subproceso, nombre, descripcion)\n"
+                    + "	VALUES ("+proceso.getCodigo_subproceso()+",'"+proceso.getNombre()+"', '"+proceso.getDescripcion()+"');";
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        }finally {
+            conexion.desconectar();
+        }
+    }
 
     public int idSubproceso() {
         try {
 
             int id = -1;
-            sentenciaSql = "select max(codigo_subproceso)+1 as id from public.subproceso;";
+            String sentenciaSql = "select max(codigo_subproceso)+1 as id from public.subproceso;";
             resultSet = conexion.ejecutarSql(sentenciaSql);
             while (resultSet.next()) {
                 id = resultSet.getInt("id");
@@ -69,6 +92,8 @@ public class SubProcesoDAO {
             return id;
         } catch (SQLException e) {
             return -1;
+        }finally {
+            conexion.desconectar();
         }
 
     }
