@@ -29,11 +29,13 @@ import javax.inject.Named;
 public class TransferenciaManagedBean implements Serializable {
 
     private Bodega bodega = new Bodega();
+    private EncabezadoTransferencia transferencia= new EncabezadoTransferencia();
+    private DetalleTransferencia detalleTransferencia= new DetalleTransferencia(); 
     private BodegaDAO bodegaDAO = new BodegaDAO();
     private List<Bodega> listaBodega = new ArrayList<>();
-    private ArticulosInventario articulosInventario= new ArticulosInventario();
-    private ArticulosInventarioDAO articulosInventarioDAO= new ArticulosInventarioDAO();
-    private List<ArticulosInventario> listaArticulos=new ArrayList<>();
+    private ArticulosInventario articulosInventario = new ArticulosInventario();
+    private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
+    private List<ArticulosInventario> listaArticulos = new ArrayList<>();
     private int codBodegaOrigen;
     private int codBodegaDestino;
     private String NombreBodegaOrigen;
@@ -42,23 +44,29 @@ public class TransferenciaManagedBean implements Serializable {
     private String nombreArticulo;
     private EncabezadoTransferencia bodegaseleccionada;
     private DetalleTransferencia prodselecionado;
+    private List<DetalleTransferencia> listDetalle;
+
+    private int cantidad;
 
     @PostConstruct
     public void init() {
         System.out.println("PostConstruct");
         this.listaBodega = bodegaDAO.getBodega();
-        this.listaArticulos=articulosInventarioDAO.getArticulos();
+        this.listaArticulos = articulosInventarioDAO.getArticulos();
         this.bodega = new Bodega();
-        this.articulosInventario=new ArticulosInventario();
+        this.articulosInventario = new ArticulosInventario();
         this.codBodegaOrigen = 0;
-        this.codBodegaDestino=0;
+        this.codBodegaDestino = 0;
         this.NombreBodegaOrigen = " ";
         this.NombreBodegaDestino = " ";
         this.bodegaseleccionada = null;
-        
-        this.codArticulo=0;
-        this.nombreArticulo="";
-        this.prodselecionado=null;
+
+        this.codArticulo = 0;
+        this.nombreArticulo = "";
+        this.prodselecionado = null;
+
+        this.cantidad = 1;
+        this.listDetalle= new ArrayList<>();
 
     }
 
@@ -89,7 +97,7 @@ public class TransferenciaManagedBean implements Serializable {
     @Asynchronous
     public void SearchBodega() {
         this.bodega = null;
-        this.NombreBodegaOrigen = "nnnnn";
+        this.NombreBodegaOrigen = "mmm";
 
         this.bodega = this.bodegaDAO.obtenerBodega(this.codBodegaOrigen);
         if (this.bodega.getNomBodega() == null) {
@@ -102,22 +110,57 @@ public class TransferenciaManagedBean implements Serializable {
         }
     }
 
+    @Asynchronous
+    public void AgregarArticulosLista() {
+        try {
+            if (this.articulosInventario.getCod() > 0) {
+                if (this.articulosInventario.getCantidad() < this.cantidad) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay Stock suficiente");
+                } else {
+                    if (this.cantidad <= 0) {
+                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Valor invalido");
+                    }else{
+                        
+                        //poner los articulos en el detalle
+                        DetalleTransferencia dt=new DetalleTransferencia();
+                        dt.setIdDetalle(this.detalleTransferencia.getIdDetalle());
+                        dt.setCod_transferencia(this.transferencia.getCodemcabezado());
+                        dt.setCod_articulo(this.articulosInventario.getCod());
+                        dt.setIdDetalle(codArticulo);
+                        dt.setCant(this.cantidad);
+                        dt.setCosto(this.articulosInventario.getCosto());
+                        
+                        this.listDetalle.add(dt);
+                       
+                    }
+                }
+            }else{
+                 System.out.println("Ningun articulo seleccionado");
+            }
+
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
+        }
+    }
+
     public void SeleccionarBodegaOrigen(Bodega b) {
         this.codBodegaOrigen = b.getCod();
         this.NombreBodegaOrigen = b.getNomBodega();
-        this.bodega=b;
-        
+        this.bodega = b;
+
     }
+
     public void SeleccionarBodegaDestino(Bodega b) {
         this.codBodegaDestino = b.getCod();
         this.NombreBodegaDestino = b.getNomBodega();
-        this.bodega=b;
-        
+        this.bodega = b;
+
     }
-    public void SeleccionarArticulo(ArticulosInventario ai){
-        this.codArticulo=ai.getId();
-        this.nombreArticulo=ai.getNombre();
-        this.articulosInventario=ai;
+
+    public void SeleccionarArticulo(ArticulosInventario ai) {
+        this.codArticulo = ai.getId();
+        this.nombreArticulo = ai.getNombre();
+        this.articulosInventario = ai;
     }
 
     public EncabezadoTransferencia getBodegaseleccionada() {
@@ -208,6 +251,38 @@ public class TransferenciaManagedBean implements Serializable {
         this.prodselecionado = prodselecionado;
     }
 
+    public EncabezadoTransferencia getTransferencia() {
+        return transferencia;
+    }
+
+    public void setTransferencia(EncabezadoTransferencia transferencia) {
+        this.transferencia = transferencia;
+    }
+
+    public DetalleTransferencia getDetalleTransferencia() {
+        return detalleTransferencia;
+    }
+
+    public void setDetalleTransferencia(DetalleTransferencia detalleTransferencia) {
+        this.detalleTransferencia = detalleTransferencia;
+    }
+
+    public List<DetalleTransferencia> getListDetalle() {
+        return listDetalle;
+    }
+
+    public void setListDetalle(List<DetalleTransferencia> listDetalle) {
+        this.listDetalle = listDetalle;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+    
     
 
 }
