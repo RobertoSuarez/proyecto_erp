@@ -8,21 +8,21 @@
     <body>
 
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
-                    <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
-    
-                    <p:submenu label="Pagos">
-                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
-                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
+            <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+                <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
+                <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
-                    </p:submenu>
-                    <p:submenu label="Reportes">
-                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
-      
-                    </p:submenu>
-                    <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
-                </p:menubar>
+                <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
+                    <p:menuitem value="Autorizar Factura" outcome="/View/cuentas_por_pagar/AutorizacionFactura.xhtml"  icon="pi pi-list" />
+                    <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
+
+                </p:submenu>
+                <p:submenu label="Reportes">
+                    <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+
+                </p:submenu>
+                <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
+            </p:menubar>
             <ui:define name="content">
 
                 <h:form class="p-p-5">
@@ -82,7 +82,7 @@
                                 <h:outputText value="#{comprobanteMB.getCountRegister(retencion.estado_retencion)}"/>
                             </p:column>
                         </p:summaryRow>
-                        
+
                     </p:dataTable>
 
                 </h:form>

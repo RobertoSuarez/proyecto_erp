@@ -18,7 +18,7 @@
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
                     <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
-                        <p:menuitem value="Autorizar Pago" outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
+                        <p:menuitem value="Autorizar Factura" outcome="/View/cuentas_por_pagar/AutorizacionFactura.xhtml"  icon="pi pi-list" />
                         <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
                     </p:submenu>
@@ -28,6 +28,7 @@
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
                 </p:menubar>
+                
                 <h:form class="p-m-3 " id="form" style="padding-left: 30px; padding-right: 30px">
                     <h1 style="text-align: center; color: black; margin-top: 4%">Generación de calendario de pagos</h1>
                     <p:growl id="growl" showDetail="true"/>

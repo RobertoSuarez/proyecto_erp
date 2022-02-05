@@ -11,23 +11,20 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
-                
+
                 <f:event type="preRenderView" listener="#{seguridadCtasPagar.verificarPermiso()}"/>
-                
+
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Proveedores" outcome="/View/cuentas_por_pagar/Proveedor" />
                     <p:menuitem value="Factura Compra" outcome="/View/cuentas_por_pagar/Factura" />
 
                     <p:submenu label="Pagos" rendered="#{seguridadCtasPagar.renderForGerente()}">
-                        <p:menuitem value="Autorizar Pago" 
-                                    outcome="/View/cuentas_por_pagar/AutorizacionPago"  icon="pi pi-list" />
-                        <p:menuitem value="Realizar Pago"  
-                                    outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
+                        <p:menuitem value="Autorizar Factura" outcome="/View/cuentas_por_pagar/AutorizacionFactura.xhtml"  icon="pi pi-list" />
+                        <p:menuitem value="Realizar Pago"  outcome="/View/cuentas_por_pagar/Pago" icon="pi pi-list" />
 
                     </p:submenu>
                     <p:submenu label="Reportes">
-                        <p:menuitem value="Generar calendario de pagos" 
-                                    outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
+                        <p:menuitem value="Generar calendario de pagos" outcome="/View/cuentas_por_pagar/Calendario" icon="pi pi-book" />
 
                     </p:submenu>
                     <p:menuitem value="Anticipos" outcome="/View/cuentas_por_pagar/Anticipo"/>
@@ -122,6 +119,7 @@
 
                                 <!-- CAMPOS DEL DIALOG-->
                                 <div class="p-formgrid p-grid">
+                                    
                                     <div class="p-field p-col">
                                         <p:outputLabel for="proveedor">Proveedor: *</p:outputLabel>
                                         <p:inputText type="button" id="proveedor"
@@ -141,8 +139,8 @@
                                     </div>
 
                                     <div class="p-field p-col">
-                                        <p:outputLabel for="saldofavor">Saldo a favor:</p:outputLabel>
-                                        <p:inputText type="number" id="saldofavor" value="#{facturaMB.factura.pagado}" 
+                                        <p:outputLabel for="saldofavor">Anticipos favorables:</p:outputLabel>
+                                        <p:inputText type="number" id="saldofavor" value="#{BuscarMB.totalAnticipo}" 
                                                      required="true"/>
                                     </div>
 

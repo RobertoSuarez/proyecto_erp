@@ -6,6 +6,7 @@
 package com.cuentasporpagar.controllers;
 
 import com.cuentasporpagar.daos.FacturaDAO;
+import com.cuentasporpagar.models.Anticipo;
 import com.cuentasporpagar.models.Factura;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class FacturaManagedBean {
      private float datoImporte;
      private String datoDetalle;
      private String datoCuenta;
+     private List<Anticipo> anriciposVigentes;
 
      //Constructor
      public FacturaManagedBean() {
