@@ -30,24 +30,7 @@
                     </div>
                 </ui:fragment>
 
-                <c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }"> 
-                    <div class="p-col-12 p-lg-6 p-xl-3">
-                        <a href="../contabilidad/asientos.xhtml" >
-                            <div class="card-box bg-blue">
-                                <div class="inner">
-                                    <h3> Contabilidad </h3>
-                                    <p> Descripción </p>
-                                </div>
-                                <div class="icon">
-                                    <i class="pi pi-book" aria-hidden="true" ></i>
-                                </div>
-                                <div class="card-box-footer">Ingresar 
-                                    <i class="pi pi-arrow-circle-right"/>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </c:if>
+
 
                 <ui:fragment rendered="#{seguridadCtasPagar.renderForEveryone()}">
                     <div class="p-col-12 p-lg-6 p-xl-3">
