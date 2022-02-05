@@ -46,7 +46,6 @@ public class AnticipoDAO {
 
                 anticipos.add(anticipo);
             }
-            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -59,6 +58,30 @@ public class AnticipoDAO {
         }
 
         return anticipos;
+    }
+
+    public List<Anticipo> getAncitipoByProveedor(int idProveedor) {
+        try {
+            List<Anticipo> anticipos = new ArrayList<>();
+            Conexion conn = new Conexion();
+            conn.abrirConexion();
+            String query = "select \"id_anticipo\", \"importe\", \"id_proveedor\" from public.anticipo where \"id_proveedor\" = " + String.valueOf(idProveedor) + ";";
+            ResultSet rs = conn.ejecutarConsulta(query);
+            Anticipo aux;
+            while(rs.next()){
+                aux = new Anticipo();
+                aux.setId_anticipo(rs.getString("id_anticipo"));
+                aux.setImporte(rs.getDouble("importe"));
+                anticipos.add(aux);
+            }
+            rs.close();
+            if(anticipos.size() > 0){
+                return anticipos;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // GetAllDBProveedor va iterando por cada anticipo y va a traer el proveedor
@@ -76,7 +99,7 @@ public class AnticipoDAO {
     public static List<Anticipo> getAllJson(boolean revertido) throws SQLException {
         String datos = null;
         Conexion conn = new Conexion();
-        String query = "select select_all_anticipo_width_proveedor('"+ revertido +"') as _anticipo;";
+        String query = "select select_all_anticipo_width_proveedor('" + revertido + "') as _anticipo;";
         try {
             conn.abrirConexion();
 
@@ -87,8 +110,6 @@ public class AnticipoDAO {
             while (rs.next()) {
                 datos = rs.getString("_anticipo");
             }
-
-            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -115,11 +136,10 @@ public class AnticipoDAO {
 
         return anticiposDB;
     }
-    
+
     public static void Revertir(Anticipo anticipo) {
         int id_asiento = 0;
-        
-        
+
         // creamos los asientos y los movimientos.
         Anticipo.Asiento asiento = new Anticipo().new Asiento();
         asiento.setIdDiario("11");
@@ -128,44 +148,44 @@ public class AnticipoDAO {
         asiento.setDetalle(anticipo.getDescripcion());
         asiento.setFechaCreacion(new SimpleDateFormat("dd-MM-yyyy").format(anticipo.getFecha()));
         asiento.setFechaCierre(new SimpleDateFormat("dd-MM-yyyy").format(anticipo.getFecha()));
-        
+
         List<Anticipo.Movimiento> movimientos = new ArrayList<>();
-        
+
         Anticipo.Movimiento movimiento1 = new Anticipo().new Movimiento();
         movimiento1.setIdSubcuenta("2"); // Subcuenta caja chica
         movimiento1.setDebe("0");
         movimiento1.setHaber(anticipo.getImporte().toString()); // lo que entra en la caja chica
         movimiento1.setTipoMovimiento("Anticipo de proveedor Revertido");
-        
+
         Anticipo.Movimiento movimiento2 = new Anticipo().new Movimiento();
         movimiento2.setIdSubcuenta("65"); // Subcuenta Anticipo proveedor
         movimiento2.setDebe(anticipo.getImporte().toString()); // lo que sale de anticipo
         movimiento2.setHaber("0"); // lo que entra en anticipo
         movimiento2.setTipoMovimiento("Anticipo de proveedor Revertido");
-        
+
         movimientos.add(movimiento1);
         movimientos.add(movimiento2);
-        
+
         Gson gson = new Gson();
         System.out.println(gson.toJson(asiento));
         System.out.println(gson.toJson(movimientos));
-        
+
         Conexion conn = new Conexion();
-        
+
         // Registramos el asiento con los movimeintos, y obtenemos el id del asiento.
         try {
             String queryAsiento = String.format("SELECT public.generateasientocotableexternal2('%s', '%s') as id_asiento", gson.toJson(asiento), gson.toJson(movimientos));
             System.out.println("desde reversión: " + queryAsiento);
             conn.abrirConexion();
-            
+
             Statement statement = conn.conex.createStatement();
             ResultSet data = statement.executeQuery(queryAsiento);
             while (data.next()) {
-                id_asiento = data.getInt("id_asiento");                
+                id_asiento = data.getInt("id_asiento");
             }
-            
+
             System.out.println("id asiento recuperado de la db " + id_asiento);
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             System.out.println("No se puedo registrar el asiento del anticipo, se cacelo todo en el ambito de revertir el anticipo");
             try {
@@ -175,25 +195,21 @@ public class AnticipoDAO {
             }
             return;
         }
-        
-        
+
         // Actualizamos el anticipo, para revertirlo con el asiento registrado anteriormente.
-        String query =  "update anticipo set revertido='true', id_asiento_revertido=? where id_anticipo=?;";
+        String query = "update anticipo set revertido='true', id_asiento_revertido=? where id_anticipo=?;";
         try {
-            
+
             PreparedStatement stmt = conn.conex.prepareStatement(query);
             stmt.setInt(1, id_asiento);
             stmt.setString(2, anticipo.getId_anticipo());
-            
+
             stmt.execute();
             //ResultSet rs = stmt.executeQuery(query);
-          
-            
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-            
-            
+
         } finally {
             try {
                 conn.conex.close();
@@ -201,7 +217,6 @@ public class AnticipoDAO {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        
-    
+
     }
 }

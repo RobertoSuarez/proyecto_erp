@@ -53,16 +53,11 @@
                             </div>
                             <p:toolbarGroup 
                                 style="margin-top: 3%; width: 15%">
-                                <p:selectOneButton 
-                                    style="margin-top: 1%" >
-                                    <f:selectItem
-                                        itemLabel="Anual" 
-                                        itemValue="1"/>
-                                </p:selectOneButton>                       
+                                                   
                             </p:toolbarGroup>
 
                             <p:toolbarGroup 
-                                style="margin-top: 3%; 
+                                style="margin-top: 3%;
                                 width: 15%">
                                 <p:commandButton 
                                     value="Aceptar" 
@@ -127,7 +122,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4 
-                                        style="font-weight: bold;">
+                                            style="font-weight: bold;">
 
                                         </h4>
                                     </div>
@@ -148,7 +143,7 @@
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
-                                    <div class="p-col-9">Total, Egresos</div>
+                                    <div class="p-col-9">Total, Costos</div>
                                     <div class="p-col-3" style="text-align: left">
                                         <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.egresos}"/></p>
                                     </div>
@@ -186,13 +181,21 @@
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
-                                    <div class="p-col-9">Total, Costo ventas</div>
+                                    <div class="p-col-9">Total, Gastos</div>
                                     <div class="p-col-3" style="text-align: left">
                                         <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.ventas}"/></p>
                                     </div>
                                 </div>
                             </f:facet>
-                        </p:dataTable>
+                        </p:dataTable>                        
+                    </div>
+                    <div class="card">
+                        <div class="p-grid">
+                            <div class="p-col-9">Total</div>
+                            <div class="p-col-3" style="text-align: left">
+                                <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.total}"/></p>
+                            </div>
+                        </div>
                     </div>
                 </h:form>
             </ui:define>

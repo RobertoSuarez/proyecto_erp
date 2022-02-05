@@ -24,7 +24,7 @@
 
 .navbar .submenu {
     position: fixed;
-    right: 110px;
+    right: 60px;
     width: 300px;
     top: 65px;
     background: #fff;
@@ -35,7 +35,7 @@
 
 .navbar .submenu{
     padding: 6px 0;
-    width: 15%;
+    width: 13%;
     box-shadow: 3px 1px 6px rgba(0,0,0,0.3);
 }
 

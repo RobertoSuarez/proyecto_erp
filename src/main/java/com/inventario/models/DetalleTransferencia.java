@@ -5,21 +5,37 @@
  */
 package com.inventario.models;
 
-public class DetalleTransferencia {
+import java.io.Serializable;
+
+public class DetalleTransferencia implements Serializable {
 
    private int idDetalle;
    private int cod_transferencia;
    private int cod_articulo;
+   private ArticulosInventario articulosInventario;
    private int cant;
+   private double costo;
+   private String nombreArticulo;
 
     public DetalleTransferencia() {
     }
 
-    public DetalleTransferencia(int idDetalle, int cod_transferencia, int cod_articulo, int cant) {
+    public DetalleTransferencia(int idDetalle, int cod_transferencia, int cod_articulo, int cant, double costo, ArticulosInventario articulosInventario, String nombrearticulo) {
         this.idDetalle = idDetalle;
         this.cod_transferencia = cod_transferencia;
         this.cod_articulo = cod_articulo;
         this.cant = cant;
+        this.costo=costo;
+        this.articulosInventario=articulosInventario;
+        this.nombreArticulo=nombrearticulo;
+    }
+
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
     }
 
     public int getIdDetalle() {
@@ -53,6 +69,23 @@ public class DetalleTransferencia {
     public void setCant(int cant) {
         this.cant = cant;
     }
+
+    public ArticulosInventario getArticulosInventario() {
+        return articulosInventario;
+    }
+
+    public void setArticulosInventario(ArticulosInventario articulosInventario) {
+        this.articulosInventario = articulosInventario;
+    }
+
+    public String getNombreArticulo() {
+        return nombreArticulo;
+    }
+
+    public void setNombreArticulo(String nombreArticulo) {
+        this.nombreArticulo = nombreArticulo;
+    }
+    
    
    
 
