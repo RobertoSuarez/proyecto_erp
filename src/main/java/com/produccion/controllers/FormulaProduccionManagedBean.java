@@ -229,11 +229,13 @@ public class FormulaProduccionManagedBean implements Serializable {
         this.articulo = articulo;
     }
     public void llenaArticulo(FormulaProduccion inventario){
-        formulaProduccion.setCodigo_articulo(inventario.getCodigo_articulo());
+        formulaProduccion.setCodigo_producto(inventario.getCodigo_producto());
         formulaProduccion.setNombre_producto(inventario.getNombre());
+        formulaProduccion.setTipo(inventario.getTipo());
+        formulaProduccion.setCategoria(inventario.getCategoria());
     }
     public void saludo(){
-        System.out.println("Hola");
+        System.out.println("Hola"+formulaProduccion.getNombre_formula());
     }
 
 }

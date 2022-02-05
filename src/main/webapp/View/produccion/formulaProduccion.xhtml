@@ -43,9 +43,14 @@
 
                                                     <div class="p-col-6">
                                                         <div class="p-grid">
-                                                            <div class="p-col-8">
-                                                                <p:outputLabel for="nonmbreF">Nombre : </p:outputLabel>
-                                                                <p:inputText id="nonmbreF" value="#{formulaMB.formulaProduccion.nombre_producto}" readonly="true"></p:inputText>
+                                                            <div class="p-col-2">
+                                                                <p:outputLabel>N° : </p:outputLabel>
+                                                                <p:inputText value="#{formulaMB.formulaProduccion.codigo_producto}" ></p:inputText>
+                                                            </div>
+                                                            <div class="p-col-6">
+                                                                <p:outputLabel>Nombre : </p:outputLabel>
+                                                                <p:inputText id="nombreProducto" value="#{formulaMB.formulaProduccion.nombre_producto}"></p:inputText>
+
                                                             </div>
                                                             <div class="p-col-4">
                                                                 <p:outputLabel value="." style="color: white"/>
@@ -53,22 +58,23 @@
                                                                                  styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('producto').show()">
                                                                 </p:commandButton>
                                                             </div>
+
                                                         </div>
                                                         <p:outputLabel value="Nombre Formula:"></p:outputLabel>
                                                         <p:inputText value="#{formulaMB.formulaProduccion.nombre_formula}"
-                                                                     disabled="#">
+                                                                     >
                                                         </p:inputText>
-                                                        <p:outputLabel for="DescripcionF">Descripción : </p:outputLabel>
-                                                        <p:inputTextarea maxlength="50" id="DescripcionF"
+                                                        <p:outputLabel>Descripción : </p:outputLabel>
+                                                        <p:inputTextarea maxlength="50"
                                                                          placeholder="Descripcion maximo 50 caracteres"
                                                                          value="#{formulaMB.formulaProduccion.descripcion}"
                                                                          rows="5" 
                                                                          cols="33" 
                                                                          autoResize="false"/>
 
-                                                        <p:outputLabel for="rendimientoF"> Rendimiento : </p:outputLabel>
-                                                        <p:inputNumber id="rendimientoF" value="#{formulaMB.formulaProduccion.rendimiento}" maxlength="25"
-                                                                     placeholder="Ingrese numero" ></p:inputNumber>
+                                                        <p:outputLabel> Rendimiento : </p:outputLabel>
+                                                        <p:inputNumber value="#{formulaMB.formulaProduccion.rendimiento}" maxlength="25"
+                                                                       placeholder="Ingrese numero" ></p:inputNumber>
 
 
                                                     </div>
@@ -79,29 +85,28 @@
                                                         </p:inputText>
                                                         <p:outputLabel value="Categoria:"></p:outputLabel>
                                                         <p:inputText value="#{formulaMB.formulaProduccion.categoria}" readonly="true"
-                                                                     disabled="#">
+                                                                     >
                                                         </p:inputText>
                                                         <p:outputLabel value="Producción tipo costo:"></p:outputLabel>
-                                                        <p:selectOneRadio id="console"  unselectable="true">
+                                                        <p:selectOneRadio unselectable="true">
                                                             <f:selectItem itemLabel="Detallado" itemValue="Option1"/>
                                                             <f:selectItem itemLabel="Estandar" itemValue="Option2"/>
                                                         </p:selectOneRadio>
                                                         <p:outputLabel value="MOD:"></p:outputLabel>
                                                         <p:inputNumber value="" readonly="true"
-                                                                     disabled="#">
+                                                                       >
                                                         </p:inputNumber>
                                                         <p:outputLabel value="CIF:"></p:outputLabel>
                                                         <p:inputNumber value="" readonly="true"
-                                                                     disabled="#">
+                                                                       disabled="#">
                                                         </p:inputNumber>
 
                                                         <p:outputLabel value="Proceso Principal:"></p:outputLabel>
-                                                        <p:selectOneMenu id="procesoPrincipal"
-                                                                         value="#{formulaMB.formulaProduccion.codigo_proceso}"
-                                                                         editable="false">
-                                                            <p:ajax listener="#{formulaMB.subProcesoLista()}" 
-                                                                    update=":form-princFormula:tablaFormulacion" process="@this"/>
-                                                            <f:selectItem itemLabel="Seleccionar Proceso" itemValue="" noSelectionOption="true"/>
+                                                        <p:selectOneMenu
+                                                            value="#{formulaMB.formulaProduccion.codigo_proceso}"
+                                                            editable="false">
+                                                            <p:ajax listener="#{formulaMB.subProcesoLista()}"/>
+                                                            <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
                                                             <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
                                                                            itemLabel="#{proceso.nombre}"
                                                                            itemValue="#{proceso.codigo_proceso}"/>
@@ -139,15 +144,11 @@
                                                             </p:column>
 
                                                             <p:column headerText="Sub Procesos">
-                                                                <p:outputLabel for="@next" />
-                                                                <p:selectOneMenu id="ElegirSubrocesos" value="#{formulaMB.formulaProduccion.codigo_subproceso}"
-                                                                                 hideNoSelectionOption="#">
-                                                                    <p:ajax update="@this" process="@this"/>
-                                                                    <f:selectItem itemLabel="Seleccionar" itemValue="#" noSelectionOption="true"/>
-                                                                    <f:selectItems value="#{formulaMB.listSubProceso}" var="proceso"
-                                                                                   itemLabel="#{proceso.nombre}"
-                                                                                   itemValue="#{proceso.codigo_subproceso}"/>
-
+                                                                <p:selectOneMenu id="ElegirSubrocesos" value="#{formulaMB.formulaProduccion.codigo_subproceso}">
+                                                                    <f:selectItem itemLabel="Seleccionar"/>
+                                                                    <f:selectItems value="#{formulaMB.listSubProceso}" var="subproceso"
+                                                                                   itemLabel="#{subproceso.nombre}"
+                                                                                   itemValue="#{subproceso.codigo_subproceso}"/>
                                                                 </p:selectOneMenu>
 
                                                             </p:column>
@@ -184,8 +185,7 @@
                                                             <div class="p-col-2">
 
                                                                 <p:commandButton value="Guardar " actionListener="#{formulaMB.insertar()}"
-                                                                                 update="dtformulaPrin,form-princFormula"
-                                                                                 process=":form-princFormula:manage-nuevaFormula-form @this"
+                                                                                 process="manage-nuevaFormula-form @this"
                                                                                  icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
                                                             </div>
                                                             <div class="p-col-2">
@@ -388,8 +388,8 @@
                                     </p:outputPanel>
 
                                     <p:commandButton value="Si" icon="pi pi-check" actionListener="#{formulaMB.llenaArticulo(articulosMB.articulosInventario)}"
-                                                     update=":form-princFormula:manage-nuevaFormula-form"
-                                                     process="manage-selectProductoFormula-form @this"/>
+
+                                                     />
                                     <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                                      onclick="PF('selectProductoFormulaDialog').hide()"/>
                                 </p:confirmDialog>
@@ -451,16 +451,17 @@
                                                                          editInitEvent="dblclick" editMode="cell"
                                                                          value="#{formulaMB.articuloMateriaP}" var="TablaBuscarMateriaPrima">
                                                                 <p:column headerText="Acciones">
-                                                                    <p:commandButton update=":form-princFormula:manage-nuevaFormula-form, :form-princFormula:nonmbreF"
-                                                                                     class="rounded-button"
-                                                                                     process="@this"
-                                                                                     icon="pi pi-check" 
-                                                                                     action="#{formulaMB.llenaArticulo(TablaBuscarMateriaPrima)}">
-                                                                        <f:setPropertyActionListener value="#{TablaBuscarMateriaPrima}" 
-                                                                                                     target="#{formulaMB.formulaProduccion}"/>
-                                                                        <p:resetInput target=":form-princFormula:manage-nuevaFormula-form, :form-princFormula:nonmbreF"/>
-
+                                                                    <p:commandButton
+                                                                        class="rounded-button"
+                                                                        icon="pi pi-check">
+                                                                        <p:ajax listener="#{formulaMB.llenaArticulo(TablaBuscarMateriaPrima)}" 
+                                                                                update=":form-princFormula:manage-nuevaFormula-form"/>
                                                                     </p:commandButton>
+                                                                </p:column>
+
+                                                                <p:column headerText="N°" filterStyle="display : none">
+                                                                    <h:outputText value="#{TablaBuscarMateriaPrima.codigo_producto}" />
+                                                                    <p:skeleton rendered="#"></p:skeleton>
                                                                 </p:column>
 
                                                                 <p:column headerText="Nombre" filterStyle="display : none">
