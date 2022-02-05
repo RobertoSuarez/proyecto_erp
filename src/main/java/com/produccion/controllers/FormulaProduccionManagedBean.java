@@ -5,9 +5,11 @@
  */
 package com.produccion.controllers;
 
+import com.inventario.models.ArticulosInventario;
 import com.produccion.dao.FormulaProduccionDAO;
 import com.produccion.dao.ProcesoProduccionDAO;
 import com.produccion.dao.SubProcesoDAO;
+import com.produccion.models.ArticuloFormula;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.ProcesoProduccion;
 import com.produccion.models.SubProceso;
@@ -34,58 +36,53 @@ import org.primefaces.PrimeFaces;
 
 public class FormulaProduccionManagedBean implements Serializable {
 
-    private FormulaProduccion formulaProduccion = new FormulaProduccion();
-    private FormulaProduccionDAO formulaProduccionDAO = new FormulaProduccionDAO();
-    private List<FormulaProduccion> listaFormula = new ArrayList<>();
-    
+    private FormulaProduccion formulaProduccion= new FormulaProduccion();
+    private FormulaProduccionDAO formulaProduccionDAO;
+    private List<FormulaProduccion> listaFormula;
+    private List<FormulaProduccion>articuloMateriaP;
+    ArticuloFormula articuloMateriaPrima;
+    ArticulosInventario articulo;
     private ProcesoProduccion procesoProduccion;
-    private ProcesoProduccionDAO procesoProduccionDao;
+    ProcesoProduccionDAO procesoProduccionDao;
     List<ProcesoProduccion> listProceso = new ArrayList<>();
-    
     private SubProceso subProceso;
-    private SubProcesoDAO subProcesoDAO;
-    List <SubProceso> listSubProceso = new ArrayList<>();
-    List <SubProceso> listTempSubPro = new ArrayList<>();
+    SubProcesoDAO subProcesoDAO;
+    List<SubProceso> listSubProceso = new ArrayList<>();
+    List<SubProceso> listTempSubPro = new ArrayList<>();
+
+    public FormulaProduccionManagedBean() {
+       
+        formulaProduccionDAO = new FormulaProduccionDAO();
+        procesoProduccionDao = new ProcesoProduccionDAO();
+        procesoProduccion = new ProcesoProduccion();
+        subProceso = new SubProceso();
+        articulo= new ArticulosInventario();
+        subProcesoDAO = new SubProcesoDAO();
+        listaFormula = new ArrayList<>();
+        articuloMateriaP= new ArrayList<>();
+
+    }
 
     @PostConstruct
     public void init() {
-        System.out.println("PostConstruct");
-        procesoProduccionDao = new ProcesoProduccionDAO();
-        subProceso = new SubProceso();
-        subProcesoDAO = new SubProcesoDAO();
         listaFormula = formulaProduccionDAO.getFormula();
-    }
-    
-    public void openNew() {
-        this.procesoProduccion = new ProcesoProduccion();
         listProceso = procesoProduccionDao.getProcesosProduccion();
+        articuloMateriaP=formulaProduccionDAO.getArticulos();
     }
+
     
-    
-      public void closeDialogModal() {
+    public void closeDialogModal() {
         PrimeFaces.current().executeScript("PF('crearFormulaDialog').hide()");
     }
-      
-       public void insertar() {
-           System.err.println("Entro ......");
+
+    public void insertar() {
+        System.err.println("Entro ......");
         try {
-            if ("".equals(formulaProduccion.getCodigo_proceso())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
-            } else if ("".equals(formulaProduccion.getNombre_formula())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
-            } else if ("".equals(formulaProduccion.getDescripcion())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-            } else if ("".equals(formulaProduccion.getRendimiento())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-            } else if ("".equals(formulaProduccion.getEstado())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-            } else if ("".equals(formulaProduccion.getCodigo_producto())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-            } else {
-                this.formulaProduccionDAO.insertarFormula(formulaProduccion);
+            
+                formulaProduccionDAO.insertarFormula(formulaProduccion);
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
-            }
+            
 
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
@@ -95,9 +92,9 @@ public class FormulaProduccionManagedBean implements Serializable {
         closeDialogModal();
         PrimeFaces.current().ajax().update("form-princFormula:dtformulaPrin");
     }
-     
-         public void editar() {
-             System.err.println("Entro en editar......");
+
+    public void editar() {
+        System.err.println("Entro en editar......");
         try {
             if ("".equals(formulaProduccion.getCodigo_proceso())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
@@ -124,22 +121,50 @@ public class FormulaProduccionManagedBean implements Serializable {
         }
         PrimeFaces.current().executeScript("PF('crearFormulaDialg').hide()");
         PrimeFaces.current().ajax().update("form:dtFormulaPrin", "form:growl");
-    } 
-         
-    public void eliminarFormula(){
+    }
+
+    public void eliminarFormula() {
         try {
             this.formulaProduccionDAO.eliminarF(formulaProduccion, formulaProduccion.getNombre_formula());
             listaFormula = formulaProduccionDAO.getFormula();
             PrimeFaces.current().executeScript("PF('eliminarFormulaDialog').hide()");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Exito", "Formula Eliminada"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Formula Eliminada"));
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Error al Eliminar la Formula"));
-            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al Eliminar la Formula"));
+
         }
-        
-    }     
+
+    }
+    public void subProcesoLista(){
+        listSubProceso=formulaProduccionDAO.getSubProceso(formulaProduccion.getCodigo_proceso());
+    }
+
+    public SubProceso getSubProceso() {
+        return subProceso;
+    }
+
+    public List<FormulaProduccion> getArticuloMateriaP() {
+        return articuloMateriaP;
+    }
+
+    public void setArticuloMateriaP(List<FormulaProduccion> articuloMateriaP) {
+        this.articuloMateriaP = articuloMateriaP;
+    }
+
+    public ArticuloFormula getArticuloMateriaPrima() {
+        return articuloMateriaPrima;
+    }
+
+    public void setArticuloMateriaPrima(ArticuloFormula articuloMateriaPrima) {
+        this.articuloMateriaPrima = articuloMateriaPrima;
+    }
     
-       
+    
+
+    public void setSubProceso(SubProceso subProceso) {
+        this.subProceso = subProceso;
+    }
+
     public FormulaProduccion getFormulaProduccion() {
         return formulaProduccion;
     }
@@ -196,10 +221,19 @@ public class FormulaProduccionManagedBean implements Serializable {
         this.listTempSubPro = listTempSubPro;
     }
 
-  
-    
-    
-    
-    
+    public ArticulosInventario getArticulo() {
+        return articulo;
+    }
+
+    public void setArticulo(ArticulosInventario articulo) {
+        this.articulo = articulo;
+    }
+    public void llenaArticulo(FormulaProduccion inventario){
+        formulaProduccion.setCodigo_articulo(inventario.getCodigo_articulo());
+        formulaProduccion.setNombre_producto(inventario.getNombre());
+    }
+    public void saludo(){
+        System.out.println("Hola");
+    }
 
 }

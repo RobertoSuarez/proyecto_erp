@@ -97,5 +97,6 @@ public class ProcesoProduccionDAO {
     public void delete(ProcesoProduccion proceso, String aux) throws SQLException {
         sentenciaSql = ("DELETE FROM public.proceso_produccion WHERE identificador = '" + aux + "'");
         conexion.ejecutar(sentenciaSql);
+        conexion.desconectar();
     }
 }

@@ -15,11 +15,37 @@ public class FormulaProduccion {
     
     private int codigo_formula;
     private int codigo_proceso;
+    private int codigo_subproceso;
+    private int codigo_articulo;
     private String nombre_formula;
+    private String nombre_producto;
     private String descripcion;
     private int rendimiento;
     private String estado;
     private int codigo_producto;
+    
+    
+    
+    
+    private String nombre;
+    private String categoria;
+    private String descripcionProducto;
+    private String tipo;
+    private float costo;
+    private float cantidad;
+    private float cantidadMaxima;
+
+    public FormulaProduccion(int codigo_producto, String nombre, String categoria,String descripcionProducto, String tipo, float costo, float cantidad, float cantidadMaxima) {
+        this.codigo_producto = codigo_producto;
+        this.nombre = nombre;
+        this.categoria = categoria;
+        this.descripcionProducto=descripcionProducto;
+        this.tipo = tipo;
+        this.costo = costo;
+        this.cantidad = cantidad;
+        this.cantidadMaxima = cantidadMaxima;
+    }
+    
 
     public FormulaProduccion() {
     }
@@ -39,6 +65,91 @@ public class FormulaProduccion {
         this.estado = estado;
         this.codigo_producto = codigo_producto;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcionProducto() {
+        return descripcionProducto;
+    }
+
+    public void setDescripcionProducto(String descripcionProducto) {
+        this.descripcionProducto = descripcionProducto;
+    }
+    
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public float getCosto() {
+        return costo;
+    }
+
+    public void setCosto(float costo) {
+        this.costo = costo;
+    }
+
+    public float getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(float cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public float getCantidadMaxima() {
+        return cantidadMaxima;
+    }
+
+    public void setCantidadMaxima(float cantidadMaxima) {
+        this.cantidadMaxima = cantidadMaxima;
+    }
+    
+
+    public int getCodigo_articulo() {
+        return codigo_articulo;
+    }
+
+    public void setCodigo_articulo(int codigo_articulo) {
+        this.codigo_articulo = codigo_articulo;
+    }
+
+    public String getNombre_producto() {
+        return nombre_producto;
+    }
+
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
+    }
+    
+    
+
+    public int getCodigo_subproceso() {
+        return codigo_subproceso;
+    }
+
+    public void setCodigo_subproceso(int codigo_subproceso) {
+        this.codigo_subproceso = codigo_subproceso;
+    }
+    
 
     public int getCodigo_formula() {
         return codigo_formula;

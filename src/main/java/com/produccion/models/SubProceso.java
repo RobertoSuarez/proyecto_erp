@@ -37,6 +37,13 @@ public class SubProceso {
         this.hora = hora;
     }
 
+    public SubProceso(int codigo_subproceso, String nombre) {
+        this.codigo_subproceso = codigo_subproceso;
+        this.nombre = nombre;
+    }
+    
+    
+
     public SubProceso(int codigo_subproceso, int id_codigo_proceso, String nombre, String descripcion, String hora, float rendimiento) {
         this.codigo_subproceso = codigo_subproceso;
         this.id_codigo_proceso = id_codigo_proceso;
