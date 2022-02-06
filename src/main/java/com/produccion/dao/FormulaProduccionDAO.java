@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.produccion.dao;
 
 import com.global.config.Conexion;
@@ -26,12 +22,18 @@ public class FormulaProduccionDAO {
     private List<FormulaProduccion> listaFormula;
     private List auxlista = new ArrayList<>();
 
+    /**
+     * Constructor sin parametros 
+     */
     public FormulaProduccionDAO() {
         formulaProduccion = new FormulaProduccion();
         conexion = new Conexion();
         listaFormula = new ArrayList<>();
     }
 
+    /**
+     * Constructor en donde instanciamos conexion
+     */
     public FormulaProduccionDAO(FormulaProduccion formulaProduccion) {
         conexion = new Conexion();
         this.formulaProduccion = formulaProduccion;
@@ -40,12 +42,14 @@ public class FormulaProduccionDAO {
     public void getProcess(int cod){
         
     }
-
+     /**
+     * Método para Listar las Formulas
+     */
     public List<FormulaProduccion> getFormula() {
         List<FormulaProduccion> formula = new ArrayList<>();
         String sql = String.format("Select * from formula");
         try {
-
+             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
@@ -66,7 +70,9 @@ public class FormulaProduccionDAO {
         }
         return formula;
     }
-    
+    /**
+     * Método para Listar todos los Subprocesos de produccion
+     */
     public List<SubProceso> getSubProceso(int id) {
         List<SubProceso> subProceso = new ArrayList<>();
         String sql = String.format("select SP.codigo_subproceso,SP.nombre from subproceso as SP \n" +
@@ -106,7 +112,9 @@ public class FormulaProduccionDAO {
             conexion.desconectar();
         }
     }
-    
+    /**
+     * Método para Listar todos los Articulos
+     */
     public List<FormulaProduccion> getArticulos(){
         List<FormulaProduccion> Materiales = new ArrayList<>();
         String sqlSentencia="select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock from articulos as a\n" +
@@ -142,14 +150,16 @@ public class FormulaProduccionDAO {
                     + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto)\n"
                     + "	VALUES ( "+f.getCodigo_proceso()+", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', "+f.getCodigo_producto()+");";
             return conexion.insertar(cadena);
-
         } catch (Exception e) {
             return -1;
         }finally {
             conexion.cerrarConexion();
         }
     }
-
+    /**
+     * Método para actualizar la formula recibiendo un parámetro Dicha clase
+     * implementa try and catch
+     */
     public void update(FormulaProduccion formula) throws SQLException {
         try {
             this.conexion.Conectar();
@@ -161,9 +171,7 @@ public class FormulaProduccionDAO {
                     + " estado='" + formula.getEstado() + "', "
                     + " codigo_producto='" + formula.getCodigo_producto() + "', "
                     + "Where codigo_formula= ";
-
             conexion.ejecutar(sql);
-
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -171,7 +179,10 @@ public class FormulaProduccionDAO {
         }
     }
     
-    // Parte de Elimar formula 
+  /**
+     * Método para eliminar una Formula recibiendo un parámetro Dicha clase
+     * implementa try and catch
+     */
    public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException{
        try {
            

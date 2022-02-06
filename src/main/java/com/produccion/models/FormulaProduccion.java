@@ -12,7 +12,7 @@ import com.global.config.Conexion;
  * @author Jimmy
  */
 public class FormulaProduccion {
-    
+
     private int codigo_formula;
     private int codigo_proceso;
     private int codigo_subproceso;
@@ -23,10 +23,7 @@ public class FormulaProduccion {
     private int rendimiento;
     private String estado;
     private int codigo_producto;
-    
-    
-    
-    
+
     private String nombre;
     private String categoria;
     private String descripcionProducto;
@@ -34,28 +31,36 @@ public class FormulaProduccion {
     private float costo;
     private float cantidad;
     private float cantidadMaxima;
-
-    public FormulaProduccion(int codigo_producto, String nombre, String categoria,String descripcionProducto, String tipo, float costo, float cantidad, float cantidadMaxima) {
+     /**
+     * Constructor con diferentes parametros en donde inicializaremos 
+     * nuestra variables
+     */
+    public FormulaProduccion(int codigo_producto, String nombre, 
+            String categoria, String descripcionProducto, 
+            String tipo, float costo, float cantidad, float cantidadMaxima) {
         this.codigo_producto = codigo_producto;
         this.nombre = nombre;
         this.categoria = categoria;
-        this.descripcionProducto=descripcionProducto;
+        this.descripcionProducto = descripcionProducto;
         this.tipo = tipo;
         this.costo = costo;
         this.cantidad = cantidad;
         this.cantidadMaxima = cantidadMaxima;
     }
-    
 
     public FormulaProduccion() {
     }
 
-    public FormulaProduccion(int codigo_formula, 
-            int codigo_proceso, 
-            String nombre_formula, 
-            String descripcion, 
-            int rendimiento, 
-            String estado, 
+    /**
+     * Constructor con diferentes parametros en donde inicializaremos nuestra
+     * variables
+     */
+    public FormulaProduccion(int codigo_formula,
+            int codigo_proceso,
+            String nombre_formula,
+            String descripcion,
+            int rendimiento,
+            String estado,
             int codigo_producto) {
         this.codigo_formula = codigo_formula;
         this.codigo_proceso = codigo_proceso;
@@ -81,7 +86,6 @@ public class FormulaProduccion {
     public void setDescripcionProducto(String descripcionProducto) {
         this.descripcionProducto = descripcionProducto;
     }
-    
 
     public String getCategoria() {
         return categoria;
@@ -122,7 +126,6 @@ public class FormulaProduccion {
     public void setCantidadMaxima(float cantidadMaxima) {
         this.cantidadMaxima = cantidadMaxima;
     }
-    
 
     public int getCodigo_articulo() {
         return codigo_articulo;
@@ -139,8 +142,6 @@ public class FormulaProduccion {
     public void setNombre_producto(String nombre_producto) {
         this.nombre_producto = nombre_producto;
     }
-    
-    
 
     public int getCodigo_subproceso() {
         return codigo_subproceso;
@@ -149,7 +150,6 @@ public class FormulaProduccion {
     public void setCodigo_subproceso(int codigo_subproceso) {
         this.codigo_subproceso = codigo_subproceso;
     }
-    
 
     public int getCodigo_formula() {
         return codigo_formula;
@@ -206,10 +206,5 @@ public class FormulaProduccion {
     public void setCodigo_producto(int codigo_producto) {
         this.codigo_producto = codigo_producto;
     }
-    
-    
- 
-    
-  
-    
+
 }

@@ -14,143 +14,197 @@
                 <h:form id="form-princ" style="margin-top: 4%;">
                     <p:growl id="growl" showDetail="true"/>
                     <div class="card">
-
                         <p:toolbar>
                             <!-- Botones del submenu Principal -->
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <!-- Boton Nuevo Proceso -->
-                                    <p:commandButton value="Nuevo Proceso" styleClass="ui-button-primary"
-                                                     actionListener="#{procesoMB.openNew()}"
-                                                     update=":form-princ:manage-nuevoProceso-form"
-                                                     icon="pi pi-plus" 
-                                                     oncomplete="PF('nuevoProcesoPrincDialog').show()"
-                                                     style=" margin-right: .6rem" process="@this">
+                                    <p:commandButton 
+                                        value="Nuevo Proceso" 
+                                        styleClass="ui-button-primary"
+                                        actionListener="#{procesoMB.openNew()}"
+                                        update=":form-princ:manage-nuevoProceso-form"
+                                        icon="pi pi-plus" 
+                                        oncomplete="PF('nuevoProcesoPrincDialog').show()"
+                                        style=" margin-right: .6rem" 
+                                        process="@this">
                                         <p:resetInput target=":form-princ:manage-nuevoProceso-form"/>
                                     </p:commandButton>
                                     <!-- Boton Nuevo Subproceso -->
-                                    <p:button  value="Nuevo Subproceso"
-                                               styleClass="ui-button-primary"
-                                               icon="pi pi-plus" 
-                                               style="margin-right: 6px;"
-                                               outcome="CrearSubProceso?p=#{procesoMB.procesoProduccion.codigo_proceso}">
-                                        
+                                    <p:button  
+                                        value="Nuevo Subproceso"
+                                        styleClass="ui-button-primary"
+                                        icon="pi pi-plus" 
+                                        style="margin-right: 6px;"
+                                        outcome="CrearSubProceso?p=#{procesoMB.procesoProduccion.codigo_proceso}">
                                     </p:button>
                                     <!-- Boton Agregar Costo -->
-                                    <p:commandButton value="Agregar Costos" 
-                                                     actionListener="#{costoMB.openNew()}"
-                                                     update=":form-princ:manage-nuevoCosto-form"
-                                                     styleClass="ui-button-primary"
-                                                     icon="pi pi-plus" 
-                                                     oncomplete="PF('agregarCostos').show()"
-                                                     style=" margin-right: .6rem" process="@this">
-                                        <p:resetInput target=":form-princ:manage-nuevoCosto-form"/>
+                                    <p:commandButton 
+                                        value="Agregar Costos" 
+                                        actionListener="#{costoMB.openNew()}"
+                                        update=":form-princ:manage-nuevoCosto-form"
+                                        styleClass="ui-button-primary"
+                                        icon="pi pi-plus" 
+                                        oncomplete="PF('agregarCostos').show()"
+                                        style=" margin-right: .6rem" 
+                                        process="@this">
+                                        <p:resetInput 
+                                            target=":form-princ:manage-nuevoCosto-form"/>
                                     </p:commandButton>                                 
                                     <!-- Boton Agregar Centro de Costo -->
-                                    <p:commandButton value=" Agregar Centro de Costos" 
-                                                     actionListener="#{centroMB.openNew()}"
-                                                     update=":form-princ:manage-nuevoCentro-form"
-                                                     styleClass="ui-button-primary" 
-                                                     icon="pi pi-plus" process="@this"
-                                                     oncomplete="PF('agregarCentroDeCostos').show()">
-                                        <p:resetInput target=":form-princ:manage-nuevoCentro-form"/>
+                                    <p:commandButton 
+                                        value=" Agregar Centro de Costos" 
+                                        actionListener="#{centroMB.openNew()}"
+                                        update=":form-princ:manage-nuevoCentro-form"
+                                        styleClass="ui-button-primary" 
+                                        icon="pi pi-plus" 
+                                        process="@this"
+                                        oncomplete="PF('agregarCentroDeCostos').show()">
+                                        <p:resetInput 
+                                            target=":form-princ:manage-nuevoCentro-form"/>
                                     </p:commandButton>
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
 
                         <!-- Dialogo Nuevo Proceso Principal -->
-                        <p:dialog header="Proceso Principal" showEffect="fade" modal="true"
-                                  widgetVar="nuevoProcesoPrincDialog" responsive="true" width="35%"
-                                  draggable="false" height="370" >
-
-                            <p:outputPanel id="manage-nuevoProceso-form" class="ui-fluid">
+                        <p:dialog header="Proceso Principal" 
+                                  showEffect="fade" 
+                                  modal="true"
+                                  widgetVar="nuevoProcesoPrincDialog" 
+                                  responsive="true" 
+                                  width="35%"
+                                  draggable="false" 
+                                  height="370" >
+                            <p:outputPanel 
+                                id="manage-nuevoProceso-form" 
+                                class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-field">
-                                        <p:outputLabel for="codProceso">Código: </p:outputLabel>
-                                        <p:inputText id="codProceso" value="#{procesoMB.procesoProduccion.identificador}" 
-                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" required="true" ></p:inputText>
+                                        <p:outputLabel 
+                                            for="codProceso">Código: </p:outputLabel>
+                                        <p:inputText 
+                                            id="codProceso" 
+                                            value="#{procesoMB.procesoProduccion.identificador}" 
+                                            placeholder="Siglas del identificador" 
+                                            style="background: #90A4AE;
+                                            color:#000000" required="true" ></p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="nameProceso">Nombre: </p:outputLabel>
-                                        <p:inputText id="nameProceso" value="#{procesoMB.procesoProduccion.nombre}" maxlength="25"
-                                                     placeholder="Maximo 25 caracteres" required="true"></p:inputText>
+                                        <p:outputLabel 
+                                            for="nameProceso">Nombre: </p:outputLabel>
+                                        <p:inputText 
+                                            id="nameProceso" 
+                                            value="#{procesoMB.procesoProduccion.nombre}" 
+                                            maxlength="25"
+                                            placeholder="Maximo 25 caracteres" 
+                                            required="true"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="descrProceso">Descripción:</p:outputLabel>
-                                        <p:inputTextarea maxlength="50" id="descrProceso"
-                                                         placeholder="Descripcion maximo 50 caracteres"
-                                                         value="#{procesoMB.procesoProduccion.descripcion}"
-                                                         rows="5" autoResize="false"/>
+                                        <p:inputTextarea 
+                                            maxlength="50" 
+                                            id="descrProceso"
+                                            placeholder="Descripcion maximo 50 caracteres"
+                                            value="#{procesoMB.procesoProduccion.descripcion}"
+                                            rows="5" 
+                                            autoResize="false"/>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
-
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" action="#{procesoMB.insertar()}"
-                                                 update=":form-princ:dtProcesoPrin"
-                                                 process="manage-nuevoProceso-form @this"
-                                                 icon="pi pi-check" styleClass="ui-button-primary">
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    action="#{procesoMB.insertar()}"
+                                    update=":form-princ:dtProcesoPrin"
+                                    process="manage-nuevoProceso-form @this"
+                                    icon="pi pi-check" 
+                                    styleClass="ui-button-primary">
                                 </p:commandButton>
-                                <p:commandButton value="Cancelar" icon="pi pi-check"
-                                                 onclick ="PF('nuevoProcesoPrincDialog').hide()" 
-                                                 styleClass="ui-button-danger"/>
+                                <p:commandButton 
+                                    value="Cancelar" 
+                                    icon="pi pi-check"
+                                    onclick ="PF('nuevoProcesoPrincDialog').hide()" 
+                                    styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
                         
                         <!-- Dialogo editar Centro Costo-->
-                        <p:dialog header="Proceso Principal" showEffect="fade" modal="true"
-                                  widgetVar="centroEditDialog" responsive="true" width="35%"
-                                  draggable="false" height="370" >
-
-                            <p:outputPanel id="manage-editarCentro-form" class="ui-fluid">
+                        <p:dialog header="Proceso Principal" 
+                                  showEffect="fade" 
+                                  modal="true"
+                                  widgetVar="centroEditDialog" 
+                                  responsive="true" 
+                                  width="35%"
+                                  draggable="false" 
+                                  height="370" >
+                            <p:outputPanel 
+                                id="manage-editarCentro-form" 
+                                class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-field">
-                                        <p:outputLabel value="Codigo: *"></p:outputLabel>
-                                        <p:inputText value="#{centroMB.centroCosto.identificador}" 
-                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000"></p:inputText>
+                                        <p:outputLabel 
+                                            value="Codigo: *"></p:outputLabel>
+                                        <p:inputText 
+                                            value="#{centroMB.centroCosto.identificador}" 
+                                            placeholder="Siglas del identificador" 
+                                            style="background: #90A4AE;
+                                            color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel value="Nombre: *"></p:outputLabel>
-                                        <p:inputText value="#{centroMB.centroCosto.nombre}" maxlength="25"
-                                                     placeholder="Maximo 25 caracteres" ></p:inputText>
+                                        <p:outputLabel 
+                                            value="Nombre: *"></p:outputLabel>
+                                        <p:inputText 
+                                            value="#{centroMB.centroCosto.nombre}" 
+                                            maxlength="25"
+                                            placeholder="Maximo 25 caracteres" ></p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel value="Descripción:"></p:outputLabel>
-                                        <p:inputTextarea maxlength="50"
-                                                         placeholder="Descripcion maximo 50 caracteres"
-                                                         value="#{centroMB.centroCosto.descripcion}"
-                                                         rows="5" autoResize="false"/>
+                                        <p:outputLabel 
+                                            value="Descripción:"></p:outputLabel>
+                                        <p:inputTextarea 
+                                            maxlength="50"
+                                            placeholder="Descripcion maximo 50 caracteres"
+                                            value="#{centroMB.centroCosto.descripcion}"
+                                            rows="5" 
+                                            autoResize="false"/>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" icon="pi pi-check"
-                                                 styleClass="ui-button-primary"
-                                                 update=":form-princ:dtCentroCosto"
-                                                 process="manage-editarCentro-form @this" 
-                                                 actionListener="#{centroMB.editar()}"/>
-                                <p:commandButton value="Cancelar" icon="pi pi-times"
-                                                 onclick="PF('centroEditDialog').hide()"  
-                                                 styleClass="ui-button-danger"/>
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    icon="pi pi-check"
+                                    styleClass="ui-button-primary"
+                                    update=":form-princ:dtCentroCosto"
+                                    process="manage-editarCentro-form @this" 
+                                    actionListener="#{centroMB.editar()}"/>
+                                <p:commandButton 
+                                    value="Cancelar" 
+                                    icon="pi pi-times"
+                                    onclick="PF('centroEditDialog').hide()"  
+                                    styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
 
                         <!-- Dialogo editar Costo-->
-                        <p:dialog header="Editar Costo" showEffect="fade" modal="true"
-                                  widgetVar="costoEditDialog" responsive="true" width="35%"
-                                  draggable="false" height="370" >
-
+                        <p:dialog header="Editar Costo" 
+                                  showEffect="fade" 
+                                  modal="true"
+                                  widgetVar="costoEditDialog" 
+                                  responsive="true" 
+                                  width="35%"
+                                  draggable="false" 
+                                  height="370" >
                             <p:outputPanel id="manage-editarCosto-form" class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-field">
                                         <p:outputLabel>Código: *</p:outputLabel>
                                         <p:inputText value="#{costoMB.costo.identificador}" 
-                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
+                                                     placeholder="Siglas del identificador" 
+                                                     style="background: #90A4AE;
                                                      color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
@@ -159,107 +213,163 @@
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel value="Descripción: "></p:outputLabel>
-                                        <p:inputTextarea maxlength="50"
-                                                         placeholder="Descripcion maximo 50 caracteres"
-                                                         value="#{costoMB.costo.descripcion}" 
-                                                         rows="5" autoResize="false"/>
+                                        <p:inputTextarea 
+                                            maxlength="50"
+                                            placeholder="Descripcion maximo 50 caracteres"
+                                            value="#{costoMB.costo.descripcion}" 
+                                            rows="5" 
+                                            autoResize="false"/>
                                     </div>
                                     <!-- Panel tipo de costo-->
                                     <div class="p-field">
                                         <p:outputLabel value="Tipo: "></p:outputLabel>
-                                        <p:selectOneMenu id="TipoCosto" 
-                                                         value="#{costoMB.costo.tipo}"
-                                                         disabled="#{costoMB.costo.tipo == 'Directo'}">                            
-                                            <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
-                                            <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
-                                            <f:selectItem itemLabel="Directo" itemValue="Directo"/>
+                                        <p:selectOneMenu 
+                                            id="TipoCosto" 
+                                            value="#{costoMB.costo.tipo}"
+                                            disabled="#{costoMB.costo.tipo == 'Directo'}">                            
+                                            <f:selectItem 
+                                                itemLabel="Seleccione tipo de Costo" 
+                                                itemValue=""/>
+                                            <f:selectItem 
+                                                itemLabel="Indirecto" 
+                                                itemValue="Indirecto"/>
+                                            <f:selectItem 
+                                                itemLabel="Directo" 
+                                                itemValue="Directo"/>
                                         </p:selectOneMenu>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" icon="pi pi-check"
-                                                 styleClass="ui-button-primary"
-                                                 update=":form-princ:dtCosto"
-                                                 process="manage-editarCosto-form @this" 
-                                                 actionListener="#{costoMB.editar()}"/>
-                                <p:commandButton value="Cancelar" icon="pi pi-times"
-                                                 onclick="PF('costoEditDialog').hide()"  
-                                                 styleClass="ui-button-danger"/>
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    icon="pi pi-check"
+                                    styleClass="ui-button-primary"
+                                    update=":form-princ:dtCosto"
+                                    process="manage-editarCosto-form @this" 
+                                    actionListener="#{costoMB.editar()}"/>
+                                <p:commandButton 
+                                    value="Cancelar" 
+                                    icon="pi pi-times"
+                                    onclick="PF('costoEditDialog').hide()"  
+                                    styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
 
                         <!-- Dialogo editar Proceso Principal -->
-                        <p:dialog header="Proceso Principal" showEffect="fade" modal="true"
-                                  widgetVar="procesoEditDialog" responsive="true" width="35%"
-                                  draggable="false" height="370" >
-
+                        <p:dialog header="Proceso Principal" 
+                                  showEffect="fade" 
+                                  modal="true"
+                                  widgetVar="procesoEditDialog" 
+                                  responsive="true" 
+                                  width="35%"
+                                  draggable="false" 
+                                  height="370" >
                             <p:outputPanel id="manage-editarProceso-form" class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-field">
-                                        <p:outputLabel for="codProces" value="Codigo: *"></p:outputLabel>
-                                        <p:inputText id="codProces" value="#{procesoMB.procesoProduccion.identificador}" 
-                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" required="true"></p:inputText>
+                                        <p:outputLabel 
+                                            for="codProces" 
+                                            value="Codigo: *"></p:outputLabel>
+                                        <p:inputText 
+                                            id="codProces" 
+                                            value="#{procesoMB.procesoProduccion.identificador}" 
+                                            placeholder="Siglas del identificador" 
+                                            style="background: #90A4AE;color:#000000" 
+                                            required="true"></p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="namProces" value="Nombre: *"></p:outputLabel>
-                                        <p:inputText id="namProces" value="#{procesoMB.procesoProduccion.nombre}" maxlength="25"
-                                                     placeholder="Maximo 25 caracteres" ></p:inputText>
+                                        <p:outputLabel 
+                                            for="namProces" 
+                                            value="Nombre: *"></p:outputLabel>
+                                        <p:inputText 
+                                            id="namProces" 
+                                            value="#{procesoMB.procesoProduccion.nombre}" 
+                                            maxlength="25"
+                                            placeholder="Maximo 25 caracteres" ></p:inputText>
                                     </div>
                                     <div class="p-field">
-                                        <p:outputLabel for="desProces" value="Descripción:"></p:outputLabel>
-                                        <p:inputTextarea id="desProces" maxlength="50" rows="5" autoResize="false"
-                                                         placeholder="Descripcion maximo 50 caracteres"
-                                                         value="#{procesoMB.procesoProduccion.descripcion}"/>
+                                        <p:outputLabel 
+                                            for="desProces" 
+                                            value="Descripción:"></p:outputLabel>
+                                        <p:inputTextarea 
+                                            id="desProces" 
+                                            maxlength="50" 
+                                            rows="5" 
+                                            autoResize="false"
+                                            placeholder="Descripcion maximo 50 caracteres"
+                                            value="#{procesoMB.procesoProduccion.descripcion}"/>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" icon="pi pi-check"
-                                                 styleClass="ui-button-primary"
-                                                 process="manage-editarProceso-form @this" 
-                                                 actionListener="#{procesoMB.editar()}"/>
-                                <p:commandButton value="Cancelar" icon="pi pi-times"
-                                                 onclick="PF('procesoEditDialog').hide()"  
-                                                 styleClass="ui-button-danger"/>
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    icon="pi pi-check"
+                                    styleClass="ui-button-primary"
+                                    process="manage-editarProceso-form @this" 
+                                    actionListener="#{procesoMB.editar()}"/>
+                                <p:commandButton 
+                                    value="Cancelar" 
+                                    icon="pi pi-times"
+                                    onclick="PF('procesoEditDialog').hide()"  
+                                    styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
 
                         <!-- Dialogo Agregar Costos -->
-                        <p:dialog header="Agregar Costos" showEffect="fade" modal="true"
-                                  widgetVar="agregarCostos" responsive="true" width="60%"
-                                  draggable="false" height="500">
+                        <p:dialog header="Agregar Costos" 
+                                  showEffect="fade" 
+                                  modal="true"
+                                  widgetVar="agregarCostos" 
+                                  responsive="true" 
+                                  width="60%"
+                                  draggable="false" 
+                                  height="500">
                             <p:outputPanel id="manage-nuevoCosto-form" class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-grid ">
                                         <div class="p-col-12">
                                             <div class="p-grid">
                                                 <div class="p-col-8">
-                                                    <p:outputLabel for="codCosto">Código: *</p:outputLabel>
-                                                    <p:inputText id="codCosto" value="#{costoMB.costo.identificador}" 
-                                                                 placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                                 color:#000000"></p:inputText>
+                                                    <p:outputLabel 
+                                                        for="codCosto">Código: *</p:outputLabel>
+                                                    <p:inputText 
+                                                        id="codCosto" 
+                                                        value="#{costoMB.costo.identificador}" 
+                                                        placeholder="Siglas del identificador" 
+                                                        style="background: #90A4AE;
+                                                        color:#000000"></p:inputText>
 
                                                     <p:outputLabel value="Nombre: "></p:outputLabel>
-                                                    <p:inputText value="#{costoMB.costo.nombre}"></p:inputText>  
-
+                                                    <p:inputText value="#{costoMB.costo.nombre}">
+                                                    </p:inputText>  
                                                     <p:outputLabel value="Descripción: "></p:outputLabel>
-                                                    <p:inputTextarea maxlength="50" rows="5" autoResize="false"
-                                                                     placeholder="Descripcion maximo 50 caracteres"
-                                                                     value="#{costoMB.costo.descripcion}"/>
+                                                    <p:inputTextarea 
+                                                        maxlength="50" 
+                                                        rows="5" 
+                                                        autoResize="false"
+                                                        placeholder="Descripcion maximo 50 caracteres"
+                                                        value="#{costoMB.costo.descripcion}"/>
                                                 </div>
                                                 <!-- Panel tipo de costo -->
                                                 <div class="p-col-4">
                                                     <p:outputLabel value="Tipo: "></p:outputLabel>
-                                                    <p:selectOneMenu id="TipoCentroCosto" 
-                                                                     value="#{costoMB.costo.tipo}"
-                                                                     disabled="#{costoMB.costo.tipo == 'Directo'}">                            
-                                                        <f:selectItem itemLabel="Seleccione tipo de Costo" itemValue=""/>
-                                                        <f:selectItem itemLabel="Indirecto" itemValue="Indirecto"/>
-                                                        <f:selectItem itemLabel="Directo" itemValue="Directo"/>
+                                                    <p:selectOneMenu 
+                                                        id="TipoCentroCosto" 
+                                                        value="#{costoMB.costo.tipo}"
+                                                        disabled="#{costoMB.costo.tipo == 'Directo'}">                            
+                                                        <f:selectItem 
+                                                            itemLabel="Seleccione tipo de Costo" 
+                                                            itemValue=""/>
+                                                        <f:selectItem 
+                                                            itemLabel="Indirecto" 
+                                                            itemValue="Indirecto"/>
+                                                        <f:selectItem 
+                                                            itemLabel="Directo" 
+                                                            itemValue="Directo"/>
                                                     </p:selectOneMenu>
                                                 </div>
                                             </div>
@@ -267,23 +377,35 @@
                                         <p:toolbar>
                                             <p:toolbarGroup>
                                                 <!-- Tabla de costos -->
-                                                <p:dataTable id="dtCosto" reflow="true" paginator="true" rows="5" var="costo"
-                                                             rowSelectMode="add" paginatorPosition="bottom" value="#{costoMB.listaCosto}">
+                                                <p:dataTable id="dtCosto" 
+                                                             reflow="true" 
+                                                             paginator="true" 
+                                                             rows="5" 
+                                                             var="costo"
+                                                             rowSelectMode="add" 
+                                                             paginatorPosition="bottom" 
+                                                             value="#{costoMB.listaCosto}">
                                                     <f:facet name="header">
                                                         <div class="p-d-flex p-jc-between p-ai-center">
-                                                            <span style="font-weight: bold; margin-right: 6px;">Lista de Costos</span>
+                                                            <span style="font-weight: bold; margin-right: 6px;">
+                                                                Lista de Costos</span>
                                                         </div>
                                                     </f:facet>
-                                                    <p:column headerText="Código" filterStyle="display : none">
-                                                        <h:outputText value="#{costo.identificador}" />
+                                                    <p:column headerText="Código" 
+                                                              filterStyle="display:none">
+                                                        <h:outputText 
+                                                            value="#{costo.identificador}" />
                                                     </p:column>
 
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
-                                                        <h:outputText value="#{costo.nombre}" />
+                                                    <p:column headerText="Nombre" 
+                                                              filterStyle="display : none">
+                                                        <h:outputText 
+                                                            value="#{costo.nombre}" />
                                                     </p:column>
 
                                                     <p:column headerText="Descripción" >
-                                                        <h:outputText value="#{costo.descripcion}" />
+                                                        <h:outputText 
+                                                            value="#{costo.descripcion}" />
                                                     </p:column>
 
                                                     <p:column headerText="Tipo">
@@ -291,20 +413,25 @@
                                                     </p:column>
                                                     <!-- Botones de la tabla Editar/Eliminar -->
                                                     <p:column headerText="Acciones">
-                                                        <p:commandButton icon="pi pi-pencil" update=":form-princ:manage-editarCosto-form"
-                                                                         class="ui-button-primary rounded-button p-mr-2 p-mb-2"
-                                                                         oncomplete="PF('costoEditDialog').show()" 
-                                                                         process="@this">
+                                                        <p:commandButton 
+                                                            icon="pi pi-pencil" 
+                                                            update=":form-princ:manage-editarCosto-form"
+                                                            class="ui-button-primary rounded-button p-mr-2 p-mb-2"
+                                                            oncomplete="PF('costoEditDialog').show()" 
+                                                            process="@this">
                                                             <f:setPropertyActionListener 
                                                                 value="#{costo}" 
                                                                 target="#{costoMB.costo}"/>
-                                                            <p:resetInput target=":form-princ:manage-editarCosto-form"/>
+                                                            <p:resetInput 
+                                                                target=":form-princ:manage-editarCosto-form"/>
                                                         </p:commandButton>
 
-                                                        <p:commandButton class="ui-button-danger rounded-button" 
-                                                                         update=":form-princ:manage-eliminarCosto-form"
-                                                                         icon="pi pi-trash" process="@this"
-                                                                         oncomplete="PF('deleteCostoDialog').show()">
+                                                        <p:commandButton 
+                                                            class="ui-button-danger rounded-button" 
+                                                            update=":form-princ:manage-eliminarCosto-form"
+                                                            icon="pi pi-trash" 
+                                                            process="@this"
+                                                            oncomplete="PF('deleteCostoDialog').show()">
                                                             <f:setPropertyActionListener 
                                                                 value="#{costo}" 
                                                                 target="#{costoMB.costo}"/>
@@ -319,10 +446,13 @@
                             </p:outputPanel>
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" actionListener="#{costoMB.insertar()}"
-                                                 update="dtCosto"
-                                                 process="manage-nuevoCosto-form @this"
-                                                 icon="pi pi-check" styleClass="ui-button-primary"/>
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    actionListener="#{costoMB.insertar()}"
+                                    update="dtCosto"
+                                    process="manage-nuevoCosto-form @this"
+                                    icon="pi pi-check" 
+                                    styleClass="ui-button-primary"/>
                                 <p:commandButton value="Cancelar" icon="pi pi-check"
                                                  onclick ="PF('agregarCostos').hide()" 
                                                  styleClass="ui-button-danger"/>
@@ -330,38 +460,60 @@
                         </p:dialog>
 
                         <!-- Dialogo Agregar Centros de Costo -->
-                        <p:dialog header="Agregar Centro de Costos" showEffect="fade" modal="true"
-                                  widgetVar="agregarCentroDeCostos" responsive="true" width="60%"
-                                  draggable="false" height="500">
-
+                        <p:dialog header="Agregar Centro de Costos" 
+                                  showEffect="fade" 
+                                  modal="true"
+                                  widgetVar="agregarCentroDeCostos" 
+                                  responsive="true" 
+                                  width="60%"
+                                  draggable="false" 
+                                  height="500">
                             <p:outputPanel id="manage-nuevoCentro-form" class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-field">
                                         <p:outputLabel for="codCentro">Código: *</p:outputLabel>
-                                        <p:inputText id="codCentro" value="#{centroMB.centroCosto.identificador}" 
-                                                     placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000"></p:inputText>
+                                        <p:inputText 
+                                            id="codCentro" 
+                                            value="#{centroMB.centroCosto.identificador}" 
+                                            placeholder="Siglas del identificador" 
+                                            style="background: #90A4AE;
+                                                   color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="nameCentro">Nombre: *</p:outputLabel>
-                                        <p:inputText id="nameCentro" value="#{centroMB.centroCosto.nombre}" maxlength="25"
-                                                     placeholder="Maximo 25 caracteres" ></p:inputText>
+                                        <p:inputText 
+                                            id="nameCentro" 
+                                            value="#{centroMB.centroCosto.nombre}" 
+                                            maxlength="25"
+                                            placeholder="Maximo 25 caracteres" ></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="descrCentro">Descripción:</p:outputLabel>
-                                        <p:inputTextarea maxlength="50" id="descrCentro" rows="5"
-                                                         placeholder="Descripcion maximo 50 caracteres"
-                                                         value="#{centroMB.centroCosto.descripcion}"
-                                                         autoResize="false"/>
+                                        <p:inputTextarea 
+                                            maxlength="50" 
+                                            id="descrCentro" 
+                                            rows="5"
+                                            placeholder="Descripcion maximo 50 caracteres"
+                                            value="#{centroMB.centroCosto.descripcion}"
+                                            autoResize="false"/>
                                     </div>
                                     <p:toolbar>
                                         <p:toolbarGroup>
                                             <!-- Tabla de los centros de costos -->
-                                            <p:dataTable id="dtCentroCosto" reflow="true" paginator="true" rows="5" var="centro"
-                                                         rowSelectMode="add" paginatorPosition="bottom" value="#{centroMB.listaCentro}">
+                                            <p:dataTable 
+                                                id="dtCentroCosto" 
+                                                reflow="true" 
+                                                paginator="true" 
+                                                rows="5" 
+                                                var="centro"
+                                                rowSelectMode="add" 
+                                                paginatorPosition="bottom" 
+                                                value="#{centroMB.listaCentro}">
                                                 <f:facet name="header">
                                                     <div class="p-d-flex p-jc-between p-ai-center">
-                                                        <span style="font-weight: bold; margin-right: 6px;">Lista de Centro de Costos</span>
+                                                        <span style="font-weight: bold; 
+                                                              margin-right: 6px;">
+                                                            Lista de Centro de Costos</span>
                                                     </div>
                                                 </f:facet>
 
@@ -370,7 +522,8 @@
                                                     <p:skeleton rendered="#"></p:skeleton>
                                                 </p:column>
 
-                                                <p:column headerText="Nombre" filterStyle="display : none">
+                                                <p:column headerText="Nombre" 
+                                                          filterStyle="display : none">
                                                     <h:outputText value="#{centro.nombre}" />
                                                     <p:skeleton rendered="#"></p:skeleton>
                                                 </p:column>
@@ -381,17 +534,23 @@
                                                 </p:column>
                                                 <!-- Botones de la tabla Editar/Eliminar -->
                                                 <p:column headerText="Acciones">
-                                                    <p:commandButton icon="pi pi-pencil" update=":form-princ:manage-editarCentro-form"
-                                                                     class="ui-button-primary rounded-button p-mr-2 p-mb-2"
-                                                                     oncomplete="PF('centroEditDialog').show()" process="@this">
-                                                        <f:setPropertyActionListener value="#{centro}" 
+                                                    <p:commandButton 
+                                                        icon="pi pi-pencil" 
+                                                        update=":form-princ:manage-editarCentro-form"
+                                                        class="ui-button-primary rounded-button p-mr-2 p-mb-2"
+                                                        oncomplete="PF('centroEditDialog').show()" 
+                                                        process="@this">
+                                                        <f:setPropertyActionListener 
+                                                            value="#{centro}" 
                                                             target="#{centroMB.centroCosto}"/>
                                                         <p:resetInput target=":form-princ:manage-editarCentro-form"/>
                                                     </p:commandButton>
-                                                    <p:commandButton class="ui-button-danger rounded-button" 
-                                                                     update=":form-princ:manage-eliminarCentro-form"
-                                                                     icon="pi pi-trash" process="@this"
-                                                                     oncomplete="PF('deleteCentroDialog').show()">
+                                                    <p:commandButton 
+                                                        class="ui-button-danger rounded-button" 
+                                                        update=":form-princ:manage-eliminarCentro-form"
+                                                        icon="pi pi-trash" 
+                                                        process="@this"
+                                                        oncomplete="PF('deleteCentroDialog').show()">
                                                         <f:setPropertyActionListener 
                                                             value="#{centro}" 
                                                             target="#{centroMB.centroCosto}"/>
@@ -405,70 +564,108 @@
                             </p:outputPanel>
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
-                                <p:commandButton value="Guardar" actionListener="#{centroMB.insertar()}"
-                                                 process="manage-nuevoCentro-form @this"
-                                                 icon="pi pi-check" styleClass="ui-button-primary"/>
-                                <p:commandButton value="Cancelar" icon="pi pi-check"
-                                                 onclick ="PF('agregarCentroDeCostos').hide()" 
-                                                 styleClass="ui-button-danger"/>
+                                <p:commandButton 
+                                    value="Guardar" 
+                                    actionListener="#{centroMB.insertar()}"
+                                    process="manage-nuevoCentro-form @this"
+                                    icon="pi pi-check" 
+                                    styleClass="ui-button-primary"/>
+                                <p:commandButton 
+                                    value="Cancelar" 
+                                    icon="pi pi-check"
+                                    onclick ="PF('agregarCentroDeCostos').hide()" 
+                                    styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
 
                         <!-- Dialogo Eliminar Costo -->
-                        <p:confirmDialog id="manage-eliminarCosto-form" widgetVar="deleteCostoDialog" showEffect="fade" width="40%" 
-                                         message="Seguro desea eliminar el Proceso que fue seleccionado? 
-                                         " header="Eliminar Costo" severity="warn">
+                        <p:confirmDialog 
+                            id="manage-eliminarCosto-form" 
+                            widgetVar="deleteCostoDialog" 
+                            showEffect="fade" 
+                            width="40%" 
+                            message="Seguro desea eliminar el Proceso que fue seleccionado?" 
+                            header="Eliminar Costo" 
+                            severity="warn">
                             <p:outputPanel class="ui-fluid">
                                 <div class="p-grid" style="text-align: left">
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel >Código:</p:outputLabel>
                                         <p:inputText value="#{costoMB.costo.identificador}" 
-                                                     style="background: #B0F1F5;color:#000000"></p:inputText>
+                                                     style="background: #B0F1F5;color:#000000">
+                                        </p:inputText>
                                     </div>
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel value="Nombre: "></p:outputLabel>
                                         <p:inputText value="#{costoMB.costo.nombre}"
-                                                     style="background: #B0F1F5; color:#000000"></p:inputText>
+                                                     style="background: #B0F1F5; color:#000000">
+                                        </p:inputText>
                                     </div>
                                 </div>
                             </p:outputPanel>
                             <!-- Botones Confirmar/Cancelar -->
-                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{costoMB.eliminar()}" update="dtCosto"
-                                             process="manage-eliminarCosto-form @this" oncomplete="PF('deleteCostoDialog').hide()"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                             onclick="PF('deleteCostoDialog').hide()"/>
+                            <p:commandButton 
+                                value="Si" 
+                                icon="pi pi-check" 
+                                actionListener="#{costoMB.eliminar()}" 
+                                update="dtCosto"
+                                process="manage-eliminarCosto-form @this" 
+                                oncomplete="PF('deleteCostoDialog').hide()"/>
+                            <p:commandButton 
+                                value="No" 
+                                type="button" 
+                                styleClass="ui-button-secondary" 
+                                icon="pi pi-times"
+                                onclick="PF('deleteCostoDialog').hide()"/>
                         </p:confirmDialog>
 
                         <!-- Dialogo Eliminar Proceso Principal -->
-                        <p:confirmDialog id="manage-eliminarProceso-form" widgetVar="deleteProcDialog" showEffect="fade" width="40%" 
+                        <p:confirmDialog id="manage-eliminarProceso-form" 
+                                         widgetVar="deleteProcDialog" 
+                                         showEffect="fade" 
+                                         width="40%" 
                                          message="Seguro desea eliminar el Proceso que fue seleccionado?" 
-                                         header="Eliminar Proceso" severity="warn">
+                                         header="Eliminar Proceso" 
+                                         severity="warn">
                             <p:outputPanel class="ui-fluid">
                                 <div class="p-grid" style="text-align: left">
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel >Código:</p:outputLabel>
-                                        <p:inputText value="#{procesoMB.procesoProduccion.identificador}" 
-                                                     style="background: #B0F1F5; color:#000000"></p:inputText>
+                                        <p:inputText 
+                                            value="#{procesoMB.procesoProduccion.identificador}" 
+                                            style="background: #B0F1F5; color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel value="Nombre: "></p:outputLabel>
-                                        <p:inputText readonly="true" value="#{procesoMB.procesoProduccion.nombre}"
-                                                     style="background: #B0F1F5; color:#000000"></p:inputText>
+                                        <p:inputText 
+                                            readonly="true" 
+                                            value="#{procesoMB.procesoProduccion.nombre}"
+                                            style="background: #B0F1F5; color:#000000"></p:inputText>
                                     </div>
                                 </div>
                             </p:outputPanel>
                             <!-- Botones Confirmar/Cancelar -->
-                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{procesoMB.eliminar()}"
-                                             update="dtProcesoPrin" process="manage-eliminarProceso-form @this" 
+                            <p:commandButton value="Si" 
+                                             icon="pi pi-check" 
+                                             actionListener="#{procesoMB.eliminar()}" 
+                                             update="dtProcesoPrin" 
+                                             process="manage-eliminarProceso-form @this" 
                                              oncomplete="PF('deleteProcDialog').hide()"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                            <p:commandButton value="No" 
+                                             type="button" 
+                                             styleClass="ui-button-secondary" 
+                                             icon="pi pi-times"
                                              onclick="PF('deleteProcDialog').hide()"/>
                         </p:confirmDialog>
 
                         <!-- Dialogo Eliminar Centro Costo -->
-                        <p:confirmDialog id="manage-eliminarCentro-form" widgetVar="deleteCentroDialog" showEffect="fade" width="40%" 
+                        <p:confirmDialog id="manage-eliminarCentro-form" 
+                                         widgetVar="deleteCentroDialog" 
+                                         showEffect="fade" 
+                                         width="40%" 
                                          message="Seguro desea eliminar el Centro de Costo que fue seleccionado?" 
-                                         header="Eliminar Centro de Costo" severity="warn">
+                                         header="Eliminar Centro de Costo" 
+                                         severity="warn">
                             <p:outputPanel class="ui-fluid">
                                 <div class="p-grid" style="text-align: left">
                                     <div class="p-col-6 p-field">
@@ -484,24 +681,37 @@
                                 </div>
                             </p:outputPanel>
                             <!-- Botones Confirmar/Cancelar -->
-                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{centroMB.eliminar()}"
-                                             update="dtCosto" process="manage-eliminarCentro-form @this" 
+                            <p:commandButton value="Si" 
+                                             icon="pi pi-check" 
+                                             actionListener="#{centroMB.eliminar()}"
+                                             update="dtCosto" 
+                                             process="manage-eliminarCentro-form @this" 
                                              oncomplete="PF('deleteCentroDialog').hide()"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-button-secondary" 
+                                             icon="pi pi-times"
                                              onclick="PF('deleteCentroDialog').hide()"/>
                         </p:confirmDialog>
 
                         <!-- Tabla de datos -->
-                        <p:treeTable id="dtProcesoPrin" value="#{procesoMB.root}" var="document" paginator="true" 
-                                     paginatorPosition="bottom" rows="5" editable="true" editInitEvent="dblclick" editMode="cell">
+                        <p:treeTable id="dtProcesoPrin" 
+                                     value="#{procesoMB.root}" 
+                                     var="document" 
+                                     paginator="true" 
+                                     paginatorPosition="bottom" 
+                                     rows="5" 
+                                     editable="true" 
+                                     editInitEvent="dblclick" 
+                                     editMode="cell">
                             <!-- comment <p:ajax event="select" listener="#"
                                     update=":form-princ:messages"/>-->
-                            <p:ajax event="cellEdit" process="@this" update=":form-princ:dtProcesoPrin"/>
-
-
+                            <p:ajax event="cellEdit" 
+                                    process="@this" 
+                                    update=":form-princ:dtProcesoPrin"/>
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Procesos</span>
+                                    <span style="font-weight: bold; margin-right: 6px; 
+                                          font-size: 24px">Procesos</span>
                                     <span class="filter-container ui-input-icon-left">
                                         <i class="pi pi-search"></i>
                                         <p:inputText id="globalFilter" placeholder="Buscar"/>
@@ -519,7 +729,9 @@
                                     <f:facet name="input">
                                         <p:inputText value="#{document.nombre}" 
                                                      style="width:100%">
-                                            <p:ajax event="blur" update=":form-princ:dtProcesoPrin" process="@this" 
+                                            <p:ajax event="blur" 
+                                                    update=":form-princ:dtProcesoPrin" 
+                                                    process="@this" 
                                                     listener="#{procesoMB.procesoProduccion.nombre}"/>
                                         </p:inputText>
 
@@ -535,7 +747,9 @@
                                     <f:facet name="input">
                                         <p:inputText value="#{document.descripcion}" 
                                                      style="width:100%">
-                                            <p:ajax event="blur" update=":form-princ:dtProcesoPrin" process="@this" 
+                                            <p:ajax event="blur" 
+                                                    update=":form-princ:dtProcesoPrin" 
+                                                    process="@this" 
                                                     listener="#{procesoMB.procesoProduccion.descripcion}"/>
                                         </p:inputText>
                                     </f:facet>
@@ -545,16 +759,17 @@
                                 <h:outputText value="#{document.identificador}"/>
                             </p:column>
                             <p:column style="width:6rem">
-                                <p:commandButton icon="pi pi-save" update=":form-princ:dtProcesoPrin, :form-princ:growl"
+                                <p:commandButton icon="pi pi-save" 
+                                                 update=":form-princ:dtProcesoPrin, :form-princ:growl"
                                                  class="ui-button-primary rounded-button p-mr-2 p-mb-2"
-                                                 process="@this" actionListener="#{procesoMB.edit2(document)}">
+                                                 process="@this" 
+                                                 actionListener="#{procesoMB.edit2(document)}">
                                     <p:resetInput target=":form-princ:dtProcesoPrin"/>
                                 </p:commandButton>
                             </p:column>
                         </p:treeTable>
                     </div>
                 </h:form>
-
             </ui:define>
         </ui:composition>
     </body>
