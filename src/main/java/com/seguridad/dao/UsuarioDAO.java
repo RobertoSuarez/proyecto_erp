@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import com.seguridad.models.Rol;
 
 public class UsuarioDAO {
 
@@ -18,6 +17,7 @@ public class UsuarioDAO {
     Conexion conexion = new Conexion();
     private AES encryptAES;
     List<Roles> listaRoles;
+    ResultSet result;
 
     public UsuarioDAO() {
         encryptAES = new AES();
@@ -30,7 +30,8 @@ public class UsuarioDAO {
 
             String sentencia = "SELECT public.registrarusuario('" + user.getNombre() + "',"
                     + "'" + user.getApellido() + "','" + user.getEmail() + "',"
-                    + "'" + user.getUsername() + "','" + encryptAES.getAESEncrypt(user.getPassword()) + "')";
+                    + "'" + user.getUsername()
+                    + "','" + encryptAES.getAESEncrypt(user.getPassword()) + "')";
             conexion.Ejecutar2(sentencia);
             conexion.cerrarConexion();
 
@@ -43,31 +44,6 @@ public class UsuarioDAO {
         }
 
     }
-    /*
-
-    public void iniciarSesionS(String usuario, String password) {
-        String sentencia = "";
-        try {
-            this.conexion.Conectar();
-
-            sentencia = "SELECT public.iniciarsesion"
-                    + "('" + usuario + "',"
-                    + "'" + password + "')";
-            System.out.println(usuario + "l:j" + password);
-            conexion.Ejecutar2(sentencia);
-            conexion.cerrarConexion();
-
-            System.out.print(sentencia);
-        } catch (SQLException e) {
-            e.toString();
-            System.out.print(sentencia);
-        } finally {
-
-            conexion.cerrarConexion();
-        }
-    }
-/*/
-    ResultSet result;
     // RETURNS TABLE(code integer, reslt character varying, iduser integer, name character varying, surname character varying, usrnm character varying, pssword character varying, mail character varying) 
 
     public Usuario iniciarSesion(Usuario u) {
@@ -77,12 +53,15 @@ public class UsuarioDAO {
         String sentencia = "";
         if (conexion.isEstado()) {
             try {
-                sentencia = String.format("SELECT * from public.iniciarsesion('%1$s','%2$s')", u.getUsername(), encryptAES.getAESEncrypt(u.getPassword()));
+                sentencia = String.format(
+                        "SELECT * from public.iniciarsesion('%1$s','%2$s')",
+                        u.getUsername(), encryptAES.getAESEncrypt(u.getPassword()));
                 result = conexion.ejecutarConsulta(sentencia);
 
                 while (result.next()) {
 
-                    usuarioAcceso = new Usuario(result.getInt("code"),
+                    usuarioAcceso = new Usuario(
+                            result.getInt("code"),
                             result.getString("reslt"),
                             result.getInt("iduser"),
                             result.getString("name"),
@@ -104,9 +83,7 @@ public class UsuarioDAO {
         return usuarioAcceso;
     }
 
-    
-
-    //--------------------------------IMPLEMENTADO POR RECURSOS HUMANOS--------------------------------
+    //------------------IMPLEMENTADO POR RECURSOS HUMANOS------\\
     public List<Roles> rolRRHH(int user) {
         listaRoles = new ArrayList<>();
         String sentencia = "";

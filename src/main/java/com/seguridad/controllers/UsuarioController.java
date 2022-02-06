@@ -135,19 +135,23 @@ public class UsuarioController implements Serializable {
                     PFE(usuarioSesion.getMsj());
 
                     usuario = usuarioSesion;
-                    List<Rol> rolesSesion = rolDao.getRolesByUsers(usuarioSesion.getIdUsuario());
+                    List<Rol> rolesSesion = rolDao.
+                            getRolesByUsers(usuarioSesion.getIdUsuario());
                     rolesDAO = new RolesDAO(rolesSesion);
                     //Registrar usuario en HttpSession
                     httpSession.setAttribute("username", usuarioSesion);
 
                     //Registrar usuario en Session de JSF
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                            .put("usuario", usuarioSesion);
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                            .put("roles", rolesSesion);
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                            .put("usuario_rol", usuarioDAO.rolRRHH(usuarioSesion.getIdUsuario()));
-                    facesContext.getExternalContext().redirect("/proyecto_erp/View/Global/Main.xhtml");
+                    FacesContext.getCurrentInstance().getExternalContext()
+                            .getSessionMap().put("usuario", usuarioSesion);
+                    FacesContext.getCurrentInstance().getExternalContext()
+                            .getSessionMap().put("roles", rolesSesion);
+                    FacesContext.getCurrentInstance().getExternalContext().
+                            getSessionMap().put("usuario_rol",
+                                    usuarioDAO.rolRRHH(
+                                            usuarioSesion.getIdUsuario()));
+                    facesContext.getExternalContext()
+                            .redirect("/proyecto_erp/View/Global/Main.xhtml");
 
                 }
             } else {
@@ -157,13 +161,17 @@ public class UsuarioController implements Serializable {
     }
 
     public void cerrarSession() throws IOException {
-        System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
+        System.out.println(httpSession.getAttribute(
+                "usuario") + "Holas CESION");
         httpSession.removeAttribute("usuario");
-        System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
-        facesContext.getExternalContext().redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+        System.out.println(httpSession.getAttribute(
+                "usuario") + "Holas CESION");
+        facesContext.getExternalContext().redirect(
+                "/proyecto_erp/View/login_and_registro/login.xhtml");
         usuario.setPassword("");
         usuario.setUsername("");
-        System.out.println(httpSession.getAttribute("usuario") + "Holas CESION");
+        System.out.println(httpSession.getAttribute(
+                "usuario") + "Holas CESION");
     }
 
     public void PFW(String msj) {
@@ -182,10 +190,12 @@ public class UsuarioController implements Serializable {
 
     public void verificarInicioSesion() {
         FacesContext context = FacesContext.getCurrentInstance();
-        Usuario usuarioSesion = (Usuario) context.getExternalContext().getSessionMap().get("usuario");
+        Usuario usuarioSesion = (Usuario) context
+                .getExternalContext().getSessionMap().get("usuario");
         try {
             if (usuarioSesion == null || usuarioSesion.getIdUsuario() < 1) {
-                context.getExternalContext().redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+                context.getExternalContext()
+                        .redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,7 +205,8 @@ public class UsuarioController implements Serializable {
     public boolean verificarSesion() {
         Usuario user = new Usuario();
         try {
-            user = (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuario");
+            user = (Usuario) FacesContext.getCurrentInstance()
+                    .getExternalContext().getSessionMap().get("usuario");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,7 +218,9 @@ public class UsuarioController implements Serializable {
 
     public boolean verificarPermisoNombre(List<String> rolesPermitidos, int codigoModulo) {
         try {
-            List<Rol> rolesSesion = (List<Rol>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("roles");
+            List<Rol> rolesSesion = (List<Rol>) FacesContext
+                    .getCurrentInstance().getExternalContext()
+                    .getSessionMap().get("roles");
             for (String rolPermitido : rolesPermitidos) {
                 for (Rol rolCompare : rolesSesion) {
                     if (rolPermitido.equals(rolCompare.getNombre())) {
@@ -223,7 +236,9 @@ public class UsuarioController implements Serializable {
 
     public boolean verificarPermisoCodigo(List<Integer> rolesPermitidos, int codigoModulo) {
         try {
-            List<Rol> rolesSesion = (List<Rol>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("roles");
+            List<Rol> rolesSesion = (List<Rol>) FacesContext
+                    .getCurrentInstance().getExternalContext()
+                    .getSessionMap().get("roles");
             for (int rolPermitido : rolesPermitidos) {
                 for (Rol rolCompare : rolesSesion) {
                     if (rolPermitido == rolCompare.getId()) {

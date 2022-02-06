@@ -10,7 +10,8 @@ package com.produccion.models;
  * @author HP
  */
 public class FormulaMateriales {
-
+    
+    
     private int codigFormula;
     private int codigoProducto;
     private float cantidad;
@@ -20,9 +21,10 @@ public class FormulaMateriales {
     public FormulaMateriales() {
     }
 
-    public FormulaMateriales(int codigFormula, int codigoProducto) {
+    public FormulaMateriales(int codigFormula, int codigoProducto, float precio) {
         this.codigFormula = codigFormula;
         this.codigoProducto = codigoProducto;
+        this.precio=precio;
     }
 
     
