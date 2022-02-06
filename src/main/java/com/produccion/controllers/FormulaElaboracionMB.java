@@ -162,7 +162,8 @@ public class FormulaElaboracionMB implements Serializable {
     }
 
     public FormulaMateriales llenarMateriales(FormulaProduccion materiales) {
-        materialesFormula = new FormulaMateriales(formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
+        materialesFormula = new FormulaMateriales(materiales.getNombre(),
+                materiales.getDescripcionProducto(),formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
         return materialesFormula;
     }
 
@@ -172,6 +173,8 @@ public class FormulaElaboracionMB implements Serializable {
             if (materialesFormula.getCodigoProducto() == productoE.getCodigo_producto()) {
                 materialesFormula.setCodigFormula(formulaProduccion.getCodigo_formula());
                 materialesFormula.setPrecio(productoE.getCosto());
+                materialesFormula.setNombre(productoE.getNombre());
+                materialesFormula.setDescripcion(productoE.getDescripcion());
                 break;
             }
         }

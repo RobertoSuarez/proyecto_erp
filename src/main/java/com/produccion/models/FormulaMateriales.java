@@ -10,8 +10,9 @@ package com.produccion.models;
  * @author HP
  */
 public class FormulaMateriales {
-    
-    
+
+    private String nombre;
+    private String descripcion;
     private int codigFormula;
     private int codigoProducto;
     private float cantidad;
@@ -24,16 +25,56 @@ public class FormulaMateriales {
     public FormulaMateriales(int codigFormula, int codigoProducto, float precio) {
         this.codigFormula = codigFormula;
         this.codigoProducto = codigoProducto;
-        this.precio=precio;
+        this.precio = precio;
     }
 
-    
+    public FormulaMateriales(String nombre, String descripcion, int codigFormula, int codigoProducto) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.codigFormula = codigFormula;
+        this.codigoProducto = codigoProducto;
+    }
+
+    public FormulaMateriales(String nombre, String descripcion, int codigFormula, int codigoProducto, float precio) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.codigFormula = codigFormula;
+        this.codigoProducto = codigoProducto;
+        this.precio = precio;
+    }
+
     public FormulaMateriales(int codigFormula, int codigoProducto, float cantidad, String unidadMedida, float precio) {
         this.codigFormula = codigFormula;
         this.codigoProducto = codigoProducto;
         this.cantidad = cantidad;
         this.unidadMedida = unidadMedida;
         this.precio = precio;
+    }
+
+    public FormulaMateriales(String nombre, String descripcion, int codigFormula, int codigoProducto, float cantidad, String unidadMedida, float precio) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.codigFormula = codigFormula;
+        this.codigoProducto = codigoProducto;
+        this.cantidad = cantidad;
+        this.unidadMedida = unidadMedida;
+        this.precio = precio;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public int getCodigFormula() {
