@@ -113,7 +113,7 @@ and open the template in the editor.
                                              editInitEvent="dblclick" editMode="cell"
                                              value="#{formulaMBeans.listaMateriales}">
 
-                                    <!-- comment <f:facet name="header">
+                                    <f:facet name="header">
                                         <div class="p-d-flex p-jc-between p-ai-center">
                                             <span style="font-weight: bold; margin-right: 0.5em;">Formulación</span>
                                             <p:selectOneMenu id="costoindirectoP" value="#{formulaMBeans.materialesFormula.codigoProducto}" 
@@ -127,7 +127,7 @@ and open the template in the editor.
                                             </p:selectOneMenu>
 
                                         </div>
-                                    </f:facet>-->
+                                    </f:facet>
                                     <p:column headerText="Nombre">
                                         <h:outputText value="#{Materiales.nombre}" />
                                     </p:column>
