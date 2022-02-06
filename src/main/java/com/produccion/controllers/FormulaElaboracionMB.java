@@ -5,6 +5,7 @@
  */
 package com.produccion.controllers;
 
+import com.produccion.dao.FormulaMaterialesDAO;
 import com.produccion.dao.FormulaProduccionDAO;
 import com.produccion.dao.ProcesoProduccionDAO;
 import com.produccion.models.FormulaMateriales;
@@ -34,6 +35,7 @@ public class FormulaElaboracionMB implements Serializable {
     ProcesoProduccionDAO procesoProduccionDAO;
     private FormulaMateriales materialesFormula;
     private boolean verificar;//eliminar si no sale
+    FormulaMaterialesDAO formulaMaterialesDAO;
 
     private List<FormulaProduccion> listaFormula;
     private List<ProcesoProduccion> listProceso;
@@ -52,6 +54,7 @@ public class FormulaElaboracionMB implements Serializable {
         listaMateriales = new ArrayList<>();
         productoTerminado = new ArrayList<>();
         formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
+        formulaMaterialesDAO= new FormulaMaterialesDAO();
     }
 
     @PostConstruct
@@ -134,6 +137,9 @@ public class FormulaElaboracionMB implements Serializable {
     public void insertarDatos() {
         try {
             formulaProduccionDAO.insertarFormula(formulaProduccion);
+            for (FormulaMateriales lista : listaMateriales) {
+                formulaMaterialesDAO.InsertarMateriales(lista);
+            }
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
 
@@ -180,7 +186,12 @@ public class FormulaElaboracionMB implements Serializable {
         }
         return materialesFormula;
     }
-
+    
+    public List<FormulaMateriales> listarMateriales(){
+        return listaMateriales;
+    }
+    
+    
     public void deleteFila(FormulaMateriales producto) {
         listaMateriales.remove(producto);
     }

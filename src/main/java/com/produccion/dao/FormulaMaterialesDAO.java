@@ -25,7 +25,7 @@ public class FormulaMaterialesDAO {
             String consulta="INSERT INTO public.detalle_formula(\n" +
 "	codigo_formula, cantidad_unitaria, unidad_medida, precio, codigo_producto)\n" +
 "	VALUES ("+materiales.getCodigFormula()+", "+materiales.getCantidad()+", '"+materiales.getUnidadMedida()+"',"+
-                    materiales.getPrecio()+", "+materiales.getCodigFormula()+");";
+                    materiales.getPrecio()+", "+materiales.getCodigoProducto()+");";
             return conexion.insertar(consulta);
         } catch (Exception e) {
             return -1;
