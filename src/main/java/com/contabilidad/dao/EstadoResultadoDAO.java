@@ -14,22 +14,39 @@ import java.util.List;
 
 /**
  *
- * @author User
+ * @author Ebert Guatanga
  */
 public class EstadoResultadoDAO {
 
-    private Conexion conexion;
+    /*
+     * Inicializamos las variables a utilizar tales como, 
+     * la variable que me permitira el acceso a la bd, los parametros
+     * necesarios para cada sentencia sql,
+     * y un gson que contendra la informacion
+     */
+    private final Conexion conexion;
     private ResultSet result;
-    private Gson gson;
+    private final Gson gson;
     private String fecha;
     private String fecha2;
 
+    /**
+     * Constructor de la clase en donde inicializamos dos de las variables
+     * utilizadas
+     *
+     */
     public EstadoResultadoDAO() {
         conexion = new Conexion();
         gson = new Gson();
     }
 //------------------------SUMA INGRESOS---------------------------\\
 
+    /**
+     * Llena una lista de todos los estados resultates de asientos de un grupo
+     * espesificamente del grupo #4
+     *
+     * @return Retorna el calculo de los asientos grupo
+     */
     private List<EstadoResultado> getCalculoGrupo() {
 
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',4)";
@@ -51,6 +68,12 @@ public class EstadoResultadoDAO {
         }
     }
 
+    /**
+     * Llena una lista de todos los estados resultates de asientos de un
+     * subgrupo
+     *
+     * @return Retorna el calculo de los asientos de subgrupo
+     */
     private List<EstadoResultado> getCalculoSubGrupo() {
         String sql = "select public.getcalculosubgrupoer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubGrupo = new ArrayList<>();
@@ -71,6 +94,11 @@ public class EstadoResultadoDAO {
         }
     }
 
+    /**
+     * Llena una lista de todos los estados resultates de asientos de una cuenta
+     *
+     * @return Retorna el calculo de una cuenta
+     */
     private List<EstadoResultado> getCalculoCuenta() {
         String sql = "select public.getcalculocuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosCuenta = new ArrayList<>();
@@ -91,6 +119,12 @@ public class EstadoResultadoDAO {
         }
     }
 
+    /**
+     * Llena una lista de todos los estados resultates de asientos de una
+     * subCuenta
+     *
+     * @return Retorna el calculo de los asientos de una subCuenta
+     */
     private List<EstadoResultado> getCalculoSubCuenta() {
 
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
@@ -112,7 +146,14 @@ public class EstadoResultadoDAO {
         }
     }
 
-    public List<EstadoResultado> generateBalanceGeneral(String fecha, String fecha2) {
+    /**
+     * Lista de todos los estados resultates de asientos de un grupo
+     *
+     * @param fecha
+     * @param fecha2
+     * @return Retorna el calculo total del assiento #4
+     */
+    public List<EstadoResultado> generateEstadoResultante(String fecha, String fecha2) {
         this.fecha = fecha;
         this.fecha2 = fecha2;
         List<EstadoResultado> balanceGeneral = new ArrayList<>();
@@ -144,6 +185,14 @@ public class EstadoResultadoDAO {
         return balanceGeneral;
     }
 
+    /**
+     * Retorna el valor total de los ingresos teniendo como parametros las
+     * fechas dadas
+     *
+     * @param fecha
+     * @param fecha2
+     * @return Retorna el calculo de los asientos grupo
+     */
     public double sumaIngresos(String fecha, String fecha2) {
         String sql = "select sumaingresos('" + fecha + "', '" + fecha2 + "')";
         result = conexion.consultar(sql);
@@ -160,7 +209,13 @@ public class EstadoResultadoDAO {
     }
 
 //------------------------SUMA EGRESOS---------------------------\\
-    private List<EstadoResultado> getCalculoGrupoe() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de un grupo
+     * espesificamente del grupo #5
+     *
+     * @return Retorna el calculo de los asientos grupo
+     */
+    private List<EstadoResultado> getCalculoGrupoEg() {
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',5)";
         List<EstadoResultado> listaCalculosGrupo = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -180,28 +235,34 @@ public class EstadoResultadoDAO {
         }
     }
 
-    public List<EstadoResultado> generateBalanceGenerale(String fecha, String fecha2) {
+    /**
+     * Lista de todos los estados resultates de asientos de un grupo
+     *
+     * @param fecha
+     * @param fecha2
+     * @return Retorna una lista total del assiento #5
+     */
+    public List<EstadoResultado> generateEstadoResultadoEg(String fecha, String fecha2) {
         this.fecha = fecha;
         this.fecha2 = fecha2;
-        List<EstadoResultado> balanceGeneral = new ArrayList<>();
-        List<EstadoResultado> calculoGrupo = getCalculoGrupoe();
-        List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupoe();
-        List<EstadoResultado> calculoCuenta = getCalculoCuentae();
-        List<EstadoResultado> calculoSubCuenta = getCalculoSubCuentae();
+        List<EstadoResultado> estadoResultado = new ArrayList<>();
+        List<EstadoResultado> calculoGrupo = getCalculoGrupoEg();
+        List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupoEg();
+        List<EstadoResultado> calculoCuenta = getCalculoCuentaEg();
+        List<EstadoResultado> calculoSubCuenta = getCalculoSubCuentaEg();
 
         calculoGrupo.forEach(g -> {
-            balanceGeneral.add(g);
+            estadoResultado.add(g);
             calculoSubGrupo.forEach(sg -> {
                 if (sg.getParent() == g.getId()) {
-                    balanceGeneral.add(sg);
+                    estadoResultado.add(sg);
 
                     calculoCuenta.forEach(c -> {
                         if (c.getParent() == sg.getId()) {
-                            balanceGeneral.add(c);
-
+                            estadoResultado.add(c);
                             calculoSubCuenta.forEach(sc -> {
                                 if (sc.getParent() == c.getId()) {
-                                    balanceGeneral.add(sc);
+                                    estadoResultado.add(sc);
                                 }
                             });
                         }
@@ -209,10 +270,16 @@ public class EstadoResultadoDAO {
                 }
             });
         });
-        return balanceGeneral;
+        return estadoResultado;
     }
 
-    private List<EstadoResultado> getCalculoSubCuentae() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de una
+     * subCuenta
+     *
+     * @return Retorna el calculo de los asientos de una subCuenta
+     */
+    private List<EstadoResultado> getCalculoSubCuentaEg() {
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubCuenta = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -232,7 +299,13 @@ public class EstadoResultadoDAO {
         }
     }
 
-    private List<EstadoResultado> getCalculoSubGrupoe() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de un
+     * subgrupo
+     *
+     * @return Retorna una lista de los asientos de subgrupo
+     */
+    private List<EstadoResultado> getCalculoSubGrupoEg() {
         String sql = "select public.getcalculosubgrupoer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubGrupo = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -252,7 +325,12 @@ public class EstadoResultadoDAO {
         }
     }
 
-    private List<EstadoResultado> getCalculoCuentae() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de una cuenta
+     *
+     * @return Retorna el calculo de una cuenta
+     */
+    private List<EstadoResultado> getCalculoCuentaEg() {
         String sql = "select public.getcalculocuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosCuenta = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -272,6 +350,14 @@ public class EstadoResultadoDAO {
         }
     }
 
+    /**
+     * Retorna el valor total de los egresos teniendo como parametros las fechas
+     * dadas
+     *
+     * @param fecha
+     * @param fecha2
+     * @return Retorna el calculo de los asientos grupo
+     */
     public double sumaegresos(String fecha, String fecha2) {
         String sql = "select sumaegresos('" + fecha + "', '" + fecha2 + "')";
         result = conexion.consultar(sql);
@@ -288,7 +374,13 @@ public class EstadoResultadoDAO {
     }
 //------------------------SUMA COMPRA---------------------------\\
 
-    private List<EstadoResultado> getCalculoGrupoes() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de un grupo
+     * espesificamente del grupo #6
+     *
+     * @return Retorna el calculo de los asientos grupo
+     */
+    private List<EstadoResultado> getCalculoGrupoVen() {
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',6)";
         List<EstadoResultado> listaCalculosGrupo = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -308,28 +400,35 @@ public class EstadoResultadoDAO {
         }
     }
 
-    public List<EstadoResultado> generateBalanceGenerales(String fecha, String fecha2) {
+    /**
+     * Lista de todos los estados resultates de asientos de un grupo
+     *
+     * @param fecha
+     * @param fecha2
+     * @return Retorna una lista total del assiento #6
+     */
+    public List<EstadoResultado> estadoResultadoVen(String fecha, String fecha2) {
         this.fecha = fecha;
         this.fecha2 = fecha2;
-        List<EstadoResultado> balanceGeneral = new ArrayList<>();
-        List<EstadoResultado> calculoGrupo = getCalculoGrupoes();
-        List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupoes();
-        List<EstadoResultado> calculoCuenta = getCalculoCuentaes();
-        List<EstadoResultado> calculoSubCuenta = getCalculoSubCuentaes();
+        List<EstadoResultado> estadoResultado = new ArrayList<>();
+        List<EstadoResultado> calculoGrupo = getCalculoGrupoVen();
+        List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupoVen();
+        List<EstadoResultado> calculoCuenta = getCalculoCuentaVen();
+        List<EstadoResultado> calculoSubCuenta = getCalculoSubCuentaVen();
 
         calculoGrupo.forEach(g -> {
-            balanceGeneral.add(g);
+            estadoResultado.add(g);
             calculoSubGrupo.forEach(sg -> {
                 if (sg.getParent() == g.getId()) {
-                    balanceGeneral.add(sg);
+                    estadoResultado.add(sg);
 
                     calculoCuenta.forEach(c -> {
                         if (c.getParent() == sg.getId()) {
-                            balanceGeneral.add(c);
+                            estadoResultado.add(c);
 
                             calculoSubCuenta.forEach(sc -> {
                                 if (sc.getParent() == c.getId()) {
-                                    balanceGeneral.add(sc);
+                                    estadoResultado.add(sc);
                                 }
                             });
                         }
@@ -337,10 +436,16 @@ public class EstadoResultadoDAO {
                 }
             });
         });
-        return balanceGeneral;
+        return estadoResultado;
     }
 
-    private List<EstadoResultado> getCalculoSubCuentaes() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de una
+     * subCuenta
+     *
+     * @return Retorna el calculo de los asientos de una subCuenta
+     */
+    private List<EstadoResultado> getCalculoSubCuentaVen() {
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubCuenta = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -360,7 +465,13 @@ public class EstadoResultadoDAO {
         }
     }
 
-    private List<EstadoResultado> getCalculoSubGrupoes() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de un
+     * subgrupo
+     *
+     * @return Retorna el calculo de los asientos de subgrupo
+     */
+    private List<EstadoResultado> getCalculoSubGrupoVen() {
         String sql = "select public.getcalculosubgrupoer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubGrupo = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -380,7 +491,12 @@ public class EstadoResultadoDAO {
         }
     }
 
-    private List<EstadoResultado> getCalculoCuentaes() {
+    /**
+     * Llena una lista de todos los estados resultates de asientos de una cuenta
+     *
+     * @return Retorna el calculo de una cuenta
+     */
+    private List<EstadoResultado> getCalculoCuentaVen() {
         String sql = "select public.getcalculocuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosCuenta = new ArrayList<>();
         result = conexion.consultar(sql);
@@ -400,6 +516,14 @@ public class EstadoResultadoDAO {
         }
     }
 
+    /**
+     * Retorna el valor total de los egresos teniendo como parametros las fechas
+     * dadas
+     *
+     * @param fecha
+     * @param fecha2
+     * @return Retorna el calculo de los asientos grupo
+     */
     public double costoventa(String fecha, String fecha2) {
         String sql = "select costoventa('" + fecha + "', '" + fecha2 + "')";
         result = conexion.consultar(sql);

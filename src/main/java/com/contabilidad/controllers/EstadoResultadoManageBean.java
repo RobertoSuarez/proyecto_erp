@@ -51,6 +51,10 @@ public class EstadoResultadoManageBean implements Serializable {
     private double total;
     private String empresa;
 
+    /**
+     * Constructor de la clase en donde se inicializa las listas a
+     * llenarteniendo un total de 4 listas
+     */
     public EstadoResultadoManageBean() {
         estadoResultadoVen = new ArrayList<>();
         estadoResultadoEg = new ArrayList<>();
@@ -58,65 +62,85 @@ public class EstadoResultadoManageBean implements Serializable {
         estadoResultadoDAO = new EstadoResultadoDAO();
     }
 
+    /**
+     * PosConstructor de la clase en donde se inicializa las listas a
+     * llenarteniendo un total de 4 listas
+     */
     @PostConstruct
     public void init() {
         fecha = new Date();
         fecha2 = new Date();
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
-        estadoResultadoIn = estadoResultadoDAO.
-                generateBalanceGeneral(
-                        dateFormat.format(fecha),
-                        dateFormat.format(fecha2));
-        estadoResultadoEg = estadoResultadoDAO.
-                generateBalanceGenerale(
-                        dateFormat.format(fecha),
-                        dateFormat.format(fecha2));
-        estadoResultadoVen = estadoResultadoDAO.
-                generateBalanceGenerales(
-                        dateFormat.format(fecha),
-                        dateFormat.format(fecha2));
+//Ingresos, llena la lista dada por el dao
+        estadoResultadoIn = estadoResultadoDAO.generateEstadoResultante(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Egresos,llena la lista dada por el dao 
+        estadoResultadoEg = estadoResultadoDAO.generateEstadoResultadoEg(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Ventas, llena la lista dada por el dao
+        estadoResultadoVen = estadoResultadoDAO.estadoResultadoVen(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+
+//Resultado total de ingresos
         ingresos = estadoResultadoDAO.
                 sumaIngresos(
                         dateFormat.format(fecha),
                         dateFormat.format(fecha2));
+//Resultado total de egresos
         egresos = estadoResultadoDAO.
                 sumaegresos(
                         dateFormat.format(fecha),
                         dateFormat.format(fecha2));
+//Resultado total de ventas
         ventas = estadoResultadoDAO.
                 costoventa(
                         dateFormat.format(fecha),
                         dateFormat.format(fecha2));
+//Resultado total
         total = ingresos - (ventas + egresos);
     }
 
+    /**
+     * Metodo para recibir las fechas correspondientes para generar la
+     * informacion de los estados resultantes
+     */
     public void recibiendoFecha() {
+        /**
+         * damos el formato simple a nuestra fecha para que solo reciba el dia,
+         * mes y año
+         */
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        estadoResultadoIn = estadoResultadoDAO.
-                generateBalanceGeneral(
-                        dateFormat.format(fecha),
-                        dateFormat.format(fecha2));
-        estadoResultadoEg = estadoResultadoDAO.
-                generateBalanceGenerale(
-                        dateFormat.format(fecha),
-                        dateFormat.format(fecha2));
-        estadoResultadoVen = estadoResultadoDAO.
-                generateBalanceGenerales(
-                        dateFormat.format(fecha),
-                        dateFormat.format(fecha2));
-
+//Ingresos, llena la lista dada por el dao
+        estadoResultadoIn = estadoResultadoDAO.generateEstadoResultante(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Egresos, llena la lista dada por el dao
+        estadoResultadoEg = estadoResultadoDAO.generateEstadoResultadoEg(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Ventas, llena la lista dada por el dao
+        estadoResultadoVen = estadoResultadoDAO.estadoResultadoVen(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Resultado total de Ingresos
         ingresos = estadoResultadoDAO.sumaIngresos(
                 dateFormat.format(fecha),
                 dateFormat.format(fecha2));
+//Resultado total de Egresos
         egresos = estadoResultadoDAO.
                 sumaegresos(
                         dateFormat.format(fecha),
                         dateFormat.format(fecha2));
+//Resultado total de Ventas
         ventas = estadoResultadoDAO.
                 costoventa(
                         dateFormat.format(fecha),
                         dateFormat.format(fecha2));
+//Resultado total 
         total = ingresos - (ventas + egresos);
     }
 
