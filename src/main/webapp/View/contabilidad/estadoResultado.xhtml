@@ -79,31 +79,49 @@
                                     <div class="col-md-12">
                                         <h4 style="font-weight: bold;">
                                             Al <h:outputText
-                                                value="#{estadoResultadolMB.fecha}">
-                                                <f:convertDateTime
+                                           value="#{estadoResultadolMB.fecha}">
+                                            <f:convertDateTime
                                                     pattern="dd/MM/yyyy" />
                                             </h:outputText>
                                         </h4>
                                     </div>
                                     <div class="col-md-6">
-
                                     </div>
                                 </div>
                             </f:facet>
-                            <p:column colspan="8" headerText="Cuenta Contable" responsivePriority="4">
-                                <h:outputText value="#{pYg.nombre}" rendered="#{estadoResultadolMB.getBold(pYg.nombre)}"  style="font-weight: bold" />
-                                <h:outputText value="#{pYg.nombre}" rendered="#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
+                            <p:column 
+                                colspan="8" 
+                                headerText="Cuenta Contable" 
+                                responsivePriority="4">
+                                <h:outputText
+                                    value="#{pYg.nombre}"
+                                    rendered="#{estadoResultadolMB.getBold(pYg.nombre)}" 
+                                    style="font-weight: bold" />
+                                <h:outputText
+                                    value="#{pYg.nombre}"
+                                    rendered="#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
                             </p:column>
 
-                            <p:column colspan="2" headerText="Saldo" responsivePriority="2">
-                                <h:outputText value="#{pYg.saldo}" rendered="#{estadoResultadolMB.getBold(pYg.nombre)}" style="font-weight: bold" />
-                                <h:outputText value="#{pYg.saldo}" rendered="#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
+                            <p:column
+                                colspan="2"
+                                headerText="Saldo" 
+                                responsivePriority="2">
+                                <h:outputText 
+                                    value="#{pYg.saldo}"
+                                    rendered="#{estadoResultadolMB.getBold(pYg.nombre)}"
+                                    style="font-weight: bold" />
+                                <h:outputText 
+                                    value="#{pYg.saldo}
+                                    "rendered="#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
                                     <div class="p-col-9">Total, Ingresos</div>
                                     <div class="p-col-3" style="text-align: left">
-                                        <p><h:outputText id="sumaPP" value="#{estadoResultadolMB.ingresos}"/></p>
+                                        <p><h:outputText 
+                                                id="sumaPP"
+                                                value="#{estadoResultadolMB.ingresos}"/>
+                                        </p>
                                     </div>
                                 </div>
                             </f:facet>

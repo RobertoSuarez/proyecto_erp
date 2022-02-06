@@ -38,7 +38,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupoer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(
+                        cadenaJSON, EstadoResultado.class);
                 listaCalculosGrupo.add(estadoResultante);
             }
             return listaCalculosGrupo;
@@ -57,7 +58,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupoer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(
+                        cadenaJSON, EstadoResultado.class);
                 listaCalculosSubGrupo.add(estadoResultante);
             }
             return listaCalculosSubGrupo;
@@ -76,7 +78,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentaer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(
+                        cadenaJSON, EstadoResultado.class);
                 listaCalculosCuenta.add(estadoResultante);
             }
             return listaCalculosCuenta;
@@ -96,7 +99,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentaer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(
+                        cadenaJSON, EstadoResultado.class);
                 listaCalculosSubCuenta.add(estadoResultante);
             }
             return listaCalculosSubCuenta;
@@ -163,7 +167,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupoer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosGrupo.add(estadoResultante);
             }
             return listaCalculosGrupo;
@@ -214,7 +219,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentaer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosSubCuenta.add(estadoResultante);
             }
             return listaCalculosSubCuenta;
@@ -233,7 +239,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupoer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosSubGrupo.add(estadoResultante);
             }
             return listaCalculosSubGrupo;
@@ -252,7 +259,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentaer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosCuenta.add(estadoResultante);
             }
             return listaCalculosCuenta;
@@ -287,7 +295,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupoer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosGrupo.add(estadoResultante);
             }
             return listaCalculosGrupo;
@@ -338,7 +347,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentaer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosSubCuenta.add(estadoResultante);
             }
             return listaCalculosSubCuenta;
@@ -357,7 +367,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupoer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosSubGrupo.add(estadoResultante);
             }
             return listaCalculosSubGrupo;
@@ -376,7 +387,8 @@ public class EstadoResultadoDAO {
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentaer");
-                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON, EstadoResultado.class);
+                EstadoResultado estadoResultante = gson.fromJson(cadenaJSON,
+                        EstadoResultado.class);
                 listaCalculosCuenta.add(estadoResultante);
             }
             return listaCalculosCuenta;

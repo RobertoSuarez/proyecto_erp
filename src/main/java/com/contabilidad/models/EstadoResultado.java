@@ -48,6 +48,7 @@ public class EstadoResultado {
 
     @Override
     public String toString() {
-        return "EstadoResultado{" + "parent=" + parent + ", id=" + id + ", nombre=" + nombre + ", saldo=" + saldo + '}';
+        return "EstadoResultado{" + "parent=" + parent + ", id="
+                + id + ", nombre=" + nombre + ", saldo=" + saldo + '}';
     }
 }
