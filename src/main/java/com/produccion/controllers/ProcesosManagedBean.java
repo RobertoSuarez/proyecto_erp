@@ -34,24 +34,32 @@ import org.primefaces.model.TreeNode;
 
 public class ProcesosManagedBean implements Serializable {
 
-    int idSubproceso=12;
-    private List<ProcesoProduccion> listaProcesos= new ArrayList<>();
+    int idSubproceso = 12;
+    private List<ProcesoProduccion> listaProcesos = new ArrayList<>();
     private ProcesoProduccionDAO procesoProduccionDAO;
     private ProcesoProduccion procesoProduccion;
-    private List<SubProceso> listaSubProcesos= new ArrayList<>();
+    private List<SubProceso> listaSubProcesos = new ArrayList<>();
     private ProcesoProduccion selectProceso;
     private TreeNode singleSelectedTreeNode;
     private TreeNode root = new DefaultTreeNode("Root Node", null);
     TreeNode documents;
     SubProceso sProceso;
     TreeNode document1;
-    
+
+    /**
+     * Constructor Costo Manage Bean inicializamos las variables
+     * procesoProduccionDAO, procesoProduccion
+     */
     public ProcesosManagedBean() {
         procesoProduccionDAO = new ProcesoProduccionDAO();
         procesoProduccion = new ProcesoProduccion();
         cargarLista();
     }
-    private void cargarLista(){
+
+    /**
+     * Metodo que carga la lista con valores de la base de datos
+     */
+    private void cargarLista() {
         listaProcesos = procesoProduccionDAO.getProcesosProduccion();
         for (ProcesoProduccion listaProceso : listaProcesos) {
             documents = new DefaultTreeNode(new ProcesoProduccion(listaProceso.getCodigo_proceso(),
@@ -67,46 +75,56 @@ public class ProcesosManagedBean implements Serializable {
     public void init() {
     }
 
-    public void closeDialogModal() {
-        PrimeFaces.current().executeScript("PF('procesoPrincDialog').hide()");
-    }
-
+    /**
+     * Metodo que generara una palabra aleatoria para el codigo
+     */
     public void aleatorioIdenti() {
         String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
         String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
         this.procesoProduccion.setIdentificador("PR-" + uuid + uuid2);
     }
 
+    /**
+     * Metodo que hace la llamada para generar el codigo del numero aleatorio
+     */
     public void openNew() {
         this.selectProceso = new ProcesoProduccion();
         aleatorioIdenti();
     }
 
-    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(severity, summary, detail));
-    }
-
-    public void showInfo(String message) {
-        addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
-    }
-
-    public void showWarn(String message) {
-        addMessage(FacesMessage.SEVERITY_ERROR, "Advertencia", message);
-    }
-
+    /**
+     * Metodo que permitira insertar un Nuevo Proceso
+     */
     public void insertar() {
         try {
+            /**
+             * Validamos campos vacios de los cuadros de texto
+             */
             if ("".equals(procesoProduccion.getIdentificador())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+                FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
             } else if ("".equals(procesoProduccion.getNombre())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
+                FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
             } else if ("".equals(procesoProduccion.getDescripcion())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+                FacesContext.getCurrentInstance().addMessage(null, 
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
+                /**
+                 * Si es falso ejecutamos el metodo insertarp del Proceso con
+                 * sus parametros
+                 *
+                 * @param procesoProduccion objeto ProcesoPorduccion
+                 */
                 this.procesoProduccionDAO.insertarp(procesoProduccion);
+                /**
+                 * Mostramos el mensaje
+                 */
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
+                /**
+                 * Cerramos el dialogo de insertar
+                 */
                 PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
             }
 
@@ -115,37 +133,15 @@ public class ProcesosManagedBean implements Serializable {
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
-
-        PrimeFaces.current().ajax().update("@form");
     }
 
-//    public void editar() {
-//        try {
-//            if ("".equals(procesoProduccion.getIdentificador())) {
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Codigo"));
-//            } else if ("".equals(procesoProduccion.getNombre())) {
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
-//            } else if ("".equals(procesoProduccion.getDescripcion())) {
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-//            } else {
-//                this.procesoProduccionDAO.update(procesoProduccion);
-//                System.out.println(procesoProduccion.getCodigo_proceso());
-//                FacesContext.getCurrentInstance().
-//                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Guardado"));
-//                PrimeFaces.current().ajax().update("form-princ:dtProcesoPrin");
-//                PrimeFaces.current().executeScript("PF('procesoEditDialog').hide()");
-//
-//            }
-//
-//        } catch (Exception e) {
-//            FacesContext.getCurrentInstance().
-//                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-//                            "Error al guardar"));
-//        }
-//
-//    }
-    public void edit2(ProcesoProduccion proceso) throws SQLException{
-        if (procesoProduccionDAO.actualizarProceso(proceso)> 0) {
+    /**
+     * Metodo que permitira editar la informacion de un proceso
+     * direcctamente en la tabla.
+     * Muestra un mensaje cada vez que realize un cambio en el campo
+     */
+    public void edit2(ProcesoProduccion proceso) throws SQLException {
+        if (procesoProduccionDAO.actualizarProceso(proceso) > 0) {
             FacesMessage msg = new FacesMessage("Proceso Editado", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } else {
@@ -153,28 +149,6 @@ public class ProcesosManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
-    
-
-    //En proceso, no utilizar
-    public void eliminar() {
-        try {
-            this.procesoProduccionDAO.delete(procesoProduccion, procesoProduccion.getIdentificador());
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Eliminado"));
-        } catch (SQLException e) {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-                            "Error al eliminar"));
-        }
-    }
-    
-//    public void onRowSelect(NodeSelectEvent event) {
-//        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", String.valueOf(((ProcesoProduccion) event.getTreeNode().getData()).getCodigo_proceso()));
-//        FacesContext.getCurrentInstance().addMessage(null, message);
-//        procesoProduccion= new ProcesoProduccion(((ProcesoProduccion) event.getTreeNode().getData()).getCodigo_proceso());
-//        procesoProduccion.setCodigo_proceso(((ProcesoProduccion) event.getTreeNode().getData()).getCodigo_proceso());
-//    }
-    
 
     public ProcesoProduccion getProcesoProduccion() {
         return procesoProduccion;
@@ -223,6 +197,7 @@ public class ProcesosManagedBean implements Serializable {
     public void setIdSubproceso(int idSubproceso) {
         this.idSubproceso = idSubproceso;
     }
+
     public TreeNode getSingleSelectedTreeNode() {
         return singleSelectedTreeNode;
     }
@@ -230,13 +205,15 @@ public class ProcesosManagedBean implements Serializable {
     public void setSingleSelectedTreeNode(TreeNode singleSelectedTreeNode) {
         this.singleSelectedTreeNode = singleSelectedTreeNode;
     }
-     public TreeNode getRoot() {
+
+    public TreeNode getRoot() {
         return root;
     }
 
     public void setRoot(TreeNode root) {
         this.root = root;
     }
+
     public TreeNode getDocuments() {
         return documents;
     }

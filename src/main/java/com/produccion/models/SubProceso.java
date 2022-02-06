@@ -21,29 +21,27 @@ public class SubProceso {
 
     public SubProceso() {
     }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
-
+    /**
+     * Constructor en donde inicializaremos nuestra variables
+     */
     public SubProceso(int id_codigo_proceso, String nombre, String descripcion, String hora) {
         this.id_codigo_proceso = id_codigo_proceso;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.hora = hora;
     }
-
+    /**
+     * Constructor con diferentes parametros en donde inicializaremos 
+     * nuestra variables
+     */
     public SubProceso(int codigo_subproceso, String nombre) {
         this.codigo_subproceso = codigo_subproceso;
         this.nombre = nombre;
     }
-    
-    
-
+    /**
+     * Constructor con diferentes parametros en donde inicializaremos 
+     * nuestra variables, rendimiento
+     */
     public SubProceso(int codigo_subproceso, int id_codigo_proceso, String nombre, String descripcion, String hora, float rendimiento) {
         this.codigo_subproceso = codigo_subproceso;
         this.id_codigo_proceso = id_codigo_proceso;
@@ -52,13 +50,25 @@ public class SubProceso {
         this.hora = hora;
         this.rendimiento = rendimiento;
     }
-    
-
+    /**
+     * Constructor con diferentes parametros en donde inicializaremos 
+     * nuestra variables
+     */
     public SubProceso(int codigo_subproceso, int id_codigo_proceso, String nombre, String descripcion, String hora) {
         this.codigo_subproceso = codigo_subproceso;
         this.id_codigo_proceso = id_codigo_proceso;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.hora = hora;
+    }
+    /**
+     * getters y setters de todas las variables
+     */
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
         this.hora = hora;
     }
 
@@ -70,20 +80,15 @@ public class SubProceso {
         this.rendimiento = rendimiento;
     }
     
-    
-
     public SubProceso(int codigo_subproceso) {
         this.codigo_subproceso = codigo_subproceso;
     }
-
 
     public SubProceso(int codigo_subproceso, String nombre, String descripcion) {
         this.codigo_subproceso = codigo_subproceso;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-    
-    
 
     public int getCodigo_subproceso() {
         return codigo_subproceso;

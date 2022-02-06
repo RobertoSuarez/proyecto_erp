@@ -19,16 +19,21 @@ import java.util.List;
 public class CostoDAO {
     private Conexion conexion;
     private ResultSet resultSet;
-
+    /**
+     * Constructor en donde instanciamos conexion
+     */
     public CostoDAO() {
         conexion = new Conexion();
     }
-
+    /**
+      * Método para Listar la lista todos los costos
+      */
     public List<Costo> getCosto(){
         List<Costo> costo = new ArrayList<>();
         String sql = String.format("SELECT * FROM public.costos;");
         try {
             conexion.conectar();
+            //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
@@ -42,9 +47,15 @@ public class CostoDAO {
         }
         return costo;
     }
-    
+    /**
+      * Método para insertar un costo recibiendo un parámetro, dicha clase implementa try and
+      * catch
+      *
+      * @param costo objeto Costo
+      */
     public void insertarCosto(Costo costo) {
         try {
+            //llamamos a la conexion
             this.conexion.Conectar();
 
             String sql = "INSERT INTO public.costos(nombre, descripcion, tipo, identificador)\n"
@@ -52,7 +63,7 @@ public class CostoDAO {
             
             String sql2 = "Insert into public.costos (nombre, descripcion, tipo, identificador) \n"
                     + "values('" + costo.getNombre() + "', '" + costo.getDescripcion() + "', '" + costo.getTipo()+ "','" + costo.getIdentificador() + "')";
-
+            //enviamos la sentencia
             conexion.Ejecutar2(sql2);
             conexion.cerrarConexion();
 
@@ -61,15 +72,22 @@ public class CostoDAO {
             conexion.cerrarConexion();
         }
     }
-    
+    /**
+      * Método para actualizar un Centro de costo recibiendo un parametro 
+      * Dicho metodo implementa throws
+      *
+      * @param costo obejto Costo
+      * @throws SQLException validador
+      */
     public void updateCosto(Costo costo) throws SQLException {
         try {
+            //llamamos a la conexion
             this.conexion.Conectar();
 
             String sql = "UPDATE public.costos\n"
                     + "	SET nombre='" + costo.getNombre() + "', descripcion='" + costo.getDescripcion() + "', identificador='" + costo.getIdentificador() + "'\n"
                     + "	WHERE identificador = '" + costo.getIdentificador()+ "'";
-
+            //enviamos la sentencia
             conexion.ejecutar(sql);
             conexion.cerrarConexion();
 
@@ -79,13 +97,21 @@ public class CostoDAO {
             this.conexion.cerrarConexion();
         }
     }
-    
+    /**
+      * Método para actualizar un Centro de costo recibiendo dos parametro 
+      * Dicho metodo implementa throws
+      *
+      * @param costo obejto Costo
+      * @param aux variable tipo String
+      * @throws SQLException validador
+      */
     public void deletecosto(Costo costo, String aux) throws SQLException{
         
         try {
+            //llamamos a la conexion
             this.conexion.Conectar();
             String sql = ("DELETE FROM public.costos WHERE identificador = '" + aux + "'");
-            
+            //enviamos la sentencia
             conexion.ejecutar(sql);
             conexion.cerrarConexion();
             
