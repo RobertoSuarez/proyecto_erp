@@ -24,16 +24,85 @@ public class SubProcesoManageBean implements Serializable {
     private SubProceso subProceso;
     private ProcesoProduccion procesoProduccion;
     private Costo costoProduccion;
+    
     private List<Costo> listaCostoDirecto;
     private List<Costo> listaCostoIndirecto;
+    
     private int id_subproceso;
     private int idCostoIndirecto;
     private int idCostoDirecto;
+    
     private dSubproceso dsubproceso;
     private dSubprocesoDAO subproDAO;
+    /**
+     * Constructor Sub proceso Manage Bean inicializamos las diferentes
+     * variables cada vez se se ejecute la aplicacion
+     */
+    public SubProcesoManageBean() {
+        subProcesoDAO = new SubProcesoDAO();
+        listaSubProceso = new ArrayList<>();
+        listaProceso = new ArrayList<>();
+        procesoProduccion = new ProcesoProduccion();
+        idSubproceso = subProcesoDAO.idSubproceso();
+        costoProduccion = new Costo();
+        listaCostoDirecto = new ArrayList<>();
+        listaCostoIndirecto = new ArrayList<>();
+        subproDAO = new dSubprocesoDAO();
+        dsubproceso = new dSubproceso();
+    }
+    /**
+     * Post Constructor sub proceso Manage Bean inicializablos la variable
+     * listaProceso, listaCostoDirecto, listaCostoIndirecto
+     */
+    @PostConstruct
+    public void init() {
+        subProceso = new SubProceso();
+        listaProceso = subProcesoDAO.getProcesosProduccion();
+        listaCostoDirecto = subproDAO.getCosto("Directo");
+        listaCostoIndirecto = subproDAO.getCosto("Indirecto");
+
+    }
     
-    //filter
-    private String action;
+    public void listarDirectos() {
+        System.out.println(this.idSubproceso);
+
+    }
+    /**
+     * Agrega un nuevo costo directo a una lista
+     */
+    public void aggCostoIndirecto() {
+        Costo costoI = new Costo();
+        costoI.setCodigo_costos(costoIndirecto().getCodigo_costos());
+        costoI.setNombre(costoIndirecto().getNombre());
+        costoI.setDescripcion(costoIndirecto().getDescripcion());
+        costoI.setTipo(costoIndirecto().getTipo());
+        costoI.setIdentificador(costoIndirecto().getIdentificador());
+        costos.add(indiceI, costoI);
+        indiceI++;
+        System.out.println(indiceI);
+    }
+    /**
+     * Retorna los valores pertinentes a los costos indirectos
+     */
+    public Costo costoIndirecto() {
+        costoProduccion = new Costo();
+        for (Costo costoI : listaCostoIndirecto) {
+            if (costoI.getCodigo_costos() == idCostoIndirecto) {
+                costoProduccion = new Costo(costoI.getCodigo_costos(), costoI.getNombre(),
+                        costoI.getDescripcion(), costoI.getTipo(), costoI.getIdentificador());
+            }
+        }
+        return costoProduccion;
+    }
+    /**
+     * Metodo que permitira insertar un Nuevo sub proceso
+     */
+    public void insertSubproceso() {
+        subProceso.setCodigo_subproceso(idSubproceso);
+        System.out.println(" " + subProceso.getNombre() + subProceso.getDescripcion());
+        subProcesoDAO.insertarSubproceso(subProceso);
+
+    }
 
     public dSubprocesoDAO getSubproDAO() {
         return subproDAO;
@@ -135,67 +204,7 @@ public class SubProcesoManageBean implements Serializable {
         this.listaProceso = listaProceso;
     }
 
-    public SubProcesoManageBean() {
-        subProcesoDAO = new SubProcesoDAO();
-        listaSubProceso = new ArrayList<>();
-        listaProceso = new ArrayList<>();
-        procesoProduccion = new ProcesoProduccion();
-        idSubproceso = subProcesoDAO.idSubproceso();
-        costoProduccion = new Costo();
-        listaCostoDirecto = new ArrayList<>();
-        listaCostoIndirecto = new ArrayList<>();
-        subproDAO = new dSubprocesoDAO();
-        dsubproceso = new dSubproceso();
-    }
-
-    @PostConstruct
-    public void init() {
-        subProceso = new SubProceso();
-        listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto = subproDAO.getCosto("Directo");
-        listaCostoIndirecto = subproDAO.getCosto("Indirecto");
-
-    }
-
-    public void listarDirectos() {
-        System.out.println(this.idSubproceso);
-
-    }
-
-    public void aggCostoIndirecto() {
-
-        Costo costoI = new Costo();
-        costoI.setCodigo_costos(costoIndirecto().getCodigo_costos());
-        costoI.setNombre(costoIndirecto().getNombre());
-        costoI.setDescripcion(costoIndirecto().getDescripcion());
-        costoI.setTipo(costoIndirecto().getTipo());
-        costoI.setIdentificador(costoIndirecto().getIdentificador());
-        costos.add(indiceI, costoI);
-        indiceI++;
-        System.out.println(indiceI);
-    }
-
-    public Costo costoIndirecto() {
-        costoProduccion = new Costo();
-        for (Costo costoI : listaCostoIndirecto) {
-            if (costoI.getCodigo_costos() == idCostoIndirecto) {
-                costoProduccion = new Costo(costoI.getCodigo_costos(), costoI.getNombre(),
-                        costoI.getDescripcion(), costoI.getTipo(), costoI.getIdentificador());
-            }
-        }
-        return costoProduccion;
-    }
-
-    public String formAgregarSubProceso() {
-        return "CrearSubProceso.xhtml";
-    }
-
-    public void insertSubproceso() {
-        subProceso.setCodigo_subproceso(idSubproceso);
-        System.out.println(" " + subProceso.getNombre() + subProceso.getDescripcion());
-        subProcesoDAO.insertarSubproceso(subProceso);
-
-    }
+    
 
     public List<SubProceso> getListaSubProceso() {
         return listaSubProceso;
@@ -220,13 +229,4 @@ public class SubProcesoManageBean implements Serializable {
     public void setSubProceso(SubProceso subProceso) {
         this.subProceso = subProceso;
     }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
 }

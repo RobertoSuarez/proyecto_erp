@@ -32,33 +32,51 @@ public class SubProcesoMB implements Serializable {
     SubProcesoDAO subProcesoDAO;
     dSubprocesoDAO detalleSuprocesoDAO;
     Costo costo;
+
     private dSubproceso subDproceso;
     private List<ProcesoProduccion> listaProceso;
     private List<Costo> listaCostoDirecto;
     private List<Costo> listaCostoIndirecto;
     private List<Costo> NuevolistaCostoDirecto;
     private List<Costo> NuevolistaCostoIndirecto;
+    /**
+     * Variables para listar la tabla Costos
+     */
     List<dSubproceso> listaDsubprocesoDirecta;
     List<dSubproceso> listaDsubprocesoInirecta;
+    /**
+     * Variables para Sumar costos
+     */
     float totalDirecto;
     float totalIndirecto;
 
+    /**
+     * Constructor Sub proceso Manage Bean inicializamos las diferentes
+     * variables cada vez se se ejecute la aplicacion
+     */
     public SubProcesoMB() {
         sproceso = new SubProceso();
         subProcesoDAO = new SubProcesoDAO();
         detalleSuprocesoDAO = new dSubprocesoDAO();
         costo = new Costo();
         subDproceso = new dSubproceso();
+
         listaProceso = new ArrayList<>();
         listaCostoDirecto = new ArrayList<>();
         listaCostoIndirecto = new ArrayList<>();
+
         NuevolistaCostoDirecto = new ArrayList<>();
         NuevolistaCostoIndirecto = new ArrayList<>();
+
         listaDsubprocesoDirecta = new ArrayList<>();
         listaDsubprocesoInirecta = new ArrayList<>();
         sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
     }
 
+    /**
+     * Post Constructor sub proceso Manage Bean inicializablos la variable
+     * listaProceso, listaCostoDirecto, listaCostoIndirecto
+     */
     @PostConstruct
     public void init() {
         listaProceso = subProcesoDAO.getProcesosProduccion();
@@ -147,57 +165,32 @@ public class SubProcesoMB implements Serializable {
         this.sproceso = sproceso;
     }
 
+    /**
+     * Metodo que permitira insertar un Nuevo sub proceso
+     */
     public void insertarSubProceso() {
         if (subProcesoDAO.insertarSubproceso(sproceso) > 0) {
             subProcesoDAO.insertardSubproceso(sproceso);
             llenarDetalleDirecto();
             for (dSubproceso subproceso : listaDsubprocesoDirecta) {
+                //insertamos costo directo
                 subProcesoDAO.insertarDetalleSubproceso(subproceso);
             }
             llenarDetalleInirecto();
             for (dSubproceso subproceso : listaDsubprocesoInirecta) {
+                //insertamos costo indirecto
                 subProcesoDAO.insertarDetalleSubproceso(subproceso);
             }
-            FacesMessage msg = new FacesMessage("Se inserto con existo",null);
+            //Mensaje de proceso terminado con exito
+            FacesMessage msg = new FacesMessage("Se inserto con existo", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-
     }
 
-    public void addDirecto() {
-
-        NuevolistaCostoDirecto.add(costoD());
-        costo = new Costo();
-
-    }
-
-    public Costo costoD() {
-        for (Costo costoDirecto : listaCostoDirecto) {
-            if (costo.getCodigo_costos() == costoDirecto.getCodigo_costos()) {
-                costo.setNombre(costoDirecto.getNombre());
-                costo.setDescripcion(costoDirecto.getDescripcion());
-                costo.setCosto(costoDirecto.getCosto());
-            }
-        }
-        return costo;
-    }
-
-    public Costo costoI() {
-        for (Costo costoIndirecto : listaCostoIndirecto) {
-            if (costo.getCodigo_costos() == costoIndirecto.getCodigo_costos()) {
-                costo.setNombre(costoIndirecto.getNombre());
-                costo.setDescripcion(costoIndirecto.getDescripcion());
-                costo.setCosto(costoIndirecto.getCosto());
-            }
-        }
-        return costo;
-    }
-
-    public void addIndirecto() {
-        NuevolistaCostoIndirecto.add(costoI());
-        costo = new Costo();
-    }
-
+    /**
+     * Metodo que permitira llenar con todos los datos de costos directos en una
+     * lista
+     */
     public void llenarDetalleDirecto() {
         for (Costo directo : NuevolistaCostoDirecto) {
             subDproceso.setCodigo_subproceso(sproceso.getCodigo_subproceso());
@@ -208,6 +201,10 @@ public class SubProcesoMB implements Serializable {
         }
     }
 
+    /**
+     * Metodo que permitira llenar con todos los datos de costos indirectos en
+     * una lista
+     */
     public void llenarDetalleInirecto() {
         for (Costo indirecto : NuevolistaCostoIndirecto) {
             subDproceso.setCodigo_subproceso(sproceso.getCodigo_subproceso());
@@ -218,6 +215,49 @@ public class SubProcesoMB implements Serializable {
         }
     }
 
+    /**
+     * Agrega un nuevo costo directo a una lista
+     */
+    public void addDirecto() {
+        NuevolistaCostoDirecto.add(costoD());
+        costo = new Costo();
+    }
+    /**
+     * Agrega un nuevo costo directo a una lista
+     */
+    public void addIndirecto() {
+        NuevolistaCostoIndirecto.add(costoI());
+        costo = new Costo();
+    }
+    /**
+     * Retorna los valores pertinentes a los costos directos
+     */
+    public Costo costoD() {
+        for (Costo costoDirecto : listaCostoDirecto) {
+            if (costo.getCodigo_costos() == costoDirecto.getCodigo_costos()) {
+                costo.setNombre(costoDirecto.getNombre());
+                costo.setDescripcion(costoDirecto.getDescripcion());
+                costo.setCosto(costoDirecto.getCosto());
+            }
+        }
+        return costo;
+    }
+    /**
+     * Retorna los valores pertinentes a los costos indirectos
+     */
+    public Costo costoI() {
+        for (Costo costoIndirecto : listaCostoIndirecto) {
+            if (costo.getCodigo_costos() == costoIndirecto.getCodigo_costos()) {
+                costo.setNombre(costoIndirecto.getNombre());
+                costo.setDescripcion(costoIndirecto.getDescripcion());
+                costo.setCosto(costoIndirecto.getCosto());
+            }
+        }
+        return costo;
+    }
+    /**
+     * Este metodo suma los valores indirectos que se ingresen
+     */
     public void sumarIndirectos() {
         float totalI = 0;
         for (Costo indirecto : NuevolistaCostoIndirecto) {
@@ -225,7 +265,9 @@ public class SubProcesoMB implements Serializable {
         }
         totalIndirecto = totalI;
     }
-
+    /**
+     * Este metodo suma los valores directos que se ingresen
+     */
     public void sumarDirectos() {
         float tD = 0;
         for (Costo directo : NuevolistaCostoDirecto) {
@@ -233,12 +275,16 @@ public class SubProcesoMB implements Serializable {
         }
         totalDirecto = tD;
     }
-
+    /**
+     * Elimina los costos directos que son ingresados en la tabla
+     */
     public void deleteFila(Costo directo) {
         NuevolistaCostoDirecto.remove(directo);
         sumarDirectos();
     }
-
+    /**
+     * Elimina los costos indirectos que son ingresados en la tabla
+     */
     public void deleteFilaIndirecto(Costo directo) {
         NuevolistaCostoIndirecto.remove(directo);
         sumarIndirectos();

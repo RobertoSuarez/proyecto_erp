@@ -70,7 +70,7 @@
                                         <p:outputLabel for="codProceso">Código: </p:outputLabel>
                                         <p:inputText id="codProceso" value="#{procesoMB.procesoProduccion.identificador}" 
                                                      placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" required="true" readonly="true"></p:inputText>
+                                                     color:#000000" required="true" ></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="nameProceso">Nombre: </p:outputLabel>
@@ -111,7 +111,7 @@
                                         <p:outputLabel value="Codigo: *"></p:outputLabel>
                                         <p:inputText value="#{centroMB.centroCosto.identificador}" 
                                                      placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" readonly="true"></p:inputText>
+                                                     color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel value="Nombre: *"></p:outputLabel>
@@ -151,7 +151,7 @@
                                         <p:outputLabel>Código: *</p:outputLabel>
                                         <p:inputText value="#{costoMB.costo.identificador}" 
                                                      placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" readonly="true"></p:inputText>
+                                                     color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel value="Nombre: "></p:outputLabel>
@@ -201,7 +201,7 @@
                                         <p:outputLabel for="codProces" value="Codigo: *"></p:outputLabel>
                                         <p:inputText id="codProces" value="#{procesoMB.procesoProduccion.identificador}" 
                                                      placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" required="true" readonly="true"></p:inputText>
+                                                     color:#000000" required="true"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="namProces" value="Nombre: *"></p:outputLabel>
@@ -241,7 +241,7 @@
                                                     <p:outputLabel for="codCosto">Código: *</p:outputLabel>
                                                     <p:inputText id="codCosto" value="#{costoMB.costo.identificador}" 
                                                                  placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                                 color:#000000" readonly="true"></p:inputText>
+                                                                 color:#000000"></p:inputText>
 
                                                     <p:outputLabel value="Nombre: "></p:outputLabel>
                                                     <p:inputText value="#{costoMB.costo.nombre}"></p:inputText>  
@@ -340,7 +340,7 @@
                                         <p:outputLabel for="codCentro">Código: *</p:outputLabel>
                                         <p:inputText id="codCentro" value="#{centroMB.centroCosto.identificador}" 
                                                      placeholder="Siglas del identificador" style="background: #90A4AE;
-                                                     color:#000000" readonly="true"></p:inputText>
+                                                     color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="nameCentro">Nombre: *</p:outputLabel>
@@ -407,7 +407,6 @@
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" actionListener="#{centroMB.insertar()}"
                                                  process="manage-nuevoCentro-form @this"
-                                                 oncomplete="PF('agregarCentroDeCostos').hide()"
                                                  icon="pi pi-check" styleClass="ui-button-primary"/>
                                 <p:commandButton value="Cancelar" icon="pi pi-check"
                                                  onclick ="PF('agregarCentroDeCostos').hide()" 
@@ -424,13 +423,12 @@
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel >Código:</p:outputLabel>
                                         <p:inputText value="#{costoMB.costo.identificador}" 
-                                                     style="background: #B0F1F5;color:#000000"
-                                                     readonly="true"></p:inputText>
+                                                     style="background: #B0F1F5;color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel value="Nombre: "></p:outputLabel>
                                         <p:inputText value="#{costoMB.costo.nombre}"
-                                                     style="background: #B0F1F5; color:#000000" readonly="true"></p:inputText>
+                                                     style="background: #B0F1F5; color:#000000"></p:inputText>
                                     </div>
                                 </div>
                             </p:outputPanel>
@@ -449,7 +447,7 @@
                                 <div class="p-grid" style="text-align: left">
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel >Código:</p:outputLabel>
-                                        <p:inputText readonly="true" value="#{procesoMB.procesoProduccion.identificador}" 
+                                        <p:inputText value="#{procesoMB.procesoProduccion.identificador}" 
                                                      style="background: #B0F1F5; color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-col-6 p-field">
@@ -475,7 +473,7 @@
                                 <div class="p-grid" style="text-align: left">
                                     <div class="p-col-6 p-field">
                                         <p:outputLabel >Código:</p:outputLabel>
-                                        <p:inputText disabled="false" value="#{centroMB.centroCosto.identificador}" 
+                                        <p:inputText value="#{centroMB.centroCosto.identificador}" 
                                                      style="background: #B0F1F5; color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-col-6 p-field">
@@ -546,17 +544,6 @@
                             <p:column headerText="Código secundario">
                                 <h:outputText value="#{document.identificador}"/>
                             </p:column>
-                            <!-- comment <p:column exportable="false">
-                                <p:commandButton icon="pi pi-pencil" update=":form-princ:manage-editarProceso-form"
-                                                 class="ui-button-primary rounded-button p-mr-2 p-mb-2"
-                                                 oncomplete="PF('procesoEditDialog').show()"
-                                                 process="@this">
-                                    <f:setPropertyActionListener 
-                                        value="#{procesoProduccion}" 
-                                        target="#{procesoMB.procesoProduccion}"/>
-                                    <p:resetInput target=":form-princ:manage-editarProceso-form"/>
-                                </p:commandButton>
-                            </p:column>-->
                             <p:column style="width:6rem">
                                 <p:commandButton icon="pi pi-save" update=":form-princ:dtProcesoPrin, :form-princ:growl"
                                                  class="ui-button-primary rounded-button p-mr-2 p-mb-2"

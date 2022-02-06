@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.produccion.models;
 
 /**
@@ -19,8 +15,11 @@ public class Costo {
 
     public Costo() {
     }
-
-    public Costo(int codigo_costos, String nombre, String descripcion, String tipo, String identificador, float costo) {
+    /**
+     * Constructor en donde inicializaremos nuestra variables
+     */
+    public Costo(int codigo_costos, String nombre, String descripcion, 
+            String tipo, String identificador, float costo) {
         this.codigo_costos = codigo_costos;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -28,16 +27,21 @@ public class Costo {
         this.identificador = identificador;
         this.costo = costo;
     }
-    
-
-    public Costo(int codigo_costos, String nombre, String descripcion, String tipo, String identificador) {
+    /**
+     * Constructor con diferentes parametros en donde inicializaremos 
+     * nuestra variables
+     */
+    public Costo(int codigo_costos, String nombre, String descripcion, 
+            String tipo, String identificador) {
         this.codigo_costos = codigo_costos;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
         this.identificador = identificador;
     }
-
+    /**
+     * getters y setters de todas las variables
+     */
     public float getCosto() {
         return costo;
     }

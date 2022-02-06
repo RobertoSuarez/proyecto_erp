@@ -22,7 +22,10 @@ public class dSubproceso {
     private String hora_costo;
     private List<Costo> costoDirecto;
     private List<Costo> costoIndirecto;
-
+    
+    /**
+     * Constructor en donde inicializaremos nuestra variables
+     */
     public dSubproceso(int codigo_subproceso, int codigo_costos, String descripcion, float costo_mano_obra, float costo_indirecto, String hora_costo) {
         this.codigo_subproceso = codigo_subproceso;
         this.codigo_costos = codigo_costos;
@@ -31,7 +34,10 @@ public class dSubproceso {
         this.costo_indirecto = costo_indirecto;
         this.hora_costo = hora_costo;
     }
-
+    /**
+     * Constructor con diferentes parametros en donde inicializaremos 
+     * nuestra variables
+     */
     public dSubproceso(int codigo_subproceso, int codigo_costos, String descripcion, float costo_mano_obra, float costo_indirecto) {
         this.codigo_subproceso = codigo_subproceso;
         this.codigo_costos = codigo_costos;
@@ -39,7 +45,9 @@ public class dSubproceso {
         this.costo_mano_obra = costo_mano_obra;
         this.costo_indirecto = costo_indirecto;
     }
-
+    /**
+     * getters y setters de todas las variables
+     */
     public dSubproceso() {
     }
 
