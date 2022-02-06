@@ -31,6 +31,9 @@ public class SubProcesoManageBean implements Serializable {
     private int idCostoDirecto;
     private dSubproceso dsubproceso;
     private dSubprocesoDAO subproDAO;
+    
+    //filter
+    private String action;
 
     public dSubprocesoDAO getSubproDAO() {
         return subproDAO;
@@ -183,7 +186,9 @@ public class SubProcesoManageBean implements Serializable {
         return costoProduccion;
     }
 
-    
+    public String formAgregarSubProceso() {
+        return "CrearSubProceso.xhtml";
+    }
 
     public void insertSubproceso() {
         subProceso.setCodigo_subproceso(idSubproceso);
@@ -214,6 +219,14 @@ public class SubProcesoManageBean implements Serializable {
 
     public void setSubProceso(SubProceso subProceso) {
         this.subProceso = subProceso;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 
 }
