@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="title">Fórmula</ui:define>
+            <ui:define name="content">
+                <ui:include src="subheaderProduccion.xhtml"/>
+                <p:growl id="growl" showDetail="true"/>
+                <h:form id="form-princFormula" style="margin-top: 4%;">
+                    <div class="card">
+                        <p:outputPanel id="nuevaFormula" class="ui-fluid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <div class="p-grid">
+                                    <div class="p-col-1">
+                                        <p:outputLabel value="N°Producto :"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.codigo_producto}"></p:inputText>
+                                    </div>
+                                    <div class="p-col-3">
+                                        <p:outputLabel value="Nombre :"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.nombre_producto}"></p:inputText>
+
+                                    </div>
+                                    <div class="p-col-2">
+                                        <p:outputLabel value="." style="color: white"/>
+                                        <p:commandButton style="margin-right: 6px;" value="Buscar" 
+                                                         styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('producto').show()">
+                                        </p:commandButton>
+                                    </div>
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="Tipo producto:"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.tipo}">
+                                        </p:inputText>
+                                    </div>
+                                    <div class="p-col-1">
+                                        <p:outputLabel value="N°Formula :"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.codigo_formula}"></p:inputText>
+                                    </div>
+                                    <div class="p-col-5">
+                                        <p:outputLabel value="Nombre Formula:"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.nombre_formula}"></p:inputText>
+                                    </div>
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="Ctegoria producto:"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.categoria}">
+                                        </p:inputText>
+                                    </div>
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="Descripción :"> </p:outputLabel>
+                                        <p:inputTextarea maxlength="50"
+                                                         placeholder="Descripcion maximo 50 caracteres"
+                                                         value="#{formulaMBeans.formulaProduccion.descripcion}"
+                                                         rows="2" 
+                                                         cols="2"/>
+                                    </div>
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="Producción tipo costo:"></p:outputLabel>
+                                        <p:selectOneRadio unselectable="true">
+                                            <f:selectItem itemLabel="Detallado" itemValue="Option1"/>
+                                            <f:selectItem itemLabel="Estandar" itemValue="Option2"/>
+                                        </p:selectOneRadio>
+                                    </div>
+
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="Rendimiento :"></p:outputLabel>
+                                        <p:inputNumber value="#{formulaMBeans.formulaProduccion.rendimiento}" maxlength="25"
+                                                       placeholder="Ingrese numero" ></p:inputNumber>
+                                    </div>
+
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="MOD:"></p:outputLabel>
+                                        <p:inputNumber value="" readonly="true"/>
+
+                                    </div>
+
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="Proceso Principal:"></p:outputLabel>
+                                        <p:selectOneMenu
+                                            value="#{formulaMBeans.formulaProduccion.codigo_proceso}"
+                                            editable="false">
+                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}"/>
+                                            <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
+                                            <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
+                                                           itemLabel="#{proceso.nombre}"
+                                                           itemValue="#{proceso.codigo_proceso}"/>
+
+
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="CIF:"></p:outputLabel>
+                                        <p:inputNumber readonly="true">
+                                        </p:inputNumber>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <p:commandButton value="Materia Prima" icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <!-- Tabla de materia  -->
+                                <p:dataTable id="MaterialesProducto" editable="true" reflow="true" var="Materiales"
+                                             editInitEvent="dblclick" editMode="cell"
+                                             value="#{formulaMBeans.listaMateriales}">
+
+                                    <!-- comment <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 0.5em;">Formulación</span>
+                                            <p:selectOneMenu id="costoindirectoP" value="#{formulaMBeans.materialesFormula.codigoProducto}" 
+                                                             editable="false">
+                                                <f:selectItem itemLabel="Seleccione un Producto" itemValue="" noSelectionOption="true"/>
+
+                                                <f:selectItems value="#{formulaMBeans.productoTerminado}" var="articulos"
+                                                               itemLabel="#{articulos.nombre}" itemValue="#{articulos.codigo_producto}">
+                                                </f:selectItems>
+                                                <p:ajax listener="#{formulaMBeans.addMateriales()}" update=":form-princFormula:MaterialesProducto"/>
+                                            </p:selectOneMenu>
+
+                                        </div>
+                                    </f:facet>-->
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{Materiales.codigFormula}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripción">
+                                        <h:outputText value="#{Materiales.codigoProducto}" />
+                                    </p:column>
+
+                                    <p:column headerText="Unidad de Medida">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="Cantidad">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="Precio">
+                                        <h:outputText value="#{Materiales.precio}" />
+                                    </p:column>
+
+                                    <p:column headerText="Sub Procesos">
+                                        <p:selectOneMenu id="ElegirSubrocesos" value="#{formulaMBeans.formulaProduccion.codigo_subproceso}">
+                                            <f:selectItem itemLabel="Seleccionar"/>
+                                            <f:selectItems value="#{formulaMBeans.listSubProceso}" var="subproceso"
+                                                           itemLabel="#{subproceso.nombre}"
+                                                           itemValue="#{subproceso.codigo_subproceso}"/>
+                                        </p:selectOneMenu>
+
+                                    </p:column>
+
+                                    <p:column headerText="Acciones">
+                                        <p:column headerText="Acciones">
+                                            <p:commandButton icon="pi pi-pencil" actionListener="#{formulaMBeans.deleteFila(Materiales)}"
+                                                             update=":form-princFormula:MaterialesProducto">
+
+                                            </p:commandButton>
+                                            <p:commandButton icon="pi pi-trash" action="#"  
+                                                             styleClass="edit-button rounded-button ui-button-danger" process="@this"
+                                                             oncomplete="PF('eliminarForm').show()"
+                                                             style="margin-left: 6px;">
+                                            </p:commandButton>
+
+                                        </p:column>
+                                    </p:column>
+                                </p:dataTable>
+                                <div class="p-col-12">
+                                    <div class="p-grid p-justify-end">
+                                        <!-- Botones Guardar/Cerrar -->
+                                        <div class="p-col-2">
+
+                                            <p:commandButton value="Guardar " actionListener="#{formulaMBeans.insertarDatos()}"
+                                                             process="nuevaFormula @this"
+                                                             update=":form-princFormula:nuevaFormula"
+                                                             icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
+                                        </div>
+                                        <div class="p-col-2">
+                                            <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                             styleClass="ui-button-danger"
+                                                             oncomplete="PF('crearFormula').hide()"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:outputPanel>
+                    </div>
+
+                    <!-- Cuadro de dialogo Producto -->
+                    <p:dialog header="Seleccionar Producto" showEffect="fade" modal="true"
+                              widgetVar="producto" responsive="true" width="60%"
+                              draggable="false" height="500">
+
+                        <p:outputPanel class="ui-fluid">
+                            <p:outputPanel>
+                                <div class="p-grid p-justify-around">
+                                    <div class="p-col-1 p-md-1 p-lg-5">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Producto:"></p:outputLabel>
+                                                <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:dataTable id="dtBuscarMateriaPrima" reflow="true" paginator="true" rows="4" 
+                                                             rowSelectMode="add" paginatorPosition="bottom" 
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="#{formulaMBeans.productoTerminado}" var="TablaBuscarMateriaPrima">
+                                                    <p:column headerText="Acciones">
+                                                        <p:commandButton
+                                                            class="rounded-button"
+                                                            icon="pi pi-check">
+                                                            <p:ajax listener="#{formulaMBeans.llenaArticulo(TablaBuscarMateriaPrima)}" 
+                                                                    update=":form-princFormula:nuevaFormula"
+                                                                    oncomplete="PF('producto').hide()"/>
+                                                        </p:commandButton>
+                                                    </p:column>
+
+                                                    <p:column headerText="N°" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaBuscarMateriaPrima.codigo_producto}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaBuscarMateriaPrima.nombre}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Descripción" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaBuscarMateriaPrima.descripcionProducto}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Tipo" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaBuscarMateriaPrima.tipo}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="max-Stock" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaBuscarMateriaPrima.cantidad}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+
+
+
+
+
+
+                    <!-- Cuadro de dialogo Materia Prima -->
+                    <p:dialog header="Seleccionar Materia Prima" showEffect="fade" modal="true"
+                              widgetVar="materiaPrima" responsive="true" width="75%"
+                              draggable="false" height="500">
+
+                        <p:outputPanel class="ui-fluid">
+                            <p:outputPanel>
+                                <div class="p-grid p-justify-around">
+                                    <div class="p-col-1 p-md-1 p-lg-5">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Materia Prima:"></p:outputLabel>
+                                                <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:dataTable id="dtMateriaPrimaPrin" editable="true" reflow="true"
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="#{formulaMBeans.productoTerminado}" var="TablaMateriaPrima">
+
+
+
+
+
+
+
+
+                                                    <p:column headerText="Acciones">
+                                                        <p:selectBooleanCheckbox value="#{formulaMB.verificar}">
+                                                            <p:ajax listener="#{formulaMBeans.addMateriales2(TablaMateriaPrima)}" 
+                                                                    update=":form-princFormula:MaterialesProducto"/>
+                                                        </p:selectBooleanCheckbox>
+
+                                                    </p:column>
+
+                                                    <p:column headerText="Código" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaMateriaPrima.codigo_producto}" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaMateriaPrima.nombre}" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+
+                                                    <p:column headerText="Descripción" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaMateriaPrima.descripcion}"  />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+                                                    <p:column headerText="Unidad Medida" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaMateriaPrima.tipo}" />
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+                                                    <p:column headerText="max-Stock" filterStyle="display : none">
+                                                        <h:outputText value="#{TablaMateriaPrima.cantidad}"/>
+                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+                                        </div>
+                                        <!-- Botones Guardar/Cerrar -->
+                                        <div class="p-grid p-justify-end">
+                                            <div class="p-col-2">
+                                                <p:commandButton value="Confirmar"  
+                                                                 icon="pi pi-check" 
+                                                                 disabled="#" styleClass="ui-button-primary"/>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                 styleClass="ui-button-danger" process="@this"
+                                                                 oncomplete="PF('materiaPrima').hide()"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </p:dialog>
+
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

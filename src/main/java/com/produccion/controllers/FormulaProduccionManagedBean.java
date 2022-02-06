@@ -261,7 +261,7 @@ public class FormulaProduccionManagedBean implements Serializable {
     }
     public FormulaMateriales llenarMateriales(ArticulosInventario materiales){
         materialesProduccion= new FormulaMateriales();
-        materialesProduccion=new FormulaMateriales(formulaProduccion.getCodigo_formula(),materiales.getCod());
+//        materialesProduccion=new FormulaMateriales(formulaProduccion.getCodigo_formula(),materiales.getCod());
         return materialesProduccion;
     }
 
