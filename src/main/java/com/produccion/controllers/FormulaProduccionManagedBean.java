@@ -10,6 +10,7 @@ import com.produccion.dao.FormulaProduccionDAO;
 import com.produccion.dao.ProcesoProduccionDAO;
 import com.produccion.dao.SubProcesoDAO;
 import com.produccion.models.ArticuloFormula;
+import com.produccion.models.FormulaMateriales;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.ProcesoProduccion;
 import com.produccion.models.SubProceso;
@@ -49,6 +50,9 @@ public class FormulaProduccionManagedBean implements Serializable {
     SubProcesoDAO subProcesoDAO;
     List<SubProceso> listSubProceso = new ArrayList<>();
     List<SubProceso> listTempSubPro = new ArrayList<>();
+    List<FormulaMateriales> listaMateriales;
+    FormulaMateriales materialesProduccion;
+    private boolean verificar;
 
     public FormulaProduccionManagedBean() {
        
@@ -60,7 +64,9 @@ public class FormulaProduccionManagedBean implements Serializable {
         subProcesoDAO = new SubProcesoDAO();
         listaFormula = new ArrayList<>();
         articuloMateriaP= new ArrayList<>();
-
+        listaMateriales= new ArrayList<>();
+        formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
+        materialesProduccion=new FormulaMateriales();
     }
 
     @PostConstruct
@@ -69,6 +75,24 @@ public class FormulaProduccionManagedBean implements Serializable {
         listProceso = procesoProduccionDao.getProcesosProduccion();
         articuloMateriaP=formulaProduccionDAO.getArticulos();
     }
+
+    public List<FormulaMateriales> getListaMateriales() {
+        return listaMateriales;
+    }
+
+    public void setListaMateriales(List<FormulaMateriales> listaMateriales) {
+        this.listaMateriales = listaMateriales;
+    }
+
+    public boolean isVerificar() {
+        return verificar;
+    }
+
+    public void setVerificar(boolean verificar) {
+        this.verificar = verificar;
+    }
+    
+    
 
     
     public void closeDialogModal() {
@@ -224,6 +248,22 @@ public class FormulaProduccionManagedBean implements Serializable {
     public ArticulosInventario getArticulo() {
         return articulo;
     }
+    
+    public void aggMateriales(ArticulosInventario materiales){
+        if(verificar){
+            listaMateriales.add(llenarMateriales(materiales));
+            System.out.println("Hola");
+            
+        }
+        
+//        NuevolistaCostoIndirecto.add(costoI());
+//        costo = new Costo();
+    }
+    public FormulaMateriales llenarMateriales(ArticulosInventario materiales){
+        materialesProduccion= new FormulaMateriales();
+        materialesProduccion=new FormulaMateriales(formulaProduccion.getCodigo_formula(),materiales.getCod());
+        return materialesProduccion;
+    }
 
     public void setArticulo(ArticulosInventario articulo) {
         this.articulo = articulo;
@@ -233,9 +273,6 @@ public class FormulaProduccionManagedBean implements Serializable {
         formulaProduccion.setNombre_producto(inventario.getNombre());
         formulaProduccion.setTipo(inventario.getTipo());
         formulaProduccion.setCategoria(inventario.getCategoria());
-    }
-    public void saludo(){
-        System.out.println("Hola"+formulaProduccion.getNombre_formula());
     }
 
 }

@@ -91,6 +91,21 @@ public class FormulaProduccionDAO {
         }
         return subProceso;
     }
+    public int IdFormula(){
+        try {
+            int idFormula=0;
+            String sentencia="select max(codigo_formula)+1 as Id from formula";
+            resultSet=conexion.ejecutarSql(sentencia);
+            while(resultSet.next()){
+                idFormula=resultSet.getInt("Id");
+            }
+            return idFormula;
+        } catch (SQLException e) {
+            return -1;
+        }finally{
+            conexion.desconectar();
+        }
+    }
     
     public List<FormulaProduccion> getArticulos(){
         List<FormulaProduccion> Materiales = new ArrayList<>();
