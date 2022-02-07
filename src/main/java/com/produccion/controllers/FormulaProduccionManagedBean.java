@@ -28,19 +28,16 @@ import org.primefaces.PrimeFaces;
  *
  * @author Jimmy
  */
-/**
- * Solo a los controladores se les pone implements serializable
- */
 @ManagedBean(name = "formulaMB")
 
 @ViewScoped
 
 public class FormulaProduccionManagedBean implements Serializable {
 
-    private FormulaProduccion formulaProduccion= new FormulaProduccion();
+    private FormulaProduccion formulaProduccion = new FormulaProduccion();
     private FormulaProduccionDAO formulaProduccionDAO;
     private List<FormulaProduccion> listaFormula;
-    private List<FormulaProduccion>articuloMateriaP;
+    private List<FormulaProduccion> articuloMateriaP;
     ArticuloFormula articuloMateriaPrima;
     ArticulosInventario articulo;
     private ProcesoProduccion procesoProduccion;
@@ -54,26 +51,29 @@ public class FormulaProduccionManagedBean implements Serializable {
     FormulaMateriales materialesProduccion;
     private boolean verificar;
 
+    /**
+     * Constructor FormuladeProduccion ManagegBean inicializamos las variables
+     * FormuladeProduccionDAO, FormuladeProduccion
+     */
     public FormulaProduccionManagedBean() {
-       
         formulaProduccionDAO = new FormulaProduccionDAO();
         procesoProduccionDao = new ProcesoProduccionDAO();
         procesoProduccion = new ProcesoProduccion();
         subProceso = new SubProceso();
-        articulo= new ArticulosInventario();
+        articulo = new ArticulosInventario();
         subProcesoDAO = new SubProcesoDAO();
         listaFormula = new ArrayList<>();
-        articuloMateriaP= new ArrayList<>();
-        listaMateriales= new ArrayList<>();
+        articuloMateriaP = new ArrayList<>();
+        listaMateriales = new ArrayList<>();
         formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
-        materialesProduccion=new FormulaMateriales();
+        materialesProduccion = new FormulaMateriales();
     }
 
     @PostConstruct
     public void init() {
         listaFormula = formulaProduccionDAO.getFormula();
         listProceso = procesoProduccionDao.getProcesosProduccion();
-        articuloMateriaP=formulaProduccionDAO.getArticulos();
+        articuloMateriaP = formulaProduccionDAO.getArticulos();
     }
 
     public List<FormulaMateriales> getListaMateriales() {
@@ -91,22 +91,23 @@ public class FormulaProduccionManagedBean implements Serializable {
     public void setVerificar(boolean verificar) {
         this.verificar = verificar;
     }
-    
-    
 
-    
     public void closeDialogModal() {
         PrimeFaces.current().executeScript("PF('crearFormulaDialog').hide()");
     }
 
+    /**
+     * Metodo que permitira insertar una Nueva Formula
+     */
     public void insertar() {
         System.err.println("Entro ......");
         try {
-            
-                formulaProduccionDAO.insertarFormula(formulaProduccion);
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
-            
+            /**
+             * Validamos campos vacios de los cuadros de texto
+             */
+            formulaProduccionDAO.insertarFormula(formulaProduccion);
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
 
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
@@ -117,8 +118,11 @@ public class FormulaProduccionManagedBean implements Serializable {
         PrimeFaces.current().ajax().update("form-princFormula:dtformulaPrin");
     }
 
+    /**
+     * Metodo que permitira editar la informacion de la formula direcctamente en
+     * la tabla. Muestra un mensaje cada vez que realize un cambio en el campo
+     */
     public void editar() {
-        System.err.println("Entro en editar......");
         try {
             if ("".equals(formulaProduccion.getCodigo_proceso())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
@@ -147,6 +151,11 @@ public class FormulaProduccionManagedBean implements Serializable {
         PrimeFaces.current().ajax().update("form:dtFormulaPrin", "form:growl");
     }
 
+    /**
+     * Metodo que permitira eliminar la informacion de la formula direcctamente
+     * en la tabla. Muestra un mensaje cada vez que realize un cambio en el
+     * campo
+     */
     public void eliminarFormula() {
         try {
             this.formulaProduccionDAO.eliminarF(formulaProduccion, formulaProduccion.getNombre_formula());
@@ -155,12 +164,11 @@ public class FormulaProduccionManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Formula Eliminada"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al Eliminar la Formula"));
-
         }
-
     }
-    public void subProcesoLista(){
-        listSubProceso=formulaProduccionDAO.getSubProceso(formulaProduccion.getCodigo_proceso());
+
+    public void subProcesoLista() {
+        listSubProceso = formulaProduccionDAO.getSubProceso(formulaProduccion.getCodigo_proceso());
     }
 
     public SubProceso getSubProceso() {
@@ -182,8 +190,6 @@ public class FormulaProduccionManagedBean implements Serializable {
     public void setArticuloMateriaPrima(ArticuloFormula articuloMateriaPrima) {
         this.articuloMateriaPrima = articuloMateriaPrima;
     }
-    
-    
 
     public void setSubProceso(SubProceso subProceso) {
         this.subProceso = subProceso;
@@ -248,19 +254,20 @@ public class FormulaProduccionManagedBean implements Serializable {
     public ArticulosInventario getArticulo() {
         return articulo;
     }
-    
-    public void aggMateriales(ArticulosInventario materiales){
-        if(verificar){
+
+    public void aggMateriales(ArticulosInventario materiales) {
+        if (verificar) {
             listaMateriales.add(llenarMateriales(materiales));
             System.out.println("Hola");
-            
+
         }
-        
+
 //        NuevolistaCostoIndirecto.add(costoI());
 //        costo = new Costo();
     }
-    public FormulaMateriales llenarMateriales(ArticulosInventario materiales){
-        materialesProduccion= new FormulaMateriales();
+
+    public FormulaMateriales llenarMateriales(ArticulosInventario materiales) {
+        materialesProduccion = new FormulaMateriales();
 //        materialesProduccion=new FormulaMateriales(formulaProduccion.getCodigo_formula(),materiales.getCod());
         return materialesProduccion;
     }
@@ -268,7 +275,11 @@ public class FormulaProduccionManagedBean implements Serializable {
     public void setArticulo(ArticulosInventario articulo) {
         this.articulo = articulo;
     }
-    public void llenaArticulo(FormulaProduccion inventario){
+
+    /**
+     * Metodo que permitira llenar la informacion de Articulos
+     */
+    public void llenaArticulo(FormulaProduccion inventario) {
         formulaProduccion.setCodigo_producto(inventario.getCodigo_producto());
         formulaProduccion.setNombre_producto(inventario.getNombre());
         formulaProduccion.setTipo(inventario.getTipo());
