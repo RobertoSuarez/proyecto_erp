@@ -4,7 +4,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
-    <f:event type="preRenderView" listener="#{restriccionesProduccion.redireccion()}"/>
+    <f:event type="preRenderView" listener="#{restriccionesProduccion.redireccionExternas()}"/>
     <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
         <p:menuitem value="Solicitud orden de producción" url="solicitudOrden.xhtml" rendered="#{restriccionesProduccion.renderedMproduccion()}"/>
         <p:menuitem value="Orden de Trabajo" url="listaOrdenProduccion.xhtml" rendered="#{restriccionesProduccion.renderedMproduccion()}"/>

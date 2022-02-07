@@ -23,7 +23,7 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class RestriccionesProduccion implements Serializable {
 
-    private UsuarioDAO usuarioDAO;
+    UsuarioDAO usuarioDAO;
     FacesContext context = FacesContext.getCurrentInstance();
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -31,7 +31,7 @@ public class RestriccionesProduccion implements Serializable {
     public RestriccionesProduccion() {
         usuarioDAO = new UsuarioDAO();
     }
-
+    //
     public String renderedMproduccion() {
         if (listaRoles.get(0).getNombre().equals("Operario")) {
             return "false";
@@ -47,7 +47,7 @@ public class RestriccionesProduccion implements Serializable {
             return "/proyecto_erp/View/produccion/procesoProduccion.xhtml";
         }
     }
-    public String renMenu() {
+    public String renderizarMenuInicio() {
         if ("Jefe de Producción".equals(listaRoles.get(0).getNombre())
                     || "Operario".equals(listaRoles.get(0).getNombre())
                     || "Gerente".equals(listaRoles.get(0).getNombre())) {
@@ -57,7 +57,7 @@ public class RestriccionesProduccion implements Serializable {
         }
     }
 
-    public void redireccion() throws IOException {
+    public void redireccionExternas() throws IOException {
 
         if (!"Jefe de Producción".equals(listaRoles.get(0).getNombre())&&
                 !"Operario".equals(listaRoles.get(0).getNombre())
