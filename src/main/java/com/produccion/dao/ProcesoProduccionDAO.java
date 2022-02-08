@@ -59,7 +59,7 @@ public class ProcesoProduccionDAO {
         List<ProcesoProduccion> procesos = new ArrayList<>();
         //llamamos a la conexion
         conexion.conectar();
-        sentenciaSql = String.format("select * from getProcesosProduccion();");
+        sentenciaSql = String.format("select * from proceso_produccion;");
         try {
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);

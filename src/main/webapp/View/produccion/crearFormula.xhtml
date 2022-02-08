@@ -15,19 +15,16 @@ and open the template in the editor.
             <ui:define name="title">Fórmula</ui:define>
             <ui:define name="content">
                 <ui:include src="subheaderProduccion.xhtml"/>
-                <p:growl id="growl" showDetail="true"/>
                 <h:form id="form-princFormula" style="margin-top: 4%;">
+                    <p:growl id="growl" showDetail="true"/>
                     <div class="card">
                         <p:outputPanel id="nuevaFormula" class="ui-fluid">
                             <div class="p-col-12 p-md-12 p-lg-12">
                                 <div class="p-grid">
-                                    <div class="p-col-1">
-                                        <p:outputLabel value="N°Producto :"></p:outputLabel>
-                                        <p:inputText value="#{formulaMBeans.formulaProduccion.codigo_producto}"></p:inputText>
-                                    </div>
-                                    <div class="p-col-3">
+
+                                    <div class="p-col-4">
                                         <p:outputLabel value="Nombre :"></p:outputLabel>
-                                        <p:inputText value="#{formulaMBeans.formulaProduccion.nombre_producto}"></p:inputText>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.nombre_producto}" readonly="true"></p:inputText>
 
                                     </div>
                                     <div class="p-col-2">
@@ -38,20 +35,16 @@ and open the template in the editor.
                                     </div>
                                     <div class="p-col-6">
                                         <p:outputLabel value="Tipo producto:"></p:outputLabel>
-                                        <p:inputText value="#{formulaMBeans.formulaProduccion.tipo}">
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.tipo}" readonly="true">
                                         </p:inputText>
                                     </div>
-                                    <div class="p-col-1">
-                                        <p:outputLabel value="N°Formula :"></p:outputLabel>
-                                        <p:inputText value="#{formulaMBeans.formulaProduccion.codigo_formula}"></p:inputText>
-                                    </div>
-                                    <div class="p-col-5">
+                                    <div class="p-col-6">
                                         <p:outputLabel value="Nombre Formula:"></p:outputLabel>
                                         <p:inputText value="#{formulaMBeans.formulaProduccion.nombre_formula}"></p:inputText>
                                     </div>
                                     <div class="p-col-6">
-                                        <p:outputLabel value="Ctegoria producto:"></p:outputLabel>
-                                        <p:inputText value="#{formulaMBeans.formulaProduccion.categoria}">
+                                        <p:outputLabel value="Categoria producto:"></p:outputLabel>
+                                        <p:inputText value="#{formulaMBeans.formulaProduccion.categoria}" readonly="true">
                                         </p:inputText>
                                     </div>
                                     <div class="p-col-6">
@@ -63,11 +56,9 @@ and open the template in the editor.
                                                          cols="2"/>
                                     </div>
                                     <div class="p-col-6">
-                                        <p:outputLabel value="Producción tipo costo:"></p:outputLabel>
-                                        <p:selectOneRadio unselectable="true">
-                                            <f:selectItem itemLabel="Detallado" itemValue="Option1"/>
-                                            <f:selectItem itemLabel="Estandar" itemValue="Option2"/>
-                                        </p:selectOneRadio>
+                                        <p:outputLabel value="Tipo de producción :"></p:outputLabel>
+                                        <p:selectBooleanCheckbox style="display: block" value="#{formulaMBeans.formulaProduccion.estado}" itemLabel="Producción Detallada">
+                                        </p:selectBooleanCheckbox>
                                     </div>
 
                                     <div class="p-col-6">
@@ -76,10 +67,10 @@ and open the template in the editor.
                                                        placeholder="Ingrese numero" ></p:inputNumber>
                                     </div>
 
+
                                     <div class="p-col-6">
                                         <p:outputLabel value="MOD:"></p:outputLabel>
-                                        <p:inputNumber value="" readonly="true"/>
-
+                                        <p:inputNumber value="#{formulaMBeans.formulaProduccion.MOD}"/>
                                     </div>
 
                                     <div class="p-col-6">
@@ -92,15 +83,15 @@ and open the template in the editor.
                                             <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
                                                            itemLabel="#{proceso.nombre}"
                                                            itemValue="#{proceso.codigo_proceso}"/>
-
-
                                         </p:selectOneMenu>
                                     </div>
+
                                     <div class="p-col-6">
                                         <p:outputLabel value="CIF:"></p:outputLabel>
-                                        <p:inputNumber readonly="true">
+                                        <p:inputNumber value="#{formulaMBeans.formulaProduccion.CIF}">
                                         </p:inputNumber>
                                     </div>
+
                                     <div class="p-col-2">
                                         <p:commandButton value="Materia Prima" icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
                                     </div>
@@ -161,7 +152,7 @@ and open the template in the editor.
                                                 </p:inputText>
                                             </f:facet>
                                         </p:cellEditor>
-                                        
+
                                         <h:outputText value="" />
                                     </p:column>
                                     <p:column headerText="Precio">
@@ -200,7 +191,7 @@ and open the template in the editor.
 
                                             <p:commandButton value="Guardar " actionListener="#{formulaMBeans.insertarDatos()}"
                                                              process="nuevaFormula @this"
-                                                             update=":form-princFormula:nuevaFormula"
+                                                             update=":form-princFormula:nuevaFormula,:form-princFormula:growl"
                                                              icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
                                         </div>
                                         <div class="p-col-2">
@@ -303,14 +294,6 @@ and open the template in the editor.
                                                 <p:dataTable id="dtMateriaPrimaPrin" editable="true" reflow="true"
                                                              editInitEvent="dblclick" editMode="cell"
                                                              value="#{formulaMBeans.productoTerminado}" var="TablaMateriaPrima">
-
-
-
-
-
-
-
-
                                                     <p:column headerText="Acciones">
                                                         <p:selectBooleanCheckbox value="#{formulaMB.verificar}">
                                                             <p:ajax listener="#{formulaMBeans.addMateriales2(TablaMateriaPrima)}" 

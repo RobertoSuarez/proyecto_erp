@@ -7,10 +7,6 @@ package com.produccion.models;
 
 import com.global.config.Conexion;
 
-/**
- *
- * @author Jimmy
- */
 public class FormulaProduccion {
 
     private int codigo_formula;
@@ -31,12 +27,11 @@ public class FormulaProduccion {
     private float costo;
     private float cantidad;
     private float cantidadMaxima;
-     /**
-     * Constructor con diferentes parametros en donde inicializaremos 
-     * nuestra variables
-     */
-    public FormulaProduccion(int codigo_producto, String nombre, 
-            String categoria, String descripcionProducto, 
+    private float MOD;
+    private float CIF;
+
+    public FormulaProduccion(int codigo_producto, String nombre,
+            String categoria, String descripcionProducto,
             String tipo, float costo, float cantidad, float cantidadMaxima) {
         this.codigo_producto = codigo_producto;
         this.nombre = nombre;
@@ -51,10 +46,6 @@ public class FormulaProduccion {
     public FormulaProduccion() {
     }
 
-    /**
-     * Constructor con diferentes parametros en donde inicializaremos nuestra
-     * variables
-     */
     public FormulaProduccion(int codigo_formula,
             int codigo_proceso,
             String nombre_formula,
@@ -77,6 +68,22 @@ public class FormulaProduccion {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public float getMOD() {
+        return MOD;
+    }
+
+    public void setMOD(float MOD) {
+        this.MOD = MOD;
+    }
+
+    public float getCIF() {
+        return CIF;
+    }
+
+    public void setCIF(float CIF) {
+        this.CIF = CIF;
     }
 
     public String getDescripcionProducto() {

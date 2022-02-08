@@ -1,4 +1,3 @@
-
 package com.produccion.dao;
 
 import com.global.config.Conexion;
@@ -10,46 +9,34 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Jimmy
- */
 public class FormulaProduccionDAO {
 
     Conexion conexion = new Conexion();
-    private FormulaProduccion formulaProduccion;
+    FormulaProduccion formulaProduccion;
     private ResultSet resultSet;
     private List<FormulaProduccion> listaFormula;
     private List auxlista = new ArrayList<>();
 
-    /**
-     * Constructor sin parametros 
-     */
     public FormulaProduccionDAO() {
         formulaProduccion = new FormulaProduccion();
         conexion = new Conexion();
         listaFormula = new ArrayList<>();
     }
 
-    /**
-     * Constructor en donde instanciamos conexion
-     */
     public FormulaProduccionDAO(FormulaProduccion formulaProduccion) {
         conexion = new Conexion();
         this.formulaProduccion = formulaProduccion;
     }
-    
-    public void getProcess(int cod){
-        
+
+    public void getProcess(int cod) {
+
     }
-     /**
-     * Método para Listar las Formulas
-     */
+
     public List<FormulaProduccion> getFormula() {
         List<FormulaProduccion> formula = new ArrayList<>();
         String sql = String.format("Select * from formula");
         try {
-             //enviamos la sentencia
+            //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
@@ -63,22 +50,20 @@ public class FormulaProduccionDAO {
 
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally{
+        } finally {
             conexion.desconectar();
         }
         return formula;
     }
-    /**
-     * Método para Listar todos los Subprocesos de produccion
-     */
+
     public List<SubProceso> getSubProceso(int id) {
         List<SubProceso> subProceso = new ArrayList<>();
-        String sql = String.format("select SP.codigo_subproceso,SP.nombre from subproceso as SP \n" +
-"	inner join detalle_proceso_p as DP on SP.codigo_subproceso=DP.codigo_subproceso\n" +
-"	inner join proceso_produccion as P on DP.codigo_proceso=P.codigo_proceso\n" +
-"	where P.codigo_proceso="+id);
+        String sql = String.format("select SP.codigo_subproceso,SP.nombre from subproceso as SP \n"
+                + "	inner join detalle_proceso_p as DP on SP.codigo_subproceso=DP.codigo_subproceso\n"
+                + "	inner join proceso_produccion as P on DP.codigo_proceso=P.codigo_proceso\n"
+                + "	where P.codigo_proceso=" + id);
         try {
 
             resultSet = conexion.ejecutarSql(sql);
@@ -86,80 +71,71 @@ public class FormulaProduccionDAO {
             while (resultSet.next()) {
                 subProceso.add(new SubProceso(resultSet.getInt("codigo_subproceso"),
                         resultSet.getString("nombre")
-                        ));
+                ));
 
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally{
+        } finally {
             conexion.desconectar();
         }
         return subProceso;
     }
-    public int IdFormula(){
+
+    public int IdFormula() {
         try {
-            int idFormula=0;
-            String sentencia="select max(codigo_formula)+1 as Id from formula";
-            resultSet=conexion.ejecutarSql(sentencia);
-            while(resultSet.next()){
-                idFormula=resultSet.getInt("Id");
+            int idFormula = 0;
+            String sentencia = "select max(codigo_formula)+1 as Id from formula";
+            resultSet = conexion.ejecutarSql(sentencia);
+            while (resultSet.next()) {
+                idFormula = resultSet.getInt("Id");
             }
             return idFormula;
         } catch (SQLException e) {
             return -1;
-        }finally{
+        } finally {
             conexion.desconectar();
         }
     }
-    /**
-     * Método para Listar todos los Articulos
-     */
-    public List<FormulaProduccion> getArticulos(){
+
+    public List<FormulaProduccion> getArticulos() {
         List<FormulaProduccion> Materiales = new ArrayList<>();
-        String sqlSentencia="select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock from articulos as a\n" +
-"	inner join categoria as c on a.cat_cod=c.cod\n" +
-"	inner join tipo as t on t.cod=a.id_tipo";
+        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock from articulos as a\n"
+                + "	inner join categoria as c on a.cat_cod=c.cod\n"
+                + "	inner join tipo as t on t.cod=a.id_tipo";
         try {
 
             resultSet = conexion.ejecutarSql(sqlSentencia);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                Materiales.add(new FormulaProduccion(resultSet.getInt("id"),resultSet.getString("nombre"),resultSet.getString("nom_categoria"),
-                resultSet.getString("descripcion"),resultSet.getString("tipo"),resultSet.getFloat("costo"),resultSet.getFloat("cantidad"),resultSet.getFloat("max_stock")));
+                Materiales.add(new FormulaProduccion(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("nom_categoria"),
+                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cantidad"), resultSet.getFloat("max_stock")));
 
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally{
+        } finally {
             conexion.desconectar();
         }
         return Materiales;
     }
 
-    /**
-     * Método para insertar un proveedor recibiendo un parámetro Dicha clase
-     * implementa try and catch
-     *
-     * @param f objeto formula
-     */
     public int insertarFormula(FormulaProduccion f) {
         try {
             String cadena = "INSERT INTO public.formula(\n"
-                    + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto)\n"
-                    + "	VALUES ( "+f.getCodigo_proceso()+", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento() + ", 'T', "+f.getCodigo_producto()+");";
+                    + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\")\n"
+                    + "	VALUES ( " + f.getCodigo_proceso() + ", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento()
+                    + ", '"+f.getEstado()+"', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ");";
             return conexion.insertar(cadena);
         } catch (Exception e) {
             return -1;
-        }finally {
+        } finally {
             conexion.cerrarConexion();
         }
     }
-    /**
-     * Método para actualizar la formula recibiendo un parámetro Dicha clase
-     * implementa try and catch
-     */
+
     public void update(FormulaProduccion formula) throws SQLException {
         try {
             this.conexion.Conectar();
@@ -178,29 +154,22 @@ public class FormulaProduccionDAO {
             this.conexion.cerrarConexion();
         }
     }
-    
-  /**
-     * Método para eliminar una Formula recibiendo un parámetro Dicha clase
-     * implementa try and catch
-     */
-   public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException{
-       try {
-           
-           this.conexion.Conectar();
-           String sql=("DELETE FROM public.formula WHERE nombre_formula = '"+aux+"'");
-           conexion.ejecutar(sql);
-           conexion.cerrarConexion();
-           
-       } catch (Exception e) {
-           throw e;
-       } finally{
-       this.conexion.cerrarConexion();
-       
-       }
-   
-        
-   }
-    
-    
+
+    public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException {
+        try {
+
+            this.conexion.Conectar();
+            String sql = ("DELETE FROM public.formula WHERE nombre_formula = '" + aux + "'");
+            conexion.ejecutar(sql);
+            conexion.cerrarConexion();
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            this.conexion.cerrarConexion();
+
+        }
+
+    }
 
 }

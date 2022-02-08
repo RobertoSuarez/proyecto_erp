@@ -25,12 +25,8 @@ import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
-/**
- *
- * @author Alex
- */
 @ManagedBean(name = "procesoMB")
-@ApplicationScoped
+@ViewScoped
 
 public class ProcesosManagedBean implements Serializable {
 
@@ -46,19 +42,14 @@ public class ProcesosManagedBean implements Serializable {
     SubProceso sProceso;
     TreeNode document1;
 
-    /**
-     * Constructor Costo Manage Bean inicializamos las variables
-     * procesoProduccionDAO, procesoProduccion
-     */
+
     public ProcesosManagedBean() {
         procesoProduccionDAO = new ProcesoProduccionDAO();
         procesoProduccion = new ProcesoProduccion();
         cargarLista();
     }
 
-    /**
-     * Metodo que carga la lista con valores de la base de datos
-     */
+
     private void cargarLista() {
         listaProcesos = procesoProduccionDAO.getProcesosProduccion();
         for (ProcesoProduccion listaProceso : listaProcesos) {
@@ -75,31 +66,19 @@ public class ProcesosManagedBean implements Serializable {
     public void init() {
     }
 
-    /**
-     * Metodo que generara una palabra aleatoria para el codigo
-     */
     public void aleatorioIdenti() {
         String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
         String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
         this.procesoProduccion.setIdentificador("PR-" + uuid + uuid2);
     }
 
-    /**
-     * Metodo que hace la llamada para generar el codigo del numero aleatorio
-     */
+
     public void openNew() {
         this.selectProceso = new ProcesoProduccion();
         aleatorioIdenti();
     }
-
-    /**
-     * Metodo que permitira insertar un Nuevo Proceso
-     */
     public void insertar() {
         try {
-            /**
-             * Validamos campos vacios de los cuadros de texto
-             */
             if ("".equals(procesoProduccion.getIdentificador())) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
@@ -110,21 +89,11 @@ public class ProcesosManagedBean implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
-                /**
-                 * Si es falso ejecutamos el metodo insertarp del Proceso con
-                 * sus parametros
-                 *
-                 * @param procesoProduccion objeto ProcesoPorduccion
-                 */
                 this.procesoProduccionDAO.insertarp(procesoProduccion);
-                /**
-                 * Mostramos el mensaje
-                 */
+               
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
-                /**
-                 * Cerramos el dialogo de insertar
-                 */
+               
                 PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
             }
 
@@ -135,11 +104,7 @@ public class ProcesosManagedBean implements Serializable {
         }
     }
 
-    /**
-     * Metodo que permitira editar la informacion de un proceso
-     * direcctamente en la tabla.
-     * Muestra un mensaje cada vez que realize un cambio en el campo
-     */
+ 
     public void edit2(ProcesoProduccion proceso) throws SQLException {
         if (procesoProduccionDAO.actualizarProceso(proceso) > 0) {
             FacesMessage msg = new FacesMessage("Proceso Editado", null);

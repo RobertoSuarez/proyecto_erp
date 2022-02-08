@@ -36,6 +36,7 @@ public class FormulaElaboracionMB implements Serializable {
     private FormulaMateriales materialesFormula;
     private boolean verificar;//eliminar si no sale
     FormulaMaterialesDAO formulaMaterialesDAO;
+    private String render;
 
     private List<FormulaProduccion> listaFormula;
     private List<ProcesoProduccion> listProceso;
@@ -54,7 +55,7 @@ public class FormulaElaboracionMB implements Serializable {
         listaMateriales = new ArrayList<>();
         productoTerminado = new ArrayList<>();
         formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
-        formulaMaterialesDAO= new FormulaMaterialesDAO();
+        formulaMaterialesDAO = new FormulaMaterialesDAO();
     }
 
     @PostConstruct
@@ -62,6 +63,14 @@ public class FormulaElaboracionMB implements Serializable {
         listaFormula = formulaProduccionDAO.getFormula();
         listProceso = procesoProduccionDAO.getProcesosProduccion();
         productoTerminado = formulaProduccionDAO.getArticulos();
+    }
+
+    public String getRender() {
+        return render;
+    }
+
+    public void setRender(String render) {
+        this.render = render;
     }
 
     public FormulaProduccion getFormulaProduccion() {
@@ -136,18 +145,45 @@ public class FormulaElaboracionMB implements Serializable {
 
     public void insertarDatos() {
         try {
-            formulaProduccionDAO.insertarFormula(formulaProduccion);
-            for (FormulaMateriales lista : listaMateriales) {
-                formulaMaterialesDAO.InsertarMateriales(lista);
+            if ("".equals(formulaProduccion.getCodigo_proceso())) {
+                mensajeValidaciones("Advertencia", "Ingrese un Identificador");
+            } else if ("".equals(formulaProduccion.getNombre_formula())) {
+                mensajeValidaciones("Advertencia", "Ingrese un Nombre en la formula");
+            } else if ("".equals(formulaProduccion.getDescripcion())) {
+                mensajeValidaciones("Advertencia", "Ingrese una Descripción");
+            } else if ("".equals(formulaProduccion.getRendimiento())) {
+                mensajeValidaciones("Advertencia", "Ingrese el rendimiento");
+            } else if ("".equals(formulaProduccion.getCodigo_producto())) {
+                mensajeValidaciones("Advertencia", "Escoja un producto");
+            } else {
+                if (formulaProduccionDAO.insertarFormula(formulaProduccion) > 0) {
+                    for (FormulaMateriales lista : listaMateriales) {
+                        if (lista.getCantidad() != 0 && !"".equals(lista.getUnidadMedida())) {
+                            formulaMaterialesDAO.InsertarMateriales(lista);
+                        } else {
+                            mensajeValidaciones("Advertencia", "Ingrese valores Unidad de Medida y Cantidades");
+                        }
+                    }
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito",
+                                    "Formula Agregada"));
+                } else {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                                    "Error al guardar"));
+                }
+
             }
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
 
         } catch (Exception e) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
+    }
+
+    public void mensajeValidaciones(String tipo, String mensaje) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, tipo, mensaje));
     }
 
     public void llenaArticulo(FormulaProduccion inventario) {
@@ -169,7 +205,7 @@ public class FormulaElaboracionMB implements Serializable {
 
     public FormulaMateriales llenarMateriales(FormulaProduccion materiales) {
         materialesFormula = new FormulaMateriales(materiales.getNombre(),
-                materiales.getDescripcionProducto(),formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
+                materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
         return materialesFormula;
     }
 
@@ -186,12 +222,11 @@ public class FormulaElaboracionMB implements Serializable {
         }
         return materialesFormula;
     }
-    
-    public List<FormulaMateriales> listarMateriales(){
+
+    public List<FormulaMateriales> listarMateriales() {
         return listaMateriales;
     }
-    
-    
+
     public void deleteFila(FormulaMateriales producto) {
         listaMateriales.remove(producto);
     }
