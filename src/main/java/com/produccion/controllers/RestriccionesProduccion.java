@@ -25,6 +25,7 @@ public class RestriccionesProduccion implements Serializable {
 
     UsuarioDAO usuarioDAO;
     FacesContext context = FacesContext.getCurrentInstance();
+    /** Obteniendo la lista de Roles*/
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
@@ -71,5 +72,4 @@ public class RestriccionesProduccion implements Serializable {
             externalContext.redirect("/proyecto_erp/View/produccion/procesoProduccion.xhtml");
         }
     }
-
 }

@@ -32,6 +32,10 @@ public class RestriccionesCont implements Serializable {
         usuarioDAO = new UsuarioDAO();
     }
 
+    /**
+     * Creación del método rol, para comprobar si un rol es detectado
+     * @return String falso o verdadero.
+     **/
     public String rol() {
         if (listaRoles.get(0).getNombre().equals("Asistente del contador")) {
             return "true";
@@ -40,6 +44,11 @@ public class RestriccionesCont implements Serializable {
         }
     }
 
+    /**
+     * Creación del método rendered, para comprobar si un rol es detectado
+     * y controlar aspectos visuales
+     * @return String falso o verdadero.
+     **/
     public String rendered() {
         if (listaRoles.get(0).getNombre().equals("Asistente del contador")) {
             return "false";
@@ -48,6 +57,11 @@ public class RestriccionesCont implements Serializable {
         }
     }
 
+    /**
+     * Creación del método vista, para comprobar si un rol es detectado
+     * y redireccionar páginas (NO UTILIZADO)
+     * @return String falso o verdadero.
+     **/
     public String vista() {
         if (listaRoles.get(0).getNombre().equals("Asistente del contador")) {
             return "../recursoshumanos/ciudad.xhtml";
@@ -56,6 +70,11 @@ public class RestriccionesCont implements Serializable {
         }
     }
 
+    /**
+     * Creación del método menu, para comprobar si un rol es detectado
+     * y acceder al menú principal
+     * @return String falso o verdadero.
+     **/
     public String menu() {
         if ("Gerente".equals(listaRoles.get(0).getNombre())
                 || "Administrador de la empresa".equals(listaRoles.get(0).getNombre())
@@ -67,6 +86,11 @@ public class RestriccionesCont implements Serializable {
         }
     }
 
+    /**
+     * Creación del método red, para comprobar si un rol es detectado
+     * e ingresar al módulo
+     * @return void
+     **/
     public void red() {
         if ("Gerente".equals(listaRoles.get(0).getNombre())
                 || "Administrador de la empresa".equals(listaRoles.get(0).getNombre())

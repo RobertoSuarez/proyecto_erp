@@ -13,6 +13,10 @@ import java.util.List;
  *
  * @author angul
  */
+
+/*
+  Clase encargada para administrar los roles que se manejaran
+*/
 public class RolesDAO implements Serializable {
 
     private List<Rol> roles;
@@ -33,6 +37,9 @@ public class RolesDAO implements Serializable {
         this.roles = roles;
     }
 
+    /*
+    Método para agregar un rol a una lista
+    */
     public void addRol(Rol rol) {
         ArrayList<Rol> lista = new ArrayList<Rol>();
         if (roles == null) {
@@ -40,7 +47,9 @@ public class RolesDAO implements Serializable {
         }
         this.roles.add(rol);
     }
-
+    /*
+    Método para verificar que un rol  exista mediante el nombre que recibe
+    */
     public boolean rolExist(String rolName) {
         if (roles != null) {
             if (!roles.isEmpty()) {
@@ -54,6 +63,10 @@ public class RolesDAO implements Serializable {
         return false;
     }
 
+    /*
+    Método para verificar que varios roles existan mediante el arreglo
+    que recibe
+    */
     public boolean rolExist(String[] rolNames) {
         for (String rolname : rolNames) {
             if (rolExist(rolname)) {
@@ -62,7 +75,10 @@ public class RolesDAO implements Serializable {
         }
         return (false);
     }
-
+    /*
+    Método para verificar que varios roles exista mediante el arreglo
+    que recibe
+    */
     public boolean rolExist(int[] ids) {
         for (int rolId : ids) {
             if (rolExist(rolId)) {
@@ -71,6 +87,11 @@ public class RolesDAO implements Serializable {
         }
         return (false);
     }
+    
+     /*
+    Método para verificar que varios roles existan mediante una lista
+    que recibe
+    */
     public boolean rolExist(List<String> rolNames){
         return this.rolExist((String[])rolNames.toArray());
     }

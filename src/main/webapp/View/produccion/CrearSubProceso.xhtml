@@ -25,58 +25,35 @@
                             <p:toolbarGroup>
                                 <p:outputPanel id="subProceso" class="ui-fluid">
                                     <div class="p-grid p-justify-center">
-                                        <div class=" p-lg-3">
-                                            <div class="p-grid">
-                                                <div class="p-col-10">
-                                                    <p:outputLabel value="Codigo Subproceso:"/>
-                                                    <p:inputText value="#{SubProcesoMB.sproceso.codigo_subproceso}" readonly="true"/>
-                                                </div>
-                                                <div class="p-col-10">
-                                                    <p:outputLabel value="Proceso Principal:"/>
-                                                    <p:selectOneMenu id="proceso" value="#{SubProcesoMB.sproceso.id_codigo_proceso}" 
-                                                                     alwaysDisplayLabel="true">
-                                                        <f:selectItems value="#{SubProcesoMB.listaProceso}" var="proceso"
-                                                                       itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
-
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="p-col-10">
-                                                    <p:outputLabel value="Nombre:"></p:outputLabel>
-                                                    <p:inputText value="#{SubProcesoMB.sproceso.nombre}"/>
-                                                </div>
-                                                <div class="p-col-10">
-                                                    <p:outputLabel value="Descripcion:"></p:outputLabel>
-                                                    <p:inputTextarea  value="#{SubProcesoMB.sproceso.descripcion}"
-                                                                      maxlength="250"
-                                                                      placeholder="Descripcion maximo 255 caracteres maximo"
-                                                                      rows="5" 
-                                                                      autoResize="false"/>
-                                                </div>
-                                            </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Nombre:"></p:outputLabel>
+                                            <p:inputText value="#{SubProcesoMB.sproceso.nombre}"/>
+                                            <p:outputLabel value="Descripcion:"></p:outputLabel>
+                                            <p:inputTextarea  value="#{SubProcesoMB.sproceso.descripcion}"
+                                                              maxlength="250"
+                                                              placeholder="Descripcion maximo 255 caracteres maximo"
+                                                              rows="5" 
+                                                              autoResize="false"/>
                                         </div>
-                                        <div class="  p-lg-3">
-                                            <div class="p-grid">
-                                                <div class="p-col-10">
-
-                                                    <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
-                                                    <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
-                                                                 mask="99:99:99" 
-                                                                 required="true"/>
-
-                                                </div>
-                                                <div class="p-col-10">
-
-                                                    <p:outputLabel value="Rendimiento:"></p:outputLabel>
-                                                    <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
-
-                                                </div>
-                                            </div>
+                                        <div class="  p-lg-4">
+                                            <p:outputLabel value="Codigo Subproceso:"/>
+                                            <p:inputText value="#{SubProcesoMB.sproceso.codigo_subproceso}" readonly="true"/>
+                                            <p:outputLabel value="Proceso Principal:"/>
+                                            <p:selectOneMenu id="proceso" value="#{SubProcesoMB.sproceso.id_codigo_proceso}" 
+                                                             alwaysDisplayLabel="true">
+                                                <f:selectItems value="#{SubProcesoMB.listaProceso}" var="proceso"
+                                                               itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
+                                            </p:selectOneMenu>
                                         </div>
-
-
-
+                                        <div class="  p-lg-4">
+                                            <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
+                                            <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
+                                                         mask="99:99:99" 
+                                                         required="true"/>
+                                            <p:outputLabel value="Rendimiento:"></p:outputLabel>
+                                            <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
+                                        </div>
                                     </div>
-
                                 </p:outputPanel>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -136,12 +113,16 @@
 
                                 </p:dataTable>
                                 <p:outputPanel id="totalIndirectos">
-                                    <div class="p-field p-col-12 p-md-4">
-                                        <p:outputLabel value="Total : "></p:outputLabel>
-                                        <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>
+                                    <div class="p-grid p-justify-end p-lg-12">
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>
 
-                                        <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                        <p:inputText disabled="#"  value=""></p:inputText>
+                                        </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                            <p:inputText disabled="#"  value=""></p:inputText>
+                                        </div>
                                     </div>
                                 </p:outputPanel>
                             </div>
@@ -191,11 +172,15 @@
                                     </p:column>
                                 </p:dataTable>
                                 <p:outputPanel id="totalDirectos">
-                                    <div class="p-field p-col-12 p-md-4">
-                                        <p:outputLabel value="Total : "></p:outputLabel>
-                                        <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
-                                        <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                        <p:inputText disabled="#"  value=""></p:inputText>
+                                    <div class="p-grid p-justify-end p-lg-12">
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
+                                        </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                            <p:inputText disabled="#"  value=""></p:inputText>
+                                        </div>
                                     </div>
                                 </p:outputPanel>
                             </div>
