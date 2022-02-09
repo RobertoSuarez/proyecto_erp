@@ -166,12 +166,11 @@ public class FormulaElaboracionMB implements Serializable {
                 showWarn("Ingrese el rendimiento");
             } else if ("".equals(formulaProduccion.getCodigo_producto())) {
                 showWarn("Escoja un producto");
-            } else if(formulaProduccion.getCodigo_proceso()==0){
+            } else if (formulaProduccion.getCodigo_proceso() == 0) {
                 showWarn("Seleccione un proceso");
-            }else if (!validaMateriales()) {
-                showWarn("Ingrese valores Unidad de Medida y Cantidades");
-            }
-            else {
+            } else if (!validaMateriales()) {
+                showWarn("Ingrese valores Unidad de Medida, Cantidades y seleccione un Subproceso");
+            } else {
                 if (formulaProduccionDAO.insertarFormula(formulaProduccion) > 0) {
                     for (FormulaMateriales lista : listaMaterialesConfirmados) {
                         if (lista.getCantidad() != 0 && !"".equals(lista.getUnidadMedida())) {
@@ -198,7 +197,8 @@ public class FormulaElaboracionMB implements Serializable {
     public boolean validaMateriales() {
         boolean verifica = false;
         for (FormulaMateriales lista : listaMaterialesConfirmados) {
-            if (lista.getCantidad() >= 0 && lista.getUnidadMedida()!=null && lista.getCodigoSuproceso()>0) {
+            if (lista.getCantidad() >= 0 && lista.getUnidadMedida() != null
+                    && lista.getCodigoSuproceso() > 0 && listaMaterialesConfirmados != null) {
                 verifica = true;
             } else {
                 verifica = false;
@@ -283,7 +283,8 @@ public class FormulaElaboracionMB implements Serializable {
         formulaProduccion.setTiempoFormula(formulaProduccionDAO.tiempoFormula(formulaProduccion.getCodigo_proceso(),
                 formulaProduccion.getRendimiento()));
     }
-    public void limpiarFormulario(){
+
+    public void limpiarFormulario() {
         formulaProduccion = new FormulaProduccion();
         formulaProduccionDAO = new FormulaProduccionDAO();
         procesoProduccionDAO = new ProcesoProduccionDAO();
