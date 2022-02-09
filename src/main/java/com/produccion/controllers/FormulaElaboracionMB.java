@@ -223,7 +223,12 @@ public class FormulaElaboracionMB implements Serializable {
 
     //borrar si no sale
     public void addMateriales2(FormulaProduccion producto) {
-        listaMateriales.add(llenarMateriales(producto));
+        FormulaMateriales verifica = llenarMateriales(producto);
+        if (verifica != null) {
+            if (producto.isVerifica()) {
+                listaMateriales.add(verifica);
+            }
+        }
     }
 
     public FormulaMateriales llenarMateriales(FormulaProduccion materiales) {
@@ -232,6 +237,14 @@ public class FormulaElaboracionMB implements Serializable {
                     materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
             return materialesFormula;
         } else {
+            FormulaMateriales buscar = new FormulaMateriales(materiales.getNombre(),
+                    materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
+            for(FormulaMateriales lista:listaMateriales){
+                if(lista.getCodigoProducto()==buscar.getCodigoProducto()){
+                    listaMateriales.remove(lista);
+                }
+                
+            }
             return null;
         }
 
