@@ -27,7 +27,7 @@ public class CentroCostoDAO {
       */
     public List<CentroCosto> getCentroCosots() {
         List<CentroCosto> centro = new ArrayList<>();
-        String sql = String.format("SELECT * FROM getcentrocostos();");
+        String sql = String.format("SELECT * FROM centro_costo;");
         try {
             //llamamos a la conexion
             conexion.conectar();

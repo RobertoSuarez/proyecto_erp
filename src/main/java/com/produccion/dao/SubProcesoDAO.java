@@ -26,7 +26,7 @@ public class SubProcesoDAO {
 
     public List<ProcesoProduccion> getProcesosProduccion() {
         List<ProcesoProduccion> procesos = new ArrayList<>();
-        String sentenciaSql = String.format("select * from getProcesosProduccion();");
+        String sentenciaSql = String.format("select * from proceso_produccion;");
         try {
             //llamamos a la conexion
             conexion.conectar();
@@ -122,12 +122,12 @@ public class SubProcesoDAO {
             minutos += date.getMinutes();
             proceso.setPieza(1);
             proceso.setMinuto_pieza(minutos / proceso.getRendimiento());
-            proceso.setMinuto_directo(MOD(proceso.getId_codigo_proceso())/minutos);
-            proceso.setMinuto_intirecto(CIF(proceso.getId_codigo_proceso())/minutos);
+            proceso.setMinuto_directo((MOD(proceso.getId_codigo_proceso()))/minutos);
+            proceso.setMinuto_intirecto((CIF(proceso.getId_codigo_proceso()))/minutos);
             String sentenciaSql = "UPDATE public.proceso_produccion\n"
                     + "	SET pieza=" + proceso.getPieza() + ", minutos_pieza=" + proceso.getMinuto_pieza() + ", minuto_directo="+proceso.getMinuto_directo()
                     +", minuto_indirecto="+proceso.getMinuto_intirecto()+", cantidad_estimada="+proceso.getRendimiento()+"\n"
-                    + "	WHERE codigo_proceso=?;";
+                    + "	WHERE codigo_proceso="+proceso.getId_codigo_proceso()+";";
             
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public class SubProcesoDAO {
                     + "	where pp.codigo_proceso=" + codProceso;
             resultSet = conexion.ejecutarSql(sentenciaSql);
             while (resultSet.next()) {
-                costoIndirecto = resultSet.getFloat("CMO");
+                costoIndirecto = resultSet.getFloat("CIF");
             }
             return costoIndirecto;
 

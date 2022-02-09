@@ -127,7 +127,7 @@ public class FormulaProduccionDAO {
             String cadena = "INSERT INTO public.formula(\n"
                     + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\")\n"
                     + "	VALUES ( " + f.getCodigo_proceso() + ", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento()
-                    + ", '"+f.getEstado()+"', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ");";
+                    + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ");";
             return conexion.insertar(cadena);
         } catch (Exception e) {
             return -1;
@@ -170,6 +170,44 @@ public class FormulaProduccionDAO {
 
         }
 
+    }
+
+    public float MOD(int codigo, float pieza) {
+        try {
+            float cif=0;
+            conexion.Conectar();
+            String sql = "select ((pp.minutos_pieza*" + pieza + ")*pp.minuto_directo)as total from formula as f \n"
+                    + "	inner join proceso_produccion as pp on f.codigo_proceso=pp.codigo_proceso\n"
+                    + "	where f.codigo_proceso=" + codigo + ";";
+            resultSet=conexion.ejecutarSql(sql);
+            while(resultSet.next()){
+                cif=resultSet.getFloat("total");
+            }
+            return cif;
+        } catch (SQLException e) {
+            return -1;
+        }finally{
+            conexion.cerrarConexion();
+        }
+    }
+
+    public float CIF(int codigo, float pieza) {
+        try {
+            float cif=0;
+            conexion.Conectar();
+            String sql = "select ((pp.minutos_pieza*" + pieza + ")*pp.minuto_indirecto)as total from formula as f \n"
+                    + "	inner join proceso_produccion as pp on f.codigo_proceso=pp.codigo_proceso\n"
+                    + "	where f.codigo_proceso=" + codigo + ";";
+            resultSet=conexion.ejecutarSql(sql);
+            while(resultSet.next()){
+                cif=resultSet.getFloat("total");
+            }
+            return cif;
+        } catch (SQLException e) {
+            return -1;
+        }finally{
+            conexion.cerrarConexion();
+        }
     }
 
 }

@@ -181,6 +181,7 @@ public class SubProcesoMB implements Serializable {
                 //insertamos costo indirecto
                 subProcesoDAO.insertarDetalleSubproceso(subproceso);
             }
+            subProcesoDAO.actualizaProceso(sproceso);
             //Mensaje de proceso terminado con exito
             FacesMessage msg = new FacesMessage("Se inserto con existo", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);

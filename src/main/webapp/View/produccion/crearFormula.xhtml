@@ -64,22 +64,27 @@ and open the template in the editor.
                                     <div class="p-col-6">
                                         <p:outputLabel value="Rendimiento :"></p:outputLabel>
                                         <p:inputNumber value="#{formulaMBeans.formulaProduccion.rendimiento}" maxlength="25"
-                                                       placeholder="Ingrese numero" ></p:inputNumber>
+                                                       placeholder="Ingrese numero" >
+                                            <p:ajax event="blur" update="mod,cif" listener="#{formulaMBeans.costosProduccion()}"/>
+                                        </p:inputNumber>
                                     </div>
 
 
                                     <div class="p-col-6">
                                         <p:outputLabel value="MOD:"></p:outputLabel>
-                                        <p:inputNumber value="#{formulaMBeans.formulaProduccion.MOD}"/>
+                                        <p:inputNumber id="mod" value="#{formulaMBeans.formulaProduccion.MOD}" readonly="true"/>
                                     </div>
+
+
 
                                     <div class="p-col-6">
                                         <p:outputLabel value="Proceso Principal:"></p:outputLabel>
                                         <p:selectOneMenu
                                             value="#{formulaMBeans.formulaProduccion.codigo_proceso}"
                                             editable="false">
-                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}"/>
+                                            
                                             <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
+                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}" update=":form-princFormula:MaterialesProducto,mod,cif"/>
                                             <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
                                                            itemLabel="#{proceso.nombre}"
                                                            itemValue="#{proceso.codigo_proceso}"/>
@@ -88,9 +93,11 @@ and open the template in the editor.
 
                                     <div class="p-col-6">
                                         <p:outputLabel value="CIF:"></p:outputLabel>
-                                        <p:inputNumber value="#{formulaMBeans.formulaProduccion.CIF}">
+                                        <p:inputNumber id="cif" value="#{formulaMBeans.formulaProduccion.CIF}" readonly="true">
                                         </p:inputNumber>
                                     </div>
+
+
 
                                     <div class="p-col-2">
                                         <p:commandButton value="Materia Prima" icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
@@ -102,7 +109,7 @@ and open the template in the editor.
                                 <!-- Tabla de materia  -->
                                 <p:dataTable id="MaterialesProducto" editable="true" reflow="true" var="Materiales"
                                              editInitEvent="dblclick" editMode="cell"
-                                             value="#{formulaMBeans.listaMateriales}">
+                                             value="#{formulaMBeans.listaMaterialesConfirmados}">
 
                                     <!-- comment <f:facet name="header">
                                         <div class="p-d-flex p-jc-between p-ai-center">
@@ -146,10 +153,10 @@ and open the template in the editor.
                                                 <h:outputText value="#{Materiales.cantidad}"/>
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:inputText value="#{Materiales.cantidad}" 
+                                                <p:inputNumber value="#{Materiales.cantidad}" 
                                                              style="width:100%">
                                                     <p:ajax event="blur" update=":form-princFormula:MaterialesProducto"/>
-                                                </p:inputText>
+                                                </p:inputNumber>
                                             </f:facet>
                                         </p:cellEditor>
 
@@ -171,16 +178,12 @@ and open the template in the editor.
 
                                     <p:column headerText="Acciones">
                                         <p:column headerText="Acciones">
-                                            <p:commandButton icon="pi pi-pencil" actionListener="#{formulaMBeans.deleteFila(Materiales)}"
-                                                             update=":form-princFormula:MaterialesProducto">
+                                            <p:commandButton icon="pi pi-trash" actionListener="#{formulaMBeans.deleteFila(Materiales)}"
+                                                             styleClass="edit-button rounded-button ui-button-danger"
+                                                             update=":form-princFormula:MaterialesProducto"
+                                                             process="@this">
 
                                             </p:commandButton>
-                                            <p:commandButton icon="pi pi-trash" action="#"  
-                                                             styleClass="edit-button rounded-button ui-button-danger" process="@this"
-                                                             oncomplete="PF('eliminarForm').show()"
-                                                             style="margin-left: 6px;">
-                                            </p:commandButton>
-
                                         </p:column>
                                     </p:column>
                                 </p:dataTable>
@@ -277,7 +280,7 @@ and open the template in the editor.
                               widgetVar="materiaPrima" responsive="true" width="75%"
                               draggable="false" height="500">
 
-                        <p:outputPanel class="ui-fluid">
+                        <p:outputPanel id="materiaPrima" class="ui-fluid">
                             <p:outputPanel>
                                 <div class="p-grid p-justify-around">
                                     <div class="p-col-1 p-md-1 p-lg-5">
@@ -295,9 +298,9 @@ and open the template in the editor.
                                                              editInitEvent="dblclick" editMode="cell"
                                                              value="#{formulaMBeans.productoTerminado}" var="TablaMateriaPrima">
                                                     <p:column headerText="Acciones">
-                                                        <p:selectBooleanCheckbox value="#{formulaMB.verificar}">
+                                                        <p:selectBooleanCheckbox value="#{TablaMateriaPrima.verifica}">
                                                             <p:ajax listener="#{formulaMBeans.addMateriales2(TablaMateriaPrima)}" 
-                                                                    update=":form-princFormula:MaterialesProducto"/>
+                                                                    />
                                                         </p:selectBooleanCheckbox>
 
                                                     </p:column>
@@ -332,7 +335,11 @@ and open the template in the editor.
                                             <div class="p-col-2">
                                                 <p:commandButton value="Confirmar"  
                                                                  icon="pi pi-check" 
-                                                                 disabled="#" styleClass="ui-button-primary"/>
+                                                                 actionListener="#{formulaMBeans.llenaMaterialiesConfirmados()}" 
+                                                                 styleClass="ui-button-primary"
+                                                                 update=":form-princFormula:MaterialesProducto :form-princFormula:growl"
+                                                                 process=":form-princFormula:dtMateriaPrimaPrin @this"
+                                                                 oncomplete="PF('materiaPrima').hide()"/>
                                             </div>
                                             <div class="p-col-2">
                                                 <p:commandButton value="Cerrar" icon="pi pi-times"

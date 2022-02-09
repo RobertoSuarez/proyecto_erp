@@ -42,6 +42,7 @@ public class FormulaElaboracionMB implements Serializable {
     private List<ProcesoProduccion> listProceso;
     private List<SubProceso> listSubProceso;
     private List<FormulaMateriales> listaMateriales;
+    private List<FormulaMateriales> listaMaterialesConfirmados;
     private List<FormulaProduccion> productoTerminado;
 
     public FormulaElaboracionMB() {
@@ -54,6 +55,7 @@ public class FormulaElaboracionMB implements Serializable {
         listSubProceso = new ArrayList<>();
         listaMateriales = new ArrayList<>();
         productoTerminado = new ArrayList<>();
+        listaMaterialesConfirmados = new ArrayList<>();
         formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
         formulaMaterialesDAO = new FormulaMaterialesDAO();
     }
@@ -138,9 +140,18 @@ public class FormulaElaboracionMB implements Serializable {
         this.verificar = verificar;
     }
 
+    public List<FormulaMateriales> getListaMaterialesConfirmados() {
+        return listaMaterialesConfirmados;
+    }
+
+    public void setListaMaterialesConfirmados(List<FormulaMateriales> listaMaterialesConfirmados) {
+        this.listaMaterialesConfirmados = listaMaterialesConfirmados;
+    }
+
     //metodos
     public void llenarListaSubproceso() {
         listSubProceso = formulaProduccionDAO.getSubProceso(formulaProduccion.getCodigo_proceso());
+        costosProduccion();
     }
 
     public void insertarDatos() {
@@ -204,9 +215,38 @@ public class FormulaElaboracionMB implements Serializable {
     }
 
     public FormulaMateriales llenarMateriales(FormulaProduccion materiales) {
-        materialesFormula = new FormulaMateriales(materiales.getNombre(),
-                materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
-        return materialesFormula;
+        if (materiales.isVerifica()) {
+            materialesFormula = new FormulaMateriales(materiales.getNombre(),
+                    materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
+            return materialesFormula;
+        } else {
+            return null;
+        }
+
+    }
+
+    public void llenaMaterialiesConfirmados() {
+        for (FormulaMateriales materiales : listaMateriales) {
+            if (materiales != null) {
+                if (duplicidadDatos(materiales)) {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "",
+                                    "El producto ya se encuentra agregado"));
+                } else {
+                    listaMaterialesConfirmados.add(materiales);
+                }
+            }
+        }
+    }
+
+    public boolean duplicidadDatos(FormulaMateriales datos) {
+        boolean confirmacion = false;
+        for (FormulaMateriales materiales : listaMaterialesConfirmados) {
+            if (materiales.getCodigoProducto() == datos.getCodigoProducto()) {
+                confirmacion = true;
+            }
+        }
+        return confirmacion;
     }
 
     //hasta aqui eliminar si no sale
@@ -223,12 +263,19 @@ public class FormulaElaboracionMB implements Serializable {
         return materialesFormula;
     }
 
+    public void costosProduccion() {
+        formulaProduccion.setCIF(formulaProduccionDAO.CIF(formulaProduccion.getCodigo_proceso(),
+                formulaProduccion.getRendimiento()));
+        formulaProduccion.setMOD(formulaProduccionDAO.MOD(formulaProduccion.getCodigo_proceso(),
+                formulaProduccion.getRendimiento()));
+    }
+
     public List<FormulaMateriales> listarMateriales() {
         return listaMateriales;
     }
 
     public void deleteFila(FormulaMateriales producto) {
-        listaMateriales.remove(producto);
+        listaMaterialesConfirmados.remove(producto);
     }
 
 }

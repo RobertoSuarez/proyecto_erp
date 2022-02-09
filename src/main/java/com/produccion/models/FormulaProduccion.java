@@ -9,6 +9,7 @@ import com.global.config.Conexion;
 
 public class FormulaProduccion {
 
+    private boolean verifica;
     private int codigo_formula;
     private int codigo_proceso;
     private int codigo_subproceso;
@@ -212,6 +213,14 @@ public class FormulaProduccion {
 
     public void setCodigo_producto(int codigo_producto) {
         this.codigo_producto = codigo_producto;
+    }
+
+    public boolean isVerifica() {
+        return verifica;
+    }
+
+    public void setVerifica(boolean verifica) {
+        this.verifica = verifica;
     }
 
 }
