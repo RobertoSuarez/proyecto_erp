@@ -168,81 +168,107 @@
                                     <h:form id="formnuevoDepreciable">
                                         <p:dialog header="Nuevo Activo Depreciable"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
+                                                  responsive="true"
                                                   modal="true" widgetVar="NuevoDepreciable"
                                                   id="ingresodepreciable">
-                                            <div  style="display: flex;justify-content: center" class="p-grid">
-                                                <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
-                                                    <p:overlayPanel for="proveedor" dynamic="true" 
-                                                                    style="width:600px" widgetVar="moviePicker">
-                                                        <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
-                                                                     rows="5" paginator="true" selectionMode="single"
-                                                                     selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
-                                                            <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
-                                                                    oncomplete="PF('moviePicker').hide()" 
-                                                                    update="@formnuevoDepreciable" 
-                                                                    />
+                                            <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
+                                                <p:overlayPanel for="proveedor" dynamic="true" 
+                                                                style="width:600px" widgetVar="moviePicker">
+                                                    <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
+                                                                 rows="5" paginator="true" selectionMode="single"
+                                                                 selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
+                                                        <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
+                                                                oncomplete="PF('moviePicker').hide()" 
+                                                                update="@formnuevoDepreciable" 
+                                                                />
 
-                                                            <p:column headerText="Proveedor">
-                                                                <h:outputText value="#{proveedor.codigo}"/>
-                                                            </p:column>
-                                                            <p:column headerText="Nombre">
-                                                                <h:outputText value="#{proveedor.nombre}"/>
-                                                            </p:column>
-                                                            <p:column headerText="Ruc">
-                                                                <h:outputText value="#{proveedor.ruc}"/>
-                                                            </p:column>
-                                                        </p:dataTable>
-                                                    </p:overlayPanel>
-                                                    <h:panelGrid columns="4" class="p-col" >
-                                                        <p:outputLabel for="@next" value="Descripción: "/>
-                                                        <p:inputText  value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true" >
-                                                            <!-- <p:keyFilter mask="alpha"/>-->
-                                                        </p:inputText>
-                                                        <p:outputLabel for="@next" value="Costo Adquisición:" />
-                                                        <p:inputText  type="number" value="#{activosFijosMB.activosFijos.valor_adquisicion}" required="true" >
-                                                            <p:keyFilter regEx="/[0-9]/i" />
-                                                        </p:inputText>
+                                                        <p:column headerText="Proveedor">
+                                                            <h:outputText value="#{proveedor.codigo}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Nombre">
+                                                            <h:outputText value="#{proveedor.nombre}"/>
+                                                        </p:column>
+                                                        <p:column headerText="Ruc">
+                                                            <h:outputText value="#{proveedor.ruc}"/>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </p:overlayPanel>
+                                                <p:outputPanel class="ui-fluid" >
 
-                                                        <p:outputLabel for="@next" value="Tiempo de depreciación en Meses:" />
-                                                        <p:inputText type="number" value="#{activosFijosMB.activodepreciable.depreciacion_meses}" required="true" >
-                                                            <p:keyFilter regEx="/[0-9]/i"/>
-                                                        </p:inputText>
+                                                    <div class="p-formgrid p-grid">
+                                                        <div class="p-field p-col">
+                                                            <p:outputLabel for="proveedor"  value="Proveedor: "/>
+                                                            <p:inputText   id="proveedor" type="button" value="#{activosFijosMB.activosFijos.proveedor}" required="true" />
 
-                                                        <p:outputLabel for="@next" value="Porcentaje de Depreciación: %" />
-                                                        <p:inputText type="number" value="#{activosFijosMB.activodepreciable.porcentaje_depreciacion}" required="true" >
-                                                            <p:keyFilter regEx="/[0-9,]/i" />
-                                                        </p:inputText>
+                                                        </div>
+                                                        <div class="p-field p-col">
+                                                            <p:outputLabel for="@next" value="Costo Adquisición:" />
+                                                            <p:inputText  type="number" value="#{activosFijosMB.activosFijos.valor_adquisicion}" required="true" >
+                                                                <p:keyFilter regEx="/[0-9]/i" />
+                                                            </p:inputText>
+                                                        </div>
 
-                                                        <p:outputLabel value="Número de Factura: "/>
-                                                        <p:inputText   value="#{activosFijosMB.activosFijos.numero_factura}" />
+                                                        <div class="p-field p-col">
+                                                            <p:outputLabel value="Fecha de Adquisición:    " />
+                                                            <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
 
-                                                        <p:outputLabel for="proveedor"  value="Proveedor: "/>
-                                                        <p:inputText   id="proveedor" type="button" value="#{activosFijosMB.activosFijos.proveedor}" required="true" />
+                                                        </div>
+                                                    </div>
 
-                                                        <p:outputLabel value="Fecha de Adquisición:    " />
-                                                        <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
+                                                    <!--j-->
+                                                    <div class="p-formgrid p-grid">
+                                                        <div class="p-field p-col">
+                                                            <p:outputLabel for="@next" value="Tiempo de depreciación en Meses:" />
+                                                            <p:inputText type="number" value="#{activosFijosMB.activodepreciable.depreciacion_meses}" required="true" >
+                                                                <p:keyFilter regEx="/[0-9]/i"/>
+                                                            </p:inputText>
 
-                                                    </h:panelGrid>
+                                                        </div>
+                                                        <div class="p-field p-col">
+                                                            <p:outputLabel for="@next" value="Porcentaje de Depreciación: %" />
+                                                            <p:inputText type="number" value="#{activosFijosMB.activodepreciable.porcentaje_depreciacion}" required="true" >
+                                                                <p:keyFilter regEx="/[0-9,]/i" />
+                                                            </p:inputText>
+                                                        </div>
+                                                        <div class="p-field p-col">
+                                                            <p:outputLabel value="Número de Factura: "/>
+                                                            <p:inputText   value="#{activosFijosMB.activosFijos.numero_factura}" />
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <p:outputLabel for="@next" value="Descripción: "/>
+                                                    <p:inputText  value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true" >
+                                                    </p:inputText>
+
+
+
+
+
                                                 </p:outputPanel>
-                                                <div > 
-                                                    <f:facet name="footer">
+                                            </p:outputPanel>
+                                            <div > 
+                                                <f:facet name="footer">
 
-                                                        <p:commandButton value="Guardar" 
-                                                                         icon="pi pi-check" action="#{activosFijosMB.getDataApi()}" ajax="false"
-                                                                         />
-                                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                         onclick="PF('NuevoDepreciable').hide()"
-                                                                         class="ui-button-danger"/>
-                                                    </f:facet>
-                                                </div>   
+                                                    <p:commandButton value="Guardar" 
+                                                                     icon="pi pi-check" action="#{activosFijosMB.getDataApi()}" ajax="false"
+                                                                     />
+                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                     onclick="PF('NuevoDepreciable').hide()"
+                                                                     class="ui-button-danger"/>
+                                                </f:facet>
+                                            </div>   
 
 
-                                            </div>
+
 
                                         </p:dialog> 
                                     </h:form>
                                     <h:form id="editarDepreciable">
-                                        <p:dialog header="Editar Activo Depreciable "  minHeight="40" 
+                                        <p:dialog header="Editar Activo Depreciable " 
+                                                  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="EditarDepreciable"
                                                   id="dialogeditardepreciable">
@@ -251,7 +277,7 @@
                                                     <p:overlayPanel for="listaproveedoreditar" dynamic="true" 
                                                                     style="width:600px" widgetVar="moviePicker">
                                                         <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
-                                                                     rows="5" paginator="true" selectionMode="single"
+                                                                     rows="3" paginator="true" selectionMode="single"
                                                                      selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
                                                             <p:ajax event="rowSelect" listener="#{activosFijosMB.onRowSelect}" 
                                                                     oncomplete="PF('moviePicker').hide()" update=":editarDepreciable:paneleditarpreciableeditar,:editarDepreciable:listaproveedoreditar"/>
@@ -267,35 +293,61 @@
                                                             </p:column>
                                                         </p:dataTable>
                                                     </p:overlayPanel>
-                                                    <h:panelGrid columns="4"  >
+                                                    <p:outputPanel class="ui-fluid"  >
+
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next"  value="Proveedor: "/>
+                                                                <p:inputText  id="listaproveedoreditar" type="button" value="#{activosFijosMB.listadepreciable.proveedor}" required="true"  />
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Costo Adquisición: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listadepreciable.valor_adquisicion}"  required="true">
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
+                                                            </div>
+
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="Fecha de Adquisición:    " />
+                                                                <p:datePicker  value="#{activosFijosMB.listadepreciable.fecha_adquisicion}" showIcon="true"/>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Tiempo de depreciación en Meses: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listadepreciable.depreciacion_meses}" required="true" >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Porcentaje de Depreciación: %"/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listadepreciable.porcentaje_depreciacion}" required="true" >
+                                                                    <p:keyFilter regEx="/[0-9,]/i"/>
+                                                                </p:inputText>
+                                                            </div>
+                                                            <div class="p-field p-col">
+
+
+                                                                <p:outputLabel value="Número de Factura: "/>
+                                                                <p:inputText   value="#{activosFijosMB.listadepreciable.numero_factura}" />
+
+
+                                                            </div>
+                                                        </div>
                                                         <p:outputLabel for="@next" value="Descripción: "/>
                                                         <p:inputText  value="#{activosFijosMB.listadepreciable.detalle_de_activo}" required="true" />
 
-                                                        <p:outputLabel for="@next" value="Costo Adquisición: "/>
-                                                        <p:inputText type="number" value="#{activosFijosMB.listadepreciable.valor_adquisicion}"  required="true">
-                                                            <p:keyFilter regEx="/[0-9]/i"/>
-                                                        </p:inputText>
 
-                                                        <p:outputLabel for="@next" value="Tiempo de depreciación en Meses: "/>
-                                                        <p:inputText type="number" value="#{activosFijosMB.listadepreciable.depreciacion_meses}" required="true" >
-                                                            <p:keyFilter regEx="/[0-9]/i"/>
-                                                        </p:inputText>
 
-                                                        <p:outputLabel for="@next" value="Porcentaje de Depreciación: %"/>
-                                                        <p:inputText type="number" value="#{activosFijosMB.listadepreciable.porcentaje_depreciacion}" required="true" >
-                                                            <p:keyFilter regEx="/[0-9,]/i"/>
-                                                        </p:inputText>
 
-                                                        <p:outputLabel value="Número de Factura: "/>
-                                                        <p:inputText   value="#{activosFijosMB.listadepreciable.numero_factura}" />
 
-                                                        <p:outputLabel for="@next"  value="Proveedor: "/>
-                                                        <p:inputText  id="listaproveedoreditar" type="button" value="#{activosFijosMB.listadepreciable.proveedor}" required="true"  />
 
-                                                        <p:outputLabel value="Fecha de Adquisición:    " />
-                                                        <p:datePicker  value="#{activosFijosMB.listadepreciable.fecha_adquisicion}" showIcon="true"/>
-
-                                                    </h:panelGrid>
+                                                    </p:outputPanel>
                                                 </p:outputPanel>
                                                 <div > 
                                                     <f:facet name="footer">
