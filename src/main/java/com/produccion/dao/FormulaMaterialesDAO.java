@@ -7,6 +7,7 @@ package com.produccion.dao;
 
 import com.global.config.Conexion;
 import com.produccion.models.FormulaMateriales;
+import java.sql.SQLException;
 
 /**
  *
@@ -24,11 +25,11 @@ public class FormulaMaterialesDAO {
         try {
             conexion.Conectar();
             String consulta = "INSERT INTO public.detalle_formula(\n"
-                    + "	codigo_formula, cantidad_unitaria, unidad_medida, precio, codigo_producto)\n"
+                    + "	codigo_formula, cantidad_unitaria, unidad_medida, precio, codigo_producto,codigo_subproceso)\n"
                     + "	VALUES (" + materiales.getCodigFormula() + ", " + materiales.getCantidad() + ", '" + materiales.getUnidadMedida() + "',"
-                    + materiales.getPrecio() + ", " + materiales.getCodigoProducto() + ");";
+                    + materiales.getPrecio() + ", " + materiales.getCodigoProducto() +", " + materiales.getCodigoSuproceso()+ ");";
             return conexion.insertar(consulta);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return -1;
         } finally {
             conexion.desconectar();

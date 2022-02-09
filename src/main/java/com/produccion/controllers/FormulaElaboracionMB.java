@@ -157,31 +157,33 @@ public class FormulaElaboracionMB implements Serializable {
     public void insertarDatos() {
         try {
             if ("".equals(formulaProduccion.getCodigo_proceso())) {
-                mensajeValidaciones("Advertencia", "Ingrese un Identificador");
+                showWarn("Ingrese un Identificador");
             } else if ("".equals(formulaProduccion.getNombre_formula())) {
-                mensajeValidaciones("Advertencia", "Ingrese un Nombre en la formula");
+                showWarn("Ingrese un Nombre en la formula");
             } else if ("".equals(formulaProduccion.getDescripcion())) {
-                mensajeValidaciones("Advertencia", "Ingrese una Descripción");
+                showWarn("Ingrese una Descripción");
             } else if ("".equals(formulaProduccion.getRendimiento())) {
-                mensajeValidaciones("Advertencia", "Ingrese el rendimiento");
+                showWarn("Ingrese el rendimiento");
             } else if ("".equals(formulaProduccion.getCodigo_producto())) {
-                mensajeValidaciones("Advertencia", "Escoja un producto");
-            } else {
+                showWarn("Escoja un producto");
+            } else if(formulaProduccion.getCodigo_proceso()==0){
+                showWarn("Seleccione un proceso");
+            }else if (!validaMateriales()) {
+                showWarn("Ingrese valores Unidad de Medida y Cantidades");
+            }
+            else {
                 if (formulaProduccionDAO.insertarFormula(formulaProduccion) > 0) {
-                    for (FormulaMateriales lista : listaMateriales) {
+                    for (FormulaMateriales lista : listaMaterialesConfirmados) {
                         if (lista.getCantidad() != 0 && !"".equals(lista.getUnidadMedida())) {
                             formulaMaterialesDAO.InsertarMateriales(lista);
                         } else {
-                            mensajeValidaciones("Advertencia", "Ingrese valores Unidad de Medida y Cantidades");
+                            showWarn("Ingrese valores Unidad de Medida y Cantidades");
                         }
                     }
-                    FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito",
-                                    "Formula Agregada"));
+                    showInfo("Formula Agregada");
+                    limpiarFormulario();
                 } else {
-                    FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-                                    "Error al guardar"));
+                    showError("Error al guardar");
                 }
 
             }
@@ -193,8 +195,18 @@ public class FormulaElaboracionMB implements Serializable {
         }
     }
 
-    public void mensajeValidaciones(String tipo, String mensaje) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, tipo, mensaje));
+    public boolean validaMateriales() {
+        boolean verifica = false;
+        for (FormulaMateriales lista : listaMaterialesConfirmados) {
+            if (lista.getCantidad() >= 0 && lista.getUnidadMedida()!=null && lista.getCodigoSuproceso()>0) {
+                verifica = true;
+            } else {
+                verifica = false;
+                break;
+            }
+
+        }
+        return verifica;
     }
 
     public void llenaArticulo(FormulaProduccion inventario) {
@@ -268,6 +280,42 @@ public class FormulaElaboracionMB implements Serializable {
                 formulaProduccion.getRendimiento()));
         formulaProduccion.setMOD(formulaProduccionDAO.MOD(formulaProduccion.getCodigo_proceso(),
                 formulaProduccion.getRendimiento()));
+        formulaProduccion.setTiempoFormula(formulaProduccionDAO.tiempoFormula(formulaProduccion.getCodigo_proceso(),
+                formulaProduccion.getRendimiento()));
+    }
+    public void limpiarFormulario(){
+        formulaProduccion = new FormulaProduccion();
+        formulaProduccionDAO = new FormulaProduccionDAO();
+        procesoProduccionDAO = new ProcesoProduccionDAO();
+        materialesFormula = new FormulaMateriales();
+        listaFormula = new ArrayList<>();
+        listProceso = new ArrayList<>();
+        listSubProceso = new ArrayList<>();
+        listaMateriales = new ArrayList<>();
+        productoTerminado = new ArrayList<>();
+        listaMaterialesConfirmados = new ArrayList<>();
+        formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
+        formulaMaterialesDAO = new FormulaMaterialesDAO();
+        listaFormula = formulaProduccionDAO.getFormula();
+        listProceso = procesoProduccionDAO.getProcesosProduccion();
+        productoTerminado = formulaProduccionDAO.getArticulos();
+    }
+
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+
+    public void showInfo(String message) {
+        addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
+    }
+
+    public void showWarn(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
+    }
+
+    public void showError(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Error", message);
     }
 
     public List<FormulaMateriales> listarMateriales() {

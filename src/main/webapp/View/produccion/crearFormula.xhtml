@@ -82,7 +82,7 @@ and open the template in the editor.
                                         <p:selectOneMenu
                                             value="#{formulaMBeans.formulaProduccion.codigo_proceso}"
                                             editable="false">
-                                            
+
                                             <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
                                             <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}" update=":form-princFormula:MaterialesProducto,mod,cif"/>
                                             <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
@@ -110,22 +110,6 @@ and open the template in the editor.
                                 <p:dataTable id="MaterialesProducto" editable="true" reflow="true" var="Materiales"
                                              editInitEvent="dblclick" editMode="cell"
                                              value="#{formulaMBeans.listaMaterialesConfirmados}">
-
-                                    <!-- comment <f:facet name="header">
-                                        <div class="p-d-flex p-jc-between p-ai-center">
-                                            <span style="font-weight: bold; margin-right: 0.5em;">Formulación</span>
-                                            <p:selectOneMenu id="costoindirectoP" value="#{formulaMBeans.materialesFormula.codigoProducto}" 
-                                                             editable="false">
-                                                <f:selectItem itemLabel="Seleccione un Producto" itemValue="" noSelectionOption="true"/>
-
-                                                <f:selectItems value="#{formulaMBeans.productoTerminado}" var="articulos"
-                                                               itemLabel="#{articulos.nombre}" itemValue="#{articulos.codigo_producto}">
-                                                </f:selectItems>
-                                                <p:ajax listener="#{formulaMBeans.addMateriales()}" update=":form-princFormula:MaterialesProducto"/>
-                                            </p:selectOneMenu>
-
-                                        </div>
-                                    </f:facet>-->
                                     <p:column headerText="Nombre">
                                         <h:outputText value="#{Materiales.nombre}" />
                                     </p:column>
@@ -154,7 +138,7 @@ and open the template in the editor.
                                             </f:facet>
                                             <f:facet name="input">
                                                 <p:inputNumber value="#{Materiales.cantidad}" 
-                                                             style="width:100%">
+                                                               style="width:100%">
                                                     <p:ajax event="blur" update=":form-princFormula:MaterialesProducto"/>
                                                 </p:inputNumber>
                                             </f:facet>
@@ -167,7 +151,7 @@ and open the template in the editor.
                                     </p:column>
 
                                     <p:column headerText="Sub Procesos">
-                                        <p:selectOneMenu id="ElegirSubrocesos" value="#{formulaMBeans.formulaProduccion.codigo_subproceso}">
+                                        <p:selectOneMenu id="ElegirSubrocesos" value="#{Materiales.codigoSuproceso}">
                                             <f:selectItem itemLabel="Seleccionar"/>
                                             <f:selectItems value="#{formulaMBeans.listSubProceso}" var="subproceso"
                                                            itemLabel="#{subproceso.nombre}"

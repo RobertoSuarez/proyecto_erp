@@ -30,6 +30,7 @@ public class FormulaProduccion {
     private float cantidadMaxima;
     private float MOD;
     private float CIF;
+    private float tiempoFormula;
 
     public FormulaProduccion(int codigo_producto, String nombre,
             String categoria, String descripcionProducto,
@@ -221,6 +222,14 @@ public class FormulaProduccion {
 
     public void setVerifica(boolean verifica) {
         this.verifica = verifica;
+    }
+
+    public float getTiempoFormula() {
+        return tiempoFormula;
+    }
+
+    public void setTiempoFormula(float tiempoFormula) {
+        this.tiempoFormula = tiempoFormula;
     }
 
 }

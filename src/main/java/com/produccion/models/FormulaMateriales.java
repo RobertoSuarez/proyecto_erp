@@ -18,6 +18,7 @@ public class FormulaMateriales {
     private float cantidad;
     private String unidadMedida;
     private float precio;
+    public int codigoSuproceso;
 
     public FormulaMateriales() {
     }
@@ -115,6 +116,14 @@ public class FormulaMateriales {
 
     public void setPrecio(float precio) {
         this.precio = precio;
+    }
+
+    public int getCodigoSuproceso() {
+        return codigoSuproceso;
+    }
+
+    public void setCodigoSuproceso(int codigoSuproceso) {
+        this.codigoSuproceso = codigoSuproceso;
     }
 
 }
