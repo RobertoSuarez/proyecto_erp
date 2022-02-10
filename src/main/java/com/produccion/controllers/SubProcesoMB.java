@@ -194,7 +194,7 @@ public class SubProcesoMB implements Serializable {
     public boolean verificaListas(List<Costo> listaDsubproceso) {
         boolean verifica = false;
         for (Costo lista : listaDsubproceso) {
-            if (lista.getCosto()> 0) {
+            if (lista.getCosto() > 0) {
                 verifica = true;
             } else {
                 verifica = false;
@@ -224,6 +224,9 @@ public class SubProcesoMB implements Serializable {
         listaProceso = subProcesoDAO.getProcesosProduccion();
         listaCostoDirecto = detalleSuprocesoDAO.getCosto("Directo");
         listaCostoIndirecto = detalleSuprocesoDAO.getCosto("Indirecto");
+
+        totalDirecto=0;
+        totalIndirecto=0;
     }
 
     public void llenarDetalleDirecto() {
