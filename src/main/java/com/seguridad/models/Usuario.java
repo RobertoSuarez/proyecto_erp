@@ -8,48 +8,41 @@ import java.util.List;
 public class Usuario implements Serializable{
 
     int idUsuario;
-    String msj;
     String nombre;// limte 50
     String apellido;// limte 50
     String username;// limte 15
     String password;// limte 15
     Date fehcaCreacion;
-    boolean habilitado;
+    boolean habilitado = true;
     String email;
-    int code;
-    
     List<Rol> roles;
     
-// RETURNS TABLE(code integer, 
-//reslt character varying, 
-//iduser integer, name character varying, 
-//surname character varying, 
-//usrnm character varying, pssword character varying, 
-//mail character varying) 
-
+    String mensajeAux;
+    int codigoAux;
+    
     public Usuario() {
         this.roles = new ArrayList<>();
     }
 
-    public String getMsj() {
-        return msj;
+    public String getMensajeAux() {
+        return mensajeAux;
     }
 
-    public void setMsj(String msj) {
-        this.msj = msj;
+    public void setMensajeAux(String mensajeAux) {
+        this.mensajeAux = mensajeAux;
     }
 
-    public int getCode() {
-        return code;
+    public int getCodigoAux() {
+        return codigoAux;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setCodigoAux(int codigoAux) {
+        this.codigoAux = codigoAux;
     }
 
     public Usuario(int code, String reslt, int iduser, String name, String surname, String usrnm, String pssword, String mail) {
-        this.code = code;
-        this.msj = reslt;
+        this.codigoAux = code;
+        this.mensajeAux = reslt;
         this.idUsuario = iduser;
         this.nombre = name;
         this.apellido = surname;
