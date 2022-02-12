@@ -10,6 +10,9 @@
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                
+                <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
+                
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
@@ -20,6 +23,7 @@
                     <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
                     <div>
                         <p:tabView class="formulario" id="tabladepreciable" prependId="false">
+                            
                             <p:tab title="Depreciables" >
 
                                 <p:panel>
@@ -31,7 +35,8 @@
                                                     <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                                      oncomplete="PF('NuevoDepreciable').show()"   
                                                                      styleClass="ui-button-primary" 
-                                                                     style="margin-right: .3rem">                               
+                                                                     style="margin-right: .3rem"
+                                                                     rendered="#{seguridadActvFijo.renderSoloGerente()}">                               
                                                     </p:commandButton>
                                                     <p:commandButton value="Deshabilitados" 
                                                                      icon="pi pi-pencil"
@@ -88,7 +93,7 @@
                                                     <h:outputText value="#{depreciable.proveedor}"/>
                                                 </p:column>
 
-                                                <p:column headerText="Opciones">
+                                                <p:column headerText="Opciones" rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                                     <p:commandButton  
                                                         actionListener="#{activosFijosMB.obtenerdatos(depreciable)}"
                                                         update="editarDepreciable"
@@ -150,7 +155,7 @@
                                                         <h:outputText value="#{depreciable.proveedor}"/>
                                                     </p:column>
 
-                                                    <p:column headerText="Habilitar">
+                                                    <p:column headerText="Habilitar" rendered="#{seguridadActvFijo.renderSoloGerente()}">
 
                                                         <p:commandButton action="#{activosFijosMB.setHabilitarintangible(depreciable.id_activo_fijo)}" ajax="false"
                                                                          update="formDepreciable formverdeshabilitadodepreciable"
@@ -168,7 +173,7 @@
                                     <h:form id="formnuevoDepreciable">
                                         <p:dialog header="Nuevo Activo Depreciable"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
-                                                  responsive="true"
+                                                  responsive="true" rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                                   modal="true" widgetVar="NuevoDepreciable"
                                                   id="ingresodepreciable">
                                             <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
@@ -267,7 +272,7 @@
                                         </p:dialog> 
                                     </h:form>
                                     <h:form id="editarDepreciable">
-                                        <p:dialog header="Editar Activo Depreciable " 
+                                        <p:dialog header="Editar Activo Depreciable "  rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                                   minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="EditarDepreciable"
@@ -386,7 +391,7 @@
                                                 <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                                  oncomplete="PF('NuevoNoDepreciable').show()"   
                                                                  styleClass="ui-button-primary" 
-                                                                 style="margin-right: .3rem">                               
+                                                                 style="margin-right: .3rem" rendered="#{seguridadActvFijo.renderSoloGerente()}">                               
                                                 </p:commandButton>
                                                 <p:commandButton value="Deshabilitados" 
                                                                  icon="pi pi-pencil"
@@ -438,7 +443,7 @@
                                                 <p:column headerText="Proveedor"  >
                                                     <h:outputText value="#{nodepreciable.proveedor}"/>
                                                 </p:column>
-                                                <p:column headerText="Opciones  ">
+                                                <p:column headerText="Opciones  " rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                                     <p:commandButton 
                                                         actionListener="#{activosFijosMB.obtenerdatosNodepreciables(nodepreciable)}"
                                                         update="formeditarNoDepreciable"
@@ -496,7 +501,7 @@
                                                     <p:column headerText="Proveedor"  >
                                                         <h:outputText value="#{nodepreciable.proveedor}"/>
                                                     </p:column> 
-                                                    <p:column headerText="Habilitar  ">
+                                                    <p:column headerText="Habilitar  " rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                                         <p:commandButton action="#{activosFijosMB.setHabilitarintangibleNoDepreciable(nodepreciable.id_activo_fijo)}" ajax="false"
                                                                          update="fromverNodepreciable formverdeshabilitadonodepreciable"
                                                                          oncomplete="ActivosTangibles.xhtml.show()"  
@@ -515,7 +520,8 @@
                                         <p:dialog header="Nuevo Activo No Depreciable"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="NuevoNoDepreciable"
-                                                  id="dialogoingresarNodepreciable">
+                                                  id="dialogoingresarNodepreciable"
+                                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
                                                 <h:panelGrid columns="4"  >
                                                     <p:outputLabel for="@next" value="Descripción: "/>
@@ -561,7 +567,8 @@
                                         <p:dialog header="Editar Activo No Depreciable"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="EditarNoDepreciable"
-                                                  id="dialogeditarNoDepreciable">
+                                                  id="dialogeditarNoDepreciable"
+                                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
                                                 <h:panelGrid columns="4"  >
                                                     <p:outputLabel for="@next" value="Descripción: "/>
@@ -625,7 +632,8 @@
                                                 <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                                  oncomplete="PF('NuevoAgotable').show()"   
                                                                  styleClass="ui-button-primary" 
-                                                                 style="margin-right: .3rem">                               
+                                                                 style="margin-right: .3rem"
+                                                                 rendered="#{seguridadActvFijo.renderSoloGerente()}">                               
                                                 </p:commandButton>
                                                 <p:commandButton value="Deshabilitados" 
                                                                  icon="pi pi-pencil"
@@ -666,7 +674,7 @@
                                                 <p:column headerText="Proveedor"  >
                                                     <h:outputText value="#{agotables.proveedor}"/>
                                                 </p:column>
-                                                <p:column headerText="Opciones">  
+                                                <p:column headerText="Opciones" rendered="#{seguridadActvFijo.renderSoloGerente()}">  
                                                     <p:commandButton 
                                                         actionListener="#{activosFijosMB.obtenerdatosAgotables(agotables)}"
                                                         update="formeditarAgotable"
@@ -683,7 +691,8 @@
                                         <p:dialog header="Activos  Agotables Deshabilitados"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="deshabilitadosagotables"
-                                                  id="dialogoingresarNodepreciable">
+                                                  id="dialogoingresarNodepreciable"
+                                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
                                                 <p:dataTable id="visualizarAgotable" value="#{activosFijosMB.agotablesdao.listaragotablesDeshabilitados()}" var="agotables" 
                                                              rowKey="#{agotables.id_activo_fijo}" editable="true">
@@ -732,7 +741,8 @@
                                         <p:dialog header="Nuevo Activo Agotable"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="NuevoAgotable"
-                                                  id="dialogingresoAgotable">
+                                                  id="dialogingresoAgotable"
+                                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
                                                 <h:panelGrid columns="4"  >
                                                     <p:outputLabel for="@next" value="Descripción: "/>
@@ -776,7 +786,8 @@
                                         <p:dialog header="Editar Activo Agotable"  minHeight="40" 
                                                   height="auto" width="1000px" showEffect="fade"
                                                   modal="true" widgetVar="EditarAgotable"
-                                                  id="dialogeditarAgotable">
+                                                  id="dialogeditarAgotable"
+                                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
 
                                                 <h:panelGrid columns="4"  >

@@ -15,6 +15,9 @@ and open the template in the editor.
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                
+                <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
+                
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
                     <p:menuitem value="Intangibles" url="#"/>
@@ -34,7 +37,8 @@ and open the template in the editor.
                                     <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                      oncomplete="PF('NuevoIntangible').show()"   
                                                      styleClass="ui-button-primary" 
-                                                     style="margin-right: .3rem">                               
+                                                     style="margin-right: .3rem"
+                                                     rendered="#{seguridadActvFijo.renderSoloGerente()}">                               
                                     </p:commandButton>
                                     <p:commandButton value="Deshabilitados" 
                                                      update="formintangible"
@@ -71,7 +75,7 @@ and open the template in the editor.
                                 <p:column headerText="Proveedor"  >
                                     <h:outputText value="#{intangible.proveedor}"/>
                                 </p:column>
-                                <p:column headerText="Opciones" >
+                                <p:column headerText="Opciones" rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                     <p:commandButton  
                                         icon="pi pi-pencil"
                                         update=":formintangible:paneleditar"
@@ -116,7 +120,7 @@ and open the template in the editor.
                                     <p:column headerText="Proveedor"  >
                                         <h:outputText value="#{intangible.proveedor}"/>
                                     </p:column>
-                                    <p:column headerText="Habilitar  ">
+                                    <p:column headerText="Habilitar  " rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                         <p:commandButton action="#{activosintangilesMB.setHabilitarintangible(intangible.id_activo_fijo)}" 
 
                                                          icon="pi pi-check"
@@ -137,7 +141,8 @@ and open the template in the editor.
                                   height="200" width="60%" 
                                   showEffect="fade"
                                   modal="true" 
-                                  widgetVar="NuevoIntangible">
+                                  widgetVar="NuevoIntangible"
+                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
 
                             <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
                                 <p:overlayPanel for="proveedor" dynamic="true" 

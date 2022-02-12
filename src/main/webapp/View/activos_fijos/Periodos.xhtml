@@ -12,6 +12,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                
+                <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
+                
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
                     <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
