@@ -12,24 +12,7 @@
 
             <ui:define name="content">
 
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Nueva venta"
-                                style="display: flex; align-items: center; text-decoration: none;"
-                                outcome="/View/ventas/nuevaVenta.xhtml" 
-                                icon="pi pi-shopping-cart" />
-                    <p:menuitem value="Lista ventas"
-                                style="display: flex; align-items: center; text-decoration: none;"
-                                outcome="/View/ventas/listaVentas.xhtml" 
-                                icon="pi pi-book" />
-                    <p:menuitem value="Nueva proforma"
-                                style="display: flex; align-items: center; text-decoration: none;"
-                                outcome="/View/ventas/nuevaProforma.xhtml" 
-                                icon="pi pi-plus-circle" />
-                    <p:menuitem value="Lista proforma"
-                                style="display: flex; align-items: center; text-decoration: none;"
-                                outcome="/View/ventas/listaProforma.xhtml" 
-                                icon="pi pi-book" />
-                </p:menubar>
+               <ui:include src="menuVentas.xhtml"/>
 
                 <h:form id="listaDeProforma" >
                     <br/><br/><br/><br/>
