@@ -1,0 +1,26 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <p:menubar autoDisplay="false" style="position: fixed; width: 100%; padding-top: 10px">
+        <p:menuitem value="Nueva venta"
+                    outcome="/View/ventas/nuevaVenta.xhtml" 
+                    icon="pi pi-shopping-cart" />
+        <p:menuitem value="Lista ventas"
+                    outcome="/View/ventas/listaVentas.xhtml" 
+                    icon="pi pi-book" />
+        <p:menuitem value="Nueva proforma"
+                    outcome="/View/ventas/nuevaProforma.xhtml" 
+                    icon="pi pi-plus-circle" />
+        <p:menuitem value="Lista proforma"
+                    outcome="/View/ventas/listaProforma.xhtml" 
+                    icon="pi pi-book" />
+        <p:menuitem value="Lista precios"
+                    outcome="/View/ventas/listaPrecios.xhtml" 
+                    icon="pi pi-book" />
+    </p:menubar>
+
+</ui:composition>
