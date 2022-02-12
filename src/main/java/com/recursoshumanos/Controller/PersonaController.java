@@ -94,7 +94,8 @@ public class PersonaController implements Serializable {
      * interfaz.
      */
     public void mostrarMensajeInformacion(String mensaje) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
