@@ -10,9 +10,9 @@
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                
+
                 <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-                
+
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
@@ -23,7 +23,7 @@
                     <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
                     <div>
                         <p:tabView class="formulario" id="tabladepreciable" prependId="false">
-                            
+
                             <p:tab title="Depreciables" >
 
                                 <p:panel>
@@ -457,9 +457,14 @@
                                     </div>
                                     <h:form id="formverdeshabilitadonodepreciable" >
 
-                                        <p:dialog header="Activo No Depreciables Deshabilitados"  minHeight="40" 
-                                                  height="auto" width="1000px" showEffect="fade"
-                                                  modal="true" widgetVar="deshabilitadosnodepreciables"
+                                        <p:dialog header="Activo No Depreciables Deshabilitados"  
+                                                  minHeight="40" 
+                                                  height="auto" 
+                                                  responsive="true"
+                                                  width="60%"
+                                                  showEffect="fade"
+                                                  modal="true" 
+                                                  widgetVar="deshabilitadosnodepreciables"
                                                   id="dialogoingresarNodepreciable">
                                             <div  style="display: flex;justify-content: center">
                                                 <p:dataTable id="visualizarNoDepreciable"  value="#{activosFijosMB.nodepreciabledao.ListarNodepreciableDeshabilitados()}" var="nodepreciable" 
@@ -517,34 +522,61 @@
                                     </h:form>
                                     <h:form id="formnuevoNodepreciable" >
 
-                                        <p:dialog header="Nuevo Activo No Depreciable"  minHeight="40" 
-                                                  height="auto" width="1000px" showEffect="fade"
-                                                  modal="true" widgetVar="NuevoNoDepreciable"
+                                        <p:dialog header="Nuevo Activo No Depreciable"  
+                                                  minHeight="40" 
+                                                  height="auto" 
+                                                  responsive="true"
+                                                  width="60%"
+                                                  showEffect="fade"
+                                                  modal="true" 
+                                                  widgetVar="NuevoNoDepreciable"
                                                   id="dialogoingresarNodepreciable"
                                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
-                                                <h:panelGrid columns="4"  >
-                                                    <p:outputLabel for="@next" value="Descripción: "/>
-                                                    <p:inputText value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true" />
+                                                <p:outputPanel class="ui-fluid" >
+                                                    <p:outputPanel>
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Descripción: "/>
+                                                                <p:inputText value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true" />
 
-                                                    <p:outputLabel for="@next" value="Costo Adquisición: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.activosFijos.valor_adquisicion}" required="true" >
-                                                        <p:keyFilter regEx="/[0-9]/i"/>
-                                                    </p:inputText>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Costo Adquisición: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.activosFijos.valor_adquisicion}" required="true" >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="Fecha de Adquisición:    " />
+                                                                <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
 
-                                                    <p:outputLabel value="Fecha de Adquisición:    " />
-                                                    <p:datePicker  value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>
+                                                            </div>
 
-                                                    <p:outputLabel for="@next" value="Plusvalia"/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.activoNoDepreciable.plusvalia}" required="true" />                                                            
+                                                        </div>
 
-                                                    <p:outputLabel value="N° Factura"/>
-                                                    <p:inputText  value="#{activosFijosMB.activosFijos.numero_factura}"  />                                                            
 
-                                                    <p:outputLabel for="@next" value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}" required="true" />                                                            
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Plusvalia"/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.activoNoDepreciable.plusvalia}" required="true" />                                                            
 
-                                                </h:panelGrid>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="N° Factura"/>
+                                                                <p:inputText  value="#{activosFijosMB.activosFijos.numero_factura}"  />                                                            
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+
+                                                                <p:outputLabel for="@next" value="Proveedor"/>
+                                                                <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}" required="true" />                                                            
+
+                                                            </div>
+                                                        </div>
+
+                                                    </p:outputPanel>
+                                                </p:outputPanel>
 
                                                 <div > 
                                                     <f:facet name="footer">
@@ -564,34 +596,58 @@
                                     </h:form>
                                     <h:form id="formeditarNoDepreciable">
 
-                                        <p:dialog header="Editar Activo No Depreciable"  minHeight="40" 
-                                                  height="auto" width="1000px" showEffect="fade"
-                                                  modal="true" widgetVar="EditarNoDepreciable"
+                                        <p:dialog header="Editar Activo No Depreciable"
+                                                  minHeight="40" 
+                                                  height="auto" 
+                                                  width="60%" 
+                                                  showEffect="fade"
+                                                  responsive="true"
+                                                  modal="true" 
+                                                  widgetVar="EditarNoDepreciable"
                                                   id="dialogeditarNoDepreciable"
                                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
-                                                <h:panelGrid columns="4"  >
-                                                    <p:outputLabel for="@next" value="Descripción: "/>
-                                                    <p:inputText value="#{activosFijosMB.listanodepreciable.detalle_de_activo}" required="true" />
+                                                <p:outputPanel  class="ui-fluid">
+                                                    <p:outputPanel >
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Descripción: "/>
+                                                                <p:inputText value="#{activosFijosMB.listanodepreciable.detalle_de_activo}" required="true" />
 
-                                                    <p:outputLabel for="@next" value="Costo Adquisición: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.listanodepreciable.valor_adquisicion}" required="true" >
-                                                        <p:keyFilter regEx="/[0-9]/i"/>
-                                                    </p:inputText>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Costo Adquisición: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listanodepreciable.valor_adquisicion}" required="true" >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="Fecha de Adquisición:    " />
+                                                                <p:datePicker  value="#{activosFijosMB.listanodepreciable.fecha_adquisicion}" showIcon="true"/>
 
-                                                    <p:outputLabel value="Fecha de Adquisición:    " />
-                                                    <p:datePicker  value="#{activosFijosMB.listanodepreciable.fecha_adquisicion}" showIcon="true"/>
+                                                            </div>
+                                                        </div>
 
-                                                    <p:outputLabel for="@next" value="Plusvalia"/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.listanodepreciable.plusvalia}" required="true" />                                                            
 
-                                                    <p:outputLabel value="N° Factura"/>
-                                                    <p:inputText  value="#{activosFijosMB.listanodepreciable.numero_factura}"  />                                                            
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Plusvalia"/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listanodepreciable.plusvalia}" required="true" />                                                            
 
-                                                    <p:outputLabel for="@next" value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.listanodepreciable.proveedor}"  required="true" />                                                            
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="N° Factura"/>
+                                                                <p:inputText  value="#{activosFijosMB.listanodepreciable.numero_factura}"  />                                                            
 
-                                                </h:panelGrid>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Proveedor"/>
+                                                                <p:inputText value="#{activosFijosMB.listanodepreciable.proveedor}"  required="true" />                                                            
+
+                                                            </div>
+                                                        </div>
+                                                    </p:outputPanel>
+                                                </p:outputPanel>
                                                 <div > 
                                                     <f:facet name="footer">         
                                                         <p:commandButton value="Guardar" 
@@ -738,35 +794,62 @@
                                     </h:form>
                                     <h:form id="formnuevoagotable" >
 
-                                        <p:dialog header="Nuevo Activo Agotable"  minHeight="40" 
-                                                  height="auto" width="1000px" showEffect="fade"
-                                                  modal="true" widgetVar="NuevoAgotable"
+                                        <p:dialog header="Nuevo Activo Agotable" 
+                                                  minHeight="40" 
+                                                  height="auto" 
+                                                  width="60%" 
+                                                  showEffect="fade"
+                                                  responsive="true"
+                                                  modal="true"
+                                                  widgetVar="NuevoAgotable"
                                                   id="dialogingresoAgotable"
                                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
-                                                <h:panelGrid columns="4"  >
-                                                    <p:outputLabel for="@next" value="Descripción: "/>
-                                                    <p:inputText  value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true"  />
 
-                                                    <p:outputLabel for="@next" value="Costo Adquisición: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.activosFijos.valor_adquisicion}" required="true" >
-                                                        <p:keyFilter regEx="/[0-9]/i"/>
-                                                    </p:inputText>
+                                                <p:outputPanel class="ui-fluid">
+                                                    <p:outputPanel>
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Descripción: "/>
+                                                                <p:inputText  value="#{activosFijosMB.activosFijos.detalle_de_activo}" required="true"  />
 
-                                                    <p:outputLabel for="@next" value="Cantidad en Stock: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.activosagotables.stock}" required="true"  >
-                                                        <p:keyFilter regEx="/[0-9]/i"/>
-                                                    </p:inputText>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Costo Adquisición: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.activosFijos.valor_adquisicion}" required="true" >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
 
-                                                    <p:outputLabel value="Fecha de Adquisición:    " />
-                                                    <p:datePicker   value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>                                                         
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Cantidad en Stock: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.activosagotables.stock}" required="true"  >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
 
-                                                    <p:outputLabel value="N° Factura"/>
-                                                    <p:inputText  value="#{activosFijosMB.activosFijos.numero_factura}"  />                                                            
+                                                            </div>
+                                                        </div>
 
-                                                    <p:outputLabel for="@next" value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}" required="true"  /> 
-                                                </h:panelGrid>
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="Fecha de Adquisición:    " />
+                                                                <p:datePicker   value="#{activosFijosMB.activosFijos.fecha_adquisicion}" showIcon="true"/>                                                         
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="N° Factura"/>
+                                                                <p:inputText  value="#{activosFijosMB.activosFijos.numero_factura}"  />                                                            
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Proveedor"/>
+                                                                <p:inputText value="#{activosFijosMB.activosFijos.idproveedor}" required="true"  /> 
+
+                                                            </div>
+                                                        </div>
+                                                    </p:outputPanel>
+                                                </p:outputPanel>
+
                                                 <div > 
                                                     <f:facet name="footer">
                                                         <p:commandButton value="Guardar" 
@@ -783,38 +866,68 @@
                                     </h:form>
                                     <h:form id="formeditarAgotable" >
 
-                                        <p:dialog header="Editar Activo Agotable"  minHeight="40" 
-                                                  height="auto" width="1000px" showEffect="fade"
-                                                  modal="true" widgetVar="EditarAgotable"
+                                        <p:dialog header="Editar Activo Agotable" 
+                                                  minHeight="40" 
+                                                  height="auto" 
+                                                  width="60%"
+                                                  showEffect="fade"
+                                                  modal="true" 
+                                                  widgetVar="EditarAgotable"
                                                   id="dialogeditarAgotable"
                                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
 
-                                                <h:panelGrid columns="4"  >
-                                                    <p:outputLabel for="@next" value="Descripción: "/>
-                                                    <p:inputText value="#{activosFijosMB.listaragotables.detalle_de_activo}" required="true" />
+                                                <p:outputPanel class="ui-fluid">
+                                                    <p:outputPanel>
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Descripción: "/>
+                                                                <p:inputText value="#{activosFijosMB.listaragotables.detalle_de_activo}" required="true" />
 
-                                                    <p:outputLabel for="@next" value="Costo Adquisición: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.listaragotables.valor_adquisicion}" required="true" >
-                                                        <p:keyFilter regEx="/[0-9]/i"/>
-                                                    </p:inputText>
-
-                                                    <p:outputLabel for="@next" value="Cantidad en Stock: "/>
-                                                    <p:inputText type="number" value="#{activosFijosMB.listaragotables.stock}" required="true">
-                                                        <p:keyFilter regEx="/[0-9]/i"/>
-                                                    </p:inputText>
-
-                                                    <p:outputLabel value="Fecha de Adquisición:    " />
-                                                    <p:datePicker  value="#{activosFijosMB.listaragotables.fecha_adquisicion}" showIcon="true"/>
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Costo Adquisición: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listaragotables.valor_adquisicion}" required="true" >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
 
 
-                                                    <p:outputLabel value="N° Factura"/>
-                                                    <p:inputText  value="#{activosFijosMB.listaragotables.numero_factura}"  />                                                            
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel for="@next" value="Cantidad en Stock: "/>
+                                                                <p:inputText type="number" value="#{activosFijosMB.listaragotables.stock}" required="true">
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText>
 
-                                                    <p:outputLabel for="@next" value="Proveedor"/>
-                                                    <p:inputText value="#{activosFijosMB.listaragotables.proveedor}" required="true" />                                                            
+                                                            </div>
+                                                        </div>
 
-                                                </h:panelGrid> 
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="Fecha de Adquisición:    " />
+                                                                <p:datePicker  value="#{activosFijosMB.listaragotables.fecha_adquisicion}" showIcon="true"/>
+
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <p:outputLabel value="N° Factura"/>
+                                                                <p:inputText  value="#{activosFijosMB.listaragotables.numero_factura}"  />                                                            
+
+
+                                                            </div>
+                                                            <div class="p-field p-col">
+
+                                                                <p:outputLabel for="@next" value="Proveedor"/>
+                                                                <p:inputText value="#{activosFijosMB.listaragotables.proveedor}" required="true" />                                                            
+
+
+                                                            </div>
+                                                        </div>
+                                                    </p:outputPanel>
+                                                </p:outputPanel>
+
+
+
 
                                             </div>
 
