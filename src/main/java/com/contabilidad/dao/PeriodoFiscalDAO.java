@@ -87,12 +87,25 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
         return -1;
     }
 
+    /**
+     * Creación del metedo INSERTAR, para refrescar
+     * los datos recopilados de los PeriodoFiscal (Sólamente se envía
+     * la entidad como parámetro).
+     * @return int Retorna la confirmación
+     * de un registro exitoso o erróneo.
+     **/
     @Override
     public int insertar(PeriodoFiscal entity) {
         this.periodoFiscal = entity;
         return insertar();
     }
 
+    /**
+     * Creación del metedo ACTUALIZAR, para refrescar
+     * los datos recopilados de los PeriodoFiscal.
+     * @return int Retorna la confirmación
+     * de un registro exitoso o erróneo.
+     **/
     @Override
     public int actualizar() {
         if (conexion.isEstado()) {
@@ -105,12 +118,25 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
         return -1;
     }
 
+    /**
+     * Creación del metedo ACTUALIZAR, para refrescar
+     * los datos recopilados de los PeriodoFiscal (Sólamente se envía
+     * la entidad como parámetro).
+     * @return int Retorna la confirmación
+     * de un registro exitoso o erróneo.
+     **/
     @Override
     public int actualizar(PeriodoFiscal entity) {
         this.periodoFiscal = entity;
         return actualizar();
     }
     
+    /**
+     * Creación del metedo DESACTIVAR, para desactivar
+     * un PeriodoFiscal.
+     * @return int Retorna la confirmación
+     * de un registro exitoso o erróneo.
+     **/
     public int descativar() {
         if (conexion.isEstado()) {
             return conexion.modificar("periodo_fiscal", "activo = false", "id_periodo_fiscal = " + periodoFiscal.getIdPeriodoFiscal());
@@ -118,6 +144,11 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
         return -1;
     }
 
+    /**
+     * Creación del método buscarPorId, para buscar
+     * un PeriodoFiscal por ID.
+     * @return PeriodoFiscal Retorna un objeto de este tipo.
+     **/
     @Override
     public PeriodoFiscal buscarPorId(Object id) {
         List<PeriodoFiscal> lista = buscar("id_periodo_fiscal = " + id, null);
@@ -127,15 +158,30 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
         return new PeriodoFiscal();
     }
 
+    /**
+     * Creación del método Listar, para listar
+     * un PeriodoFiscal en orden descendente.
+     * @return PeriodoFiscal Retorna un objeto de este tipo.
+     **/
     @Override
     public List<PeriodoFiscal> Listar() {
         return buscar(null, "periodo DESC");
     }
 
+    /**
+     * Creación del método Activos, para listar
+     * un PeriodoFiscal activo.
+     * @return  Retorna una lista de este tipo.
+     **/
     public List<PeriodoFiscal> Activos() {
         return buscar("activo = true", "periodo DESC");
     }
     
+    /**
+     * Creación del metedo BUSCAR, para buscar
+     * los datos recopilados de un PeriodoFiscal.
+     * @return PeriodosFiscales Retorna una lista de este tipo.
+     **/
     private List<PeriodoFiscal> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
         List<PeriodoFiscal> periodosFiscales = new ArrayList<>();
         if (conexion.isEstado()) {

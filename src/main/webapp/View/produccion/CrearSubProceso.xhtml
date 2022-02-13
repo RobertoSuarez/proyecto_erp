@@ -20,28 +20,14 @@
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:outputPanel id="subProceso" class="ui-fluid">
-                            <div class="p-grid p-justify-around">
-                                <div class="p-col-6 p-md-12 p-lg-5">
-                                    <div class="p-grid">
-                                        <div class="p-col-12">
-                                            <p:outputLabel value="Codigo Subproceso:"/>
-                                            <p:inputText value="#{SubProcesoMB.sproceso.codigo_subproceso}" readonly="true"/>
-                                        </div>
-                                        <div class="p-col-12">
-                                            <p:outputLabel value="Proceso Principal:"/>
-                                            <p:selectOneMenu id="proceso" value="#{SubProcesoMB.sproceso.id_codigo_proceso}" 
-                                                             alwaysDisplayLabel="true">
-                                                <f:selectItems value="#{SubProcesoMB.listaProceso}" var="proceso"
-                                                               itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
 
-                                            </p:selectOneMenu>
-                                        </div>
-                                        <div class="p-col-12">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:outputPanel id="subProceso" class="ui-fluid">
+                                    <div class="p-grid p-justify-center">
+                                        <div class=" p-lg-4">
                                             <p:outputLabel value="Nombre:"></p:outputLabel>
                                             <p:inputText value="#{SubProcesoMB.sproceso.nombre}"/>
-                                        </div>
-                                        <div class="p-col-12">
                                             <p:outputLabel value="Descripcion:"></p:outputLabel>
                                             <p:inputTextarea  value="#{SubProcesoMB.sproceso.descripcion}"
                                                               maxlength="250"
@@ -49,39 +35,35 @@
                                                               rows="5" 
                                                               autoResize="false"/>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="p-col-6 p-md-12 p-lg-5">
-                                    <div class="p-grid">
-                                        <div class="p-col-12">
-
+                                        <div class="  p-lg-4">
+                                            <p:outputLabel value="Proceso Principal:"/>
+                                            <p:selectOneMenu id="proceso" value="#{SubProcesoMB.sproceso.id_codigo_proceso}" 
+                                                             alwaysDisplayLabel="true">
+                                                <f:selectItem itemLabel="Seleccione un Proceso" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{SubProcesoMB.listaProceso}" var="proceso"
+                                                               itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
+                                            </p:selectOneMenu>
                                             <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
                                             <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
-                                                         mask="99:99:99" 
-                                                         required="true"/>
-
-                                        </div>
-                                        <div class="p-col-12">
-
+                                                         mask="99:99:99"/>
                                             <p:outputLabel value="Rendimiento:"></p:outputLabel>
                                             <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
-
                                         </div>
+                                        
                                     </div>
+                                </p:outputPanel>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span style="font-weight: bold; margin-right: 6em; font-size: 2em">Integración de Costo</span>
+
                                 </div>
-
-
-
-                            </div>
-                        </p:outputPanel>
-
-                        <div class="p-d-flex p-jc-between p-ai-center">
-                            <span style="font-weight: bold; margin-right: 6em; font-size: 2em">Integración de Costo</span>
-
-                        </div>
+                            </p:toolbarGroup>
+                        </p:toolbar>
                         <div class="p-formgrid p-grid">
-
-
                             <div class="p-field p-col-12 p-md-6">
                                 <p:dataTable id="costoIndirecto" reflow="true" paginator="true" rows="2" 
                                              rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoIndirecto}" var="nIndirecto"
@@ -90,14 +72,14 @@
                                     <f:facet name="header">
                                         <div class="p-d-flex p-jc-between p-ai-center">
                                             <span style="font-weight: bold; margin-right: 0.5em;">Costos Indirectos</span>
-                                            <p:selectOneMenu id="costoindirectoP" value="#{SubProcesoMB.costo.codigo_costos}" 
+                                            <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_costos}" 
                                                              editable="false">
                                                 <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
 
                                                 <f:selectItems value="#{SubProcesoMB.listaCostoIndirecto}" var="cIndirecto"
                                                                itemLabel="#{cIndirecto.nombre}" itemValue="#{cIndirecto.codigo_costos}">
                                                 </f:selectItems>
-                                                <p:ajax listener="#{SubProcesoMB.addIndirecto()}" update=":form_subproceso:costoIndirecto"/>
+                                                <p:ajax listener="#{SubProcesoMB.addIndirecto()}" update=":form_subproceso:costoIndirecto ,:form_subproceso:growl"/>
                                             </p:selectOneMenu>
 
                                         </div>
@@ -105,17 +87,14 @@
 
                                     <p:column headerText="Nombre" filterStyle="display : none">
                                         <h:outputText value="#{nIndirecto.nombre}" />
-                                        <p:skeleton rendered="#"></p:skeleton>
                                     </p:column>
 
                                     <p:column headerText="Descripción" >
                                         <h:outputText value="#{nIndirecto.descripcion}" />
-                                        <p:skeleton rendered="#"></p:skeleton>
                                     </p:column>
 
                                     <p:column headerText="Costo">
-                                        <p:inputNumber required="true" value="#{nIndirecto.costo}" maxlength="5">
-                                            <p:ajax event="blur" update=":form_subproceso:costoIndirecto"/>
+                                        <p:inputNumber required="true" value="#{nIndirecto.costo}" maxlength="5" size="8">
                                             <p:ajax event="blur" update=":form_subproceso:totalIndirectos" process="@this" listener="#{SubProcesoMB.sumarIndirectos()}"/>
                                         </p:inputNumber>
 
@@ -130,15 +109,18 @@
 
                                 </p:dataTable>
                                 <p:outputPanel id="totalIndirectos">
-                                    <p:outputLabel value="Total : "></p:outputLabel>
-                                    <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>  
-                                    <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                    <p:inputText disabled="#"  value=""></p:inputText>
+                                    <div class="p-grid p-justify-end p-lg-12">
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>
+
+                                        </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                            <p:inputText disabled="#"  value=""></p:inputText>
+                                        </div>
+                                    </div>
                                 </p:outputPanel>
-
-
-
-
                             </div>
 
                             <div class="p-field p-col-12 p-md-6">
@@ -149,10 +131,10 @@
                                         <div class="p-d-flex p-jc-between p-ai-center">
                                             <span style="font-weight: bold; margin-right: 0.5em;">Costos Directos</span>
 
-                                            <p:selectOneMenu id="costoD" value="#{SubProcesoMB.costo.codigo_costos}" editable="false">
+                                            <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_costos}" editable="false">
                                                 <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
                                                 <p:ajax listener="#{SubProcesoMB.addDirecto()}" 
-                                                        update=":form_subproceso:costoDirecto" process="@this"/>
+                                                        update=":form_subproceso:costoDirecto ,:form_subproceso:growl" process="@this"/>
                                                 <f:selectItems value="#{SubProcesoMB.listaCostoDirecto}" var="cDirecto"
                                                                itemLabel="#{cDirecto.nombre}" itemValue="#{cDirecto.codigo_costos}">
 
@@ -170,18 +152,12 @@
                                         <h:outputText value="#{nDirecto.descripcion}" />
                                     </p:column>
 
-
                                     <p:column headerText="Costo">
-                                        <p:inputNumber required="true" value="#{nDirecto.costo}" maxlength="10">
-                                            <p:ajax event="blur" update=":form_subproceso:costoDirecto"/>
+                                        <p:inputNumber required="true" value="#{nDirecto.costo}" size="8" maxlength="10">
                                             <p:ajax event="blur" update=":form_subproceso:totalDirectos" process="@this" listener="#{SubProcesoMB.sumarDirectos()}"/>
 
                                         </p:inputNumber>
                                     </p:column>
-
-
-
-
                                     <p:column headerText="Acciones">
                                         <p:commandButton class="ui-button-danger rounded-button"
                                                          icon="pi pi-trash" actionListener="#{SubProcesoMB.deleteFila(nDirecto)}" 
@@ -189,27 +165,35 @@
                                         </p:commandButton>
 
                                     </p:column>
-
                                 </p:dataTable>
                                 <p:outputPanel id="totalDirectos">
-
-                                    <p:outputLabel value="Total : "></p:outputLabel>
-                                    <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true">
-                                    </p:inputNumber>  
-                                    <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                    <p:inputText disabled="#"  value=""></p:inputText>
-
+                                    <div class="p-grid p-justify-end p-lg-12">
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
+                                        </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                            <p:inputText disabled="#"  value=""></p:inputText>
+                                        </div>
+                                    </div>
                                 </p:outputPanel>
-
                             </div>
-
                         </div>
-                        <p:commandButton action="#{SubProcesoMB.insertarSubProceso()}" value="Guardar" process="subProceso @this" update=":form_subproceso:growl"/>
+                        <div class="p-grid p-jc-end">
+                            <p:commandButton action="#{SubProcesoMB.insertarSubProceso()}" 
+                                             value="Guardar" process="subProceso @this" 
+                                             update=":form_subproceso:growl, :form_subproceso:costoDirecto,
+                                             :form_subproceso:costoIndirecto,:form_subproceso:subProceso,
+                                             :form_subproceso:totalDirectos,:form_subproceso:totalIndirectos"
+                                             class=" p-mr-2 p-mb-2"/>
+                            <p:button  value="Cancelar"
+                                       class="ui-button-danger p-mr-2 p-mb-2"
+                                       outcome="procesoProduccion.xhtml">
+                            </p:button>
+                        </div>
                     </div>
-
-
                 </h:form>
-
             </ui:define>
         </ui:composition>
     </body>

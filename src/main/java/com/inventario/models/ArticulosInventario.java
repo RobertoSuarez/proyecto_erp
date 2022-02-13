@@ -5,6 +5,9 @@
  */
 package com.inventario.models;
 
+import com.produccion.models.FormulaMateriales;
+import java.util.List;
+
 public class ArticulosInventario {
     
     private int id;
@@ -21,6 +24,7 @@ public class ArticulosInventario {
     private int costo;
     private int iva;
     private int ice ;
+    private List<FormulaMateriales> formulaMateriales;
 
     public ArticulosInventario() {
     }
@@ -44,6 +48,15 @@ public class ArticulosInventario {
         this.iva = iva;
         this.ice = ice;
     }
+
+    public List<FormulaMateriales> getFormulaMateriales() {
+        return formulaMateriales;
+    }
+
+    public void setFormulaMateriales(List<FormulaMateriales> formulaMateriales) {
+        this.formulaMateriales = formulaMateriales;
+    }
+    
 
     public int getId() {
         return id;

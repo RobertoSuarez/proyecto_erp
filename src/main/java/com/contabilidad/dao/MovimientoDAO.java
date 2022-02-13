@@ -12,7 +12,11 @@ public class MovimientoDAO {
     private Conexion conexion = new Conexion();
     private ResultSet resultSet;
 
-    //Obtener lista de movimientos en base al codigo del asiento contable
+        /**
+         * Creación del método getMovimientoByAsiento, para obtener los movimientos
+         * según el asiento
+         * @return Movimiento Retorna una lista de este tipo.
+         **/
     public List<Movimiento> getMovimientoByAsiento(int idAsiento) {
         List<Movimiento> movimientos = new ArrayList<>();
         String sql = String.format("select * from getMovimientos('%1$d');", idAsiento);
@@ -34,18 +38,23 @@ public class MovimientoDAO {
         return movimientos;
     }
 
+    /**
+     * Creación del método getAllMovimientos, para obtener todos los movimientos
+     * 
+     * @return Movimiento Retorna una lista de este tipo.
+     **/
     public List<Movimiento> getAllMovimientos() {
         List<Movimiento> movimientos = new ArrayList<>();
         String sql = String.format("select * from movimiento;");
         try {
             conexion.conectar();
             resultSet = conexion.ejecutarSql(sql);
-            //PeriodoFiscalDAO periodoFiscalDAO = new PeriodoFiscalDAO();
+            PeriodoFiscalDAO periodoFiscalDAO = new PeriodoFiscalDAO();
             //Llena la lista de los datos
             while (resultSet.next()) {
                 movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
                         resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idasiento"),
-                        resultSet.getInt("idSubcuenta")));
+                        resultSet.getInt("idSubcuenta"), periodoFiscalDAO.buscarPorId(resultSet.getInt("periodo_fiscal"))));
             }
             return movimientos;
         } catch (Exception e) {
@@ -56,6 +65,11 @@ public class MovimientoDAO {
         }
     }
 
+    /**
+     * Creación del método getMovimientoByAsiento, para obtener los movimientos
+     * según el asiento
+     * @return Movimiento Retorna una lista de este tipo.
+     **/
     public int setMovimientoDefault() {
         String sql = "select idAsiento from public.asiento order by idAsiento desc limit 1;";
         Asiento asientoRef = new Asiento();
@@ -76,7 +90,10 @@ public class MovimientoDAO {
         }
     }
 
-    //Actualiza movimientos cuado se edita un asiento contable.
+    /**
+     * Creación del método updateMovimientos, para actualizar los movimientos
+     * @return void
+     **/
     public void updateMovimientos(Movimiento movimiento, int idAsiento) {
         String sql;
         if (movimiento.getIdMovimiento() == 0) {

@@ -52,7 +52,6 @@ public class HorarioLaboralController implements Serializable {
     private final String INICIO = "HorarioLaboral";
 
     private static HttpSession httpSession;
-    
     private HorarioLaboral horarioLaboral;
     private DetalleHorario detalleHorario;
     private List<HorarioLaboral> lista;
@@ -316,18 +315,21 @@ public class HorarioLaboralController implements Serializable {
      * interfaz.
      */
     public void mostrarMensajeInformacion(String mensaje) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                "Éxito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     //  MENSAJE DE ERROR
     public void mostrarMensajeError(String mensaje) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void mostrarMensajePrecaucion(String mensaje) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Atención!", mensaje);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, 
+                "Atención!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

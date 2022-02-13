@@ -15,6 +15,9 @@ and open the template in the editor.
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
+                
+                <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
+                
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
                     <p:menuitem value="Intangibles" url="#"/>
@@ -34,7 +37,8 @@ and open the template in the editor.
                                     <p:commandButton value="Nuevo" icon="pi pi-plus"   
                                                      oncomplete="PF('NuevoIntangible').show()"   
                                                      styleClass="ui-button-primary" 
-                                                     style="margin-right: .3rem">                               
+                                                     style="margin-right: .3rem"
+                                                     rendered="#{seguridadActvFijo.renderSoloGerente()}">                               
                                     </p:commandButton>
                                     <p:commandButton value="Deshabilitados" 
                                                      update="formintangible"
@@ -71,7 +75,7 @@ and open the template in the editor.
                                 <p:column headerText="Proveedor"  >
                                     <h:outputText value="#{intangible.proveedor}"/>
                                 </p:column>
-                                <p:column headerText="Opciones" >
+                                <p:column headerText="Opciones" rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                     <p:commandButton  
                                         icon="pi pi-pencil"
                                         update=":formintangible:paneleditar"
@@ -85,14 +89,17 @@ and open the template in the editor.
                         </div>
 
 
-                        <p:dialog header="Activos  Intangibles Deshabilitados"  minHeight="40" 
-                                  height="auto" width="1000px" showEffect="fade"
+                        <p:dialog header="Activos  Intangibles Deshabilitados"
+                                  minHeight="40" 
+                                  height="auto" width="1000px" 
+                                  showEffect="fade"
                                   modal="true" widgetVar="deshabilitadosintangible"
                                   id="dialogoingresarNodepreciable">
                             <div  style="display: flex;justify-content: center">
 
                                 <p:dataTable id="verListaIntangiblesdeshabilitados"
-                                             value="#{activosintangilesMB.intangibledao.listaragotablesdeshabilitados()}" var="intangible" 
+                                             value="#{activosintangilesMB.intangibledao.listaragotablesdeshabilitados()}" 
+                                             var="intangible" 
                                              rowKey="#{intangible.id_activo_fijo}" editable="true" >
                                     <p:column headerText="Descripción"  >
                                         <h:outputText value="#{intangible.detalle_de_activo}"/>
@@ -113,7 +120,7 @@ and open the template in the editor.
                                     <p:column headerText="Proveedor"  >
                                         <h:outputText value="#{intangible.proveedor}"/>
                                     </p:column>
-                                    <p:column headerText="Habilitar  ">
+                                    <p:column headerText="Habilitar  " rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                         <p:commandButton action="#{activosintangilesMB.setHabilitarintangible(intangible.id_activo_fijo)}" 
 
                                                          icon="pi pi-check"
@@ -128,66 +135,88 @@ and open the template in the editor.
                         </p:dialog> 
 
 
-                        <p:dialog header="Nuevo Activo Intangible"  minHeight="40" 
-                                  height="auto" width="1000px" showEffect="fade"
-                                  modal="true" widgetVar="NuevoIntangible">
+                        <p:dialog header="Nuevo Activo Intangible"  
+                                  responsive="true" minHeight="40" 
+                                  maximizable="true"                                  
+                                  height="200" width="60%" 
+                                  showEffect="fade"
+                                  modal="true" 
+                                  widgetVar="NuevoIntangible"
+                                  rendered="#{seguridadActvFijo.renderSoloGerente()}">
 
-                            <div  style="display: flex;justify-content: center">
-                                <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
-                                    <p:overlayPanel for="proveedor" dynamic="true" 
-                                                    style="width:600px" widgetVar="moviePicker">
-                                        <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
-                                                     rows="5" paginator="true" selectionMode="single"
-                                                     selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
-                                            <p:ajax event="rowSelect" listener="#{activosintangilesMB.onRowSelect}" 
-                                                    oncomplete="PF('moviePicker').hide()" 
-                                                    update=":formintangible:proveedor" 
-                                                    />
+                            <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
+                                <p:overlayPanel for="proveedor" dynamic="true" 
+                                                style="width:600px" widgetVar="moviePicker">
+                                    <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
+                                                 rows="3" paginator="true" selectionMode="single"
+                                                 selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
+                                        <p:ajax event="rowSelect" listener="#{activosintangilesMB.onRowSelect}" 
+                                                oncomplete="PF('moviePicker').hide()" 
+                                                update=":formintangible:proveedor" 
+                                                process="@this"
+                                                />
 
-                                            <p:column headerText="Proveedor">
-                                                <h:outputText value="#{proveedor.codigo}"/>
-                                            </p:column>
-                                            <p:column headerText="Nombre">
-                                                <h:outputText value="#{proveedor.nombre}"/>
-                                            </p:column>
-                                            <p:column headerText="Ruc">
-                                                <h:outputText value="#{proveedor.ruc}"/>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </p:overlayPanel>
-                                    <h:panelGrid columns="4"  >
-                                        <p:outputLabel for="@next" value="Descripción: "/>
-                                        <p:inputText value="#{activosintangilesMB.activosFijos.detalle_de_activo}" required="true" >
+                                        <p:column headerText="Proveedor">
+                                            <h:outputText value="#{proveedor.codigo}"/>
+                                        </p:column>
+                                        <p:column headerText="Nombre">
+                                            <h:outputText value="#{proveedor.nombre}"/>
+                                        </p:column>
+                                        <p:column headerText="Ruc">
+                                            <h:outputText value="#{proveedor.ruc}"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:overlayPanel>
+                                <p:outputPanel  >
+                                    <div class="p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <p:outputLabel for="proveedor" value="Proveedor"/>
+                                            <p:inputText id="proveedor" type="button" value="#{activosintangilesMB.activosFijos.proveedor}" required="true"  /> 
 
-                                        </p:inputText>
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <p:outputLabel for="@next" value="Descripción: "/>
+                                            <p:inputText value="#{activosintangilesMB.activosFijos.detalle_de_activo}" required="true" >
 
-                                        <p:outputLabel for="@next" value="Costo Adquisición: "/>
-                                        <p:inputText type="number" value="#{activosintangilesMB.activosFijos.valor_adquisicion}" required="true">
-                                            <p:keyFilter regEx="/[0-9]/i"/>
-                                        </p:inputText>
+                                            </p:inputText>
 
-                                        <p:outputLabel value="Fecha de Adquisición:    " />
-                                        <p:datePicker value="#{activosintangilesMB.activosFijos.fecha_adquisicion}"  showIcon="true"/>                                                         
 
-                                        <p:outputLabel value="N° Factura"/>
-                                        <p:inputText  value="#{activosintangilesMB.activosFijos.numero_factura}"  />                                                            
+                                        </div>
 
-                                        <p:outputLabel for="proveedor" value="Proveedor"/>
-                                        <p:inputText id="proveedor" type="button" value="#{activosintangilesMB.activosFijos.proveedor}" required="true"  /> 
-                                    </h:panelGrid>
+                                    </div>
+
+
+                                    <div class="p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <p:outputLabel value="Fecha de Adquisición:    " />
+                                            <p:datePicker value="#{activosintangilesMB.activosFijos.fecha_adquisicion}"  showIcon="true"/>                                                         
+                                        </div>
+                                        <div class="p-field p-col">
+                                            <p:outputLabel value="N° Factura"/>
+                                            <p:inputText  value="#{activosintangilesMB.activosFijos.numero_factura}"  />                                                            
+
+                                        </div>
+
+                                        <div class="p-field p-col">
+                                            <p:outputLabel for="@next" value="Costo Adquisición: "/>
+                                            <p:inputText type="number" value="#{activosintangilesMB.activosFijos.valor_adquisicion}" required="true">
+                                                <p:keyFilter regEx="/[0-9]/i"/>
+                                            </p:inputText>
+                                        </div>
+                                    </div>
                                 </p:outputPanel>
-                                <div>   
-                                    <f:facet name="footer">
-                                        <p:commandButton value="Guardar" 
-                                                         icon="pi pi-check" 
-                                                         actionListener="#{activosintangilesMB.setRegistrar3}"
-                                                         process="panelnuevodepreciable @this" />
-                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                         onclick="PF('NuevoIntangible').hide()"
-                                                         class="ui-button-danger"/>
-                                    </f:facet>
-                                </div>
-                            </div>
+                            </p:outputPanel>
+                            <div>   
+                                <f:facet name="footer">
+                                    <p:commandButton value="Guardar" 
+                                                     icon="pi pi-check" 
+                                                     actionListener="#{activosintangilesMB.setRegistrar3}"
+                                                     process="panelnuevodepreciable @this" />
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                     onclick="PF('NuevoIntangible').hide()"
+                                                     class="ui-button-danger"/>
+                                </f:facet>
+                            </div>                          
 
                         </p:dialog> 
 

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -52,6 +51,10 @@ public class EstadoResultadoManageBean implements Serializable {
     private double total;
     private String empresa;
 
+    /**
+     * Constructor de la clase en donde se inicializa las listas a
+     * llenarteniendo un total de 4 listas
+     */
     public EstadoResultadoManageBean() {
         estadoResultadoVen = new ArrayList<>();
         estadoResultadoEg = new ArrayList<>();
@@ -59,30 +62,85 @@ public class EstadoResultadoManageBean implements Serializable {
         estadoResultadoDAO = new EstadoResultadoDAO();
     }
 
+    /**
+     * PosConstructor de la clase en donde se inicializa las listas a
+     * llenarteniendo un total de 4 listas
+     */
     @PostConstruct
     public void init() {
         fecha = new Date();
         fecha2 = new Date();
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
-        estadoResultadoIn = estadoResultadoDAO.generateBalanceGeneral(dateFormat.format(fecha), dateFormat.format(fecha2));
-        estadoResultadoEg = estadoResultadoDAO.generateBalanceGenerale(dateFormat.format(fecha), dateFormat.format(fecha2));
-        estadoResultadoVen = estadoResultadoDAO.generateBalanceGenerales(dateFormat.format(fecha), dateFormat.format(fecha2));
-        ingresos = estadoResultadoDAO.sumaIngresos(dateFormat.format(fecha), dateFormat.format(fecha2));
-        egresos = estadoResultadoDAO.sumaegresos(dateFormat.format(fecha), dateFormat.format(fecha2));
-        ventas = estadoResultadoDAO.costoventa(dateFormat.format(fecha), dateFormat.format(fecha2));
+//Ingresos, llena la lista dada por el dao
+        estadoResultadoIn = estadoResultadoDAO.generateEstadoResultante(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Egresos,llena la lista dada por el dao 
+        estadoResultadoEg = estadoResultadoDAO.generateEstadoResultadoEg(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Ventas, llena la lista dada por el dao
+        estadoResultadoVen = estadoResultadoDAO.estadoResultadoVen(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+
+//Resultado total de ingresos
+        ingresos = estadoResultadoDAO.
+                sumaIngresos(
+                        dateFormat.format(fecha),
+                        dateFormat.format(fecha2));
+//Resultado total de egresos
+        egresos = estadoResultadoDAO.
+                sumaegresos(
+                        dateFormat.format(fecha),
+                        dateFormat.format(fecha2));
+//Resultado total de ventas
+        ventas = estadoResultadoDAO.
+                costoventa(
+                        dateFormat.format(fecha),
+                        dateFormat.format(fecha2));
+//Resultado total
         total = ingresos - (ventas + egresos);
     }
 
+    /**
+     * Metodo para recibir las fechas correspondientes para generar la
+     * informacion de los estados resultantes
+     */
     public void recibiendoFecha() {
+        /**
+         * damos el formato simple a nuestra fecha para que solo reciba el dia,
+         * mes y año
+         */
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        estadoResultadoIn = estadoResultadoDAO.generateBalanceGeneral(dateFormat.format(fecha), dateFormat.format(fecha2));
-        estadoResultadoEg = estadoResultadoDAO.generateBalanceGenerale(dateFormat.format(fecha), dateFormat.format(fecha2));
-        estadoResultadoVen = estadoResultadoDAO.generateBalanceGenerales(dateFormat.format(fecha), dateFormat.format(fecha2));
-
-        ingresos = estadoResultadoDAO.sumaIngresos(dateFormat.format(fecha), dateFormat.format(fecha2));
-        egresos = estadoResultadoDAO.sumaegresos(dateFormat.format(fecha), dateFormat.format(fecha2));
-        ventas = estadoResultadoDAO.costoventa(dateFormat.format(fecha), dateFormat.format(fecha2));
+//Ingresos, llena la lista dada por el dao
+        estadoResultadoIn = estadoResultadoDAO.generateEstadoResultante(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Egresos, llena la lista dada por el dao
+        estadoResultadoEg = estadoResultadoDAO.generateEstadoResultadoEg(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Ventas, llena la lista dada por el dao
+        estadoResultadoVen = estadoResultadoDAO.estadoResultadoVen(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Resultado total de Ingresos
+        ingresos = estadoResultadoDAO.sumaIngresos(
+                dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+//Resultado total de Egresos
+        egresos = estadoResultadoDAO.
+                sumaegresos(
+                        dateFormat.format(fecha),
+                        dateFormat.format(fecha2));
+//Resultado total de Ventas
+        ventas = estadoResultadoDAO.
+                costoventa(
+                        dateFormat.format(fecha),
+                        dateFormat.format(fecha2));
+//Resultado total 
         total = ingresos - (ventas + egresos);
     }
 
@@ -94,7 +152,8 @@ public class EstadoResultadoManageBean implements Serializable {
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
         ec.setResponseHeader("Content-disposition", "attachment; "
-                + "filename=estado-resultado-" + LocalDateTime.now().toString() + ".pdf");
+                + "filename=estado-resultado-"
+                + LocalDateTime.now().toString() + ".pdf");
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
@@ -113,13 +172,15 @@ public class EstadoResultadoManageBean implements Serializable {
                     .getRealPath("/PlantillasReportes/EstadoResultado.jasper"));
 
             // llenamos la plantilla con los datos.
-            JasperPrint jasperPrintIn = JasperFillManager.fillReport(filetext.getPath(),
+            JasperPrint jasperPrintIn = JasperFillManager.fillReport(
+                    filetext.getPath(),
                     parametros,
                     new JRBeanCollectionDataSource(this.estadoResultadoIn)
             );
 
             // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrintIn, stream);
+            JasperExportManager.exportReportToPdfStream(
+                    jasperPrintIn, stream);
             //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
 
             stream.flush();

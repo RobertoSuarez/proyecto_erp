@@ -32,14 +32,17 @@ public class SubProcesoMB implements Serializable {
     SubProcesoDAO subProcesoDAO;
     dSubprocesoDAO detalleSuprocesoDAO;
     Costo costo;
+
     private dSubproceso subDproceso;
     private List<ProcesoProduccion> listaProceso;
     private List<Costo> listaCostoDirecto;
     private List<Costo> listaCostoIndirecto;
     private List<Costo> NuevolistaCostoDirecto;
     private List<Costo> NuevolistaCostoIndirecto;
+
     List<dSubproceso> listaDsubprocesoDirecta;
     List<dSubproceso> listaDsubprocesoInirecta;
+
     float totalDirecto;
     float totalIndirecto;
 
@@ -49,14 +52,16 @@ public class SubProcesoMB implements Serializable {
         detalleSuprocesoDAO = new dSubprocesoDAO();
         costo = new Costo();
         subDproceso = new dSubproceso();
+
         listaProceso = new ArrayList<>();
         listaCostoDirecto = new ArrayList<>();
         listaCostoIndirecto = new ArrayList<>();
+
         NuevolistaCostoDirecto = new ArrayList<>();
         NuevolistaCostoIndirecto = new ArrayList<>();
+
         listaDsubprocesoDirecta = new ArrayList<>();
         listaDsubprocesoInirecta = new ArrayList<>();
-        sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
     }
 
     @PostConstruct
@@ -148,54 +153,80 @@ public class SubProcesoMB implements Serializable {
     }
 
     public void insertarSubProceso() {
-        if (subProcesoDAO.insertarSubproceso(sproceso) > 0) {
-            subProcesoDAO.insertardSubproceso(sproceso);
-            llenarDetalleDirecto();
-            for (dSubproceso subproceso : listaDsubprocesoDirecta) {
-                subProcesoDAO.insertarDetalleSubproceso(subproceso);
+
+        if ("".equals(sproceso.getNombre())) {
+            showWarn("Ingrese un Nombre al Subproceso.");
+        } else if ("".equals(sproceso.getDescripcion())) {
+            showWarn("La descripción no puede estar vacia.");
+        } else if (sproceso.getRendimiento() <= 0) {
+            showWarn("El rendimiento no pude ser cero.");
+        } else if ("".equals(sproceso.getHora())) {
+            showWarn("Debe ingresar las horas de trabajo.");
+        } else if (sproceso.getId_codigo_proceso() == 0) {
+            showWarn("Debe escojer un proceso.");
+        } else if (!verificaListas(NuevolistaCostoDirecto)) {
+            showWarn("Ingrese valor en los Costos Directos");
+        } else if (!verificaListas(NuevolistaCostoIndirecto)) {
+            showWarn("Ingrese valor en los Costos Indirectos");
+        } else {
+            if (subProcesoDAO.insertarSubproceso(sproceso) > 0) {
+                sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
+                subProcesoDAO.insertardSubproceso(sproceso);
+                llenarDetalleDirecto();
+                for (dSubproceso subproceso : listaDsubprocesoDirecta) {
+                    //insertamos costo directo
+                    subProcesoDAO.insertarDetalleSubproceso(subproceso);
+                }
+                llenarDetalleInirecto();
+                for (dSubproceso subproceso : listaDsubprocesoInirecta) {
+                    //insertamos costo indirecto
+                    subProcesoDAO.insertarDetalleSubproceso(subproceso);
+                }
+                subProcesoDAO.actualizaProceso(sproceso);
+                //Mensaje de proceso terminado con exito
+                showInfo("Subproceso registrado con exito");
+                limpiarCampos();
             }
-            llenarDetalleInirecto();
-            for (dSubproceso subproceso : listaDsubprocesoInirecta) {
-                subProcesoDAO.insertarDetalleSubproceso(subproceso);
-            }
-            FacesMessage msg = new FacesMessage("Se inserto con existo",null);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 
     }
 
-    public void addDirecto() {
+    public boolean verificaListas(List<Costo> listaDsubproceso) {
+        boolean verifica = false;
+        for (Costo lista : listaDsubproceso) {
+            if (lista.getCosto() > 0) {
+                verifica = true;
+            } else {
+                verifica = false;
+                break;
+            }
+        }
+        return verifica;
+    }
 
-        NuevolistaCostoDirecto.add(costoD());
+    public void limpiarCampos() {
+        sproceso = new SubProceso();
+        subProcesoDAO = new SubProcesoDAO();
+        detalleSuprocesoDAO = new dSubprocesoDAO();
         costo = new Costo();
+        subDproceso = new dSubproceso();
 
-    }
+        listaProceso = new ArrayList<>();
+        listaCostoDirecto = new ArrayList<>();
+        listaCostoIndirecto = new ArrayList<>();
 
-    public Costo costoD() {
-        for (Costo costoDirecto : listaCostoDirecto) {
-            if (costo.getCodigo_costos() == costoDirecto.getCodigo_costos()) {
-                costo.setNombre(costoDirecto.getNombre());
-                costo.setDescripcion(costoDirecto.getDescripcion());
-                costo.setCosto(costoDirecto.getCosto());
-            }
-        }
-        return costo;
-    }
+        NuevolistaCostoDirecto = new ArrayList<>();
+        NuevolistaCostoIndirecto = new ArrayList<>();
 
-    public Costo costoI() {
-        for (Costo costoIndirecto : listaCostoIndirecto) {
-            if (costo.getCodigo_costos() == costoIndirecto.getCodigo_costos()) {
-                costo.setNombre(costoIndirecto.getNombre());
-                costo.setDescripcion(costoIndirecto.getDescripcion());
-                costo.setCosto(costoIndirecto.getCosto());
-            }
-        }
-        return costo;
-    }
+        listaDsubprocesoDirecta = new ArrayList<>();
+        listaDsubprocesoInirecta = new ArrayList<>();
 
-    public void addIndirecto() {
-        NuevolistaCostoIndirecto.add(costoI());
-        costo = new Costo();
+        listaProceso = subProcesoDAO.getProcesosProduccion();
+        listaCostoDirecto = detalleSuprocesoDAO.getCosto("Directo");
+        listaCostoIndirecto = detalleSuprocesoDAO.getCosto("Indirecto");
+
+        totalDirecto=0;
+        totalIndirecto=0;
     }
 
     public void llenarDetalleDirecto() {
@@ -216,6 +247,74 @@ public class SubProcesoMB implements Serializable {
             listaDsubprocesoInirecta.add(subDproceso);
             subDproceso = new dSubproceso();
         }
+    }
+
+    public void addDirecto() {
+        Costo costoDirecto = costoD();
+        if (!verificaCostoD(costoDirecto)) {
+            NuevolistaCostoDirecto.add(costoDirecto);
+            costo = new Costo();
+        } else {
+            showWarn("Ya ha agregado este Costo Directo");
+        }
+    }
+
+    public void addIndirecto() {
+
+        Costo costoIndirecto = costoI();
+        if (!verificaCostoI(costoIndirecto)) {
+            NuevolistaCostoIndirecto.add(costoIndirecto);
+            costo = new Costo();
+        } else {
+            showWarn("Ya ha agregado este Costo Indirecto");
+        }
+
+    }
+
+    public Costo costoD() {
+        for (Costo costoDirecto : listaCostoDirecto) {
+            if (costo.getCodigo_costos() == costoDirecto.getCodigo_costos()) {
+
+                costo.setNombre(costoDirecto.getNombre());
+                costo.setDescripcion(costoDirecto.getDescripcion());
+                costo.setCosto(costoDirecto.getCosto());
+
+            }
+        }
+        return costo;
+    }
+
+    public boolean verificaCostoD(Costo costoDirecto) {
+        boolean verifica = false;
+        for (Costo directo : NuevolistaCostoDirecto) {
+            if (costoDirecto.getCodigo_costos() == directo.getCodigo_costos()) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
+    }
+
+    public boolean verificaCostoI(Costo costoIndirecto) {
+        boolean verifica = false;
+        for (Costo indirecto : NuevolistaCostoIndirecto) {
+            if (costoIndirecto.getCodigo_costos() == indirecto.getCodigo_costos()) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
+    }
+
+    public Costo costoI() {
+        for (Costo costoIndirecto : listaCostoIndirecto) {
+            if (costo.getCodigo_costos() == costoIndirecto.getCodigo_costos()) {
+                costo.setNombre(costoIndirecto.getNombre());
+                costo.setDescripcion(costoIndirecto.getDescripcion());
+                costo.setCosto(costoIndirecto.getCosto());
+            }
+        }
+        return costo;
     }
 
     public void sumarIndirectos() {
@@ -242,6 +341,23 @@ public class SubProcesoMB implements Serializable {
     public void deleteFilaIndirecto(Costo directo) {
         NuevolistaCostoIndirecto.remove(directo);
         sumarIndirectos();
+    }
+
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+
+    public void showInfo(String message) {
+        addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
+    }
+
+    public void showWarn(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
+    }
+
+    public void showError(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Error", message);
     }
 
 }

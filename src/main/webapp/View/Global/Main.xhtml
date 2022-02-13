@@ -50,7 +50,12 @@
                         </a>
                     </div>
                 </ui:fragment>
-                <c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }"> 
+
+
+
+                <!--<c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }"> -->
+                
+                <ui:fragment rendered="#{seguridadActvFijo.renderTodosRolesAdmitidos()}">
                     <div class="p-col-12 p-lg-6 p-xl-3">
                         <a href="../activos_fijos/ActivosTangibles.xhtml">
                             <div class="card-box bg-orange">
@@ -67,7 +72,8 @@
                             </div>
                         </a>
                     </div>
-                </c:if>
+                </ui:fragment>
+
                 <c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }"> 
                     <div class="p-col-12 p-lg-6 p-xl-3">
                         <a href="../cuentas_por_cobrar/MantenimientoCliente.xhtml">
@@ -124,7 +130,7 @@
                         </a>
                     </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{restriccionesProduccion.renMenu()}">
+                <ui:fragment rendered="#{restriccionesProduccion.renderizarMenuInicio()}">
                     <div class="p-col-12 p-lg-6 p-xl-3">
                         <a href="#{restriccionesProduccion.restriccionUser()}">
                             <div class="card-box bg-yellow">

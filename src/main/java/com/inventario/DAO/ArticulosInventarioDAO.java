@@ -60,7 +60,9 @@ public class ArticulosInventarioDAO {
              
          } catch (Exception e) {
              System.out.println(e.getMessage());
-         }
+         }finally{
+            conexion.desconectar();
+        }
         return ListaInv;
          }
  
