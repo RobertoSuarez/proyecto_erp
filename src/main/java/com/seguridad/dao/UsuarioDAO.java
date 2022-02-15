@@ -121,4 +121,36 @@ public class UsuarioDAO {
         roles.setURL("/proyecto_erp/View/Global/Main.xhtml");
         return roles.getURL();
     }
+    
+    //Listar usuarios registrados
+    public List<Usuario> listUsers (){
+        List<Usuario> listOfUsers = new ArrayList<>();
+        Usuario user;
+        String sentencia = "";
+            try {
+                conexion.Conectar();
+                sentencia = String.format(
+                        "SELECT \"idUsuario\", nombre, apellido, username, \"fechaCreacion\", habilitado, email\n" +
+"	FROM public.usuario;");
+                result = conexion.ejecutarConsulta(sentencia);
+                while (result.next()) {
+                    user = new Usuario();
+                    user.setIdUsuario(result.getInt(1));
+                    user.setNombre(result.getString(2));
+                    user.setApellido(result.getString(3));
+                    user.setPassword("**********");
+                    user.setUsername(result.getString(4));
+                    user.setFehcaCreacion(result.getDate(5));
+                    user.setHabilitado(result.getBoolean(6));
+                    user.setEmail(result.getString(7));
+                    listOfUsers.add(user);
+                }
+                
+            } catch (SQLException e) {
+                System.out.println(e.toString() + "EBERT");
+            } finally {
+                conexion.desconectar();
+            }        
+        return listOfUsers;
+    }
 }

@@ -12,7 +12,8 @@
 
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
+                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" 
+                                outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
                     <p:submenu label="Cobranzas" icon="pi pi-dollar">
                         <p:menuitem value="Nuevo Cobro" outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
                         <p:menuitem value="Listado Cobro" outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
@@ -21,10 +22,12 @@
                         <p:menuitem value="Aplicar Retención" outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
                     </p:submenu>
                     <p:submenu label="Reportes" icon="pi pi-book">
-                        <p:menuitem value="Listado de Clientes con/sin deuda" outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
+                        <p:menuitem value="Listado de Clientes con/sin deuda" 
+                                    outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
                         <p:menuitem value="Estado de Cuenta" outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
                         <p:menuitem value="Facturas Pendientes" outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
-                        <p:menuitem value="Cartera x Edades de Vencimiento" outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
+                        <p:menuitem value="Cartera x Edades de Vencimiento" 
+                                    outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
                     </p:submenu>
                 </p:menubar>
                 <br></br>
@@ -43,13 +46,13 @@
                                                  styleClass="ui-button-secondary"
                                                  update="tblListaDeudas"
                                                  actionListener="#{clientes_Con_Sin_DeudaController.cargarClientesConDeudas()}"/></div>
-                                <div style="float: left; margin-left: 2px;">
+                                <div style="float: left; margin-left: 5px;">
                                 <p:commandButton value="Clientes Sin Deuda" icon="fa fa-group"
                                                  styleClass="ui-button-secondary"
                                                  update="tblListaDeudas"
                                                  actionListener="#{clientes_Con_Sin_DeudaController.cargarClientesSinDeudas()}"/>
                                 </div>
-                                <div style="float: left; margin-left: 2px;">
+                                <div style="float: left; margin-left: 5px;">
                                     <p:commandButton id="btnPdf" ajax="false"
                                                      actionListener="#{clientes_Con_Sin_DeudaController.exportarPDF()}"
                                                      value="GENERAR PDF" icon="pi pi-file-pdf">

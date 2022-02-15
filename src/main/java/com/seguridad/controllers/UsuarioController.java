@@ -37,6 +37,19 @@ public class UsuarioController implements Serializable {
     RolDAO rolDao;
     RolesDAO rolesDAO;
 
+    public UsuarioController() {
+        usuario = new Usuario();
+        usuarioDAO = new UsuarioDAO();
+        rolDao = new RolDAO();
+        rolesDAO = new RolesDAO();
+        listaUsuario = usuarioDAO.listUsers();
+        System.out.println("########## Pasa algo");
+    }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
     public RolesDAO getRolesDAO() {
         return rolesDAO;
     }
@@ -44,25 +57,7 @@ public class UsuarioController implements Serializable {
     public void setRolesDAO(RolesDAO rolesDAO) {
         this.rolesDAO = rolesDAO;
     }
-
-    public UsuarioController() {
-        usuario = new Usuario();
-        usuarioDAO = new UsuarioDAO();
-        rolDao = new RolDAO();
-        rolesDAO = new RolesDAO();
-        listaUsuario = new ArrayList<>();
-        System.out.println("########## Pasa algo");
-    }
-
-    @PostConstruct
-    public void init() {
-
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
+    
     public boolean rolExist(String rol) {
         return rolesDAO.rolExist(rol);
     }
@@ -77,6 +72,14 @@ public class UsuarioController implements Serializable {
 
     public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
         this.usuarioDAO = usuarioDAO;
+    }
+
+    public List<Usuario> getListaUsuario() {
+        return listaUsuario;
+    }
+
+    public void setListaUsuario(List<Usuario> listaUsuario) {
+        this.listaUsuario = listaUsuario;
     }
 
     public String registrarUsuario() throws Exception {
@@ -128,11 +131,11 @@ public class UsuarioController implements Serializable {
             usuarioSesion = usuarioDAO.iniciarSesion(usuario);
 
             if (usuarioSesion != null) {
-                if (usuarioSesion.getCode() < 1) {
-                    PFW(usuarioSesion.getMsj());
+                if (usuarioSesion.getCodigoAux() < 1) {
+                    PFW(usuarioSesion.getMensajeAux());
 
                 } else {
-                    PFE(usuarioSesion.getMsj());
+                    PFE(usuarioSesion.getMensajeAux());
 
                     usuario = usuarioSesion;
                     List<Rol> rolesSesion = rolDao.
@@ -187,7 +190,8 @@ public class UsuarioController implements Serializable {
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
 
     }
-
+    
+    //Controla que en caso de que no haya un usuario conectado entonces redirija al incio.
     public void verificarInicioSesion() {
         FacesContext context = FacesContext.getCurrentInstance();
         Usuario usuarioSesion = (Usuario) context
@@ -201,7 +205,8 @@ public class UsuarioController implements Serializable {
             e.printStackTrace();
         }
     }
-
+    
+    //Verifica si la sesion tiene un usuario, devuelve un booleano
     public boolean verificarSesion() {
         Usuario user = new Usuario();
         try {
@@ -216,6 +221,7 @@ public class UsuarioController implements Serializable {
         return false;
     }
 
+    //Verifica si el usuario en sesion cuenta con los roles permitidos (nombre), devuelve un booleano
     public boolean verificarPermisoNombre(List<String> rolesPermitidos, int codigoModulo) {
         try {
             List<Rol> rolesSesion = (List<Rol>) FacesContext
@@ -234,6 +240,7 @@ public class UsuarioController implements Serializable {
         return false;
     }
 
+    //Verifica si el usuario en sesion cuenta con los roles permitidos (código), devuelve un booleano
     public boolean verificarPermisoCodigo(List<Integer> rolesPermitidos, int codigoModulo) {
         try {
             List<Rol> rolesSesion = (List<Rol>) FacesContext
@@ -251,5 +258,7 @@ public class UsuarioController implements Serializable {
         }
         return false;
     }
+    
+    
 
 }

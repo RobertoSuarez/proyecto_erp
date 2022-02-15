@@ -95,12 +95,12 @@ public class SubProcesoDAO {
             //llamamos a la conexion
             this.conexion.Conectar();
             String sentenciaSql = "INSERT INTO public.subproceso(\n"
-                    + "	codigo_subproceso, nombre, descripcion)\n"
-                    + "	VALUES (" + proceso.getCodigo_subproceso() + ",'"
+                    + " nombre, descripcion)\n"
+                    + "	VALUES ('"
                     + proceso.getNombre() + "', '" + proceso.getDescripcion() + "');";
             //enviamos la sentencia
             return conexion.insertar(sentenciaSql);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return -1;
         } finally {
             conexion.desconectar();
@@ -185,11 +185,11 @@ public class SubProcesoDAO {
             //llamamos a la conexion
             this.conexion.Conectar();
             int id = -1;
-            String sentenciaSql = "select max(codigo_subproceso)+1 as id from public.subproceso;";
+            String sentenciaSql = "select max(codigo_subproceso)as ultimo from subproceso;";
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             while (resultSet.next()) {
-                id = resultSet.getInt("id");
+                id = resultSet.getInt("ultimo");
             }
             return id;
         } catch (SQLException e) {

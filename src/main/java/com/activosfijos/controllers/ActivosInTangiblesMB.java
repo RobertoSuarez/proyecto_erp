@@ -135,7 +135,6 @@ public class ActivosInTangiblesMB implements Serializable {
             intangibledao.deshabilitarintangible(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
-
             PrimeFaces.current().ajax().update(":formintangible");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

@@ -39,21 +39,13 @@ public class SubProcesoMB implements Serializable {
     private List<Costo> listaCostoIndirecto;
     private List<Costo> NuevolistaCostoDirecto;
     private List<Costo> NuevolistaCostoIndirecto;
-    /**
-     * Variables para listar la tabla Costos
-     */
+
     List<dSubproceso> listaDsubprocesoDirecta;
     List<dSubproceso> listaDsubprocesoInirecta;
-    /**
-     * Variables para Sumar costos
-     */
+
     float totalDirecto;
     float totalIndirecto;
 
-    /**
-     * Constructor Sub proceso Manage Bean inicializamos las diferentes
-     * variables cada vez se se ejecute la aplicacion
-     */
     public SubProcesoMB() {
         sproceso = new SubProceso();
         subProcesoDAO = new SubProcesoDAO();
@@ -70,13 +62,8 @@ public class SubProcesoMB implements Serializable {
 
         listaDsubprocesoDirecta = new ArrayList<>();
         listaDsubprocesoInirecta = new ArrayList<>();
-        sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
     }
 
-    /**
-     * Post Constructor sub proceso Manage Bean inicializablos la variable
-     * listaProceso, listaCostoDirecto, listaCostoIndirecto
-     */
     @PostConstruct
     public void init() {
         listaProceso = subProcesoDAO.getProcesosProduccion();
@@ -165,33 +152,83 @@ public class SubProcesoMB implements Serializable {
         this.sproceso = sproceso;
     }
 
-    /**
-     * Metodo que permitira insertar un Nuevo sub proceso
-     */
     public void insertarSubProceso() {
-        if (subProcesoDAO.insertarSubproceso(sproceso) > 0) {
-            subProcesoDAO.insertardSubproceso(sproceso);
-            llenarDetalleDirecto();
-            for (dSubproceso subproceso : listaDsubprocesoDirecta) {
-                //insertamos costo directo
-                subProcesoDAO.insertarDetalleSubproceso(subproceso);
+
+        if ("".equals(sproceso.getNombre())) {
+            showWarn("Ingrese un Nombre al Subproceso.");
+        } else if ("".equals(sproceso.getDescripcion())) {
+            showWarn("La descripción no puede estar vacia.");
+        } else if (sproceso.getRendimiento() <= 0) {
+            showWarn("El rendimiento no pude ser cero.");
+        } else if ("".equals(sproceso.getHora())) {
+            showWarn("Debe ingresar las horas de trabajo.");
+        } else if (sproceso.getId_codigo_proceso() == 0) {
+            showWarn("Debe escojer un proceso.");
+        } else if (!verificaListas(NuevolistaCostoDirecto)) {
+            showWarn("Ingrese valor en los Costos Directos");
+        } else if (!verificaListas(NuevolistaCostoIndirecto)) {
+            showWarn("Ingrese valor en los Costos Indirectos");
+        } else {
+            if (subProcesoDAO.insertarSubproceso(sproceso) > 0) {
+                sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
+                subProcesoDAO.insertardSubproceso(sproceso);
+                llenarDetalleDirecto();
+                for (dSubproceso subproceso : listaDsubprocesoDirecta) {
+                    //insertamos costo directo
+                    subProcesoDAO.insertarDetalleSubproceso(subproceso);
+                }
+                llenarDetalleInirecto();
+                for (dSubproceso subproceso : listaDsubprocesoInirecta) {
+                    //insertamos costo indirecto
+                    subProcesoDAO.insertarDetalleSubproceso(subproceso);
+                }
+                subProcesoDAO.actualizaProceso(sproceso);
+                //Mensaje de proceso terminado con exito
+                showInfo("Subproceso registrado con exito");
+                limpiarCampos();
             }
-            llenarDetalleInirecto();
-            for (dSubproceso subproceso : listaDsubprocesoInirecta) {
-                //insertamos costo indirecto
-                subProcesoDAO.insertarDetalleSubproceso(subproceso);
-            }
-            subProcesoDAO.actualizaProceso(sproceso);
-            //Mensaje de proceso terminado con exito
-            FacesMessage msg = new FacesMessage("Se inserto con existo", null);
-            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+
     }
 
-    /**
-     * Metodo que permitira llenar con todos los datos de costos directos en una
-     * lista
-     */
+    public boolean verificaListas(List<Costo> listaDsubproceso) {
+        boolean verifica = false;
+        for (Costo lista : listaDsubproceso) {
+            if (lista.getCosto() > 0) {
+                verifica = true;
+            } else {
+                verifica = false;
+                break;
+            }
+        }
+        return verifica;
+    }
+
+    public void limpiarCampos() {
+        sproceso = new SubProceso();
+        subProcesoDAO = new SubProcesoDAO();
+        detalleSuprocesoDAO = new dSubprocesoDAO();
+        costo = new Costo();
+        subDproceso = new dSubproceso();
+
+        listaProceso = new ArrayList<>();
+        listaCostoDirecto = new ArrayList<>();
+        listaCostoIndirecto = new ArrayList<>();
+
+        NuevolistaCostoDirecto = new ArrayList<>();
+        NuevolistaCostoIndirecto = new ArrayList<>();
+
+        listaDsubprocesoDirecta = new ArrayList<>();
+        listaDsubprocesoInirecta = new ArrayList<>();
+
+        listaProceso = subProcesoDAO.getProcesosProduccion();
+        listaCostoDirecto = detalleSuprocesoDAO.getCosto("Directo");
+        listaCostoIndirecto = detalleSuprocesoDAO.getCosto("Indirecto");
+
+        totalDirecto=0;
+        totalIndirecto=0;
+    }
+
     public void llenarDetalleDirecto() {
         for (Costo directo : NuevolistaCostoDirecto) {
             subDproceso.setCodigo_subproceso(sproceso.getCodigo_subproceso());
@@ -202,10 +239,6 @@ public class SubProcesoMB implements Serializable {
         }
     }
 
-    /**
-     * Metodo que permitira llenar con todos los datos de costos indirectos en
-     * una lista
-     */
     public void llenarDetalleInirecto() {
         for (Costo indirecto : NuevolistaCostoIndirecto) {
             subDproceso.setCodigo_subproceso(sproceso.getCodigo_subproceso());
@@ -216,36 +249,63 @@ public class SubProcesoMB implements Serializable {
         }
     }
 
-    /**
-     * Agrega un nuevo costo directo a una lista
-     */
     public void addDirecto() {
-        NuevolistaCostoDirecto.add(costoD());
-        costo = new Costo();
+        Costo costoDirecto = costoD();
+        if (!verificaCostoD(costoDirecto)) {
+            NuevolistaCostoDirecto.add(costoDirecto);
+            costo = new Costo();
+        } else {
+            showWarn("Ya ha agregado este Costo Directo");
+        }
     }
-    /**
-     * Agrega un nuevo costo directo a una lista
-     */
+
     public void addIndirecto() {
-        NuevolistaCostoIndirecto.add(costoI());
-        costo = new Costo();
+
+        Costo costoIndirecto = costoI();
+        if (!verificaCostoI(costoIndirecto)) {
+            NuevolistaCostoIndirecto.add(costoIndirecto);
+            costo = new Costo();
+        } else {
+            showWarn("Ya ha agregado este Costo Indirecto");
+        }
+
     }
-    /**
-     * Retorna los valores pertinentes a los costos directos
-     */
+
     public Costo costoD() {
         for (Costo costoDirecto : listaCostoDirecto) {
             if (costo.getCodigo_costos() == costoDirecto.getCodigo_costos()) {
+
                 costo.setNombre(costoDirecto.getNombre());
                 costo.setDescripcion(costoDirecto.getDescripcion());
                 costo.setCosto(costoDirecto.getCosto());
+
             }
         }
         return costo;
     }
-    /**
-     * Retorna los valores pertinentes a los costos indirectos
-     */
+
+    public boolean verificaCostoD(Costo costoDirecto) {
+        boolean verifica = false;
+        for (Costo directo : NuevolistaCostoDirecto) {
+            if (costoDirecto.getCodigo_costos() == directo.getCodigo_costos()) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
+    }
+
+    public boolean verificaCostoI(Costo costoIndirecto) {
+        boolean verifica = false;
+        for (Costo indirecto : NuevolistaCostoIndirecto) {
+            if (costoIndirecto.getCodigo_costos() == indirecto.getCodigo_costos()) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
+    }
+
     public Costo costoI() {
         for (Costo costoIndirecto : listaCostoIndirecto) {
             if (costo.getCodigo_costos() == costoIndirecto.getCodigo_costos()) {
@@ -256,9 +316,7 @@ public class SubProcesoMB implements Serializable {
         }
         return costo;
     }
-    /**
-     * Este metodo suma los valores indirectos que se ingresen
-     */
+
     public void sumarIndirectos() {
         float totalI = 0;
         for (Costo indirecto : NuevolistaCostoIndirecto) {
@@ -266,9 +324,7 @@ public class SubProcesoMB implements Serializable {
         }
         totalIndirecto = totalI;
     }
-    /**
-     * Este metodo suma los valores directos que se ingresen
-     */
+
     public void sumarDirectos() {
         float tD = 0;
         for (Costo directo : NuevolistaCostoDirecto) {
@@ -276,19 +332,32 @@ public class SubProcesoMB implements Serializable {
         }
         totalDirecto = tD;
     }
-    /**
-     * Elimina los costos directos que son ingresados en la tabla
-     */
+
     public void deleteFila(Costo directo) {
         NuevolistaCostoDirecto.remove(directo);
         sumarDirectos();
     }
-    /**
-     * Elimina los costos indirectos que son ingresados en la tabla
-     */
+
     public void deleteFilaIndirecto(Costo directo) {
         NuevolistaCostoIndirecto.remove(directo);
         sumarIndirectos();
+    }
+
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+
+    public void showInfo(String message) {
+        addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
+    }
+
+    public void showWarn(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
+    }
+
+    public void showError(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Error", message);
     }
 
 }

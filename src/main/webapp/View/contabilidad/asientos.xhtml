@@ -10,13 +10,12 @@
     <body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                <h:form id="form">
-                    <ui:include src="./subheadercontabilidad.xhtml"/>
+                <ui:include src="./subheadercontabilidad.xhtml"/>
+                <h:form id="form" style="margin-top: 3%">
                     <p:growl id="msgs" showDetail="true"/>
                     <div class="card">
                         <p:toolbar>
-                            <p:toolbarGroup style="margin-top: 4%">
-                                
+                            <p:toolbarGroup>
                                 <p:commandButton value="Nuevo" action="#{asientoManagedBean.openNewAsiento()}"
                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                  update=":form:manage-asiento" icon="pi pi-plus" 
@@ -260,13 +259,11 @@
                             <p:column headerText="Acciones">
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-asiento"
                                                  oncomplete="PF('detalleAsiento').show()" action="#{asientoManagedBean.calculateTotal()}"  
-                                                 process="@this"
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2">
-                                    
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 process="@this">
                                     <f:setPropertyActionListener value="#{asiento}" target="#{asientoManagedBean.currentAsiento}"/>
                                     <p:resetInput target=":form:manage-asiento"/>
                                 </p:commandButton>
-                                <p:skeleton rendered="#{asientoManagedBean.asientos == null}"></p:skeleton>
                             </p:column>
                         </p:dataTable>
                     </div>

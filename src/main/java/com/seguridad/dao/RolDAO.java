@@ -17,12 +17,12 @@ public class RolDAO {
     public List<Rol> getRolesByUsers(int idUsuario) {
         List<Rol> roles = new ArrayList<>();
         Rol rolAux;
-        String sql = "select r.* from public.\"rolUsuario\" ru inner join public.rol r on ru.\"idRol\" = r.\"idRol\" where ru.\"idUsuario\" = " + String.valueOf(idUsuario) + ";";
+        String query = "select r.* from public.\"rolUsuario\" ru inner join public.rol r on ru.\"idRol\" = r.\"idRol\" where ru.\"idUsuario\" = " + String.valueOf(idUsuario) + ";";
         ResultSet rs;
         try {
             this.conexion.Conectar();
 
-            rs = conexion.consultar(sql);
+            rs = conexion.consultar(query);
             
             while(rs.next()){
                 rolAux = new Rol();
