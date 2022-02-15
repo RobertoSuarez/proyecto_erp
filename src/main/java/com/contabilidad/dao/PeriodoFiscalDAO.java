@@ -78,9 +78,12 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
         if (conexion.isEstado()) {
             periodoFiscal.setIdPeriodoFiscal(conexion.insertar("periodo_fiscal",
                     "fecha_inicio, fecha_fin, periodo, activo",
-                    "'" + DateFormatUtils.format(periodoFiscal.getFechaInicio(), "yyyy-MM-dd HH:mm:SS") + "', '" +
-                    DateFormatUtils.format(periodoFiscal.getFechaFin(), "yyyy-MM-dd HH:mm:SS") + "', "
-                    + periodoFiscal.getPreriodo() + ", " + periodoFiscal.isActivo(),
+                    "'" + DateFormatUtils.format(periodoFiscal.getFechaInicio(), 
+                    "yyyy-MM-dd HH:mm:SS") + "', '" +
+                    DateFormatUtils.format(periodoFiscal.getFechaFin(), 
+                    "yyyy-MM-dd HH:mm:SS") + "', "
+                    + periodoFiscal.getPreriodo() + ", " 
+                    + periodoFiscal.isActivo(),
                     "id_periodo_fiscal"));
             return periodoFiscal.getIdPeriodoFiscal();
         }
@@ -110,10 +113,15 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("periodo_fiscal",
-                    "fecha_inicio = '" + DateFormatUtils.format(periodoFiscal.getFechaInicio(), "yyyy-MM-dd HH:mm:SS") +
-                    "', feccha_fin = '" + DateFormatUtils.format(periodoFiscal.getFechaFin(), "yyyy-MM-dd HH:mm:SS") +
-                    "', periodo = " + periodoFiscal.getPreriodo() + ", activo = " + periodoFiscal.isActivo(),
-                    "id_periodo_fiscal = " + periodoFiscal.getIdPeriodoFiscal());
+                    "fecha_inicio = '" + DateFormatUtils.format(
+                    periodoFiscal.getFechaInicio(), "yyyy-MM-dd HH:mm:SS") +
+                    "', feccha_fin = '" + DateFormatUtils.format(
+                    periodoFiscal.getFechaFin(), "yyyy-MM-dd HH:mm:SS") +
+                    "', periodo = " + 
+                    periodoFiscal.getPreriodo() + ", activo = " 
+                    + periodoFiscal.isActivo(),
+                    "id_periodo_fiscal = " 
+                    + periodoFiscal.getIdPeriodoFiscal());
         }
         return -1;
     }
@@ -139,7 +147,8 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
      **/
     public int descativar() {
         if (conexion.isEstado()) {
-            return conexion.modificar("periodo_fiscal", "activo = false", "id_periodo_fiscal = " + periodoFiscal.getIdPeriodoFiscal());
+            return conexion.modificar("periodo_fiscal", "activo = false", 
+                "id_periodo_fiscal = " + periodoFiscal.getIdPeriodoFiscal());
         }
         return -1;
     }
@@ -182,12 +191,15 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
      * los datos recopilados de un PeriodoFiscal.
      * @return PeriodosFiscales Retorna una lista de este tipo.
      **/
-    private List<PeriodoFiscal> buscar(@Nullable String restricciones, @Nullable String OrdenarAgrupar) {
+    private List<PeriodoFiscal> buscar(@Nullable String restricciones, 
+                                       @Nullable String OrdenarAgrupar) {
         List<PeriodoFiscal> periodosFiscales = new ArrayList<>();
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("periodo_fiscal", "id_periodo_fiscal, fecha_inicio, fecha_fin, periodo, activo", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("periodo_fiscal", "id_periodo_fiscal, "
+                + "fecha_inicio, fecha_fin, periodo, activo", 
+                restricciones, OrdenarAgrupar);
                 while (result.next()) {
                     periodosFiscales.add(new PeriodoFiscal(
                             result.getInt("id_periodo_fiscal"),

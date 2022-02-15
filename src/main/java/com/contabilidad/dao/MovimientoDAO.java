@@ -26,9 +26,13 @@ public class MovimientoDAO {
             PeriodoFiscalDAO periodoFiscalDAO = new PeriodoFiscalDAO();
             //Llena la lista de los datos
             while (resultSet.next()) {
-                movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
-                        resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idAsient"),
-                        resultSet.getInt("idSubcuenta"), periodoFiscalDAO.buscarPorId(resultSet.getInt("periodo_fiscal"))));
+                movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), 
+                resultSet.getString("detalle"),
+                resultSet.getDouble("debe"), 
+                resultSet.getDouble("haber"), 
+                resultSet.getInt("idAsient"),
+                resultSet.getInt("idSubcuenta"), 
+                periodoFiscalDAO.buscarPorId(resultSet.getInt("periodo_fiscal"))));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -52,8 +56,10 @@ public class MovimientoDAO {
             PeriodoFiscalDAO periodoFiscalDAO = new PeriodoFiscalDAO();
             //Llena la lista de los datos
             while (resultSet.next()) {
-                movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
-                        resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idasiento"),
+                movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), 
+                resultSet.getString("detalle"),
+                        resultSet.getDouble("debe"), resultSet.getDouble("haber"), 
+                        resultSet.getInt("idasiento"),
                         resultSet.getInt("idSubcuenta")));
             }
             return movimientos;
@@ -97,9 +103,11 @@ public class MovimientoDAO {
     public void updateMovimientos(Movimiento movimiento, int idAsiento) {
         String sql;
         if (movimiento.getIdMovimiento() == 0) {
-            sql = String.format("select addmovimiento('%1$d','%2$d','%3$s','%4$s','%5$s')", movimiento.getIdSubcuenta(),
-                    idAsiento, Double.toString(movimiento.getDebe()), Double.toString(movimiento.getHaber()), 
-                    movimiento.getTipoMovimiento());
+            sql = String.format("select addmovimiento('%1$d','%2$d','%3$s','%4$s','%5$s')", 
+            movimiento.getIdSubcuenta(),
+            idAsiento, Double.toString(movimiento.getDebe()), 
+            Double.toString(movimiento.getHaber()), 
+            movimiento.getTipoMovimiento());
         } else {
             sql = String.format("UPDATE public.movimiento SET idsubcuenta= '%1$d', "
                     + "tipo= '%2$s', debe= %3$s , haber= %4$s, detalle= '%5$s' "
