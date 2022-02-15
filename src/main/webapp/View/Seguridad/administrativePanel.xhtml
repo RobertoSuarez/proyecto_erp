@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+                <h:form id="form" style="width: 100%;">
+                    <div class="card crud-demo" style="margin-top: -40px">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <div class="products-table-header" style="text-align: center">
+                                        <span style="font-weight: bold; font-size: 25px;" > Administracion </span>
+                                    </div>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <f:facet name="header">
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-">
+                                </p:commandButton>
+                            </f:facet>
+                            <br/>
+                            <div  style="width:1250px;height: 500px;margin: 0 auto">
+                                <p:dataTable id="dt_users" value="#{usuarioMB.listaUsuario}" var="ListaUsuarios"
+                                             size="small" liveResize="true" rowKey="#{usuario.idUsuario}"
+                                             style="width: 1250px;"
+                                             paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                                    <p:column headerText="Codigo" width="4%">
+                                        <h:outputText value="#{ListaUsuarios.idUsuario}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Nombre" style="font-size: 17px" width="16%">
+                                        <h:outputText value="#{ListaUsuarios.nombre}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Apellido" style="font-size: 17px" width="16%">
+                                        <h:outputText value="#{ListaUsuarios.apellido}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Usuario" style="font-size: 17px" width="12%">
+                                        <h:outputText value="#{ListaUsuarios.username}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Contraseña" style="font-size: 17px" width="12%">
+                                        <h:outputText value="#{ListaUsuarios.password}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Fecha de creacion" style="font-size: 17px" width="15%">
+                                        <h:outputText value="#{ListaUsuarios.fehcaCreacion}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Estado" style="font-size: 17px" width="5%">
+                                        <h:outputText value="#{ListaUsuarios.habilitado}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="E-mail" style="font-size: 17px" width="16%">
+                                        <h:outputText value="#{ListaUsuarios.email}"/>
+                                    </p:column>
+                                    
+                                    <p:column exportable="false" width="4%">
+                                        <p:commandButton icon="pi pi-pencil"                                                         
+                                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+                        </p:panel>
+                    </div>
+                </h:form>                
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
