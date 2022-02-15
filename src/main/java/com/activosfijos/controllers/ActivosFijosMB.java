@@ -159,7 +159,7 @@ public class ActivosFijosMB implements Serializable {
 
 
 
-    public void setRegistrar() {
+    public void setRegistrarTangible() {
         String data = "";
         TangibleDAO tangibledao = new TangibleDAO();
         try {
@@ -173,7 +173,7 @@ public class ActivosFijosMB implements Serializable {
 
     }
 
-    public void setEditar() {
+    public void setEditarTangibles() {
         String data = "";
         TangibleDAO tangibledao = new TangibleDAO();
         try {
@@ -188,7 +188,7 @@ public class ActivosFijosMB implements Serializable {
 
     }
 
-    public void setEditar1() {
+    public void setEditarNoDepreciable() {
         String data = "";
         NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
         try {
@@ -203,7 +203,7 @@ public class ActivosFijosMB implements Serializable {
 
     }
 
-    public void setEditar2() {
+    public void setEditarAgotables() {
         String data = "";
         AgotableDAO agotablesdao = new AgotableDAO();
         try {
@@ -230,10 +230,6 @@ public class ActivosFijosMB implements Serializable {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
-
-    }
-
-    public void regresar() {
 
     }
 

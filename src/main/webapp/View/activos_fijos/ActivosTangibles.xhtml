@@ -394,7 +394,7 @@
                                                     <p:commandButton
                                                         value="Guardar" 
                                                         icon="pi pi-check"
-                                                        actionListener="#{activosFijosMB.setRegistrar()}" 
+                                                        actionListener="#{activosFijosMB.setRegistrarTangible()}" 
                                                         update=":formnuevoDepreciable:panelnuevodepreciable, :formDepreciable"
                                                         onclick="PF('NuevoDepreciable').hide()"
                                                         ajax="false"
@@ -546,7 +546,7 @@
                                                         <p:commandButton 
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
-                                                            action="#{activosFijosMB.setEditar}" 
+                                                            action="#{activosFijosMB.setEditarTangibles}" 
                                                             update=":editarDepreciable:paneleditarpreciableeditar"
                                                             onclick="PF('EditarDepreciable').hide()"
                                                             ajax="false"/>
@@ -966,7 +966,7 @@
                                                         <p:commandButton 
                                                             value="Guardar" 
                                                             icon="pi pi-check"
-                                                            action="#{activosFijosMB.setEditar1}" 
+                                                            action="#{activosFijosMB.setEditarNoDepreciable}" 
                                                             ajax="false"/>
                                                         <p:commandButton
                                                             value="Cancelar" 
@@ -1351,7 +1351,7 @@
                                             <f:facet name="footer">
                                                 <p:commandButton value="Guardar" 
                                                                  icon="pi pi-check"
-                                                                 action="#{activosFijosMB.setEditar2}" 
+                                                                 action="#{activosFijosMB.setEditarAgotables}" 
                                                                  ajax="false"/>
                                                 <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                                  onclick="PF('EditarAgotable').hide()"
