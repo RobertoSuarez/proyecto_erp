@@ -12,7 +12,8 @@
 
             <ui:define name="content">
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
+                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" 
+                                outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
                     <p:submenu label="Cobranzas" icon="pi pi-dollar">
                         <p:menuitem value="Nuevo Cobro" outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
                         <p:menuitem value="Listado Cobro" outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
@@ -21,10 +22,12 @@
                         <p:menuitem value="Aplicar Retención" outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
                     </p:submenu>
                     <p:submenu label="Reportes" icon="pi pi-book">
-                        <p:menuitem value="Listado de Clientes con/sin deuda" outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
+                        <p:menuitem value="Listado de Clientes con/sin deuda" 
+                                    outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
                         <p:menuitem value="Estado de Cuenta" outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
                         <p:menuitem value="Facturas Pendientes" outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
-                        <p:menuitem value="Cartera x Edades de Vencimiento" outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
+                        <p:menuitem value="Cartera x Edades de Vencimiento" 
+                                    outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
                     </p:submenu>
                 </p:menubar>
                 <br></br>
@@ -145,7 +148,8 @@
                                                          disabled="true" 
                                                          value="#{abonoController.totalAbonos}"
                                                          style="width: 100px; text-align: right;">
-                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                <f:convertNumber currencySymbol="$" 
+                                                                 type="currency"/>
                                             </p:inputText>
                                         </span>
                                         <span style="float: right; padding-right: 20px;">
@@ -157,8 +161,10 @@
                                                          disabled="true" 
                                                          type="text"
                                                          value="#{abonoController.totalPendiente}"
-                                                         style="width: 100px; text-align: right;">
-                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                         style="width: 100px; 
+                                                         text-align: right;">
+                                                <f:convertNumber currencySymbol="$" 
+                                                                 type="currency"/>
                                             </p:inputText>
                                         </span>
                                         <br/><br/>
@@ -270,8 +276,10 @@
                                         <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
                                         <f:selectItem itemLabel="Efectivo" itemValue="2"/>
                                         <f:selectItem itemLabel="Cheque" itemValue="3"/>
-                                        <f:selectItem itemLabel="Tarjeta de Débito" itemValue="4"/>
-                                        <f:selectItem itemLabel="Tarjeta de Crédito" itemValue="5"/>
+                                        <f:selectItem itemLabel="Tarjeta de Débito" 
+                                                      itemValue="4"/>
+                                        <f:selectItem itemLabel="Tarjeta de Crédito" 
+                                                      itemValue="5"/>
                                     </p:selectOneMenu>
 
                                     <p:outputLabel for="fechaAbono" 
