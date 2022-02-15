@@ -54,7 +54,7 @@ public class MovimientoDAO {
             while (resultSet.next()) {
                 movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
                         resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idasiento"),
-                        resultSet.getInt("idSubcuenta"), periodoFiscalDAO.buscarPorId(resultSet.getInt("periodo_fiscal"))));
+                        resultSet.getInt("idSubcuenta")));
             }
             return movimientos;
         } catch (Exception e) {

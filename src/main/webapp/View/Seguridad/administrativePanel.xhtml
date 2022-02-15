@@ -28,12 +28,11 @@
                                 </p:commandButton>
                             </f:facet>
                             <br/>
-                            <div  style="width:1250px;height: 500px;margin: 0 auto">
+                            <div>
                                 <p:dataTable id="dt_users" value="#{usuarioMB.listaUsuario}" var="ListaUsuarios"
                                              size="small" liveResize="true" rowKey="#{usuario.idUsuario}"
-                                             style="width: 1250px;"
                                              paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                                    <p:column headerText="Codigo" width="4%">
+                                    <p:column headerText="Codigo" width="5%" style="font-size: 17px">
                                         <h:outputText value="#{ListaUsuarios.idUsuario}"/>
                                     </p:column>
                                     
@@ -47,10 +46,6 @@
                                     
                                     <p:column headerText="Usuario" style="font-size: 17px" width="12%">
                                         <h:outputText value="#{ListaUsuarios.username}"/>
-                                    </p:column>
-                                    
-                                    <p:column headerText="Contraseña" style="font-size: 17px" width="12%">
-                                        <h:outputText value="#{ListaUsuarios.password}"/>
                                     </p:column>
                                     
                                     <p:column headerText="Fecha de creacion" style="font-size: 17px" width="15%">
