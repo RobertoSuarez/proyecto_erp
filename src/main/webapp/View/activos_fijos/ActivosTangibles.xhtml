@@ -394,7 +394,7 @@
                                                     <p:commandButton
                                                         value="Guardar" 
                                                         icon="pi pi-check"
-                                                        actionListener="#{activosFijosMB.getDataApi()}" 
+                                                        actionListener="#{activosFijosMB.setRegistrar()}" 
                                                         update=":formnuevoDepreciable:panelnuevodepreciable, :formDepreciable"
                                                         onclick="PF('NuevoDepreciable').hide()"
                                                         ajax="false"
@@ -882,10 +882,10 @@
                                             </div>
                                         </p:dialog> 
                                     </h:form>
-                                    
-                                    
-                                    
-                                    
+
+
+
+
                                     <h:form id="formeditarNoDepreciable">
                                         <p:dialog header="Editar Activo No Depreciable"
                                                   minHeight="40" 
@@ -988,7 +988,7 @@
                                     </h:form>
                                 </p:panel>
                             </p:tab>
-                            
+
                             <p:tab title="Agotables" id="tablaAgotable">
                                 <p:panel>
                                     <div>
@@ -1012,8 +1012,8 @@
                                                 </p:commandButton>
                                             </p:toolbarGroup>                       
                                         </p:toolbar> 
-                                        
-                                        
+
+
                                         <h:form id="formagotable">
                                             <!-- Tabla visual de datos  !-->
                                             <p:dataTable 
@@ -1076,10 +1076,10 @@
                                             </p:dataTable>
                                         </h:form>
                                     </div>
-                                    
-                                    
-                                    
-                                    
+
+
+
+
                                     <h:form id="formverdeshabilitadoagotable" >
                                         <p:dialog header="Activos  Agotables Deshabilitados" 
                                                   minHeight="40" 
@@ -1152,9 +1152,9 @@
                                             </div>
                                         </p:dialog> 
                                     </h:form>
-                                    
-                                    
-                                    
+
+
+
                                     <h:form id="formnuevoagotable" >
                                         <p:dialog 
                                             header="Nuevo Activo Agotable" 
@@ -1254,8 +1254,8 @@
                                             </div>
                                         </p:dialog> 
                                     </h:form>
-                                    
-                                    
+
+
                                     <h:form id="formeditarAgotable" >
                                         <p:dialog 
                                             header="Editar Activo Agotable" 
