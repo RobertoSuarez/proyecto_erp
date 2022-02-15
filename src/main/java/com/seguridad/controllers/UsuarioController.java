@@ -42,7 +42,7 @@ public class UsuarioController implements Serializable {
         usuarioDAO = new UsuarioDAO();
         rolDao = new RolDAO();
         rolesDAO = new RolesDAO();
-        listaUsuario = new ArrayList<>();
+        listaUsuario = usuarioDAO.listUsers();
         System.out.println("########## Pasa algo");
     }
     
@@ -72,6 +72,14 @@ public class UsuarioController implements Serializable {
 
     public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
         this.usuarioDAO = usuarioDAO;
+    }
+
+    public List<Usuario> getListaUsuario() {
+        return listaUsuario;
+    }
+
+    public void setListaUsuario(List<Usuario> listaUsuario) {
+        this.listaUsuario = listaUsuario;
     }
 
     public String registrarUsuario() throws Exception {
@@ -250,5 +258,7 @@ public class UsuarioController implements Serializable {
         }
         return false;
     }
+    
+    
 
 }
