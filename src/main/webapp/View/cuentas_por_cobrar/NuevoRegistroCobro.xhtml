@@ -65,7 +65,7 @@
                                         <br/> <br/>
                                         <p:selectOneMenu id="optionFactura" 
                                                          value="#{abonoController.idFactura}"
-                                                         style="height: 40px; width: 185px !important;"
+                                                         style="height: 35px; width: 185px !important;"
                                                          filter="true" filterMatchMode="startsWith">                            
                                             <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
                                             <f:selectItems value="#{abonoController.listaVenta}"/>
@@ -107,8 +107,9 @@
                                                      placeholder="aaaa/mm/dd"
                                                      value="#{abonoController.fechasPlan[1]}"/> 
                                     </div>
+                                    &nbsp;
                                     <div style="ext-align: center;">
-                                    <div style="float: left; padding-top: 20px;">
+                                    <div style="float: left; padding-top: 18px; padding-left: 5px;">
                                         <p:commandButton value="Cargar Plan de Pagos"
                                                          id="btnDeuda"
                                                          icon="pi pi-replay" 
@@ -116,7 +117,7 @@
                                                          update="growl fechaVencida fechaEmision tblRegistroCobro"
                                                          styleClass="ui-button-secondary"/>
                                     </div>
-                                    <div style="float: left; padding-top: 20px; padding-left: 2px;">
+                                    <div style="float: left; padding-top: 18px; padding-left: 5px;">
                                         <p:commandButton value="Nuevo Cobro"
                                                          ajax="false"
                                                          disabled="#{(abonoController.getFechasPlan()[0] == null)}"
