@@ -54,7 +54,7 @@
 
 
                 <!--<c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }"> -->
-                
+
                 <ui:fragment rendered="#{seguridadActvFijo.renderTodosRolesAdmitidos()}">
                     <div class="p-col-12 p-lg-6 p-xl-3">
                         <a href="../activos_fijos/ActivosTangibles.xhtml">
@@ -166,24 +166,25 @@
                         </div>
                     </a>
                 </div>
-                
-                <div class="p-col-12 p-lg-6 p-xl-3">
-                    <a href="../Seguridad/administrativePanel.xhtml" >
-                        <div class="card-box bg-deeppurple">
-                            <div class="inner">
-                                <h3> Administracion </h3>
-                                <p> Descripción </p>
+
+                <ui:fragment rendered="#{rolController.renderPrincipalView()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="../Seguridad/administrativePanel.xhtml" >
+                            <div class="card-box bg-orange">
+                                <div class="inner">
+                                    <h3> Administración </h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-sitemap"></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="pi pi-inbox"></i>
-                            </div>
-                            <div class="card-box-footer">Ingresar
-                                <i class="pi pi-arrow-circle-right"/>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                
+                        </a>
+                    </div>
+                </ui:fragment>            
             </div>
         </div>
         <h:outputStylesheet name="home.css" library="css"/>
