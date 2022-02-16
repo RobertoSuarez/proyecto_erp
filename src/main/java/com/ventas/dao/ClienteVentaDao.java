@@ -48,7 +48,7 @@ public class ClienteVentaDao implements Serializable {
             }
             System.out.println(e.getMessage());
         } finally {
-            con.desconectar();
+            con.cerrarConexion();
         }
         return temp;
     }
@@ -80,7 +80,7 @@ public class ClienteVentaDao implements Serializable {
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.con.desconectar();
+            this.con.cerrarConexion();
         }
         return clientes;
     }
