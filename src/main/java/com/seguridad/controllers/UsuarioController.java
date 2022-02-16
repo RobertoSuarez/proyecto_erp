@@ -30,6 +30,8 @@ public class UsuarioController implements Serializable {
     private Usuario usuario;
     private List<Usuario> listaUsuario;
     private UsuarioDAO usuarioDAO;
+    private Usuario selectionUser;
+    private Usuario infoUser;
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -40,6 +42,8 @@ public class UsuarioController implements Serializable {
     public UsuarioController() {
         usuario = new Usuario();
         usuarioDAO = new UsuarioDAO();
+        this.selectionUser = null;
+        this.infoUser = null;
         rolDao = new RolDAO();
         rolesDAO = new RolesDAO();
         listaUsuario = usuarioDAO.listUsers();
@@ -80,6 +84,22 @@ public class UsuarioController implements Serializable {
 
     public void setListaUsuario(List<Usuario> listaUsuario) {
         this.listaUsuario = listaUsuario;
+    }
+
+    public Usuario getSelectionUser() {
+        return selectionUser;
+    }
+
+    public void setSelectionUser(Usuario selectionUser) {
+        this.selectionUser = selectionUser;
+    }
+
+    public Usuario getInfoUser() {
+        return infoUser;
+    }
+
+    public void setInfoUser(Usuario infoUser) {
+        this.infoUser = infoUser;
     }
 
     public String registrarUsuario() throws Exception {
@@ -259,6 +279,9 @@ public class UsuarioController implements Serializable {
         return false;
     }
     
-    
+    public void chargeUser(Usuario seleccion){
+        this.infoUser.setIdUsuario(seleccion.getIdUsuario());
+        this.infoUser.setUsername(seleccion.getUsername());
+    }
 
 }

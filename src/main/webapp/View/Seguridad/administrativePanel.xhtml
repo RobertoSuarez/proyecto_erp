@@ -22,54 +22,66 @@
                                     </div>
                                 </p:toolbarGroup>
                             </p:toolbar>
-                            <f:facet name="header">
-                                <p:commandButton value="Nuevo" icon="pi pi-plus"
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-">
-                                </p:commandButton>
-                            </f:facet>
                             <br/>
                             <div>
                                 <p:dataTable id="dt_users" value="#{usuarioMB.listaUsuario}" var="ListaUsuarios"
                                              size="small" liveResize="true" rowKey="#{usuario.idUsuario}"
+                                             selection="#{usuarioMB.selectionUser}" selectionMode="single"
                                              paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
                                     <p:column headerText="Codigo" width="5%" style="font-size: 17px">
                                         <h:outputText value="#{ListaUsuarios.idUsuario}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="Nombre" style="font-size: 17px" width="16%">
                                         <h:outputText value="#{ListaUsuarios.nombre}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="Apellido" style="font-size: 17px" width="16%">
                                         <h:outputText value="#{ListaUsuarios.apellido}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="Usuario" style="font-size: 17px" width="12%">
                                         <h:outputText value="#{ListaUsuarios.username}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="Fecha de creacion" style="font-size: 17px" width="15%">
                                         <h:outputText value="#{ListaUsuarios.fehcaCreacion}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="Estado" style="font-size: 17px" width="5%">
                                         <h:outputText value="#{ListaUsuarios.habilitado}"/>
                                     </p:column>
-                                    
+
                                     <p:column headerText="E-mail" style="font-size: 17px" width="16%">
                                         <h:outputText value="#{ListaUsuarios.email}"/>
                                     </p:column>
-                                    
+
                                     <p:column exportable="false" width="4%">
                                         <p:commandButton icon="pi pi-pencil"                                                         
-                                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
+                                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this"
+                                                         onclick="PF('userData').show()" update="RolUser" actionListener="#{usuarioMB.chargeUser(ListaUsuarios)}">
                                         </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
                             </div>
                         </p:panel>
                     </div>
-                </h:form>                
+                </h:form>
+                <p:dialog id="userDat" header="Informacion de Usuario" widgetVar="userData"
+                          height="100%" width="70%" showEffect="fade">
+                    <h:form id="RolUser">
+                        <p:panel header="Perfil de usuario" style="text-align: left; width: 100%; float: right">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Usuario"/>
+                                <p:inputText value="#{usuarioMB.infoUser.username}" disabled="true" />
+                                <p:outputLabel value="Roles"/>
+                                <p:inputTextarea value="" disabled="true" rows="10" cols="10"/>
+                                <div/>
+                                <p:commandButton value="Agregar rol" type="button"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form >
+                </p:dialog>                
             </ui:define>
         </ui:composition>
 
