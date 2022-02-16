@@ -65,6 +65,48 @@ public class ArticulosInventarioDAO {
         }
         return ListaInv;
          }
+    
+        public ArticulosInventario ObtenerProducto(int id) {
+        ResultSet rs;
+        ArticulosInventario temp = new ArticulosInventario();
+        
+        try {
+            String code = String.valueOf(id);
+            conexion.abrirConexion();
+            rs = conexion.ejecutarConsulta("select * from public.buscarproductocodigo(" + code.trim() + ")");
+            
+            if (rs == null) {
+                System.out.println("No existen registros");
+            } else {
+                System.out.println("Existen registros");
+                
+                while (rs.next()) {
+                    System.out.print("Producto " + rs.getInt(1));
+                    temp.setCod(rs.getInt(1));
+                    temp.setCat_cod(rs.getInt(2));
+                    temp.setNombre(rs.getString(3));
+                    temp.setDescripcion(rs.getString(4));
+                    temp.setId_bodega(rs.getInt(5));
+                    temp.setCosto(rs.getInt(6));
+                    temp.setIce(rs.getInt(7));
+                    temp.setIva(rs.getInt(8));
+                    
+                }
+            }
+            conexion.cerrarConexion();
+
+            return temp;
+        } catch (Exception e) {
+            if (conexion.isEstado()) {
+                conexion.cerrarConexion();
+            }
+        }
+        finally{
+            conexion.cerrarConexion();
+        }
+
+        return null;
+    }
  
     
     
