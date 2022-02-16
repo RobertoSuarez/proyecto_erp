@@ -52,13 +52,13 @@ public class CostoManageBean implements Serializable {
             /**
              * Validamos campos vacios de los cuadros de texto
              */
-            if ("".equals(costo.getIdentificador())) {
+            if ("".equals(costo.getIdentificador_subcuenta())) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
-            } else if ("".equals(costo.getNombre())) {
+            } else if ("".equals(costo.getNombre_subcuenta())) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
-            } else if ("".equals(costo.getDescripcion())) {
+            } else if ("".equals(costo.getDescripcion_subgrupo())) {
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
@@ -96,11 +96,11 @@ public class CostoManageBean implements Serializable {
              * Validamos campos vacios de los cuadros de texto asi como sus
              * longitudes
              */
-            if ("".equals(costo.getIdentificador())) {
+            if ("".equals(costo.getIdentificador_subcuenta())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Codigo"));
-            } else if ("".equals(costo.getNombre())) {
+            } else if ("".equals(costo.getNombre_subcuenta())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
-            } else if ("".equals(costo.getDescripcion())) {
+            } else if ("".equals(costo.getDescripcion_subgrupo())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 /**
@@ -145,7 +145,7 @@ public class CostoManageBean implements Serializable {
              *
              * @param costo objeto Costo
              */
-            this.costoDAO.deletecosto(costo, costo.getIdentificador());
+            this.costoDAO.deletecosto(costo, costo.getIdentificador_subcuenta());
             /**
              * Llamamos a la lista para actualizar
              */
@@ -172,7 +172,7 @@ public class CostoManageBean implements Serializable {
     public void aleatorioIdentiCosto() {
         String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
         String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
-        this.costo.setIdentificador("CT-" + uuid + uuid2);
+        this.costo.setIdentificador_subcuenta("CT-" + uuid + uuid2);
     }
 
     public void openNew() {

@@ -1,47 +1,35 @@
-
 package com.produccion.models;
 
-/**
- *
- * @author Alex
- */
 public class Costo {
-    private int codigo_costos;
-    private String nombre;
-    private String descripcion;
-    private String tipo;
-    private String identificador;
-    private float costo;
 
+    private int codigo_subcuenta;
+    private String nombre_subcuenta;
+    private String descripcion_subgrupo;
+    private String tipo_cuenta;
+    private String identificador_subcuenta;
+    private float costo;
     public Costo() {
     }
-    /**
-     * Constructor en donde inicializaremos nuestra variables
-     */
-    public Costo(int codigo_costos, String nombre, String descripcion, 
+
+    public Costo(int codigo_costos, String nombre, String descripcion,
             String tipo, String identificador, float costo) {
-        this.codigo_costos = codigo_costos;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tipo = tipo;
-        this.identificador = identificador;
+        this.codigo_subcuenta = codigo_costos;
+        this.nombre_subcuenta = nombre;
+        this.descripcion_subgrupo = descripcion;
+        this.tipo_cuenta = tipo;
+        this.identificador_subcuenta = identificador;
         this.costo = costo;
     }
-    /**
-     * Constructor con diferentes parametros en donde inicializaremos 
-     * nuestra variables
-     */
-    public Costo(int codigo_costos, String nombre, String descripcion, 
+
+    public Costo(int codigo_costos, String nombre, String descripcion,
             String tipo, String identificador) {
-        this.codigo_costos = codigo_costos;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tipo = tipo;
-        this.identificador = identificador;
+        this.codigo_subcuenta = codigo_costos;
+        this.nombre_subcuenta = nombre;
+        this.descripcion_subgrupo = descripcion;
+        this.tipo_cuenta = tipo;
+        this.identificador_subcuenta = identificador;
     }
-    /**
-     * getters y setters de todas las variables
-     */
+
     public float getCosto() {
         return costo;
     }
@@ -49,46 +37,45 @@ public class Costo {
     public void setCosto(float costo) {
         this.costo = costo;
     }
-    
 
-    public int getCodigo_costos() {
-        return codigo_costos;
+    public int getCodigo_subcuenta() {
+        return codigo_subcuenta;
     }
 
-    public void setCodigo_costos(int codigo_costos) {
-        this.codigo_costos = codigo_costos;
+    public void setCodigo_subcuenta(int codigo_subcuenta) {
+        this.codigo_subcuenta = codigo_subcuenta;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombre_subcuenta() {
+        return nombre_subcuenta;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre_subcuenta(String nombre_subcuenta) {
+        this.nombre_subcuenta = nombre_subcuenta;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescripcion_subgrupo() {
+        return descripcion_subgrupo;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescripcion_subgrupo(String descripcion_subgrupo) {
+        this.descripcion_subgrupo = descripcion_subgrupo;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipo_cuenta() {
+        return tipo_cuenta;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipo_cuenta(String tipo_cuenta) {
+        this.tipo_cuenta = tipo_cuenta;
     }
 
-    public String getIdentificador() {
-        return identificador;
+    public String getIdentificador_subcuenta() {
+        return identificador_subcuenta;
     }
 
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
+    public void setIdentificador_subcuenta(String identificador_subcuenta) {
+        this.identificador_subcuenta = identificador_subcuenta;
     }
-    
+
 }

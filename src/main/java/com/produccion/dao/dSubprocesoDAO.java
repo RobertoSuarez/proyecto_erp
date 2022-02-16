@@ -1,4 +1,3 @@
-
 package com.produccion.dao;
 
 import com.global.config.Conexion;
@@ -13,21 +12,24 @@ import java.util.List;
  * @author HP
  */
 public class dSubprocesoDAO {
+
     private Conexion conexion;
     private ResultSet resultSet;
     private String sentenciaSql;
-    /**
-     * Constructor en donde instanciamos conexion
-     */
+
     public dSubprocesoDAO() {
         conexion = new Conexion();
     }
-    /**
-     * Método para Listar la lista todos los costos
-     */
-    public List<Costo> getCosto(String tipo) {
+
+    public List<Costo> getCostoDirecto() {
         List<Costo> costo = new ArrayList<>();
-        sentenciaSql = String.format("select * from costos where tipo='"+tipo+"';");
+        sentenciaSql = String.format("SELECT sc.idsubcuenta as codigo_subcuenta, sc.nombre subcuenta,  \n"
+                + "   sg.nombre subgrupo, c.nombre cuenta,sc.codigo as identificador\n"
+                + "  FROM subcuenta as sc inner join cuenta as c on sc.idcuenta = c.idcuenta \n"
+                + "  inner join subgrupo as sg on c.idsubgrupo = sg.idsubgrupo \n"
+                + "  inner join grupocuenta as g on sg.idgrupo = g.idgrupo \n"
+                + "  where g.idgrupo=5 and g.codigo='5' and sg.codigo='5.2' and c.codigo='5.2.1'\n"
+                + " order by sc.idsubcuenta");
         try {
             //llamamos a la conexion
             conexion.conectar();
@@ -35,11 +37,38 @@ public class dSubprocesoDAO {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                costo.add(new Costo(resultSet.getInt("codigo_costos"), resultSet.getString("nombre"),
-                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getString("identificador")));
+                costo.add(new Costo(resultSet.getInt("codigo_subcuenta"), resultSet.getString("subcuenta"),
+                        resultSet.getString("subgrupo"), resultSet.getString("cuenta"), resultSet.getString("identificador")));
             }
         } catch (SQLException e) {
-        }finally {
+        } finally {
+            conexion.desconectar();
+        }
+        return costo;
+    }
+
+    public List<Costo> getCostoIndirecto() {
+        List<Costo> costo = new ArrayList<>();
+        sentenciaSql = String.format("SELECT sc.idsubcuenta as codigo_subcuenta, sc.nombre subcuenta,\n"
+                + "	sg.nombre subgrupo, c.nombre cuenta,sc.codigo as identificador\n"
+                + "	FROM subcuenta as sc inner join cuenta as c on sc.idcuenta = c.idcuenta \n"
+                + "	inner join subgrupo as sg on c.idsubgrupo = sg.idsubgrupo\n"
+                + "	inner join grupocuenta as g on sg.idgrupo = g.idgrupo \n"
+                + "	where (g.idgrupo=5 and g.codigo='5') and (sg.codigo='5.2' or sg.codigo='5.3'or sg.codigo='5.4')\n"
+                + "	and (c.codigo='5.2.2' or c.codigo='5.3.1' or c.codigo='5.3.2')\n"
+                + "	order by sc.idsubcuenta");
+        try {
+            //llamamos a la conexion
+            conexion.conectar();
+            //enviamos la sentencia
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                costo.add(new Costo(resultSet.getInt("codigo_subcuenta"), resultSet.getString("subcuenta"),
+                        resultSet.getString("subgrupo"), resultSet.getString("cuenta"), resultSet.getString("identificador")));
+            }
+        } catch (SQLException e) {
+        } finally {
             conexion.desconectar();
         }
         return costo;

@@ -67,8 +67,8 @@ public class SubProcesoMB implements Serializable {
     @PostConstruct
     public void init() {
         listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto = detalleSuprocesoDAO.getCosto("Directo");
-        listaCostoIndirecto = detalleSuprocesoDAO.getCosto("Indirecto");
+        listaCostoDirecto = detalleSuprocesoDAO.getCostoDirecto();
+        listaCostoIndirecto = detalleSuprocesoDAO.getCostoIndirecto();
 
     }
 
@@ -183,7 +183,6 @@ public class SubProcesoMB implements Serializable {
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
                 subProcesoDAO.actualizaProceso(sproceso);
-                //Mensaje de proceso terminado con exito
                 showInfo("Subproceso registrado con exito");
                 limpiarCampos();
             }
@@ -222,8 +221,8 @@ public class SubProcesoMB implements Serializable {
         listaDsubprocesoInirecta = new ArrayList<>();
 
         listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto = detalleSuprocesoDAO.getCosto("Directo");
-        listaCostoIndirecto = detalleSuprocesoDAO.getCosto("Indirecto");
+        listaCostoDirecto = detalleSuprocesoDAO.getCostoDirecto();
+        listaCostoIndirecto = detalleSuprocesoDAO.getCostoIndirecto();
 
         totalDirecto=0;
         totalIndirecto=0;
@@ -232,7 +231,7 @@ public class SubProcesoMB implements Serializable {
     public void llenarDetalleDirecto() {
         for (Costo directo : NuevolistaCostoDirecto) {
             subDproceso.setCodigo_subproceso(sproceso.getCodigo_subproceso());
-            subDproceso.setCodigo_costos(directo.getCodigo_costos());
+            subDproceso.setCodigo_costos(directo.getCodigo_subcuenta());
             subDproceso.setCosto_mano_obra(directo.getCosto());
             listaDsubprocesoDirecta.add(subDproceso);
             subDproceso = new dSubproceso();
@@ -242,7 +241,7 @@ public class SubProcesoMB implements Serializable {
     public void llenarDetalleInirecto() {
         for (Costo indirecto : NuevolistaCostoIndirecto) {
             subDproceso.setCodigo_subproceso(sproceso.getCodigo_subproceso());
-            subDproceso.setCodigo_costos(indirecto.getCodigo_costos());
+            subDproceso.setCodigo_costos(indirecto.getCodigo_subcuenta());
             subDproceso.setCosto_indirecto(indirecto.getCosto());
             listaDsubprocesoInirecta.add(subDproceso);
             subDproceso = new dSubproceso();
@@ -273,10 +272,10 @@ public class SubProcesoMB implements Serializable {
 
     public Costo costoD() {
         for (Costo costoDirecto : listaCostoDirecto) {
-            if (costo.getCodigo_costos() == costoDirecto.getCodigo_costos()) {
+            if (costo.getCodigo_subcuenta() == costoDirecto.getCodigo_subcuenta()) {
 
-                costo.setNombre(costoDirecto.getNombre());
-                costo.setDescripcion(costoDirecto.getDescripcion());
+                costo.setNombre_subcuenta(costoDirecto.getNombre_subcuenta());
+                costo.setDescripcion_subgrupo(costoDirecto.getDescripcion_subgrupo());
                 costo.setCosto(costoDirecto.getCosto());
 
             }
@@ -287,7 +286,7 @@ public class SubProcesoMB implements Serializable {
     public boolean verificaCostoD(Costo costoDirecto) {
         boolean verifica = false;
         for (Costo directo : NuevolistaCostoDirecto) {
-            if (costoDirecto.getCodigo_costos() == directo.getCodigo_costos()) {
+            if (costoDirecto.getCodigo_subcuenta() == directo.getCodigo_subcuenta()) {
                 verifica = true;
                 break;
             }
@@ -298,7 +297,7 @@ public class SubProcesoMB implements Serializable {
     public boolean verificaCostoI(Costo costoIndirecto) {
         boolean verifica = false;
         for (Costo indirecto : NuevolistaCostoIndirecto) {
-            if (costoIndirecto.getCodigo_costos() == indirecto.getCodigo_costos()) {
+            if (costoIndirecto.getCodigo_subcuenta() == indirecto.getCodigo_subcuenta()) {
                 verifica = true;
                 break;
             }
@@ -308,9 +307,9 @@ public class SubProcesoMB implements Serializable {
 
     public Costo costoI() {
         for (Costo costoIndirecto : listaCostoIndirecto) {
-            if (costo.getCodigo_costos() == costoIndirecto.getCodigo_costos()) {
-                costo.setNombre(costoIndirecto.getNombre());
-                costo.setDescripcion(costoIndirecto.getDescripcion());
+            if (costo.getCodigo_subcuenta() == costoIndirecto.getCodigo_subcuenta()) {
+                costo.setNombre_subcuenta(costoIndirecto.getNombre_subcuenta());
+                costo.setDescripcion_subgrupo(costoIndirecto.getDescripcion_subgrupo());
                 costo.setCosto(costoIndirecto.getCosto());
             }
         }

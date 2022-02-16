@@ -58,8 +58,8 @@ public class SubProcesoManageBean implements Serializable {
     public void init() {
         subProceso = new SubProceso();
         listaProceso = subProcesoDAO.getProcesosProduccion();
-        listaCostoDirecto = subproDAO.getCosto("Directo");
-        listaCostoIndirecto = subproDAO.getCosto("Indirecto");
+        listaCostoDirecto = subproDAO.getCostoDirecto();
+        listaCostoIndirecto = subproDAO.getCostoIndirecto();
 
     }
     
@@ -72,11 +72,11 @@ public class SubProcesoManageBean implements Serializable {
      */
     public void aggCostoIndirecto() {
         Costo costoI = new Costo();
-        costoI.setCodigo_costos(costoIndirecto().getCodigo_costos());
-        costoI.setNombre(costoIndirecto().getNombre());
-        costoI.setDescripcion(costoIndirecto().getDescripcion());
-        costoI.setTipo(costoIndirecto().getTipo());
-        costoI.setIdentificador(costoIndirecto().getIdentificador());
+        costoI.setCodigo_subcuenta(costoIndirecto().getCodigo_subcuenta());
+        costoI.setNombre_subcuenta(costoIndirecto().getNombre_subcuenta());
+        costoI.setDescripcion_subgrupo(costoIndirecto().getDescripcion_subgrupo());
+        costoI.setTipo_cuenta(costoIndirecto().getTipo_cuenta());
+        costoI.setIdentificador_subcuenta(costoIndirecto().getIdentificador_subcuenta());
         costos.add(indiceI, costoI);
         indiceI++;
         System.out.println(indiceI);
@@ -87,9 +87,9 @@ public class SubProcesoManageBean implements Serializable {
     public Costo costoIndirecto() {
         costoProduccion = new Costo();
         for (Costo costoI : listaCostoIndirecto) {
-            if (costoI.getCodigo_costos() == idCostoIndirecto) {
-                costoProduccion = new Costo(costoI.getCodigo_costos(), costoI.getNombre(),
-                        costoI.getDescripcion(), costoI.getTipo(), costoI.getIdentificador());
+            if (costoI.getCodigo_subcuenta() == idCostoIndirecto) {
+                costoProduccion = new Costo(costoI.getCodigo_subcuenta(), costoI.getNombre_subcuenta(),
+                        costoI.getDescripcion_subgrupo(), costoI.getTipo_cuenta(), costoI.getIdentificador_subcuenta());
             }
         }
         return costoProduccion;

@@ -59,10 +59,10 @@ public class CostoDAO {
             this.conexion.Conectar();
 
             String sql = "INSERT INTO public.costos(nombre, descripcion, tipo, identificador)\n"
-                    + "	VALUES ('" + costo.getNombre() + "', '" + costo.getDescripcion() + "', '" + costo.getTipo()+ "', '" + costo.getIdentificador() + "')";
+                    + "	VALUES ('" + costo.getNombre_subcuenta() + "', '" + costo.getDescripcion_subgrupo() + "', '" + costo.getTipo_cuenta()+ "', '" + costo.getIdentificador_subcuenta() + "')";
             
             String sql2 = "Insert into public.costos (nombre, descripcion, tipo, identificador) \n"
-                    + "values('" + costo.getNombre() + "', '" + costo.getDescripcion() + "', '" + costo.getTipo()+ "','" + costo.getIdentificador() + "')";
+                    + "values('" + costo.getNombre_subcuenta() + "', '" + costo.getDescripcion_subgrupo() + "', '" + costo.getTipo_cuenta()+ "','" + costo.getIdentificador_subcuenta() + "')";
             //enviamos la sentencia
             conexion.Ejecutar2(sql2);
             conexion.cerrarConexion();
@@ -85,8 +85,8 @@ public class CostoDAO {
             this.conexion.Conectar();
 
             String sql = "UPDATE public.costos\n"
-                    + "	SET nombre='" + costo.getNombre() + "', descripcion='" + costo.getDescripcion() + "', identificador='" + costo.getIdentificador() + "'\n"
-                    + "	WHERE identificador = '" + costo.getIdentificador()+ "'";
+                    + "	SET nombre='" + costo.getNombre_subcuenta() + "', descripcion='" + costo.getDescripcion_subgrupo() + "', identificador='" + costo.getIdentificador_subcuenta() + "'\n"
+                    + "	WHERE identificador = '" + costo.getIdentificador_subcuenta()+ "'";
             //enviamos la sentencia
             conexion.ejecutar(sql);
             conexion.cerrarConexion();

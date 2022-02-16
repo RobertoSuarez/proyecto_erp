@@ -49,7 +49,7 @@
                                             <p:outputLabel value="Rendimiento:"></p:outputLabel>
                                             <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
                                         </div>
-                                        
+
                                     </div>
                                 </p:outputPanel>
                             </p:toolbarGroup>
@@ -65,6 +65,62 @@
                         </p:toolbar>
                         <div class="p-formgrid p-grid">
                             <div class="p-field p-col-12 p-md-6">
+                                <p:dataTable id="costoDirecto" reflow="true" paginator="true" rows="2" 
+                                             rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoDirecto}" var="nDirecto">
+                                    <!-- Buscador -->
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 0.5em;">Costos Directos</span>
+
+                                            <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_subcuenta}" editable="false">
+                                                <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
+                                                <p:ajax listener="#{SubProcesoMB.addDirecto()}" 
+                                                        update=":form_subproceso:costoDirecto ,:form_subproceso:growl" process="@this"/>
+                                                <f:selectItems value="#{SubProcesoMB.listaCostoDirecto}" var="cDirecto"
+                                                               itemLabel="#{cDirecto.nombre_subcuenta}" itemValue="#{cDirecto.codigo_subcuenta}">
+
+                                                </f:selectItems>
+
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </f:facet>
+
+                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                        <h:outputText value="#{nDirecto.nombre_subcuenta}" id="codigo"/>
+                                    </p:column>
+
+                                    <p:column headerText="Descripción" >
+                                        <h:outputText value="#{nDirecto.descripcion_subgrupo}" />
+                                    </p:column>
+
+                                    <p:column headerText="Costo">
+                                        <p:inputNumber required="true" value="#{nDirecto.costo}" size="8" maxlength="10">
+                                            <p:ajax event="blur" update=":form_subproceso:totalDirectos" process="@this" listener="#{SubProcesoMB.sumarDirectos()}"/>
+
+                                        </p:inputNumber>
+                                    </p:column>
+                                    <p:column headerText="Acciones">
+                                        <p:commandButton class="ui-button-danger rounded-button"
+                                                         icon="pi pi-trash" actionListener="#{SubProcesoMB.deleteFila(nDirecto)}" 
+                                                         update=":form_subproceso:costoDirecto, :form_subproceso:totalDirectos" process="@this">
+                                        </p:commandButton>
+
+                                    </p:column>
+                                </p:dataTable>
+                                <p:outputPanel id="totalDirectos">
+                                    <div class="p-grid p-justify-end p-lg-12">
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
+                                        </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
+                                            <p:inputText disabled="#"  value=""></p:inputText>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
                                 <p:dataTable id="costoIndirecto" reflow="true" paginator="true" rows="2" 
                                              rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoIndirecto}" var="nIndirecto"
                                              >
@@ -72,12 +128,12 @@
                                     <f:facet name="header">
                                         <div class="p-d-flex p-jc-between p-ai-center">
                                             <span style="font-weight: bold; margin-right: 0.5em;">Costos Indirectos</span>
-                                            <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_costos}" 
+                                            <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_subcuenta}" 
                                                              editable="false">
                                                 <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
 
                                                 <f:selectItems value="#{SubProcesoMB.listaCostoIndirecto}" var="cIndirecto"
-                                                               itemLabel="#{cIndirecto.nombre}" itemValue="#{cIndirecto.codigo_costos}">
+                                                               itemLabel="#{cIndirecto.nombre_subcuenta}" itemValue="#{cIndirecto.codigo_subcuenta}">
                                                 </f:selectItems>
                                                 <p:ajax listener="#{SubProcesoMB.addIndirecto()}" update=":form_subproceso:costoIndirecto ,:form_subproceso:growl"/>
                                             </p:selectOneMenu>
@@ -86,11 +142,11 @@
                                     </f:facet>
 
                                     <p:column headerText="Nombre" filterStyle="display : none">
-                                        <h:outputText value="#{nIndirecto.nombre}" />
+                                        <h:outputText value="#{nIndirecto.nombre_subcuenta}" />
                                     </p:column>
 
                                     <p:column headerText="Descripción" >
-                                        <h:outputText value="#{nIndirecto.descripcion}" />
+                                        <h:outputText value="#{nIndirecto.descripcion_subgrupo}" />
                                     </p:column>
 
                                     <p:column headerText="Costo">
@@ -114,63 +170,6 @@
                                             <p:outputLabel value="Total : "></p:outputLabel>
                                             <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>
 
-                                        </div>
-                                        <div class=" p-lg-4">
-                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                            <p:inputText disabled="#"  value=""></p:inputText>
-                                        </div>
-                                    </div>
-                                </p:outputPanel>
-                            </div>
-
-                            <div class="p-field p-col-12 p-md-6">
-                                <p:dataTable id="costoDirecto" reflow="true" paginator="true" rows="2" 
-                                             rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoDirecto}" var="nDirecto">
-                                    <!-- Buscador -->
-                                    <f:facet name="header">
-                                        <div class="p-d-flex p-jc-between p-ai-center">
-                                            <span style="font-weight: bold; margin-right: 0.5em;">Costos Directos</span>
-
-                                            <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_costos}" editable="false">
-                                                <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
-                                                <p:ajax listener="#{SubProcesoMB.addDirecto()}" 
-                                                        update=":form_subproceso:costoDirecto ,:form_subproceso:growl" process="@this"/>
-                                                <f:selectItems value="#{SubProcesoMB.listaCostoDirecto}" var="cDirecto"
-                                                               itemLabel="#{cDirecto.nombre}" itemValue="#{cDirecto.codigo_costos}">
-
-                                                </f:selectItems>
-
-                                            </p:selectOneMenu>
-                                        </div>
-                                    </f:facet>
-
-                                    <p:column headerText="Nombre" filterStyle="display : none">
-                                        <h:outputText value="#{nDirecto.nombre}" id="codigo"/>
-                                    </p:column>
-
-                                    <p:column headerText="Descripción" >
-                                        <h:outputText value="#{nDirecto.descripcion}" />
-                                    </p:column>
-
-                                    <p:column headerText="Costo">
-                                        <p:inputNumber required="true" value="#{nDirecto.costo}" size="8" maxlength="10">
-                                            <p:ajax event="blur" update=":form_subproceso:totalDirectos" process="@this" listener="#{SubProcesoMB.sumarDirectos()}"/>
-
-                                        </p:inputNumber>
-                                    </p:column>
-                                    <p:column headerText="Acciones">
-                                        <p:commandButton class="ui-button-danger rounded-button"
-                                                         icon="pi pi-trash" actionListener="#{SubProcesoMB.deleteFila(nDirecto)}" 
-                                                         update=":form_subproceso:costoDirecto, :form_subproceso:totalDirectos" process="@this">
-                                        </p:commandButton>
-
-                                    </p:column>
-                                </p:dataTable>
-                                <p:outputPanel id="totalDirectos">
-                                    <div class="p-grid p-justify-end p-lg-12">
-                                        <div class=" p-lg-4">
-                                            <p:outputLabel value="Total : "></p:outputLabel>
-                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
                                         </div>
                                         <div class=" p-lg-4">
                                             <p:outputLabel value="Costo por Hora : "></p:outputLabel>

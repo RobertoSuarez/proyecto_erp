@@ -31,24 +31,24 @@ import org.primefaces.model.TreeNode;
 public class ProcesosManagedBean implements Serializable {
 
     int idSubproceso = 12;
-    private List<ProcesoProduccion> listaProcesos = new ArrayList<>();
+    private List<ProcesoProduccion> listaProcesos;
     private ProcesoProduccionDAO procesoProduccionDAO;
     private ProcesoProduccion procesoProduccion;
-    private List<SubProceso> listaSubProcesos = new ArrayList<>();
+    private List<SubProceso> listaSubProcesos;
     private ProcesoProduccion selectProceso;
     private TreeNode singleSelectedTreeNode;
-    private TreeNode root = new DefaultTreeNode("Root Node", null);
+    private TreeNode root;
     TreeNode documents;
     SubProceso sProceso;
     TreeNode document1;
 
-
     public ProcesosManagedBean() {
         procesoProduccionDAO = new ProcesoProduccionDAO();
         procesoProduccion = new ProcesoProduccion();
-        cargarLista();
+        listaProcesos = new ArrayList<>();
+        listaSubProcesos = new ArrayList<>();
+        root = new DefaultTreeNode("Root Node", null);
     }
-
 
     private void cargarLista() {
         listaProcesos = procesoProduccionDAO.getProcesosProduccion();
@@ -64,6 +64,9 @@ public class ProcesosManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        cargarLista();
+        this.selectProceso = new ProcesoProduccion();
+        aleatorioIdenti();
     }
 
     public void aleatorioIdenti() {
@@ -72,28 +75,22 @@ public class ProcesosManagedBean implements Serializable {
         this.procesoProduccion.setIdentificador("PR-" + uuid + uuid2);
     }
 
-
-    public void openNew() {
-        this.selectProceso = new ProcesoProduccion();
-        aleatorioIdenti();
-    }
     public void insertar() {
         try {
             if ("".equals(procesoProduccion.getIdentificador())) {
-                FacesContext.getCurrentInstance().addMessage(null, 
+                FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
             } else if ("".equals(procesoProduccion.getNombre())) {
-                FacesContext.getCurrentInstance().addMessage(null, 
+                FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
             } else if ("".equals(procesoProduccion.getDescripcion())) {
-                FacesContext.getCurrentInstance().addMessage(null, 
+                FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
                 this.procesoProduccionDAO.insertarp(procesoProduccion);
-               
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
-               
+
                 PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
             }
 
@@ -104,7 +101,6 @@ public class ProcesosManagedBean implements Serializable {
         }
     }
 
- 
     public void edit2(ProcesoProduccion proceso) throws SQLException {
         if (procesoProduccionDAO.actualizarProceso(proceso) > 0) {
             FacesMessage msg = new FacesMessage("Proceso Editado", null);
