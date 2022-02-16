@@ -22,13 +22,9 @@
                                     <p:commandButton 
                                         value="Nuevo Proceso" 
                                         styleClass="ui-button-primary"
-                                        actionListener="#{procesoMB.openNew()}"
-                                        update=":form-princ:manage-nuevoProceso-form"
                                         icon="pi pi-plus" 
                                         oncomplete="PF('nuevoProcesoPrincDialog').show()"
-                                        style=" margin-right: .6rem" 
-                                        process="@this">
-                                        <p:resetInput target=":form-princ:manage-nuevoProceso-form"/>
+                                        style=" margin-right: .6rem">
                                     </p:commandButton>
                                     <!-- Boton Nuevo Subproceso -->
                                     <p:button  
@@ -106,8 +102,8 @@
                                 <p:commandButton 
                                     value="Guardar" 
                                     action="#{procesoMB.insertar()}"
-                                    update=":form-princ:dtProcesoPrin"
                                     process="manage-nuevoProceso-form @this"
+                                    update=":form-princ:growl,form-princ"
                                     icon="pi pi-check" 
                                     styleClass="ui-button-primary">
                                 </p:commandButton>
@@ -454,8 +450,10 @@
                                      rows="5" 
                                      editable="true" 
                                      editInitEvent="dblclick" 
-                                     editMode="cell">
-                            <!-- comment <p:ajax event="select" listener="#"
+                                     editMode="cell"
+                                     styleClass="procesosproduccion">
+                            <!-- comment <p:ajax 
+                            event="select" listener="#"
                                     update=":form-princ:messages"/>-->
                             <p:ajax event="cellEdit" 
                                     process="@this" 
