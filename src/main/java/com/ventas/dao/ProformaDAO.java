@@ -199,7 +199,7 @@ public class ProformaDAO {
                 con.cerrarConexion();
             }
         } finally {
-            con.desconectar();
+            con.cerrarConexion();
         }
         return listadocs;
     }
@@ -231,10 +231,10 @@ public class ProformaDAO {
         } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.desconectar();
+                con.cerrarConexion();
             }
         } finally {
-            con.desconectar();
+            con.cerrarConexion();
         }
         return listaitems;
 
@@ -253,7 +253,7 @@ public class ProformaDAO {
                 con.cerrarConexion();
             }
         } finally {
-            con.desconectar();
+            con.cerrarConexion();
         }
     }
 
@@ -308,7 +308,7 @@ public class ProformaDAO {
                 con.cerrarConexion();
             }
         } finally {
-            con.desconectar();
+            con.cerrarConexion();
         }
         return codigoventa;
     }

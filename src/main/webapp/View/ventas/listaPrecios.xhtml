@@ -2,10 +2,165 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="./../../WEB-INF/InicioTemplate.xhtml">
 
     <ui:define name="content">
         <ui:include src="menuVentas.xhtml"/>
+        <br/><br/><br/>
+        <h:form id="form" style="padding-left: 30px; padding-right: 30px">
+            <p:growl id="messages" showDetail="true"/>
+            <h1 style="text-align: center; color: black">Lista de precios</h1>
+
+            <p:toolbarGroup>
+                <p:commandButton id="new" value="Nuevo" icon="pi pi-plus" 
+                                 actionListener="#{preciosMB.abrir}"
+                                 update=":form:outputnuevo" process="@this"
+                                 onclick="PF('newLista').show()" 
+                                 styleClass="ui-button-success"
+                                 style="margin-right: .5rem">
+                    <p:resetInput target=":form:outputnuevo"/>
+                </p:commandButton>
+
+            </p:toolbarGroup>
+
+            <p:dataTable  id="dt-precio" widgetVar="dtPrecio" var="precio"
+                          value="#{preciosMB.listaPrecios}"
+                          reflow="true" paginator="true" rows="5"
+                          resizableColumns="true" class="p-mt-3" 
+                          paginatorPosition="bottom"
+                          style="font-size:12px">
+                <p:column headerText="Tipo de Cliente" 
+                          filterStyle="display: none" sortBy="#{precio.tipo}">
+                    <h:outputText value="#{precio.tipo}" />
+                </p:column>
+
+                <p:column headerText="Descripción" sortBy="#{precio.descripcion}"
+                          >
+                    <h:outputText value="#{precio.descripcion}"/>
+                </p:column>
+
+                <p:column headerText="Descuento" sortBy="#{precio.descuento}">
+                    <h:outputText value="#{precio.descuento}"/>
+                </p:column>
+                <p:column exportable="false" >
+
+                    <p:commandButton icon="pi pi-pencil" update=":form:outputnuevo"
+                                     oncomplete="PF('newLista').show()" 
+                                     actionListener="#{preciosMB.cargardatos(precio)}"
+                                     process="@this"
+                                     class="ui-button rounded-button"/>
+<!--                    <p:commandButton class="ui-button-danger rounded-button"
+                                     icon="pi pi-trash" process="@this"
+                                     update=":form:confirmDHab"
+                                     oncomplete="PF('DHFactura').show()"
+                                     action="{facturaMB.cargarEditar(factura)}"/>-->
+
+
+                </p:column>
+            </p:dataTable>
+            <p:dialog  header="Precios" showEffect="fade" modal="true"
+                       widgetVar="newLista" maximizable="true" height="250" 
+                       closable="false" width="50%">
+                <p:outputPanel id="outputnuevo" class="ui-fluid">
+                    <p:outputPanel rendered="#{not empty preciosMB.precios}">
+                        <!-- CAMPOS DEL DIALOG-->
+                        <div class="p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <p:outputLabel for="Opciones">Tipo de Cliente:</p:outputLabel>
+                                <p:selectOneMenu var="Tipo" id="Opciones" value="#{preciosMB.precios.idtipocliente}">
+                                    <f:selectItem itemLabel="Select One" itemValue=""/>
+                                    <f:selectItems value="#{preciosMB.tiposClientes}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="p-field p-col">
+                                <p:outputLabel for="descuento">Descuento:</p:outputLabel>
+                                <p:inputText id="descuento" value="#{preciosMB.precios.descuento}" 
+                                             maxlength="15" />                                                      
+                            </div>
+                        </div>
+                        <div class="p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <p:outputLabel for="Aplicar">Aplicar:</p:outputLabel>
+                                <p:selectOneRadio id="Aplicar" value="#{preciosMB.opciones}" 
+                                                  unselectable="true" >
+                                    <f:selectItem itemLabel="Todos los productos" itemValue="Option1"/>
+                                    <f:selectItem itemLabel="Producto" itemValue="Option2"/>
+                                    <p:ajax update=":form:dt-productos,:form:movieBtn"/>
+                                </p:selectOneRadio>                                                     
+                            </div>
+                            <div class="p-field p-col">
+                                <p:inputText id="idlista" value="#{preciosMB.precios.idprecio}" 
+                                             maxlength="5" style="visibility: hidden"/>
+                                <p:commandButton value="Lista de Productos" id="movieBtn"
+                                                 type="button" icon="pi pi-search"
+                                                 onclick="PF('moviePicker').show()"
+                                                 style="visibility: #{preciosMB.visible()}"/>
+                            </div>
+                        </div>
+
+                        <!-- Tabla de productos seleccionados -->
+                        <p:dataTable id="dt-productos" var="productos" value="#{preciosMB.listaProductos}"
+                                     style="visibility: #{preciosMB.visible()}"
+                                     scrollable="true" scrollHeight="250">
+                            <p:column headerText="Codigo">
+                                <h:outputText value="#{productos.codigo}"/>
+                            </p:column>
+                            <p:column headerText="Descripción">
+                                <h:outputText value="#{productos.descripcion}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <!-- Buscar producto -->
+                        <p:dialog header="Productos" widgetVar="moviePicker" minHeight="70" width="600" showEffect="fade">
+                            <p:dataTable var="select" value="#{VentaMB.listaProductos}" 
+                                         id="checkboxDT" scrollable="true" scrollHeight="250"
+                                         selection="#{preciosMB.producto}" selectionMode="single"
+                                         rowKey="#{select.codigo}">
+                                <p:ajax event="rowSelect" listener="#{preciosMB.onRowSelect}"/>
+
+                                <p:column headerText="Codigo">
+                                    <h:outputText value="#{select.codigo}" />
+                                </p:column>
+
+                                <p:column headerText="Descripción">
+                                    <h:outputText value="#{select.descripcion}" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:dialog>
+                    </p:outputPanel>
+                </p:outputPanel>
+                <f:facet name="footer">                            
+                    <p:commandButton value="Guardar" styleClass="ui-button-success"
+                                     actionListener="#{preciosMB.guardar}"
+                                     process="outputnuevo @this" update=":form:messages"/>
+                    <p:commandButton value="Cancelar" 
+                                     styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                     onclick="PF('newLista').hide()"
+                                     actionListener="#{preciosMB.reset()}" 
+                                     process="@this"/>
+                </f:facet>
+            </p:dialog>
+
+
+
+<!--            <p:confirmDialog id="confirmDHab" widgetVar="DHFactura" showEffect="fade" width="700"
+                             header="Confirmar" severity="warn">
+                <f:facet name="message">
+                    <h:outputText value="Desea eliminar la lista de {preciosMB.precios.tipo}?"/><br/><br/>
+                </f:facet>
+                <p:inputText value="{preciosMB.precios.tipo}" type="hidden"/>
+
+                <p:commandButton value="Si" update=":form:outputrev" styleClass="ui-button-success"
+                                 process="confirmDHab @this" oncomplete="PF('revFactura').show()" onsuccess="PF('DHFactura').hide()"/>
+                <p:commandButton value="No" type="button" styleClass="ui-button-danger"
+                                 onclick="PF('DHFactura').hide()" actionListener="{preciosMB.reset()}"/>
+            </p:confirmDialog> -->
+
+        </h:form>
+
     </ui:define>
 
 </ui:composition>
