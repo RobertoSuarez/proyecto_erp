@@ -1,34 +1,28 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.contabilidad.controllers;
+package com.ventas.controllers;
 
 import com.seguridad.dao.UsuarioDAO;
 import com.seguridad.models.Roles;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
 
 /**
  *
- * @author pideu
+ * @author cturriagos
  */
-@Named(value = "rolcontMB")
-@ViewScoped
-public class RestriccionesCont implements Serializable {
+public class RestriccionVenta {
 
     private UsuarioDAO usuarioDAO;
     FacesContext context = FacesContext.getCurrentInstance();
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
 
-    public RestriccionesCont() {
+    public RestriccionVenta() {
         usuarioDAO = new UsuarioDAO();
     }
 
