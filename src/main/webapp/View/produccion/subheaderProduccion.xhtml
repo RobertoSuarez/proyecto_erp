@@ -6,9 +6,9 @@
     xmlns:p="http://primefaces.org/ui">
     <f:event type="preRenderView" listener="#{restriccionesProduccion.redireccionExternas()}"/>
     <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+        <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
+        <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
         <p:menuitem value="Solicitud orden de producción" url="solicitudOrden.xhtml" rendered="#{restriccionesProduccion.renderedMproduccion()}"/>
         <p:menuitem value="Orden de Trabajo" url="listaOrdenProduccion.xhtml" rendered="#{restriccionesProduccion.renderedMproduccion()}"/>
-        <p:menuitem value="Fórmula" url="formulaProduccion.xhtml"/>
-        <p:menuitem value="Procesos" url="procesoProduccion.xhtml"/>
     </p:menubar>
 </ui:composition>

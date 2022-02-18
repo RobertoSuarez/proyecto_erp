@@ -6,12 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 
 public class RolDAO {
+
     Conexion conexion;
 
     public RolDAO() {
         this.conexion = new Conexion();
+        if (conexion.conectar()) {
+            conexion.desconectar();
+        }
     }
 
     public List<Rol> getRolesByUsers(int idUsuario) {
@@ -22,9 +27,9 @@ public class RolDAO {
         try {
             this.conexion.Conectar();
 
-            rs = conexion.consultar(query);
-            
-            while(rs.next()){
+            rs = conexion.ejecutarSql(query);
+
+            while (rs.next()) {
                 rolAux = new Rol();
                 rolAux.setId(rs.getInt("idRol"));
                 rolAux.setNombre(rs.getString("nombreRol"));
@@ -32,14 +37,16 @@ public class RolDAO {
                 rolAux.setHabilitado(rs.getBoolean("enable"));
                 roles.add(rolAux);
             }
-            
+
             rs.close();
-            
-            conexion.cerrarConexion();
-            
+
+            conexion.desconectar();
+
             return roles;
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.toString();
+        } finally {
+            conexion.desconectar();
         }
         return null;
     }
