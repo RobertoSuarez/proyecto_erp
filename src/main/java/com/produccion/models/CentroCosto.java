@@ -15,9 +15,7 @@ public class CentroCosto {
     private String descripcion;
     private String identificador;
 
-    /**
-     * Constructor en donde inicializaremos nuestra variables
-     */
+  
     public CentroCosto(int codigo_centroc, String nombre, String descripcion, String identificador) {
         this.codigo_centroc = codigo_centroc;
         this.nombre = nombre;
@@ -27,9 +25,12 @@ public class CentroCosto {
 
     public CentroCosto() {
     }
-    /**
-     * getters y setters de todas las variables
-     */
+
+    public CentroCosto(int codigo_centroc, String nombre) {
+        this.codigo_centroc = codigo_centroc;
+        this.nombre = nombre;
+    }
+    
     public int getCodigo_centroc() {
         return codigo_centroc;
     }

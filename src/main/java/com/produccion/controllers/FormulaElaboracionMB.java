@@ -238,7 +238,8 @@ public class FormulaElaboracionMB implements Serializable {
             return materialesFormula;
         } else {
             FormulaMateriales buscar = new FormulaMateriales(materiales.getNombre(),
-                    materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
+                    materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), 
+                    materiales.getCodigo_producto(), materiales.getCosto());
             for(FormulaMateriales lista:listaMateriales){
                 if(lista.getCodigoProducto()==buscar.getCodigoProducto()){
                     listaMateriales.remove(lista);
