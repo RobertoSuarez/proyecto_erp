@@ -33,7 +33,7 @@ public class AnticipoDAO {
         String query = "select \"id_anticipo\", importe, \"fecha\", descripcion, \"id_proveedor\"\n"
                 + "    from anticipo;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
             Statement stmt = conn.conex.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
@@ -64,9 +64,9 @@ public class AnticipoDAO {
         try {
             List<Anticipo> anticipos = new ArrayList<>();
             Conexion conn = new Conexion();
-            conn.abrirConexion();
+            conn.conectar();
             String query = "select \"id_anticipo\", \"importe\", \"id_proveedor\" from public.anticipo where \"id_proveedor\" = " + String.valueOf(idProveedor) + ";";
-            ResultSet rs = conn.ejecutarConsulta(query);
+            ResultSet rs = conn.ejecutarSql(query);
             Anticipo aux;
             while(rs.next()){
                 aux = new Anticipo();
@@ -101,7 +101,7 @@ public class AnticipoDAO {
         Conexion conn = new Conexion();
         String query = "select select_all_anticipo_width_proveedor('" + revertido + "') as _anticipo;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
 
             Statement statement = conn.conex.createStatement();
             //PreparedStatement stmt = conn.conex.prepareStatement(query);
@@ -176,7 +176,7 @@ public class AnticipoDAO {
         try {
             String queryAsiento = String.format("SELECT public.generateasientocotableexternal2('%s', '%s') as id_asiento", gson.toJson(asiento), gson.toJson(movimientos));
             System.out.println("desde reversión: " + queryAsiento);
-            conn.abrirConexion();
+            conn.conectar();
 
             Statement statement = conn.conex.createStatement();
             ResultSet data = statement.executeQuery(queryAsiento);
