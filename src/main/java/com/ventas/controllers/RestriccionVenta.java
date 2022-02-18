@@ -75,7 +75,7 @@ public class RestriccionVenta implements Serializable {
      * @return String falso o verdadero.
      **/
     public String menu() {
-        if ("Vendedor".equals(listaRoles.get(0).getNombre())
+        if ("Administrador de ventas".equals(listaRoles.get(0).getNombre())
                 || "Vendedor".equals(listaRoles.get(0).getNombre())) {
             return "true";
         } else {
