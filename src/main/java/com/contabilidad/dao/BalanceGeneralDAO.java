@@ -23,7 +23,7 @@ public class BalanceGeneralDAO {
     private List<BalanceGeneral> getCalculoGrupo() {
         String sql = "select getcalculogrupobg('"+fecha+"')";
         List<BalanceGeneral> listaCalculosGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupobg");
@@ -42,7 +42,7 @@ public class BalanceGeneralDAO {
     private List<BalanceGeneral> getCalculoSubGrupo() {
         String sql = "select getcalculosubgrupobg('"+fecha+"')";
         List<BalanceGeneral> listaCalculosSubGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupobg");
@@ -61,7 +61,7 @@ public class BalanceGeneralDAO {
     private List<BalanceGeneral> getCalculoCuenta() {
         String sql = "select getcalculocuentabg('"+fecha+"')";
         List<BalanceGeneral> listaCalculosCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentabg");
@@ -80,7 +80,7 @@ public class BalanceGeneralDAO {
     private List<BalanceGeneral> getCalculoSubCuenta() {
         String sql = "select getcalculosubcuentabg('"+fecha+"')";
         List<BalanceGeneral> listaCalculosSubCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentabg");
@@ -129,7 +129,7 @@ public class BalanceGeneralDAO {
     
     public double sumaPasivoPatrimonio(String fecha) {
         String sql = "select sumapasivopatrimonio('"+fecha+"')";
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             if (result.next()) {
                 return result.getDouble("sumapasivopatrimonio");

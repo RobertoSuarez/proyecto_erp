@@ -25,7 +25,7 @@ public class PeriodosActivosFijosDAO {
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
                     "select CAST (periodos.anio AS INT),\n" +
@@ -66,7 +66,7 @@ public class PeriodosActivosFijosDAO {
         } catch (Exception e) {
             throw e;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return listperiodo;

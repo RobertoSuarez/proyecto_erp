@@ -93,7 +93,7 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
         } finally {
 
             //Se cierra la conexion.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
 
         //Se retorna -1 indicando que la conexión esta en estado Falso.
@@ -137,7 +137,7 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
         } finally {
 
             //Se cierra la conexión.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
 
         //Se retorna -1 indicando que la conexión esta en estado Falso.
@@ -165,7 +165,7 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
                         + idCliente + ")";
 
                 //Se da lectura del procemiento almacenado.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado del objeto Persona_Juridica.
                 while (result.next()) {
@@ -191,7 +191,7 @@ public class Persona_JuridicaDAO extends PersonaDAO implements Serializable {
             } finally {
 
                 //Se cierra la conexión.
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return p_juridica;

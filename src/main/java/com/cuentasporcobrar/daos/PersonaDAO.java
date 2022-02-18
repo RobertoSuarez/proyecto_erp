@@ -78,7 +78,7 @@ public class PersonaDAO implements Serializable {
                         + "where estado_r='Activo' order by id desc";
 
                 //Se ejecuta la sentencia.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_Personas.
                 while (result.next()) {
@@ -99,7 +99,7 @@ public class PersonaDAO implements Serializable {
             } finally {
 
                 //Se realiza un cierre de conexion de la base de datos.
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return lista_Personas;
@@ -122,7 +122,7 @@ public class PersonaDAO implements Serializable {
                         + "where estado_r='Inactivo'";
 
                 //Se ejecuta la sentencia.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_Personas.
                 while (result.next()) {
@@ -143,7 +143,7 @@ public class PersonaDAO implements Serializable {
             } finally {
 
                 //Se realiza un cierre de conexion de la base de datos.
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return lista_Personas;
@@ -165,7 +165,7 @@ public class PersonaDAO implements Serializable {
                         + " Where estado_r='Activo'";
 
                 //Se ejecuta la sentencia.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_Personas.
                 while (result.next()) {
@@ -178,7 +178,7 @@ public class PersonaDAO implements Serializable {
             } finally {
 
                 //Se realiza un cierre de conexion de la base de datos.
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return lista_Personas;
@@ -203,7 +203,7 @@ public class PersonaDAO implements Serializable {
                         + " Where estado_r='Activo'";
 
                 //Se ejecuta la sentencia.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_Personas.
                 while (result.next()) {
@@ -216,7 +216,7 @@ public class PersonaDAO implements Serializable {
             } finally {
 
                 //Se realiza un cierre de conexion de la base de datos.
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return lista_Personas;
@@ -239,7 +239,7 @@ public class PersonaDAO implements Serializable {
                         + "Where estado_r='Activo' and identificacion='" + identificacion + "'";
 
                 //Se ejecuta la sentencia.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_Personas.
                 while (result.next()) {
@@ -254,7 +254,7 @@ public class PersonaDAO implements Serializable {
             } finally {
 
                 //Se realiza un cierre de conexion de la base de datos.
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return persona;
@@ -278,7 +278,7 @@ public class PersonaDAO implements Serializable {
         } finally {
 
             //Se realiza un cierre de conexion de la base de datos.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
         return -1;
     }
@@ -299,7 +299,7 @@ public class PersonaDAO implements Serializable {
         } finally {
 
             //Se realiza un cierre de conexion de la base de datos.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
         return -1;
     }
@@ -319,7 +319,7 @@ public class PersonaDAO implements Serializable {
             
             //Se valida que el estado de la conexion sea true(conexion abierta).
             if (conex.isEstado()) {
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 result.next();
                 tipo = result.getString("tipo");
             }
@@ -329,7 +329,7 @@ public class PersonaDAO implements Serializable {
         } finally {
 
             //Se realiza un cierre de conexion de la base de datos.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
         return tipo;
     }

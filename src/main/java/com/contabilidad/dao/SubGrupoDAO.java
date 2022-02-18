@@ -23,7 +23,7 @@ public class SubGrupoDAO {
     
     public List<SubGrupo> getSubGrupos() {
         listaSubgrupo = new ArrayList<>();
-        result = conexion.consultar("select getsubgruposcuenta()");
+        result = conexion.ejecutarSql("select getsubgruposcuenta()");
         try {
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
@@ -41,7 +41,7 @@ public class SubGrupoDAO {
     }
     
     public int getProximoCodigo(int idGrupo) {
-        result = conexion.consultar("select getproximocodigosubgrupo("+idGrupo+")");
+        result = conexion.ejecutarSql("select getproximocodigosubgrupo("+idGrupo+")");
         try {
             if (result.next()) {
                 return result.getInt("getproximocodigosubgrupo");
@@ -70,7 +70,7 @@ public class SubGrupoDAO {
     
     public SubGrupo getGrupoById(int id) {
         SubGrupo g = null;
-        result = conexion.consultar("select getsubgrupobyid("+id+")");
+        result = conexion.ejecutarSql("select getsubgrupobyid("+id+")");
         try {
             if (result.next()) {
                 String cadenaJSON = result.getString("getsubgrupobyid");
@@ -106,7 +106,7 @@ public class SubGrupoDAO {
     }
     
     public boolean isReference(int id) {
-        result = conexion.consultar("select is_reference_subgrupo('"+id+"')");
+        result = conexion.ejecutarSql("select is_reference_subgrupo('"+id+"')");
         try {
             if (result.next()) {
                 return result.getBoolean("is_reference_subgrupo");

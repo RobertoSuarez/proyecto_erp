@@ -52,7 +52,7 @@ public class AbonoDAO implements Serializable {
                 /* Se obtiene una TABLA con todos los abonos que se pagaron 
                 de un plan de pago correspondiente */
                 String sentencia = "Select*from obtener_abonos_de_plan_de_pago(" + idVenta + ")";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Recorremos la TABLA retornada y la almacenamos en la lista.
                 while (result.next()) {
@@ -82,7 +82,7 @@ public class AbonoDAO implements Serializable {
                         "", ""));
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -143,7 +143,7 @@ public class AbonoDAO implements Serializable {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            conex.cerrarConexion();
+            conex.desconectar();
         }
         return -1;
     }
@@ -163,7 +163,7 @@ public class AbonoDAO implements Serializable {
             String sentencia = "select*from "
                     + "obtener_valor_pendiente_de_una_venta"
                     + "(" + idVenta + ")";
-            result = conex.ejecutarConsulta(sentencia);
+            result = conex.ejecutarSql(sentencia);
 
             result.next();
 
@@ -178,7 +178,7 @@ public class AbonoDAO implements Serializable {
 
         } finally {
 
-            conex.cerrarConexion();
+            conex.desconectar();
 
         }
 
@@ -200,7 +200,7 @@ public class AbonoDAO implements Serializable {
             String sentencia = "select*from "
                     + " obtener_sum_de_abonos_de_una_venta"
                     + "(" + idVenta + ")";
-            result = conex.ejecutarConsulta(sentencia);
+            result = conex.ejecutarSql(sentencia);
 
             result.next();
 
@@ -215,7 +215,7 @@ public class AbonoDAO implements Serializable {
 
         } finally {
 
-            conex.cerrarConexion();
+            conex.desconectar();
 
         }
 
@@ -237,7 +237,7 @@ public class AbonoDAO implements Serializable {
             String sentencia = "select*from "
                     + "obtener_id_PlanDePago"
                     + "(" + idVenta + ")";
-            result = conex.ejecutarConsulta(sentencia);
+            result = conex.ejecutarSql(sentencia);
 
             result.next();
 
@@ -252,7 +252,7 @@ public class AbonoDAO implements Serializable {
 
         } finally {
 
-            conex.cerrarConexion();
+            conex.desconectar();
 
         }
 
@@ -277,7 +277,7 @@ public class AbonoDAO implements Serializable {
                 String sentencia = "Select *from "
                         + "obtener_fechas_plandepago("
                         + idVenta + ")";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 result.next();
 
@@ -293,7 +293,7 @@ public class AbonoDAO implements Serializable {
 
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
