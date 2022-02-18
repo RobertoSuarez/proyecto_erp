@@ -11,6 +11,7 @@ import com.seguridad.models.Rol;
 import com.seguridad.models.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -159,7 +160,7 @@ public class UsuarioController implements Serializable {
         return "";
     }
 
-    public void iniciarSesion() throws IOException {
+    public void iniciarSesion() throws IOException, SQLException {
         Usuario usuarioSesion = new Usuario();
         if ("".equals(usuario.getUsername())) {
             PFW("Ingrese un usuario");
