@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.collections4.list.AbstractLinkedList;
@@ -33,7 +34,7 @@ public class UsuarioController implements Serializable {
     private UsuarioDAO usuarioDAO;
     private Usuario selectionUser;
     private Usuario infoUser;
-    String userName="";
+    String userName = "";
     private List<Rol> rolesUser;
     private RolDAO rDao;
     String warnMsj = "Advertencia";
@@ -45,16 +46,16 @@ public class UsuarioController implements Serializable {
 
     public UsuarioController() {
         usuario = new Usuario();
-        usuarioDAO = new UsuarioDAO();
         this.selectionUser = null;
         this.infoUser = null;
+        usuarioDAO = new UsuarioDAO();
         rolDao = new RolDAO();
         rolesDAO = new RolesDAO();
         rDao = new RolDAO();
         listaUsuario = usuarioDAO.listUsers();
         System.out.println("########## Pasa algo");
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -66,7 +67,7 @@ public class UsuarioController implements Serializable {
     public void setRolesDAO(RolesDAO rolesDAO) {
         this.rolesDAO = rolesDAO;
     }
-    
+
     public boolean rolExist(String rol) {
         return rolesDAO.rolExist(rol);
     }
@@ -170,7 +171,7 @@ public class UsuarioController implements Serializable {
         }
         if (!usuario.getUsername().isEmpty() && !usuario.getPassword().isEmpty()) {
             usuarioSesion = usuarioDAO.iniciarSesion(usuario);
-
+            System.out.println(usuarioSesion.getApellido());
             if (usuarioSesion != null) {
                 if (usuarioSesion.getCodigoAux() < 1) {
                     PFW(usuarioSesion.getMensajeAux());
@@ -231,7 +232,7 @@ public class UsuarioController implements Serializable {
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
 
     }
-    
+
     //Controla que en caso de que no haya un usuario conectado entonces redirija al incio.
     public void verificarInicioSesion() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -246,7 +247,7 @@ public class UsuarioController implements Serializable {
             e.printStackTrace();
         }
     }
-    
+
     //Verifica si la sesion tiene un usuario, devuelve un booleano
     public boolean verificarSesion() {
         Usuario user = new Usuario();
@@ -299,8 +300,8 @@ public class UsuarioController implements Serializable {
         }
         return false;
     }
-    
-    public void chargeUser(Usuario seleccion){
+
+    public void chargeUser(Usuario seleccion) {
         System.out.println(seleccion.getUsername());
         this.infoUser = seleccion;
         this.userName = seleccion.getUsername();
