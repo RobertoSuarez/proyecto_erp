@@ -147,7 +147,7 @@ public class Conexion implements Serializable {
     }
 
     /**
-    public boolean abrirConexion() throws SQLException {
+    public boolean conectar() throws SQLException {
         try {
             if (conex == null || !(conex.isClosed())) {
                 //System.out.println(mensaje+ " si abre la conexion");
@@ -165,7 +165,7 @@ public class Conexion implements Serializable {
         return true;
     }    
 
-    public void cerrarConexion() {
+    public void desconectar() {
         try {
             if (conex != null && !conex.isClosed()) {
                 conex.close();
@@ -188,7 +188,7 @@ public class Conexion implements Serializable {
 
     public ResultSet ejecutarConsulta(String sql) {
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 lector = st.executeQuery(sql);
             }
         } catch (SQLException exc) {
@@ -202,7 +202,7 @@ public class Conexion implements Serializable {
     public int ejecutarProcedimiento(String sql) {
         int retorno = -1;
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 st.executeQuery(sql);
                 mensaje = "El procedimiento se ejecutó correctamente";
                 retorno = 1;
@@ -214,7 +214,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -222,7 +222,7 @@ public class Conexion implements Serializable {
     public int ejecutar(String sql) {
         int retorno = -1;
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql);
                 mensaje = "Se guardó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -233,7 +233,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -265,7 +265,7 @@ public class Conexion implements Serializable {
     public int insertar(String sql) {
         int retorno = -1;
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 System.out.println(retorno = st.executeUpdate(sql));
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -277,7 +277,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje + " AQUI");
         }
-        cerrarConexion();
+        desconectar();
         return retorno;
     }
 
@@ -305,13 +305,13 @@ public class Conexion implements Serializable {
     public String obtenerValor(String consulta, int indx) {
         String valor = "";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 st = conex.createStatement();
                 lector = st.executeQuery(consulta);
                 if (lector.next()) {
                     valor = lector.getString(indx);
                 }
-                cerrarConexion();
+                desconectar();
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
@@ -322,7 +322,7 @@ public class Conexion implements Serializable {
             System.out.println(mensaje);
 
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return valor;
     }
@@ -330,13 +330,13 @@ public class Conexion implements Serializable {
     //Diana -- Lo uso
     public void Ejecutar2(String sql) {
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 st.executeUpdate(sql);
             }
         } catch (SQLException exc) {
             System.out.print(exc);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
     }
 
@@ -369,7 +369,7 @@ public class Conexion implements Serializable {
         } else {
             conex.rollback();
         }
-        cerrarConexion();
+        desconectar();
     }
 
     public ResultSet selecionar(String tabla, String campos, @Nullable String restrinciones, @Nullable String ordenar) {
@@ -381,7 +381,7 @@ public class Conexion implements Serializable {
             sql = sql + " ORDER BY " + ordenar;
         }
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 lector = st.executeQuery(sql);
             }
         } catch (SQLException exc) {
@@ -389,7 +389,7 @@ public class Conexion implements Serializable {
             mensaje = exc.getMessage();
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
-            cerrarConexion();
+            desconectar();
         }
         return lector;
     }
@@ -399,7 +399,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ")";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql);
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -410,7 +410,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -420,7 +420,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ");";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 lector = st.executeQuery("SELECT MAX(" + id + ") AS ID FROM public." + tabla + ";");
                 if (lector.next()) {
@@ -435,7 +435,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -444,9 +444,9 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "SELECT public." + procedure + "(" + parametros + ");";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 st.execute(sql);
-                cerrarConexion();
+                desconectar();
             }
         } catch (SQLException exc) {
             System.out.println(sql);
@@ -454,7 +454,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -463,9 +463,9 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql);
-                cerrarConexion();
+                desconectar();
                 mensaje = "Se modifico correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
@@ -475,7 +475,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
