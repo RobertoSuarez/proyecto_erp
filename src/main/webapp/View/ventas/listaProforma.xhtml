@@ -44,9 +44,11 @@
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
                             <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" 
-                                             actionListener="#{ProformaMB.aceptarProforma(Lista)}" update="listaDeProforma"/>
+                                             actionListener="#{ProformaMB.aceptarProforma(Lista)}" update="listaDeProforma"
+                                             rendered="#{rolventMB.rendered()}"/>
                             <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger" 
-                                             actionListener="#{ProformaMB.rechazarProforma(Lista)}" update="listaDeProforma"/>
+                                             actionListener="#{ProformaMB.rechazarProforma(Lista)}" update="listaDeProforma"
+                                             rendered="#{rolventMB.rendered()}"/>
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this"
                                              onclick="PF('DetalleProforma').show()" actionListener="#{ProformaMB.detalleProforma(Lista)}" update="datosFactura" />
                         </p:column>

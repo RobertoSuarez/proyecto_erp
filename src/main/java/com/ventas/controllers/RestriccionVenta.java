@@ -36,7 +36,7 @@ public class RestriccionVenta implements Serializable {
      * @return String falso o verdadero.
      **/
     public String rol() {
-        if (listaRoles.get(0).getNombre().equals("Asistente del contador")) {
+        if (listaRoles.get(0).getNombre().equals("Vendedor")) {
             return "true";
         } else {
             return "false";
@@ -49,7 +49,7 @@ public class RestriccionVenta implements Serializable {
      * @return String falso o verdadero.
      **/
     public String rendered() {
-        if (listaRoles.get(0).getNombre().equals("Asistente del contador")) {
+        if (listaRoles.get(0).getNombre().equals("Vendedor")) {
             return "false";
         } else {
             return "true";
@@ -62,7 +62,7 @@ public class RestriccionVenta implements Serializable {
      * @return String falso o verdadero.
      **/
     public String vista() {
-        if (listaRoles.get(0).getNombre().equals("Asistente del contador")) {
+        if (listaRoles.get(0).getNombre().equals("Vendedor")) {
             return "../recursoshumanos/ciudad.xhtml";
         } else {
             return "../recursoshumanos/empresa.xhtml";
@@ -75,7 +75,7 @@ public class RestriccionVenta implements Serializable {
      * @return String falso o verdadero.
      **/
     public String menu() {
-        if ("Administrador de ventas".equals(listaRoles.get(0).getNombre())
+        if ("Vendedor".equals(listaRoles.get(0).getNombre())
                 || "Vendedor".equals(listaRoles.get(0).getNombre())) {
             return "true";
         } else {
