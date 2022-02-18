@@ -11,6 +11,7 @@ import com.seguridad.models.Rol;
 import com.seguridad.models.Usuario;
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -32,6 +33,9 @@ public class UsuarioController implements Serializable {
     private UsuarioDAO usuarioDAO;
     private Usuario selectionUser;
     private Usuario infoUser;
+    String userName="";
+    private List<Rol> rolesUser;
+    private RolDAO rDao;
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
     private final FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -46,6 +50,7 @@ public class UsuarioController implements Serializable {
         this.infoUser = null;
         rolDao = new RolDAO();
         rolesDAO = new RolesDAO();
+        rDao = new RolDAO();
         listaUsuario = usuarioDAO.listUsers();
         System.out.println("########## Pasa algo");
     }
@@ -102,6 +107,22 @@ public class UsuarioController implements Serializable {
         this.infoUser = infoUser;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public List<Rol> getRolesUser() {
+        return rolesUser;
+    }
+
+    public void setRolesUser(List<Rol> rolesUser) {
+        this.rolesUser = rolesUser;
+    }
+
     public String registrarUsuario() throws Exception {
 
         Pattern pattern = Pattern
@@ -139,7 +160,7 @@ public class UsuarioController implements Serializable {
         return "";
     }
 
-    public void iniciarSesion() throws IOException {
+    public void iniciarSesion() throws IOException, SQLException {
         Usuario usuarioSesion = new Usuario();
         if ("".equals(usuario.getUsername())) {
             PFW("Ingrese un usuario");
@@ -280,8 +301,9 @@ public class UsuarioController implements Serializable {
     }
     
     public void chargeUser(Usuario seleccion){
-        this.infoUser.setIdUsuario(seleccion.getIdUsuario());
-        this.infoUser.setUsername(seleccion.getUsername());
+        System.out.println(seleccion.getUsername());
+        this.infoUser = seleccion;
+        this.userName = seleccion.getUsername();
+        this.rolesUser = this.rDao.getRolesByUsers(seleccion.getIdUsuario());
     }
-
 }

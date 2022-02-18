@@ -73,7 +73,6 @@ public class ClienteVentaDao implements Serializable {
                 this.clienteVenta.setIdentificacion(rs.getString(6));
                 clientes.add(this.clienteVenta);
             }
-            this.con.cerrarConexion();
         } catch (Exception e) {
             if (con.isEstado()) {
                 con.cerrarConexion();

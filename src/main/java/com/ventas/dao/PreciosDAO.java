@@ -110,6 +110,22 @@ public class PreciosDAO {
         }
         return dato;
     }
+    
+    public boolean opcionesVentas(int id) {
+        boolean dato = true;
+        try {
+            String Sentencia = "select tipo from listaprecios where idtipocliente = '" + id + "'";
+            result = conexion.ejecutarConsulta(Sentencia);
+            while (result.next()) {
+                dato = result.getBoolean("tipo");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage() + " error en conectarse");
+        } finally {
+            conexion.cerrarConexion();
+        }
+        return dato;
+    }
 
     public int insert(Precios precios, boolean radio) {
         int existe = 1;
@@ -197,5 +213,44 @@ public class PreciosDAO {
             conexion.cerrarConexion();
         }
         return existe;
+    }
+    
+    public double descuento(int idtipo){
+        double des = 0;
+        try {
+
+            String Sentencia = "select descuento from listaprecios where idtipocliente = '"
+                    + idtipo+ "'";
+            result = conexion.ejecutarConsulta(Sentencia);
+            while (result.next()) {
+                des = result.getInt("descuento");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage() + " error en conectarse");
+        } finally {
+            conexion.cerrarConexion();
+        }
+        return des;
+    }
+    
+    public int idtipocliente(String id){
+        int idtipo = 2;
+        try {
+            if (id.length() <= 10) {
+                result = conexion.ejecutarConsulta("select * from public.buscarclientenatural('" + id.trim() + "')");
+            } else if (id.length() > 10) {
+                result = conexion.ejecutarConsulta("select * from public.buscarclientejuridico('" + id.trim() + "')");
+            } else {
+                result = null;
+            }
+            while (result.next()) {
+                idtipo = result.getInt("id_tipocliente");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage() + " error en conectarse");
+        } finally {
+            conexion.cerrarConexion();
+        }
+        return idtipo;
     }
 }

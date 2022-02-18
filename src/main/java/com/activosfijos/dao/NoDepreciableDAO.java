@@ -23,6 +23,9 @@ import java.util.List;
  */
 public class NoDepreciableDAO {
 
+    Conexion conexion = new Conexion();
+    ResultSet result;
+
     public boolean guardar1(ActivosFijos activosFijos, ActivoNoDepreciable activoNoDepreciable) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -39,90 +42,6 @@ public class NoDepreciableDAO {
         conexion.ejecutar(consulta3);
         System.out.println(consulta + "\n" + consulta2 + "\n funcion : " + consulta3);
         return true;
-    }
-
-    public List<ListaNoDepreciable> ListarNodepreciable() throws Exception {
-        List<ListaNoDepreciable> listaNP = new ArrayList<>();
-        Conexion conexion = new Conexion();
-        System.out.println("Conectado a la db");
-        try {
-            conexion.abrirConexion();
-            // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
-                    "select *from activos_fijos, fijo_tanginle_no_depreciable, proveedor\n" +
-"where fijo_tanginle_no_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
-"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
-"and activos_fijos.estado='habilitado';");
-            // Ejecución
-            ResultSet rs = st.executeQuery();
-
-            while (rs.next()) {
-                ListaNoDepreciable listaNoDepreciable = new ListaNoDepreciable();
-                listaNoDepreciable.setId_activo_fijo(rs.getInt("id_activo_fijo"));
-                listaNoDepreciable.setDetalle_de_activo(rs.getString("detalle_de_activo"));
-                listaNoDepreciable.setValor_adquisicion(rs.getInt("valor_adquisicion"));
-                listaNoDepreciable.setFecha_adquisicion(rs.getObject("fecha_adquisicion", LocalDate.class));
-                listaNoDepreciable.setId_empresa(rs.getInt("id_empresa"));
-                listaNoDepreciable.setTiempo_amortizacion(rs.getInt("tiempo_amortizacion"));
-                listaNoDepreciable.setPorcentaje_amortizacion(rs.getDouble("porcentaje_amortizacion"));
-                listaNoDepreciable.setCapitalizacion_meses(rs.getInt("capitalizacion_meses"));
-                listaNoDepreciable.setRevalorizar(rs.getDouble("revalorizar"));
-                listaNoDepreciable.setPlusvalia(rs.getDouble("plusvalia"));
-                listaNoDepreciable.setIdproveedor(rs.getInt("idproveedor"));
-               // listaNoDepreciable.setProveedor(rs.getString("proveedor"));
-                listaNoDepreciable.setNumero_factura(rs.getString("numero_factura"));
-                listaNP.add(listaNoDepreciable);
-            }
-
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            conexion.cerrarConexion();
-        }
-
-        return listaNP;
-    }
-
-    public List<ListaNoDepreciable> ListarNodepreciableDeshabilitados() throws Exception {
-        List<ListaNoDepreciable> listaNP = new ArrayList<>();
-        Conexion conexion = new Conexion();
-        System.out.println("Conectado a la db");
-        try {
-            conexion.abrirConexion();
-            // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
-                    "select *from activos_fijos, fijo_tanginle_no_depreciable, proveedor\n" +
-"where fijo_tanginle_no_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
-"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
-"and activos_fijos.estado='deshabilitado';");
-            // Ejecución
-            ResultSet rs = st.executeQuery();
-
-            while (rs.next()) {
-                ListaNoDepreciable listaNoDepreciable = new ListaNoDepreciable();
-                listaNoDepreciable.setId_activo_fijo(rs.getInt("id_activo_fijo"));
-                listaNoDepreciable.setDetalle_de_activo(rs.getString("detalle_de_activo"));
-                listaNoDepreciable.setValor_adquisicion(rs.getInt("valor_adquisicion"));
-                listaNoDepreciable.setFecha_adquisicion(rs.getObject("fecha_adquisicion", LocalDate.class));
-                listaNoDepreciable.setId_empresa(rs.getInt("id_empresa"));
-                listaNoDepreciable.setTiempo_amortizacion(rs.getInt("tiempo_amortizacion"));
-                listaNoDepreciable.setPorcentaje_amortizacion(rs.getDouble("porcentaje_amortizacion"));
-                listaNoDepreciable.setCapitalizacion_meses(rs.getInt("capitalizacion_meses"));
-                listaNoDepreciable.setRevalorizar(rs.getDouble("revalorizar"));
-                listaNoDepreciable.setPlusvalia(rs.getDouble("plusvalia"));
-                listaNoDepreciable.setIdproveedor(rs.getInt("idproveedor"));
-               // listaNoDepreciable.setProveedor(rs.getString("proveedor"));
-                listaNoDepreciable.setNumero_factura(rs.getString("numero_factura"));
-                listaNP.add(listaNoDepreciable);
-            }
-
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            conexion.cerrarConexion();
-        }
-
-        return listaNP;
     }
 
     public boolean editar1(ListaNoDepreciable li) throws SQLException {
@@ -144,27 +63,118 @@ public class NoDepreciableDAO {
         return true;
     }
 
-    public boolean deshabilitarnoDepreciable(ListaNoDepreciable li) throws SQLException {
+    public List<ListaNoDepreciable> ListarNodepreciable() throws Exception {
+        List<ListaNoDepreciable> listaNP = new ArrayList<>();
+        String sentencia = "";
+        System.out.println("Conectado a la db");
+        try {
+            conexion.abrirConexion();
+            // Consulta.
+            sentencia
+                    = "select *from activos_fijos, fijo_tanginle_no_depreciable, proveedor\n"
+                    + "where fijo_tanginle_no_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='habilitado';";
+            // Ejecución
+            result = conexion.ejecutarConsulta(sentencia);
 
-        Conexion conexion = new Conexion();
-        String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET  estado='deshabilitado'\n"
-                + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
-        //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
-        System.out.println("update 1: " + consulta);
+            while (result.next()) {
+                ListaNoDepreciable listaNoDepreciable = new ListaNoDepreciable();
+                listaNoDepreciable.setId_activo_fijo(result.getInt("id_activo_fijo"));
+                listaNoDepreciable.setDetalle_de_activo(result.getString("detalle_de_activo"));
+                listaNoDepreciable.setValor_adquisicion(result.getInt("valor_adquisicion"));
+                listaNoDepreciable.setFecha_adquisicion(result.getObject("fecha_adquisicion", LocalDate.class));
+                listaNoDepreciable.setId_empresa(result.getInt("id_empresa"));
+                listaNoDepreciable.setTiempo_amortizacion(result.getInt("tiempo_amortizacion"));
+                listaNoDepreciable.setPorcentaje_amortizacion(result.getDouble("porcentaje_amortizacion"));
+                listaNoDepreciable.setCapitalizacion_meses(result.getInt("capitalizacion_meses"));
+                listaNoDepreciable.setRevalorizar(result.getDouble("revalorizar"));
+                listaNoDepreciable.setPlusvalia(result.getDouble("plusvalia"));
+                listaNoDepreciable.setIdproveedor(result.getInt("idproveedor"));
+                // listaNoDepreciable.setProveedor(rs.getString("proveedor"));
+                listaNoDepreciable.setNumero_factura(result.getString("numero_factura"));
+                listaNP.add(listaNoDepreciable);
+
+            }
+            conexion.cerrarConexion();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conexion.cerrarConexion();
+        }
+
+        return listaNP;
+    }
+
+    public List<ListaNoDepreciable> ListarNodepreciableDeshabilitados() throws Exception {
+        List<ListaNoDepreciable> listaNP = new ArrayList<>();
+        String sentencia = "";
+        try {
+            conexion.abrirConexion();
+            // Consulta.
+            sentencia
+                    = "select *from activos_fijos, fijo_tanginle_no_depreciable, proveedor\n"
+                    + "where fijo_tanginle_no_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='deshabilitado';";
+            // Ejecución
+            result = conexion.ejecutarSql(sentencia);
+
+            while (result.next()) {
+                ListaNoDepreciable listaNoDepreciable = new ListaNoDepreciable();
+                listaNoDepreciable.setId_activo_fijo(result.getInt("id_activo_fijo"));
+                listaNoDepreciable.setDetalle_de_activo(result.getString("detalle_de_activo"));
+                listaNoDepreciable.setValor_adquisicion(result.getInt("valor_adquisicion"));
+                listaNoDepreciable.setFecha_adquisicion(result.getObject("fecha_adquisicion", LocalDate.class));
+                listaNoDepreciable.setId_empresa(result.getInt("id_empresa"));
+                listaNoDepreciable.setTiempo_amortizacion(result.getInt("tiempo_amortizacion"));
+                listaNoDepreciable.setPorcentaje_amortizacion(result.getDouble("porcentaje_amortizacion"));
+                listaNoDepreciable.setCapitalizacion_meses(result.getInt("capitalizacion_meses"));
+                listaNoDepreciable.setRevalorizar(result.getDouble("revalorizar"));
+                listaNoDepreciable.setPlusvalia(result.getDouble("plusvalia"));
+                listaNoDepreciable.setIdproveedor(result.getInt("idproveedor"));
+                // listaNoDepreciable.setProveedor(rs.getString("proveedor"));
+                listaNoDepreciable.setNumero_factura(result.getString("numero_factura"));
+                listaNP.add(listaNoDepreciable);
+            }
+            conexion.cerrarConexion();
+        } catch (SQLException e) {
+            e.toString();
+            conexion.cerrarConexion();
+        } finally {
+            conexion.cerrarConexion();
+        }
+        return listaNP;
+    }
+
+    public boolean deshabilitarnoDepreciable(ListaNoDepreciable li) throws SQLException {
+        String consulta = "";
+        try {
+
+            conexion.abrirConexion();
+            consulta = String.format("SELECT public.deshabilitarnodepreciable(" + li.getId_activo_fijo() + ")");
+            conexion.ejecutar(consulta);
+            conexion.cerrarConexion();
+        } catch (SQLException e) {
+            System.out.println(consulta);
+        } finally {
+            conexion.cerrarConexion();
+        }
         return true;
     }
 
     public boolean habilitarnoDepreciable(ActivoNoDepreciable li) throws SQLException {
-
-        Conexion conexion = new Conexion();
-        String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET  estado='habilitado'\n"
-                + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
-        //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
-        System.out.println("update 1: " + consulta);
+        String consulta = "";
+        try {
+            conexion.abrirConexion();
+            consulta = String.format("SELECT public.habilitarnodepreciable(" + li.getId_activo_fijo() + ")");
+            conexion.ejecutar(consulta);
+            conexion.cerrarConexion();
+        } catch (SQLException e) {
+            System.out.println(consulta);
+        } finally {
+            conexion.cerrarConexion();
+        }
         return true;
     }
 }

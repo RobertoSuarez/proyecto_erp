@@ -93,7 +93,7 @@
                     </div>
                 </c:if>
 
-                <c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }">    
+                <ui:fragment rendered="#{rolventMB.menu()}">    
                     <div class="p-col-12 p-lg-6 p-xl-3">
                         <a href="../ventas/nuevaVenta.xhtml">
                             <div class="card-box bg-cyan">
@@ -110,7 +110,7 @@
                             </div>
                         </a>
                     </div>
-                </c:if>
+                </ui:fragment>
 
                 <ui:fragment rendered="#{rolMB.menu()}">
                     <div class="p-col-12 p-lg-6 p-xl-3">
