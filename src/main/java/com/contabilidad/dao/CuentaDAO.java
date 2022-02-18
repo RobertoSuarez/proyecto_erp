@@ -24,7 +24,7 @@ public class CuentaDAO {
 
     public List<Cuenta> getCuentas() {
         listaCuenta = new ArrayList<>();
-        result = conexion.consultar("select getcuentas()");
+        result = conexion.ejecutarSql("select getcuentas()");
         try {
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
@@ -43,7 +43,7 @@ public class CuentaDAO {
 
     public Cuenta getCuentaById(int id) {
         Cuenta cuenta = new Cuenta();
-        result = conexion.consultar(String.format("select getCuenta('%1$d')", id));
+        result = conexion.ejecutarSql(String.format("select getCuenta('%1$d')", id));
         try {
             if (result.next()) {
                 String cadenaJSON = result.getString("getcuenta");
@@ -92,7 +92,7 @@ public class CuentaDAO {
     }
     
     public boolean isReference(int id) {
-        result = conexion.consultar("select is_reference_cuenta('"+id+"')");
+        result = conexion.ejecutarSql("select is_reference_cuenta('"+id+"')");
         try {
             if (result.next()) {
                 return result.getBoolean("is_reference_cuenta");

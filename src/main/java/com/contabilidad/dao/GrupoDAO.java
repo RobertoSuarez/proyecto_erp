@@ -23,7 +23,7 @@ public class GrupoDAO {
 
     public List<Grupo> getGrupoCuenta() {
         listaGrupo = new ArrayList<>();
-        result = conexion.consultar("select getgrupocuenta()");
+        result = conexion.ejecutarSql("select getgrupocuenta()");
         try {
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
@@ -43,7 +43,7 @@ public class GrupoDAO {
     
     public Grupo getGrupoById(int id) {
         Grupo g = null;
-        result = conexion.consultar("select getgrupocuentabyid("+id+")");
+        result = conexion.ejecutarSql("select getgrupocuentabyid("+id+")");
         try {
             if (result.next()) {
                 String cadenaJSON = result.getString("getgrupocuentabyid");
@@ -58,7 +58,7 @@ public class GrupoDAO {
     }
 
     public int getUltimoCodigo() {
-        result = conexion.consultar("select getultimocodigogrupo()");
+        result = conexion.ejecutarSql("select getultimocodigogrupo()");
         try {
             if (result.next()) {
                 return result.getInt("getultimocodigogrupo");
@@ -108,7 +108,7 @@ public class GrupoDAO {
     }
     
     public boolean isReference(int id) {
-        result = conexion.consultar("select is_reference('"+id+"')");
+        result = conexion.ejecutarSql("select is_reference('"+id+"')");
         try {
             if (result.next()) {
                 System.out.println("result:" + result.getBoolean("is_reference"));

@@ -31,7 +31,7 @@ public class PlanContableDAO {
 
 //    public List<CuentaContable> getSubCuentas() {
 //        cuentasContables = new ArrayList<>();
-//        result = conexion.consultar("select * from public.getsubcuentas()");
+//        result = conexion.ejecutarSql("select * from public.getsubcuentas()");
 //        try {
 //            //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
 //            while (result.next()) {
@@ -53,7 +53,7 @@ public class PlanContableDAO {
     
     public List<CuentaContable> getSubCuentas() {
         cuentasContables = new ArrayList<>();
-        result = conexion.consultar("select getsubcuentas()");
+        result = conexion.ejecutarSql("select getsubcuentas()");
         try {
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
@@ -71,7 +71,7 @@ public class PlanContableDAO {
 
     public List<Grupo> getGrupos() {
         grupos = new ArrayList<>();
-        result = conexion.consultar("select getgrupocuenta();");
+        result = conexion.ejecutarSql("select getgrupocuenta();");
         try {
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
@@ -90,7 +90,7 @@ public class PlanContableDAO {
 
     public List<SubGrupo> getSubGrupos(String codigo) {
         subgrupos = new ArrayList<>();
-        result = conexion.consultar("select * from public.subgrupo where idgrupo = "+codigo+"");
+        result = conexion.ejecutarSql("select * from public.subgrupo where idgrupo = "+codigo+"");
         try {
             while (result.next()) {
                 subgrupos.add(new SubGrupo(
@@ -110,7 +110,7 @@ public class PlanContableDAO {
 
     public List<Cuenta> getCuentas(String codigo) {
         cuentas = new ArrayList<>();
-        result = conexion.consultar("select * from public.cuenta where idsubgrupo = "+codigo+"");
+        result = conexion.ejecutarSql("select * from public.cuenta where idsubgrupo = "+codigo+"");
         try {
             // int id, int subgrupo, String codigo, String nombre
             while (result.next()) {
@@ -133,7 +133,7 @@ public class PlanContableDAO {
         int count = -1;
         System.out.println("####################################" + codigo);
         try {
-            result = conexion.consultar("select count(*) from public.subcuenta where idcuenta = "+codigo+"");
+            result = conexion.ejecutarSql("select count(*) from public.subcuenta where idcuenta = "+codigo+"");
             while (result.next()) {
                 count = result.getInt("count");
             }
@@ -219,7 +219,7 @@ public class PlanContableDAO {
     }
     
     public boolean isReferenceSubCuenta(int id) {
-        result = conexion.consultar("select is_reference_subcuenta('"+id+"')");
+        result = conexion.ejecutarSql("select is_reference_subcuenta('"+id+"')");
         try {
             if (result.next()) {
                 return result.getBoolean("is_reference_subcuenta");

@@ -92,7 +92,7 @@ public class ChequeDAO implements Serializable{
                  /* Se obtiene una TABLA con todos los cheques que se receptaron
                  de un cliente a una determinada factura.*/
                String sentencia="Select*from obtener_cheques_de_clientes("+idCliente+")";
-               result = conex.ejecutarConsulta(sentencia);
+               result = conex.ejecutarSql(sentencia);
                
                 //Recorremos la TABLA retornada y la almacenamos en la lista.
                while(result.next()){
@@ -124,7 +124,7 @@ public class ChequeDAO implements Serializable{
                 
             } finally {
                 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
          }

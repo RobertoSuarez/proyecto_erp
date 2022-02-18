@@ -213,7 +213,7 @@ public class PeriodoFiscalDAO implements IDAO<PeriodoFiscal>  {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return periodosFiscales;

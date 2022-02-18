@@ -38,7 +38,7 @@ public class SeguridadCuentasXCobrar implements Serializable{
         List<String> rolesAdmitidos = new ArrayList<>();
         rolesAdmitidos.add("Gerente");
         rolesAdmitidos.add("Contador");
-        rolesAdmitidos.add("asconta");
+        rolesAdmitidos.add("Asistente de Asiento Contable");
         if(usuarioController.verificarPermisoNombre(rolesAdmitidos, 2)){
             return "true";
         }

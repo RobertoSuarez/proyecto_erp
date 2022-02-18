@@ -33,7 +33,7 @@ public class IntangibleDAO {
         String consulta2 = String.format("INSERT INTO public.fijo_intangible(\n"
                 + "	 id_activo_fijo)\n"
                 + "	VALUES ('%s');", idactivofijo);
-        conexion.ejecutar(consulta2);
+        conexion.ejecutarSql(consulta2);
         System.out.println(consulta + "\n" + consulta2);
         return true;
     }
@@ -43,7 +43,7 @@ public class IntangibleDAO {
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
                     "select *from activos_fijos, fijo_intangible, proveedor\n" +
@@ -70,7 +70,7 @@ public class IntangibleDAO {
         } catch (Exception e) {
             throw e;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return listInta;
@@ -81,7 +81,7 @@ public class IntangibleDAO {
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
                     "select *from activos_fijos, fijo_intangible, proveedor\n" +
@@ -108,7 +108,7 @@ public class IntangibleDAO {
         } catch (Exception e) {
             throw e;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return listInta;
@@ -122,7 +122,7 @@ public class IntangibleDAO {
                 + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
                 li.getFecha_adquisicion(), li.getIdproveedor(), li.getNumero_factura(), li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
     }
@@ -134,7 +134,7 @@ public class IntangibleDAO {
                 + "	SET  estado='deshabilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
     }
@@ -146,7 +146,7 @@ public class IntangibleDAO {
                 + "	SET  estado='habilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
     }

@@ -51,7 +51,7 @@ public class EstadoResultadoDAO {
 
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',4)";
         List<EstadoResultado> listaCalculosGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupoer");
@@ -77,7 +77,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoSubGrupo() {
         String sql = "select public.getcalculosubgrupoer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupoer");
@@ -102,7 +102,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoCuenta() {
         String sql = "select public.getcalculocuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentaer");
@@ -129,7 +129,7 @@ public class EstadoResultadoDAO {
 
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentaer");
@@ -195,7 +195,7 @@ public class EstadoResultadoDAO {
      */
     public double sumaIngresos(String fecha, String fecha2) {
         String sql = "select sumaingresos('" + fecha + "', '" + fecha2 + "')";
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             if (result.next()) {
                 return result.getDouble("sumaingresos");
@@ -218,7 +218,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoGrupoEg() {
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',5)";
         List<EstadoResultado> listaCalculosGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupoer");
@@ -282,7 +282,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoSubCuentaEg() {
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentaer");
@@ -308,7 +308,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoSubGrupoEg() {
         String sql = "select public.getcalculosubgrupoer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupoer");
@@ -333,7 +333,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoCuentaEg() {
         String sql = "select public.getcalculocuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentaer");
@@ -360,7 +360,7 @@ public class EstadoResultadoDAO {
      */
     public double sumaegresos(String fecha, String fecha2) {
         String sql = "select sumaegresos('" + fecha + "', '" + fecha2 + "')";
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             if (result.next()) {
                 return result.getDouble("sumaegresos");
@@ -383,7 +383,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoGrupoVen() {
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',6)";
         List<EstadoResultado> listaCalculosGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupoer");
@@ -448,7 +448,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoSubCuentaVen() {
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentaer");
@@ -474,7 +474,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoSubGrupoVen() {
         String sql = "select public.getcalculosubgrupoer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupoer");
@@ -499,7 +499,7 @@ public class EstadoResultadoDAO {
     private List<EstadoResultado> getCalculoCuentaVen() {
         String sql = "select public.getcalculocuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentaer");
@@ -526,7 +526,7 @@ public class EstadoResultadoDAO {
      */
     public double costoventa(String fecha, String fecha2) {
         String sql = "select costoventa('" + fecha + "', '" + fecha2 + "')";
-        result = conexion.consultar(sql);
+        result = conexion.ejecutarSql(sql);
         try {
             if (result.next()) {
                 return result.getDouble("costoventa");

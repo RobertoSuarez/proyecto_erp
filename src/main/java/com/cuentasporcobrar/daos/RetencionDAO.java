@@ -55,7 +55,7 @@ public class RetencionDAO implements Serializable {
                 /*Se obtiene las retenciones de una venta*/
                 String sentencia = "Select *from Obtener_Retenciones(" + idVenta + ") "
                         + "order by idretencion_r desc";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Recorremos la TABLA retornada y la almacenamos en la lista.
                 while (result.next()) {
@@ -84,7 +84,7 @@ public class RetencionDAO implements Serializable {
                         0.0));
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -106,7 +106,7 @@ public class RetencionDAO implements Serializable {
             try {
                 /*Se obtiene las facturas de un cliente*/
                 String sentencia = "select*from obtener_idfacturas_de_Cliente(" + idCliente + ")";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Recorremos la TABLA retornada y la almacenamos en la lista.
                 while (result.next()) {
@@ -125,10 +125,10 @@ public class RetencionDAO implements Serializable {
                         -1,
                         -1,
                         -1));
-                conex.cerrarConexion();
+                conex.desconectar();
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -159,7 +159,7 @@ public class RetencionDAO implements Serializable {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            conex.cerrarConexion();
+            conex.desconectar();
         }
         //Caso contrario: Se retorna -1 indicando que la conexión está
         //en estado Falso
@@ -193,7 +193,7 @@ public class RetencionDAO implements Serializable {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            conex.cerrarConexion();
+            conex.desconectar();
         }
 
         //Caso contrario: Se retorna -1 indicando que la conexión está
