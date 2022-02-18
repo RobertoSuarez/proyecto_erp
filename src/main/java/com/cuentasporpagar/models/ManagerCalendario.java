@@ -86,7 +86,7 @@ public class ManagerCalendario extends Conexion implements DAOCalendario{
     @Override
     public ManagerCalendario Selecionar() throws Exception {
         try {
-            this.abrirConexion();
+            this.conectar();
             PreparedStatement st = this.conex.prepareStatement("SELECT * FROM facturas");
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -96,7 +96,7 @@ public class ManagerCalendario extends Conexion implements DAOCalendario{
         } catch(Exception e) {
             throw e;
         } finally {
-            this.cerrarConexion();
+            this.desconectar();
         }
         
         return null;
@@ -108,7 +108,7 @@ public class ManagerCalendario extends Conexion implements DAOCalendario{
         System.out.println("Conectado a la db");
         try {
             
-            this.abrirConexion();
+            this.conectar();
             // Consulta.
             PreparedStatement st = this.conex.prepareStatement(
                     "SELECT idfactura, nfactura, descripcion, importe, pagado, fecha, vencimiento, estado, idproveedor, idasiento\n" +
@@ -132,7 +132,7 @@ public class ManagerCalendario extends Conexion implements DAOCalendario{
         } catch(Exception e) {
             throw e;
         } finally {
-            this.cerrarConexion();
+            this.desconectar();
         }
         
         return lista;

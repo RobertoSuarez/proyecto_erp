@@ -211,7 +211,7 @@ public class Proveedor {
                             "from proveedor\n" +
                             "where idproveedor=?;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
             
             //Statement stmt = conn.conex.createStatement();
             PreparedStatement stmt = conn.conex.prepareStatement(query);
