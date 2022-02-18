@@ -7,15 +7,20 @@ package com.ventas.controllers;
 import com.seguridad.dao.UsuarioDAO;
 import com.seguridad.models.Roles;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
 /**
  *
  * @author cturriagos
  */
-public class RestriccionVenta {
+@Named(value = "rolventMB")
+@ViewScoped
+public class RestriccionVenta implements Serializable {
 
     private UsuarioDAO usuarioDAO;
     FacesContext context = FacesContext.getCurrentInstance();
@@ -70,10 +75,8 @@ public class RestriccionVenta {
      * @return String falso o verdadero.
      **/
     public String menu() {
-        if ("Gerente".equals(listaRoles.get(0).getNombre())
-                || "Administrador de la empresa".equals(listaRoles.get(0).getNombre())
-                || "Contador".equals(listaRoles.get(0).getNombre())
-                || "Asistente del contador".equals(listaRoles.get(0).getNombre())) {
+        if ("Administrador de ventas".equals(listaRoles.get(0).getNombre())
+                || "Vendedor".equals(listaRoles.get(0).getNombre())) {
             return "true";
         } else {
             return "false";
