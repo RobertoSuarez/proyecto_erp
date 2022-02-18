@@ -14,34 +14,38 @@ public class UsuarioDAO {
     List<Usuario> lsitaUsuarios;
     boolean isTrue = true;
     Usuario usuario = new Usuario();
-    Conexion conexion = new Conexion();
+    Conexion conexion;
     private AES encryptAES;
     List<Roles> listaRoles;
     ResultSet result;
 
     public UsuarioDAO() {
+
+        conexion = new Conexion();
         encryptAES = new AES();
-       
+        if (conexion.conectar()) {
+            conexion.desconectar();
+        }
     }
 
     public void registrarUsuario(Usuario user) {
 
-        try {
-            this.conexion.conectar();
+        if (conexion.conectar()) {
 
-            String sentencia = "SELECT public.registrarusuario('" + user.getNombre() + "',"
-                    + "'" + user.getApellido() + "','" + user.getEmail() + "',"
-                    + "'" + user.getUsername()
-                    + "','" + encryptAES.getAESEncrypt(user.getPassword()) + "')";
-            conexion.ejecutarSql(sentencia);
-            conexion.desconectar();
+            try {
 
-        } catch (Exception e) {
-            e.toString();
-        } finally {
+                String sentencia = "SELECT public.registrarusuario('" + user.getNombre() + "',"
+                        + "'" + user.getApellido() + "','" + user.getEmail() + "',"
+                        + "'" + user.getUsername()
+                        + "','" + encryptAES.getAESEncrypt(user.getPassword()) + "')";
+                conexion.ejecutarSql(sentencia);
+                conexion.desconectar();
 
-            conexion.desconectar();
-
+            } catch (Exception e) {
+                e.toString();
+            } finally {
+                conexion.desconectar();
+            }
         }
 
     }
@@ -51,8 +55,7 @@ public class UsuarioDAO {
 
         Usuario usuarioAcceso = null;
         String sentencia = "";
-        conexion.conectar();
-        if (conexion.isEstado()) {
+        if (conexion.conectar()) {
             try {
                 sentencia = String.format(
                         "SELECT * from public.iniciarsesion('%1$s','%2$s')",
@@ -75,7 +78,7 @@ public class UsuarioDAO {
                 }
                 conexion.desconectar();
             } catch (SQLException e) {
-                System.out.println(e.toString() + "EBERT");
+                System.out.println(e.toString());
             } finally {
                 conexion.desconectar();
             }
@@ -89,24 +92,25 @@ public class UsuarioDAO {
         listaRoles = new ArrayList<>();
         String sentencia = "";
         int id = 0;
-        try {
-            this.conexion.conectar();
-            sentencia = "select rol.\"idRol\",rol.\"nombreRol\",rol.\"detalleRol\" from public.usuario inner join public.\"rolUsuario\" on usuario.\"idUsuario\" = \"rolUsuario\".\"idUsuario\" \n"
-                    + "	inner join public.rol on \"rolUsuario\".\"idRol\" = rol.\"idRol\" where usuario.\"idUsuario\" =" + user;
-            result = conexion.ejecutarSql(sentencia);
-            while (result.next()) {
-                listaRoles.add(new Roles(
-                        result.getInt("idRol"),
-                        result.getString("nombreRol"),
-                        result.getString("detalleRol")));
+        if (conexion.conectar()) {
+            try {
+                sentencia = "select rol.\"idRol\",rol.\"nombreRol\",rol.\"detalleRol\" from public.usuario inner join public.\"rolUsuario\" on usuario.\"idUsuario\" = \"rolUsuario\".\"idUsuario\" \n"
+                        + "	inner join public.rol on \"rolUsuario\".\"idRol\" = rol.\"idRol\" where usuario.\"idUsuario\" =" + user;
+                result = conexion.ejecutarSql(sentencia);
+                while (result.next()) {
+                    listaRoles.add(new Roles(
+                            result.getInt("idRol"),
+                            result.getString("nombreRol"),
+                            result.getString("detalleRol")));
+                }
+                conexion.desconectar();
+            } catch (SQLException e) {
+                e.toString();
+                conexion.desconectar();
+                System.out.print(sentencia);
+            } finally {
+                conexion.desconectar();
             }
-            conexion.desconectar();
-        } catch (SQLException e) {
-            e.toString();
-            conexion.desconectar();
-            System.out.print(sentencia);
-        } finally {
-            conexion.desconectar();
         }
         return listaRoles;
     }
@@ -128,30 +132,31 @@ public class UsuarioDAO {
         List<Usuario> listOfUsers = new ArrayList<>();
         Usuario user;
         String sentencia = "";
-        try {
-            conexion.conectar();
-            sentencia = String.format(
-                    "SELECT \"idUsuario\", nombre, apellido, username, \"fechaCreacion\", habilitado, email\n"
-                    + "	FROM public.usuario;");
-            result = conexion.ejecutarSql(sentencia);
-            while (result.next()) {
-                user = new Usuario();
-                user.setIdUsuario(result.getInt(1));
-                user.setNombre(result.getString(2));
-                user.setApellido(result.getString(3));
-                user.setPassword("**********");
-                user.setUsername(result.getString(4));
-                user.setFehcaCreacion(result.getDate(5));
-                user.setHabilitado(result.getBoolean(6));
-                user.setEmail(result.getString(7));
-                listOfUsers.add(user);
-            }
-            conexion.desconectar();
-        } catch (SQLException e) {
-            System.out.println(e.toString() + "EBERT");
-        } finally {
+        if (conexion.conectar()) {
+            try {
+                sentencia = String.format(
+                        "SELECT \"idUsuario\", nombre, apellido, username, \"fechaCreacion\", habilitado, email\n"
+                        + "	FROM public.usuario;");
+                result = conexion.ejecutarSql(sentencia);
+                while (result.next()) {
+                    user = new Usuario();
+                    user.setIdUsuario(result.getInt(1));
+                    user.setNombre(result.getString(2));
+                    user.setApellido(result.getString(3));
+                    user.setPassword("**********");
+                    user.setUsername(result.getString(4));
+                    user.setFehcaCreacion(result.getDate(5));
+                    user.setHabilitado(result.getBoolean(6));
+                    user.setEmail(result.getString(7));
+                    listOfUsers.add(user);
+                }
+                conexion.desconectar();
+            } catch (SQLException e) {
+                System.out.println(e.toString() + "EBERT");
+            } finally {
 
-            conexion.desconectar();
+                conexion.desconectar();
+            }
         }
         return listOfUsers;
     }
