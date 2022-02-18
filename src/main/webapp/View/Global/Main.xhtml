@@ -73,6 +73,25 @@
                         </a>
                     </div>
                 </ui:fragment>
+                
+                <ui:fragment rendered="#{seguridadCtsXCbr.renderForEveryone()}">
+                    <div class="p-col-12 p-lg-6 p-xl-3">
+                        <a href="../cuentas_por_cobrar/AgregarRetencion.xhtml">
+                            <div class="card-box bg-orange">
+                                <div class="inner">
+                                    <h3> Cuentas por Cobrar </h3>
+                                    <p> Descripción </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="pi pi-home" aria-hidden="true"></i>
+                                </div>
+                                <div class="card-box-footer">Ingresar
+                                    <i class="pi pi-arrow-circle-right"/>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </ui:fragment>
 
                 <c:if test="${!usuarioMB.rolesDAO.rolExist('Encargado de inventario') == true }"> 
                     <div class="p-col-12 p-lg-6 p-xl-3">
