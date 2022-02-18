@@ -93,7 +93,8 @@ public class BuscarProvManagedBean implements Serializable {
         int msg4 = event.getObject().getVence();
         int idProv = event.getObject().getIdProveedor();
         AnticipoDAO antiDao = new AnticipoDAO();
-        List<Anticipo> anticipos = antiDao.getAncitipoByProveedor(idProv);
+        List<Anticipo> anticipos = new ArrayList<>();
+        anticipos = antiDao.getAncitipoByProveedor(idProv);
         for(int i = 0; i < anticipos.size(); i++){
             this.totalAnticipo += anticipos.get(i).getImporte();
         }
