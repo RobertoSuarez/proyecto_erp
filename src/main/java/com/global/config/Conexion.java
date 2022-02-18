@@ -187,7 +187,6 @@ public class Conexion implements Serializable {
 
     public ResultSet ejecutarSql(String sql) {
         try {
-            conectar();
             result = statement.executeQuery(sql);
         } catch (SQLException ex) {
             System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
