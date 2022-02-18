@@ -33,7 +33,7 @@ public class AgotableDAO {
         String consulta2 = String.format("INSERT INTO public.fijo_tangible_agotable(\n"
                 + "	id_activo_fijo, stock)\n"
                 + "	VALUES ('%s', '%s');", idactivofijo, activoagotable.getStock());
-        conexion.ejecutar(consulta2);
+        conexion.ejecutarSql(consulta2);
         System.out.println(consulta + "\n" + consulta2);
         return true;
     }
@@ -43,7 +43,7 @@ public class AgotableDAO {
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
                     "Select *from activos_fijos inner join fijo_tangible_agotable \n"
@@ -68,7 +68,7 @@ public class AgotableDAO {
         } catch (Exception e) {
             throw e;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return listaago;
@@ -79,7 +79,7 @@ public class AgotableDAO {
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.conex.prepareStatement(
                     "Select *from activos_fijos inner join fijo_tangible_agotable \n"
@@ -104,7 +104,7 @@ public class AgotableDAO {
         } catch (Exception e) {
             throw e;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return listaago;
@@ -118,11 +118,11 @@ public class AgotableDAO {
                 + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
                 li.getFecha_adquisicion(), li.getProveedor(), li.getNumero_factura(), li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         String consulta2 = String.format("UPDATE public.fijo_tangible_agotable\n"
                 + "	SET  stock='%s'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getStock(), li.getId_activo_fijo());
-        conexion.ejecutar(consulta2);
+        conexion.ejecutarSql(consulta2);
         System.out.println("update 1: " + consulta + "\n update 2: " + consulta2);
         return true;
     }
@@ -134,7 +134,7 @@ public class AgotableDAO {
                 + "	SET  estado='deshabilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
     }
@@ -146,7 +146,7 @@ public class AgotableDAO {
                 + "	SET  estado='habilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
     }
