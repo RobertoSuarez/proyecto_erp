@@ -5,11 +5,6 @@
  */
 package com.cuentasporcobrar.controllers;
 
-/**
- *
- * @author ClasK
- */
-
 import com.seguridad.controllers.UsuarioController;
 import com.seguridad.models.Rol;
 import com.seguridad.models.Usuario;
@@ -43,6 +38,7 @@ public class SeguridadCuentasXCobrar implements Serializable{
         List<String> rolesAdmitidos = new ArrayList<>();
         rolesAdmitidos.add("Gerente");
         rolesAdmitidos.add("Contador");
+        rolesAdmitidos.add("asconta");
         if(usuarioController.verificarPermisoNombre(rolesAdmitidos, 2)){
             return "true";
         }
