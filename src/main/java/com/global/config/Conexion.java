@@ -46,184 +46,6 @@ public class Conexion implements Serializable {
         estado = true;
     }
 
-    public boolean abrirConexion() throws SQLException {
-        try {
-            if (conex == null || !(conex.isClosed())) {
-                //System.out.println(mensaje+ " si abre la conexion");
-                Class.forName(classForName);
-                conex = DriverManager.getConnection(url, usuario, clave);
-                st = conex.createStatement();
-                estado = true;
-            }
-        } catch (ClassNotFoundException | SQLException exSQL) {
-            mensaje = exSQL.getMessage();
-            System.out.println(mensaje + " no abre la conexion");
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            return false;
-        }
-        return true;
-    }
-
-    //Conexion estandar, pendiente de revision para implementar en todos los modulos
-    public boolean conectar() {
-        try {
-            try {
-                Class.forName("org.postgresql.Driver");
-            } catch (ClassNotFoundException e) {
-                System.out.println(e.getMessage());
-            }
-            if (connection == null || connection.isClosed()) {
-                connection = DriverManager.getConnection(url, usuario, clave);
-                statement = connection.createStatement();
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println("No hay conexion a la base de datos: " + e.getMessage());
-        }
-        return false;
-    }
-
-    public void cerrarConexion() {
-        try {
-            if (conex != null && !conex.isClosed()) {
-                conex.close();
-                conex = null;
-            }
-            if (st != null && !st.isClosed()) {
-                st.close();
-                st = null;
-            }
-            if (lector != null && !lector.isClosed()) {
-                lector.close();
-                lector = null;
-            }
-        } catch (SQLException e) {
-            mensaje = e.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println("ERROR: " + mensaje);
-        }
-    }
-
-    public boolean desconectar() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                statement.close();
-                return true;
-            } else {
-                System.out.println("No hay una conexion para desconectar");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Hubo un problema al desconectar la conexion");
-        }
-        return false;
-    }
-
-    public ResultSet ejecutarConsulta(String sql) {
-        try {
-            if (abrirConexion()) {
-                lector = st.executeQuery(sql);
-            }
-        } catch (SQLException exc) {
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        }
-        return lector;
-    }
-
-    public int ejecutarProcedimiento(String sql) {
-        int retorno = -1;
-        try {
-            if (abrirConexion()) {
-                st.executeQuery(sql);
-                mensaje = "El procedimiento se ejecutó correctamente";
-                retorno = 1;
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        } finally {
-            cerrarConexion();
-        }
-        return retorno;
-    }
-
-    public int ejecutar(String sql) {
-        int retorno = -1;
-        try {
-            if (abrirConexion()) {
-                retorno = st.executeUpdate(sql);
-                mensaje = "Se guardó correctamente : ";
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        } finally {
-            cerrarConexion();
-        }
-        return retorno;
-    }
-
-    public int eliminar(String sql) {
-        int result = -1;
-        try {
-            conectar();
-            result = statement.executeUpdate(sql);
-            System.out.println("Se ha eliminado el registro");
-        } catch (SQLException e) {
-            System.out.println("No se ha podido eliminar el registro " + e.getMessage());
-        } finally {
-            desconectar();
-        }
-        return result;
-    }
-
-    public ResultSet ejecutarSql(String sql) {
-        try {
-            conectar();
-            result = statement.executeQuery(sql);
-        } catch (SQLException ex) {
-            System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
-        }
-        return result;
-    }
-
-    public ResultSet consultar(String sql) {
-        try {
-            conectar();
-            result = statement.executeQuery(sql);
-        } catch (SQLException ex) {
-            System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
-        }
-        return result;
-    }
-
-    public int insertar(String sql) {
-        int retorno = -1;
-        try {
-            if (abrirConexion()) {
-                System.out.println(retorno = st.executeUpdate(sql));
-                mensaje = "Se insertó correctamente : ";
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-                System.out.println(retorno + "HOLIS");
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje + " AQUI");
-        }
-        cerrarConexion();
-        return retorno;
-    }
-
     public Connection getConnection() {
         return connection;
     }
@@ -254,6 +76,213 @@ public class Conexion implements Serializable {
         this.transaccionIniciada = transaccionIniciada;
     }
 
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public Connection getConexion() {
+        return conex;
+    }
+
+    public ResultSet getLector() {
+        return lector;
+    }
+
+    public FacesMessage.Severity getTipoMensaje() {
+        return tipoMensaje;
+    }
+
+    public void setTipoMensaje(FacesMessage.Severity tipoMensaje) {
+        this.tipoMensaje = tipoMensaje;
+    }
+
+    //  MÉTODO CONECTAR PARA INICIAR UNA CONEXIÓN A LA BASE DE DATOS
+    public boolean conectar() {
+        try {
+            try {
+                Class.forName("org.postgresql.Driver");
+            } catch (ClassNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(url, usuario, clave);
+                statement = connection.createStatement();
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("No hay conexion a la base de datos: " + e.getMessage());
+        }
+        return false;
+    }
+
+   //  MÉTODO DESCONECTAR PARA CERRAR UNA CONEXIÓN A LA BASE DE DATOS
+    public boolean desconectar() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                statement.close();
+                return true;
+            } else {
+                System.out.println("No hay una conexion para desconectar");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Hubo un problema al desconectar la conexion");
+        }
+        return false;
+    }
+
+    //  EJECUTAR CONSULTAS SQL
+    public ResultSet ejecutarSql(String sql) {
+        try {
+            // conectar();
+            result = statement.executeQuery(sql);
+        } catch (SQLException ex) {
+            System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
+        }
+        return result;
+    }
+
+    /**
+    public boolean conectar() throws SQLException {
+        try {
+            if (conex == null || !(conex.isClosed())) {
+                //System.out.println(mensaje+ " si abre la conexion");
+                Class.forName(classForName);
+                conex = DriverManager.getConnection(url, usuario, clave);
+                st = conex.createStatement();
+                estado = true;
+            }
+        } catch (ClassNotFoundException | SQLException exSQL) {
+            mensaje = exSQL.getMessage();
+            System.out.println(mensaje + " no abre la conexion");
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            return false;
+        }
+        return true;
+    }    
+
+    public void desconectar() {
+        try {
+            if (conex != null && !conex.isClosed()) {
+                conex.close();
+                conex = null;
+            }
+            if (st != null && !st.isClosed()) {
+                st.close();
+                st = null;
+            }
+            if (lector != null && !lector.isClosed()) {
+                lector.close();
+                lector = null;
+            }
+        } catch (SQLException e) {
+            mensaje = e.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println("ERROR: " + mensaje);
+        }
+    }
+
+    public ResultSet ejecutarConsulta(String sql) {
+        try {
+            if (conectar()) {
+                lector = st.executeQuery(sql);
+            }
+        } catch (SQLException exc) {
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        }
+        return lector;
+    }
+
+    public int ejecutarProcedimiento(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                st.executeQuery(sql);
+                mensaje = "El procedimiento se ejecutó correctamente";
+                retorno = 1;
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            desconectar();
+        }
+        return retorno;
+    }
+
+    public int ejecutar(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                retorno = st.executeUpdate(sql);
+                mensaje = "Se guardó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            desconectar();
+        }
+        return retorno;
+    }
+
+    public int eliminar(String sql) {
+        int result = -1;
+        try {
+            conectar();
+            result = statement.executeUpdate(sql);
+            System.out.println("Se ha eliminado el registro");
+        } catch (SQLException e) {
+            System.out.println("No se ha podido eliminar el registro " + e.getMessage());
+        } finally {
+            desconectar();
+        }
+        return result;
+    }
+
+    public ResultSet consultar(String sql) {
+        try {
+            conectar();
+            result = statement.executeQuery(sql);
+        } catch (SQLException ex) {
+            System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
+        }
+        return result;
+    }
+
+    public int insertar(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                System.out.println(retorno = st.executeUpdate(sql));
+                mensaje = "Se insertó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+                System.out.println(retorno + "HOLIS");
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje + " AQUI");
+        }
+        desconectar();
+        return retorno;
+    }
+
+    
+
     public void Conectar() throws SQLException {
         try {
             if (conex == null || !(conex.isClosed())) {
@@ -269,31 +298,20 @@ public class Conexion implements Serializable {
         }
 
     }
-//Diana -- Lo uso
+    **/
 
-    public void Ejecutar2(String sql) {
-        try {
-            if (abrirConexion()) {
-                st.executeUpdate(sql);
-            }
-        } catch (SQLException exc) {
-            System.out.print(exc);
-        } finally {
-            cerrarConexion();
-        }
-    }
-    //para modulo activos fijos
-
+    
+    //Para modulo activos fijos
     public String obtenerValor(String consulta, int indx) {
         String valor = "";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 st = conex.createStatement();
                 lector = st.executeQuery(consulta);
                 if (lector.next()) {
                     valor = lector.getString(indx);
                 }
-                cerrarConexion();
+                desconectar();
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
@@ -304,9 +322,22 @@ public class Conexion implements Serializable {
             System.out.println(mensaje);
 
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return valor;
+    }
+
+    //Diana -- Lo uso
+    public void Ejecutar2(String sql) {
+        try {
+            if (conectar()) {
+                st.executeUpdate(sql);
+            }
+        } catch (SQLException exc) {
+            System.out.print(exc);
+        } finally {
+            desconectar();
+        }
     }
 
     //  RRHH
@@ -338,7 +369,7 @@ public class Conexion implements Serializable {
         } else {
             conex.rollback();
         }
-        cerrarConexion();
+        desconectar();
     }
 
     public ResultSet selecionar(String tabla, String campos, @Nullable String restrinciones, @Nullable String ordenar) {
@@ -350,7 +381,7 @@ public class Conexion implements Serializable {
             sql = sql + " ORDER BY " + ordenar;
         }
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 lector = st.executeQuery(sql);
             }
         } catch (SQLException exc) {
@@ -358,7 +389,7 @@ public class Conexion implements Serializable {
             mensaje = exc.getMessage();
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
-            cerrarConexion();
+            desconectar();
         }
         return lector;
     }
@@ -368,7 +399,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ")";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql);
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -379,7 +410,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -389,7 +420,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ");";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 lector = st.executeQuery("SELECT MAX(" + id + ") AS ID FROM public." + tabla + ";");
                 if (lector.next()) {
@@ -404,7 +435,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -413,9 +444,9 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "SELECT public." + procedure + "(" + parametros + ");";
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 st.execute(sql);
-                cerrarConexion();
+                desconectar();
             }
         } catch (SQLException exc) {
             System.out.println(sql);
@@ -423,7 +454,7 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
     }
@@ -432,9 +463,9 @@ public class Conexion implements Serializable {
         int retorno = -1;
         String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;
         try {
-            if (abrirConexion()) {
+            if (conectar()) {
                 retorno = st.executeUpdate(sql);
-                cerrarConexion();
+                desconectar();
                 mensaje = "Se modifico correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
@@ -444,32 +475,8 @@ public class Conexion implements Serializable {
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
             System.out.println(mensaje);
         } finally {
-            cerrarConexion();
+            desconectar();
         }
         return retorno;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    public Connection getConexion() {
-        return conex;
-    }
-
-    public ResultSet getLector() {
-        return lector;
-    }
-
-    public FacesMessage.Severity getTipoMensaje() {
-        return tipoMensaje;
-    }
-
-    public void setTipoMensaje(FacesMessage.Severity tipoMensaje) {
-        this.tipoMensaje = tipoMensaje;
     }
 }
