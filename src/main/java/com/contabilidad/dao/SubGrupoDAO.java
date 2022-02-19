@@ -1,4 +1,3 @@
-
 package com.contabilidad.dao;
 
 import com.contabilidad.models.SubGrupo;
@@ -10,21 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubGrupoDAO {
+
     private Conexion conexion;
     private List<SubGrupo> listaSubgrupo;
     private ResultSet result;
     private Gson gson;
-    
+
     public SubGrupoDAO() {
         conexion = new Conexion();
         listaSubgrupo = new ArrayList<>();
         gson = new Gson();
     }
-    
+
     public List<SubGrupo> getSubGrupos() {
         listaSubgrupo = new ArrayList<>();
-        result = conexion.ejecutarSql("select getsubgruposcuenta()");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getsubgruposcuenta()");
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
                 String cadenaJSON = result.getString("getsubgruposcuenta");
@@ -39,10 +40,11 @@ public class SubGrupoDAO {
             conexion.desconectar();
         }
     }
-    
+
     public int getProximoCodigo(int idGrupo) {
-        result = conexion.ejecutarSql("select getproximocodigosubgrupo("+idGrupo+")");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getproximocodigosubgrupo(" + idGrupo + ")");
             if (result.next()) {
                 return result.getInt("getproximocodigosubgrupo");
             }
@@ -53,9 +55,10 @@ public class SubGrupoDAO {
         }
         return -1;
     }
-    
+
     public boolean store(SubGrupo subGrupo) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertsubgrupo('%1$d', '%2$s', '%3$s')",
                     subGrupo.getGrupo(), subGrupo.getCodigo(), subGrupo.getNombre());
             result = conexion.ejecutarSql(sql);
@@ -67,11 +70,12 @@ public class SubGrupoDAO {
         }
         return false;
     }
-    
+
     public SubGrupo getGrupoById(int id) {
         SubGrupo g = null;
-        result = conexion.ejecutarSql("select getsubgrupobyid("+id+")");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getsubgrupobyid(" + id + ")");
             if (result.next()) {
                 String cadenaJSON = result.getString("getsubgrupobyid");
                 g = gson.fromJson(cadenaJSON, SubGrupo.class);
@@ -83,9 +87,10 @@ public class SubGrupoDAO {
         }
         return g;
     }
-    
+
     public boolean update(SubGrupo subGrupo) {
         try {
+            conexion.conectar();
             String obj = gson.toJson(subGrupo);
             String sql = String.format("select updatesubgrupo('%1$s')", obj);
             result = conexion.ejecutarSql(sql);
@@ -99,15 +104,16 @@ public class SubGrupoDAO {
         }
         return false;
     }
-    
+
     public boolean delete(int id) {
         String sql = String.format("delete from subgrupo where idsubgrupo = '%1$d'", id);
         return conexion.eliminar(sql) != -1;
     }
-    
+
     public boolean isReference(int id) {
-        result = conexion.ejecutarSql("select is_reference_subgrupo('"+id+"')");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select is_reference_subgrupo('" + id + "')");
             if (result.next()) {
                 return result.getBoolean("is_reference_subgrupo");
             }

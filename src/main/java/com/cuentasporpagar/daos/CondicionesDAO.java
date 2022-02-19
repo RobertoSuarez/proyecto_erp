@@ -54,8 +54,7 @@ public class CondicionesDAO implements Serializable {
                             + "p.telefono,p.estado FROM condiciones c \n"
                             + "INNER JOIN proveedor p ON p.idproveedor = c.idproveedor "
                             + "where p.estado = " + n + " order by p.idproveedor";
-                    PreparedStatement prs = conexion.getCnx().prepareStatement(sentencia);
-                    ResultSet result = prs.executeQuery();
+                    ResultSet result = conexion.ejecutarSql(sentencia);
                     while (result.next()) {
                          Proveedor p = new Proveedor();
                          Condiciones c = new Condiciones();
@@ -78,7 +77,6 @@ public class CondicionesDAO implements Serializable {
                          c.setProveedor(p);
                          lista.add(c);
                     }
-                    conexion.desconectar();
                } catch (SQLException e) {
                     throw e;
                } finally {
@@ -99,7 +97,6 @@ public class CondicionesDAO implements Serializable {
                try {
                     String cadena = "select habilitarproveedor(" + n + ",'" + d + "')";
                     conexion.ejecutarSql(cadena);                   
-                    conexion.desconectar();
                } catch (Exception e) {
                     throw e;
 
@@ -127,7 +124,6 @@ public class CondicionesDAO implements Serializable {
                        + "(SELECT idproveedor FROM proveedor ORDER BY idproveedor DESC LIMIT 1));";
 
                conexion.ejecutarSql(sentencia);
-               conexion.desconectar();
           } catch (Exception e) {
                throw e;
           } finally {
@@ -153,7 +149,6 @@ public class CondicionesDAO implements Serializable {
                        + "descripcion = '" + c.getDescripcion() + "' "
                        + "WHERE idproveedor = " + codigo + "";
                conexion.ejecutarSql(cadena);
-               conexion.desconectar();
           } catch (Exception e) {
               throw  e;
           } finally {

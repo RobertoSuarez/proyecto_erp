@@ -138,7 +138,7 @@ public class Conexion implements Serializable {
     //  EJECUTAR CONSULTAS SQL
     public ResultSet ejecutarSql(String sql) {
         try {
-            // conectar();
+            conectar();
             result = statement.executeQuery(sql);
         } catch (SQLException ex) {
             System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
@@ -180,6 +180,46 @@ public class Conexion implements Serializable {
             desconectar();
         }
         return result;
+    }
+
+    // MÉTODO PARA PRODUCCIÓN
+    public int insertar(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                System.out.println(retorno = st.executeUpdate(sql));
+                mensaje = "Se insertó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+                System.out.println(retorno + "HOLIS");
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje + " AQUI");
+        }
+        desconectar();
+        return retorno;
+    }
+
+    //  OTRO MÉTODO PARA PRODUCCIÓN
+    public int ejecutar(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                retorno = st.executeUpdate(sql);
+                mensaje = "Se guardó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            desconectar();
+        }
+        return retorno;
     }
 
     //Para modulo activos fijos
@@ -360,7 +400,7 @@ public class Conexion implements Serializable {
         }
         return retorno;
     }
-    
+
     public int insertar(String sql) {
         int retorno = -1;
         try {
@@ -398,7 +438,7 @@ public class Conexion implements Serializable {
             return false;
         }
         return true;
-    }    
+    }
 
     public void desconectar() {
         try {
@@ -433,27 +473,6 @@ public class Conexion implements Serializable {
         }
         return lector;
     }
-    **/
-
-    /**
-    public int ejecutar(String sql) {
-        int retorno = -1;
-        try {
-            if (conectar()) {
-                retorno = st.executeUpdate(sql);
-                mensaje = "Se guardó correctamente : ";
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        } finally {
-            desconectar();
-        }
-        return retorno;
-    }
 
     public ResultSet consultar(String sql) {
         try {
@@ -465,9 +484,9 @@ public class Conexion implements Serializable {
         return result;
     }
 
-    
 
-    
+
+
 
     public void Conectar() throws SQLException {
         try {

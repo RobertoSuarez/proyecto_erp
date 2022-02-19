@@ -60,7 +60,7 @@ public class CostoDAO {
 
             String sql = "INSERT INTO public.costos(nombre, descripcion, tipo, identificador)\n"
                     + "	VALUES ('" + costo.getNombre_subcuenta() + "', '" + costo.getDescripcion_subgrupo() + "', '" + costo.getTipo_cuenta()+ "', '" + costo.getIdentificador_subcuenta() + "')";
-            
+
             String sql2 = "Insert into public.costos (nombre, descripcion, tipo, identificador) \n"
                     + "values('" + costo.getNombre_subcuenta() + "', '" + costo.getDescripcion_subgrupo() + "', '" + costo.getTipo_cuenta()+ "','" + costo.getIdentificador_subcuenta() + "')";
             //enviamos la sentencia
@@ -73,13 +73,13 @@ public class CostoDAO {
         }
     }
     /**
-      * Método para actualizar un Centro de costo recibiendo un parametro 
+      * Método para actualizar un Centro de costo recibiendo un parametro
       * Dicho metodo implementa throws
       *
       * @param costo obejto Costo
       * @throws SQLException validador
       */
-    
+
     ///AQUI-----
     public void updateCosto(Costo costo) throws SQLException {
         try {
@@ -97,7 +97,7 @@ public class CostoDAO {
         }
     }
     /**
-      * Método para actualizar un Centro de costo recibiendo dos parametro 
+      * Método para actualizar un Centro de costo recibiendo dos parametro
       * Dicho metodo implementa throws
       *
       * @param costo obejto Costo
@@ -105,14 +105,14 @@ public class CostoDAO {
       * @throws SQLException validador
       */
     public void deletecosto(Costo costo, String aux) throws SQLException{
-        
+
         try {
             //llamamos a la conexion
             this.conexion.conectar();
             String sql = ("DELETE FROM public.costos WHERE identificador = '" + aux + "'");
             //enviamos la sentencia
             conexion.ejecutarSql(sql);
-            
+
         } catch (Exception e) {
             throw e;
         }finally{

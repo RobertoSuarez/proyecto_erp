@@ -20,12 +20,8 @@ public class UsuarioDAO {
     ResultSet result;
 
     public UsuarioDAO() {
-
         conexion = new Conexion();
         encryptAES = new AES();
-        if (conexion.conectar()) {
-            conexion.desconectar();
-        }
     }
 
     public void registrarUsuario(Usuario user) {
