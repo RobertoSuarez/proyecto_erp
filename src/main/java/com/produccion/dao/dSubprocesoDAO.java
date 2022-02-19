@@ -7,10 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author HP
- */
 public class dSubprocesoDAO {
 
     private Conexion conexion;
@@ -31,8 +27,6 @@ public class dSubprocesoDAO {
                 + "  where g.idgrupo=5 and g.codigo='5' and sg.codigo='5.2' and c.codigo='5.2.1'\n"
                 + " order by sc.idsubcuenta");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -58,8 +52,6 @@ public class dSubprocesoDAO {
                 + "	and (c.codigo='5.2.2' or c.codigo='5.3.1' or c.codigo='5.3.2')\n"
                 + "	order by sc.idsubcuenta");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos

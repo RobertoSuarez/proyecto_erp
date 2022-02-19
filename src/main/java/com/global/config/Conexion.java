@@ -116,6 +116,7 @@ public class Conexion implements Serializable {
         return false;
     }
 
+
    //  MÉTODO DESCONECTAR PARA CERRAR UNA CONEXIÓN A LA BASE DE DATOS
     public boolean desconectar() {
         try {
@@ -139,7 +140,7 @@ public class Conexion implements Serializable {
             result = statement.executeQuery(sql);
         } catch (SQLException ex) {
             System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
-        }
+        } 
         return result;
     }
 
@@ -179,28 +180,25 @@ public class Conexion implements Serializable {
         return result;
     }
 
-    // MÉTODO PARA PRODUCCIÓN
+    /* MÉTODO PARA PRODUCCIÓN
     public int insertar(String sql) {
         int retorno = -1;
         try {
             if (conectar()) {
-                System.out.println(retorno = statement.executeUpdate(sql));
+                retorno = statement.executeUpdate(sql);
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
-                System.out.println(retorno + "HOLIS");
             }
         } catch (SQLException exc) {
-            System.out.println(sql);
             mensaje = exc.getMessage();
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje + " AQUI");
         }
         desconectar();
         return retorno;
-    }
+    }*/
 
     //  OTRO MÉTODO PARA PRODUCCIÓN
-    public int ejecutar(String sql) {
+    public int insertar(String sql) {
         int retorno = -1;
         try {
             if (conectar()) {
@@ -209,10 +207,8 @@ public class Conexion implements Serializable {
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
         } catch (SQLException exc) {
-            System.out.println(sql);
             mensaje = exc.getMessage();
             tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
         } finally {
             desconectar();
         }
