@@ -128,11 +128,11 @@ public class UsuarioDAO {
         Usuario user;
         String sentencia = "";
             try {
-                conexion.Conectar();
+                conexion.conectar();
                 sentencia = String.format(
                         "SELECT \"idUsuario\", nombre, apellido, username, \"fechaCreacion\", habilitado, email\n" +
 "	FROM public.usuario;");
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 while (result.next()) {
                     user = new Usuario();
                     user.setIdUsuario(result.getInt(1));
@@ -145,6 +145,7 @@ public class UsuarioDAO {
                     user.setEmail(result.getString(7));
                     listOfUsers.add(user);
                 }
+                conexion.desconectar();
                 
             } catch (SQLException e) {
                 System.out.println(e.toString() + "EBERT");
