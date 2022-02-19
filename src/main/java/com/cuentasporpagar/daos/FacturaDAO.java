@@ -527,16 +527,17 @@ public class FacturaDAO {
         Conexion conn = new Conexion();
         String query = "select idfactura, nfactura, descripcion, importe, pagado, fecha, vencimiento, estado, idproveedor, idasiento\n"
                 + "from factura\n"
-                + "where \"idfactura\"=?;";
+                + "where \"idfactura\"="+id+";";
         try
         {
-            conn.conectar();
-
-            //Statement stmt = conn.conex.createStatement();
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
-            stmt.setInt(1, id);
-
-            ResultSet rs = stmt.executeQuery();
+//            conn.conectar();
+//
+//            //Statement stmt = conn.conex.createStatement();
+//            PreparedStatement stmt = conn.conex.prepareStatement(query);
+//            stmt.setInt(1, id);
+//
+//            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = conn.ejecutarSql(query);
             while (rs.next())
             {
                 fac.setId(rs.getInt("idfactura"));
@@ -557,13 +558,7 @@ public class FacturaDAO {
             return null;
         } finally
         {
-            try
-            {
-                conn.conex.close();
-            } catch (SQLException ex)
-            {
-                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            conn.desconectar();
         }
 
         return fac;
@@ -574,21 +569,22 @@ public class FacturaDAO {
         List<Factura> lista = new ArrayList<>();
 
         Conexion conn = new Conexion();
-        String query = "select * from select_fac_pro(?, ?, ?);";
+        String query = "select * from select_fac_pro('"+desde+"','"+hasta+"',"+opcion+");";
 
         try
         {
-            conn.conectar();
+            
+//            conn.conectar();
+//
+//            //Statement stmt = conn.conex.createStatement();
+//            PreparedStatement stmt = conn.conex.prepareStatement(query);
+//            // Establecemos los argumentos.
+//            stmt.setDate(1, java.sql.Date.valueOf(desde));
+//            stmt.setDate(2, java.sql.Date.valueOf(hasta));
+//            stmt.setInt(3, opcion);
+//            //stmt.setObject(1, new java.sql.Date());
 
-            //Statement stmt = conn.conex.createStatement();
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
-            // Establecemos los argumentos.
-            stmt.setDate(1, java.sql.Date.valueOf(desde));
-            stmt.setDate(2, java.sql.Date.valueOf(hasta));
-            stmt.setInt(3, opcion);
-            //stmt.setObject(1, new java.sql.Date());
-
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = conn.ejecutarSql(query);
             while (rs.next())
             {
                 Factura fac = new Factura();
@@ -623,13 +619,7 @@ public class FacturaDAO {
             return null;
         } finally
         {
-            try
-            {
-                conn.conex.close();
-            } catch (SQLException ex)
-            {
-                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            conn.desconectar();
         }
 
         return lista;
