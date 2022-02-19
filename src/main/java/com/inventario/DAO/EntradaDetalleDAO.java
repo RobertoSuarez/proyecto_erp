@@ -6,7 +6,7 @@ package com.inventario.DAO;
 
 import com.global.config.Conexion;
 import com.inventario.models.EntradaDetalleInventario;
-import com.produccion.dao.ResulSet;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
