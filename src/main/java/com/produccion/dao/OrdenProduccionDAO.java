@@ -126,9 +126,6 @@ public class OrdenProduccionDAO {
                 + "	inner join tipo as t on t.cod=a.id_tipo\n"
                 + "	where df.codigo_formula=" + codigo + ";");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
-            //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
@@ -148,7 +145,6 @@ public class OrdenProduccionDAO {
         sentenciaSql = String.format("select estado from formula \n"
                 + "	where codigo_formula=" + id_formula + ";");
         try {
-            conexion.conectar();
             resultSet = conexion.ejecutarSql(sentenciaSql);
             while (resultSet.next()) {
                 verifica = resultSet.getBoolean("estado");
@@ -167,9 +163,6 @@ public class OrdenProduccionDAO {
                 + "	((tiempo_unidad*"+unidad+")*cifunidad) as CIF from formula\n"
                 + "	where codigo_formula="+codigo_formula+";");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
-            //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {

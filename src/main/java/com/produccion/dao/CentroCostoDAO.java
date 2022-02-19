@@ -29,7 +29,7 @@ public class CentroCostoDAO {
                 centro.add(new CentroCosto(resultSet.getInt("codigo_centroc"), resultSet.getString("nombre"),
                         resultSet.getString("descripcion"), resultSet.getString("identificador")));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
             conexion.desconectar();
@@ -44,8 +44,6 @@ public class CentroCostoDAO {
                     + "	VALUES ('" + centro.getNombre() + "', '" + centro.getDescripcion() + "', '" + centro.getIdentificador() + "')";
             //enviamos la sentencia
             conexion.ejecutarSql(sql);
-            conexion.desconectar();
-
         } catch (Exception e) {
         } finally {
             conexion.desconectar();
