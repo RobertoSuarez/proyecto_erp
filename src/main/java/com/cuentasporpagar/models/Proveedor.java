@@ -213,8 +213,8 @@ public class Proveedor {
         try {
             conn.conectar();
             
-            //Statement stmt = conn.conex.createStatement();
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
+            //Statement stmt = conn.connection.createStatement();
+            PreparedStatement stmt = conn.connection.prepareStatement(query);
             stmt.setInt(1, idproveedor);
             
             ResultSet rs = stmt.executeQuery();
@@ -230,7 +230,7 @@ public class Proveedor {
                 pro.setContacto(rs.getString("contacto"));
                 pro.setTelefono(rs.getString("estado"));
             }
-            conn.conex.close();
+            conn.connection.close();
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

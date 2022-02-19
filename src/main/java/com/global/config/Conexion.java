@@ -16,18 +16,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class Conexion implements Serializable {
 
-    public Connection conex;
-    private java.sql.Statement st;
-    private ResultSet lector;
+    public Connection connection;
+    private Statement statement;
+    private ResultSet result;
     private boolean estado;
     private String mensaje;
     private boolean transaccionIniciada;
     private FacesMessage.Severity tipoMensaje;
 
     //Nuevos parametros estandarizados
-    private Connection connection;
-    private Statement statement;
-    private ResultSet result;
 
     //Credenciales para la conexion
     private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
@@ -60,11 +57,11 @@ public class Conexion implements Serializable {
 
     //EBERT-- LO USO
     public Connection getCnx() {
-        return conex;
+        return connection;
     }
 
     public void setCnx(Connection conex) {
-        this.conex = conex;
+        this.connection = conex;
 
     }
 
@@ -85,11 +82,11 @@ public class Conexion implements Serializable {
     }
 
     public Connection getConexion() {
-        return conex;
+        return connection;
     }
 
-    public ResultSet getLector() {
-        return lector;
+    public ResultSet getResult() {
+        return result;
     }
 
     public FacesMessage.Severity getTipoMensaje() {
@@ -101,7 +98,7 @@ public class Conexion implements Serializable {
     }
 
     //  MÉTODO CONECTAR PARA INICIAR UNA CONEXIÓN A LA BASE DE DATOS
-    public boolean conectar() {
+   public boolean conectar() {
         try {
             try {
                 Class.forName("org.postgresql.Driver");
@@ -151,7 +148,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         try {
             if (conectar()) {
-                st.executeQuery(sql);
+                statement.executeQuery(sql);
                 mensaje = "El procedimiento se ejecutó correctamente";
                 retorno = 1;
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -187,7 +184,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         try {
             if (conectar()) {
-                System.out.println(retorno = st.executeUpdate(sql));
+                System.out.println(retorno = statement.executeUpdate(sql));
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
                 System.out.println(retorno + "HOLIS");
@@ -207,7 +204,7 @@ public class Conexion implements Serializable {
         int retorno = -1;
         try {
             if (conectar()) {
-                retorno = st.executeUpdate(sql);
+                retorno = statement.executeUpdate(sql);
                 mensaje = "Se guardó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
@@ -227,10 +224,10 @@ public class Conexion implements Serializable {
         String valor = "";
         try {
             if (conectar()) {
-                st = conex.createStatement();
-                lector = st.executeQuery(consulta);
-                if (lector.next()) {
-                    valor = lector.getString(indx);
+                statement = connection.createStatement();
+                result = statement.executeQuery(consulta);
+                if (result.next()) {
+                    valor = result.getString(indx);
                 }
                 desconectar();
                 mensaje = "Se insertó correctamente : ";
@@ -252,7 +249,7 @@ public class Conexion implements Serializable {
     public void Ejecutar2(String sql) {
         try {
             if (conectar()) {
-                st.executeUpdate(sql);
+                statement.executeUpdate(sql);
             }
         } catch (SQLException exc) {
             System.out.print(exc);
@@ -263,11 +260,11 @@ public class Conexion implements Serializable {
 
     //  RRHH
     public boolean iniciarTransaccion() throws SQLException, ClassNotFoundException {
-        if (conex == null || !(conex.isClosed())) {
+        if (connection == null || !(connection.isClosed())) {
             Class.forName(classForName);
-            conex = DriverManager.getConnection(url, usuario, clave);
-            conex.setAutoCommit(false);
-            st = conex.createStatement();
+            connection = DriverManager.getConnection(url, usuario, clave);
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
             estado = true;
             transaccionIniciada = true;
             return estado;
@@ -278,7 +275,7 @@ public class Conexion implements Serializable {
 
     public void ejecutarInsertarToTrnasaccion(String tabla, String campos, String valores) throws SQLException {
         if (transaccionIniciada) {
-            st.executeUpdate("INSERT INTO public." + tabla + "(" + campos + ")" + "VALUES(" + valores + ")");
+            statement.executeUpdate("INSERT INTO public." + tabla + "(" + campos + ")" + "VALUES(" + valores + ")");
         } else {
             throw new SQLException("Debe ejecutar primero la funcion iniciarTransaccion()");
         }
@@ -286,9 +283,9 @@ public class Conexion implements Serializable {
 
     public void finalizarTransaccion(boolean conmit) throws SQLException {
         if (conmit) {
-            conex.commit();
+            connection.commit();
         } else {
-            conex.rollback();
+            connection.rollback();
         }
         desconectar();
     }
@@ -303,7 +300,7 @@ public class Conexion implements Serializable {
         }
         try {
             if (conectar()) {
-                lector = st.executeQuery(sql);
+                result = statement.executeQuery(sql);
             }
         } catch (SQLException exc) {
             System.out.println(sql);
@@ -312,7 +309,7 @@ public class Conexion implements Serializable {
             System.out.println(mensaje);
             desconectar();
         }
-        return lector;
+        return result;
     }
 
     //  Insertar con tres parámetros
@@ -321,7 +318,7 @@ public class Conexion implements Serializable {
         String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ")";
         try {
             if (conectar()) {
-                retorno = st.executeUpdate(sql);
+                retorno = statement.executeUpdate(sql);
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
             }
@@ -342,10 +339,10 @@ public class Conexion implements Serializable {
         String sql = "INSERT INTO public." + tabla + " (" + campos + ")" + " VALUES(" + valores + ");";
         try {
             if (conectar()) {
-                retorno = st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-                lector = st.executeQuery("SELECT MAX(" + id + ") AS ID FROM public." + tabla + ";");
-                if (lector.next()) {
-                    retorno = lector.getInt("ID");
+                retorno = statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+                result = statement.executeQuery("SELECT MAX(" + id + ") AS ID FROM public." + tabla + ";");
+                if (result.next()) {
+                    retorno = result.getInt("ID");
                 }
                 mensaje = "Se insertó correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;
@@ -366,7 +363,7 @@ public class Conexion implements Serializable {
         String sql = "SELECT public." + procedure + "(" + parametros + ");";
         try {
             if (conectar()) {
-                st.execute(sql);
+                statement.execute(sql);
                 desconectar();
             }
         } catch (SQLException exc) {
@@ -385,7 +382,7 @@ public class Conexion implements Serializable {
         String sql = "UPDATE " + tabla + " SET " + camposModificados + " WHERE " + restrinciones;
         try {
             if (conectar()) {
-                retorno = st.executeUpdate(sql);
+                retorno = statement.executeUpdate(sql);
                 desconectar();
                 mensaje = "Se modifico correctamente : ";
                 tipoMensaje = FacesMessage.SEVERITY_INFO;

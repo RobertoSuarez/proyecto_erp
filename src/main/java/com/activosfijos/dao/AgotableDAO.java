@@ -45,7 +45,7 @@ public class AgotableDAO {
         try {
             conexion.conectar();
             // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
+            PreparedStatement st = conexion.connection.prepareStatement(
                     "Select *from activos_fijos inner join fijo_tangible_agotable \n"
                     + "on fijo_tangible_agotable.id_activo_fijo = activos_fijos.id_activo_fijo where estado='habilitado';");
             // Ejecución
@@ -60,7 +60,7 @@ public class AgotableDAO {
                 listaagotable.setId_empresa(rs.getInt("id_empresa"));
                 listaagotable.setStock(rs.getInt("stock"));
                 listaagotable.setIdproveedor(rs.getInt("idproveedor"));
-               // listaagotable.setProveedor(rs.getString("proveedor"));
+                // listaagotable.setProveedor(rs.getString("proveedor"));
                 listaagotable.setNumero_factura(rs.getString("numero_factura"));
                 listaago.add(listaagotable);
             }
@@ -81,7 +81,7 @@ public class AgotableDAO {
         try {
             conexion.conectar();
             // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
+            PreparedStatement st = conexion.connection.prepareStatement(
                     "Select *from activos_fijos inner join fijo_tangible_agotable \n"
                     + "on fijo_tangible_agotable.id_activo_fijo = activos_fijos.id_activo_fijo where estado='deshabilitado';");
             // Ejecución
@@ -96,7 +96,7 @@ public class AgotableDAO {
                 listaagotable.setId_empresa(rs.getInt("id_empresa"));
                 listaagotable.setStock(rs.getInt("stock"));
                 listaagotable.setIdproveedor(rs.getInt("idproveedor"));
-               // listaagotable.setProveedor(rs.getString("proveedor"));
+                // listaagotable.setProveedor(rs.getString("proveedor"));
                 listaagotable.setNumero_factura(rs.getString("numero_factura"));
                 listaago.add(listaagotable);
             }

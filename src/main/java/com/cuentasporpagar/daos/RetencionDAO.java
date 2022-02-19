@@ -27,7 +27,7 @@ public class RetencionDAO {
                 + "from retencion as r;";
         try {
             conn.conectar();
-            Statement stmt = conn.conex.createStatement();
+            Statement stmt = conn.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 Retencion retencion = new Retencion();
@@ -41,7 +41,7 @@ public class RetencionDAO {
 
                 retenciones.add(retencion);
             }
-            conn.conex.close();
+            conn.connection.close();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
