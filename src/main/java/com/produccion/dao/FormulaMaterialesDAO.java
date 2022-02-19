@@ -20,17 +20,15 @@ public class FormulaMaterialesDAO {
     public FormulaMaterialesDAO() {
         conexion = new Conexion();
     }
-
+    ///AQUI-----------------------------------------------
     public int InsertarMateriales(FormulaMateriales materiales) {
         try {
-            conexion.Conectar();
+            conexion.conectar();
             String consulta = "INSERT INTO public.detalle_formula(\n"
                     + "	codigo_formula, cantidad_unitaria, unidad_medida, precio, codigo_producto,codigo_subproceso)\n"
                     + "	VALUES (" + materiales.getCodigFormula() + ", " + materiales.getCantidad() + ", '" + materiales.getUnidadMedida() + "',"
                     + materiales.getPrecio() + ", " + materiales.getCodigoProducto() +", " + materiales.getCodigoSuproceso()+ ");";
             return conexion.insertar(consulta);
-        } catch (SQLException e) {
-            return -1;
         } finally {
             conexion.desconectar();
         }

@@ -91,7 +91,7 @@ public class solicitudOrdenDAO {
     public int idSolicitud() {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             int id = -1;
             sentenciaSql = "select max(codigo_orden)as ultimo from orden_produccion;";
             //enviamos la sentencia
