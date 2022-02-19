@@ -131,7 +131,7 @@
                                                                      styleClass="ui-button-success p-mr-2 p-mb-2"/>
                                                 </div>
                                                 <div class="p-col-12">
-                                                    <p:dataTable >
+                                                    <p:dataTable>
 
                                                         <p:column headerText="Producto" width="12%" >
                                                             <h:outputText value=""/>
@@ -184,9 +184,12 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
-                        <p:dataTable editable="true" reflow="true"
+                        <p:dataTable 
+                            var="ListaEntradas" 
+                            value="#{EntradaMB.listaEntradas}" 
+                            editable="true" reflow="true"
                                      editInitEvent="dblclick" editMode="cell"
-                                     value="">
+                                     >
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Entrada de Productos</span>
@@ -197,18 +200,18 @@
                                 </div>
                             </f:facet>
                             <p:column headerText="Nº de Comprobante" >
-                                <h:outputText value="----" />
+                                <h:outputText value="#{ListaEntradas.numComprobante}" />
                             </p:column>
 
                             <p:column headerText="Fecha" >
-                                <h:outputText value="----" />
+                                <h:outputText value="#{ListaEntradas.fecha}" />
                             </p:column>
 
                             <p:column headerText="Proveedor" >
-                                <h:outputText value="----" />
+                                <h:outputText value="#{ListaEntradas.idProveedor}" />
                             </p:column>
                             <p:column headerText="Bodega" >
-                                <h:outputText value="----" />
+                                <h:outputText value="#{ListaEntradas.idBodega}" />
                             </p:column>
 
                             <p:column headerText="Acción" filterStyle="display : none">

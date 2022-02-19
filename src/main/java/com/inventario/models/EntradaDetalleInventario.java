@@ -12,21 +12,21 @@ public class EntradaDetalleInventario {
 
 
 
-    private Integer idEntradaDetalle;
+    private int idEntradaDetalle;
 
-    private Integer idEntrada;
+    private int idEntrada;
 
-    private Integer idArticulo;
+    private int idArticulo;
 
-    private Integer cant;
+    private int cant;
 
-    private Short costo;
+    private int costo;
 
-    private Integer iva;
+    private int iva;
 
-    private Integer ice;
+    private int ice;
 
-    private Integer subtotal;
+    private int subtotal;
 
     private ArticulosInventario articulosInventario;
 
@@ -35,7 +35,7 @@ public class EntradaDetalleInventario {
     public EntradaDetalleInventario() {
     }
 
-    public EntradaDetalleInventario(Integer idEntradaDetalle, Integer idEntrada, Integer idArticulo, Integer cant, Short costo, Integer iva, Integer ice) {
+    public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, int cant, int costo, int iva, int ice, int subtotal) {
         this.idEntradaDetalle = idEntradaDetalle;
         this.idEntrada = idEntrada;
         this.idArticulo = idArticulo;
@@ -43,69 +43,83 @@ public class EntradaDetalleInventario {
         this.costo = costo;
         this.iva = iva;
         this.ice = ice;
+        this.subtotal = subtotal;
+        this.articulosInventario = null;
+    }
+    
+    public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, int cant, int costo, int iva, int ice, int subtotal, ArticulosInventario articulosInventario) {
+        this.idEntradaDetalle = idEntradaDetalle;
+        this.idEntrada = idEntrada;
+        this.idArticulo = idArticulo;
+        this.cant = cant;
+        this.costo = costo;
+        this.iva = iva;
+        this.ice = ice;
+        this.subtotal = subtotal;
+        this.articulosInventario = articulosInventario;
     }
 
-    public Integer getIdEntradaDetalle() {
+    public int getIdEntradaDetalle() {
         return idEntradaDetalle;
     }
 
-    public void setIdEntradaDetalle(Integer idEntradaDetalle) {
+    public void setIdEntradaDetalle(int idEntradaDetalle) {
         this.idEntradaDetalle = idEntradaDetalle;
     }
 
-    public Integer getIdEntrada() {
+    public int getIdEntrada() {
         return idEntrada;
     }
 
-    public void setIdEntrada(Integer idEntrada) {
+    public void setIdEntrada(int idEntrada) {
         this.idEntrada = idEntrada;
     }
 
-    public Integer getIdArticulo() {
+    public int getIdArticulo() {
         return idArticulo;
     }
 
-    public void setIdArticulo(Integer idArticulo) {
+    public void setIdArticulo(int idArticulo) {
         this.idArticulo = idArticulo;
     }
 
-    public Integer getCant() {
+    public int getCant() {
         return cant;
     }
 
-    public void setCant(Integer cant) {
+    public void setCant(int cant) {
         this.cant = cant;
     }
 
-    public Short getCosto() {
+    public int getCosto() {
         return costo;
     }
 
-    public void setCosto(Short costo) {
+    public void setCosto(int costo) {
         this.costo = costo;
     }
 
-    public Integer getIva() {
+    public int getIva() {
         return iva;
     }
 
-    public void setIva(Integer iva) {
+    public void setIva(int iva) {
         this.iva = iva;
     }
 
-    public Integer getIce() {
+    public int getIce() {
         return ice;
     }
 
-    public void setIce(Integer ice) {
+    public void setIce(int ice) {
         this.ice = ice;
     }
 
-    public Integer getSubtotal() {
+    public int getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(Integer subtotal) {
+    public void setSubtotal(int subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -117,6 +131,9 @@ public class EntradaDetalleInventario {
         this.articulosInventario = articulosInventario;
     }
 
+
+
+  
 
     
 

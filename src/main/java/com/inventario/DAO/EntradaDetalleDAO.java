@@ -6,10 +6,12 @@ package com.inventario.DAO;
 
 import com.global.config.Conexion;
 import com.inventario.models.EntradaDetalleInventario;
+import com.produccion.dao.ResulSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -41,13 +43,16 @@ public class EntradaDetalleDAO {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
-                ListEntrada.add(new EntradaDetalleInventario(resultSet.getInt("cod_articulo"),
-                        resultSet.getInt("id_entrada_detalle"),
-                        resultSet.getInt("id_entrada"),
-                        resultSet.getInt("cant"),
-                        resultSet.getShort("costo"),
-                        resultSet.getInt("iva"),
-                        resultSet.getInt("ice")));
+                EntradaDetalleInventario detalle = new EntradaDetalleInventario();
+                                        detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
+                                        detalle.setIdEntrada(resultSet.getInt("id_entrada")); 
+                                        detalle.setCant(resultSet.getInt("cant"));
+                                        detalle.setCosto(resultSet.getInt("costo"));
+                                        detalle.setIva(resultSet.getInt("ice"));
+                                        detalle.setIce(resultSet.getInt("ice"));
+                                        
+                ListEntrada.add(detalle);
+
             }
 
         } catch (SQLException e) {

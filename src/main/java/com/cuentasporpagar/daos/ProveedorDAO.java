@@ -113,7 +113,7 @@ public class ProveedorDAO extends Conexion {
                     + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                     + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
             ResultSet rs = this.conexion.ejecutarSql(query);
-            conexion.conex.close();
+            //conexion.conex.close();
             while (rs.next()) {
                 this.proveedor = new Proveedor();
                 this.proveedor.setIdProveedor(rs.getInt(1));
