@@ -94,7 +94,7 @@ public class Clientes_Con_Sin_DeudaDAO implements Serializable {
         if (conex.isEstado()) {
             try {
                 String sentencia = "select*from obtener_clientes_con_y_sin_deudas()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_Clientes_Con_Sin_Deudas.
                 while (result.next()) {
@@ -128,7 +128,7 @@ public class Clientes_Con_Sin_DeudaDAO implements Serializable {
             } finally {
 
                 //Se cierra la conexion.
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -152,7 +152,7 @@ public class Clientes_Con_Sin_DeudaDAO implements Serializable {
                 /* Se obtiene una TABLA con todos los cliente que deben y no 
                 deben*/
                 String sentencia = "select*from obtener_cliente_con_deudas()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 while (result.next()) {
 
@@ -185,7 +185,7 @@ public class Clientes_Con_Sin_DeudaDAO implements Serializable {
 
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -203,7 +203,7 @@ public class Clientes_Con_Sin_DeudaDAO implements Serializable {
                 /* Se obtiene una TABLA con todos los cliente que deben y no 
                 deben*/
                 String sentencia = "select*from obtener_cliente_sin_deudas()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 while (result.next()) {
 
@@ -236,7 +236,7 @@ public class Clientes_Con_Sin_DeudaDAO implements Serializable {
 
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }

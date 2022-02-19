@@ -200,7 +200,7 @@ public class TipoRubroDAO implements IDAO<TipoRubro> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

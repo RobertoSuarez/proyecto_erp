@@ -85,7 +85,7 @@ public class Cartera_X_EdadesDAO implements Serializable {
         if (conex.isEstado()) {
             try {
                 String sentencia = "select*from obtener_cartera_vencidaxedades()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                  //Instanciamos la clase AbonoDAO.        
                 AbonoDAO abonoDAO= new AbonoDAO();
@@ -137,7 +137,7 @@ public class Cartera_X_EdadesDAO implements Serializable {
             } finally {
 
                 //Se cierra la conéxión.
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -162,7 +162,7 @@ public class Cartera_X_EdadesDAO implements Serializable {
                 String sentencia = "select*from obtener_sum_carteraxedades("+idCliente+")";
                 
                 //Se ejecuta la sentencia.
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Se realiza el llenado de la lista_CarteraxEdades.
                 while (result.next()) {
@@ -190,7 +190,7 @@ public class Cartera_X_EdadesDAO implements Serializable {
             } finally {
 
                 //Se cierra la conexión.
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }

@@ -182,7 +182,7 @@ public class CiudadDAO implements IDAO<Ciudad> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return lista;
@@ -218,7 +218,7 @@ public class CiudadDAO implements IDAO<Ciudad> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return lista;

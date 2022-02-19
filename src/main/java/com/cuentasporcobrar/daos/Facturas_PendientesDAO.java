@@ -54,7 +54,7 @@ public class Facturas_PendientesDAO implements Serializable{
                 credito, con sus respectivo datos calculados como la 
                 fecha de vencimiento =fecha actual+diascredito */
                 String sentencia = "Select*from Obtener_Facturas_Pendientes()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Instanciamos la clase AbonoDAO.        
                 AbonoDAO abonoDAO= new AbonoDAO();
@@ -97,7 +97,7 @@ public class Facturas_PendientesDAO implements Serializable{
                         ""));
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -119,7 +119,7 @@ public class Facturas_PendientesDAO implements Serializable{
             try {
                 //Se obtiene una TABLA con 1 fila y 2 columnas.
                 String sentencia = "Select*From obtener_ventas_y_cartera_pendiente()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 result.next();
 
@@ -135,7 +135,7 @@ public class Facturas_PendientesDAO implements Serializable{
 
             } finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }

@@ -175,7 +175,7 @@ public class ProvinciaDAO implements IDAO<Provincia> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

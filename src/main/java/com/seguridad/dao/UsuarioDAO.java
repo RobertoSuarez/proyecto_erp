@@ -20,12 +20,8 @@ public class UsuarioDAO {
     ResultSet result;
 
     public UsuarioDAO() {
-
         conexion = new Conexion();
         encryptAES = new AES();
-        if (conexion.conectar()) {
-            conexion.desconectar();
-        }
     }
 
     public void registrarUsuario(Usuario user) {
@@ -74,9 +70,7 @@ public class UsuarioDAO {
                             result.getString("pswrd"),
                             result.getString("mail")
                     );
-
                 }
-                conexion.desconectar();
             } catch (SQLException e) {
                 System.out.println(e.toString());
             } finally {

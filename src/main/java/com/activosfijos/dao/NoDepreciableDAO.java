@@ -37,9 +37,9 @@ public class NoDepreciableDAO {
         String consulta2 = String.format("INSERT INTO public.fijo_tanginle_no_depreciable(\n"
                 + "	 id_activo_fijo,    plusvalia)"
                 + "VALUES ( '%s', '%s');", idactivofijo, activoNoDepreciable.getPlusvalia());
-        conexion.ejecutar(consulta2);
+        conexion.ejecutarSql(consulta2);
         String consulta3 = String.format("select *from listarnodepreciables();");
-        conexion.ejecutar(consulta3);
+        conexion.ejecutarSql(consulta3);
         System.out.println(consulta + "\n" + consulta2 + "\n funcion : " + consulta3);
         return true;
     }
@@ -52,13 +52,13 @@ public class NoDepreciableDAO {
                 + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
                 li.getFecha_adquisicion(), li.getIdproveedor(), li.getNumero_factura(), li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutar(consulta);
+        conexion.ejecutarSql(consulta);
         String consulta2 = String.format("UPDATE public.fijo_tanginle_no_depreciable\n"
                 + "	SET  plusvalia='%s'\n"
                 + "	WHERE id_activo_fijo='%s' ;", li.getPlusvalia(), li.getId_activo_fijo());
-        conexion.ejecutar(consulta2);
+        conexion.ejecutarSql(consulta2);
         String consulta3 = String.format("select *from listarnodepreciables();");
-        conexion.ejecutar(consulta3);
+        conexion.ejecutarSql(consulta3);
         System.out.println("update 1: " + consulta + "\n update 2: " + consulta2 + "\n funcion : " + consulta3);
         return true;
     }
@@ -68,7 +68,7 @@ public class NoDepreciableDAO {
         String sentencia = "";
         System.out.println("Conectado a la db");
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             sentencia
                     = "select *from activos_fijos, fijo_tanginle_no_depreciable, proveedor\n"
@@ -76,7 +76,7 @@ public class NoDepreciableDAO {
                     + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
                     + "and activos_fijos.estado='habilitado';";
             // Ejecución
-            result = conexion.ejecutarConsulta(sentencia);
+            result = conexion.ejecutarSql(sentencia);
 
             while (result.next()) {
                 ListaNoDepreciable listaNoDepreciable = new ListaNoDepreciable();
@@ -96,11 +96,11 @@ public class NoDepreciableDAO {
                 listaNP.add(listaNoDepreciable);
 
             }
-            conexion.cerrarConexion();
+            conexion.desconectar();
         } catch (SQLException e) {
             throw e;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return listaNP;
@@ -110,7 +110,7 @@ public class NoDepreciableDAO {
         List<ListaNoDepreciable> listaNP = new ArrayList<>();
         String sentencia = "";
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             // Consulta.
             sentencia
                     = "select *from activos_fijos, fijo_tanginle_no_depreciable, proveedor\n"
@@ -137,12 +137,12 @@ public class NoDepreciableDAO {
                 listaNoDepreciable.setNumero_factura(result.getString("numero_factura"));
                 listaNP.add(listaNoDepreciable);
             }
-            conexion.cerrarConexion();
+            conexion.desconectar();
         } catch (SQLException e) {
             e.toString();
-            conexion.cerrarConexion();
+            conexion.desconectar();
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return listaNP;
     }
@@ -151,14 +151,14 @@ public class NoDepreciableDAO {
         String consulta = "";
         try {
 
-            conexion.abrirConexion();
+            conexion.conectar();
             consulta = String.format("SELECT public.deshabilitarnodepreciable(" + li.getId_activo_fijo() + ")");
-            conexion.ejecutar(consulta);
-            conexion.cerrarConexion();
-        } catch (SQLException e) {
+            conexion.ejecutarSql(consulta);
+            conexion.desconectar();
+        } catch (Exception e) {
             System.out.println(consulta);
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return true;
     }
@@ -166,14 +166,14 @@ public class NoDepreciableDAO {
     public boolean habilitarnoDepreciable(ActivoNoDepreciable li) throws SQLException {
         String consulta = "";
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             consulta = String.format("SELECT public.habilitarnodepreciable(" + li.getId_activo_fijo() + ")");
-            conexion.ejecutar(consulta);
-            conexion.cerrarConexion();
-        } catch (SQLException e) {
+            conexion.ejecutarSql(consulta);
+            conexion.desconectar();
+        } catch (Exception e) {
             System.out.println(consulta);
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return true;
     }

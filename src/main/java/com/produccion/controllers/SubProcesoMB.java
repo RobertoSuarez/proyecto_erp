@@ -187,7 +187,6 @@ public class SubProcesoMB implements Serializable {
                 limpiarCampos();
             }
         }
-
     }
 
     public boolean verificaListas(List<Costo> listaDsubproceso) {

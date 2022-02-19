@@ -17,10 +17,10 @@ import org.primefaces.PrimeFaces;
 public class GrupoManagedBean implements Serializable {
 
     private GrupoDAO grupoDAO;
-    
+
     private List<Grupo> listaGrupos;
     private List<SubGrupo> listSubGrupos;
-    
+
     private Grupo grupo, grupoActual;
     private String action;
     private String selectedGrupo;
@@ -28,10 +28,8 @@ public class GrupoManagedBean implements Serializable {
 
     public GrupoManagedBean() {
         grupoDAO = new GrupoDAO();
-        
         listaGrupos = new ArrayList<>();
         listSubGrupos = new ArrayList<>();
-        
         filteredGrupoList = new ArrayList<>();
         grupo = new Grupo();
         grupoActual = new Grupo();
@@ -84,7 +82,7 @@ public class GrupoManagedBean implements Serializable {
         }
     }
 
-    public void form(boolean editable) {        
+    public void form(boolean editable) {
         if (!editable) {
             grupo = new Grupo();
             int codigo = grupoDAO.getUltimoCodigo();

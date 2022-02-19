@@ -225,7 +225,7 @@ public class EmpresaDAO implements IDAO<Empresa> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

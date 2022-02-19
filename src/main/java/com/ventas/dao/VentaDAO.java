@@ -32,8 +32,8 @@ public class VentaDAO {
         try {
             ResultSet rs = null;
 
-            this.con.abrirConexion();
-            rs = this.con.consultar("select idventa, secuencia from public.venta order by idventa desc limit 1;");
+            this.con.conectar();
+            rs = this.con.ejecutarSql("select idventa, secuencia from public.venta order by idventa desc limit 1;");
             int idVenta = 1;
             int secuenciaActual = 1;
             
@@ -54,7 +54,7 @@ public class VentaDAO {
                     + "', 1, " + ventaActual.getSecuencia() + ", " + ventaActual.getAutorizacion() + ", '" + ventaActual.getFechaEmision() + "', '" + ventaActual.getFechaAutorizacion()
                     + "', " + ventaActual.getBase12() + ", " + ventaActual.getBase0() + ", 0, " + ventaActual.getIva() + ", " + ventaActual.getIce() + ", " + ventaActual.getTotalFactura() + ")";
             System.out.println(query);
-            this.con.consultar(query);
+            this.con.ejecutarSql(query);
 
             
             //Verificación de forma de pago a crédito
@@ -62,21 +62,21 @@ public class VentaDAO {
                 query = "select ingresar_plan_de_pago(" + ventaActual.getIdVenta() + ", " + ventaActual.getDiasCredito() + ", '" + ventaActual.getFechaVenta() + "', "
                         + ventaActual.getTotalFactura() + ", 0.1)";
                 System.out.println(query);
-                this.con.consultar(query);
+                this.con.ejecutarSql(query);
             }
 
-            this.con.cerrarConexion();
+            this.con.desconectar();
 
             System.out.println("Venta Guardada exitosamente");
 
             return ventaActual.getIdVenta();
         } catch (Exception e) {
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.con.cerrarConexion();
+            this.con.desconectar();
         }
         return 0;
     }
@@ -85,8 +85,8 @@ public class VentaDAO {
     public List<Venta> TodasVentas() throws SQLException {
         List<Venta> ventas = new ArrayList<>();
 
-        this.con.abrirConexion();
-        ResultSet rs = this.con.consultar("select * from public.venta order by fechaventa desc;");
+        this.con.conectar();
+        ResultSet rs = this.con.ejecutarSql("select * from public.venta order by fechaventa desc;");
 
         Venta venta = new Venta();
 
@@ -135,7 +135,7 @@ public class VentaDAO {
             
         }
 
-        this.con.cerrarConexion();
+        this.con.desconectar();
 
         return ventas;
     }

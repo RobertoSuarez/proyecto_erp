@@ -206,7 +206,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return amonestaciones;
@@ -241,7 +241,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return amonestaciones;
@@ -274,7 +274,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return amonestacion;
@@ -313,7 +313,7 @@ public class AmonestacionDAO implements IDAO<Amonestacion> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return amonestaciones;

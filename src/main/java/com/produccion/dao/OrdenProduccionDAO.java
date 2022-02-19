@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.produccion.dao;
 
 import com.global.config.Conexion;
@@ -16,10 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author HP
- */
 public class OrdenProduccionDAO {
 
     Conexion conexion;
@@ -34,8 +25,6 @@ public class OrdenProduccionDAO {
         List<OrdenProduccion> ordenProduccion = new ArrayList<>();
         sentenciaSql = String.format("select * from orden_produccion;");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -57,8 +46,6 @@ public class OrdenProduccionDAO {
                 + "	inner join articulos as a on rop.\"Codigo_producto\"=a.id\n"
                 + "	where op.codigo_orden=" + codigo_orden + ";");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -79,8 +66,6 @@ public class OrdenProduccionDAO {
                 + "	inner join articulos as a on f.codigo_producto=a.id\n"
                 + "	where f.codigo_producto=" + codigo_producto + ";");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -102,8 +87,6 @@ public class OrdenProduccionDAO {
                 + "	on f.codigo_proceso=pp.codigo_proceso\n"
                 + "	where f.codigo_formula=" + codigo_formula + ";");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
@@ -121,8 +104,6 @@ public class OrdenProduccionDAO {
         List<CentroCosto> centro = new ArrayList<>();
         sentenciaSql = String.format("select codigo_centroc,nombre from centro_costo;");
         try {
-            //llamamos a la conexion
-            conexion.conectar();
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos

@@ -29,6 +29,7 @@ public class solicitudOrdenDAO {
 
     public int insertarDetalleSolicitud(productosOrden producto) {
         try {
+            conexion.conectar();
             sentenciaSql = "INSERT INTO public.registro_orden_produccion(\n"
                     + "	codigo_orden, cantidad, unidad_medida, estado, \"Codigo_producto\")\n"
                     + "	VALUES ("+producto.getCodigoOrden()+","+producto.getCantidad()+",'"+producto.getUnidadMedida()+"','"
@@ -48,6 +49,7 @@ public class solicitudOrdenDAO {
 
     public int insertarSolicitud(SolicitudOrden orden) {
         try {
+            conexion.conectar();
             sentenciaSql = "INSERT INTO public.orden_produccion(fecha_orden, fecha_fin, descripcion, estado)\n"
                     + "	VALUES ('" + orden.getFecha_orden() + "', '" + orden.getFecha_fin() + "', "
                     + "'" + orden.getDescripcion() + "', '" + orden.getEstado() + "');";
@@ -91,7 +93,7 @@ public class solicitudOrdenDAO {
     public int idSolicitud() {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             int id = -1;
             sentenciaSql = "select max(codigo_orden)as ultimo from orden_produccion;";
             //enviamos la sentencia
