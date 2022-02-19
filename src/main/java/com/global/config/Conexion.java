@@ -401,25 +401,6 @@ public class Conexion implements Serializable {
         return retorno;
     }
 
-    public int insertarPro(String sql) {
-        int retorno = -1;
-        try {
-            if (conectar()) {
-                System.out.println(retorno = st.executeUpdate(sql));
-                mensaje = "Se insertó correctamente : ";
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-                System.out.println(retorno + "HOLIS");
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje + " AQUI");
-        }
-        desconectar();
-        return retorno;
-    }
-
 
     /**
     public boolean conectar() throws SQLException {
