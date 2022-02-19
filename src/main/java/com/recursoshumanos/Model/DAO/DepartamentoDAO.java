@@ -185,13 +185,13 @@ public class DepartamentoDAO implements IDAO<Departamento> {
                             result.getString("descripcion")
                     ));
                 }
-                conexion.cerrarConexion();
+                conexion.desconectar();
                 result.close();
                 return departamentos;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

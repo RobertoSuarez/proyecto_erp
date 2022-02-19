@@ -212,7 +212,7 @@ public class SuspencionDAO implements IDAO<Suspencion> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return suspenciones;
@@ -246,7 +246,7 @@ public class SuspencionDAO implements IDAO<Suspencion> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return suspenciones;
@@ -278,7 +278,7 @@ public Suspencion buscar(Empleado empleado) {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return suspencion;
@@ -318,7 +318,7 @@ public Suspencion buscar(Empleado empleado) {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return suspenciones;

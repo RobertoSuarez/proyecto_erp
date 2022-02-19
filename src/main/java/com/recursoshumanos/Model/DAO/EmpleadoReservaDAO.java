@@ -189,7 +189,7 @@ public class EmpleadoReservaDAO implements IDAO<EmpleadoReserva> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleadoReserva;
@@ -222,7 +222,7 @@ public class EmpleadoReservaDAO implements IDAO<EmpleadoReserva> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleadoReservas;

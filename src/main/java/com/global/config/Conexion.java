@@ -146,6 +146,42 @@ public class Conexion implements Serializable {
         return result;
     }
 
+    // MÉTODO PARA CUENTAS POR COBRAR
+    public int ejecutarProcedimiento(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                st.executeQuery(sql);
+                mensaje = "El procedimiento se ejecutó correctamente";
+                retorno = 1;
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            desconectar();
+        }
+        return retorno;
+    }
+
+    // MÉTODO PARA CONTABILIDAD
+    public int eliminar(String sql) {
+        int result = -1;
+        try {
+            conectar();
+            result = statement.executeUpdate(sql);
+            System.out.println("Se ha eliminado el registro");
+        } catch (SQLException e) {
+            System.out.println("No se ha podido eliminar el registro " + e.getMessage());
+        } finally {
+            desconectar();
+        }
+        return result;
+    }
+
     //Para modulo activos fijos
     public String obtenerValor(String consulta, int indx) {
         String valor = "";
@@ -379,26 +415,6 @@ public class Conexion implements Serializable {
     }
     **/
 
-    public int ejecutarProcedimiento(String sql) {
-        int retorno = -1;
-        try {
-            if (conectar()) {
-                st.executeQuery(sql);
-                mensaje = "El procedimiento se ejecutó correctamente";
-                retorno = 1;
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        } finally {
-            desconectar();
-        }
-        return retorno;
-    }
-
     /**
     public int ejecutar(String sql) {
         int retorno = -1;
@@ -419,23 +435,6 @@ public class Conexion implements Serializable {
         return retorno;
     }
 
-   **/
-
-    public int eliminar(String sql) {
-        int result = -1;
-        try {
-            conectar();
-            result = statement.executeUpdate(sql);
-            System.out.println("Se ha eliminado el registro");
-        } catch (SQLException e) {
-            System.out.println("No se ha podido eliminar el registro " + e.getMessage());
-        } finally {
-            desconectar();
-        }
-        return result;
-    }
-
-    /**
     public ResultSet consultar(String sql) {
         try {
             conectar();

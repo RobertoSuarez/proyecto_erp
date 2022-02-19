@@ -40,7 +40,7 @@ public class ProformaDAO {
     public void IngresarProforma(Proforma ProformaDetalle) throws SQLException {
         String procedimiento;
         int estado;
-        con.abrirConexion();
+        con.desconectar();
         try {
             procedimiento = "INSERT INTO public.proforma(idproforma, idcliente, id_empleado, fechacreacion, fechaactualizacion, fechaexpiracion, proformaterminada, aceptacioncliente, estado, fechaautorizacion, base12, base0, baseexcentoiva, iva12, ice, totalproforma)VALUES(" + ProformaDetalle.getId_proforma()
                     + "," + ProformaDetalle.getId_cliente() + "," + ProformaDetalle.getId_empleado()
@@ -51,16 +51,16 @@ public class ProformaDAO {
                     + "," + ProformaDetalle.getBase0() + "," + ProformaDetalle.getBase_excento_iva()
                     + "," + ProformaDetalle.getIva12() + "," + ProformaDetalle.getIce()
                     + "," + ProformaDetalle.getTotalproforma() + ")";
-            con.ejecutarConsulta(procedimiento);
-            con.cerrarConexion();
+            con.ejecutarSql(procedimiento);
+            con.desconectar();
 
         } catch (Exception e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
     }
 
@@ -68,7 +68,7 @@ public class ProformaDAO {
         String procedimiento;
         ResultSet rs;
         int estado, codigo;
-        con.abrirConexion();
+        con.desconectar();
         try {
             codigo = codigodetalleproforma();
             estado = 0;
@@ -76,20 +76,20 @@ public class ProformaDAO {
                     + "	iddetalleproforma, idproforma, codprincipal, cantidad, descuento, precio)"
                     + "	VALUES (" + codigo + "," + ProformaDetalle.getId_proforma() + "," + prod.getCodigo()
                     + "," + prod.getStock() + "," + prod.getDescuento() + "," + prod.getPrecioUnitario() + ");";
-            rs = con.ejecutarConsulta(procedimiento);
+            rs = con.ejecutarSql(procedimiento);
             if (rs == null) {
                 System.out.println("Detalle de proforma incorrectamente");
             } else {
                 System.out.println("Detalle proforma ingresado correctamente");
             }
-            con.cerrarConexion();
+            con.desconectar();
         } catch (Exception e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
     }
 
@@ -97,20 +97,20 @@ public class ProformaDAO {
         ResultSet rs = null;
         int idVenta = 1;
         try {
-            this.con.abrirConexion();
-            rs = this.con.ejecutarConsulta("select * from public.proforma order by idproforma desc limit 1");
+            this.con.desconectar();
+            rs = this.con.ejecutarSql("select * from public.proforma order by idproforma desc limit 1");
             while (rs.next()) {
                 idVenta = rs.getInt(1) + 1;
             }
-            this.con.cerrarConexion();
+            this.con.desconectar();
             return idVenta;
         } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
             return idVenta;
         }
     }
@@ -119,20 +119,20 @@ public class ProformaDAO {
         ResultSet rs = null;
         int idVenta = 1;
         try {
-            this.con.abrirConexion();
-            rs = this.con.ejecutarConsulta("select * from public.detalleproforma order by iddetalleproforma ASC");
+            this.con.desconectar();
+            rs = this.con.ejecutarSql("select * from public.detalleproforma order by iddetalleproforma ASC");
             while (rs.next()) {
                 idVenta = rs.getInt(1) + 1;
             }
-            this.con.cerrarConexion();
+            this.con.desconectar();
             return idVenta;
         } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
             return idVenta;
         }
     }
@@ -140,11 +140,11 @@ public class ProformaDAO {
     public List<Proforma> retornarProformas() throws SQLException {
         ResultSet rs;
         String consulta, estado;
-        con.abrirConexion();
+        con.desconectar();
         List<Proforma> listadocs = new ArrayList<>();
         try {
             consulta = "SELECT * FROM public.proforma ORDER BY idproforma ASC ";
-            rs = con.ejecutarConsulta(consulta);
+            rs = con.ejecutarSql(consulta);
             con.conex.close();
             if (rs == null) {
                 System.out.println("No existen registros");
@@ -192,14 +192,14 @@ public class ProformaDAO {
                     listadocs.add(prof);
                 }
             }
-            con.cerrarConexion();
+            con.desconectar();
         } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
         return listadocs;
     }
@@ -210,9 +210,9 @@ public class ProformaDAO {
         DetalleProforma details;
         List<DetalleProforma> listaitems = new ArrayList<>();
         consulta = "Select * from public.detalleproforma where idproforma=" + id + ";";
-        this.con.abrirConexion();
+        this.con.desconectar();
         try {
-            rs = this.con.consultar(consulta);
+            rs = this.con.ejecutarSql(consulta);
             if (rs == null) {
                 System.out.print("No existe ninguna proforma en la Base de datos");
             } else {
@@ -231,10 +231,10 @@ public class ProformaDAO {
         } catch (SQLException e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
         return listaitems;
 
@@ -243,17 +243,17 @@ public class ProformaDAO {
     public void cambiarEstadoProforma(String estado, int idproforma) throws SQLException {
         String consulta;
         ResultSet rs;
-        con.abrirConexion();
+        con.desconectar();
         try {
             consulta = "UPDATE public.proforma SET estado= '" + estado + "' WHERE idproforma = " + idproforma + ";";
-            this.con.consultar(consulta);
-            con.cerrarConexion();
+            this.con.ejecutarSql(consulta);
+            con.desconectar();
         } catch (Exception e) {
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
     }
 
@@ -262,10 +262,10 @@ public class ProformaDAO {
         int codigoventa=0;
         this.venta = new Venta();
         String consulta;
-        con.abrirConexion();
+        con.desconectar();
         try {
             consulta = "UPDATE public.proforma SET estado= '" + estado + "' WHERE idproforma = " + pr.id_proforma + ";";
-            this.con.consultar(consulta);
+            this.con.ejecutarSql(consulta);
             this.venta.setBase0(pr.getBase0());
             this.venta.setBase12(pr.getBase12());
             this.venta.setIdCliente(pr.getId_cliente());
@@ -302,13 +302,13 @@ public class ProformaDAO {
                     listSize += 1;
                 }
             }
-            con.cerrarConexion();
+            con.desconectar();
         } catch (SQLException e) {
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
         return codigoventa;
     }

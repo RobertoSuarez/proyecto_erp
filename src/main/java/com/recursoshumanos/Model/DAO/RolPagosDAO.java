@@ -175,7 +175,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return rolPagos;
@@ -191,7 +191,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.ejecutarConsulta(
+                result = conexion.ejecutarSql(
                         "SELECT round(COALESCE(SUM(valor)/12, 0)::numeric, 2) "
                         + "AS decimo FROM rol_de_pagos "
                         + "WHERE id_empleado = "
@@ -206,7 +206,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return decimo;
@@ -222,7 +222,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.ejecutarConsulta("SELECT COALESCE("
+                result = conexion.ejecutarSql("SELECT COALESCE("
                         + "horas_laboradas((SELECT "
                         + "empleado_puesto.id_empleado_puesto FROM "
                         + "empleado_puesto " + "WHERE "
@@ -237,7 +237,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return horas;
@@ -253,7 +253,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.ejecutarConsulta("SELECT COALESCE("
+                result = conexion.ejecutarSql("SELECT COALESCE("
                         + "horas_sumplementarias((SELECT empleado_puesto."
                         + "id_empleado_puesto FROM empleado_puesto "
                         + "WHERE empleado_puesto.id_empleado = "
@@ -267,7 +267,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return decimo;
@@ -283,7 +283,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.ejecutarConsulta("SELECT round("
+                result = conexion.ejecutarSql("SELECT round("
                         + "horas_sumplementarias('"
                         + rolPagos.getFechaGenerado()
                         + "'::DATE, " + rolPagos.getEmpleado().getId()
@@ -295,7 +295,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return decimo;
@@ -342,7 +342,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return roles;
@@ -386,7 +386,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

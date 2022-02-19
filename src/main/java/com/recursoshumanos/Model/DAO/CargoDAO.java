@@ -168,14 +168,14 @@ public class CargoDAO implements IDAO<Cargo>{
                     cargos.add(new Cargo(result.getInt("id_cargo"),
                                 result.getString("nombre")));
                 }
-                conexion.cerrarConexion();
+                conexion.desconectar();
                 result.close();
                 return cargos;
             } catch (SQLException ex) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

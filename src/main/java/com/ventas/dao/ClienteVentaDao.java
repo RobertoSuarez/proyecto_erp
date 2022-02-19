@@ -34,21 +34,21 @@ public class ClienteVentaDao implements Serializable {
                 + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                 + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico) where cl.idcliente = " + id + ";";
         try {
-            con.abrirConexion();
-            rs = con.ejecutarConsulta(query);
+            con.conectar();
+            rs = con.ejecutarSql(query);
             while (rs.next()) {
                 temp.setIdCliente(rs.getInt(1));
                 temp.setNombre(rs.getString(5));
                 temp.setIdentificacion(rs.getString(6));
             }
-            con.cerrarConexion();
+            con.desconectar();
         } catch (SQLException e) {
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
             System.out.println(e.getMessage());
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
         return temp;
     }
@@ -56,7 +56,7 @@ public class ClienteVentaDao implements Serializable {
     public List<ClienteVenta> ListarClientes() {
         List<ClienteVenta> clientes = new ArrayList<>();
         try {
-            this.con.abrirConexion();
+            this.con.conectar();
             String query = "select cl.idcliente, T.* from "
                     + "(select pn.idpersonanatural as IdNatural, null as IdJuridico, "
                     + "pr.id_persona, pn.nombre1||' '||pn.nombre2||' '||pn.apellido1||' '||pn.apellido2 as Nombre, pr.identificacion "
@@ -64,7 +64,7 @@ public class ClienteVentaDao implements Serializable {
                     + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
                     + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                     + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
-            ResultSet rs = this.con.ejecutarConsulta(query);
+            ResultSet rs = this.con.ejecutarSql(query);
             con.conex.close();
             while (rs.next()) {
                 this.clienteVenta = new ClienteVenta();
@@ -75,11 +75,11 @@ public class ClienteVentaDao implements Serializable {
             }
         } catch (Exception e) {
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.con.cerrarConexion();
+            this.con.desconectar();
         }
         return clientes;
     }
@@ -88,11 +88,11 @@ public class ClienteVentaDao implements Serializable {
         ResultSet rs = null;
         ClienteVenta temp = new ClienteVenta();
         try {
-            con.abrirConexion();
+            con.conectar();
             if (id.length() <= 10) {
-                rs = con.ejecutarConsulta("select * from public.buscarclientenatural('" + id.trim() + "')");
+                rs = con.ejecutarSql("select * from public.buscarclientenatural('" + id.trim() + "')");
             } else if (id.length() > 10) {
-                rs = con.ejecutarConsulta("select * from public.buscarclientejuridico('" + id.trim() + "')");
+                rs = con.ejecutarSql("select * from public.buscarclientejuridico('" + id.trim() + "')");
             } else {
                 rs = null;
             }
@@ -111,16 +111,16 @@ public class ClienteVentaDao implements Serializable {
                     temp.setContacto(rs.getString(7));
                 }
             }
-            con.cerrarConexion();
+            con.desconectar();
 
             return temp;
         } catch (Exception e) {
             System.out.println(e.toString());
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         } finally {
-            con.cerrarConexion();
+            con.desconectar();
         }
         return null;
     }
