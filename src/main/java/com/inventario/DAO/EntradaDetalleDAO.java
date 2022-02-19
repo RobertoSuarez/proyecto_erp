@@ -62,8 +62,8 @@ public class EntradaDetalleDAO {
         try {
             ResultSet rs = null;
 
-            this.conexion.abrirConexion();
-            rs = this.conexion.consultar("select cod from public.entrada_Detalle order by cod desc limit 1;");
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql("select cod from public.entrada_Detalle order by cod desc limit 1;");
             int codigo = 1;
 
             //Asignar los valores de la siguiente venta y secuencia.
@@ -78,16 +78,16 @@ public class EntradaDetalleDAO {
                     + "cod_articulo, id_entrada_detalle, id_entrada, cant, costo, iva, ice)"
                     + "VALUES(" + entradaDetalleInventario.getIdEntradaDetalle() + ",'" + entradaDetalleInventario.getIdEntradaDetalle() + "', " + entradaDetalleInventario.getCant() + ", " + entradaDetalleInventario.getCosto() + ", " + entradaDetalleInventario.getIva() + ", " + entradaDetalleInventario.getIce() + ")";
             System.out.println(query);
-            this.conexion.consultar(query);
+            this.conexion.ejecutarSql(query);
 
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
 
             System.out.println("Entrada Guardada exitosamente");
 
             return entradaDetalleInventario.getIdEntradaDetalle();
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
@@ -100,11 +100,11 @@ public class EntradaDetalleDAO {
         try {
             int idDetalle = 1;
             ResultSet rs = null;
-            this.conexion.abrirConexion();
+            this.conexion.conectar();
 
             //Recibir siguiente código de detalle venta
             String query = "select iddetalleventa from public.detalleventa order by iddetalleventa desc limit 1;";
-            rs = this.conexion.consultar(query);
+            rs = this.conexion.ejecutarSql(query);
 
             while (rs.next()) {
                 idDetalle = rs.getInt(1) + 1;
@@ -114,26 +114,26 @@ public class EntradaDetalleDAO {
             query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
                     + idProducto + "," + cantidad + "," + precio + ")";
             System.out.println(query);
-            this.conexion.consultar(query);
+            this.conexion.ejecutarSql(query);
 
             //Reducir stock
             int cantidadActual = 0;
             query = "select cantidad from public.productos where codprincipal = " + idProducto + ";";
-            rs = this.conexion.consultar(query);
+            rs = this.conexion.ejecutarSql(query);
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
             query = "update public.productos set cantidad = " + (cantidadActual - cantidad) + " where codprincipal = " + idProducto + ";";
-            this.conexion.ejecutar(query);
+            this.conexion.ejecutarSql(query);
 
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
 

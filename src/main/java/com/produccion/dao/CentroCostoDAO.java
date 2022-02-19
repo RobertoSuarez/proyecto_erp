@@ -54,17 +54,17 @@ public class CentroCostoDAO {
     public void insertarc(CentroCosto centro) {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
 
             String sql = "INSERT INTO public.centro_costo(nombre, descripcion, identificador)\n"
                     + "	VALUES ('" + centro.getNombre() + "', '" + centro.getDescripcion() + "', '" + centro.getIdentificador() + "')";
             //enviamos la sentencia
-            conexion.Ejecutar2(sql);
-            conexion.cerrarConexion();
+            conexion.ejecutarSql(sql);
+            conexion.desconectar();
 
         } catch (Exception e) {
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
     /**
@@ -77,19 +77,19 @@ public class CentroCostoDAO {
     public void updatec(CentroCosto centro) throws SQLException {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
 
             String sql = "UPDATE public.centro_costo\n"
                     + "	SET nombre='" + centro.getNombre() + "', descripcion='" + centro.getDescripcion() + "', identificador='" + centro.getIdentificador() + "'\n"
                     + "	WHERE identificador = '" + centro.getIdentificador() + "'";
             //enviamos la sentencia
-            conexion.ejecutar(sql);
-            conexion.cerrarConexion();
+            conexion.ejecutarSql(sql);
+            conexion.desconectar();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw e;
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
     /**
@@ -104,16 +104,16 @@ public class CentroCostoDAO {
 
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String sql = ("DELETE FROM public.centro_costo WHERE identificador = '" + aux + "'");
             //enviamos la sentencia
-            conexion.ejecutar(sql);
-            conexion.cerrarConexion();
+            conexion.ejecutarSql(sql);
+            conexion.desconectar();
 
         } catch (Exception e) {
             throw e;
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
 }
