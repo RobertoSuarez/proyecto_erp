@@ -44,7 +44,7 @@ public class CondicionesDAO implements Serializable {
       * @throws SQLException validador
       */
      public List<Condiciones> llenarP(boolean n) throws SQLException {
-          this.conexion.Conectar();
+          this.conexion.conectar();
           if (conexion.isEstado()) {
                try {
                     String sentencia = "SELECT c.descuento,c.diasneto,c.diasdescuento,\n"
@@ -78,11 +78,11 @@ public class CondicionesDAO implements Serializable {
                          c.setProveedor(p);
                          lista.add(c);
                     }
-                    conexion.cerrarConexion();
+                    conexion.desconectar();
                } catch (SQLException e) {
                     throw e;
                } finally {
-                    conexion.cerrarConexion();
+                    conexion.desconectar();
                }
           }
           return lista;
@@ -98,13 +98,13 @@ public class CondicionesDAO implements Serializable {
           if (conexion.isEstado()) {
                try {
                     String cadena = "select habilitarproveedor(" + n + ",'" + d + "')";
-                    conexion.ejecutar(cadena);                   
-                    conexion.cerrarConexion();
+                    conexion.ejecutarSql(cadena);                   
+                    conexion.desconectar();
                } catch (Exception e) {
                     throw e;
 
                } finally {
-                    conexion.cerrarConexion();
+                    conexion.desconectar();
                }
 
           }
@@ -118,7 +118,7 @@ public class CondicionesDAO implements Serializable {
       */
      public void insertarCondiciones(Condiciones c) throws Exception {
           try {
-               this.conexion.Conectar();
+               this.conexion.conectar();
                String sentencia = "INSERT INTO public.condiciones(descuento,"
                        + " diasneto, diasdescuento, cantdiasvencidos,"
                        + " descripcion, idproveedor)\n"
@@ -126,12 +126,12 @@ public class CondicionesDAO implements Serializable {
                        + "" + c.getCantDiasVencidos() + ",'" + c.getDescripcion() + "',"
                        + "(SELECT idproveedor FROM proveedor ORDER BY idproveedor DESC LIMIT 1));";
 
-               conexion.insertar(sentencia);
-               conexion.cerrarConexion();
-          } catch (SQLException e) {
+               conexion.ejecutarSql(sentencia);
+               conexion.desconectar();
+          } catch (Exception e) {
                throw e;
           } finally {
-               this.conexion.cerrarConexion();
+               this.conexion.desconectar();
           }
      }
      /**
@@ -144,7 +144,7 @@ public class CondicionesDAO implements Serializable {
      public void updateCondiciones(Condiciones c, int codigo) throws SQLException {
 
           try {
-               this.conexion.Conectar();
+               this.conexion.conectar();
                String cadena = "UPDATE public.condiciones set "
                        + "descuento = " + c.getDescuento() + ", "
                        + "diasneto = " + c.getDiasNeto() + ", "
@@ -152,12 +152,12 @@ public class CondicionesDAO implements Serializable {
                        + "cantdiasvencidos = " + c.getCantDiasVencidos() + ", "
                        + "descripcion = '" + c.getDescripcion() + "' "
                        + "WHERE idproveedor = " + codigo + "";
-               conexion.ejecutar(cadena);
-               conexion.cerrarConexion();
-          } catch (SQLException e) {
+               conexion.ejecutarSql(cadena);
+               conexion.desconectar();
+          } catch (Exception e) {
               throw  e;
           } finally {
-               this.conexion.cerrarConexion();
+               this.conexion.desconectar();
           }
      }
 }

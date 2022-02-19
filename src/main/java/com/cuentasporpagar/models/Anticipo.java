@@ -189,7 +189,7 @@ public class Anticipo {
         try {
             String queryAsiento = String.format("SELECT public.generateasientocotableexternal2('%s', '%s') as id_asiento", gson.toJson(asiento), gson.toJson(movimientos));
             System.out.println(queryAsiento);
-            conn.abrirConexion();
+            conn.conectar();
             
             Statement statement = conn.conex.createStatement();
             ResultSet data = statement.executeQuery(queryAsiento);
@@ -257,7 +257,7 @@ public class Anticipo {
         String query =  "update anticipo set \"importe\"=?, \"fecha\"=?, descripcion=?, \"id_proveedor\"=?, habilitado=?, referencia=?\n" +
                         "    where \"id_anticipo\"=?;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
             
             PreparedStatement stmt = conn.conex.prepareStatement(query);
             stmt.setDouble(1, this.importe);
@@ -295,7 +295,7 @@ public class Anticipo {
         Conexion conn = new Conexion();
         String query =  "delete from anticipo where id_anticipo=?;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
             
             PreparedStatement stmt = conn.conex.prepareStatement(query);
             stmt.setString(1, this.getId_anticipo());

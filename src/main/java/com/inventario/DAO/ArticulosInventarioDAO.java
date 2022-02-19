@@ -72,8 +72,8 @@ public class ArticulosInventarioDAO {
         
         try {
             String code = String.valueOf(id);
-            conexion.abrirConexion();
-            rs = conexion.ejecutarConsulta("select * from public.buscarproductocodigo(" + code.trim() + ")");
+            conexion.conectar();
+            rs = conexion.ejecutarSql("select * from public.buscarproductocodigo(" + code.trim() + ")");
             
             if (rs == null) {
                 System.out.println("No existen registros");
@@ -93,16 +93,16 @@ public class ArticulosInventarioDAO {
                     
                 }
             }
-            conexion.cerrarConexion();
+            conexion.desconectar();
 
             return temp;
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         finally{
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
 
         return null;

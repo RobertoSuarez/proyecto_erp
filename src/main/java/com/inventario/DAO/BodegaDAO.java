@@ -73,8 +73,8 @@ public class BodegaDAO {
         Bodega temp = new Bodega();
         try {
             String id = String.valueOf(codigo);
-            conexion.abrirConexion();
-            rs = conexion.ejecutarConsulta("select*from bodega where cod= " + id.trim());
+            conexion.conectar();
+            rs = conexion.ejecutarSql("select*from bodega where cod= " + id.trim());
 
             if (rs == null) {
                 System.out.println("No existe registro");
@@ -91,15 +91,15 @@ public class BodegaDAO {
                 }
                 
             }
-            conexion.cerrarConexion();
+            conexion.desconectar();
             return temp;
 
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return null;
     }

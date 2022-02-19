@@ -70,9 +70,7 @@ public class UsuarioDAO {
                             result.getString("pswrd"),
                             result.getString("mail")
                     );
-
                 }
-                //conexion.desconectar();
             } catch (SQLException e) {
                 System.out.println(e.toString());
             } finally {

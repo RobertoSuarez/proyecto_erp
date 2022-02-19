@@ -65,7 +65,7 @@ public class AbonoProveedorDAO {
         listaAbono = new ArrayList<>();
         if (conex.isEstado()) {
             try {
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaAbono.add(new AbonoProveedor(result.getString("referencia"),
                             result.getInt("idproveedor"), result.getObject("fecha", LocalDate.class),
@@ -77,7 +77,7 @@ public class AbonoProveedorDAO {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return listaAbono;
@@ -95,7 +95,7 @@ public class AbonoProveedorDAO {
         listafactura = new ArrayList<>();
         if (conex.isEstado()) {
             try {
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 while (result.next()) {
                     listafactura.add(new Factura(result.getString("nfactura"),
                             result.getFloat("importe"), result.getFloat("pagado"),
@@ -107,7 +107,7 @@ public class AbonoProveedorDAO {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return listafactura;
@@ -128,7 +128,7 @@ public class AbonoProveedorDAO {
                         + "where f.habilitar=1 and f.estado=1 and f.pagado<f.importe\n"
                         + "group by f.idproveedor,p.codigo,p.ruc,p.nombre) as x";
                 System.out.println(sentencia);
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaProveedor.add(new Proveedor(
                             result.getString("codigo"),
@@ -140,7 +140,7 @@ public class AbonoProveedorDAO {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return listaProveedor;
@@ -161,14 +161,14 @@ public class AbonoProveedorDAO {
                         abonoProveedor.getRuc(), abonoProveedor.getReferencia(),
                         abonoProveedor.getFecha(), abonoProveedor.getPeriodo(), estado);
                 System.out.println(sentencia);
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 while (result.next()) {
                     abonoProveedor.setIdAbonoProveedor(result.getInt("registro"));
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
     }
@@ -190,13 +190,13 @@ public class AbonoProveedorDAO {
                             abono.getIdAbonoProveedor(), selectedFactura.get(i).getPagado(),
                             selectedFactura.get(i).getNfactura(), opcion);
                     System.out.println(sentencia);
-                    result = conex.ejecutarConsulta(sentencia);
+                    result = conex.ejecutarSql(sentencia);
                 }
                 bandera = result.next();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return bandera;
@@ -245,14 +245,14 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
-                result = conex.ejecutarConsulta(cadena);
+                result = conex.ejecutarSql(cadena);
                 while (result.next()) {
                     iddiario = result.getInt("iddiario");
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return iddiario;
@@ -306,7 +306,7 @@ public class AbonoProveedorDAO {
      * @param idabono idabono para actualizar el estado
      */
     public void update_abono(int estado, int idabono) {
-        conex.cerrarConexion();
+        conex.desconectar();
         if (conex.isEstado()) {
             try {
                 String sentencia = String.format("select update_abono('%1$s','%2$s') as updateAbono",
@@ -316,7 +316,7 @@ public class AbonoProveedorDAO {
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
     }
@@ -333,11 +333,11 @@ public class AbonoProveedorDAO {
                 String cadena = "SELECT public.generateasientocotableexternal('"
                         + a + "','" + b + "')";
                 System.out.println(cadena);
-                conex.ejecutarConsulta(cadena);
+                conex.ejecutarSql(cadena);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
     }
@@ -347,14 +347,14 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String cadena = "select idsubcuenta from subcuenta where nombre = '" + g + "'";
-                result = conex.ejecutarConsulta(cadena);
+                result = conex.ejecutarSql(cadena);
                 while (result.next()) {
                     n = result.getInt("idsubcuenta");
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return n;
@@ -373,14 +373,14 @@ public class AbonoProveedorDAO {
                 System.out.println(importe + "-" + ruc);
                 String sentencia = "select search_date_payment(" + importe + ",'" + ruc + "') as idabono;";
                 System.out.println(sentencia);
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 while (result.next()) {
                     abonoProveedor.setIdAbonoProveedor(result.getInt("idabono"));
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
     }
@@ -394,7 +394,7 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String sentencia = String.format("select * from select_date_payment(%1$d);", idabono);
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 listaAbono.clear();
                 while (result.next()) {
                     listaAbono.add(new AbonoProveedor(result.getInt("idabonopro"),
@@ -407,7 +407,7 @@ public class AbonoProveedorDAO {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
     }
@@ -422,7 +422,7 @@ public class AbonoProveedorDAO {
         if (conex.isEstado()) {
             try {
                 String sentencia = String.format("select * from select_date_invoice(%1$d);", idabono);
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 listafactura.clear();
                 while (result.next()) {
                     listafactura.add(new Factura(result.getString("nfactura"), result.getFloat("importe"),
@@ -433,7 +433,7 @@ public class AbonoProveedorDAO {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conex.cerrarConexion();
+                conex.desconectar();
             }
         }
         return listafactura;

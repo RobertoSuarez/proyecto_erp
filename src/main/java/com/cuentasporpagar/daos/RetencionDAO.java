@@ -26,7 +26,7 @@ public class RetencionDAO {
         String query = "select r.\"idRetencion\", r.\"fechaEmision\", r.\"nComprobanteRetencion\", r.\"idFacturaCompra\", r.\"idTipoComprobante\""
                 + "from retencion as r;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
             Statement stmt = conn.conex.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
