@@ -20,7 +20,7 @@ public class FormulaMaterialesDAO {
     public FormulaMaterialesDAO() {
         conexion = new Conexion();
     }
-
+    ///AQUI-----------------------------------------------
     public int InsertarMateriales(FormulaMateriales materiales) {
         try {
             conexion.conectar();
@@ -29,8 +29,6 @@ public class FormulaMaterialesDAO {
                     + "	VALUES (" + materiales.getCodigFormula() + ", " + materiales.getCantidad() + ", '" + materiales.getUnidadMedida() + "',"
                     + materiales.getPrecio() + ", " + materiales.getCodigoProducto() +", " + materiales.getCodigoSuproceso()+ ");";
             return conexion.insertar(consulta);
-        } catch (Exception e) {
-            return -1;
         } finally {
             conexion.desconectar();
         }

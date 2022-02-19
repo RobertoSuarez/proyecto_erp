@@ -401,6 +401,7 @@ public class Conexion implements Serializable {
         return retorno;
     }
 
+
     /**
     public boolean conectar() throws SQLException {
         try {
@@ -418,7 +419,7 @@ public class Conexion implements Serializable {
             return false;
         }
         return true;
-    }    
+    }
 
     public void desconectar() {
         try {
@@ -463,6 +464,10 @@ public class Conexion implements Serializable {
         }
         return result;
     }
+
+
+
+
 
     public void Conectar() throws SQLException {
         try {

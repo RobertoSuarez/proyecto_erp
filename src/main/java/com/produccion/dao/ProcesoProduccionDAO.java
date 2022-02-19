@@ -108,7 +108,7 @@ public class ProcesoProduccionDAO {
                     + "	SET nombre='" + proceso.getNombre() + "', descripcion='" + proceso.getDescripcion() + "'\n"
                     + "	WHERE codigo_proceso=" + proceso.getCodigo_proceso() + ";";
             //enviamos la sentencia
-            return conexion.ejecutar(sentenciaSql);
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {

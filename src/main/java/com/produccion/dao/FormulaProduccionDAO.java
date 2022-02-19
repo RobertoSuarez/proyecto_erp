@@ -135,7 +135,7 @@ public class FormulaProduccionDAO {
             conexion.desconectar();
         }
     }
-
+    ///AQUI----------------------------------------------------------------------------
     public void update(FormulaProduccion formula) throws SQLException {
         try {
             this.conexion.conectar();
@@ -148,8 +148,6 @@ public class FormulaProduccionDAO {
                     + " codigo_producto='" + formula.getCodigo_producto() + "', "
                     + "Where codigo_formula= ";
             conexion.ejecutarSql(sql);
-        } catch (Exception e) {
-            throw e;
         } finally {
             this.conexion.desconectar();
         }
@@ -161,10 +159,7 @@ public class FormulaProduccionDAO {
             this.conexion.conectar();
             String sql = ("DELETE FROM public.formula WHERE nombre_formula = '" + aux + "'");
             conexion.ejecutarSql(sql);
-            conexion.desconectar();
 
-        } catch (Exception e) {
-            throw e;
         } finally {
             this.conexion.desconectar();
 
