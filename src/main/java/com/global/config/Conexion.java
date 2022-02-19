@@ -401,7 +401,7 @@ public class Conexion implements Serializable {
         return retorno;
     }
 
-    public int insertar(String sql) {
+    public int insertarPro(String sql) {
         int retorno = -1;
         try {
             if (conectar()) {
