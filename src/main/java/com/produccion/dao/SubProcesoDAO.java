@@ -48,7 +48,7 @@ public class SubProcesoDAO {
         try {
             //llamamos a la conexion
             float minutos = 0;
-            this.conexion.Conectar();
+            this.conexion.conectar();
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
             Date date = null;
             System.out.println("" + proceso.getHora());
@@ -76,7 +76,7 @@ public class SubProcesoDAO {
     public int insertarDetalleSubproceso(dSubproceso subproceso) {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String sentenciaSql = "INSERT INTO public.detalle_subproceso(\n"
                     + "	codigo_subproceso, costo_mano_obra, costo_indirecto, hora_costo,idsubcuenta)\n"
                     + "	VALUES (" + subproceso.getCodigo_subproceso() + ", " + subproceso.getCosto_mano_obra() + ", " + subproceso.getCosto_indirecto() + ", "
@@ -93,14 +93,14 @@ public class SubProcesoDAO {
     public int insertarSubproceso(SubProceso proceso) {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String sentenciaSql = "INSERT INTO public.subproceso(\n"
                     + " nombre, descripcion)\n"
                     + "	VALUES ('"
                     + proceso.getNombre() + "', '" + proceso.getDescripcion() + "');";
             //enviamos la sentencia
             return conexion.insertar(sentenciaSql);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             return -1;
         } finally {
             conexion.desconectar();
@@ -137,7 +137,7 @@ public class SubProcesoDAO {
 
     public float CIF(int codProceso) {
         try {
-            conexion.Conectar();
+            conexion.conectar();
             float costoIndirecto = 0;
             String sentenciaSql = "select Sum(dsp.costo_indirecto) as CIF from proceso_produccion as pp \n"
                     + "	inner join detalle_proceso_p as dp on pp.codigo_proceso=dp.codigo_proceso\n"
@@ -159,7 +159,7 @@ public class SubProcesoDAO {
 
     public float MOD(int codProceso) {
         try {
-            conexion.Conectar();
+            conexion.conectar();
             float costoIndirecto = 0;
             String sentenciaSql = "select Sum(dsp.costo_mano_obra) as CMO from proceso_produccion as pp \n"
                     + "	inner join detalle_proceso_p as dp on pp.codigo_proceso=dp.codigo_proceso\n"
@@ -183,7 +183,7 @@ public class SubProcesoDAO {
     public int idSubproceso() {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             int id = -1;
             String sentenciaSql = "select max(codigo_subproceso)as ultimo from subproceso;";
             //enviamos la sentencia

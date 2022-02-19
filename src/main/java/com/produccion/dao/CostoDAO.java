@@ -56,7 +56,7 @@ public class CostoDAO {
     public void insertarCosto(Costo costo) {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
 
             String sql = "INSERT INTO public.costos(nombre, descripcion, tipo, identificador)\n"
                     + "	VALUES ('" + costo.getNombre_subcuenta() + "', '" + costo.getDescripcion_subgrupo() + "', '" + costo.getTipo_cuenta()+ "', '" + costo.getIdentificador_subcuenta() + "')";
@@ -65,11 +65,11 @@ public class CostoDAO {
                     + "values('" + costo.getNombre_subcuenta() + "', '" + costo.getDescripcion_subgrupo() + "', '" + costo.getTipo_cuenta()+ "','" + costo.getIdentificador_subcuenta() + "')";
             //enviamos la sentencia
             conexion.Ejecutar2(sql2);
-            conexion.cerrarConexion();
+            conexion.desconectar();
 
         } catch (Exception e) {
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
     /**
@@ -82,19 +82,19 @@ public class CostoDAO {
     public void updateCosto(Costo costo) throws SQLException {
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
 
             String sql = "UPDATE public.costos\n"
                     + "	SET nombre='" + costo.getNombre_subcuenta() + "', descripcion='" + costo.getDescripcion_subgrupo() + "', identificador='" + costo.getIdentificador_subcuenta() + "'\n"
                     + "	WHERE identificador = '" + costo.getIdentificador_subcuenta()+ "'";
             //enviamos la sentencia
-            conexion.ejecutar(sql);
-            conexion.cerrarConexion();
+            conexion.ejecutarSql(sql);
+            conexion.desconectar();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw e;
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
     /**
@@ -109,16 +109,16 @@ public class CostoDAO {
         
         try {
             //llamamos a la conexion
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String sql = ("DELETE FROM public.costos WHERE identificador = '" + aux + "'");
             //enviamos la sentencia
-            conexion.ejecutar(sql);
-            conexion.cerrarConexion();
+            conexion.ejecutarSql(sql);
+            conexion.desconectar();
             
         } catch (Exception e) {
             throw e;
         }finally{
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
 }

@@ -132,13 +132,13 @@ public class FormulaProduccionDAO {
         } catch (Exception e) {
             return -1;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
 
     public void update(FormulaProduccion formula) throws SQLException {
         try {
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String sql = "UPDATE public.formula\n"
                     + " SET codigo_proceso='" + formula.getCodigo_proceso() + "',"
                     + " nombre_formula='" + formula.getNombre_formula() + "', "
@@ -147,26 +147,26 @@ public class FormulaProduccionDAO {
                     + " estado='" + formula.getEstado() + "', "
                     + " codigo_producto='" + formula.getCodigo_producto() + "', "
                     + "Where codigo_formula= ";
-            conexion.ejecutar(sql);
-        } catch (SQLException e) {
+            conexion.ejecutarSql(sql);
+        } catch (Exception e) {
             throw e;
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
 
     public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException {
         try {
 
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String sql = ("DELETE FROM public.formula WHERE nombre_formula = '" + aux + "'");
-            conexion.ejecutar(sql);
-            conexion.cerrarConexion();
+            conexion.ejecutarSql(sql);
+            conexion.desconectar();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw e;
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
 
         }
 
@@ -175,7 +175,7 @@ public class FormulaProduccionDAO {
     public float MOD(int codigo_proceso, float pieza) {
         try {
             float cif = 0;
-            conexion.Conectar();
+            conexion.conectar();
             String sql = "select ((pp.minutos_pieza*" + pieza + ")*pp.minuto_directo)as MDO \n"
                     + "	from proceso_produccion as pp \n"
                     + "	where pp.codigo_proceso=" + codigo_proceso + ";";
@@ -187,14 +187,14 @@ public class FormulaProduccionDAO {
         } catch (SQLException e) {
             return -1;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
 
     public float CIF(int codigo, float pieza) {
         try {
             float cif = 0;
-            conexion.Conectar();
+            conexion.conectar();
             String sql = "select ((pp.minutos_pieza*" + pieza + ")*pp.minuto_indirecto)as CIF \n"
                     + "	from proceso_produccion as pp \n"
                     + "	where pp.codigo_proceso=" + codigo + ";";
@@ -206,14 +206,14 @@ public class FormulaProduccionDAO {
         } catch (SQLException e) {
             return -1;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
 
     public float tiempoFormula(int codigo, float pieza) {
         try {
             float cif = 0;
-            conexion.Conectar();
+            conexion.conectar();
             String sql = "select (pp.minutos_pieza*" + pieza + ")as total \n"
                     + "	from proceso_produccion as pp \n"
                     + "	where pp.codigo_proceso=" + codigo + ";";
@@ -225,7 +225,7 @@ public class FormulaProduccionDAO {
         } catch (SQLException e) {
             return -1;
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
 
