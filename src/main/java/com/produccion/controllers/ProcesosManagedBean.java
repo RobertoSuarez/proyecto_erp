@@ -50,7 +50,7 @@ public class ProcesosManagedBean implements Serializable {
         root = new DefaultTreeNode("Root Node", null);
     }
 
-    private void cargarLista() {
+    public void cargarLista() {
         listaProcesos = procesoProduccionDAO.getProcesosProduccion();
         for (ProcesoProduccion listaProceso : listaProcesos) {
             documents = new DefaultTreeNode(new ProcesoProduccion(listaProceso.getCodigo_proceso(),

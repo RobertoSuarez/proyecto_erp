@@ -10,6 +10,7 @@ package com.produccion.models;
  * @author HP
  */
 public class ArticuloFormula {
+
     private int id;
     private String nombre;
     private String categoria;
@@ -18,6 +19,8 @@ public class ArticuloFormula {
     private float costo;
     private float cantidad;
     private float cantidadMaxima;
+    private String UnidadMedida;
+    private float total;
 
     public ArticuloFormula(int id, String nombre, String categoria, String descripcion, String tipo, float costo, float cantidad, float cantidadMaxima) {
         this.id = id;
@@ -29,8 +32,19 @@ public class ArticuloFormula {
         this.cantidad = cantidad;
         this.cantidadMaxima = cantidadMaxima;
     }
-    
-    
+
+    public ArticuloFormula(int id, String nombre, String descripcion, String tipo, float cantidad, String UnidadMedida,float costo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.tipo = tipo;
+        this.cantidad = cantidad;
+        this.UnidadMedida = UnidadMedida;
+        this.costo=costo;
+    }
+
+    public ArticuloFormula() {
+    }
 
     public int getId() {
         return id;
@@ -95,6 +109,21 @@ public class ArticuloFormula {
     public void setCantidadMaxima(float cantidadMaxima) {
         this.cantidadMaxima = cantidadMaxima;
     }
-    
-    
+
+    public String getUnidadMedida() {
+        return UnidadMedida;
+    }
+
+    public void setUnidadMedida(String UnidadMedida) {
+        this.UnidadMedida = UnidadMedida;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
 }

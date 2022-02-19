@@ -59,14 +59,16 @@
                                             <p:commandButton oncomplete="PF('clienteNaturalNew').show()"
                                                              actionListener="#{personaController.nuevoClienteN()}"
                                                              icon="fa fa-fw fa-user" 
-                                                             value="Agregar Cliente Natural"/>
+                                                             value="Agregar Cliente Natural"
+                                                             rendered="#{seguridadCtsXCbr.renderForGerente()}"/>
                                         </span>
 
                                         <span >
                                             <p:commandButton oncomplete="PF('clienteJuridicoNew').show()"
                                                              actionListener="#{personaController.nuevoClienteJ()}"
                                                              value="Agregar Cliente Jurídico" 
-                                                             icon="fa fa-fw fa-building" />
+                                                             icon="fa fa-fw fa-building" 
+                                                             rendered="#{seguridadCtsXCbr.renderForGerente()}"/>
                                         </span>
                                         <span style="margin-left: 2px">
                                             <p:commandButton value="Inactivos" 
@@ -138,7 +140,8 @@
                             </p:column>
 
                             <p:column class="tamanoColumnActions" style="text-align: center; width: 100%" 
-                                      headerText="Acciones">
+                                      headerText="Acciones"
+                                      rendered="#{seguridadCtsXCbr.renderForGerente()}">
                                 <p:commandButton actionListener="#{personaController.cargarClientes(varClientes)}" 
                                                  class="tamanoButtonActions"
                                                  icon="pi pi-pencil"
@@ -248,7 +251,8 @@
                                                   styleClass="#{varClienteInactivo.createLabel()}"/>
                                 </p:column>
                                 <p:column style="text-align: center; width: 100px;" 
-                                          headerText="Acciones">
+                                          headerText="Acciones"
+                                          rendered="#{seguridadCtsXCbr.renderForGerente()}">
                                     <p:commandButton actionListener="#{personaController.activarCliente(varClienteInactivo.idCliente)}" 
                                                      class="tamanoButtonActions" 
                                                      styleClass="rounded-button ui-button-success" 

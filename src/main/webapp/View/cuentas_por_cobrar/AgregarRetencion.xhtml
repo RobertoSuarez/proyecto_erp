@@ -124,7 +124,8 @@
                                     <p:commandButton icon="pi pi-plus " 
                                                      value="Añadir Nueva Retención" 
                                                      oncomplete="PF('RetencionNew').show();"
-                                                     style="margin:.1rem;"/>
+                                                     style="margin:.1rem;"
+                                                     rendered="#{seguridadCtsXCbr.renderForGerente()}"/>
                                 </div>
                             </p:toolbarGroup>
                         </div>
@@ -162,7 +163,8 @@
                             </p:column>
                             <p:column class="tamanoColumnActions"
                                       style="text-align: center;" 
-                                      headerText="Acciones">
+                                      headerText="Acciones"
+                                      rendered="#{seguridadCtsXCbr.renderForGerente()}">
                                 <p:commandButton actionListener="#{retencionController.CargarDatos(varRetenciones)}"
                                                  class="tamanoButtonActions"
                                                  update=":dialogEditarRetencion"

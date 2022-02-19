@@ -180,7 +180,7 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return detalles;
@@ -211,7 +211,7 @@ public class DetalleRolPagoDAO implements IDAO<DetalleRolPago> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

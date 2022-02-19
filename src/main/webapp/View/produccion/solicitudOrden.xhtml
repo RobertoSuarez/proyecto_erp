@@ -12,42 +12,43 @@
                 <f:event type="preRenderView" listener="#{restriccionesProduccion.redireccionInternas()}"/>
                 <ui:include src="subheaderProduccion.xhtml"/>
                 <h:form id="form" style="margin-top: 4%;">
+                    <p:growl id="growl" showDetail="true"/>
                     <div class="card">
-
                         <p:toolbar>
-                            <p:toolbarGroup>
-                                <div class="card ui-fluid ">
-                                    <div class="p-formgrid p-grid">
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:outputLabel value="Nº Orden" for="@next"/>
-                                            <p:inputText/>
-                                        </div>
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:outputLabel value="Fecha Inicio producción" for="@next"/>
-                                            <p:calendar value="" 
-                                                        disabled="#">
-                                            </p:calendar>
-                                        </div>
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:outputLabel value="Fecha Fin producción" for="@next"/>
-                                            <p:calendar value="" 
-                                                        disabled="#">
-                                            </p:calendar>
-                                        </div>
-                                        <div class="p-field p-col-12 p-md-4">
-                                            <p:outputLabel value="Descripción" for="@next"/>
-                                            <p:inputText/>
-                                        </div>
+                            <p:toolbarGroup id="solicitudOrden">
+                                <p:outputPanel id="nuevaSolicitud" class="ui-fluid">
+                                    <div class="card ui-fluid ">
+                                        <div class="p-formgrid p-grid">
+                                            <div class="p-field p-col-12 p-md-4">
+                                                <p:outputLabel value="Nº Orden" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.codigoSecundario}" 
+                                                             readonly="true"/>
+                                            </div>
+                                            <div class="p-field p-col-12 p-md-4">
+                                                <p:outputLabel value="Fecha Inicio producción" for="@next"/>
+                                                <p:calendar value="#{solicitudOrdenMB.solicitudOrden.fecha_orden}">
+                                                </p:calendar>
+                                            </div>
+                                            <div class="p-field p-col-12 p-md-4">
+                                                <p:outputLabel value="Fecha Fin producción" for="@next"/>
+                                                <p:calendar value="#{solicitudOrdenMB.solicitudOrden.fecha_fin}">
+                                                </p:calendar>
+                                            </div>
+                                            <div class="p-field p-col-12 p-md-4">
+                                                <p:outputLabel value="Descripción" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                            </div>
 
-                                        <div class="p-field p-col-12 p-md-2">
-                                            <p:outputLabel value="buscar" for="@next" style="color: white"/>
-                                            <p:commandButton value="Buscar Producto" 
-                                                             styleClass="ui-button-secondary"
-                                                             icon="pi pi-search" oncomplete="PF('producto').show()">
-                                            </p:commandButton>
+                                            <div class="p-field p-col-12 p-md-2">
+                                                <p:outputLabel value="buscar" for="@next" style="color: white"/>
+                                                <p:commandButton value="Buscar Producto" 
+                                                                 styleClass="ui-button-secondary"
+                                                                 icon="pi pi-search" oncomplete="PF('producto').show()">
+                                                </p:commandButton>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </p:outputPanel>
                             </p:toolbarGroup>
                         </p:toolbar>
 
@@ -70,35 +71,39 @@
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-12">
-                                                    <p:dataTable editable="true" reflow="true"
+                                                    <p:dataTable id="dtArticuloSolicitud" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
-                                                                 value="">
+                                                                 value="#{solicitudOrdenMB.listaProductOrden}" 
+                                                                 var="articuloSolicitud" paginator="true" rows="4">
 
                                                         <p:column headerText="Acciones">
-                                                            <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                                                            <p:selectBooleanCheckbox value="#{articuloSolicitud.verifica}">
+                                                                <p:ajax listener="#{solicitudOrdenMB.addMateriales(articuloSolicitud)}"
+                                                                        />
+                                                            </p:selectBooleanCheckbox>
                                                         </p:column>
 
                                                         <p:column headerText="Código" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{articuloSolicitud.codigoProducto}" />
                                                         </p:column>
 
                                                         <p:column headerText="Nombre" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{articuloSolicitud.nombreProducto}" />
                                                         </p:column>
 
                                                         <p:column headerText="Descripción" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{articuloSolicitud.descripcion}" />
                                                         </p:column>
 
                                                         <p:column headerText="Cantidad" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{articuloSolicitud.cantidad}" />
                                                         </p:column>
 
                                                         <p:column headerText="Precio" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{articuloSolicitud.precio}" />
                                                         </p:column>
                                                         <p:column headerText="Tipo" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{articuloSolicitud.tipoProducto}" />
                                                         </p:column>
                                                     </p:dataTable>
                                                 </div>
@@ -107,8 +112,13 @@
                                             <div class="p-grid p-justify-end">
                                                 <div class="p-col-2">
                                                     <p:commandButton value="Confirmar"  
-                                                                     icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-primary"/>
+                                                                     icon="pi pi-check"
+                                                                     styleClass="ui-button-primary"
+                                                                     actionListener="#{solicitudOrdenMB.llenaProductoConfirmado()}"
+                                                                     update="listaProductos"
+                                                                     process=":form:dtArticuloSolicitud @this"
+                                                                     oncomplete="PF('producto').hide()"
+                                                                     />
                                                 </div>
                                                 <div class="p-col-2">
                                                     <p:commandButton value="Cerrar" icon="pi pi-times"
@@ -123,9 +133,9 @@
                         </p:dialog>
 
                         <!-- Tabla de datos -->
-                        <p:dataTable editable="true" reflow="true"
+                        <p:dataTable id="listaProductos" editable="true" reflow="true"
                                      editInitEvent="dblclick" editMode="cell"
-                                     value="">
+                                     value="#{solicitudOrdenMB.listaOrdenConfirmados}" var="orden">
                             <!-- Buscador -->
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
@@ -133,35 +143,73 @@
 
                                 </div>
                             </f:facet>
-                            <p:column headerText="Código" filterStyle="display : none">
-                                <h:outputText value="#" />
+                            <p:column headerText="Código">
+                                <h:outputText value="#{orden.codigoProducto}" />
                             </p:column>
 
                             <p:column headerText="Nombre" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{orden.nombreProducto}" />
                             </p:column>
 
                             <p:column headerText="Cantidad" >
-                                <p:inputText disabled="#"  value=""></p:inputText>
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{orden.cantidad}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{orden.cantidad}" 
+                                                     style="width:100%">
+                                            <p:ajax event="blur" update=":form:listaProductos"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
                             </p:column>
 
                             <p:column headerText="Unidad de Medida" >
-                                <h:outputText value="#" />
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{orden.unidadMedida}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{orden.unidadMedida}" 
+                                                     style="width:100%">
+                                            <p:ajax event="blur" update=":form:listaProductos"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                </p:cellEditor>
                             </p:column>
                             <p:column headerText="Tipo" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{orden.tipoProducto}" />
+                            </p:column>
+                            <p:column headerText="Acciones">
+                                <p:column headerText="Acciones">
+                                    <p:commandButton icon="pi pi-trash" actionListener="#{solicitudOrdenMB.deleteFila(orden)}"
+                                                     styleClass="edit-button rounded-button ui-button-danger"
+                                                     update=":form:listaProductos"
+                                                     process="@this">
+
+                                    </p:commandButton>
+                                </p:column>
                             </p:column>
                         </p:dataTable>
-                        <div class="p-grid p-justify-end">
-                            <!--<p:button style="margin-right: 6px;" value="Buscar" 
-                                      styleClass="ui-button-secondary" icon="pi pi-search" outcome="listaOrdenProduccion.xhtml">
-                            </p:button>-->
-                            <p:button style="margin-right: 6px;margin-top: 15px;" value="Guardar" styleClass="ui-button-primary" icon="pi pi-save"/>
-                            <!--<p:button style="margin-right: 6px;" value="Nuevo" styleClass="ui-button-primary" icon="pi pi-plus-circle"/>-->
-                            <!-- <p:button style="margin-right: 6px;" value="Modificar" styleClass="ui-button-info" icon="pi pi-pencil"/> -->
-                            <p:button style="margin-right: 6px;margin-top: 15px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"
-                                      outcome="listaOrdenProduccion.xhtml"/>
+                        <div class="p-col-12">
+                            <div class="p-grid p-justify-end">
+                                <div class="p-col-1">
+
+                                    <p:commandButton value="Guardar " actionListener="#{solicitudOrdenMB.insertarSolicitud()}"
+                                                     process="nuevaSolicitud @this"
+                                                     update=":form:growl ,:form:nuevaSolicitud, :form:dtArticuloSolicitud,:form:listaProductos"
+                                                     icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
+                                </div>
+                                <div class="p-col-1">
+                                    <p:button  value="Cancelar" icon="pi pi-times"
+                                               class="ui-button-danger p-mr-2 p-mb-2"
+                                               outcome="solicitudOrden.xhtml">
+                                    </p:button>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
 
                 </h:form>

@@ -9,6 +9,7 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
+import com.ventas.dao.PreciosDAO;
 import com.ventas.dao.ProductoDAO;
 import com.ventas.dao.VentaDAO;
 import com.ventas.models.ClienteVenta;
@@ -64,9 +65,12 @@ public class VentaManagedBean implements Serializable {
     private List<DetalleVenta> listaDetalle;
     private double cantidad;
 
+    private PreciosDAO preciosDAO;
+
     private double subtotal12;
     private double subtotal0;
     private double descuento;
+    private double temporal;
     private double ice;
     private double iva;
     private double total;
@@ -77,21 +81,26 @@ public class VentaManagedBean implements Serializable {
     private double efectivo;
     private double cambio;
     private int diasPago;
-    
+    private boolean tipo;
+    private String visible;
+
     private List<ClienteVenta> listaClientes;
     private List<Producto> listaProductos;
+    private List<Producto> listadescuento;
 
     //Constructor
     @PostConstruct
     public void VentaManagedBean() {
         this.cliente = new ClienteVenta();
         this.clienteDAO = new ClienteVentaDao();
+        this.preciosDAO = new PreciosDAO();
 
         this.producto = new Producto();
         this.productoDao = new ProductoDAO();
         this.codigoProducto = 0;
         this.nombreProducto = "XXXXXX";
         this.subTotalVenta = 0;
+        this.visible = "false";
 
         this.subtotal12 = 0;
         this.subtotal0 = 0;
@@ -104,7 +113,7 @@ public class VentaManagedBean implements Serializable {
         this.cantidad = 1;
 
         this.productoSeleccionado = null;
-        this.clienteSeleccionado=null;
+        this.clienteSeleccionado = null;
 
         this.venta = new Venta();
         this.ventaDao = new VentaDAO();
@@ -116,9 +125,10 @@ public class VentaManagedBean implements Serializable {
         this.clienteDAO = new ClienteVentaDao();
         this.detalleDAO = new DetalleVentaDAO();
         this.listaClientes = new ArrayList<>();
+        this.listadescuento = new ArrayList<>();
         this.listaClientes = clienteDAO.ListarClientes();
         this.listaProductos = productoDao.ListarProductos();
-        
+
         System.out.print(listaClientes.get(0).getNombre());
     }
 
@@ -176,11 +186,24 @@ public class VentaManagedBean implements Serializable {
                         DetalleVenta detalle = new DetalleVenta();
                         detalle.setCodprincipal(this.producto.getCodigo());
                         detalle.setCantidad(this.cantidad);
-                        detalle.setDescuento(this.producto.getDescuento());
+
                         detalle.setPrecio(new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).doubleValue());
                         detalle.setProducto(this.producto);
                         detalle.setSubTotal(new BigDecimal(this.producto.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
-
+                        detalle.setDescuento(0);
+                        if (this.tipo) {
+                            detalle.setDescuento(this.descuento);
+                            detalle.setDescuento(detalle.getSubTotal() * (detalle.getDescuento() / 100));
+                        } else {
+                            for (int i = 0; i < this.listadescuento.size(); i++) {
+                                if (this.listadescuento.get(i).getCodigo() == detalle.getCodprincipal()) {
+                                    detalle.setDescuento(this.descuento);
+                                    detalle.setDescuento(detalle.getSubTotal() * (detalle.getDescuento() / 100));
+                                }
+                            }
+                        }
+                        this.temporal += new BigDecimal(detalle.getDescuento()).setScale(2, RoundingMode.UP).doubleValue();
+                        detalle.setSubTotal(new BigDecimal(detalle.getSubTotal() - detalle.getDescuento()).setScale(2, RoundingMode.UP).doubleValue());
                         //Cálculo de los valores
                         this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
                         this.listaDetalle.add(detalle);
@@ -189,12 +212,12 @@ public class VentaManagedBean implements Serializable {
                         this.nombreProducto = "";
                         double subtemp = new BigDecimal(this.producto.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
                         if (this.producto.getIva() != 0) {
-                            this.subtotal12 += subtemp;
+                            this.subtotal12 += detalle.getSubTotal();
                         } else {
-                            this.subtotal0 += subtemp;
+                            this.subtotal0 += detalle.getSubTotal();
                         }
 
-                        this.iva += new BigDecimal(this.producto.getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
+                        this.iva += new BigDecimal(this.producto.getIva() * (detalle.getSubTotal())).setScale(2, RoundingMode.UP).doubleValue();
                         this.ice += new BigDecimal(this.producto.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
 
                         this.total = new BigDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice).setScale(2, RoundingMode.UP).doubleValue();
@@ -309,7 +332,7 @@ public class VentaManagedBean implements Serializable {
                             daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
                             listSize += 1;
                         }
-                        
+
                         return "listaVenta";
                     }
                 }
@@ -319,19 +342,28 @@ public class VentaManagedBean implements Serializable {
         }
         return null;
     }
-    
-    public void SeleccionarCliente(ClienteVenta cl){
+
+    public void SeleccionarCliente(ClienteVenta cl) {
         this.clienteNombre = cl.getNombre();
         this.clienteIdNum = cl.getIdentificacion();
         this.cliente = cl;
+
+        int idcliente = preciosDAO.idtipocliente(cl.getIdentificacion());
+        this.tipo = preciosDAO.opciones(idcliente);
+        this.descuento = preciosDAO.descuento(idcliente);
+        this.listadescuento.clear();
+        this.listadescuento = preciosDAO.llenarProducto(idcliente);
+        System.out.println(this.descuento);
+        setVisible("true");
     }
-    
-    public void SeleccionarProducto(Producto pr){
-    this.codigoProducto = pr.getCodigoAux();
-    this.nombreProducto = pr.getDescripcion();
-    this.precioProducto = pr.getPrecioUnitario();
-    this.producto = pr;
-}
+
+    public void SeleccionarProducto(Producto pr) {
+        this.codigoProducto = pr.getCodigoAux();
+        this.nombreProducto = pr.getDescripcion();
+        this.precioProducto = pr.getPrecioUnitario();
+        this.producto = pr;
+        setVisible("true");
+    }
 
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
@@ -562,6 +594,20 @@ public class VentaManagedBean implements Serializable {
         this.listaProductos = listaProductos;
     }
 
-    
-    
+    public String getVisible() {
+        return visible;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
+
+    public double getTemporal() {
+        return temporal;
+    }
+
+    public void setTemporal(double temporal) {
+        this.temporal = temporal;
+    }
+
 }

@@ -51,7 +51,7 @@ public class ProveedorDAO extends Conexion {
      */
     public void insertarp(Proveedor p) {
         try {
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String cadena = "INSERT INTO public.proveedor(\n"
                     + "	codigo, razonsocial, ruc, nombre, direccion, email, webpage, contacto, telefono, estado)\n"
                     + "	VALUES ('" + p.getCodigo() + "','" + p.getRazonSocial() + "'"
@@ -60,12 +60,12 @@ public class ProveedorDAO extends Conexion {
                     + " '" + p.getTelefono() + "','" + p.isEstado() + "');";
 
             conexion.Ejecutar2(cadena);
-            conexion.cerrarConexion();
+            conexion.desconectar();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
     }
 
@@ -79,7 +79,7 @@ public class ProveedorDAO extends Conexion {
      */
     public void update(Proveedor proveedor, int codigo) throws SQLException {
         try {
-            this.conexion.Conectar();
+            this.conexion.conectar();
             String cadena = "UPDATE public.proveedor\n"
                     + "	SET  razonsocial= '" + proveedor.getRazonSocial() + "',"
                     + " ruc='" + proveedor.getRuc() + "', "
@@ -91,12 +91,12 @@ public class ProveedorDAO extends Conexion {
                     + " telefono='" + proveedor.getTelefono() + "',"
                     + " estado='" + proveedor.isEstado() + "' "
                     + " Where idproveedor = " + codigo + "";
-            conexion.ejecutar(cadena);
-            conexion.cerrarConexion();
-        } catch (SQLException e) {
+            conexion.ejecutarSql(cadena);
+            conexion.desconectar();
+        } catch (Exception e) {
             throw e;
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
 
     }
@@ -104,7 +104,7 @@ public class ProveedorDAO extends Conexion {
     public List<Proveedor> ListarProveedor() {
         List<Proveedor> clientes = new ArrayList<>();
         try {
-            this.conexion.abrirConexion();
+            this.conexion.conectar();
             String query = "select cl.idcliente, T.* from "
                     + "(select pn.idpersonanatural as IdNatural, null as IdJuridico, "
                     + "pr.id_persona, pn.nombre1||' '||pn.nombre2||' '||pn.apellido1||' '||pn.apellido2 as Nombre, pr.identificacion "
@@ -112,8 +112,8 @@ public class ProveedorDAO extends Conexion {
                     + "select null as IdNatural, pj.id_persona_juridica as IdJuridico, pr.id_persona, pj.razon_social as Nombre, pr.identificacion "
                     + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                     + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
-            ResultSet rs = this.conexion.ejecutarConsulta(query);
-            conexion.conex.close();
+            ResultSet rs = this.conexion.ejecutarSql(query);
+            //conexion.conex.close();
             while (rs.next()) {
                 this.proveedor = new Proveedor();
                 this.proveedor.setIdProveedor(rs.getInt(1));
@@ -121,14 +121,14 @@ public class ProveedorDAO extends Conexion {
                 this.proveedor.setRazonSocial(rs.getString(6));
                 clientes.add(this.proveedor);
             }
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
         return clientes;
     }
@@ -137,11 +137,11 @@ public class ProveedorDAO extends Conexion {
         ResultSet rs = null;
         Proveedor temp = new Proveedor();
         try {
-            conexion.abrirConexion();
+            conexion.conectar();
             if (id.length() <= 10) {
-                rs = conexion.ejecutarConsulta("select * from public.buscarclientenatural('" + id.trim() + "')");
+                rs = conexion.ejecutarSql("select * from public.buscarclientenatural('" + id.trim() + "')");
             } else if (id.length() > 10) {
-                rs = conexion.ejecutarConsulta("select * from public.buscarclientejuridico('" + id.trim() + "')");
+                rs = conexion.ejecutarSql("select * from public.buscarclientejuridico('" + id.trim() + "')");
             } else {
                 rs = null;
             }
@@ -160,16 +160,16 @@ public class ProveedorDAO extends Conexion {
                     temp.setContacto(rs.getString(7));
                 }
             }
-            conexion.cerrarConexion();
+            conexion.desconectar();
 
             return temp;
         } catch (Exception e) {
             System.out.println(e.toString());
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return null;
     }

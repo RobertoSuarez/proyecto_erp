@@ -15,6 +15,7 @@ import com.produccion.models.FormulaProduccion;
 import com.produccion.models.ProcesoProduccion;
 import com.produccion.models.SubProceso;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -37,6 +38,7 @@ public class FormulaProduccionManagedBean implements Serializable {
     private FormulaProduccion formulaProduccion = new FormulaProduccion();
     private FormulaProduccionDAO formulaProduccionDAO;
     private List<FormulaProduccion> listaFormula;
+    private List<FormulaProduccion> listaEditar;
     private List<FormulaProduccion> articuloMateriaP;
     ArticuloFormula articuloMateriaPrima;
     ArticulosInventario articulo;
@@ -65,8 +67,10 @@ public class FormulaProduccionManagedBean implements Serializable {
         listaFormula = new ArrayList<>();
         articuloMateriaP = new ArrayList<>();
         listaMateriales = new ArrayList<>();
+        listaEditar = new ArrayList<>();
         formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
         materialesProduccion = new FormulaMateriales();
+        formulaProduccion = new FormulaProduccion();
     }
 
     @PostConstruct
@@ -94,6 +98,14 @@ public class FormulaProduccionManagedBean implements Serializable {
 
     public void closeDialogModal() {
         PrimeFaces.current().executeScript("PF('crearFormulaDialog').hide()");
+    }
+
+    public List<FormulaProduccion> getListaEditar() {
+        return listaEditar;
+    }
+
+    public void setListaEditar(List<FormulaProduccion> listaEditar) {
+        this.listaEditar = listaEditar;
     }
 
     /**
@@ -124,22 +136,16 @@ public class FormulaProduccionManagedBean implements Serializable {
      */
     public void editar() {
         try {
-            if ("".equals(formulaProduccion.getCodigo_proceso())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
-            } else if ("".equals(formulaProduccion.getNombre_formula())) {
+            if ("".equals(formulaProduccion.getNombre_formula())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
             } else if ("".equals(formulaProduccion.getDescripcion())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else if ("".equals(formulaProduccion.getRendimiento())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-            } else if ("".equals(formulaProduccion.getEstado())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
-            } else if ("".equals(formulaProduccion.getCodigo_producto())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
             } else {
-                this.formulaProduccionDAO.update(formulaProduccion);
+                formulaProduccionDAO.update(formulaProduccion);
                 FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "PFormula Modificada"));
             }
 
         } catch (Exception e) {
@@ -162,7 +168,7 @@ public class FormulaProduccionManagedBean implements Serializable {
             listaFormula = formulaProduccionDAO.getFormula();
             PrimeFaces.current().executeScript("PF('eliminarFormulaDialog').hide()");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Formula Eliminada"));
-        } catch (Exception e) {
+        } catch (SQLException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error al Eliminar la Formula"));
         }
     }
@@ -276,14 +282,26 @@ public class FormulaProduccionManagedBean implements Serializable {
         this.articulo = articulo;
     }
 
-    /**
-     * Metodo que permitira llenar la informacion de Articulos
-     */
     public void llenaArticulo(FormulaProduccion inventario) {
         formulaProduccion.setCodigo_producto(inventario.getCodigo_producto());
         formulaProduccion.setNombre_producto(inventario.getNombre());
         formulaProduccion.setTipo(inventario.getTipo());
         formulaProduccion.setCategoria(inventario.getCategoria());
+    }
+
+    public void editaFormula(FormulaProduccion formula) {
+        listaEditar=formulaProduccionDAO.traemeFormula(formula.getCodigo_formula());
+        for (FormulaProduccion lista: listaEditar) {
+            formulaProduccion.setCodigo_formula(lista.getCodigo_formula());
+            formulaProduccion.setNombre_formula(lista.getNombre_formula());
+            formulaProduccion.setNombre_producto(lista.getNombre_producto());
+            formulaProduccion.setDescripcion(lista.getDescripcion());
+            formulaProduccion.setRendimiento(lista.getRendimiento());
+            formulaProduccion.setNombre(lista.getNombre());
+            formulaProduccion.setCategoria(lista.getCategoria());
+            formulaProduccion.setTipo(lista.getTipo());
+        }
+        listaEditar=formulaProduccionDAO.listaMateriales(formula.getCodigo_formula());
     }
 
 }

@@ -6,10 +6,12 @@ package com.inventario.DAO;
 
 import com.global.config.Conexion;
 import com.inventario.models.EntradaDetalleInventario;
+import com.produccion.dao.ResulSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -41,13 +43,16 @@ public class EntradaDetalleDAO {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
-                ListEntrada.add(new EntradaDetalleInventario(resultSet.getInt("cod_articulo"),
-                        resultSet.getInt("id_entrada_detalle"),
-                        resultSet.getInt("id_entrada"),
-                        resultSet.getInt("cant"),
-                        resultSet.getShort("costo"),
-                        resultSet.getInt("iva"),
-                        resultSet.getInt("ice")));
+                EntradaDetalleInventario detalle = new EntradaDetalleInventario();
+                                        detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
+                                        detalle.setIdEntrada(resultSet.getInt("id_entrada")); 
+                                        detalle.setCant(resultSet.getInt("cant"));
+                                        detalle.setCosto(resultSet.getInt("costo"));
+                                        detalle.setIva(resultSet.getInt("ice"));
+                                        detalle.setIce(resultSet.getInt("ice"));
+                                        
+                ListEntrada.add(detalle);
+
             }
 
         } catch (SQLException e) {
@@ -62,8 +67,8 @@ public class EntradaDetalleDAO {
         try {
             ResultSet rs = null;
 
-            this.conexion.abrirConexion();
-            rs = this.conexion.consultar("select cod from public.entrada_Detalle order by cod desc limit 1;");
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql("select cod from public.entrada_Detalle order by cod desc limit 1;");
             int codigo = 1;
 
             //Asignar los valores de la siguiente venta y secuencia.
@@ -78,16 +83,16 @@ public class EntradaDetalleDAO {
                     + "cod_articulo, id_entrada_detalle, id_entrada, cant, costo, iva, ice)"
                     + "VALUES(" + entradaDetalleInventario.getIdEntradaDetalle() + ",'" + entradaDetalleInventario.getIdEntradaDetalle() + "', " + entradaDetalleInventario.getCant() + ", " + entradaDetalleInventario.getCosto() + ", " + entradaDetalleInventario.getIva() + ", " + entradaDetalleInventario.getIce() + ")";
             System.out.println(query);
-            this.conexion.consultar(query);
+            this.conexion.ejecutarSql(query);
 
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
 
             System.out.println("Entrada Guardada exitosamente");
 
             return entradaDetalleInventario.getIdEntradaDetalle();
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
@@ -100,11 +105,11 @@ public class EntradaDetalleDAO {
         try {
             int idDetalle = 1;
             ResultSet rs = null;
-            this.conexion.abrirConexion();
+            this.conexion.conectar();
 
             //Recibir siguiente código de detalle venta
             String query = "select iddetalleventa from public.detalleventa order by iddetalleventa desc limit 1;";
-            rs = this.conexion.consultar(query);
+            rs = this.conexion.ejecutarSql(query);
 
             while (rs.next()) {
                 idDetalle = rs.getInt(1) + 1;
@@ -114,26 +119,26 @@ public class EntradaDetalleDAO {
             query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
                     + idProducto + "," + cantidad + "," + precio + ")";
             System.out.println(query);
-            this.conexion.consultar(query);
+            this.conexion.ejecutarSql(query);
 
             //Reducir stock
             int cantidadActual = 0;
             query = "select cantidad from public.productos where codprincipal = " + idProducto + ";";
-            rs = this.conexion.consultar(query);
+            rs = this.conexion.ejecutarSql(query);
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
             query = "update public.productos set cantidad = " + (cantidadActual - cantidad) + " where codprincipal = " + idProducto + ";";
-            this.conexion.ejecutar(query);
+            this.conexion.ejecutarSql(query);
 
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
         }
     }
 

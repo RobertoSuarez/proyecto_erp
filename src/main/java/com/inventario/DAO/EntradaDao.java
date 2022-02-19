@@ -61,8 +61,8 @@ public class EntradaDao {
         try {
             ResultSet rs = null;
 
-            this.conexion.abrirConexion();
-            rs = this.conexion.consultar("select cod, num_comprobante from public.entrada order by cod desc limit 1;");
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql("select cod, num_comprobante from public.entrada order by cod desc limit 1;");
             int codigo = 1;
             
             //Asignar los valores de la siguiente venta y secuencia.
@@ -77,19 +77,19 @@ public class EntradaDao {
                     + "cod, num_comprobante, fecha, id_proveedor, id_bodega)"
                     + "VALUES(" + entradaInventario.getCod()+ ",'" + entradaInventario.getNumComprobante()  +"', " + entradaInventario.getFecha()+ ", " + entradaInventario.getIdProveedor()+ ", " + entradaInventario.getIdBodega()+ ")";
             System.out.println(query);
-            this.conexion.consultar(query);
+            this.conexion.ejecutarSql(query);
 
             
 
 
-            this.conexion.cerrarConexion();
+            this.conexion.desconectar();
 
             System.out.println("Entrada Guardada exitosamente");
 
             return entradaInventario.getCod();
         } catch (Exception e) {
             if (conexion.isEstado()) {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
             System.out.println(e.getMessage().toString());
         } finally {

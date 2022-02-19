@@ -57,7 +57,7 @@ public class BuscarProvDAO {
                 String sentencia = "select p.idproveedor, p.codigo, p.nombre, p.ruc, c.cantdiasvencidos "
                         +" from proveedor p inner join condiciones c on " +
                         "(c.idproveedor = p.idproveedor);";
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaProveedor.add(new Proveedor(result.getInt("idproveedor"),
                             result.getString("codigo"),result.getString("ruc"), 
@@ -68,7 +68,7 @@ public class BuscarProvDAO {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return listaProveedor;

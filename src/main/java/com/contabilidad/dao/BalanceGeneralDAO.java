@@ -21,10 +21,11 @@ public class BalanceGeneralDAO {
     }
 
     private List<BalanceGeneral> getCalculoGrupo() {
-        String sql = "select getcalculogrupobg('"+fecha+"')";
+        String sql = "select getcalculogrupobg('" + fecha + "')";
         List<BalanceGeneral> listaCalculosGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql(sql);
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculogrupobg");
                 BalanceGeneral balanceGeneral = gson.fromJson(cadenaJSON, BalanceGeneral.class);
@@ -40,10 +41,11 @@ public class BalanceGeneralDAO {
     }
 
     private List<BalanceGeneral> getCalculoSubGrupo() {
-        String sql = "select getcalculosubgrupobg('"+fecha+"')";
+        String sql = "select getcalculosubgrupobg('" + fecha + "')";
         List<BalanceGeneral> listaCalculosSubGrupo = new ArrayList<>();
-        result = conexion.consultar(sql);
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql(sql);
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubgrupobg");
                 BalanceGeneral balanceGeneral = gson.fromJson(cadenaJSON, BalanceGeneral.class);
@@ -59,10 +61,11 @@ public class BalanceGeneralDAO {
     }
 
     private List<BalanceGeneral> getCalculoCuenta() {
-        String sql = "select getcalculocuentabg('"+fecha+"')";
+        String sql = "select getcalculocuentabg('" + fecha + "')";
         List<BalanceGeneral> listaCalculosCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql(sql);
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculocuentabg");
                 BalanceGeneral balanceGeneral = gson.fromJson(cadenaJSON, BalanceGeneral.class);
@@ -78,10 +81,11 @@ public class BalanceGeneralDAO {
     }
 
     private List<BalanceGeneral> getCalculoSubCuenta() {
-        String sql = "select getcalculosubcuentabg('"+fecha+"')";
+        String sql = "select getcalculosubcuentabg('" + fecha + "')";
         List<BalanceGeneral> listaCalculosSubCuenta = new ArrayList<>();
-        result = conexion.consultar(sql);
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql(sql);
             while (result.next()) {
                 String cadenaJSON = result.getString("getcalculosubcuentabg");
                 BalanceGeneral balanceGeneral = gson.fromJson(cadenaJSON, BalanceGeneral.class);
@@ -103,7 +107,7 @@ public class BalanceGeneralDAO {
         List<BalanceGeneral> calculoSubGrupo = getCalculoSubGrupo();
         List<BalanceGeneral> calculoCuenta = getCalculoCuenta();
         List<BalanceGeneral> calculoSubCuenta = getCalculoSubCuenta();
-        
+
         calculoGrupo.forEach(g -> {
             balanceGeneral.add(g);
             calculoSubGrupo.forEach(sg -> {
@@ -126,11 +130,12 @@ public class BalanceGeneralDAO {
         });
         return balanceGeneral;
     }
-    
+
     public double sumaPasivoPatrimonio(String fecha) {
-        String sql = "select sumapasivopatrimonio('"+fecha+"')";
-        result = conexion.consultar(sql);
+        String sql = "select sumapasivopatrimonio('" + fecha + "')";
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql(sql);
             if (result.next()) {
                 return result.getDouble("sumapasivopatrimonio");
             }

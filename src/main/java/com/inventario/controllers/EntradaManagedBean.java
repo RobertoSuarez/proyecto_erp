@@ -1,6 +1,9 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.inventario.controllers;
 
@@ -38,7 +41,9 @@ public class EntradaManagedBean implements Serializable {
     private ProveedorDAO clienteDAO;
     private String clienteIdNum;
     private String clienteNombre;
-
+    
+    private EntradaDao enntradaDAO;
+    
     private EntradaDetalleInventario productoSeleccionado;
     private Proveedor clienteSeleccionado;
 
@@ -46,31 +51,40 @@ public class EntradaManagedBean implements Serializable {
     private ArticulosInventario producto;
     private int codigoProducto;
     private String nombreProducto;
-    private float precioProducto;
-    private double subTotalVenta;
+    private int precioProducto;
+    private int subTotalVenta;
 
     private EntradaDetalleInventario detalleVenta;
     private EntradaDetalleDAO detalleDAO;
     private List<EntradaDetalleInventario> listaDetalle;
     private int cantidad;
 
-    private double subtotal12;
-    private double subtotal0;
-    private double descuento;
-    private double ice;
-    private double iva;
-    private double total;
+    private int subtotal12;
+    private int subtotal0;
+    private int descuento;
+    private int ice;
+    private int iva;
+    private int total;
 
     private EntradaInventario venta;
     private EntradaDao ventaDao;
 
-    private double efectivo;
-    private double cambio;
+    private int efectivo;
+    private int cambio;
     private int diasPago;
     
     private List<Proveedor> listaClientes;
     private List<ArticulosInventario> listaProductos;
 
+    public List<EntradaInventario> getListaEntradas() {
+        return listaEntradas;
+    }
+
+    public void setListaEntradas(List<EntradaInventario> listaEntradas) {
+        this.listaEntradas = listaEntradas;
+    }
+    private List<EntradaInventario> listaEntradas;
+    
     //Constructor
     @PostConstruct
     public void VentaManagedBean() {
@@ -92,12 +106,15 @@ public class EntradaManagedBean implements Serializable {
 
         this.listaDetalle = new ArrayList<>();
         this.cantidad = 1;
-
+        
+        this.venta = new EntradaInventario();
+        this.ventaDao = new EntradaDao();
+        
+        this.listaEntradas = ventaDao.getEntradas();
         this.productoSeleccionado = null;
         this.clienteSeleccionado=null;
 
-        this.venta = new EntradaInventario();
-        this.ventaDao = new EntradaDao();
+        
 
         this.efectivo = 0;
         this.cambio = 0;
@@ -110,6 +127,12 @@ public class EntradaManagedBean implements Serializable {
         this.listaProductos = productoDao.getArticulos();
         
         System.out.print(listaClientes.get(0).getNombre());
+    }
+    //Mostrar algun mensaje
+    @Asynchronous
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
     //Buscar cliente
@@ -167,7 +190,7 @@ public class EntradaManagedBean implements Serializable {
                         detalle.setIdEntrada(this.producto.getCod());
                         detalle.setCant(this.cantidad);
                         detalle.setIva(this.producto.getIva());
-                        detalle.setCosto((Integer.valueOf(this.producto.getCosto())));
+                        detalle.setCosto(this.producto.getCosto());
                         detalle.setSubtotal(this.producto.getCosto()* this.cantidad);
           
 
@@ -200,7 +223,7 @@ public class EntradaManagedBean implements Serializable {
                 System.out.println("No hay producto seleccionado");
             }
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         }
 
     }
@@ -231,12 +254,6 @@ public class EntradaManagedBean implements Serializable {
         }
     }
 
-    //Mostrar algun mensaje
-    @Asynchronous
-    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(severity, summary, detail));
-    }
 
     @Asynchronous
     public String RegistrarVenta(int formaPago) {
@@ -312,7 +329,6 @@ public class EntradaManagedBean implements Serializable {
     this.producto = pr;
 }
 
-    //--------------------Getter y Setter-------------------//
     public Proveedor getCliente() {
         return cliente;
     }
@@ -323,6 +339,10 @@ public class EntradaManagedBean implements Serializable {
 
     public ProveedorDAO getClienteDAO() {
         return clienteDAO;
+    }
+
+    public void setClienteDAO(ProveedorDAO clienteDAO) {
+        this.clienteDAO = clienteDAO;
     }
 
     public String getClienteIdNum() {
@@ -341,6 +361,22 @@ public class EntradaManagedBean implements Serializable {
         this.clienteNombre = clienteNombre;
     }
 
+    public EntradaDetalleInventario getProductoSeleccionado() {
+        return productoSeleccionado;
+    }
+
+    public void setProductoSeleccionado(EntradaDetalleInventario productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
+    }
+
+    public Proveedor getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(Proveedor clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+
     public ArticulosInventarioDAO getProductoDao() {
         return productoDao;
     }
@@ -357,6 +393,14 @@ public class EntradaManagedBean implements Serializable {
         this.producto = producto;
     }
 
+    public int getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public void setCodigoProducto(int codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
     public String getNombreProducto() {
         return nombreProducto;
     }
@@ -365,20 +409,20 @@ public class EntradaManagedBean implements Serializable {
         this.nombreProducto = nombreProducto;
     }
 
-    public float getPrecioProducto() {
+    public int getPrecioProducto() {
         return precioProducto;
     }
 
-    public void setPrecioProducto(float precioProducto) {
+    public void setPrecioProducto(int precioProducto) {
         this.precioProducto = precioProducto;
     }
 
-    public int getCodigoProducto() {
-        return codigoProducto;
+    public int getSubTotalVenta() {
+        return subTotalVenta;
     }
 
-    public void setCodigoProducto(int codigoProducto) {
-        this.codigoProducto = codigoProducto;
+    public void setSubTotalVenta(int subTotalVenta) {
+        this.subTotalVenta = subTotalVenta;
     }
 
     public EntradaDetalleInventario getDetalleVenta() {
@@ -413,68 +457,52 @@ public class EntradaManagedBean implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public double getSubTotalVenta() {
-        return subTotalVenta;
-    }
-
-    public void setSubTotalVenta(double subTotalVenta) {
-        this.subTotalVenta = subTotalVenta;
-    }
-
-    public double getSubtotal12() {
+    public int getSubtotal12() {
         return subtotal12;
     }
 
-    public void setSubtotal12(double subtotal12) {
+    public void setSubtotal12(int subtotal12) {
         this.subtotal12 = subtotal12;
     }
 
-    public double getSubtotal0() {
+    public int getSubtotal0() {
         return subtotal0;
     }
 
-    public void setSubtotal0(double subtotal0) {
+    public void setSubtotal0(int subtotal0) {
         this.subtotal0 = subtotal0;
     }
 
-    public double getDescuento() {
+    public int getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(double descuento) {
+    public void setDescuento(int descuento) {
         this.descuento = descuento;
     }
 
-    public double getIce() {
+    public int getIce() {
         return ice;
     }
 
-    public void setIce(double ice) {
+    public void setIce(int ice) {
         this.ice = ice;
     }
 
-    public double getIva() {
+    public int getIva() {
         return iva;
     }
 
-    public void setIva(double iva) {
+    public void setIva(int iva) {
         this.iva = iva;
     }
 
-    public double getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(int total) {
         this.total = total;
-    }
-
-    public EntradaDetalleInventario getProductoSeleccionado() {
-        return productoSeleccionado;
-    }
-
-    public void setProductoSeleccionado(EntradaDetalleInventario productoSeleccionado) {
-        this.productoSeleccionado = productoSeleccionado;
     }
 
     public EntradaInventario getVenta() {
@@ -493,19 +521,19 @@ public class EntradaManagedBean implements Serializable {
         this.ventaDao = ventaDao;
     }
 
-    public double getEfectivo() {
+    public int getEfectivo() {
         return efectivo;
     }
 
-    public void setEfectivo(double efectivo) {
+    public void setEfectivo(int efectivo) {
         this.efectivo = efectivo;
     }
 
-    public double getCambio() {
+    public int getCambio() {
         return cambio;
     }
 
-    public void setCambio(double cambio) {
+    public void setCambio(int cambio) {
         this.cambio = cambio;
     }
 
@@ -525,14 +553,6 @@ public class EntradaManagedBean implements Serializable {
         this.listaClientes = listaClientes;
     }
 
-    public Proveedor getClienteSeleccionado() {
-        return clienteSeleccionado;
-    }
-
-    public void setClienteSeleccionado(Proveedor clienteSeleccionado) {
-        this.clienteSeleccionado = clienteSeleccionado;
-    }
-
     public List<ArticulosInventario> getListaProductos() {
         return listaProductos;
     }
@@ -541,5 +561,13 @@ public class EntradaManagedBean implements Serializable {
         this.listaProductos = listaProductos;
     }
 
-    
+    public EntradaDao getEnntradaDAO() {
+        return enntradaDAO;
+    }
+
+    public void setEnntradaDAO(EntradaDao enntradaDAO) {
+        this.enntradaDAO = enntradaDAO;
+    }
+
+   
 }

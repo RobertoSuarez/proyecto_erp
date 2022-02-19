@@ -24,7 +24,7 @@ public class ProductoDAO {
     Conexion con;
 
     public ProductoDAO(Producto product) throws SQLException {
-        con.abrirConexion();
+        con.conectar();
         this.product = product;
     }
 
@@ -46,8 +46,8 @@ public class ProductoDAO {
         
         try {
             String code = String.valueOf(id);
-            con.abrirConexion();
-            rs = con.ejecutarConsulta("select * from public.buscarproductocodigo(" + code.trim() + ")");
+            con.conectar();
+            rs = con.ejecutarSql("select * from public.buscarproductocodigo(" + code.trim() + ")");
             
             if (rs == null) {
                 System.out.println("No existen registros");
@@ -67,16 +67,16 @@ public class ProductoDAO {
                     temp.setDescuento(rs.getFloat(9));
                 }
             }
-            con.cerrarConexion();
+            con.desconectar();
 
             return temp;
         } catch (Exception e) {
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         }
         finally{
-            con.cerrarConexion();
+            con.desconectar();
         }
 
         return null;
@@ -87,8 +87,8 @@ public class ProductoDAO {
         Producto temp;
         ResultSet rs;
         try{
-            con.abrirConexion();
-            rs=con.ejecutarConsulta("Select * from productos");
+            con.conectar();
+            rs=con.ejecutarSql("Select * from productos");
             if (rs == null) {
                 System.out.println("No existen registros");
             } else {
@@ -108,16 +108,16 @@ public class ProductoDAO {
                     temp.setDescuento(rs.getFloat(10));
                     listaventa.add(temp);
                 }
-                con.cerrarConexion();
+                con.desconectar();
         }
         }
         catch(Exception e){
             if (con.isEstado()) {
-                con.cerrarConexion();
+                con.desconectar();
             }
         }
         finally{
-            con.cerrarConexion();
+            con.desconectar();
         }
         return listaventa;
     }

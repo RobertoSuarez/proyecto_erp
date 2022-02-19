@@ -203,7 +203,7 @@ public class EmpleadoPuestoDAO implements IDAO<EmpleadoPuesto> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleadoPuesto;
@@ -242,7 +242,7 @@ public class EmpleadoPuestoDAO implements IDAO<EmpleadoPuesto> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleadoPuestos;

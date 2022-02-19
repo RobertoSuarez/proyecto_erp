@@ -85,7 +85,7 @@ public class Plan_PagoDAO implements Serializable {
         } finally {
 
             //Se cierra la conexion.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
 
         //Se retorna -1 indicando que la conexión esta en estado Falso.
@@ -124,7 +124,7 @@ public class Plan_PagoDAO implements Serializable {
         } finally {
 
             //Se cierra la conexión.
-            conex.cerrarConexion();
+            conex.desconectar();
         }
 
         //Se retorna -1 indicando que la conexión esta en estado Falso.
@@ -149,7 +149,7 @@ public class Plan_PagoDAO implements Serializable {
                 /*Se guarda en una variable de tipo string el procedimiento 
                   almacenado. */
                 String sentencia = "select*from obtener_cobros_x_cliente(" + idCliente + ")";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
 
                 //Instanciamos la clase AbonoDAO.        
                 AbonoDAO abonoDAO = new AbonoDAO();
@@ -180,7 +180,7 @@ public class Plan_PagoDAO implements Serializable {
             } finally {
 
                 //Se cierra la conexión.
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }

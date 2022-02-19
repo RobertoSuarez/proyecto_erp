@@ -51,7 +51,7 @@ public class FacturaDAO {
                         + "f.vencimiento,f.estado, p.nombre, f.habilitar from factura as f "
                         + "INNER JOIN proveedor as p on (f.idproveedor = p.idproveedor) "
                         + "where (f.importe - f.pagado) != 0 and habilitar = " + n;
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 System.out.println("Factura: " + result.toString());
                 while (result.next())
                 {
@@ -70,7 +70,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return listaFacturas;
@@ -86,7 +86,7 @@ public class FacturaDAO {
                         + "f.estado from factura as f INNER JOIN proveedor "
                         + "as p on (f.idproveedor = p.idproveedor) "
                         + "where (f.importe - f.pagado) != 0 and f.habilitar = 1 and f.estado = 0;";
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 System.out.println("Factura: " + result.toString());
                 while (result.next())
                 {
@@ -102,7 +102,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return listaFacturas;
@@ -117,7 +117,7 @@ public class FacturaDAO {
             try
             {
                 String sentencia = "select nombre from subcuenta where tiposaldo = 'Deudor';";
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 while (result.next())
                 {
                     listaFacturas.add(new Factura(result.getString("nombre")));
@@ -127,7 +127,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         System.err.println("LLENAR CUENTA: " + listaFacturas.size());
@@ -141,7 +141,7 @@ public class FacturaDAO {
             try
             {
                 String sentencia = "select * from detalle_compra where nfactura = '" + n + "';";
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 while (result.next())
                 {
                     listaFacturas.add(new Factura(result.getFloat("importe"),
@@ -152,7 +152,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return listaFacturas;
@@ -169,7 +169,7 @@ public class FacturaDAO {
                         + 0 + ",'" + factura.getFecha() + "','"
                         + factura.getVencimiento() + "',(Select idproveedor from proveedor p "
                         + " where p.ruc = '" + factura.getRuc() + "'))";
-                result = conexion.ejecutarConsulta(cadena);
+                result = conexion.ejecutarSql(cadena);
                 while (result.next())
                 {
                     existe = result.getInt("registrarfactura");
@@ -179,7 +179,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return existe;
@@ -206,7 +206,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -219,7 +219,7 @@ public class FacturaDAO {
             {
                 int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
-                result = conexion.ejecutarConsulta(cadena);
+                result = conexion.ejecutarSql(cadena);
                 while (result.next())
                 {
                     iddiario = result.getInt("iddiario");
@@ -263,7 +263,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -275,7 +275,7 @@ public class FacturaDAO {
             {
                 int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
-                result = conexion.ejecutarConsulta(cadena);
+                result = conexion.ejecutarSql(cadena);
                 while (result.next())
                 {
                     iddiario = result.getInt("iddiario");
@@ -318,7 +318,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -337,7 +337,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -357,7 +357,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -369,7 +369,7 @@ public class FacturaDAO {
             try
             {
                 String cadena = "select idsubcuenta from subcuenta where nombre = '" + g + "'";
-                result = conexion.ejecutarConsulta(cadena);
+                result = conexion.ejecutarSql(cadena);
                 while (result.next())
                 {
                     n = result.getInt("idsubcuenta");
@@ -379,7 +379,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return n;
@@ -404,7 +404,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -428,7 +428,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -446,7 +446,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -460,7 +460,7 @@ public class FacturaDAO {
             {
                 String sentencia = "select pagado from factura where nfactura= '"
                         + nfactura + "'";
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 while (result.next())
                 {
                     pagado = result.getFloat("pagado");
@@ -470,7 +470,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return pagado;
@@ -485,7 +485,7 @@ public class FacturaDAO {
                 String sentencia = "SELECT ruc from proveedor where idproveedor ="
                         + "(SELECT  idproveedor from factura where nfactura = '"
                         + nfactura + "')";
-                result = conexion.ejecutarConsulta(sentencia);
+                result = conexion.ejecutarSql(sentencia);
                 while (result.next())
                 {
                     r = result.getString("ruc");
@@ -495,7 +495,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return r;
@@ -515,7 +515,7 @@ public class FacturaDAO {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally
             {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
     }
@@ -527,16 +527,17 @@ public class FacturaDAO {
         Conexion conn = new Conexion();
         String query = "select idfactura, nfactura, descripcion, importe, pagado, fecha, vencimiento, estado, idproveedor, idasiento\n"
                 + "from factura\n"
-                + "where \"idfactura\"=?;";
+                + "where \"idfactura\"="+id+";";
         try
         {
-            conn.abrirConexion();
-
-            //Statement stmt = conn.conex.createStatement();
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
-            stmt.setInt(1, id);
-
-            ResultSet rs = stmt.executeQuery();
+//            conn.conectar();
+//
+//            //Statement stmt = conn.conex.createStatement();
+//            PreparedStatement stmt = conn.conex.prepareStatement(query);
+//            stmt.setInt(1, id);
+//
+//            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = conn.ejecutarSql(query);
             while (rs.next())
             {
                 fac.setId(rs.getInt("idfactura"));
@@ -557,13 +558,7 @@ public class FacturaDAO {
             return null;
         } finally
         {
-            try
-            {
-                conn.conex.close();
-            } catch (SQLException ex)
-            {
-                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            conn.desconectar();
         }
 
         return fac;
@@ -574,21 +569,22 @@ public class FacturaDAO {
         List<Factura> lista = new ArrayList<>();
 
         Conexion conn = new Conexion();
-        String query = "select * from select_fac_pro(?, ?, ?);";
+        String query = "select * from select_fac_pro('"+desde+"','"+hasta+"',"+opcion+");";
 
         try
         {
-            conn.abrirConexion();
+            
+//            conn.conectar();
+//
+//            //Statement stmt = conn.conex.createStatement();
+//            PreparedStatement stmt = conn.conex.prepareStatement(query);
+//            // Establecemos los argumentos.
+//            stmt.setDate(1, java.sql.Date.valueOf(desde));
+//            stmt.setDate(2, java.sql.Date.valueOf(hasta));
+//            stmt.setInt(3, opcion);
+//            //stmt.setObject(1, new java.sql.Date());
 
-            //Statement stmt = conn.conex.createStatement();
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
-            // Establecemos los argumentos.
-            stmt.setDate(1, java.sql.Date.valueOf(desde));
-            stmt.setDate(2, java.sql.Date.valueOf(hasta));
-            stmt.setInt(3, opcion);
-            //stmt.setObject(1, new java.sql.Date());
-
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = conn.ejecutarSql(query);
             while (rs.next())
             {
                 Factura fac = new Factura();
@@ -623,13 +619,7 @@ public class FacturaDAO {
             return null;
         } finally
         {
-            try
-            {
-                conn.conex.close();
-            } catch (SQLException ex)
-            {
-                Logger.getLogger(FacturaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            conn.desconectar();
         }
 
         return lista;

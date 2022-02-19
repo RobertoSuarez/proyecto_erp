@@ -118,7 +118,7 @@ public class MultaDAO implements IDAO<Multa>  {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return multas;
@@ -143,7 +143,7 @@ public class MultaDAO implements IDAO<Multa>  {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return multas;
@@ -167,7 +167,7 @@ public class MultaDAO implements IDAO<Multa>  {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return multa;
@@ -194,7 +194,7 @@ public class MultaDAO implements IDAO<Multa>  {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return multas;

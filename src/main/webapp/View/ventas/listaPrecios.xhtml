@@ -19,8 +19,8 @@
                                  actionListener="#{preciosMB.abrir}"
                                  update=":form:outputnuevo" process="@this"
                                  onclick="PF('newLista').show()" 
-                                 styleClass="ui-button-success"
-                                 style="margin-right: .5rem">
+                                 style="margin-right: .5rem"
+                                 rendered="#{rolventMB.rendered()}">
                     <p:resetInput target=":form:outputnuevo"/>
                 </p:commandButton>
 
@@ -51,7 +51,9 @@
                                      oncomplete="PF('newLista').show()" 
                                      actionListener="#{preciosMB.cargardatos(precio)}"
                                      process="@this"
-                                     class="ui-button rounded-button"/>
+                                     class="ui-button rounded-button"
+                                     rendered="#{rolventMB.rendered()}"
+                                     />
 <!--                    <p:commandButton class="ui-button-danger rounded-button"
                                      icon="pi pi-trash" process="@this"
                                      update=":form:confirmDHab"

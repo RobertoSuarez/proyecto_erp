@@ -17,6 +17,7 @@ import java.util.List;
  * @author LUIS ALFREDO
  */
 public class PlanContableDAO {
+
     private Conexion conexion = new Conexion();
     private List<CuentaContable> cuentasContables;
     private List<Grupo> grupos;
@@ -27,11 +28,11 @@ public class PlanContableDAO {
 
     public PlanContableDAO() {
         gson = new Gson();
-    }    
+    }
 
 //    public List<CuentaContable> getSubCuentas() {
 //        cuentasContables = new ArrayList<>();
-//        result = conexion.consultar("select * from public.getsubcuentas()");
+//        result = conexion.ejecutarSql("select * from public.getsubcuentas()");
 //        try {
 //            //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
 //            while (result.next()) {
@@ -50,11 +51,11 @@ public class PlanContableDAO {
 //        }
 //        return cuentasContables;
 //    }
-    
     public List<CuentaContable> getSubCuentas() {
         cuentasContables = new ArrayList<>();
-        result = conexion.consultar("select getsubcuentas()");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getsubcuentas()");
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
                 String cadenaJSON = result.getString("getsubcuentas");
@@ -71,8 +72,10 @@ public class PlanContableDAO {
 
     public List<Grupo> getGrupos() {
         grupos = new ArrayList<>();
-        result = conexion.consultar("select getgrupocuenta();");
+
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getgrupocuenta();");
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
@@ -90,8 +93,9 @@ public class PlanContableDAO {
 
     public List<SubGrupo> getSubGrupos(String codigo) {
         subgrupos = new ArrayList<>();
-        result = conexion.consultar("select * from public.subgrupo where idgrupo = "+codigo+"");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select * from public.subgrupo where idgrupo = " + codigo + "");
             while (result.next()) {
                 subgrupos.add(new SubGrupo(
                         result.getInt("idsubgrupo"),
@@ -110,8 +114,9 @@ public class PlanContableDAO {
 
     public List<Cuenta> getCuentas(String codigo) {
         cuentas = new ArrayList<>();
-        result = conexion.consultar("select * from public.cuenta where idsubgrupo = "+codigo+"");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select * from public.cuenta where idsubgrupo = " + codigo + "");
             // int id, int subgrupo, String codigo, String nombre
             while (result.next()) {
                 cuentas.add(new Cuenta(
@@ -133,7 +138,8 @@ public class PlanContableDAO {
         int count = -1;
         System.out.println("####################################" + codigo);
         try {
-            result = conexion.consultar("select count(*) from public.subcuenta where idcuenta = "+codigo+"");
+            conexion.conectar();
+            result = conexion.ejecutarSql("select count(*) from public.subcuenta where idcuenta = " + codigo + "");
             while (result.next()) {
                 count = result.getInt("count");
             }
@@ -147,6 +153,7 @@ public class PlanContableDAO {
 
     public int insertSubCuenta(SubCuenta subcuenta) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertsubcuenta('%1$d', '%2$s', '%3$s', '%4$s')",
                     subcuenta.getCuenta(), subcuenta.getCodigo(), subcuenta.getNombre(), subcuenta.getTipo());
             conexion.ejecutarSql(sql);
@@ -161,6 +168,7 @@ public class PlanContableDAO {
 
     public int insertGrupo(Grupo grupo) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertgrupo('%1$s', '%2$s')",
                     grupo.getCodigo(), grupo.getNombre());
             result = conexion.ejecutarSql(sql);
@@ -176,6 +184,7 @@ public class PlanContableDAO {
 
     public int insertSubGrupo(SubGrupo subGrupo) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertsubgrupo('%1$d', '%2$s', '%3$s')",
                     subGrupo.getGrupo(), subGrupo.getCodigo(), subGrupo.getNombre());
             result = conexion.ejecutarSql(sql);
@@ -188,9 +197,10 @@ public class PlanContableDAO {
         }
         return -1;
     }
-    
+
     public int insertCuenta(Cuenta cuenta) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertcuenta('%1$d', '%2$s', '%3$s')",
                     cuenta.getIdsubgrupo(), cuenta.getCodigo(), cuenta.getNombre());
             result = conexion.ejecutarSql(sql);
@@ -203,9 +213,10 @@ public class PlanContableDAO {
         }
         return -1;
     }
-    
+
     public boolean updateSubCuenta(SubCuenta subCuenta) {
         try {
+            conexion.conectar();
             String obj = gson.toJson(subCuenta);
             String sql = String.format("select updatesubcuenta('%1$s')", obj);
             result = conexion.ejecutarSql(sql);
@@ -217,10 +228,11 @@ public class PlanContableDAO {
         }
         return false;
     }
-    
+
     public boolean isReferenceSubCuenta(int id) {
-        result = conexion.consultar("select is_reference_subcuenta('"+id+"')");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select is_reference_subcuenta('" + id + "')");
             if (result.next()) {
                 return result.getBoolean("is_reference_subcuenta");
             }

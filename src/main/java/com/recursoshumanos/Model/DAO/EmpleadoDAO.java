@@ -203,12 +203,12 @@ public class EmpleadoDAO implements IDAO<Empleado> {
                             result.getDate("fecha_egreso")
                     ));
                 }
-                conexion.cerrarConexion();
+                conexion.desconectar();
                 result.close();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleados;
@@ -248,7 +248,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleados;
@@ -288,7 +288,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleados;

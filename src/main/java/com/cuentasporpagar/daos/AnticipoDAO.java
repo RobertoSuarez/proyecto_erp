@@ -33,9 +33,7 @@ public class AnticipoDAO {
         String query = "select \"id_anticipo\", importe, \"fecha\", descripcion, \"id_proveedor\"\n"
                 + "    from anticipo;";
         try {
-            conn.abrirConexion();
-            Statement stmt = conn.conex.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = conn.ejecutarSql(query);
             while (rs.next()) {
                 Anticipo anticipo = new Anticipo();
                 anticipo.setId_anticipo(rs.getString("id_anticipo"));
@@ -50,23 +48,18 @@ public class AnticipoDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
-            try {
-                conn.conex.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(AnticipoDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            conn.desconectar();
         }
 
         return anticipos;
     }
 
     public List<Anticipo> getAncitipoByProveedor(int idProveedor) {
+        Conexion conn = new Conexion();
         try {
             List<Anticipo> anticipos = new ArrayList<>();
-            Conexion conn = new Conexion();
-            conn.abrirConexion();
             String query = "select \"id_anticipo\", \"importe\", \"id_proveedor\" from public.anticipo where \"id_proveedor\" = " + String.valueOf(idProveedor) + ";";
-            ResultSet rs = conn.ejecutarConsulta(query);
+            ResultSet rs = conn.ejecutarSql(query);
             Anticipo aux;
             while(rs.next()){
                 aux = new Anticipo();
@@ -78,8 +71,11 @@ public class AnticipoDAO {
             if(anticipos.size() > 0){
                 return anticipos;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+        }
+        finally{
+            conn.desconectar();
         }
         return null;
     }
@@ -101,12 +97,9 @@ public class AnticipoDAO {
         Conexion conn = new Conexion();
         String query = "select select_all_anticipo_width_proveedor('" + revertido + "') as _anticipo;";
         try {
-            conn.abrirConexion();
+            conn.conectar();
 
-            Statement statement = conn.conex.createStatement();
-            //PreparedStatement stmt = conn.conex.prepareStatement(query);
-
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = conn.ejecutarSql(query);
             while (rs.next()) {
                 datos = rs.getString("_anticipo");
             }
@@ -114,7 +107,7 @@ public class AnticipoDAO {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
-            conn.conex.close();
+            conn.desconectar();
         }
 
         // Contenedor de los datos.
@@ -176,9 +169,9 @@ public class AnticipoDAO {
         try {
             String queryAsiento = String.format("SELECT public.generateasientocotableexternal2('%s', '%s') as id_asiento", gson.toJson(asiento), gson.toJson(movimientos));
             System.out.println("desde reversión: " + queryAsiento);
-            conn.abrirConexion();
+            conn.conectar();
 
-            Statement statement = conn.conex.createStatement();
+            Statement statement = conn.connection.createStatement();
             ResultSet data = statement.executeQuery(queryAsiento);
             while (data.next()) {
                 id_asiento = data.getInt("id_asiento");
@@ -189,33 +182,27 @@ public class AnticipoDAO {
             System.out.println(ex.getMessage());
             System.out.println("No se puedo registrar el asiento del anticipo, se cacelo todo en el ambito de revertir el anticipo");
             try {
-                conn.conex.close();
+                conn.connection.close();
             } catch (SQLException ex1) {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
             }
             return;
         }
+        finally{
+            conn.desconectar();
+        }
 
         // Actualizamos el anticipo, para revertirlo con el asiento registrado anteriormente.
-        String query = "update anticipo set revertido='true', id_asiento_revertido=? where id_anticipo=?;";
+        String query = "update anticipo set revertido='true', id_asiento_revertido='"+id_asiento+"' where id_anticipo='"+anticipo.getId_anticipo()+"';";
+        conn.ejecutarSql(query);
+        //ResultSet rs = stmt.executeQuery(query);
         try {
-
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
-            stmt.setInt(1, id_asiento);
-            stmt.setString(2, anticipo.getId_anticipo());
-
-            stmt.execute();
-            //ResultSet rs = stmt.executeQuery(query);
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-
-        } finally {
-            try {
-                conn.conex.close();
-            } catch (SQLException ex1) {
-                Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+            conn.connection.close();
+        } catch (SQLException ex1) {
+            Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+        finally{
+            conn.desconectar();
         }
 
     }

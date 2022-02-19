@@ -53,7 +53,7 @@ public class Estado_De_CuentaDAO implements Serializable {
                 valor pendiente
                  */
                 String sentencia = "select*from obtener_estado_cuenta_general()";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 
                 //Instanciamos la clase AbonoDAO.        
                 AbonoDAO abonoDAO= new AbonoDAO();
@@ -87,7 +87,7 @@ public class Estado_De_CuentaDAO implements Serializable {
                 
             }finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }
@@ -111,7 +111,7 @@ public class Estado_De_CuentaDAO implements Serializable {
                 valor pendiente
                  */
                 String sentencia = "select*from obtener_estado_cuenta_cliente("+idCliente+")";
-                result = conex.ejecutarConsulta(sentencia);
+                result = conex.ejecutarSql(sentencia);
                 
                  //Instanciamos la clase AbonoDAO.        
                 AbonoDAO abonoDAO= new AbonoDAO();
@@ -146,7 +146,7 @@ public class Estado_De_CuentaDAO implements Serializable {
                 
             }finally {
 
-                conex.cerrarConexion();
+                conex.desconectar();
 
             }
         }

@@ -24,8 +24,9 @@ public class CuentaDAO {
 
     public List<Cuenta> getCuentas() {
         listaCuenta = new ArrayList<>();
-        result = conexion.consultar("select getcuentas()");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getcuentas()");
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
                 String cadenaJSON = result.getString("getcuentas");
@@ -43,8 +44,9 @@ public class CuentaDAO {
 
     public Cuenta getCuentaById(int id) {
         Cuenta cuenta = new Cuenta();
-        result = conexion.consultar(String.format("select getCuenta('%1$d')", id));
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql(String.format("select getCuenta('%1$d')", id));
             if (result.next()) {
                 String cadenaJSON = result.getString("getcuenta");
                 cuenta = gson.fromJson(cadenaJSON, Cuenta.class);
@@ -60,6 +62,7 @@ public class CuentaDAO {
 
     public boolean insert(Cuenta cuenta) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertcuenta('%1$d', '%2$s', '%3$s')",
                     cuenta.getIdsubgrupo(), cuenta.getCodigo(), cuenta.getNombre());
             result = conexion.ejecutarSql(sql);
@@ -74,7 +77,8 @@ public class CuentaDAO {
 
     public boolean update(Cuenta cuenta) {
         try {
-            String sql = String.format("select updateCuenta('%1$d','%2$s')", 
+            conexion.conectar();
+            String sql = String.format("select updateCuenta('%1$d','%2$s')",
                     cuenta.getIdcuenta(), cuenta.getNombre());
             result = conexion.ejecutarSql(sql);
             return result.next();
@@ -90,10 +94,11 @@ public class CuentaDAO {
         String sql = String.format("delete from cuenta where idcuenta = '%1$d'", id);
         return conexion.eliminar(sql) != -1;
     }
-    
+
     public boolean isReference(int id) {
-        result = conexion.consultar("select is_reference_cuenta('"+id+"')");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select is_reference_cuenta('" + id + "')");
             if (result.next()) {
                 return result.getBoolean("is_reference_cuenta");
             }

@@ -20,22 +20,13 @@
                                         <i class="pi pi-search"></i>
                                         <p:inputText style="margin-right: 6px;" id="globalFilter" placeholder="Buscar"/>
                                     </span>
-                                    <!-- comment<p:button style="margin-right: 6px;" value="Nueva Orden de producción"
-                                                         styleClass="ui-button-primary"
-                                                         icon="pi pi-plus" outcome="oProduccion.xhtml">
-                                        </p:button> -->
-                                    <!-- Tabla de datos
-                                    <p:commandButton style="margin-right: 6px;" value="Filtrar"
-                                                     styleClass="ui-button-secondary" oncomplete="PF('filtro').show()">
-                                    </p:commandButton>
-                                    -->
                                 </div>
                             </p:toolbarGroup>
                         </p:toolbar>
                         <!-- Tabla de datos -->
                         <p:dataTable editable="true" reflow="true"
                                      editInitEvent="dblclick" editMode="cell"
-                                     value="">
+                                     value="#{ordenProduccionMB.listaOrden}" var="ordenProduccion">
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Ordenes de Trabajo</span>
@@ -43,24 +34,25 @@
                                 </div>
                             </f:facet>
                             <p:column headerText="Nº Orden" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{ordenProduccion.codigo_orden}" />
                             </p:column>
 
                             <p:column headerText="Emisión" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{ordenProduccion.fecha_emision}" />
                             </p:column>
 
                             <p:column headerText="Entrega" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{ordenProduccion.fecha_fin}" />
                             </p:column>
                             <p:column headerText="Detalle" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{ordenProduccion.descripcion}" />
                             </p:column>
                             <p:column headerText="Estado" >
-                                <h:outputText value="#" />
+                                <h:outputText value="#{ordenProduccion.estado}" />
                             </p:column>
                             <p:column headerText="Acción" filterStyle="display : none">
-                                <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml"/>
+                                <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml?orden=#{ordenProduccion.codigo_orden}">
+                                </p:button>
                             </p:column>
                         </p:dataTable>
                     </div>

@@ -26,8 +26,8 @@ public class RetencionDAO {
         String query = "select r.\"idRetencion\", r.\"fechaEmision\", r.\"nComprobanteRetencion\", r.\"idFacturaCompra\", r.\"idTipoComprobante\""
                 + "from retencion as r;";
         try {
-            conn.abrirConexion();
-            Statement stmt = conn.conex.createStatement();
+            conn.conectar();
+            Statement stmt = conn.connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 Retencion retencion = new Retencion();
@@ -41,7 +41,7 @@ public class RetencionDAO {
 
                 retenciones.add(retencion);
             }
-            conn.conex.close();
+            conn.connection.close();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
