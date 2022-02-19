@@ -132,12 +132,11 @@ public class FormulaProduccionDAO {
     }
 
     public void update(FormulaProduccion formula) throws SQLException {
-        this.conexion.conectar();
         String sql = "UPDATE public.formula\n"
                 + "	SET  nombre_formula='" + formula.getNombre_formula() + "', descripcion='" + formula.getDescripcion() + "'\n"
                 + "	WHERE codigo_formula=" + formula.getCodigo_formula() + ";";
-        conexion.ejecutar(sql);
-        this.conexion.cerrarConexion();
+        conexion.insertar(sql);
+        conexion.desconectar();
     }
 
     public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException {
