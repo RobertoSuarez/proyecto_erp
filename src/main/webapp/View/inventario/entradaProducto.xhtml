@@ -10,7 +10,7 @@
     <body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                <h:form id="form">
+                <h:form id="entradaForm">
                     <ui:include src="./subheaderinventario.xhtml"/>
                     <p:growl id="msgs" showDetail="true"/>
                     <div class="card">
@@ -43,7 +43,9 @@
                                                     <p:outputLabel value="Proveedor: *"></p:outputLabel>
                                                     <h:form>
                                                         <div class="ui-inputgroup">
-                                                            <p:commandButton icon="pi pi-search"/> 
+                                                            <p:commandButton icon="pi pi-search"
+                                                                             oncomplete="PF('BuscarProveedor').show()"
+                                                                             /> 
                                                             <p:inputText placeholder="Proveedor" />        
                                                         </div>
                                                     </h:form>
@@ -184,12 +186,65 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
+                        <!-- dialogo de buscar al proveedor -->
+                        <p:panel id="outproveedor" header="Proveedor">
+                            <h:panelGrid columns="7" width="80%">
+                                <p:outputLabel value="Identificación: "/>
+                                <p:inputText id="IdNumProveedor" value="#{EntradaMB.proveedordINum}" />
+
+                                <p:outputLabel value="Nombre: "/>
+                                <p:inputText id="NombreProveedor" value="#{EntradaMB.proveedorNombre}" disabled="true" />
+
+                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarProveedor').show()" />
+
+                                <p:commandButton actionListener="#{EntradaMB.buscarProveedorEntrada()}" 
+                                                 value="Buscar" update=":entradaForm:outproveedor" 
+                                                 style="visibility: hidden"/>
+                                <p:inputText value="#{EntradaMB.descuento}" style="visibility: hidden"/>
+                            </h:panelGrid>
+                            <!-- dialogo de buscar al proveedor -->
+                        </p:panel>
+
+                        <!-- Dialogo de buscar proveedor parte 2 -->
+                        <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaCliente"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable var="ListaProveedores" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaProveedores}" 
+                                             selection="#{EntradaMB.proveedorSeleccionado}" rowKey="#{ListaProveedores.idProveedor}" 
+                                             scrollable="true" scrollHeight="250">
+
+                                    <f:facet name="header">
+                                        Clientes Registrados
+                                    </f:facet>
+
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{EntradaMB.SeleccionarProveedor(ListaProveedores)}" update="entradaForm" oncomplete="PF('BuscarProveedor').hide();"/>
+                                    </p:column>
+
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{ListaProveedores.idProveedor}" />
+                                    </p:column>
+
+                                    <p:column headerText="Cliente" >
+                                        <h:outputText value="#{ListaProveedores.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Identificacion">
+                                        <h:outputText value="#{ListaProveedores.ruc}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+
                         <p:dataTable 
                             var="ListaEntradas" 
                             value="#{EntradaMB.listaEntradas}" 
                             editable="true" reflow="true"
-                                     editInitEvent="dblclick" editMode="cell"
-                                     >
+                            editInitEvent="dblclick" editMode="cell"
+                            >
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Entrada de Productos</span>
