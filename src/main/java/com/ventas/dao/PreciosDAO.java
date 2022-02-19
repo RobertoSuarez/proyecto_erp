@@ -42,7 +42,7 @@ public class PreciosDAO {
             String Sentencia = "select p.idlistaprecios,p.idtipocliente,"
                     + "t.tipocliente,t.descripcion,p.descuento from listaprecios "
                     + "p inner join tipocliente t on p.idtipocliente = t.idtipocliente";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 listaprecios.add(new Precios(result.getInt("idlistaprecios"),
                         result.getInt("idtipocliente"),
@@ -53,7 +53,7 @@ public class PreciosDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return listaprecios;
     }
@@ -61,7 +61,7 @@ public class PreciosDAO {
     public List<SelectItem> llenarTipos() {
         try {
             String Sentencia = "select * from tipocliente";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 SelectItem Agregar = new SelectItem(result.getInt("idtipocliente"), result.getString("tipocliente"));
                 listatipos.add(Agregar);
@@ -69,7 +69,7 @@ public class PreciosDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return listatipos;
     }
@@ -80,7 +80,7 @@ public class PreciosDAO {
                     + "descuentocliente d inner join productos p on \n"
                     + "d.codprincipal = p.codprincipal where d.idlistaprecios = "
                     + "(select idlistaprecios from listaprecios where idtipocliente = "+id+")";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 Producto p = new Producto();
                 p.setCodigo(result.getInt("codprincipal"));
@@ -90,7 +90,7 @@ public class PreciosDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return listaproducto;
     }
@@ -99,14 +99,14 @@ public class PreciosDAO {
         boolean dato = true;
         try {
             String Sentencia = "select tipo from listaprecios where idtipocliente = '" + id + "'";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 dato = result.getBoolean("tipo");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return dato;
     }
@@ -115,14 +115,14 @@ public class PreciosDAO {
         boolean dato = true;
         try {
             String Sentencia = "select tipo from listaprecios where idtipocliente = '" + id + "'";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 dato = result.getBoolean("tipo");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return dato;
     }
@@ -133,14 +133,14 @@ public class PreciosDAO {
 
             String Sentencia = "select public.insertar_listaprecios('"
                     + precios.getIdtipocliente() + "','" + precios.getDescuento() + "'," + radio + ")";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 existe = result.getInt("insertar_listaprecios");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return existe;
     }
@@ -151,7 +151,7 @@ public class PreciosDAO {
             for (int i = 0; i < listaproduc.size(); i++) {
                 String Sentencia = "select public.insertar_descuento('"
                         + idtc + "'," + listaproduc.get(i).getCodigo() + ")";
-                result = conexion.ejecutarConsulta(Sentencia);
+                result = conexion.ejecutarSql(Sentencia);
                 while (result.next()) {
                     existe = result.getInt("insertar_descuento");
                 }
@@ -159,7 +159,7 @@ public class PreciosDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return existe;
     }
@@ -168,14 +168,14 @@ public class PreciosDAO {
         int existe = 1;
         try {
             String Sentencia = "select public.delete_listaprecios_detalle('" + idtc + "')";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 existe = result.getInt("delete_listaprecios_detalle");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return existe;
     }
@@ -185,14 +185,14 @@ public class PreciosDAO {
         try {
             String Sentencia = "select public.delete_descuento('"
                     + idtc + "')";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 existe = result.getInt("delete_descuento");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return existe;
     }
@@ -203,14 +203,14 @@ public class PreciosDAO {
 
             String Sentencia = "select public.update_listaprecio('"
                     + precios.getIdtipocliente() + "','" + precios.getDescuento() + "'," + radio + ")";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 existe = result.getInt("update_listaprecio");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return existe;
     }
@@ -221,14 +221,14 @@ public class PreciosDAO {
 
             String Sentencia = "select descuento from listaprecios where idtipocliente = '"
                     + idtipo+ "'";
-            result = conexion.ejecutarConsulta(Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 des = result.getInt("descuento");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return des;
     }
@@ -237,9 +237,9 @@ public class PreciosDAO {
         int idtipo = 2;
         try {
             if (id.length() <= 10) {
-                result = conexion.ejecutarConsulta("select * from public.buscarclientenatural('" + id.trim() + "')");
+                result = conexion.ejecutarSql("select * from public.buscarclientenatural('" + id.trim() + "')");
             } else if (id.length() > 10) {
-                result = conexion.ejecutarConsulta("select * from public.buscarclientejuridico('" + id.trim() + "')");
+                result = conexion.ejecutarSql("select * from public.buscarclientejuridico('" + id.trim() + "')");
             } else {
                 result = null;
             }
@@ -249,7 +249,7 @@ public class PreciosDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
         } finally {
-            conexion.cerrarConexion();
+            conexion.desconectar();
         }
         return idtipo;
     }

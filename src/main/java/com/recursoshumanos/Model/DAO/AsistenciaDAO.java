@@ -185,7 +185,7 @@ public class AsistenciaDAO implements IDAO<Asistencia> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return asistencia;
@@ -228,7 +228,7 @@ public class AsistenciaDAO implements IDAO<Asistencia> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return asistencias;
@@ -265,7 +265,7 @@ public class AsistenciaDAO implements IDAO<Asistencia> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return asistencias;

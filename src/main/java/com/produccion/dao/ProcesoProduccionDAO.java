@@ -88,7 +88,7 @@ public class ProcesoProduccionDAO {
             sentenciaSql = "INSERT INTO public.proceso_produccion(nombre, descripcion, identificador)\n"
                     + "	VALUES ('" + proceso.getNombre() + "', '" + proceso.getDescripcion() + "', '" + proceso.getIdentificador() + "')";
             //enviamos la sentencia
-            conexion.ejecutar(sentenciaSql);
+            conexion.ejecutarSql(sentenciaSql);
         } catch (Exception e) {
         } finally {
             conexion.desconectar();
@@ -120,7 +120,7 @@ public class ProcesoProduccionDAO {
      */
     public void delete(ProcesoProduccion proceso, String aux) throws SQLException {
         sentenciaSql = ("DELETE FROM public.proceso_produccion WHERE identificador = '" + aux + "'");
-        conexion.ejecutar(sentenciaSql);
+        conexion.ejecutarSql(sentenciaSql);
         conexion.desconectar();
     }
 }

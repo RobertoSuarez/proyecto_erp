@@ -176,7 +176,7 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return cargaFamiliar;
@@ -226,7 +226,7 @@ public class CargaFamiliarDAO implements IDAO<CargaFamiliar> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return cargaFamiliares;

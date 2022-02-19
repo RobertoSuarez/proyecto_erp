@@ -173,7 +173,7 @@ public class DiaSemanaDAO implements IDAO<DiaSemana>{
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

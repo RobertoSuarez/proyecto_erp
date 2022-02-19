@@ -23,15 +23,16 @@ public class GrupoDAO {
 
     public List<Grupo> getGrupoCuenta() {
         listaGrupo = new ArrayList<>();
-        result = conexion.ejecutarSql("select getgrupocuenta()");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getgrupocuenta()");
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));
                 String cadenaJSON = result.getString("getgrupocuenta");
                 Grupo g = gson.fromJson(cadenaJSON, Grupo.class);
                 listaGrupo.add(g);
             }
-            
+
             return listaGrupo;
         } catch (SQLException ex) {
             System.out.println("Error getgrupocuenta: " + ex.getMessage());
@@ -40,11 +41,12 @@ public class GrupoDAO {
             conexion.desconectar();
         }
     }
-    
+
     public Grupo getGrupoById(int id) {
         Grupo g = null;
-        result = conexion.ejecutarSql("select getgrupocuentabyid("+id+")");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getgrupocuentabyid(" + id + ")");
             if (result.next()) {
                 String cadenaJSON = result.getString("getgrupocuentabyid");
                 g = gson.fromJson(cadenaJSON, Grupo.class);
@@ -58,8 +60,9 @@ public class GrupoDAO {
     }
 
     public int getUltimoCodigo() {
-        result = conexion.ejecutarSql("select getultimocodigogrupo()");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select getultimocodigogrupo()");
             if (result.next()) {
                 return result.getInt("getultimocodigogrupo");
             }
@@ -73,6 +76,7 @@ public class GrupoDAO {
 
     public boolean insert(Grupo grupo) {
         try {
+            conexion.conectar();
             String sql = String.format("select insertgrupo('%1$s', '%2$s')",
                     grupo.getCodigo(), grupo.getNombre());
             result = conexion.ejecutarSql(sql);
@@ -88,6 +92,7 @@ public class GrupoDAO {
 
     public boolean update(Grupo grupo) {
         try {
+            conexion.conectar();
             String obj = gson.toJson(grupo);
             String sql = String.format("select updategrupocuenta('%1$s')", obj);
             result = conexion.ejecutarSql(sql);
@@ -101,15 +106,16 @@ public class GrupoDAO {
         }
         return false;
     }
-    
+
     public boolean delete(int id) {
         String sql = String.format("delete from grupocuenta where idgrupo = '%1$d'", id);
         return conexion.eliminar(sql) != -1;
     }
-    
+
     public boolean isReference(int id) {
-        result = conexion.ejecutarSql("select is_reference('"+id+"')");
         try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select is_reference('" + id + "')");
             if (result.next()) {
                 System.out.println("result:" + result.getBoolean("is_reference"));
                 return result.getBoolean("is_reference");

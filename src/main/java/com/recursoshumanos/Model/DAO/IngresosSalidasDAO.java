@@ -175,13 +175,13 @@ public class IngresosSalidasDAO implements IDAO<IngresosSalidas>{
                             )
                     );
                 }
-                conexion.cerrarConexion();
+                conexion.desconectar();
                 result.close();
                 return lista;
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

@@ -222,7 +222,7 @@ public class SueldoDAO  implements IDAO<Sueldo> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return sueldo;
@@ -254,7 +254,7 @@ public class SueldoDAO  implements IDAO<Sueldo> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return sueldos;
@@ -293,7 +293,7 @@ public class SueldoDAO  implements IDAO<Sueldo> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return sueldos;

@@ -193,7 +193,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return detalleHorario;
@@ -253,7 +253,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;
@@ -289,7 +289,7 @@ public class DetalleHorarioDAO implements IDAO<DetalleHorario> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return null;

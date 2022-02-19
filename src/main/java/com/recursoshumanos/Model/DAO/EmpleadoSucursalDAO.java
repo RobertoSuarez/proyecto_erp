@@ -201,7 +201,7 @@ public class EmpleadoSucursalDAO implements IDAO<EmpleadoSucursal> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleadoSucursal;
@@ -237,7 +237,7 @@ public class EmpleadoSucursalDAO implements IDAO<EmpleadoSucursal> {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             } finally {
-                conexion.cerrarConexion();
+                conexion.desconectar();
             }
         }
         return empleadoSucursals;

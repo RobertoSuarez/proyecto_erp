@@ -146,6 +146,82 @@ public class Conexion implements Serializable {
         return result;
     }
 
+    // MÉTODO PARA CUENTAS POR COBRAR
+    public int ejecutarProcedimiento(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                st.executeQuery(sql);
+                mensaje = "El procedimiento se ejecutó correctamente";
+                retorno = 1;
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            desconectar();
+        }
+        return retorno;
+    }
+
+    // MÉTODO PARA CONTABILIDAD
+    public int eliminar(String sql) {
+        int result = -1;
+        try {
+            conectar();
+            result = statement.executeUpdate(sql);
+            System.out.println("Se ha eliminado el registro");
+        } catch (SQLException e) {
+            System.out.println("No se ha podido eliminar el registro " + e.getMessage());
+        } finally {
+            desconectar();
+        }
+        return result;
+    }
+
+    // MÉTODO PARA PRODUCCIÓN
+    public int insertar(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                System.out.println(retorno = st.executeUpdate(sql));
+                mensaje = "Se insertó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+                System.out.println(retorno + "HOLIS");
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje + " AQUI");
+        }
+        desconectar();
+        return retorno;
+    }
+
+    //  OTRO MÉTODO PARA PRODUCCIÓN
+    public int ejecutar(String sql) {
+        int retorno = -1;
+        try {
+            if (conectar()) {
+                retorno = st.executeUpdate(sql);
+                mensaje = "Se guardó correctamente : ";
+                tipoMensaje = FacesMessage.SEVERITY_INFO;
+            }
+        } catch (SQLException exc) {
+            System.out.println(sql);
+            mensaje = exc.getMessage();
+            tipoMensaje = FacesMessage.SEVERITY_FATAL;
+            System.out.println(mensaje);
+        } finally {
+            desconectar();
+        }
+        return retorno;
+    }
+
     //Para modulo activos fijos
     public String obtenerValor(String consulta, int indx) {
         String valor = "";
@@ -377,65 +453,7 @@ public class Conexion implements Serializable {
         }
         return lector;
     }
-    **/
 
-    public int ejecutarProcedimiento(String sql) {
-        int retorno = -1;
-        try {
-            if (conectar()) {
-                st.executeQuery(sql);
-                mensaje = "El procedimiento se ejecutó correctamente";
-                retorno = 1;
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        } finally {
-            desconectar();
-        }
-        return retorno;
-    }
-
-    /**
-    public int ejecutar(String sql) {
-        int retorno = -1;
-        try {
-            if (conectar()) {
-                retorno = st.executeUpdate(sql);
-                mensaje = "Se guardó correctamente : ";
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje);
-        } finally {
-            desconectar();
-        }
-        return retorno;
-    }
-
-   **/
-
-    public int eliminar(String sql) {
-        int result = -1;
-        try {
-            conectar();
-            result = statement.executeUpdate(sql);
-            System.out.println("Se ha eliminado el registro");
-        } catch (SQLException e) {
-            System.out.println("No se ha podido eliminar el registro " + e.getMessage());
-        } finally {
-            desconectar();
-        }
-        return result;
-    }
-
-    /**
     public ResultSet consultar(String sql) {
         try {
             conectar();
@@ -445,27 +463,6 @@ public class Conexion implements Serializable {
         }
         return result;
     }
-
-    public int insertar(String sql) {
-        int retorno = -1;
-        try {
-            if (conectar()) {
-                System.out.println(retorno = st.executeUpdate(sql));
-                mensaje = "Se insertó correctamente : ";
-                tipoMensaje = FacesMessage.SEVERITY_INFO;
-                System.out.println(retorno + "HOLIS");
-            }
-        } catch (SQLException exc) {
-            System.out.println(sql);
-            mensaje = exc.getMessage();
-            tipoMensaje = FacesMessage.SEVERITY_FATAL;
-            System.out.println(mensaje + " AQUI");
-        }
-        desconectar();
-        return retorno;
-    }
-
-    
 
     public void Conectar() throws SQLException {
         try {
