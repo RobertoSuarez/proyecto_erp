@@ -25,7 +25,7 @@ public class RolDAO {
         String query = "select r.* from public.\"rolUsuario\" ru inner join public.rol r on ru.\"idRol\" = r.\"idRol\" where ru.\"idUsuario\" = " + String.valueOf(idUsuario) + ";";
         ResultSet rs;
         try {
-            this.conexion.Conectar();
+            this.conexion.conectar();
 
             rs = conexion.ejecutarSql(query);
 
