@@ -125,9 +125,9 @@ public class FormulaProduccionDAO {
     public int insertarFormula(FormulaProduccion f) {
         try {
             String cadena = "INSERT INTO public.formula(\n"
-                    + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\",tiempo_formula)\n"
+                    + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\",tiempo_formula, tiempo_unidad, modunidad, cifunidad)\n"
                     + "	VALUES ( " + f.getCodigo_proceso() + ", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento()
-                    + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ", " + f.getTiempoFormula() + ");";
+                    + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ", " + f.getTiempoFormula() +", " + f.getTiempoUnidad()+", " + f.getMODUnidad()+", " + f.getCIFUnidad()+ ");";
             return conexion.insertar(cadena);
         } catch (Exception e) {
             return -1;
@@ -137,22 +137,12 @@ public class FormulaProduccionDAO {
     }
 
     public void update(FormulaProduccion formula) throws SQLException {
-        try {
-            this.conexion.Conectar();
-            String sql = "UPDATE public.formula\n"
-                    + " SET codigo_proceso='" + formula.getCodigo_proceso() + "',"
-                    + " nombre_formula='" + formula.getNombre_formula() + "', "
-                    + " descripcion='" + formula.getDescripcion() + "', "
-                    + " rendimiento='" + formula.getRendimiento() + "', "
-                    + " estado='" + formula.getEstado() + "', "
-                    + " codigo_producto='" + formula.getCodigo_producto() + "', "
-                    + "Where codigo_formula= ";
-            conexion.ejecutar(sql);
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            this.conexion.cerrarConexion();
-        }
+        this.conexion.conectar();
+        String sql = "UPDATE public.formula\n"
+                + "	SET  nombre_formula='" + formula.getNombre_formula() + "', descripcion='" + formula.getDescripcion() + "'\n"
+                + "	WHERE codigo_formula=" + formula.getCodigo_formula() + ";";
+        conexion.ejecutar(sql);
+        this.conexion.cerrarConexion();
     }
 
     public void eliminarF(FormulaProduccion formulaProduccion, String aux) throws SQLException {
@@ -227,6 +217,63 @@ public class FormulaProduccionDAO {
         } finally {
             conexion.cerrarConexion();
         }
+    }
+
+    public List<FormulaProduccion> traemeFormula(int id) {
+        List<FormulaProduccion> editFormula = new ArrayList<>();
+        String sqlSentencia = "select f.codigo_formula, a.nombre,f.nombre_formula,f.descripcion,\n"
+                + "	f.rendimiento,t.tipo,c.nom_categoria,pp.nombre as nombreproceso\n"
+                + "	from formula as f \n"
+                + "	inner join proceso_produccion as pp on pp.codigo_proceso=f.codigo_proceso\n"
+                + "	inner join articulos as a \n"
+                + "	inner join tipo as t  on t.cod=a.id_tipo\n"
+                + "	inner join categoria as c on c.cod=a.id_categoria\n"
+                + "	on f.codigo_producto=a.id\n"
+                + "	where f.codigo_formula=" + id + "";
+        try {
+
+            resultSet = conexion.ejecutarSql(sqlSentencia);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                editFormula.add(new FormulaProduccion(resultSet.getInt("codigo_formula"), resultSet.getString("nombre_formula"), resultSet.getString("nombre"), resultSet.getString("descripcion"), resultSet.getInt("rendimiento"), resultSet.getString("nombreproceso"),
+                        resultSet.getString("nom_categoria"), resultSet.getString("tipo")));
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return editFormula;
+    }
+
+    public List<FormulaProduccion> listaMateriales(int id) {
+        List<FormulaProduccion> editFormula = new ArrayList<>();
+        String sqlSentencia = "select df.codigo_formula,a.id, a.nombre as nombre_producto,a.descripcion,df.unidad_medida,df.cantidad_unitaria,\n"
+                + "a.costo,sp.codigo_subproceso,sp.nombre \n"
+                + "from detalle_formula as df \n"
+                + "inner join articulos as a on df.codigo_producto=a.id\n"
+                + "inner join subproceso as sp on sp.codigo_subproceso=df.codigo_subproceso\n"
+                + "where df.codigo_formula=" + id + "";
+        try {
+
+            resultSet = conexion.ejecutarSql(sqlSentencia);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                editFormula.add(new FormulaProduccion(resultSet.getInt("codigo_formula"),
+                        resultSet.getInt("codigo_subproceso"), resultSet.getInt("id"), resultSet.getString("nombre_producto"),
+                        resultSet.getString("descripcion"), resultSet.getString("nombre"), resultSet.getFloat("costo"),
+                        resultSet.getFloat("cantidad_unitaria"), resultSet.getString("unidad_medida")));
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return editFormula;
     }
 
 }

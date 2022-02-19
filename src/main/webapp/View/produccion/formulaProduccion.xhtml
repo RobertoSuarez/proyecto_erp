@@ -30,269 +30,7 @@
                         </p:toolbar>
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <!-- Cuadro de dialogo de formula -->
-                                <p:dialog id="id_formulaN" 
-                                          header="Nueva Fórmula" 
-                                          showEffect="fade" 
-                                          modal="true"
-                                          widgetVar="crearFormulaDialog" 
-                                          responsive="true" width="90%"
-                                          draggable="false" height="580">
-                                    <!-- Panel Nueva Formula -->
-                                    <p:outputPanel id="manage-nuevaFormula-form" class="ui-fluid">
-                                        <div class="p-grid p-justify-around">
-                                            <div class="p-col-12 p-md-12 p-lg-12">
-                                                <div class="p-grid">
-                                                    <!-- Cuadros de texto de la izquierda -->
-                                                    <div class="p-col-6">
-                                                        <div class="p-grid">
-                                                            <div class="p-col-2">
-                                                                <p:outputLabel>
-                                                                    N°Producto : 
-                                                                </p:outputLabel>
-                                                                <p:inputText 
-                                                                    value="#{formulaMB.formulaProduccion.codigo_producto}">
-                                                                </p:inputText>
-                                                            </div>
-                                                            <div class="p-col-6">
-                                                                <p:outputLabel>
-                                                                    Nombre : 
-                                                                </p:outputLabel>
-                                                                <p:inputText 
-                                                                    id="nombreProducto" 
-                                                                    value="#{formulaMB.formulaProduccion.nombre_producto}">
-                                                                </p:inputText>
-                                                            </div>
-                                                            <div class="p-col-4">
-                                                                <p:outputLabel 
-                                                                    value="." 
-                                                                    style="color: white"/>
-                                                                <p:commandButton 
-                                                                    style="margin-right: 6px;" 
-                                                                    value="Buscar" 
-                                                                    styleClass="ui-button-secondary" 
-                                                                    icon="pi pi-search" 
-                                                                    oncomplete="PF('producto').show()">
-                                                                </p:commandButton>
-                                                            </div>
-                                                        </div>
-                                                        <div class="p-grid">
-                                                            <div class="p-col-2">
-                                                                <p:outputLabel>
-                                                                    N°Formula : 
-                                                                </p:outputLabel>
-                                                                <p:inputText 
-                                                                    value="#{formulaMB.formulaProduccion.codigo_formula}">
-                                                                </p:inputText>
-                                                            </div>
-                                                            <div class="p-col-10">    
-                                                                <p:outputLabel 
-                                                                    value="Nombre Formula:">    
-                                                                </p:outputLabel>
-                                                                <p:inputText 
-                                                                    value="#{formulaMB.formulaProduccion.nombre_formula}">
-                                                                </p:inputText>
-                                                            </div>
-                                                        </div>
-                                                        <p:outputLabel>
-                                                            Descripción : 
-                                                        </p:outputLabel>
-                                                        <p:inputTextarea 
-                                                            maxlength="50"
-                                                            placeholder="Descripcion maximo 50 caracteres"
-                                                            value="#{formulaMB.formulaProduccion.descripcion}"
-                                                            rows="5" 
-                                                            cols="33" 
-                                                            autoResize="false"/>
-                                                        <p:outputLabel> 
-                                                            Rendimiento : 
-                                                        </p:outputLabel>
-                                                        <p:inputNumber 
-                                                            value="#{formulaMB.formulaProduccion.rendimiento}" 
-                                                            maxlength="25"
-                                                            placeholder="Ingrese numero">
-                                                        </p:inputNumber>
-                                                    </div>
-                                                    <!-- Cuadros de texto de la derecha -->
-                                                    <div class="p-col-6">
-                                                        <p:outputLabel 
-                                                            value="Tipo:">   
-                                                        </p:outputLabel>
-                                                        <p:inputText 
-                                                            value="#{formulaMB.formulaProduccion.tipo}" 
-                                                            readonly="true"
-                                                            disabled="#">
-                                                        </p:inputText>
-                                                        <p:outputLabel 
-                                                            value="Categoria:">    
-                                                        </p:outputLabel>
-                                                        <p:inputText 
-                                                            value="#{formulaMB.formulaProduccion.categoria}" 
-                                                            readonly="true">
-                                                        </p:inputText>
-                                                        <p:outputLabel 
-                                                            value="Producción tipo costo:">                          
-                                                        </p:outputLabel>
-                                                        <p:selectOneRadio 
-                                                            unselectable="true">
-                                                            <f:selectItem 
-                                                                itemLabel="Detallado" 
-                                                                itemValue="Option1"/>
-                                                            <f:selectItem 
-                                                                itemLabel="Estandar" 
-                                                                itemValue="Option2"/>
-                                                        </p:selectOneRadio>
-                                                        <p:outputLabel 
-                                                            value="MOD:">
-                                                        </p:outputLabel>
-                                                        <p:inputNumber 
-                                                            value="" readonly="true">
-                                                        </p:inputNumber>
-                                                        <p:outputLabel 
-                                                            value="CIF:">
-                                                        </p:outputLabel>
-                                                        <p:inputNumber 
-                                                            value="" 
-                                                            readonly="true"
-                                                            disabled="#">
-                                                        </p:inputNumber>
-                                                        <p:outputLabel 
-                                                            value="Proceso Principal:">    
-                                                        </p:outputLabel>
-                                                        <p:selectOneMenu
-                                                            value="#{formulaMB.formulaProduccion.codigo_proceso}"
-                                                            editable="false">
-                                                            <p:ajax listener="#{formulaMB.subProcesoLista()}"/>
-                                                            <f:selectItem 
-                                                                itemLabel="Seleccionar Proceso" 
-                                                                itemValue=""/>
-                                                            <f:selectItems 
-                                                                value="#{formulaMB.listProceso}" 
-                                                                var="proceso"
-                                                                itemLabel="#{proceso.nombre}"
-                                                                itemValue="#{proceso.codigo_proceso}"/>
-                                                        </p:selectOneMenu>
-                                                    </div>
-                                                    <!-- Boton Materia Prima -->
-                                                    <div class="p-col-2">
-                                                        <p:commandButton 
-                                                            value="Materia Prima" 
-                                                            process="@this"
-                                                            disabled="#"
-                                                            actionListener="#"
-                                                            icon="pi pi-plus" 
-                                                            oncomplete="PF('materiaPrima').show()"/>
-                                                    </div>
-                                                    <div class="card">
-                                                        <!-- Tabla Nueva formula dentro del panel -->
-                                                        <p:dataTable 
-                                                            id="MaterialesProducto" 
-                                                            editable="true" 
-                                                            reflow="true" 
-                                                            var="Materiales"
-                                                            editInitEvent="dblclick" 
-                                                            editMode="cell"
-                                                            value="#{formulaMB.listaMateriales}">
-                                                            <p:column headerText="Nombre">
-                                                                <h:outputText 
-                                                                    value="#{Materiales.codigFormula}" />
-                                                            </p:column>
-                                                            <p:column 
-                                                                headerText="Descripción">
-                                                                <h:outputText 
-                                                                    value="#{Materiales.codigoProducto}" />
-                                                            </p:column>
 
-                                                            <p:column 
-                                                                headerText="Unidad de Medida">
-                                                                <h:outputText 
-                                                                    value="" />
-                                                            </p:column>
-                                                            <p:column 
-                                                                headerText="Cantidad">
-                                                                <h:outputText 
-                                                                    value="" />
-                                                            </p:column>
-                                                            <p:column 
-                                                                headerText="Precio">
-                                                                <h:outputText 
-                                                                    value="" />
-                                                            </p:column>
-                                                            <p:column 
-                                                                headerText="Sub Procesos">
-                                                                <p:selectOneMenu 
-                                                                    id="ElegirSubrocesos" 
-                                                                    value="#{formulaMB.formulaProduccion.codigo_subproceso}">
-                                                                    <f:selectItem 
-                                                                        itemLabel="Seleccionar"/>
-                                                                    <f:selectItems 
-                                                                        value="#{formulaMB.listSubProceso}" 
-                                                                        var="subproceso"
-                                                                        itemLabel="#{subproceso.nombre}"
-                                                                        itemValue="#{subproceso.codigo_subproceso}"/>
-                                                                </p:selectOneMenu>
-                                                            </p:column>
-                                                            <!-- BOTONES DE ACCIONES -->
-                                                            <!-- Boton de Editar -->
-                                                            <p:column headerText="Acciones">
-                                                                <p:column headerText="Acciones">
-                                                                    <p:commandButton 
-                                                                        icon="pi pi-pencil" 
-                                                                        action="#"  
-                                                                        styleClass="edit-button rounded-button ui-button-primary" 
-                                                                        process=""
-                                                                        oncomplete="PF('modificarForm').show()">
-                                                                    </p:commandButton>
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                    <!-- Boton de Eliminar -->
-                                                                    <p:commandButton 
-                                                                        icon="pi pi-trash" 
-                                                                        action="#"  
-                                                                        styleClass="edit-button rounded-button ui-button-danger" 
-                                                                        process="@this"
-                                                                        oncomplete="PF('eliminarForm').show()"
-                                                                        style="margin-left: 6px;">
-                                                                        <f:setPropertyActionListener 
-                                                                            value="#" 
-                                                                            target="#"/>
-                                                                        <p:resetInput 
-                                                                            target=""/>
-                                                                    </p:commandButton>
-                                                                </p:column>
-                                                            </p:column>
-                                                        </p:dataTable>
-                                                    </div>
-
-                                                    <!-- BOTONES GUARDAR/CERRAR -->
-                                                    <div class="p-col-12">
-                                                        <div class="p-grid p-justify-end">
-                                                            <!-- Boton Guardar -->
-                                                            <div class="p-col-2">
-                                                                <p:commandButton 
-                                                                    value="Guardar " 
-                                                                    actionListener="#{formulaMB.insertar()}"
-                                                                    update=":form-princFormula:dtformulaPrin"
-                                                                    process="manage-nuevaFormula-form @this"
-                                                                    icon="pi pi-check" 
-                                                                    styleClass="ui-button-primary">
-                                                                </p:commandButton>
-                                                            </div>
-                                                            <!-- Boton Cerrar -->
-                                                            <div class="p-col-2">
-                                                                <p:commandButton 
-                                                                    value="Cerrar" 
-                                                                    icon="pi pi-times"
-                                                                    styleClass="ui-button-danger" 
-                                                                    process="@this"
-                                                                    oncomplete="PF('crearFormula').hide()"/>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </p:outputPanel>
-                                </p:dialog>
 
                                 <!-- Cuadro de dialogo  Modificar formula -->
                                 <p:dialog header="Modificar Fórmula" 
@@ -303,7 +41,7 @@
                                           width="90%"
                                           draggable="false" 
                                           height="550">
-                                    <p:outputPanel class="ui-fluid">
+                                    <p:outputPanel id="editarFormula" class="ui-fluid">
                                         <p:outputPanel>
                                             <div class="p-grid p-justify-around">
                                                 <!-- Cuadros de texto de la izquierdo -->
@@ -311,29 +49,32 @@
                                                     <div class="p-grid">
                                                         <div class="p-col-12">
                                                             <p:outputLabel 
-                                                                value="Nombre"/>
+                                                                value="Nombre Producto"/>
                                                             <p:inputText 
-                                                                disabled="#"
-                                                                value=""
+                                                                value="#{formulaMB.formulaProduccion.nombre_producto}"
+                                                                maxlength="24" readonly="true">    
+                                                            </p:inputText>
+                                                            <p:outputLabel 
+                                                                value="Nombre"/>
+                                                            <p:inputText
+                                                                value="#{formulaMB.formulaProduccion.nombre_formula}"
                                                                 maxlength="24">    
                                                             </p:inputText>
                                                         </div> 
                                                         <div class="p-col-12">
                                                             <p:outputLabel 
                                                                 value="Descripción:"></p:outputLabel>
-                                                            <p:inputText 
-                                                                disabled="#"
-                                                                value=""
+                                                            <p:inputText
+                                                                value="#{formulaMB.formulaProduccion.descripcion}"
                                                                 maxlength="24">    
                                                             </p:inputText>
                                                         </div>
                                                         <div class="p-col-12">
                                                             <p:outputLabel 
                                                                 value="Rendimiento:"></p:outputLabel>
-                                                            <p:inputText 
-                                                                disabled="#"
-                                                                value=""
-                                                                maxlength="24">                                                                  
+                                                            <p:inputText
+                                                                value="#{formulaMB.formulaProduccion.rendimiento}"
+                                                                maxlength="24" readonly="true">                                                                  
                                                             </p:inputText>
                                                         </div>
                                                     </div>
@@ -346,9 +87,8 @@
                                                                 value="Tipo:">  
                                                             </p:outputLabel>
                                                             <p:inputText 
-                                                                value="" 
-                                                                readonly="true"
-                                                                disabled="#">
+                                                                value="#{formulaMB.formulaProduccion.tipo}" 
+                                                                readonly="true">
                                                             </p:inputText>
                                                         </div>
                                                         <div class="p-col-12">
@@ -356,128 +96,56 @@
                                                                 value="Categoria:">                                                                  
                                                             </p:outputLabel>
                                                             <p:inputText 
-                                                                value="" 
-                                                                readonly="true"
-                                                                disabled="#">
+                                                                value="#{formulaMB.formulaProduccion.categoria}" 
+                                                                readonly="true">
                                                             </p:inputText>
                                                         </div>
                                                         <div class="p-col-12">
                                                             <p:outputLabel 
                                                                 value="Proceso Principal:">   
                                                             </p:outputLabel>
-                                                            <p:selectOneMenu 
-                                                                id="procesoModi" 
-                                                                value="" 
-                                                                editable="false" 
-                                                                disabled="#">
-                                                                <f:selectItem 
-                                                                    itemLabel="Seleccione Proceso" 
-                                                                    itemValue="" 
-                                                                    noSelectionOption="true"/>
-                                                                <f:selectItems 
-                                                                    value="" 
-                                                                    var="procesoModi" 
-                                                                    itemLabel="#" 
-                                                                    itemValue="#">           
-                                                                </f:selectItems>
-                                                            </p:selectOneMenu>
+                                                            <p:inputText 
+                                                                value="#{formulaMB.formulaProduccion.nombre}" 
+                                                                readonly="true">
+                                                            </p:inputText>
+
+                                                        </div>
+                                                        <div class="p-col-12">
+                                                            <p:outputLabel 
+                                                                value="N° Referencia:">   
+                                                            </p:outputLabel>
+                                                            <p:inputText 
+                                                                value="#{formulaMB.formulaProduccion.codigo_formula}">
+                                                            </p:inputText>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="p-col-11">
                                                     <div class="p-grid">
-                                                        <!-- Boton Materia Prima -->
-                                                        <div class="p-col-2">
-                                                            <p:commandButton 
-                                                                value="Materia Prima" 
-                                                                process="@this"
-                                                                disabled="#"
-                                                                actionListener="#"
-                                                                icon="pi pi-plus" 
-                                                                oncomplete="PF('materiaPrima').show()"/>
-                                                        </div>
                                                         <!-- Tabla de materia prima -->
                                                         <div class="p-col-14">
-                                                            <p:dataTable 
-                                                                editable="true" 
-                                                                reflow="true" 
-                                                                var="Materiales"
-                                                                editInitEvent="dblclick" 
-                                                                editMode="cell"
-                                                                value="#{formulaMB.listaMateriales}">
-                                                                <p:column 
-                                                                    headerText="Nombre" 
-                                                                    filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{Materiales.codigFormula}" />
-                                                                    <p:skeleton 
-                                                                        rendered="#">  
-                                                                    </p:skeleton>
-                                                                </p:column>
-                                                                <p:column 
-                                                                    headerText="Descripción" 
-                                                                    filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#" />
-                                                                    <p:skeleton 
-                                                                        rendered="#">
-                                                                    </p:skeleton>
+                                                            <p:dataTable id="MaterialesProducto" editable="true" reflow="true" var="Materiales"
+                                                                         editInitEvent="dblclick" editMode="cell"
+                                                                         value="#{formulaMB.listaEditar}">
+                                                                <p:column headerText="Nombre">
+                                                                    <h:outputText value="#{Materiales.nombre_producto}" />
                                                                 </p:column>
 
-                                                                <p:column 
-                                                                    headerText="Unidad de Medida" 
-                                                                    filterStyle="display:none">
-                                                                    <h:outputText value="#" />
-                                                                    <p:skeleton rendered="#">    
-                                                                    </p:skeleton>
-                                                                </p:column>
-                                                                <p:column 
-                                                                    headerText="Cantidad" 
-                                                                    filterStyle="display : none">
-                                                                    <h:outputText value="#" />
-                                                                    <p:skeleton rendered="#">    
-                                                                    </p:skeleton>
-                                                                </p:column>
-                                                                <p:column 
-                                                                    headerText="Precio" 
-                                                                    filterStyle="display : none">
-                                                                    <h:outputText 
-                                                                        value="#" />
-                                                                    <p:skeleton 
-                                                                        rendered="#">      
-                                                                    </p:skeleton>
+                                                                <p:column headerText="Descripción">
+                                                                    <h:outputText value="#{Materiales.descripcion}" />
                                                                 </p:column>
 
-                                                                <p:column headerText="Sub Procesos" 
-                                                                          filterStyle="display : none">
-                                                                    <p:selectOneMenu 
-                                                                        id="diario" 
-                                                                        value="" 
-                                                                        editable="false" 
-                                                                        disabled="#">
-                                                                        <f:selectItem 
-                                                                            itemLabel="Seleccionar" 
-                                                                            itemValue="" 
-                                                                            noSelectionOption="true"/>
-                                                                        <f:selectItems 
-                                                                            value="" var="diario" 
-                                                                            itemLabel="#" 
-                                                                            itemValue="#">
-                                                                        </f:selectItems>
-                                                                    </p:selectOneMenu>
+                                                                <p:column headerText="Unidad de Medida">
+                                                                    <h:outputText value="#{Materiales.unidadMedida}"/>
                                                                 </p:column>
-                                                                <p:column headerText="Acciones">
-                                                                    <p:commandButton 
-                                                                        icon="pi pi-times" 
-                                                                        action="#"  
-                                                                        styleClass="edit-button rounded-button ui-button-danger" 
-                                                                        process="@this">
-                                                                        <f:setPropertyActionListener 
-                                                                            value="#" 
-                                                                            target="#"/>
-                                                                        <p:resetInput target=""/>
-                                                                    </p:commandButton>
-                                                                    <p:skeleton rendered="#"></p:skeleton>
+                                                                <p:column headerText="Cantidad">
+                                                                    <h:outputText value="#{Materiales.cantidad}"/>
+                                                                </p:column>
+                                                                <p:column headerText="Precio">
+                                                                    <h:outputText value="#{Materiales.costo}" />
+                                                                </p:column>
+                                                                <p:column headerText="Precio">
+                                                                    <h:outputText value="#{Materiales.nombre}" />
                                                                 </p:column>
                                                             </p:dataTable>
                                                         </div>
@@ -489,9 +157,12 @@
                                                         <div class="p-col-2">
                                                             <p:commandButton 
                                                                 value="Guardar"  
-                                                                icon="pi pi-check" 
-                                                                disabled="#" 
-                                                                styleClass="ui-button-primary"/>
+                                                                icon="pi pi-check"
+                                                                actionListener="#{formulaMB.editar()}"
+                                                                process="editarFormula @this"
+                                                                styleClass="ui-button-primary"
+                                                                update=":form-princFormula:dtformulaPrin ,growl"
+                                                                oncomplete="PF('editarFormulaDialog').hide()"/>
                                                         </div>
                                                         <!-- Boton Cerrar -->
                                                         <div class="p-col-2">
@@ -500,7 +171,7 @@
                                                                 icon="pi pi-times"
                                                                 styleClass="ui-button-danger" 
                                                                 process="@this"
-                                                                oncomplete="PF('modificarForm').hide()"/>
+                                                                oncomplete="PF('editarFormulaDialog').hide()"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -508,321 +179,7 @@
                                         </p:outputPanel>
                                     </p:outputPanel>
                                 </p:dialog>
-                                <!-- Fin de Cuadro de dialogo  Modificar formula -->
-
-                                <!-- Cuadro de dialogo seleccionar producto de inventario para Formula -->
-                                <p:confirmDialog 
-                                    id="manage-selectProductoFormula-form" 
-                                    widgetVar="selectProductoFormulaDialog" 
-                                    showEffect="fade" 
-                                    width="40%" 
-                                    message="Seguro desea seleccionar este Producto?" 
-                                    header="Seleccionar Producto" 
-                                    severity="warn">
-                                    <p:outputPanel class="ui-fluid">
-                                        <div class="p-grid" style="text-align: left">
-                                            <div class="p-col-6 p-field">
-                                                <p:outputLabel value="Nombre: "></p:outputLabel>
-                                                <p:inputText 
-                                                    disabled="false" 
-                                                    value="#{articulosMB.articulosInventario.nombre}" 
-                                                    style="background: #B0F1F5;
-                                                    color:#000000"></p:inputText>  
-                                            </div>
-                                            <div class="p-col-6 p-field">
-                                                <p:outputLabel value="Tipo: "></p:outputLabel>
-                                                <p:inputText 
-                                                    disabled="false" 
-                                                    value="#{articulosMB.articulosInventario.id_tipo}" 
-                                                    style="background: #B0F1F5;
-                                                    color:#000000"></p:inputText>
-                                            </div>
-                                            <div class="p-col-6 p-field">
-                                                <p:outputLabel value="Categoria: "></p:outputLabel>
-                                                <p:inputText 
-                                                    disabled="false" 
-                                                    value="#{articulosMB.articulosInventario.id_categoria}"
-                                                    style="background: #B0F1F5;
-                                                    color:#000000"></p:inputText>
-                                            </div>
-                                        </div>
-                                    </p:outputPanel>
-                                    <!-- Boton de confirmacion "SI"-->
-                                    <p:commandButton 
-                                        value="Si" 
-                                        icon="pi pi-check" 
-                                        actionListener="#{formulaMB.llenaArticulo(articulosMB.articulosInventario)}"/>
-                                    <!-- Boton de confirmacion "NO"-->
-                                    <p:commandButton 
-                                        value="No" 
-                                        type="button" 
-                                        styleClass="ui-button-secondary" 
-                                        icon="pi pi-times"
-                                        onclick="PF('selectProductoFormulaDialog').hide()"/>
-                                </p:confirmDialog>
-                                <!-- Fin de Cuadro de dialogo seleccionar producto de inventario para Formula -->
-
-                                <!-- Cuadro de dialogo Confirmar Eliminación de Formula -->
-                                <p:confirmDialog 
-                                    id="manage-eliminarFormula-form" 
-                                    widgetVar="eliminarFormulaDialog" 
-                                    showEffect="fade" 
-                                    width="40%" 
-                                    message="Seguro desea eliminar la Formula que fue seleccionada?" 
-                                    header="Eliminar Formula" 
-                                    severity="warn">
-                                    <p:outputPanel class="ui-fluid">
-                                        <div class="p-grid" 
-                                             style="text-align: left">
-                                            <div class="p-col-6 p-field">
-                                                <p:outputLabel >Nombre Formula: 
-                                                </p:outputLabel>
-                                                <p:inputText 
-                                                    disabled="false" 
-                                                    value="#{formulaMB.formulaProduccion.nombre_formula}" 
-                                                    style="background: #B0F1F5;
-                                                    color:#000000"></p:inputText>
-                                            </div>
-                                            <div class="p-col-6 p-field">
-                                                <p:outputLabel value="Descripcion : "></p:outputLabel>
-                                                <p:inputText 
-                                                    disabled="false" 
-                                                    value="#{formulaMB.formulaProduccion.descripcion}"
-                                                    style="background: #B0F1F5;
-                                                    color:#000000"></p:inputText>
-                                            </div>
-                                        </div>
-                                    </p:outputPanel>
-                                    <!-- Boton de confirmacion "SI"-->
-                                    <p:commandButton 
-                                        value="Si" 
-                                        icon="pi pi-check" 
-                                        actionListener="#{formulaMB.eliminarFormula()}"
-                                        update="dtformulaPrin"
-                                        process="manage-eliminarFormula-form @this" 
-                                        oncomplete="PF('eliminarFormulaDialog').hide()"/>
-                                    <!-- Boton de confirmacion "NO"-->
-                                    <p:commandButton 
-                                        value="No" 
-                                        type="button" 
-                                        styleClass="ui-button-secondary" 
-                                        icon="pi pi-times"
-                                        onclick="PF('eliminarFormulaDialog').hide()"/>
-                                </p:confirmDialog>
-                                <!-- Fin de Cuadro de dialogo Confirmar Eliminación de Formula -->
-
-                                <!-- Cuadro de dialogo Producto -->
-                                <p:dialog header="Seleccionar Producto" 
-                                          showEffect="fade" 
-                                          modal="true"
-                                          widgetVar="producto" 
-                                          responsive="true" 
-                                          width="60%"
-                                          draggable="false" 
-                                          height="500">
-                                    <p:outputPanel class="ui-fluid">
-                                        <p:outputPanel>
-                                            <div class="p-grid p-justify-around">
-                                                <div class="p-col-1 p-md-1 p-lg-5">
-                                                    <div class="p-grid">
-                                                        <div class="p-col-12">
-                                                            <p:outputLabel 
-                                                                value="Producto:"></p:outputLabel>
-                                                            <p:inputText 
-                                                                value="" 
-                                                                placeholder="Buscar" 
-                                                                readonly="false"></p:inputText>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-col-11">
-                                                    <div class="p-grid">
-                                                        <div class="p-col-12">
-                                                            <p:dataTable 
-                                                                id="dtBuscarMateriaPrima" 
-                                                                reflow="true" 
-                                                                paginator="true" 
-                                                                rows="4" 
-                                                                rowSelectMode="add" 
-                                                                paginatorPosition="bottom" 
-                                                                editInitEvent="dblclick" 
-                                                                editMode="cell"
-                                                                value="#{formulaMB.articuloMateriaP}" 
-                                                                var="TablaBuscarMateriaPrima">
-                                                                <p:column headerText="Acciones">
-                                                                    <p:commandButton
-                                                                        class="rounded-button"
-                                                                        icon="pi pi-check">
-                                                                        <p:ajax 
-                                                                            listener="#{formulaMB.llenaArticulo(TablaBuscarMateriaPrima)}" 
-                                                                            update=":form-princFormula:manage-nuevaFormula-form"
-                                                                            oncomplete="PF('producto').hide()"/>
-                                                                    </p:commandButton>
-                                                                </p:column>
-                                                                <p:column headerText="N°" 
-                                                                          filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaBuscarMateriaPrima.codigo_producto}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                                <p:column headerText="Nombre" 
-                                                                          filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaBuscarMateriaPrima.nombre}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                                <p:column headerText="Descripción" 
-                                                                          filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaBuscarMateriaPrima.descripcionProducto}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-
-                                                                <p:column headerText="Tipo" 
-                                                                          filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaBuscarMateriaPrima.tipo}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                                <p:column headerText="max-Stock" 
-                                                                          filterStyle="display : none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaBuscarMateriaPrima.cantidad}"/>
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                            </p:dataTable>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Botones GUARDAR/CERRAR -->
-                                                    <div class="p-grid p-justify-end">
-                                                        <!-- Boton Confirmar -->
-                                                        <div class="p-col-2">
-                                                            <p:commandButton 
-                                                                value="Confirmar"
-                                                                icon="pi pi-check" 
-                                                                disabled="#" 
-                                                                styleClass="ui-button-primary"/>
-                                                        </div>
-                                                        <!-- Boton Cerrar -->
-                                                        <div class="p-col-2">
-                                                            <p:commandButton 
-                                                                value="Cerrar" 
-                                                                icon="pi pi-times"
-                                                                styleClass="ui-button-danger" 
-                                                                process="@this"
-                                                                oncomplete="PF('producto').hide()"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </p:outputPanel>
-                                    </p:outputPanel>
-                                </p:dialog>
-                                <!-- Fin de Cuadro de dialogo Producto -->
-
-                                <!-- Cuadro de dialogo Materia Prima -->
-                                <p:dialog header="Seleccionar Materia Prima" 
-                                          showEffect="fade" 
-                                          modal="true"
-                                          widgetVar="materiaPrima" 
-                                          responsive="true" 
-                                          width="75%"
-                                          draggable="false" 
-                                          height="500">
-                                    <p:outputPanel class="ui-fluid">
-                                        <p:outputPanel>
-                                            <div class="p-grid p-justify-around">
-                                                <div class="p-col-1 p-md-1 p-lg-5">
-                                                    <div class="p-grid">
-                                                        <div class="p-col-12">
-                                                            <p:outputLabel 
-                                                                value="Materia Prima:"></p:outputLabel>
-                                                            <p:inputText 
-                                                                value="" 
-                                                                placeholder="Buscar" 
-                                                                readonly="false"></p:inputText>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-col-11">
-                                                    <div class="p-grid">
-                                                        <div class="p-col-12">
-                                                            <p:dataTable 
-                                                                id="dtMateriaPrimaPrin" 
-                                                                editable="true" 
-                                                                reflow="true"
-                                                                editInitEvent="dblclick" 
-                                                                editMode="cell"
-                                                                value="#{articulosMB.listaArticulos}" 
-                                                                var="TablaMateriaPrima">
-                                                                <p:column headerText="Acciones">
-                                                                    <p:selectBooleanCheckbox 
-                                                                        value="#{formulaMB.verificar}">
-                                                                        <p:ajax 
-                                                                            listener="#{formulaMB.aggMateriales(TablaMateriaPrima)}"/>
-                                                                    </p:selectBooleanCheckbox>
-                                                                </p:column>
-                                                                <p:column headerText="Código" 
-                                                                          filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaMateriaPrima.id}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-
-                                                                <p:column headerText="Nombre" 
-                                                                          filterStyle="display:none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaMateriaPrima.nombre}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-
-                                                                <p:column headerText="Descripción" 
-                                                                          filterStyle="display : none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaMateriaPrima.descripcion}"  />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                                <p:column headerText="Unidad Medida" 
-                                                                          filterStyle="display : none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaMateriaPrima.id_tipo}" />
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                                <p:column headerText="max-Stock" 
-                                                                          filterStyle="display : none">
-                                                                    <h:outputText 
-                                                                        value="#{TablaMateriaPrima.cantidad}"/>
-                                                                    <p:skeleton rendered="#"></p:skeleton>
-                                                                </p:column>
-                                                            </p:dataTable>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Botones CONFIRMAR/CERRAR -->
-                                                    <div class="p-grid p-justify-end">
-                                                        <!-- Boton Confirmar -->
-                                                        <div class="p-col-2">
-                                                            <p:commandButton 
-                                                                value="Confirmar"  
-                                                                icon="pi pi-check" 
-                                                                disabled="#" 
-                                                                styleClass="ui-button-primary"/>
-                                                        </div>
-                                                        <!-- Boton Cerrar -->
-                                                        <div class="p-col-2">
-                                                            <p:commandButton 
-                                                                value="Cerrar" 
-                                                                icon="pi pi-times"
-                                                                styleClass="ui-button-danger" 
-                                                                process="@this"
-                                                                oncomplete="PF('materiaPrima').hide()"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </p:outputPanel>
-                                    </p:outputPanel>
-                                </p:dialog>
-                                <!-- Fin de Cuadro de dialogo Materia Prima -->
+                                
                             </p:toolbarGroup>
                         </p:toolbar>
 
@@ -870,29 +227,9 @@
                                 <!-- Boton de Editar -->
                                 <p:commandButton 
                                     icon="pi pi-pencil" 
-                                    update=""
                                     class="ui-button-primary rounded-button p-mr-2 p-mb-2"
-                                    oncomplete="PF('editarFormulaDialog').show()"
-                                    process="@this">
-                                    <f:setPropertyActionListener 
-                                        value="#{formulaProduccion}" 
-                                        target="#{formulaMB.formulaProduccion}"/>
-                                    <p:resetInput 
-                                        target=":form-princ:manage-editarProceso-form"/>
-                                </p:commandButton>
-                                <!-- Boton de Eliminar -->
-                                <p:commandButton 
-                                    update=":form-princFormula:manage-eliminarFormula-form"
-                                    class="rounded-button ui-button-danger" 
-                                    process="@this"
-                                    icon="pi pi-trash" 
-                                    oncomplete="PF('eliminarFormulaDialog').show()"
-                                    style="margin-left: 6px;">
-                                    <f:setPropertyActionListener 
-                                        value="#{Tablaformula}" 
-                                        target="#{formulaMB.formulaProduccion}"/>
-                                    <p:resetInput 
-                                        target=":form-princFormula:manage-eliminarFormula-form"/>
+                                    oncomplete="PF('editarFormulaDialog').show()">
+                                    <p:ajax listener="#{formulaMB.editaFormula(Tablaformula)}" update=":form-princFormula:editarFormula"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>

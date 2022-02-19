@@ -22,6 +22,12 @@ public class OrdenTrabajo {
     private String nombre_centro;
     private String nombre_proceso;
     private String nombre_producto;
+    private boolean state;
+    private float totalMateria;
+    private float totalMOD;
+    private float totalCIF;
+    private float costoTotal;
+    private float costoUnitario;
 
     public OrdenTrabajo() {
     }
@@ -36,10 +42,11 @@ public class OrdenTrabajo {
         this.nombre_formula = nombre_formula;
     }
 
-    public OrdenTrabajo(int codigo_producto, int codigo_registro, String nombre_producto) {
+    public OrdenTrabajo(int codigo_producto, int codigo_registro, String nombre_producto, float cantidad) {
         this.codigo_producto = codigo_producto;
         this.codigo_registro = codigo_registro;
         this.nombre_producto = nombre_producto;
+        this.cantidad = cantidad;
     }
 
     public int getCodigo_orden() {
@@ -152,6 +159,54 @@ public class OrdenTrabajo {
 
     public void setNombre_producto(String nombre_producto) {
         this.nombre_producto = nombre_producto;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public float getTotalMateria() {
+        return totalMateria;
+    }
+
+    public void setTotalMateria(float totalMateria) {
+        this.totalMateria = totalMateria;
+    }
+
+    public float getTotalMOD() {
+        return totalMOD;
+    }
+
+    public void setTotalMOD(float totalMOD) {
+        this.totalMOD = totalMOD;
+    }
+
+    public float getTotalCIF() {
+        return totalCIF;
+    }
+
+    public void setTotalCIF(float totalCIF) {
+        this.totalCIF = totalCIF;
+    }
+
+    public float getCostoTotal() {
+        return costoTotal;
+    }
+
+    public void setCostoTotal(float costoTotal) {
+        this.costoTotal = costoTotal;
+    }
+
+    public float getCostoUnitario() {
+        return costoUnitario;
+    }
+
+    public void setCostoUnitario(float costoUnitario) {
+        this.costoUnitario = costoUnitario;
     }
 
 }

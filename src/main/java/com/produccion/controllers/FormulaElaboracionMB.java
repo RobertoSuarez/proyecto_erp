@@ -171,9 +171,11 @@ public class FormulaElaboracionMB implements Serializable {
             } else if (!validaMateriales()) {
                 showWarn("Ingrese valores Unidad de Medida, Cantidades y seleccione un Subproceso");
             } else {
+                
                 if (formulaProduccionDAO.insertarFormula(formulaProduccion) > 0) {
                     for (FormulaMateriales lista : listaMaterialesConfirmados) {
                         if (lista.getCantidad() != 0 && !"".equals(lista.getUnidadMedida())) {
+                            lista.setCantidadUnidad(lista.getCantidad() / formulaProduccion.getRendimiento());
                             formulaMaterialesDAO.InsertarMateriales(lista);
                         } else {
                             showWarn("Ingrese valores Unidad de Medida y Cantidades");
@@ -238,13 +240,13 @@ public class FormulaElaboracionMB implements Serializable {
             return materialesFormula;
         } else {
             FormulaMateriales buscar = new FormulaMateriales(materiales.getNombre(),
-                    materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), 
+                    materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(),
                     materiales.getCodigo_producto(), materiales.getCosto());
-            for(FormulaMateriales lista:listaMateriales){
-                if(lista.getCodigoProducto()==buscar.getCodigoProducto()){
+            for (FormulaMateriales lista : listaMateriales) {
+                if (lista.getCodigoProducto() == buscar.getCodigoProducto()) {
                     listaMateriales.remove(lista);
                 }
-                
+
             }
             return null;
         }
@@ -296,6 +298,10 @@ public class FormulaElaboracionMB implements Serializable {
                 formulaProduccion.getRendimiento()));
         formulaProduccion.setTiempoFormula(formulaProduccionDAO.tiempoFormula(formulaProduccion.getCodigo_proceso(),
                 formulaProduccion.getRendimiento()));
+        
+        formulaProduccion.setTiempoUnidad(formulaProduccion.getTiempoFormula()/formulaProduccion.getRendimiento());
+        formulaProduccion.setMODUnidad(formulaProduccion.getMOD()/formulaProduccion.getTiempoFormula());
+        formulaProduccion.setCIFUnidad(formulaProduccion.getCIF()/formulaProduccion.getTiempoFormula());
     }
 
     public void limpiarFormulario() {

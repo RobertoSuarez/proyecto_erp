@@ -95,7 +95,10 @@ public class SolicitudOrdenMB implements Serializable {
                 showWarn("Ingrese una fecha de finalización");
             } else if ("".equals(solicitudOrden.getDescripcion())) {
                 showWarn("Ingrese una descripción");
-            }else if(!verificaCampos()){
+            }else if(!verificaLista()){
+                showWarn("Ingrese un producto a la solicitud");
+            }
+            else if(!verificaCampos()){
                 showWarn("Ingrese valores en cantidad y unidad de medida");
             }else {
                 solicitudOrden.setEstado('P');
@@ -139,6 +142,13 @@ public class SolicitudOrdenMB implements Serializable {
             }
         }
         return verifica;
+    }
+    public boolean verificaLista(){
+        if(listaOrdenConfirmados.size()>0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public void llenaProductoConfirmado() {

@@ -40,7 +40,7 @@
                                         <div class="p-formgrid p-grid">
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Nº Orden" for="@next"/>
-                                                <p:inputText value="#{produccionMBean.ordenTrabajo.codigo_orden}"/>
+                                                <p:inputText value="#{produccionMBean.ordenTrabajo.codigo_orden}" readonly="true"/>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Fecha Inicio producción" for="@next"/>
@@ -56,21 +56,21 @@
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Producto a elaborar" for="@next"/>
                                                 <p:selectOneMenu id="producto" value="#{produccionMBean.ordenTrabajo.codigo_producto}" editable="false">
-                                                    <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls"/>
+
                                                     <f:selectItem itemLabel="Seleccione un producto" itemValue="" noSelectionOption="true"/>
                                                     <f:selectItems value="#{produccionMBean.listaProducto}"
                                                                    var="produto"
                                                                    itemLabel="#{produto.nombre_producto}"
                                                                    itemValue="#{produto.codigo_producto}">
-
                                                     </f:selectItems>
+                                                    <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls,:form:cantidad"/>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Formula" for="@next"/>
                                                 <p:selectOneMenu id="formuls" value="#{produccionMBean.ordenTrabajo.codigo_formula}" editable="false">
                                                     <f:selectItem itemLabel="Seleccione una formula" itemValue="" noSelectionOption="true"/>
-                                                    <p:ajax listener="#{produccionMBean.llenarProceso()}" update=":form:procesoProducciom"/>
+                                                    <p:ajax listener="#{produccionMBean.llenarProceso()}" update=":form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,:form:produccionDetallada,:form:costosProduccion,:form:valoresTotales"/>
                                                     <f:selectItems value="#{produccionMBean.listaFormula}"
                                                                    var="listaformula"
                                                                    itemLabel="#{listaformula.nombre_formula}" 
@@ -90,7 +90,7 @@
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Descripción" for="@next"/>
-                                                <p:inputText value="" readonly="true"></p:inputText>
+                                                <p:inputText value="#{produccionMBean.ordenTrabajo.descripcion}" readonly="true"></p:inputText>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Proceso" for="@next"/>
@@ -98,7 +98,7 @@
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Cantidad" for="@next"/>
-                                                <p:inputText/>
+                                                <p:inputText id="cantidad" value="#{produccionMBean.ordenTrabajo.cantidad}" readonly="true"/>
                                             </div>
                                         </div>
                                     </div>
@@ -122,21 +122,21 @@
                                         <p:outputPanel>
 
                                             <div class="p-grid p-justify-around">
-                                                <p:dataTable editable="true" reflow="true"
+                                                <p:dataTable id="costoMateriaPrima" editable="true" reflow="true"
                                                              editInitEvent="dblclick" editMode="cell"
-                                                             value="">
+                                                             value="#{produccionMBean.detalleListaMateriaPrima}" var="costoProduccion">
                                                     <p:column headerText="Nombre" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costoProduccion.nombre}" />
                                                     </p:column>
 
                                                     <p:column headerText="Precio" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costoProduccion.costo}" />
                                                     </p:column>
                                                     <p:column headerText="Cantidad Requerida" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costoProduccion.cantidad}" />
                                                     </p:column>
                                                     <p:column headerText="Total" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costoProduccion.total}" />
                                                     </p:column>
 
                                                 </p:dataTable>
@@ -162,21 +162,21 @@
                                         <p:outputPanel>
 
                                             <div class="p-grid p-justify-around">
-                                                <p:dataTable editable="true" reflow="true"
+                                                <p:dataTable id="costosProduccion" editable="true" reflow="true"
                                                              editInitEvent="dblclick" editMode="cell"
-                                                             value="">
+                                                             value="#{produccionMBean.listaCostos}" var="costos">
                                                     <p:column headerText="Nombre" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costos.nombre_formula}" />
                                                     </p:column>
 
                                                     <p:column headerText="Tiempo" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costos.tiempoUnidad}" />
                                                     </p:column>
                                                     <p:column headerText="Costo Directo" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costos.MODUnidad}" />
                                                     </p:column>
                                                     <p:column headerText="Costo Indirecto" filterStyle="display : none">
-                                                        <h:outputText value="#" />
+                                                        <h:outputText value="#{costos.CIFUnidad}" />
                                                     </p:column>
 
                                                 </p:dataTable>
@@ -192,49 +192,41 @@
 
                             <p:outputPanel class="ui-fluid" style="margin-top: 2em">
 
-                                <p:outputPanel>
+                                <p:outputPanel id="valoresTotales">
                                     <div class="p-grid p-justify-around">
                                         <div class="p-col-6 p-md-12 p-lg-12">
                                             <div class="p-grid">
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Materia Prima" for="@next"/>
-                                                    <p:inputText/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalMateria}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo directo" for="@next"/>
-                                                    <p:inputText/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalMOD}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo Indirecto" for="@next"/>
-                                                    <p:inputText/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalCIF}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo Total" for="@next"/>
-                                                    <p:inputText/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.costoTotal}" readonly="true"/>
                                                 </div>
 
                                             </div>
                                             <div class="p-grid">
                                                 <div class="p-col-3">
-                                                    <p:outputLabel value="Producto Terminado" for="@next"/>
-                                                    <p:inputText/>
-                                                </div>
-                                                <div class="p-col-3">
                                                     <p:outputLabel value="Cantidad Producida" for="@next"/>
-                                                    <p:inputText/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.cantidad}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo Unitario" for="@next"/>
-                                                    <p:inputText/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.costoUnitario}" readonly="true"/>
                                                 </div>
 
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
                                 </p:outputPanel>
                             </p:outputPanel>
 
@@ -257,40 +249,35 @@
                                             <div class="p-grid">
 
                                                 <div class="p-col-12">
-                                                    <p:dataTable editable="true" reflow="true"
+                                                    <p:dataTable id="materiaPrimaOrden" editable="true" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
-                                                                 value="">
+                                                                 value="#{produccionMBean.listaMateriaPrima}" var="materiales">
                                                         <p:column headerText="Código" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{materiales.id}" />
                                                         </p:column>
 
                                                         <p:column headerText="Nombre" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{materiales.nombre}" />
                                                         </p:column>
 
                                                         <p:column headerText="Descripción" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{materiales.descripcion}" />
                                                         </p:column>
                                                         <p:column headerText="Cantidad Requerida" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{materiales.cantidad}" />
                                                         </p:column>
                                                         <p:column headerText="Unidad Medidad" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{materiales.unidadMedida}" />
                                                         </p:column>
                                                         <p:column headerText="Tipo" filterStyle="display : none">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{materiales.tipo}" />
                                                         </p:column>
                                                         <p:column headerText="Acciones">
-                                                            <p:commandButton icon="pi pi-pencil" action="#"  
-                                                                             styleClass="edit-button rounded-button ui-button-primary" process=""
-                                                                             oncomplete="">
-                                                            </p:commandButton>
                                                             <p:commandButton icon="pi pi-times" action="#"  
                                                                              styleClass="edit-button rounded-button ui-button-danger" process="@this"
                                                                              oncomplete="">
 
                                                             </p:commandButton>
-                                                            <p:skeleton rendered="#"></p:skeleton>
                                                         </p:column>
                                                     </p:dataTable>
                                                 </div>
@@ -371,72 +358,70 @@
                             </p:outputPanel>
                         </p:dialog>
                         <!-- Tabla de datos -->
-                        <p:dataTable reflow="true" paginator="true" rows="5" 
-                                     rowSelectMode="add" paginatorPosition="bottom">
-                            <!-- Buscador -->
-                            <f:facet name="header">
-                                <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px;">Procesos de producción</span>
-                                </div>
-                                <div class="card ui-fluid ">
-                                    <div class="p-formgrid p-grid">
+                        <ui:fragment id="produccionDetallada" rendered="#{produccionMBean.ordenTrabajo.state eq true}">
+                            <p:dataTable reflow="true" paginator="true" rows="5" 
+                                         rowSelectMode="add" paginatorPosition="bottom">
+                                <!-- Buscador -->
+                                <f:facet name="header">
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6px;">Procesos de producción</span>
+                                    </div>
+                                    <div class="card ui-fluid ">
+                                        <div class="p-formgrid p-grid">
 
-                                        <div class="p-field p-col-12 p-md-6">
-                                            <p:outputLabel value="Hora de Inicio proceso" for="@next"/>
-                                            <p:inputText value="" readonly="true"></p:inputText>
-                                        </div>
-                                        <div class="p-field p-col-12 p-md-6">
-                                            <p:outputLabel value="Hora de Fin proceso" for="@next"/>
-                                            <p:inputText value="" readonly="true"></p:inputText>
-                                        </div>
-                                        <div class="p-field p-col-6 p-md-2">
-                                            <p:commandButton value="Empezar" 
-                                                             styleClass="ui-button-secondary"
-                                                             >
-                                            </p:commandButton>
-                                        </div>
-                                        <div class="p-field p-col-6 p-md-2">
-                                            <p:commandButton value="Avanzar" 
-                                                             styleClass="ui-button-secondary"
-                                                             >
-                                            </p:commandButton>
-                                        </div>
-                                        <div class="p-field p-col-6 p-md-2">
-                                            <p:commandButton value="Terminar" 
-                                                             styleClass="ui-button-secondary"
-                                                             >
-                                            </p:commandButton>
+                                            <div class="p-field p-col-12 p-md-6">
+                                                <p:outputLabel value="Hora de Inicio proceso" for="@next"/>
+                                                <p:inputMask value="" readonly="true" mask="99:99:99"></p:inputMask>
+                                            </div>
+                                            <div class="p-field p-col-12 p-md-6">
+                                                <p:outputLabel value="Hora de Fin proceso" for="@next"/>
+                                                <p:inputMask value="" readonly="true" mask="99:99:99"></p:inputMask>
+                                            </div>
+                                            <div class="p-field p-col-6 p-md-2">
+                                                <p:commandButton value="Empezar" 
+                                                                 styleClass="ui-button-secondary">
+                                                </p:commandButton>
+                                            </div>
+                                            <div class="p-field p-col-6 p-md-2">
+                                                <p:commandButton value="Avanzar" 
+                                                                 styleClass="ui-button-secondary">
+                                                </p:commandButton>
+                                            </div>
+                                            <div class="p-field p-col-6 p-md-2">
+                                                <p:commandButton value="Terminar" 
+                                                                 styleClass="ui-button-secondary">
+                                                </p:commandButton>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </f:facet>
-                            <p:column headerText="Proceso" filterStyle="display : none">
+                                </f:facet>
+                                <p:column headerText="Proceso" filterStyle="display : none">
 
-                            </p:column>
-                            <p:column headerText="Hora Inicio" filterStyle="display : none">
+                                </p:column>
+                                <p:column headerText="Hora Inicio" filterStyle="display : none">
 
-                            </p:column>
+                                </p:column>
 
-                            <p:column headerText="Hora Fin" >
-                                <h:outputText value="#" />
-                            </p:column>
+                                <p:column headerText="Hora Fin" >
+                                    <h:outputText value="#" />
+                                </p:column>
 
-                            <p:column headerText="Tiempo" >
-                                <h:outputText value="#" />
-                            </p:column>
+                                <p:column headerText="Tiempo" >
+                                    <h:outputText value="#" />
+                                </p:column>
 
-                            <p:column headerText="Total de costos Directo" >
-                                <h:outputText value="#" />
-                            </p:column>
-                            <p:column headerText="Total de costos Indirecto" >
-                                <h:outputText value="#" />
-                            </p:column>
-                            <p:column headerText="Total" >
-                                <h:outputText value="#" />
-                            </p:column>
-                        </p:dataTable>
-
+                                <p:column headerText="Total de costos Directo" >
+                                    <h:outputText value="#" />
+                                </p:column>
+                                <p:column headerText="Total de costos Indirecto" >
+                                    <h:outputText value="#" />
+                                </p:column>
+                                <p:column headerText="Total" >
+                                    <h:outputText value="#" />
+                                </p:column>
+                            </p:dataTable>
+                        </ui:fragment>
 
                         <div class="p-grid p-justify-end">
                             <!--<p:button style="margin-right: 6px;" value="Buscar" 

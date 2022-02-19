@@ -31,6 +31,43 @@ public class FormulaProduccion {
     private float MOD;
     private float CIF;
     private float tiempoFormula;
+    private String unidadMedida;
+    private float tiempoUnidad;
+    private float MODUnidad;
+    private float CIFUnidad;
+
+    public FormulaProduccion(String nombre_formula, float tiempoUnidad, float MODUnidad, float CIFUnidad) {
+        this.nombre_formula = nombre_formula;
+        this.tiempoUnidad = tiempoUnidad;
+        this.MODUnidad = MODUnidad;
+        this.CIFUnidad = CIFUnidad;
+    }
+
+    public FormulaProduccion(int codigo_formula, String nombre_formula, String nombre_producto,
+            String descripcion, int rendimiento, String nombre_proceso, String categoria, String tipo) {
+        this.codigo_formula = codigo_formula;
+        this.nombre_formula = nombre_formula;
+        this.nombre_producto = nombre_producto;
+        this.descripcion = descripcion;
+        this.rendimiento = rendimiento;
+        this.nombre = nombre_proceso;
+        this.categoria = categoria;
+        this.tipo = tipo;
+    }
+
+    public FormulaProduccion(int codigo_formula, int codigo_subproceso, int codigo_articulo, 
+            String nombre_producto, String descripcion, String nombre, float costo, 
+            float cantidad, String unidadMedida) {
+        this.codigo_formula = codigo_formula;
+        this.codigo_subproceso = codigo_subproceso;
+        this.codigo_articulo = codigo_articulo;
+        this.nombre_producto = nombre_producto;
+        this.descripcion = descripcion;
+        this.nombre = nombre;
+        this.costo = costo;
+        this.cantidad = cantidad;
+        this.unidadMedida = unidadMedida;
+    }
 
     public FormulaProduccion(int codigo_producto, String nombre,
             String categoria, String descripcionProducto,
@@ -231,5 +268,38 @@ public class FormulaProduccion {
     public void setTiempoFormula(float tiempoFormula) {
         this.tiempoFormula = tiempoFormula;
     }
+
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+
+    public float getTiempoUnidad() {
+        return tiempoUnidad;
+    }
+
+    public void setTiempoUnidad(float tiempoUnidad) {
+        this.tiempoUnidad = tiempoUnidad;
+    }
+
+    public float getMODUnidad() {
+        return MODUnidad;
+    }
+
+    public void setMODUnidad(float MODUnidad) {
+        this.MODUnidad = MODUnidad;
+    }
+
+    public float getCIFUnidad() {
+        return CIFUnidad;
+    }
+
+    public void setCIFUnidad(float CIFUnidad) {
+        this.CIFUnidad = CIFUnidad;
+    }
+    
 
 }
