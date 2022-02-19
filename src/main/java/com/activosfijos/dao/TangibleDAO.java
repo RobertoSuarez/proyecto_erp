@@ -80,11 +80,11 @@ public class TangibleDAO {
         try {
             conexion.conectar();
             // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
-                    "select *from activos_fijos, fijo_tangible_depreciable, proveedor\n" +
-"where fijo_tangible_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
-"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
-"and activos_fijos.estado='habilitado';");
+            PreparedStatement st = conexion.connection.prepareStatement(
+                    "select *from activos_fijos, fijo_tangible_depreciable, proveedor\n"
+                    + "where fijo_tangible_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='habilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -131,11 +131,11 @@ public class TangibleDAO {
         try {
             conexion.conectar();
             // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
-                    "select *from activos_fijos, fijo_tangible_depreciable, proveedor\n" +
-"where fijo_tangible_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
-"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
-"and activos_fijos.estado='deshabilitado';");
+            PreparedStatement st = conexion.connection.prepareStatement(
+                    "select *from activos_fijos, fijo_tangible_depreciable, proveedor\n"
+                    + "where fijo_tangible_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='deshabilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
 

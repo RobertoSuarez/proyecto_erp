@@ -14,9 +14,7 @@ public class RolDAO {
 
     public RolDAO() {
         this.conexion = new Conexion();
-        if (conexion.conectar()) {
-            conexion.desconectar();
-        }
+       
     }
 
     public List<Rol> getRolesByUsers(int idUsuario) {

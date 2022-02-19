@@ -191,7 +191,7 @@ public class Anticipo {
             System.out.println(queryAsiento);
             conn.conectar();
             
-            Statement statement = conn.conex.createStatement();
+            Statement statement = conn.connection.createStatement();
             ResultSet data = statement.executeQuery(queryAsiento);
             while (data.next()) {
                 this.id_asiento = data.getInt("id_asiento");                
@@ -202,7 +202,7 @@ public class Anticipo {
             System.out.println(ex.getMessage());
             System.out.println("No se puedo registrar el asiento del anticipo, se cacelo todo");
             try {
-                conn.conex.close();
+                conn.connection.close();
             } catch (SQLException ex1) {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
             }
@@ -214,7 +214,7 @@ public class Anticipo {
         String query =  "select insert_anticipo(?, ?, ?, ?, ?, ?, ?);";
         try {
             
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
+            PreparedStatement stmt = conn.connection.prepareStatement(query);
             stmt.setInt(1, this.id_proveedor);
             stmt.setDouble(2, this.importe);
             stmt.setObject(3, new java.sql.Date(this.fecha.getTime()));
@@ -234,7 +234,7 @@ public class Anticipo {
             
         } finally {
             try {
-                conn.conex.close();
+                conn.connection.close();
             } catch (SQLException ex1) {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
             }
@@ -259,7 +259,7 @@ public class Anticipo {
         try {
             conn.conectar();
             
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
+            PreparedStatement stmt = conn.connection.prepareStatement(query);
             stmt.setDouble(1, this.importe);
             //stmt.setDate(2, (java.sql.Date) this.fecha);
             stmt.setObject(2, new java.sql.Date(this.fecha.getTime()));
@@ -278,7 +278,7 @@ public class Anticipo {
             System.out.println(ex.getMessage());
         } finally {
             try {
-                conn.conex.close();
+                conn.connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -297,7 +297,7 @@ public class Anticipo {
         try {
             conn.conectar();
             
-            PreparedStatement stmt = conn.conex.prepareStatement(query);
+            PreparedStatement stmt = conn.connection.prepareStatement(query);
             stmt.setString(1, this.getId_anticipo());
             
             stmt.execute();
@@ -308,7 +308,7 @@ public class Anticipo {
             System.out.println(ex.getMessage());
         } finally {
             try {
-                conn.conex.close();
+                conn.connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex);
             }

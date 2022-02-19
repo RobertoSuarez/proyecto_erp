@@ -171,7 +171,7 @@ public class AnticipoDAO {
             System.out.println("desde reversión: " + queryAsiento);
             conn.conectar();
 
-            Statement statement = conn.conex.createStatement();
+            Statement statement = conn.connection.createStatement();
             ResultSet data = statement.executeQuery(queryAsiento);
             while (data.next()) {
                 id_asiento = data.getInt("id_asiento");
@@ -182,7 +182,7 @@ public class AnticipoDAO {
             System.out.println(ex.getMessage());
             System.out.println("No se puedo registrar el asiento del anticipo, se cacelo todo en el ambito de revertir el anticipo");
             try {
-                conn.conex.close();
+                conn.connection.close();
             } catch (SQLException ex1) {
                 Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
             }
@@ -197,7 +197,7 @@ public class AnticipoDAO {
         conn.ejecutarSql(query);
         //ResultSet rs = stmt.executeQuery(query);
         try {
-            conn.conex.close();
+            conn.connection.close();
         } catch (SQLException ex1) {
             Logger.getLogger(Anticipo.class.getName()).log(Level.SEVERE, null, ex1);
         }

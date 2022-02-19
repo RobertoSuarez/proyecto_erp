@@ -22,10 +22,10 @@ import java.sql.SQLException;
  */
 public class IntangibleDAO {
 
-        public boolean guardar3(ActivosFijos activosFijos, ActivoIntangible activointangible) throws SQLException {
+    public boolean guardar3(ActivosFijos activosFijos, ActivoIntangible activointangible) throws SQLException {
 
         Conexion conexion = new Conexion();
-       String consulta = String.format("INSERT INTO activos_fijos(\n"
+        String consulta = String.format("INSERT INTO activos_fijos(\n"
                 + "	detalle_de_activo,  valor_adquisicion, fecha_adquisicion,idproveedor,numero_factura,estado)\n"
                 + "	VALUES ('%s', '%s', '%s', '%s', '%s','habilitado')returning id_activo_fijo;", activosFijos.getDetalle_de_activo(),
                 activosFijos.getValor_adquisicion(), activosFijos.getFecha_adquisicion(), activosFijos.getIdproveedor(), activosFijos.getNumero_factura());
@@ -45,11 +45,11 @@ public class IntangibleDAO {
         try {
             conexion.conectar();
             // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
-                    "select *from activos_fijos, fijo_intangible, proveedor\n" +
-"where fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
-"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
-"and activos_fijos.estado='habilitado';");
+            PreparedStatement st = conexion.connection.prepareStatement(
+                    "select *from activos_fijos, fijo_intangible, proveedor\n"
+                    + "where fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='habilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
 
@@ -83,11 +83,11 @@ public class IntangibleDAO {
         try {
             conexion.conectar();
             // Consulta.
-            PreparedStatement st = conexion.conex.prepareStatement(
-                    "select *from activos_fijos, fijo_intangible, proveedor\n" +
-"where fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo\n" +
-"and activos_fijos.idproveedor=proveedor.idproveedor\n" +
-"and activos_fijos.estado='deshabilitado';");
+            PreparedStatement st = conexion.connection.prepareStatement(
+                    "select *from activos_fijos, fijo_intangible, proveedor\n"
+                    + "where fijo_intangible.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='deshabilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
 

@@ -65,7 +65,7 @@ public class ClienteVentaDao implements Serializable {
                     + "from public.persona_juridica pj inner join public.persona pr on pj.id_persona = pr.id_persona) as T "
                     + "inner join public.clientes cl on (cl.idpersonanatural = T.idnatural or cl.id_persona_juridica = T.idjuridico);";
             ResultSet rs = this.con.ejecutarSql(query);
-            con.conex.close();
+            con.connection.close();
             while (rs.next()) {
                 this.clienteVenta = new ClienteVenta();
                 this.clienteVenta.setIdCliente(rs.getInt(1));
