@@ -71,9 +71,9 @@ public class SubProcesoDAO {
     public int insertarDetalleSubproceso(dSubproceso subproceso) {
         try {
             String sentenciaSql = "INSERT INTO public.detalle_subproceso(\n"
-                    + "	codigo_subproceso, costo_mano_obra, costo_indirecto, hora_costo,idsubcuenta)\n"
+                    + "	codigo_subproceso, costo_mano_obra, costo_indirecto,idsubcuenta, cmdunitario, cifunitario, \"tiempoUnidad\")\n"
                     + "	VALUES (" + subproceso.getCodigo_subproceso() + ", " + subproceso.getCosto_mano_obra() + ", " + subproceso.getCosto_indirecto() + ", "
-                    + subproceso.getHora_costo() + ", " + subproceso.getCodigo_costos() + ");";
+                    + subproceso.getCodigo_costos() +", " + subproceso.getModunitario()+", " + subproceso.getCifunitario()+", " + subproceso.getHora_costo()+ ");";
             //enviamos la sentencia
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
