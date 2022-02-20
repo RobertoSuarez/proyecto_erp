@@ -27,7 +27,7 @@
                                 <p:dataTable id="dt_users" value="#{usuarioMB.listaUsuario}" var="ListaUsuarios"
                                              size="small" liveResize="true" rowKey="#{usuario.idUsuario}"
                                              selection="#{usuarioMB.selectionUser}" selectionMode="single"
-                                             paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                                             reflow="true">
                                     <p:column headerText="Codigo" width="5%" style="font-size: 17px">
                                         <h:outputText value="#{ListaUsuarios.idUsuario}"/>
                                     </p:column>
@@ -71,22 +71,59 @@
                           height="100%" width="40%" showEffect="fade">
                     <h:form id="RolUser">
                         <p:panel header="Perfil de usuario" style="text-align: left; width: 100%; float: right">
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="3">
                                 <p:outputLabel value="Usuario"/>
                                 <p:inputText value="#{usuarioMB.userName}" disabled="true" />
-                                <p:dataTable id="dt_users" value="#{usuarioMB.rolesUser}" var="ListaRolesUsuarios"
-                                             size="small" liveResize="true" rowKey="#{ListaRolesUsuarios.id}"
-                                             selectionMode="single"
-                                             paginator="true" reflow="true" rows="5" rowSelectMode="add" paginatorPosition="bottom">
-                                    <p:column headerText="Roles del Usuario" width="100%" style="font-size: 17px">
-                                        <h:outputText value="#{ListaRolesUsuarios.nombre}"/>
-                                    </p:column>
-                                </p:dataTable>
-                                <p:commandButton value="Agregar rol" type="button"/>
+                                <p:commandButton value="Agregar rol"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                 process="@this"
+                                                 onclick="PF('rolesData').show()" 
+                                                 update="RolesGenerales" 
+                                                 actionListener="#{usuarioMB.chargeRols()}"
+                                                 style="position: relative; width: 100%; height: 10%; margin-top: 10px;" />                                         
                             </h:panelGrid>
+                            <p:dataTable id="dt_users" value="#{usuarioMB.rolesUser}" var="ListaRolesUsuarios"
+                                         size="small" liveResize="true" rowKey="#{ListaRolesUsuarios.id}"
+                                         selectionMode="single"
+                                         reflow="true" rowSelectMode="add" paginatorPosition="bottom"
+                                         >
+                                <p:column headerText="Roles del Usuario" width="80%" style="font-size: 17px">
+                                    <h:outputText value="#{ListaRolesUsuarios.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Accion" width="20%" style="font-size: 17px">
+                                    <p:commandButton icon="pi pi-trash" type="button" 
+                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                     process="@this"
+                                                     />
+                                </p:column>
+                            </p:dataTable>
                         </p:panel>
                     </h:form >
-                </p:dialog>                
+                </p:dialog> 
+                <p:dialog id="RolesData" header="Informacion de los roles" widgetVar="rolesData"
+                          height="100%" width="80%" showEffect="fade">
+                    <h:form id="RolesGenerales">
+                        <p:dataTable id="dt_Roles" value="#{usuarioMB.generalRols}" var="ListaRolesGenerales"
+                                     rowKey="#{ListaRolesGenerales.id}"
+                                     selectionMode="single"
+                                     paginator="true"
+                                     rows="4"
+                                     paginatorPosition="bottom" >
+                            <p:column headerText="Id" width="10%" style="font-size: 17px">
+                                <h:outputText value="#{ListaRolesGenerales.id}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Nombre" width="25%" style="font-size: 17px">
+                                <h:outputText value="#{ListaRolesGenerales.nombre}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Detalle" width="55%" style="font-size: 17px">
+                                <h:outputText value="#{ListaRolesGenerales.detalle}"></h:outputText>
+                            </p:column>
+                            <p:column headerText="Accion" width="10%" style="font-size: 17px">
+                                <p:commandButton icon="pi pi-check" type="button" value="Agregar"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
             </ui:define>
         </ui:composition>
 
