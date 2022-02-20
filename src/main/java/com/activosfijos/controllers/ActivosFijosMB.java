@@ -19,6 +19,7 @@ import com.activosfijos.model.ListaNoDepreciable;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -182,10 +183,8 @@ public class ActivosFijosMB implements Serializable {
                 PrimeFaces.current().executeScript("PF('NuevoDepreciable').hide()");
                 activosFijos.setDetalle_de_activo("");
                 activosFijos.setValor_adquisicion(0);
-                activosFijos.setNumero_factura("");
-                activosFijos.setProveedor("");
+                activosFijos.setNumero_factura("001-001-000000000");
                 activosFijos.setFecha_adquisicion(LocalDate.now());
-                activosFijos.setIdproveedor(0);
                 activodepreciable.setDepreciacion_meses(0);
                 activodepreciable.setPorcentaje_depreciacion(0.0);
                 setNombre("");
@@ -207,11 +206,44 @@ public class ActivosFijosMB implements Serializable {
     public void setEditarTangibles() {
         String data = "";
         TangibleDAO tangibledao = new TangibleDAO();
+
         try {
             listadepreciable.setId_activo_fijo(idactivofijo);
-            tangibledao.editar(listadepreciable);
-            System.out.println("Actualizado correctamente");
-            PFE("Activo tangible depreciable actualizado");
+
+            if ("".equals(listadepreciable.getProveedor())) {
+                PFW("Agrege un proveedor");
+            } else if ("".equals(listadepreciable.getValor_adquisicion()) || listadepreciable.getValor_adquisicion() <= 0) {
+                PFW("Agrege un costo de adquisición");
+            } else if ("".equals(listadepreciable.getFecha_adquisicion())) {
+                PFW("Agrege una fecha de adquisición");
+            } else if ("".equals(listadepreciable.getDetalle_de_activo())) {
+                PFW("Agrege un detalle para el activo tangible depreciable");
+            } else if ("".equals(listadepreciable.getNumero_factura())) {
+                PFW("Agrege un número de factura");
+            } else if ("".equals(listadepreciable.getDepreciacion_meses()) || listadepreciable.getDepreciacion_meses() <= 0) {
+                PFW("Agrege un tiempo de depreciacion mensual");
+            } else if ("".equals(listadepreciable.getPorcentaje_depreciacion()) || listadepreciable.getPorcentaje_depreciacion() <= 0.0) {
+                PFW("Agrege un porcentaje de depreciación");
+            } else if ("".equals(getNombre())) {
+                PFW("Agrege un proveedor");
+            } else {
+
+                tangibledao.editar(listadepreciable);
+                System.out.println("Actualizado correctamente");
+                PFE("Activo tangible depreciable actualizado");
+
+                PrimeFaces.current().executeScript("PF('EditarDepreciable').hide()");
+                activosFijos.setDetalle_de_activo("");
+                activosFijos.setValor_adquisicion(0);
+                activosFijos.setNumero_factura("001-001-000000000");
+                activosFijos.setFecha_adquisicion(LocalDate.now());
+                activodepreciable.setDepreciacion_meses(0);
+                activodepreciable.setPorcentaje_depreciacion(0.0);
+                setNombre("");
+                PrimeFaces.current().ajax().update(":editarDepreciable:paneleditarpreciableeditar");
+
+            }
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -417,6 +449,25 @@ public class ActivosFijosMB implements Serializable {
             this.listadepreciable.setIdproveedor(ms1);
             setNombre(ms2);
             PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void onRowSelect2(SelectEvent<Proveedor> event) {
+        try {
+            int ms1 = event.getObject().getIdProveedor();
+            String ms2 = event.getObject().getNombre();
+            this.activosFijos.setProveedor(ms2);
+            this.activosFijos.setIdproveedor(ms1);
+
+            System.out.println(ms2);
+            System.out.println(ms1);
+            this.listadepreciable.setIdproveedor(ms1);
+            setNombre(ms2);
+            PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
+
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

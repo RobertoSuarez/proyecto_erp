@@ -445,9 +445,9 @@
                                                             rowKey="#{proveedor.nombre}">
                                                             <p:ajax 
                                                                 event="rowSelect"
-                                                                listener="#{activosFijosMB.onRowSelect}" 
-                                                                oncomplete="PF('moviePicker').hide()" 
-                                                                update=":editarDepreciable:paneleditarpreciableeditar,:editarDepreciable:listaproveedoreditar"/>
+                                                                listener="#{activosFijosMB.onRowSelect2}" 
+                                                                onsuccess="PF('moviePicker').hide()" 
+                                                                update=":editarDepreciable:paneleditarpreciableeditar @this"/>
 
                                                             <p:column
                                                                 headerText="Proveedor">
@@ -476,8 +476,8 @@
                                                                 <p:inputText  
                                                                     id="listaproveedoreditar" 
                                                                     type="button" 
-                                                                    value="#{activosFijosMB.listadepreciable.proveedor}" 
-                                                                    required="true"  />
+                                                                    value="#{activosFijosMB.nombre}" 
+                                                                     />
 
                                                             </div>
                                                             <div class="p-field p-col">
@@ -509,7 +509,7 @@
                                                                 <p:inputText 
                                                                     type="number" 
                                                                     value="#{activosFijosMB.listadepreciable.depreciacion_meses}" 
-                                                                    required="true" >
+                                                                     >
                                                                     <p:keyFilter 
                                                                         regEx="/[0-9]/i"/>
                                                                 </p:inputText>
@@ -522,7 +522,7 @@
                                                                 <p:inputText
                                                                     type="number" 
                                                                     value="#{activosFijosMB.listadepreciable.porcentaje_depreciacion}" 
-                                                                    required="true" >
+                                                                   >
                                                                     <p:keyFilter 
                                                                         regEx="/[0-9,]/i"/>
                                                                 </p:inputText>
@@ -539,7 +539,7 @@
                                                             value="Descripción: "/>
                                                         <p:inputText  
                                                             value="#{activosFijosMB.listadepreciable.detalle_de_activo}"
-                                                            required="true" />
+                                                           />
                                                     </p:outputPanel>
                                                 </p:outputPanel>
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
@@ -548,14 +548,14 @@
                                                         <p:commandButton 
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
-                                                            action="#{activosFijosMB.setEditarTangibles}" 
-                                                            update=":editarDepreciable:paneleditarpreciableeditar,:msgs"
-                                                            onclick="PF('EditarDepreciable').hide()"
-                                                            ajax="false"/>
+                                                            actionListener="#{activosFijosMB.setEditarTangibles}" 
+                                                            update=":editarDepreciable:paneleditarpreciableeditar,:formDepreciable, :msgs"
+                                                          />
                                                         <p:commandButton
                                                             value="Cancelar"
                                                             icon="pi pi-times" 
                                                             onclick="PF('EditarDepreciable').hide()"
+                                                           oncomplete="location.reload()"
                                                             class="ui-button-danger"/>
                                                         <p:commandButton 
                                                             value="Deshabilitar"
