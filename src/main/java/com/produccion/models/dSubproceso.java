@@ -19,12 +19,13 @@ public class dSubproceso {
     private String descripcion;
     private float costo_mano_obra;
     private float costo_indirecto;
-    private String hora_costo;
+    private float hora_costo;
+    private float modunitario;
+    private float cifunitario;
     private List<Costo> costoDirecto;
     private List<Costo> costoIndirecto;
-    
-  
-    public dSubproceso(int codigo_subproceso, int codigo_costos, String descripcion, float costo_mano_obra, float costo_indirecto, String hora_costo) {
+
+    public dSubproceso(int codigo_subproceso, int codigo_costos, String descripcion, float costo_mano_obra, float costo_indirecto, float hora_costo) {
         this.codigo_subproceso = codigo_subproceso;
         this.codigo_costos = codigo_costos;
         this.descripcion = descripcion;
@@ -32,7 +33,7 @@ public class dSubproceso {
         this.costo_indirecto = costo_indirecto;
         this.hora_costo = hora_costo;
     }
-    
+
     public dSubproceso(int codigo_subproceso, int codigo_costos, String descripcion, float costo_mano_obra, float costo_indirecto) {
         this.codigo_subproceso = codigo_subproceso;
         this.codigo_costos = codigo_costos;
@@ -40,7 +41,7 @@ public class dSubproceso {
         this.costo_mano_obra = costo_mano_obra;
         this.costo_indirecto = costo_indirecto;
     }
-   
+
     public dSubproceso() {
     }
 
@@ -100,12 +101,28 @@ public class dSubproceso {
         this.costo_indirecto = costo_indirecto;
     }
 
-    public String getHora_costo() {
+    public float getHora_costo() {
         return hora_costo;
     }
 
-    public void setHora_costo(String hora_costo) {
+    public void setHora_costo(float hora_costo) {
         this.hora_costo = hora_costo;
+    }
+
+    public float getModunitario() {
+        return modunitario;
+    }
+
+    public void setModunitario(float modunitario) {
+        this.modunitario = modunitario;
+    }
+
+    public float getCifunitario() {
+        return cifunitario;
+    }
+
+    public void setCifunitario(float cifunitario) {
+        this.cifunitario = cifunitario;
     }
 
 }

@@ -14,7 +14,10 @@ import com.produccion.models.dSubproceso;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -173,13 +176,27 @@ public class SubProcesoMB implements Serializable {
                 sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
                 subProcesoDAO.insertardSubproceso(sproceso);
                 llenarDetalleDirecto();
+                float minutos = 0;
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+                Date date = null;
+                try {
+                    date = sdf.parse(sproceso.getHora());
+                } catch (ParseException e) {
+                }
+                minutos += date.getSeconds() / 60;
+                minutos += date.getHours() * 60;
+                minutos += date.getMinutes();
                 for (dSubproceso subproceso : listaDsubprocesoDirecta) {
                     //insertamos costo directo
+                    subproceso.setHora_costo(minutos/sproceso.getRendimiento());
+                    subproceso.setModunitario(subproceso.getCosto_mano_obra() / sproceso.getRendimiento());
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
                 llenarDetalleInirecto();
                 for (dSubproceso subproceso : listaDsubprocesoInirecta) {
                     //insertamos costo indirecto
+                    subproceso.setHora_costo(minutos/sproceso.getRendimiento());
+                    subproceso.setCifunitario(subproceso.getCosto_indirecto() / sproceso.getRendimiento());
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
                 subProcesoDAO.actualizaProceso(sproceso);
@@ -223,8 +240,8 @@ public class SubProcesoMB implements Serializable {
         listaCostoDirecto = detalleSuprocesoDAO.getCostoDirecto();
         listaCostoIndirecto = detalleSuprocesoDAO.getCostoIndirecto();
 
-        totalDirecto=0;
-        totalIndirecto=0;
+        totalDirecto = 0;
+        totalIndirecto = 0;
     }
 
     public void llenarDetalleDirecto() {

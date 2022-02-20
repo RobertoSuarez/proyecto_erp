@@ -175,4 +175,11 @@ public class OrdenProduccionDAO {
         }
         return costos;
     }
+    public void insertAsiento(){
+        try {
+            int iddiario = 0;
+                String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
+        } catch (Exception e) {
+        }
+    }
 }
