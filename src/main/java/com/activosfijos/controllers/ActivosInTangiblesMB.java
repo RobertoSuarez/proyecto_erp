@@ -11,12 +11,15 @@ import com.activosfijos.model.ActivosFijos;
 import com.activosfijos.model.ListarIntangible;
 import com.cuentasporpagar.models.Proveedor;
 import java.io.Serializable;
+import java.sql.SQLException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -31,8 +34,10 @@ public class ActivosInTangiblesMB implements Serializable {
     ActivoIntangible activoingantible = new ActivoIntangible();
     ActivosFijos activosFijos = new ActivosFijos();
     int idactivofijo;
-     int id_proveedor;
+    int id_proveedor;
     String nombre = "";
+    String warnMsj = "Advertencia";
+    String infMsj = "Exito";
 
     public String getNombre() {
         return nombre;
@@ -92,8 +97,8 @@ public class ActivosInTangiblesMB implements Serializable {
             intangibledao.guardar3(activosFijos, activoingantible);
             System.out.println("Registrado correctamente");
             PrimeFaces.current().executeScript("PF('NuevoIntangible').hide()");
-
             PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
+            PFE("Activo intangible agregado correctamente");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -107,7 +112,6 @@ public class ActivosInTangiblesMB implements Serializable {
         System.out.println("Id obtenido de activo: " + listaIntan.getId_activo_fijo());
         System.out.println("Id obtenido de empresa: " + listaIntan.getId_empresa());
         System.out.println("Id obtenido de idproveedor: " + listaIntan.getIdproveedor());
-        
 
     }
 
@@ -118,8 +122,8 @@ public class ActivosInTangiblesMB implements Serializable {
             intangibledao.editar2(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
-
             PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
+            PFE("Activo intangible actualizado");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -136,11 +140,13 @@ public class ActivosInTangiblesMB implements Serializable {
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
             PrimeFaces.current().ajax().update(":formintangible");
-        } catch (Exception e) {
+            PFE("Activo intangible deshabilitado");
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
     }
+
     public void setHabilitarintangible(int id) {
         String data = "";
         try {
@@ -148,9 +154,9 @@ public class ActivosInTangiblesMB implements Serializable {
             intangibledao.habilitarintangible(activoingantible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('deshabilitadosintangible').hide()");
-
             PrimeFaces.current().ajax().update(":formintangible");
-        } catch (Exception e) {
+            PFE("Activo intangible habilitado");
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
@@ -171,5 +177,19 @@ public class ActivosInTangiblesMB implements Serializable {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void PFW(String msj) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_WARN, warnMsj, msj));
+
+    }
+
+    public void PFE(String msj) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, infMsj, msj));
+
     }
 }
