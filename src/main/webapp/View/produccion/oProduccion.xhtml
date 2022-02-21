@@ -286,7 +286,7 @@
                                 <p:outputPanel id="materialesOrdenProduccion">
                                     <div class="p-grid p-justify-start">
                                         <div class="p-field p-col-12 p-md-3">
-                                            <p:commandButton style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle" oncomplete="PF('aggproducto').show()"/>
+                                            <!-- comment <p:commandButton style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle" oncomplete="PF('aggproducto').show()"/>-->
 
                                         </div>
 
@@ -467,18 +467,18 @@
                                 </p:column>
                             </p:dataTable>
                         </ui:fragment>
-
                         <div class="p-grid p-justify-end">
-                           <p:commandButton value="Guardar " actionListener="#{produccionMBean.registrarOrden()}"
-                                                             process="ordenProduccion @this"
-                                                             update="@form"
-                                                             icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
-                            <p:button style="margin-right: 6px;margin-top: 15px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"
-                                      outcome="listaOrdenProduccion.xhtml"/>
+                            <div class="p-col-1">
+                                <p:commandButton style="margin-right: 6px;margin-top: 15px;" value="Guardar " actionListener="#{produccionMBean.registrarOrden()}"
+                                                 process="ordenProduccion @this"
+                                                 update="@form"
+                                                 icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
+                            </div>
+                            <div class="p-col-1">
+                                <p:button style="margin-right: 6px;margin-top: 15px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"
+                                          outcome="listaOrdenProduccion.xhtml"/>
+                            </div>
                         </div>
-
-
-
                     </div>
                 </h:form>
             </ui:define>
