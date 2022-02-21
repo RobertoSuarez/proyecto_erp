@@ -76,7 +76,9 @@ public class RestriccionVenta implements Serializable {
      **/
     public String menu() {
         if ("Administrador de ventas".equals(listaRoles.get(0).getNombre())
-                || "Vendedor".equals(listaRoles.get(0).getNombre())) {
+                || "Vendedor".equals(listaRoles.get(0).getNombre()) 
+                || "Gerente".equals(listaRoles.get(0).getNombre())
+                || "Administrador de la empresa".equals(listaRoles.get(0).getNombre())) {
             return "true";
         } else {
             return "false";
