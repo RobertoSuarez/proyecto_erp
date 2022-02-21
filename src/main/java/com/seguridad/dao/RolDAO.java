@@ -94,4 +94,17 @@ public class RolDAO {
             e.toString();
         }
     }
+    
+    public void deleteRolUser(int idRol, int idUser){
+        String query = "DELETE FROM public.\"rolUsuario\"\n" +
+"	WHERE \"idUsuario\"= "+String.valueOf(idUser) +" and \"idRol\" = "+ String.valueOf(idRol) +";";
+        try{
+            this.conexion.conectar();
+            this.conexion.ejecutarSql(query);
+            this.conexion.desconectar();
+        }
+        catch(Exception e){
+            e.toString();
+        }
+    }
 }

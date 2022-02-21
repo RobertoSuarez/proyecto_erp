@@ -328,4 +328,10 @@ public class UsuarioController implements Serializable {
         FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Nuevo rol ingresado");
         FacesContext.getCurrentInstance().addMessage(null, messages);
     }
+    
+    public void deleteRolsForUser(Rol rolAux){
+        this.rDao.deleteRolUser(rolAux.getId(), this.infoUser.getIdUsuario());
+        FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Éxito", "Nuevo rol ingresado");
+        FacesContext.getCurrentInstance().addMessage(null, messages);
+    }
 }

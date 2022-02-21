@@ -91,10 +91,12 @@
                                     <h:outputText value="#{ListaRolesUsuarios.nombre}"/>
                                 </p:column>
                                 <p:column headerText="Accion" width="20%" style="font-size: 17px">
-                                    <p:commandButton icon="pi pi-trash" type="button" 
+                                    <p:commandButton icon="pi pi-trash"
                                                      class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                      process="@this"
-                                                     />
+                                                     onclick="PF('userDat').hide()"
+                                                     update="RolUser"
+                                                     actionListener="#{usuarioMB.deleteRolsForUser(ListaRolesUsuarios)}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:panel>
