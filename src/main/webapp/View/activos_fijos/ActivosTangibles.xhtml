@@ -809,7 +809,7 @@
                                                                     for="@next" 
                                                                     value="Descripción: "/>
                                                                 <p:inputText 
-                                                                                                                              
+
                                                                     value="#{activosFijosMB.activosFijos.detalle_de_activo}" 
                                                                     required="true" />
 
@@ -913,12 +913,12 @@
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
                                                             action="#{activosFijosMB.setRegistrarNoDepreciable}"
-                                                            update=":formnuevoNodepreciable:paneldialogoingresarNodepreciable,:fromverNodepreciable,:msgs"
-                                                            onclick="PF('NuevoNoDepreciable').hide()"
-                                                            ajax="false"/>
+                                                            update=":formnuevoNodepreciable:panelNuevoNoDepreciable,:fromverNodepreciable,:msgs"
+                                                           />
                                                         <p:commandButton 
                                                             value="Cancelar" 
                                                             icon="pi pi-times" 
+                                                            oncomplete="location.reload()"
                                                             onclick="PF('NuevoNoDepreciable').hide()"
                                                             class="ui-button-danger"/>
                                                     </f:facet>

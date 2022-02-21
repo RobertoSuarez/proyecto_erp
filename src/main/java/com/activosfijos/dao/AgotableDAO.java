@@ -46,8 +46,10 @@ public class AgotableDAO {
             conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.connection.prepareStatement(
-                    "Select *from activos_fijos inner join fijo_tangible_agotable \n"
-                    + "on fijo_tangible_agotable.id_activo_fijo = activos_fijos.id_activo_fijo where estado='habilitado';");
+                    "Select *from proveedor, activos_fijos, fijo_tangible_agotable\n"
+                    + "where fijo_tangible_agotable.id_activo_fijo = activos_fijos.id_activo_fijo \n"
+                    + "and activos_fijos.idproveedor= proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='habilitado';	");
             // Ejecución
             ResultSet rs = st.executeQuery();
 
@@ -60,7 +62,7 @@ public class AgotableDAO {
                 listaagotable.setId_empresa(rs.getInt("id_empresa"));
                 listaagotable.setStock(rs.getInt("stock"));
                 listaagotable.setIdproveedor(rs.getInt("idproveedor"));
-                //listaagotable.setProveedor(rs.getString("proveedor"));
+                listaagotable.setProveedor(rs.getString("nombre"));
                 listaagotable.setNumero_factura(rs.getString("numero_factura"));
                 listaago.add(listaagotable);
             }
@@ -82,8 +84,11 @@ public class AgotableDAO {
             conexion.conectar();
             // Consulta.
             PreparedStatement st = conexion.connection.prepareStatement(
-                    "Select *from activos_fijos inner join fijo_tangible_agotable \n"
-                    + "on fijo_tangible_agotable.id_activo_fijo = activos_fijos.id_activo_fijo where estado='deshabilitado';");
+                    "Select *from proveedor, activos_fijos, fijo_tangible_agotable\n"
+                    + "where fijo_tangible_agotable.id_activo_fijo = activos_fijos.id_activo_fijo \n"
+                    + "and activos_fijos.idproveedor= proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='deshabilitado';					\n"
+                    + "					");
             // Ejecución
             ResultSet rs = st.executeQuery();
 
@@ -96,7 +101,7 @@ public class AgotableDAO {
                 listaagotable.setId_empresa(rs.getInt("id_empresa"));
                 listaagotable.setStock(rs.getInt("stock"));
                 listaagotable.setIdproveedor(rs.getInt("idproveedor"));
-                // listaagotable.setProveedor(rs.getString("proveedor"));
+                listaagotable.setProveedor(rs.getString("nombre"));
                 listaagotable.setNumero_factura(rs.getString("numero_factura"));
                 listaago.add(listaagotable);
             }
