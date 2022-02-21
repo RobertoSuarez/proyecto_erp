@@ -15,9 +15,9 @@
                             <div class="p-col-12 p-md-12 p-lg-12">
                                 <div class="p-grid">
 
-                                    <div class="p-col-1">
+                                    <div class="p-col-2">
                                         <p:outputLabel value="Código:"></p:outputLabel>
-                                        <p:inputText value=""></p:inputText>
+                                        <p:inputText value="" disabled="true"></p:inputText>
                                     </div>
                                     <div class="p-col-2">
                                         <p:outputLabel value="Fecha: *"></p:outputLabel>
@@ -26,22 +26,15 @@
                                         </p:calendar>
                                     </div>
                                     <div class="p-col-3">
-                                        <p:outputLabel value="Bodega de Origen: *"></p:outputLabel>
-                                        <div class="ui-inputgroup">
-                                            <p:commandButton type="button" icon="pi pi-search" onclick="PF('BuscarBodega').show()" style="position: center"/>
-                                            <p:inputText id="BodOrigen" value="#{transferenciaMB.nombreBodegaOrigen}" disabled="true" />       
-                                        </div>
-                                    </div>
-                                    <div class="p-col-3">
-                                        <p:outputLabel value="Bodega de Destino: *"></p:outputLabel>
+                                        <p:outputLabel value="Bodega: *"></p:outputLabel>
                                         <div class="ui-inputgroup">
                                             <p:commandButton type="button" icon="pi pi-search" onclick="PF('BuscarBodega1').show()" style="position: center"/>
-                                            <p:inputText id="BodDestino" value="#{transferenciaMB.nombreBodegaDestino}" disabled="true" />       
+                                            <p:inputText id="BodDestino" value="#{transferenciaMB.nombreBodegaDestino}" disabled="true" /> 
 
                                         </div>
                                     </div>
-                                    <div class="p-col-2">
-                                        <p:outputLabel value="Motivo: *"></p:outputLabel>
+                                    <div class="p-col-4">
+                                        <p:outputLabel value="Observación: *"></p:outputLabel>
                                         <p:inputTextarea disabled=""
                                                          maxlength="150"
                                                          value="" 
@@ -59,19 +52,21 @@
                                 <p:dataTable id="MaterialesProducto" editable="true" reflow="true" var="articuloslista"
                                              editInitEvent="dblclick" editMode="cell"
                                              value="#{transferenciaMB.listArticulos}">
-
-
-
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{articuloslista.cod_articulo}" />
+                                    </p:column>
                                     <p:column headerText="Nombre">
                                         <h:outputText value="#{articuloslista.nombreArticulo}" />
                                     </p:column>
+                                    
+
                                     <p:column headerText="Existencia">
                                         <h:outputText value="#{articuloslista.cant}" />
                                     </p:column>
-                                    <p:column headerText="Costo">
+                                    <p:column headerText="Costo Inicial">
                                         <h:outputText value="#{articuloslista.costo}" />
                                     </p:column>
-                                    <p:column headerText="Cantidad" >
+                                    <p:column headerText="Cant Ajustada" >
                                         <p:cellEditor>
                                             <f:facet name="output">
                                                 <h:outputText value="#{articuloslista.cant}"/>
@@ -127,14 +122,7 @@
                         <p:outputPanel id="materiaPrima" class="ui-fluid">
                             <p:outputPanel>
                                 <div class="p-grid p-justify-around">
-                                    <!-- <div class="p-col-1 p-md-1 p-lg-5">
-                                         <div class="p-grid">
-                                             <div class="p-col-12">
-                                                 <p:outputLabel value="Materia Prima:"></p:outputLabel>
-                                                 <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
-                                             </div>
-                                         </div>
-                                     </div>-->
+                                   
                                     <div class="p-col-11">
                                         <div class="p-grid">
                                             <div class="p-col-12">

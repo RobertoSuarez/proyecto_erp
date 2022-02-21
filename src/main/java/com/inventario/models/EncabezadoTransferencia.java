@@ -13,7 +13,15 @@ public class EncabezadoTransferencia {
     private int codBodOrigen;
     private int codBodDestino;
     private String bodOrigen;
+    private boolean verifica;
     private String bodDestino;
+    
+    private int cod_detalle;
+    private int cod_articulo;
+    private String nombre_articulo;
+    private int cantidadTrasnferida;
+    private int existencia;
+    private double costo;
 
     public EncabezadoTransferencia() {
     }
@@ -82,6 +90,62 @@ public class EncabezadoTransferencia {
 
     public void setBodDestino(String bodDestino) {
         this.bodDestino = bodDestino;
+    }
+
+    public boolean isVerifica() {
+        return verifica;
+    }
+
+    public void setVerifica(boolean verifica) {
+        this.verifica = verifica;
+    }
+
+    public int getCod_detalle() {
+        return cod_detalle;
+    }
+
+    public void setCod_detalle(int cod_detalle) {
+        this.cod_detalle = cod_detalle;
+    }
+
+    public int getCod_articulo() {
+        return cod_articulo;
+    }
+
+    public void setCod_articulo(int cod_articulo) {
+        this.cod_articulo = cod_articulo;
+    }
+
+    public String getNombre_articulo() {
+        return nombre_articulo;
+    }
+
+    public void setNombre_articulo(String nombre_articulo) {
+        this.nombre_articulo = nombre_articulo;
+    }
+
+    public int getCantidadTrasnferida() {
+        return cantidadTrasnferida;
+    }
+
+    public void setCantidadTrasnferida(int cantidadTrasnferida) {
+        this.cantidadTrasnferida = cantidadTrasnferida;
+    }
+
+    public int getExistencia() {
+        return existencia;
+    }
+
+    public void setExistencia(int existencia) {
+        this.existencia = existencia;
+    }
+
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
     }
     
     
