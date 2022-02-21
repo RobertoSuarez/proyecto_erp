@@ -12,12 +12,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ArticulosInventarioDAO {
 
     Conexion conexion = new Conexion();
     private ArticulosInventario articulosInventario;
     private ResultSet resultSet;
+    private String sentenciaSql;
     private List<ArticulosInventario> listaArticulos;
     private List auxlista = new ArrayList<>();
 
@@ -118,6 +118,39 @@ public class ArticulosInventarioDAO {
             conexion.desconectar();
         }
         return ListaCategoria;
+    }
+
+    //insertar nuevo articulo
+    public void insertarAriculo(ArticulosInventario articulo) {
+        try {
+            ResultSet rs=null;
+            this.conexion.conectar();
+            rs=this.conexion.ejecutarSql("select id from articulos order by id desc limit 1;");
+            int cod=1;
+            
+            while(rs.next()){
+                cod=rs.getInt(1)+1;
+            }
+            articulo.setId(cod);
+            System.out.println("Articulo: "+articulo.getId());
+            
+            sentenciaSql = "INSERT INTO public.articulos(id,nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad,costo,iva,ice)\n"
+                    + "	VALUES ("+articulo.getId()+"'" + articulo.getNombre() + "', " + articulo.getId_categoria() + ", " + articulo.getId_tipo() + ",'" + articulo.getDescripcion()
+                    + "'," + articulo.getId_bodega() + "," + articulo.getCantidad() + "," + articulo.getCosto() + ",12,0)";
+            //enviamos la sentencia
+            conexion.ejecutarSql(sentenciaSql);
+            this.conexion.desconectar();
+            
+            System.out.println("Entrada Guardada exitosamente");
+            
+        } catch (Exception e) {
+            if(conexion.isEstado()){
+                conexion.desconectar();
+            }
+          System.out.println(e.getMessage().toString());  
+        } finally {
+            conexion.desconectar();
+        }
     }
 
 }
