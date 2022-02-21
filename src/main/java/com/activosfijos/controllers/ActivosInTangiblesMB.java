@@ -97,7 +97,7 @@ public class ActivosInTangiblesMB implements Serializable {
             intangibledao.guardar3(activosFijos, activoingantible);
             System.out.println("Registrado correctamente");
             PrimeFaces.current().executeScript("PF('NuevoIntangible').hide()");
-            PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
+            PrimeFaces.current().ajax().update(":formintangible:verListaIntangibles");
             PFE("Activo intangible agregado correctamente");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

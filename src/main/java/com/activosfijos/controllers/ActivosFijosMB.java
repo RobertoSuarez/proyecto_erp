@@ -341,6 +341,7 @@ public class ActivosFijosMB implements Serializable {
             agotablesdao.guardar2(activosFijos, activosagotables);
             System.out.println("Registrado correctamente");
             PFE("Activo agotable registrado");
+            PrimeFaces.current().executeScript("PF('NuevoAgotable').hide()");
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -450,7 +451,10 @@ public class ActivosFijosMB implements Serializable {
             this.listadepreciable.setIdproveedor(ms1);
             setNombre(ms2);
             PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
-            PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable ");
+            PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable");
+            PrimeFaces.current().ajax().update(":formnuevoagotable:panelNuevoAgotable");
+
+            PrimeFaces.current().ajax().update(":formnuevoagotable:panelNuevoAgotable");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

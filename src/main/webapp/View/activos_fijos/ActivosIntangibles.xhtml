@@ -15,10 +15,10 @@ and open the template in the editor.
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                
+
                 <f:event type="preRenderView"
                          listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-                
+
                 <p:menubar autoDisplay="false"
                            style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" 
@@ -151,16 +151,16 @@ and open the template in the editor.
                                   widgetVar="NuevoIntangible"
                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
 
-                            <p:outputPanel id="panelnuevodepreciable" class="ui-fluid">
+                            <p:outputPanel id="panelnuevodepreciableintangible" class="ui-fluid">
                                 <p:overlayPanel for="proveedor" dynamic="true" 
                                                 style="width:600px" widgetVar="moviePicker">
                                     <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
                                                  rows="3" paginator="true" selectionMode="single"
                                                  selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
                                         <p:ajax event="rowSelect" listener="#{activosintangilesMB.onRowSelect}" 
-                                                oncomplete="PF('moviePicker').hide()" 
-                                                update=":formintangible:proveedor" 
-                                                process="@this"
+                                                onsuccess="PF('moviePicker').hide()" 
+                                                update=":formintangible:panelnuevodepreciableintangible @this" 
+
                                                 />
 
                                         <p:column headerText="Proveedor">
@@ -178,7 +178,7 @@ and open the template in the editor.
                                     <div class="p-formgrid p-grid">
                                         <div class="p-field p-col">
                                             <p:outputLabel for="proveedor" value="Proveedor"/>
-                                            <p:inputText id="proveedor" type="button" value="#{activosintangilesMB.activosFijos.proveedor}" required="true"  /> 
+                                            <p:inputText id="proveedor" type="button" value="#{activosintangilesMB.nombre}" required="true"  /> 
 
                                         </div>
                                         <div class="p-field p-col">
@@ -218,16 +218,18 @@ and open the template in the editor.
                                     <p:commandButton value="Guardar" 
                                                      icon="pi pi-check" 
                                                      actionListener="#{activosintangilesMB.setRegistrar3}"
-                                                     process="panelnuevodepreciable @this" />
+                                                     update=":msgs"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('NuevoIntangible').hide()"
+                                                     oncomplete="location.reload()"
+
                                                      class="ui-button-danger"/>
                                 </f:facet>
                             </div>                          
 
                         </p:dialog> 
 
-  <p:dialog header="Editar Activo Intangible"
+                        <p:dialog header="Editar Activo Intangible"
                                   minHeight="40"
                                   responsive="true"
                                   height="auto"
@@ -251,7 +253,7 @@ and open the template in the editor.
                                                     listener="#{activosintangilesMB.onRowSelect}" 
                                                     oncomplete="PF('moviePicker').hide()" 
                                                     update=":formintangible:proveedoredit" 
-                                                   
+
                                                     />
 
                                             <p:column headerText="Proveedor">
