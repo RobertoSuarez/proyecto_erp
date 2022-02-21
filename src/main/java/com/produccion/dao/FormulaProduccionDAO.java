@@ -96,8 +96,8 @@ public class FormulaProduccionDAO {
 
     public List<FormulaProduccion> getArticulos() {
         List<FormulaProduccion> Materiales = new ArrayList<>();
-        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock from articulos as a\n"
-                + "	inner join categoria as c on a.cat_cod=c.cod\n"
+        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock \n"
+                + "	from articulos as a	inner join categoria as c on a.id_categoria=c.cod\n"
                 + "	inner join tipo as t on t.cod=a.id_tipo";
 
         try {
@@ -122,7 +122,7 @@ public class FormulaProduccionDAO {
             String cadena = "INSERT INTO public.formula(\n"
                     + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\",tiempo_formula, tiempo_unidad, modunidad, cifunidad)\n"
                     + "	VALUES ( " + f.getCodigo_proceso() + ", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento()
-                    + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ", " + f.getTiempoFormula() +", " + f.getTiempoUnidad()+", " + f.getMODUnidad()+", " + f.getCIFUnidad()+ ");";
+                    + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ", " + f.getTiempoFormula() + ", " + f.getTiempoUnidad() + ", " + f.getMODUnidad() + ", " + f.getCIFUnidad() + ");";
             return conexion.insertar(cadena);
         } catch (Exception e) {
             return -1;

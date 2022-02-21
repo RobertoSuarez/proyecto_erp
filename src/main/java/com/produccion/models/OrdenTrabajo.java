@@ -28,8 +28,26 @@ public class OrdenTrabajo {
     private float totalCIF;
     private float costoTotal;
     private float costoUnitario;
+    private float tiempo;
+    private String estado;
 
     public OrdenTrabajo() {
+    }
+
+    public OrdenTrabajo(int codigo_registro, int codigo_formula, int codigo_proceso, String Descripcion, float cantidad, Date fecha_inicio, Date fecha_fin, float totalMateria, float totalMOD, float totalCIF, float costoTotal, float costoUnitario, float tiempo) {
+        this.codigo_registro = codigo_registro;
+        this.codigo_formula = codigo_formula;
+        this.codigo_proceso = codigo_proceso;
+        this.Descripcion = Descripcion;
+        this.cantidad = cantidad;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
+        this.totalMateria = totalMateria;
+        this.totalMOD = totalMOD;
+        this.totalCIF = totalCIF;
+        this.costoTotal = costoTotal;
+        this.costoUnitario = costoUnitario;
+        this.tiempo = tiempo;
     }
 
     public OrdenTrabajo(String nombre_proceso, int codigo_proceso) {
@@ -47,6 +65,10 @@ public class OrdenTrabajo {
         this.codigo_registro = codigo_registro;
         this.nombre_producto = nombre_producto;
         this.cantidad = cantidad;
+    }
+
+    public OrdenTrabajo(String estado) {
+        this.estado = estado;
     }
 
     public int getCodigo_orden() {
@@ -207,6 +229,22 @@ public class OrdenTrabajo {
 
     public void setCostoUnitario(float costoUnitario) {
         this.costoUnitario = costoUnitario;
+    }
+
+    public float getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(float tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
 }

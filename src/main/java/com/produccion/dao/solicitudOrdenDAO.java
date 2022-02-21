@@ -31,8 +31,8 @@ public class solicitudOrdenDAO {
         try {
             sentenciaSql = "INSERT INTO public.registro_orden_produccion(\n"
                     + "	codigo_orden, cantidad, unidad_medida, estado, \"Codigo_producto\")\n"
-                    + "	VALUES ("+producto.getCodigoOrden()+","+producto.getCantidad()+",'"+producto.getUnidadMedida()+"','"
-                    +producto.getEstado()+"', "+producto.getCodigoProducto()+");";
+                    + "	VALUES (" + producto.getCodigoOrden() + "," + producto.getCantidad() + ",'" + producto.getUnidadMedida() + "','"
+                    + producto.getEstado() + "', " + producto.getCodigoProducto() + ");";
             if (conexion.insertar(sentenciaSql) > 0) {
                 return 1;
             } else {
@@ -68,6 +68,10 @@ public class solicitudOrdenDAO {
         List<productosOrden> ordenProducto = new ArrayList<>();
         sentenciaSql = String.format("select * from articulos as a \n"
                 + "	inner join tipo as t on a.id_tipo=t.cod\n"
+                + "	where tipo='Producto Terminado'or tipo='Producto SemiElaborado'");
+        sentenciaSql = String.format("select distinct a.id,a.nombre,a.descripcion,a.cantidad,a.costo,t.tipo from articulos as a\n"
+                + "	inner join tipo as t on a.id_tipo=t.cod\n"
+                + "	inner join formula as f on a.id=f.codigo_producto\n"
                 + "	where tipo='Producto Terminado'or tipo='Producto SemiElaborado'");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);

@@ -51,7 +51,8 @@
                                 <h:outputText value="#{ordenProduccion.estado}" />
                             </p:column>
                             <p:column headerText="Acción" filterStyle="display : none">
-                                <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml?orden=#{ordenProduccion.codigo_orden}">
+                                <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml?orden=#{ordenProduccion.codigo_orden}"
+                                          disabled="#{ordenProduccion.estado=='P' eq false}">
                                 </p:button>
                             </p:column>
                         </p:dataTable>

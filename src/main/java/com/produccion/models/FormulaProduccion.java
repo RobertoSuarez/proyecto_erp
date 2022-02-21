@@ -35,6 +35,17 @@ public class FormulaProduccion {
     private float tiempoUnidad;
     private float MODUnidad;
     private float CIFUnidad;
+    private int subcuenta;
+    private String codigoSubcuenta;
+    private String nombreCuenta;
+
+    public FormulaProduccion(String nombre, float costo, int subcuenta, String codigoSubcuenta, String nombreCuenta) {
+        this.nombre = nombre;
+        this.costo = costo;
+        this.subcuenta = subcuenta;
+        this.codigoSubcuenta = codigoSubcuenta;
+        this.nombreCuenta = nombreCuenta;
+    }
 
     public FormulaProduccion(String nombre_formula, float tiempoUnidad, float MODUnidad, float CIFUnidad) {
         this.nombre_formula = nombre_formula;
@@ -100,6 +111,7 @@ public class FormulaProduccion {
         this.estado = estado;
         this.codigo_producto = codigo_producto;
     }
+    
 
     public String getNombre() {
         return nombre;
@@ -299,6 +311,30 @@ public class FormulaProduccion {
 
     public void setCIFUnidad(float CIFUnidad) {
         this.CIFUnidad = CIFUnidad;
+    }
+
+    public int getSubcuenta() {
+        return subcuenta;
+    }
+
+    public void setSubcuenta(int subcuenta) {
+        this.subcuenta = subcuenta;
+    }
+
+    public String getCodigoSubcuenta() {
+        return codigoSubcuenta;
+    }
+
+    public void setCodigoSubcuenta(String codigoSubcuenta) {
+        this.codigoSubcuenta = codigoSubcuenta;
+    }
+
+    public String getNombreCuenta() {
+        return nombreCuenta;
+    }
+
+    public void setNombreCuenta(String nombreCuenta) {
+        this.nombreCuenta = nombreCuenta;
     }
     
 
