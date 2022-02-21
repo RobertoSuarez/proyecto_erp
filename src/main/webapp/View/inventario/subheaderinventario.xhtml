@@ -17,8 +17,10 @@
             <p:menuitem value="Lista Transferencias" outcome="/View/inventario/Transferencias" icon="pi pi-list" />
             <p:menuitem value="Nueva Transferencia" outcome="/View/inventario/NuevaTransferencia" icon="pi pi-list" />
         </p:submenu>
-        <p:menuitem value="Ajuste de Inventario" outcome="/View/inventario/ajusteInventario"/>
-       
+        <p:submenu label="Ajuste de Inventario">
+            <p:menuitem value="Listado" outcome="/View/inventario/ajusteInventario"/>
+            <p:menuitem value="Nuevo Ajsute" outcome="/View/inventario/NuevaAjuste"/>
+        </p:submenu>
     </p:menubar>
 
 </ui:composition>

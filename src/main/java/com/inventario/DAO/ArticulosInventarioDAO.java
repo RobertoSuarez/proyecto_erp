@@ -7,14 +7,12 @@ package com.inventario.DAO;
 
 import com.global.config.Conexion;
 import com.inventario.models.ArticulosInventario;
+import com.inventario.models.Categoria;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Jimmy
- */
+
 public class ArticulosInventarioDAO {
 
     Conexion conexion = new Conexion();
@@ -42,44 +40,39 @@ public class ArticulosInventarioDAO {
             //LLenar la lista de datos
             while (resultSet.next()) {
                 ListaInv.add(new ArticulosInventario(resultSet.getInt("id"),
-                        resultSet.getInt("cat_cod"),
-                        resultSet.getString("nombre"),
                         resultSet.getInt("id_categoria"),
+                        resultSet.getString("nombre"),
                         resultSet.getInt("id_tipo"),
-                        resultSet.getInt("cod"),
                         resultSet.getString("descripcion"),
                         resultSet.getInt("id_bodega"),
-                        resultSet.getInt("min_stock"),
-                        resultSet.getInt("max_stock"),
                         resultSet.getInt("cantidad"),
                         resultSet.getInt("costo"),
                         resultSet.getInt("iva"),
-                        resultSet.getInt("ice") ));
-             }
-             
-             
-         } catch (Exception e) {
-             System.out.println(e.getMessage());
-         }finally{
+                        resultSet.getInt("ice")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
             conexion.desconectar();
         }
         return ListaInv;
-         }
-    
-        public ArticulosInventario ObtenerProducto(int id) {
+    }
+
+    public ArticulosInventario ObtenerProducto(int id) {
         ResultSet rs;
         ArticulosInventario temp = new ArticulosInventario();
-        
+
         try {
             String code = String.valueOf(id);
             conexion.conectar();
             rs = conexion.ejecutarSql("select * from public.buscarproductocodigo(" + code.trim() + ")");
-            
+
             if (rs == null) {
                 System.out.println("No existen registros");
             } else {
                 System.out.println("Existen registros");
-                
+
                 while (rs.next()) {
                     System.out.print("Producto " + rs.getInt(1));
                     temp.setCod(rs.getInt(1));
@@ -90,7 +83,7 @@ public class ArticulosInventarioDAO {
                     temp.setCosto(rs.getInt(6));
                     temp.setIce(rs.getInt(7));
                     temp.setIva(rs.getInt(8));
-                    
+
                 }
             }
             conexion.desconectar();
@@ -100,14 +93,31 @@ public class ArticulosInventarioDAO {
             if (conexion.isEstado()) {
                 conexion.desconectar();
             }
-        }
-        finally{
+        } finally {
             conexion.desconectar();
         }
 
         return null;
     }
- 
-    
-    
+
+    public List<Categoria> getCategoria() {
+        List<Categoria> ListaCategoria = new ArrayList<>();
+        String sql = String.format("Select * FROM categoria");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaCategoria.add(new Categoria(resultSet.getInt("cod"),
+                        resultSet.getString("nom_categoria"),
+                        resultSet.getString("descripcion")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaCategoria;
+    }
+
 }
