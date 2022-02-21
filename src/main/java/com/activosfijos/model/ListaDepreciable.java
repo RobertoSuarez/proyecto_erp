@@ -143,4 +143,5 @@ public class ListaDepreciable {
         this.valor_neto_libros = valor_neto_libros;
     }
 
+
 }

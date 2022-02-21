@@ -10,9 +10,11 @@ package com.inventario.controllers;
 import com.cuentasporpagar.daos.ProveedorDAO;
 import com.cuentasporpagar.models.Proveedor;
 import com.inventario.DAO.ArticulosInventarioDAO;
+import com.inventario.DAO.BodegaDAO;
 import com.inventario.DAO.EntradaDao;
 import com.inventario.DAO.EntradaDetalleDAO;
 import com.inventario.models.ArticulosInventario;
+import com.inventario.models.Bodega;
 import com.inventario.models.EntradaDetalleInventario;
 import com.inventario.models.EntradaInventario;
 import java.io.Serializable;
@@ -42,10 +44,18 @@ public class EntradaManagedBean implements Serializable {
     private String proveedordINum;
     private String proveedorNombre;
     
+    private Bodega bodega;
+    private BodegaDAO bodegaDAO;
+    private int codBodega;
+    private String nombreBodega;
+    private String direccionBodega;
+    private String ciudadBodega;
+    
     private EntradaDao enntradaDAO;
     
     private EntradaDetalleInventario productoSeleccionado;
     private Proveedor proveedorSeleccionado;
+    private Bodega bodegaSeleccionada;
 
     private ArticulosInventarioDAO productoDao;
     private ArticulosInventario producto;
@@ -75,6 +85,7 @@ public class EntradaManagedBean implements Serializable {
     
     private List<Proveedor> listaProveedores;
     private List<ArticulosInventario> listaProductos;
+    private List<Bodega> listaBodegas;
 
     public List<EntradaInventario> getListaEntradas() {
         return listaEntradas;
@@ -91,6 +102,9 @@ public class EntradaManagedBean implements Serializable {
         this.proveedor = new Proveedor();
         this.proveedorDAO = new ProveedorDAO();
 
+        this.bodega = new Bodega();
+        this.bodegaDAO = new BodegaDAO();
+        
         this.producto = new ArticulosInventario();
         this.productoDao = new ArticulosInventarioDAO();
         this.codigoProducto = 0;
@@ -111,8 +125,10 @@ public class EntradaManagedBean implements Serializable {
         this.entradaDao = new EntradaDao();
         
         this.listaEntradas = entradaDao.getEntradas();
+        this.listaBodegas = bodegaDAO.getBodega();
         this.productoSeleccionado = null;
         this.proveedorSeleccionado=null;
+        this.bodegaSeleccionada= null;
 
         
 
@@ -328,6 +344,81 @@ public class EntradaManagedBean implements Serializable {
     this.precioProducto = pr.getCosto();
     this.producto = pr;
 }
+
+    public void SeleccionarBodega(Bodega bod){
+        this.codBodega = bod.getCod();
+        this.nombreBodega = bod.getNomBodega();
+        this.ciudadBodega = bod.getNomCiudad();
+        this.direccionBodega = bod.getDireccion();
+    }
+
+    public String getNombreBodega() {
+        return nombreBodega;
+    }
+
+    public void setNombreBodega(String nombreBodega) {
+        this.nombreBodega = nombreBodega;
+    }
+    
+    
+    
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public BodegaDAO getBodegaDAO() {
+        return bodegaDAO;
+    }
+
+    public void setBodegaDAO(BodegaDAO bodegaDAO) {
+        this.bodegaDAO = bodegaDAO;
+    }
+
+    public int getCodBodega() {
+        return codBodega;
+    }
+
+    public void setCodBodega(int codBodega) {
+        this.codBodega = codBodega;
+    }
+
+    public String getDireccionBodega() {
+        return direccionBodega;
+    }
+
+    public void setDireccionBodega(String direccionBodega) {
+        this.direccionBodega = direccionBodega;
+    }
+
+    public String getCiudadBodega() {
+        return ciudadBodega;
+    }
+
+    public void setCiudadBodega(String ciudadBodega) {
+        this.ciudadBodega = ciudadBodega;
+    }
+
+    public Bodega getBodegaSeleccionada() {
+        return bodegaSeleccionada;
+    }
+
+    public void setBodegaSeleccionada(Bodega bodegaSeleccionada) {
+        this.bodegaSeleccionada = bodegaSeleccionada;
+    }
+
+    public List<Bodega> getListaBodegas() {
+        return listaBodegas;
+    }
+
+    public void setListaBodegas(List<Bodega> listaBodegas) {
+        this.listaBodegas = listaBodegas;
+    }
+    
+    
 
     public Proveedor getProveedor() {
         return proveedor;

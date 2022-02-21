@@ -25,8 +25,7 @@
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
                         Tangibles</h1>
-                    <p:growl id="msgs" showDetail="true"
-                             skipDetailIfEqualsSummary="true"/>
+                    <p:growl id="msgs" showDetail="true" severity="info, warn"/>
                     <div>
                         <p:tabView
                             class="formulario" 
@@ -243,7 +242,7 @@
                                                         <p:commandButton 
                                                             action="#{activosFijosMB.setHabilitarintangible(depreciable.id_activo_fijo)}"
                                                             ajax="false"
-                                                            update=":formDepreciable, :formverdeshabilitadodepreciable"
+                                                            update=":formDepreciable, :formverdeshabilitadodepreciable,:msgs"
                                                             oncomplete="ActivosTangibles.xhtml.show()"  
                                                             icon="pi pi-check"
                                                             styleClass="rounded-button" 
@@ -270,43 +269,7 @@
                                             <p:outputPanel 
                                                 id="panelnuevodepreciable"
                                                 class="ui-fluid">
-                                                <p:overlayPanel
-                                                    for="proveedor" 
-                                                    dynamic="true" 
-                                                    style="width:600px"
-                                                    widgetVar="moviePicker">
-                                                    <p:dataTable 
-                                                        var="proveedor" 
-                                                        value="#{BuscarMB.listaProveedor}" 
-                                                        rows="3"
-                                                        paginator="true"
-                                                        selectionMode="single"
-                                                        selection="#{BuscarMB.proveedor}"
-                                                        rowKey="#{proveedor.nombre}">
-                                                        <p:ajax 
-                                                            event="rowSelect" 
-                                                            listener="#{activosFijosMB.onRowSelect}" 
-                                                            oncomplete="PF('moviePicker').hide()" 
-                                                            update="@formnuevoDepreciable" 
-                                                            />
 
-                                                        <p:column 
-                                                            headerText="Proveedor">
-                                                            <h:outputText 
-                                                                value="#{proveedor.codigo}"/>
-                                                        </p:column>
-                                                        <p:column 
-                                                            headerText="Nombre">
-                                                            <h:outputText 
-                                                                value="#{proveedor.nombre}"/>
-                                                        </p:column>
-                                                        <p:column 
-                                                            headerText="Ruc">
-                                                            <h:outputText 
-                                                                value="#{proveedor.ruc}"/>
-                                                        </p:column>
-                                                    </p:dataTable>
-                                                </p:overlayPanel>
                                                 <p:outputPanel 
                                                     class="ui-fluid" >
 
@@ -318,8 +281,8 @@
                                                             <p:inputText   
                                                                 id="proveedor"
                                                                 type="button" 
-                                                                value="#{activosFijosMB.activosFijos.proveedor}" 
-                                                                required="true" />
+                                                                value="#{activosFijosMB.nombre}" 
+                                                                />
 
                                                         </div>
                                                         <div 
@@ -354,7 +317,7 @@
                                                             <p:inputText 
                                                                 type="number" 
                                                                 value="#{activosFijosMB.activodepreciable.depreciacion_meses}"
-                                                                required="true" >
+                                                                >
                                                                 <p:keyFilter regEx="/[0-9]/i"/>
                                                             </p:inputText>
 
@@ -383,8 +346,46 @@
                                                         value="Descripción: "/>
                                                     <p:inputText  
                                                         value="#{activosFijosMB.activosFijos.detalle_de_activo}"
-                                                        required="true" >
+                                                        >
                                                     </p:inputText>
+                                                    <p:overlayPanel
+                                                        for="proveedor" 
+                                                        dynamic="true" 
+                                                        style="width:600px"
+                                                        widgetVar="moviePicker">
+                                                        <p:dataTable 
+                                                            var="proveedor" 
+                                                            value="#{BuscarMB.listaProveedor}" 
+                                                            rows="3"
+                                                            paginator="true"
+                                                            selectionMode="single"
+                                                            selection="#{BuscarMB.proveedor}"
+                                                            rowKey="#{proveedor.nombre}">
+                                                            <p:ajax 
+                                                                event="rowSelect" 
+                                                                listener="#{activosFijosMB.onRowSelect}" 
+                                                                onsuccess="PF('moviePicker').hide()" 
+                                                                update=":formnuevoDepreciable:panelnuevodepreciable @this"
+
+                                                                />
+
+                                                            <p:column 
+                                                                headerText="Proveedor">
+                                                                <h:outputText 
+                                                                    value="#{proveedor.codigo}"/>
+                                                            </p:column>
+                                                            <p:column 
+                                                                headerText="Nombre">
+                                                                <h:outputText 
+                                                                    value="#{proveedor.nombre}"/>
+                                                            </p:column>
+                                                            <p:column 
+                                                                headerText="Ruc">
+                                                                <h:outputText 
+                                                                    value="#{proveedor.ruc}"/>
+                                                            </p:column>
+                                                        </p:dataTable>
+                                                    </p:overlayPanel>
                                                 </p:outputPanel>
                                             </p:outputPanel>
                                             <div > 
@@ -395,10 +396,11 @@
                                                         value="Guardar" 
                                                         icon="pi pi-check"
                                                         actionListener="#{activosFijosMB.setRegistrarTangible()}" 
-                                                        update=":formnuevoDepreciable:panelnuevodepreciable, :formDepreciable"
-                                                        onclick="PF('NuevoDepreciable').hide()"
-                                                        ajax="false"
-                                                        />
+                                                        update=":formnuevoDepreciable:panelnuevodepreciable, :formDepreciable, :msgs"
+
+
+                                                        >
+                                                    </p:commandButton>
                                                     <p:commandButton 
                                                         value="Cancelar"
                                                         icon="pi pi-times"
@@ -443,9 +445,9 @@
                                                             rowKey="#{proveedor.nombre}">
                                                             <p:ajax 
                                                                 event="rowSelect"
-                                                                listener="#{activosFijosMB.onRowSelect}" 
-                                                                oncomplete="PF('moviePicker').hide()" 
-                                                                update=":editarDepreciable:paneleditarpreciableeditar,:editarDepreciable:listaproveedoreditar"/>
+                                                                listener="#{activosFijosMB.onRowSelect2}" 
+                                                                onsuccess="PF('moviePicker').hide()" 
+                                                                update=":editarDepreciable:paneleditarpreciableeditar @this"/>
 
                                                             <p:column
                                                                 headerText="Proveedor">
@@ -475,7 +477,7 @@
                                                                     id="listaproveedoreditar" 
                                                                     type="button" 
                                                                     value="#{activosFijosMB.listadepreciable.proveedor}" 
-                                                                    required="true"  />
+                                                                    />
 
                                                             </div>
                                                             <div class="p-field p-col">
@@ -507,7 +509,7 @@
                                                                 <p:inputText 
                                                                     type="number" 
                                                                     value="#{activosFijosMB.listadepreciable.depreciacion_meses}" 
-                                                                    required="true" >
+                                                                    >
                                                                     <p:keyFilter 
                                                                         regEx="/[0-9]/i"/>
                                                                 </p:inputText>
@@ -520,7 +522,7 @@
                                                                 <p:inputText
                                                                     type="number" 
                                                                     value="#{activosFijosMB.listadepreciable.porcentaje_depreciacion}" 
-                                                                    required="true" >
+                                                                    >
                                                                     <p:keyFilter 
                                                                         regEx="/[0-9,]/i"/>
                                                                 </p:inputText>
@@ -537,7 +539,7 @@
                                                             value="Descripción: "/>
                                                         <p:inputText  
                                                             value="#{activosFijosMB.listadepreciable.detalle_de_activo}"
-                                                            required="true" />
+                                                            />
                                                     </p:outputPanel>
                                                 </p:outputPanel>
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
@@ -546,21 +548,21 @@
                                                         <p:commandButton 
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
-                                                            action="#{activosFijosMB.setEditarTangibles}" 
-                                                            update=":editarDepreciable:paneleditarpreciableeditar"
-                                                            onclick="PF('EditarDepreciable').hide()"
-                                                            ajax="false"/>
+                                                            actionListener="#{activosFijosMB.setEditarTangibles}" 
+                                                            update=":editarDepreciable:paneleditarpreciableeditar,:formDepreciable, :msgs"
+                                                            />
                                                         <p:commandButton
                                                             value="Cancelar"
                                                             icon="pi pi-times" 
                                                             onclick="PF('EditarDepreciable').hide()"
+                                                            oncomplete="location.reload()"
                                                             class="ui-button-danger"/>
                                                         <p:commandButton 
                                                             value="Deshabilitar"
                                                             action="#{activosFijosMB.setDeshabilitartangible}" ajax="false"
                                                             icon="pi pi-times"                                            
                                                             styleClass="ui-button-danger"  
-                                                            update=":formDepreciablem,:formverdeshabilitadodepreciable"
+                                                            update=":formDepreciablem,:formverdeshabilitadodepreciable,:msgs"
                                                             onclick="PF('EditarDepreciable').hide()"
                                                             />
                                                     </f:facet>    
@@ -773,7 +775,7 @@
                                                         <p:commandButton 
                                                             action="#{activosFijosMB.setHabilitarintangibleNoDepreciable(nodepreciable.id_activo_fijo)}"
                                                             ajax="false"
-                                                            update=":fromverNodepreciable,:formverdeshabilitadonodepreciable"
+                                                            update=":fromverNodepreciable,:formverdeshabilitadonodepreciable,:msgs"
                                                             oncomplete="ActivosTangibles.xhtml.show()"  
                                                             icon="pi pi-check"
                                                             styleClass="rounded-button" 
@@ -799,7 +801,7 @@
                                                   id="dialogoingresarNodepreciable"
                                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
-                                                <p:outputPanel class="ui-fluid" >
+                                                <p:outputPanel id="panelNuevoNoDepreciable"  class="ui-fluid" >
                                                     <p:outputPanel>
                                                         <div class="p-formgrid p-grid">
                                                             <div class="p-field p-col">
@@ -807,6 +809,7 @@
                                                                     for="@next" 
                                                                     value="Descripción: "/>
                                                                 <p:inputText 
+                                                                                                                              
                                                                     value="#{activosFijosMB.activosFijos.detalle_de_activo}" 
                                                                     required="true" />
 
@@ -855,11 +858,52 @@
                                                                 <p:outputLabel 
                                                                     for="@next"
                                                                     value="Proveedor"/>
-                                                                <p:inputText 
-                                                                    value="#{activosFijosMB.activosFijos.idproveedor}"
+                                                                <p:inputText
+                                                                    id="proveedor"
+                                                                    type="button"
+                                                                    value="#{activosFijosMB.nombre}"
                                                                     required="true" />   
                                                             </div>
                                                         </div>
+
+                                                        <p:overlayPanel
+                                                            for="proveedor" 
+                                                            dynamic="true" 
+                                                            style="width:600px"
+                                                            widgetVar="moviePicker">
+                                                            <p:dataTable 
+                                                                var="proveedor" 
+                                                                value="#{BuscarMB.listaProveedor}" 
+                                                                rows="3"
+                                                                paginator="true"
+                                                                selectionMode="single"
+                                                                selection="#{BuscarMB.proveedor}"
+                                                                rowKey="#{proveedor.nombre}">
+                                                                <p:ajax 
+                                                                    event="rowSelect" 
+                                                                    listener="#{activosFijosMB.onRowSelect}" 
+                                                                    onsuccess="PF('moviePicker').hide()" 
+                                                                    update=":formnuevoNodepreciable:panelNuevoNoDepreciable @this"
+
+                                                                    />
+
+                                                                <p:column 
+                                                                    headerText="Proveedor">
+                                                                    <h:outputText 
+                                                                        value="#{proveedor.codigo}"/>
+                                                                </p:column>
+                                                                <p:column 
+                                                                    headerText="Nombre">
+                                                                    <h:outputText 
+                                                                        value="#{proveedor.nombre}"/>
+                                                                </p:column>
+                                                                <p:column 
+                                                                    headerText="Ruc">
+                                                                    <h:outputText 
+                                                                        value="#{proveedor.ruc}"/>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:overlayPanel>
                                                     </p:outputPanel>
                                                 </p:outputPanel>
 
@@ -869,7 +913,7 @@
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
                                                             action="#{activosFijosMB.setRegistrarNoDepreciable}"
-                                                            update=":formnuevoNodepreciable:paneldialogoingresarNodepreciable,:fromverNodepreciable"
+                                                            update=":formnuevoNodepreciable:paneldialogoingresarNodepreciable,:fromverNodepreciable,:msgs"
                                                             onclick="PF('NuevoNoDepreciable').hide()"
                                                             ajax="false"/>
                                                         <p:commandButton 
@@ -966,6 +1010,7 @@
                                                         <p:commandButton 
                                                             value="Guardar" 
                                                             icon="pi pi-check"
+                                                            update=":msgs"
                                                             action="#{activosFijosMB.setEditarNoDepreciable}" 
                                                             ajax="false"/>
                                                         <p:commandButton
@@ -978,7 +1023,7 @@
                                                             action="#{activosFijosMB.setDeshabilitarnodepreciable}" ajax="false"
                                                             icon="pi pi-times"                                            
                                                             styleClass="ui-button-danger"  
-                                                            update=":fromverNodepreciable,:formverdeshabilitadonodepreciable"
+                                                            update=":fromverNodepreciable,:formverdeshabilitadonodepreciable,:msgs"
                                                             onclick="PF('EditarNoDepreciable').hide()"
                                                             />
                                                     </f:facet>
@@ -1140,7 +1185,7 @@
                                                         headerText="Habilitar  ">
                                                         <p:commandButton 
                                                             action="#{activosFijosMB.setHabilitarintangibleAgotables(agotables.id_activo_fijo)}" ajax="false"
-                                                            update=":formagotable,:formverdeshabilitadoagotable"
+                                                            update=":formagotable,:formverdeshabilitadoagotable,:msgs"
                                                             oncomplete="ActivosTangibles.xhtml.show()"  
                                                             icon="pi pi-check"
                                                             styleClass="rounded-button" 
@@ -1242,6 +1287,7 @@
                                                         <p:commandButton
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
+                                                            update=":msgs"
                                                             action="#{activosFijosMB.setRegistrarAgotables}"
                                                             ajax="false"/>
                                                         <p:commandButton 
@@ -1351,6 +1397,7 @@
                                             <f:facet name="footer">
                                                 <p:commandButton value="Guardar" 
                                                                  icon="pi pi-check"
+                                                                 update=":msgs"
                                                                  action="#{activosFijosMB.setEditarAgotables}" 
                                                                  ajax="false"/>
                                                 <p:commandButton value="Cancelar" icon="pi pi-times" 
@@ -1361,7 +1408,7 @@
                                                     action="#{activosFijosMB.setDeshabilitaragotable}" ajax="false"
                                                     icon="pi pi-times"                                            
                                                     styleClass="ui-button-danger"  
-                                                    update="formagotable formverdeshabilitadoagotable"
+                                                    update="formagotable formverdeshabilitadoagotable,:msgs"
                                                     onclick="PF('EditarAgotable').hide()"
 
                                                     />

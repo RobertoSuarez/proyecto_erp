@@ -25,9 +25,10 @@
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
+
                         <p:dialog header="Entrada de producto" showEffect="fade" modal="true"
                                   widgetVar="entradaproducto" responsive="true" width="80%"
-                                  draggable="false" height="550"> 
+                                  draggable="false" height="550" id="entradaProductosDialog"> 
                             <p:outputPanel id="manage-asiento" class="ui-fluid">
                                 <p:outputPanel >
                                     <div class="p-grid p-justify-around">
@@ -46,7 +47,7 @@
                                                             <p:commandButton icon="pi pi-search"
                                                                              oncomplete="PF('BuscarProveedor').show()"
                                                                              /> 
-                                                            <p:inputText placeholder="Proveedor" />        
+                                                            <p:inputText placeholder="Proveedor" id="NombreProveedor" value="#{EntradaMB.proveedorNombre}" />        
                                                         </div>
                                                     </h:form>
                                                 </div>
@@ -64,8 +65,10 @@
                                                     <p:outputLabel value="Bodega: *"></p:outputLabel>
                                                     <h:form>
                                                         <div class="ui-inputgroup">
-                                                            <p:commandButton icon="pi pi-search"/> 
-                                                            <p:inputText placeholder="Bodega" />        
+                                                            <p:commandButton icon="pi pi-search" oncomplete="PF('BuscarBodega').show()" />
+                                                            
+                                                            
+                                                            <p:inputText placeholder="Bodega" id="NombreBodega" value="#{EntradaMB.nombreBodega}" />        
                                                         </div>
                                                     </h:form>
                                                 </div>
@@ -96,8 +99,13 @@
                                                     <p:outputLabel value="Producto: *"></p:outputLabel>
                                                     <h:form>
                                                         <div class="ui-inputgroup">
-                                                            <p:commandButton icon="pi pi-search"/> 
-                                                            <p:inputText placeholder="Producto" />        
+                                                            <p:commandButton icon="pi pi-search" 
+
+                                                                             oncomplete="PF('BuscarProducto').show()"                                                                    
+                                                                             /> 
+                                                            <p:inputText placeholder="Producto" id="NombreProducto" value="#{EntradaMB.nombreProducto}" />    
+
+
                                                         </div>
                                                     </h:form>
                                                 </div>
@@ -186,27 +194,12 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
-                        <!-- dialogo de buscar al proveedor -->
-                        <p:panel id="outproveedor" header="Proveedor">
-                            <h:panelGrid columns="7" width="80%">
-                                <p:outputLabel value="Identificación: "/>
-                                <p:inputText id="IdNumProveedor" value="#{EntradaMB.proveedordINum}" />
 
-                                <p:outputLabel value="Nombre: "/>
-                                <p:inputText id="NombreProveedor" value="#{EntradaMB.proveedorNombre}" disabled="true" />
 
-                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarProveedor').show()" />
 
-                                <p:commandButton actionListener="#{EntradaMB.buscarProveedorEntrada()}" 
-                                                 value="Buscar" update=":entradaForm:outproveedor" 
-                                                 style="visibility: hidden"/>
-                                <p:inputText value="#{EntradaMB.descuento}" style="visibility: hidden"/>
-                            </h:panelGrid>
-                            <!-- dialogo de buscar al proveedor -->
-                        </p:panel>
 
                         <!-- Dialogo de buscar proveedor parte 2 -->
-                        <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaCliente"
+                        <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaProveedor"
                                   minHeight="600" width="70%" showEffect="fade">
                             <h:form>
                                 <p:dataTable var="ListaProveedores" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaProveedores}" 
@@ -219,7 +212,7 @@
 
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                         actionListener="#{EntradaMB.SeleccionarProveedor(ListaProveedores)}" update="entradaForm" oncomplete="PF('BuscarProveedor').hide();"/>
+                                                         actionListener="#{EntradaMB.SeleccionarProveedor(ListaProveedores)}" update="entradaForm" oncomplete="PF('entradaproducto').show();"/>
                                     </p:column>
 
                                     <p:column headerText="Cod">
@@ -231,7 +224,75 @@
                                     </p:column>
 
                                     <p:column headerText="Identificacion">
-                                        <h:outputText value="#{ListaProveedores.ruc}" >
+                                        <h:outputText value="#{ListaProveedores.razonSocial}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+
+                        <!-- Dialogo para articulos de buscar -->
+
+                        <p:dialog header="Busqueda de Producto" widgetVar="BuscarProducto" id="busquedaProducto"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable var="ListaProductos" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaProductos}" 
+                                             selection="#{EntradaMB.productoSeleccionado}" rowKey="#{ListaProductos.id}" 
+                                             scrollable="true" scrollHeight="250">
+
+                                    <f:facet name="header">
+                                        Clientes Registrados
+                                    </f:facet>
+
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{EntradaMB.SeleccionarProducto(ListaProductos)}" update="entradaForm" oncomplete="PF('entradaproducto').show();"/>
+                                    </p:column>
+
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{ListaProductos.id}" />
+                                    </p:column>
+
+                                    <p:column headerText="Cliente" >
+                                        <h:outputText value="#{ListaProductos.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripcion">
+                                        <h:outputText value="#{ListaProductos.descripcion}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+                        <!-- Dialogo para la busqueda de bodegas -->
+                        <p:dialog header="Busqueda de Producto" widgetVar="BuscarBodega" id="busquedaBodega"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable var="ListaBodegas" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaBodegas}" 
+                                             selection="#{EntradaMB.bodegaSeleccionada}" rowKey="#{ListaBodegas.cod}" 
+                                             scrollable="true" scrollHeight="250">
+
+                                    <f:facet name="header">
+                                        Bodegas Registradas
+                                    </f:facet>
+
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{EntradaMB.SeleccionarBodega(ListaBodegas)}" update="entradaForm" oncomplete="PF('entradaproducto').show();"/>
+                                    </p:column>
+
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{ListaBodegas.cod}" />
+                                    </p:column>
+
+                                    <p:column headerText="Cliente" >
+                                        <h:outputText value="#{ListaBodegas.nomBodega}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripcion">
+                                        <h:outputText value="#{ListaBodegas.direccion}" >
                                         </h:outputText>
                                     </p:column>
                                 </p:dataTable>

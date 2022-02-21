@@ -102,4 +102,6 @@ public class ActivosFijos {
     public void setFecha_adquisicion(LocalDate fecha_adquisicion) {
         this.fecha_adquisicion = fecha_adquisicion;
     }
+
+
 }

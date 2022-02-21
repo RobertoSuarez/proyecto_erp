@@ -14,7 +14,7 @@ public class RolDAO {
 
     public RolDAO() {
         this.conexion = new Conexion();
-       
+
     }
 
     public List<Rol> getRolesByUsers(int idUsuario) {
@@ -49,4 +49,31 @@ public class RolDAO {
         return null;
     }
 
+    public List<Rol> GetRolsDifferentOfUser(int idUsuario) {
+        List<Rol> roles = new ArrayList<>();
+        Rol rolAux;
+        String query = "select r.* \n"
+                + "from public.\"rolUsuario\" ru inner join rol r on ru.\"idRol\" = r.\"idRol\" \n"
+                + "where ru.\"idUsuario\" <> "+ String.valueOf(idUsuario) +"\n"
+                + "group by r.\"idRol\"";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = conexion.ejecutarSql(query);
+            while (rs.next()) {
+                rolAux = new Rol();
+                rolAux.setId(rs.getInt("idRol"));
+                rolAux.setNombre(rs.getString("nombreRol"));
+                rolAux.setDetalle(rs.getString("detalleRol"));
+                roles.add(rolAux);
+            }
+            rs.close();
+            this.conexion.desconectar();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            conexion.desconectar();
+        }
+        return roles;
+    }
 }

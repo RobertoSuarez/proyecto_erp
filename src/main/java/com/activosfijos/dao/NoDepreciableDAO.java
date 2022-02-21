@@ -91,7 +91,7 @@ public class NoDepreciableDAO {
                 listaNoDepreciable.setRevalorizar(result.getDouble("revalorizar"));
                 listaNoDepreciable.setPlusvalia(result.getDouble("plusvalia"));
                 listaNoDepreciable.setIdproveedor(result.getInt("idproveedor"));
-                // listaNoDepreciable.setProveedor(rs.getString("proveedor"));
+                listaNoDepreciable.setProveedor(result.getString("nombre"));
                 listaNoDepreciable.setNumero_factura(result.getString("numero_factura"));
                 listaNP.add(listaNoDepreciable);
 
@@ -133,7 +133,7 @@ public class NoDepreciableDAO {
                 listaNoDepreciable.setRevalorizar(result.getDouble("revalorizar"));
                 listaNoDepreciable.setPlusvalia(result.getDouble("plusvalia"));
                 listaNoDepreciable.setIdproveedor(result.getInt("idproveedor"));
-                // listaNoDepreciable.setProveedor(rs.getString("proveedor"));
+                listaNoDepreciable.setProveedor(result.getString("nombre"));
                 listaNoDepreciable.setNumero_factura(result.getString("numero_factura"));
                 listaNP.add(listaNoDepreciable);
             }

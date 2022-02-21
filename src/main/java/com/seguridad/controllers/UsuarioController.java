@@ -36,6 +36,7 @@ public class UsuarioController implements Serializable {
     private Usuario infoUser;
     String userName = "";
     private List<Rol> rolesUser;
+    private List<Rol> generalRols;
     private RolDAO rDao;
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
@@ -123,6 +124,16 @@ public class UsuarioController implements Serializable {
     public void setRolesUser(List<Rol> rolesUser) {
         this.rolesUser = rolesUser;
     }
+
+    public List<Rol> getGeneralRols() {
+        return generalRols;
+    }
+
+    public void setGeneralRols(List<Rol> generalRols) {
+        this.generalRols = generalRols;
+    }
+    
+    
 
     public String registrarUsuario() throws Exception {
 
@@ -306,5 +317,9 @@ public class UsuarioController implements Serializable {
         this.infoUser = seleccion;
         this.userName = seleccion.getUsername();
         this.rolesUser = this.rDao.getRolesByUsers(seleccion.getIdUsuario());
+    }
+    
+    public void chargeRols(){
+        this.generalRols = this.rDao.GetRolsDifferentOfUser(this.infoUser.getIdUsuario());
     }
 }
