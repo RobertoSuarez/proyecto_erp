@@ -30,6 +30,7 @@ and open the template in the editor.
                 </p:menubar>
 
                 <h:form id="formintangible" >
+                    <p:growl id="msgs" showDetail="true" severity="info, warn"/>
 
                     <p:panel>
                         <h1 
@@ -48,7 +49,7 @@ and open the template in the editor.
                                         rendered="#{seguridadActvFijo.renderSoloGerente()}">                               
                                     </p:commandButton>
                                     <p:commandButton value="Deshabilitados" 
-                                                     update="formintangible"
+                                                     update=":formintangible"
                                                      icon="pi pi-pencil"
                                                      oncomplete="PF('deshabilitadosintangible').show()"  
                                                      styleClass="ui-button-secondary" 
@@ -143,56 +144,37 @@ and open the template in the editor.
 
 
                         <p:dialog header="Nuevo Activo Intangible"  
-                                  responsive="true" minHeight="40" 
-                                  maximizable="true"                                  
-                                  height="auto" width="60%" 
+                                  responsive="true" 
+                                  minHeight="40"                                                                    
+                                  height="auto" 
+                                  width="60%" 
                                   showEffect="fade"
                                   modal="true" 
                                   widgetVar="NuevoIntangible"
                                   rendered="#{seguridadActvFijo.renderSoloGerente()}">
 
                             <p:outputPanel id="panelnuevodepreciableintangible" class="ui-fluid">
-                                <p:overlayPanel for="proveedor" dynamic="true" 
-                                                style="width:600px" widgetVar="moviePicker">
-                                    <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
-                                                 rows="3" paginator="true" selectionMode="single"
-                                                 selection="#{BuscarMB.proveedor}" rowKey="#{proveedor.nombre}">
-                                        <p:ajax event="rowSelect" listener="#{activosintangilesMB.onRowSelect}" 
-                                                onsuccess="PF('moviePicker').hide()" 
-                                                update=":formintangible:panelnuevodepreciableintangible @this" 
 
-                                                />
-
-                                        <p:column headerText="Proveedor">
-                                            <h:outputText value="#{proveedor.codigo}"/>
-                                        </p:column>
-                                        <p:column headerText="Nombre">
-                                            <h:outputText value="#{proveedor.nombre}"/>
-                                        </p:column>
-                                        <p:column headerText="Ruc">
-                                            <h:outputText value="#{proveedor.ruc}"/>
-                                        </p:column>
-                                    </p:dataTable>
-                                </p:overlayPanel>
                                 <p:outputPanel  >
                                     <div class="p-formgrid p-grid">
                                         <div class="p-field p-col">
-                                            <p:outputLabel for="proveedor" value="Proveedor"/>
-                                            <p:inputText id="proveedor" type="button" value="#{activosintangilesMB.nombre}" required="true"  /> 
+                                            <p:outputLabel for="proveedor"
+                                                           value="Proveedor"/>
+                                            <p:inputText id="proveedor"
+                                                         type="button"
+                                                         value="#{activosintangilesMB.nombre}" /> 
 
                                         </div>
                                         <div class="p-field p-col">
-                                            <p:outputLabel for="@next" value="Descripción: "/>
-                                            <p:inputText value="#{activosintangilesMB.activosFijos.detalle_de_activo}" required="true" >
+                                            <p:outputLabel 
+                                                for="@next" 
+                                                value="Descripción: "/>
+                                            <p:inputText
+                                                value="#{activosintangilesMB.activosFijos.detalle_de_activo}"  >
 
                                             </p:inputText>
-
-
                                         </div>
-
                                     </div>
-
-
                                     <div class="p-formgrid p-grid">
                                         <div class="p-field p-col">
                                             <p:outputLabel value="Fecha de Adquisición:    " />
@@ -201,9 +183,7 @@ and open the template in the editor.
                                         <div class="p-field p-col">
                                             <p:outputLabel value="N° Factura"/>
                                             <p:inputText  value="#{activosintangilesMB.activosFijos.numero_factura}"  />                                                            
-
                                         </div>
-
                                         <div class="p-field p-col">
                                             <p:outputLabel for="@next" value="Costo Adquisición: "/>
                                             <p:inputText type="number" value="#{activosintangilesMB.activosFijos.valor_adquisicion}" required="true">
@@ -211,6 +191,33 @@ and open the template in the editor.
                                             </p:inputText>
                                         </div>
                                     </div>
+                                    <p:overlayPanel for="proveedor" 
+                                                    dynamic="true" 
+                                                    style="width:600px" 
+                                                    widgetVar="moviePicker">
+                                        <p:dataTable var="proveedor" 
+                                                     value="#{BuscarMB.listaProveedor}" 
+                                                     rows="3" 
+                                                     paginator="true" 
+                                                     selectionMode="single"
+                                                     selection="#{BuscarMB.proveedor}"
+                                                     rowKey="#{proveedor.nombre}">
+                                            <p:ajax event="rowSelect" 
+                                                    listener="#{activosintangilesMB.onRowSelect}" 
+                                                    onsuccess="PF('moviePicker').hide()" 
+                                                    update=":formintangible:panelnuevodepreciableintangible @this" 
+                                                    />
+                                            <p:column headerText="Proveedor">
+                                                <h:outputText value="#{proveedor.codigo}"/>
+                                            </p:column>
+                                            <p:column headerText="Nombre">
+                                                <h:outputText value="#{proveedor.nombre}"/>
+                                            </p:column>
+                                            <p:column headerText="Ruc">
+                                                <h:outputText value="#{proveedor.ruc}"/>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:overlayPanel>
                                 </p:outputPanel>
                             </p:outputPanel>
                             <div>   
@@ -218,11 +225,10 @@ and open the template in the editor.
                                     <p:commandButton value="Guardar" 
                                                      icon="pi pi-check" 
                                                      actionListener="#{activosintangilesMB.setRegistrar3}"
-                                                     update=":msgs"/>
+                                                     update=":formintangible:panelnuevodepreciableintangible,:formintangible:verListaIntangibles,:formintangible:msgs"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('NuevoIntangible').hide()"
                                                      oncomplete="location.reload()"
-
                                                      class="ui-button-danger"/>
                                 </f:facet>
                             </div>                          

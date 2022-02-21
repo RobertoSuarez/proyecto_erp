@@ -453,9 +453,7 @@ public class ActivosFijosMB implements Serializable {
             PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
             PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable");
             PrimeFaces.current().ajax().update(":formnuevoagotable:panelNuevoAgotable");
-
-            PrimeFaces.current().ajax().update(":formnuevoagotable:panelNuevoAgotable");
-        } catch (Exception ex) {
+          } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
