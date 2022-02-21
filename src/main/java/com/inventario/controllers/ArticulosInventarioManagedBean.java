@@ -6,33 +6,91 @@
 package com.inventario.controllers;
 
 import com.inventario.DAO.ArticulosInventarioDAO;
+import com.inventario.DAO.CategoriaDAO;
+import com.inventario.DAO.TipoDAO;
 import com.inventario.models.ArticulosInventario;
+import com.inventario.models.Categoria;
+import com.inventario.models.Tipo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import org.primefaces.PrimeFaces;
 
 /**
  *
  * @author Jimmy
  */
-
-@ManagedBean(name ="articulosMB")
+@ManagedBean(name = "articulosMB")
 
 @ViewScoped
 
-public class ArticulosInventarioManagedBean  implements Serializable{
-    
+public class ArticulosInventarioManagedBean implements Serializable {
+
     private ArticulosInventario articulosInventario = new ArticulosInventario();
     private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
     private List<ArticulosInventario> listaArticulos = new ArrayList<>();
-    
+    private Categoria categoria = new Categoria();
+
+    private CategoriaDAO categoriaDAO = new CategoriaDAO();
+    private List<Categoria> listaCategoria = new ArrayList<>();
+    private int codCategoria;
+    private String nomCategoria;
+
     @PostConstruct
-    public void init(){
-    System.out.println("PostConstruct");
-    listaArticulos = articulosInventarioDAO.getArticulos();
+    public void init() {
+        System.out.println("PostConstruct");
+        listaArticulos = articulosInventarioDAO.getArticulos();
+        this.listaCategoria = categoriaDAO.getCategoria();
+        this.categoria = new Categoria();
+        this.codCategoria = 0;
+        this.nomCategoria = "XXXXXX";
+
+    }
+
+    public void seleccionarCategoria(Categoria c) {
+        this.codCategoria = c.getIdCat();
+        this.nomCategoria = c.getNom_categoria();
+        this.categoria = c;
+    }
+
+    public void insertararticulo() {
+        try {
+            if ("".equals(articulosInventario.getId_bodega())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(articulosInventario.getId_tipo())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(articulosInventario.getId_categoria())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(articulosInventario.getDescripcion())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(articulosInventario.getCantidad())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else if ("".equals(articulosInventario.getCosto())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Identificador"));
+            } else {
+                this.articulosInventarioDAO.insertarAriculo(articulosInventario);
+            }
+
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Datos Agregados"));
+
+            PrimeFaces.current().executeScript("PF('productosNew').hide()");
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                            "Error al guardar"));
+        }
     }
 
     public ArticulosInventario getArticulosInventario() {
@@ -41,6 +99,46 @@ public class ArticulosInventarioManagedBean  implements Serializable{
 
     public void setArticulosInventario(ArticulosInventario articulosInventario) {
         this.articulosInventario = articulosInventario;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public CategoriaDAO getCategoriaDAO() {
+        return categoriaDAO;
+    }
+
+    public void setCategoriaDAO(CategoriaDAO categoriaDAO) {
+        this.categoriaDAO = categoriaDAO;
+    }
+
+    public List<Categoria> getListaCategoria() {
+        return listaCategoria;
+    }
+
+    public void setListaCategoria(List<Categoria> listaCategoria) {
+        this.listaCategoria = listaCategoria;
+    }
+
+    public int getCodCategoria() {
+        return codCategoria;
+    }
+
+    public void setCodCategoria(int codCategoria) {
+        this.codCategoria = codCategoria;
+    }
+
+    public String getNomCategoria() {
+        return nomCategoria;
+    }
+
+    public void setNomCategoria(String nomCategoria) {
+        this.nomCategoria = nomCategoria;
     }
 
     public ArticulosInventarioDAO getArticulosInventarioDAO() {
@@ -58,6 +156,5 @@ public class ArticulosInventarioManagedBean  implements Serializable{
     public void setListaArticulos(List<ArticulosInventario> listaArticulos) {
         this.listaArticulos = listaArticulos;
     }
- 
-    
+
 }
