@@ -76,4 +76,22 @@ public class RolDAO {
         }
         return roles;
     }
+    
+    public void addRolUser(int idRol, int idUser){
+        String query = "INSERT INTO public.\"rolUsuario\"(\n" +
+"	 \"idRolUsuario\", \"idUsuario\", \"idRol\")\n" +
+"	VALUES ((Select \"idRolUsuario\"\n" +
+"	from public.\"rolUsuario\"\n" +
+"	order by \"idRolUsuario\" desc\n" +
+"	Limit 1)+1,"+ String.valueOf(idUser) +", "+ String.valueOf(idRol) +");";
+        try{
+            System.out.println("Entro al metodo");
+            this.conexion.conectar();
+            this.conexion.ejecutarSql(query);
+            this.conexion.desconectar();
+        }
+        catch(Exception e){
+            e.toString();
+        }
+    }
 }
