@@ -449,7 +449,7 @@ public class ActivosFijosMB implements Serializable {
             System.out.println(ms1);
             this.listadepreciable.setIdproveedor(ms1);
             setNombre(ms2);
-            PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
+            PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable,:formnuevoNodepreciable:panelNuevoNoDepreciable ");
             
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

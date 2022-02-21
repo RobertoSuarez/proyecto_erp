@@ -60,7 +60,7 @@ public class AgotableDAO {
                 listaagotable.setId_empresa(rs.getInt("id_empresa"));
                 listaagotable.setStock(rs.getInt("stock"));
                 listaagotable.setIdproveedor(rs.getInt("idproveedor"));
-                // listaagotable.setProveedor(rs.getString("proveedor"));
+                //listaagotable.setProveedor(rs.getString("proveedor"));
                 listaagotable.setNumero_factura(rs.getString("numero_factura"));
                 listaago.add(listaagotable);
             }
