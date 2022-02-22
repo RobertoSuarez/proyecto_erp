@@ -66,8 +66,8 @@ public class FormulaProduccion {
         this.tipo = tipo;
     }
 
-    public FormulaProduccion(int codigo_formula, int codigo_subproceso, int codigo_articulo, 
-            String nombre_producto, String descripcion, String nombre, float costo, 
+    public FormulaProduccion(int codigo_formula, int codigo_subproceso, int codigo_articulo,
+            String nombre_producto, String descripcion, String nombre, float costo,
             float cantidad, String unidadMedida) {
         this.codigo_formula = codigo_formula;
         this.codigo_subproceso = codigo_subproceso;
@@ -111,7 +111,17 @@ public class FormulaProduccion {
         this.estado = estado;
         this.codigo_producto = codigo_producto;
     }
-    
+
+    public FormulaProduccion(int codigo_formula, float cantidad) {
+        this.codigo_formula = codigo_formula;
+        this.cantidad = cantidad;
+    }
+
+    public FormulaProduccion(String nombre, float costo, int subcuenta) {
+        this.nombre = nombre;
+        this.costo = costo;
+        this.subcuenta = subcuenta;
+    }
 
     public String getNombre() {
         return nombre;
@@ -336,6 +346,5 @@ public class FormulaProduccion {
     public void setNombreCuenta(String nombreCuenta) {
         this.nombreCuenta = nombreCuenta;
     }
-    
 
 }

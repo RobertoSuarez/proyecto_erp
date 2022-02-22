@@ -6,8 +6,11 @@ import com.produccion.models.CentroCosto;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenProduccion;
 import com.produccion.models.OrdenTrabajo;
+import com.produccion.models.SolicitudOrden;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,9 +123,10 @@ public class OrdenProduccionDAO {
 
     public List<ArticuloFormula> getListaConsumoMateriales(int codigo, float cantidad) {
         List<ArticuloFormula> articulosFormula = new ArrayList<>();
-        sentenciaSql = String.format("select a.id,a.nombre,a.descripcion, df.\"cantidadUnidad\"*" + cantidad + " as cantidadUnidad,t.tipo ,df.unidad_medida "
+        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,a.id,a.nombre,a.descripcion, df.\"cantidadUnidad\"*" + cantidad + " as cantidadUnidad,t.tipo ,df.unidad_medida "
                 + ",a.costo from detalle_formula as df \n"
                 + "	inner join articulos as a on df.codigo_producto=a.id\n"
+                + "     inner join subcuenta as sc on sc.idsubcuenta=a.id_subcuenta\n"
                 + "	inner join tipo as t on t.cod=a.id_tipo\n"
                 + "	where df.codigo_formula=" + codigo + ";");
         try {
@@ -131,7 +135,7 @@ public class OrdenProduccionDAO {
             while (resultSet.next()) {
                 articulosFormula.add(new ArticuloFormula(resultSet.getInt("id"), resultSet.getString("nombre"),
                         resultSet.getString("descripcion"), resultSet.getString("tipo"),
-                        resultSet.getFloat("cantidadUnidad"), resultSet.getString("unidad_medida"), resultSet.getFloat("costo")));
+                        resultSet.getFloat("cantidadUnidad"), resultSet.getString("unidad_medida"), resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo")));
             }
         } catch (SQLException e) {
         } finally {
@@ -176,7 +180,7 @@ public class OrdenProduccionDAO {
         return costos;
     }
 
-    public List<FormulaProduccion> getListaCostos(int codigo_formula, float unidad, String costo) {
+    public List<FormulaProduccion> getListaCostos(int codigo_formula, int cod_registro, float unidad, String costo) {
         List<FormulaProduccion> costos = new ArrayList<>();
         sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,sc.nombre as nombrecuenta ,pp.nombre as nombreproceso,sum(dsp." + costo + "*" + unidad + ") as costo from orden_produccion as op \n"
                 + "	inner join registro_orden_produccion as rop \n"
@@ -188,7 +192,7 @@ public class OrdenProduccionDAO {
                 + "	inner join subproceso as sp on sp.codigo_subproceso=dp.codigo_subproceso\n"
                 + "	inner join detalle_subproceso as dsp on dsp.codigo_subproceso=sp.codigo_subproceso\n"
                 + "	inner join subcuenta as sc on sc.idsubcuenta=dsp.idsubcuenta\n"
-                + "	where f.codigo_formula=" + codigo_formula + " and (dsp." + costo + "*" + unidad + ")>0\n"
+                + "	where f.codigo_formula=" + codigo_formula + " and rop.codigo_registro=" + cod_registro + "" + " and (dsp." + costo + "*" + unidad + ")>0\n"
                 + "	group by sc.idsubcuenta,sc.codigo,sc.nombre,pp.nombre\n"
                 + "	order by sc.nombre asc");
         try {
@@ -278,12 +282,141 @@ public class OrdenProduccionDAO {
         }
     }
 
-    public void insertAsiento() {
+    public SolicitudOrden calculaProduccion(int orden) {
+        try {
+            SolicitudOrden nueva = new SolicitudOrden();
+            sentenciaSql = String.format("select op.codigo_orden,op.codigo_secundario,op.descripcion,op.fecha_orden,op.fecha_fin,\n"
+                    + "	sum(costos_generado)as total from orden_produccion as op\n"
+                    + "	inner join registro_orden_produccion as rop \n"
+                    + "	on op.codigo_orden=rop.codigo_orden\n"
+                    + "	inner join detalleproceso as dp on dp.codigo_registro=rop.codigo_registro\n"
+                    + "	where op.codigo_orden=" + orden + "\n"
+                    + "	group by  op.codigo_orden,op.codigo_secundario,op.descripcion,op.fecha_orden,op.fecha_fin");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                nueva.setCodigo_orden(resultSet.getInt("codigo_orden"));
+                nueva.setCodigoSecundario(resultSet.getString("codigo_secundario").trim());
+                nueva.setDescripcion(resultSet.getString("descripcion").trim());
+                nueva.setFecha_orden(resultSet.getDate("fecha_orden"));
+                nueva.setFecha_fin(resultSet.getDate("fecha_fin"));
+                nueva.setTotal(resultSet.getFloat("total"));
+            }
+            return nueva;
+        } catch (SQLException e) {
+            return null;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public SolicitudOrden movimientosProduccion(int orden) {
+        try {
+            SolicitudOrden nueva = new SolicitudOrden();
+            sentenciaSql = String.format("select op.codigo_orden,op.codigo_secundario,op.descripcion,op.fecha_orden,op.fecha_fin,\n"
+                    + "	sum(costos_generado)as total from orden_produccion as op\n"
+                    + "	inner join registro_orden_produccion as rop \n"
+                    + "	on op.codigo_orden=rop.codigo_orden\n"
+                    + "	inner join detalleproceso as dp on dp.codigo_registro=rop.codigo_registro\n"
+                    + "	where op.codigo_orden=" + orden + "\n"
+                    + "	group by  op.codigo_orden,op.codigo_secundario,op.descripcion,op.fecha_orden,op.fecha_fin");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                nueva.setCodigo_orden(resultSet.getInt("codigo_orden"));
+                nueva.setCodigoSecundario(resultSet.getString("codigo_secundario").trim());
+                nueva.setDescripcion(resultSet.getString("descripcion").trim());
+                nueva.setFecha_orden(resultSet.getDate("fecha_orden"));
+                nueva.setFecha_fin(resultSet.getDate("fecha_fin"));
+                nueva.setTotal(resultSet.getFloat("total"));
+            }
+            return nueva;
+        } catch (SQLException e) {
+            return null;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public List<OrdenTrabajo> listaCostoProduccion(int orden) {
+        List<OrdenTrabajo> costosMovimiento = new ArrayList<>();
+        sentenciaSql = String.format("select dp.codigo_formula,rop.codigo_registro,rop.cantidad from detalleproceso as dp \n"
+                + "	inner join registro_orden_produccion as rop on dp.codigo_registro=rop.codigo_registro\n"
+                + "	where rop.codigo_orden=" + orden + "");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                costosMovimiento.add(new OrdenTrabajo(resultSet.getInt("codigo_registro"), resultSet.getInt("codigo_formula"), resultSet.getFloat("cantidad")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return costosMovimiento;
+    }
+
+    public void insertAsiento(SolicitudOrden orden, List<FormulaProduccion> listaMovimientos,float directo,float indirect,float materiales ) {
         try {
             int iddiario = 0;
-            String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
-        } catch (Exception e) {
+            String cadena = " select iddiario from diariocontable \n"
+                    + "	  where descripcion = 'Modulo Producción'";
+            resultSet = conexion.ejecutarSql(cadena);
+            while (resultSet.next()) {
+                iddiario = resultSet.getInt("iddiario");
+            }
+            String sentencia1, sentencia;
+
+            sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + orden.getTotal()
+                    + ",\"documento\": \"" + orden.getCodigoSecundario() + " R\",\"detalle\": \""
+                    + orden.getDescripcion() + "\",\"fechaCreacion\": \""
+                    + new SimpleDateFormat("dd-MM-yyyy").format(orden.getFecha_orden()) + "\",\"fechaCierre\":\""
+                    + new SimpleDateFormat("dd-MM-yyyy").format(orden.getFecha_fin()) + "\"}";
+            sentencia1 = "[";
+            for (FormulaProduccion movimiento : listaMovimientos) {
+                sentencia1 += "{\"idSubcuenta\":\"" + movimiento.getSubcuenta() + "\",\"debe\":\""
+                        + movimiento.getCosto() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                        + movimiento.getNombre() + "\"},";
+            }
+            sentencia1 += "{\"idSubcuenta\":\"104\",\"debe\":\"0\",\"haber\":\""
+                    + directo + "\",\"tipoMovimiento\":\"Produccion en proceso\"},{\"idSubcuenta\":\"17\",\"debe\":\"0\",\"haber\":\""
+                    + materiales + "\",\"tipoMovimiento\":\"Produccion en proceso\"},{\"idSubcuenta\":\"143\",\"debe\":\"0\",\"haber\":\""
+                    + indirect + "\",\"tipoMovimiento\":\"Produccion en proceso\"}]";
+            intJson(sentencia, sentencia1);
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
         }
+    }
+
+    public void intJson(String a, String b) {
+
+        try {
+            String cadena = "SELECT public.generateasientocotableexternal('"
+                    + a + "','" + b + "')";
+            conexion.ejecutarSql(cadena);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage() + " error en conectarse");
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
+    public List<ArticuloFormula> listaMaterialesFormula(int orden) {
+        List<ArticuloFormula> materiales = new ArrayList<>();
+        sentenciaSql = String.format("	select dp.codigo_formula,rop.cantidad from orden_produccion as op \n"
+                + "	inner join registro_orden_produccion as rop\n"
+                + "	on op.codigo_orden=rop.codigo_orden\n"
+                + "	inner join detalleproceso as dp on dp.codigo_registro=rop.codigo_registro\n"
+                + "	where op.codigo_orden=" + orden + "");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                materiales.add(new ArticuloFormula(resultSet.getInt("codigo_formula"), resultSet.getFloat("cantidad")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return materiales;
     }
 
 }

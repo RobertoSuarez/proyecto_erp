@@ -403,7 +403,7 @@
                             </p:outputPanel>
                         </p:dialog>
                         <!-- Tabla de datos -->
-                        <ui:fragment id="produccionDetallada" rendered="#{produccionMBean.ordenTrabajo.state eq true}">
+                        <ui:fragment id="produccionDetallada" rendered="#{produccionMBean.ordenTrabajo.state=false}">
                             <p:dataTable reflow="true" paginator="true" rows="5" 
                                          rowSelectMode="add" paginatorPosition="bottom">
                                 <!-- Buscador -->

@@ -21,6 +21,8 @@ public class ArticuloFormula {
     private float cantidadMaxima;
     private String UnidadMedida;
     private float total;
+    private int idSubcuenta;
+    private String subCuenta;
 
     public ArticuloFormula(int id, String nombre, String categoria, String descripcion, String tipo, float costo, float cantidad, float cantidadMaxima) {
         this.id = id;
@@ -33,7 +35,9 @@ public class ArticuloFormula {
         this.cantidadMaxima = cantidadMaxima;
     }
 
-    public ArticuloFormula(int id, String nombre, String descripcion, String tipo, float cantidad, String UnidadMedida,float costo) {
+    public ArticuloFormula(int id, String nombre, String descripcion, String tipo, float cantidad, 
+            String UnidadMedida,float costo,
+            int idSubcuenta,String subCuenta) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -41,6 +45,13 @@ public class ArticuloFormula {
         this.cantidad = cantidad;
         this.UnidadMedida = UnidadMedida;
         this.costo=costo;
+        this.idSubcuenta=idSubcuenta;
+        this.subCuenta=subCuenta;
+    }
+
+    public ArticuloFormula(int id, float cantidad) {
+        this.id = id;
+        this.cantidad = cantidad;
     }
 
     public ArticuloFormula() {
@@ -124,6 +135,22 @@ public class ArticuloFormula {
 
     public void setTotal(float total) {
         this.total = total;
+    }
+
+    public int getIdSubcuenta() {
+        return idSubcuenta;
+    }
+
+    public void setIdSubcuenta(int idSubcuenta) {
+        this.idSubcuenta = idSubcuenta;
+    }
+
+    public String getSubCuenta() {
+        return subCuenta;
+    }
+
+    public void setSubCuenta(String subCuenta) {
+        this.subCuenta = subCuenta;
     }
 
 }

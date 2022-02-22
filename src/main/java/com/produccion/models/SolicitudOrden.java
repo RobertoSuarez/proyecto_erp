@@ -18,6 +18,7 @@ public class SolicitudOrden {
     private Date fecha_orden;
     private Date fecha_fin;
     private String descripcion;
+    private float total;
     private char estado;
 
     public SolicitudOrden() {
@@ -77,6 +78,14 @@ public class SolicitudOrden {
 
     public void setCodigoSecundario(String codigoSecundario) {
         this.codigoSecundario = codigoSecundario;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
     }
     
 

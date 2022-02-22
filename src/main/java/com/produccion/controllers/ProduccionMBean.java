@@ -10,6 +10,7 @@ import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenTrabajo;
+import com.produccion.models.SolicitudOrden;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -36,6 +37,7 @@ public class ProduccionMBean implements Serializable {
      * Creates a new instance of ProduccionMBean
      */
     private OrdenTrabajo ordenTrabajo;
+    private SolicitudOrden ordenAsiento;
     OrdenProduccionDAO ordenDao;
     private List<OrdenTrabajo> listaProducto;
     private List<OrdenTrabajo> listaFormula;
@@ -45,11 +47,15 @@ public class ProduccionMBean implements Serializable {
     private List<FormulaProduccion> listaCostos;
     private List<FormulaProduccion> listaCostosDirectos;
     private List<FormulaProduccion> listaCostosIndirectos;
+    private List<FormulaProduccion> listaMovimientos;
+    private List<OrdenTrabajo> listaCostoProduccion;
+    private List<ArticuloFormula> listaCformula;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
     public ProduccionMBean() {
         ordenTrabajo = new OrdenTrabajo();
         ordenDao = new OrdenProduccionDAO();
+        ordenAsiento = new SolicitudOrden();
 
         listaCostos = new ArrayList<>();
         listaProducto = new ArrayList<>();
@@ -59,6 +65,9 @@ public class ProduccionMBean implements Serializable {
         detalleListaMateriaPrima = new ArrayList<>();
         listaCostosDirectos = new ArrayList<>();
         listaCostosIndirectos = new ArrayList<>();
+        listaMovimientos = new ArrayList<>();
+        listaCostoProduccion = new ArrayList<>();
+        listaCformula=new ArrayList<>();
     }
 
     @PostConstruct
@@ -80,14 +89,13 @@ public class ProduccionMBean implements Serializable {
 
     public int idOrden() {
         Map params = externalContext.getRequestParameterMap();
-        if(params.get("orden")!=null){
+        if (params.get("orden") != null) {
             Integer categorySelected = new Integer((String) params.get("orden"));
             return categorySelected;
-        }else{
+        } else {
             return 0;
         }
-        
-        
+
     }
 
     public OrdenTrabajo getOrdenTrabajo() {
@@ -168,6 +176,38 @@ public class ProduccionMBean implements Serializable {
         this.listaCostosIndirectos = listaCostosIndirectos;
     }
 
+    public SolicitudOrden getOrdenAsiento() {
+        return ordenAsiento;
+    }
+
+    public void setOrdenAsiento(SolicitudOrden ordenAsiento) {
+        this.ordenAsiento = ordenAsiento;
+    }
+
+    public List<FormulaProduccion> getListaMovimientos() {
+        return listaMovimientos;
+    }
+
+    public void setListaMovimientos(List<FormulaProduccion> listaMovimientos) {
+        this.listaMovimientos = listaMovimientos;
+    }
+
+    public List<OrdenTrabajo> getListaCostoProduccion() {
+        return listaCostoProduccion;
+    }
+
+    public void setListaCostoProduccion(List<OrdenTrabajo> listaCostoProduccion) {
+        this.listaCostoProduccion = listaCostoProduccion;
+    }
+
+    public List<ArticuloFormula> getListaCformula() {
+        return listaCformula;
+    }
+
+    public void setListaCformula(List<ArticuloFormula> listaCformula) {
+        this.listaCformula = listaCformula;
+    }
+
     public void llenarCantidad() {
         float cantidad = 0;
         for (OrdenTrabajo producto : listaProducto) {
@@ -197,8 +237,8 @@ public class ProduccionMBean implements Serializable {
             materiaPrima += materiales.getTotal();
         }
         ordenTrabajo.setTotalMateria(materiaPrima);
-        listaCostosDirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad(), "cmdunitario");
-        listaCostosIndirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad(), "cifunitario");
+        listaCostosDirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCodigo_registro(), ordenTrabajo.getCantidad(), "cmdunitario");
+        listaCostosIndirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCodigo_registro(), ordenTrabajo.getCantidad(), "cifunitario");
         listaCostos = ordenDao.getListaCosto(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad());
 
         for (FormulaProduccion costoP : listaCostos) {
@@ -237,12 +277,46 @@ public class ProduccionMBean implements Serializable {
         } else {
             if (ordenDao.registrarProduccion(ordenTrabajo) > 0) {
                 ordenDao.actualizarOrden(ordenTrabajo.getCodigo_registro());
-                if(ordenDao.verificaOrden(ordenTrabajo.getCodigo_orden()))
+                if (ordenDao.verificaOrden(ordenTrabajo.getCodigo_orden())) {
                     ordenDao.actualizaEstado(ordenTrabajo.getCodigo_orden());
+                    ordenAsiento = ordenDao.calculaProduccion(ordenTrabajo.getCodigo_orden());
+                    ordenAsiento = ordenDao.movimientosProduccion(ordenTrabajo.getCodigo_orden());
+                    listaCostoProduccion = ordenDao.listaCostoProduccion(ordenTrabajo.getCodigo_orden());
+                    listaCformula=ordenDao.listaMaterialesFormula(ordenTrabajo.getCodigo_orden());
+                    listaCostosDirectos = new ArrayList<>();
+                    listaCostosIndirectos = new ArrayList<>();
+                    listaMateriaPrima = new ArrayList<>();
+                    float materiales=0,indirectos=0,directos=0;
+                    for (OrdenTrabajo orden : listaCostoProduccion) {
+                        listaCostosDirectos = ordenDao.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cmdunitario");
+                        listaCostosIndirectos = ordenDao.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cifunitario");
+                        for (FormulaProduccion directo : listaCostosDirectos) {
+                            listaMovimientos.add(directo);
+                            directos+=directo.getCosto();
+                        }
+                        for (FormulaProduccion indirecto : listaCostosIndirectos) {
+                            listaMovimientos.add(indirecto);
+                            indirectos+=indirecto.getCosto();
+                        }
+                        listaCostosDirectos = new ArrayList<>();
+                        listaCostosIndirectos = new ArrayList<>();
+
+                    }
+                    for(ArticuloFormula formula:listaCformula){
+                        listaMateriaPrima=ordenDao.getListaConsumoMateriales(formula.getId(), formula.getCantidad());
+                        for(ArticuloFormula articulo:listaMateriaPrima){
+                            listaMovimientos.add(new FormulaProduccion(articulo.getDescripcion(),articulo.getCantidad() * articulo.getCosto(),articulo.getIdSubcuenta()) );
+                            materiales+=articulo.getCantidad() * articulo.getCosto();
+                        }
+                        listaMateriaPrima = new ArrayList<>();
+                    }
+                    ordenDao.insertAsiento(ordenAsiento,listaMovimientos,directos,indirectos,materiales);
+
+                }
                 showInfo("Orden de producción registrada");
                 vaciar();
             } else {
-                showInfo("No se pudo generar la Orden de producción");
+                showWarn("No se pudo generar la Orden de producción");
             }
 
         }
@@ -261,6 +335,7 @@ public class ProduccionMBean implements Serializable {
         detalleListaMateriaPrima = new ArrayList<>();
         listaCostosDirectos = new ArrayList<>();
         listaCostosIndirectos = new ArrayList<>();
+//        ordenTrabajo.setCodigo_orden(idOrden());
 //        try {
 //            externalContext.redirect("/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml");
 ////        ordenTrabajo.setCodigo_orden(idOrden());

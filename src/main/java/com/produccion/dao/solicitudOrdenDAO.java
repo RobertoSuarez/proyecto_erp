@@ -48,9 +48,9 @@ public class solicitudOrdenDAO {
 
     public int insertarSolicitud(SolicitudOrden orden) {
         try {
-            sentenciaSql = "INSERT INTO public.orden_produccion(fecha_orden, fecha_fin, descripcion, estado)\n"
+            sentenciaSql = "INSERT INTO public.orden_produccion(fecha_orden, fecha_fin, descripcion, estado, codigo_secundario)\n"
                     + "	VALUES ('" + orden.getFecha_orden() + "', '" + orden.getFecha_fin() + "', "
-                    + "'" + orden.getDescripcion() + "', '" + orden.getEstado() + "');";
+                    + "'" + orden.getDescripcion() + "', '" + orden.getEstado()+ "', '" + orden.getCodigoSecundario()+ "');";
             if (conexion.insertar(sentenciaSql) > 0) {
                 return 1;
             } else {

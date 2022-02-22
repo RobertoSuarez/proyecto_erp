@@ -166,7 +166,7 @@ public class SolicitudOrdenMB implements Serializable {
     public void aleatorioIdenti() {
         String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
         String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
-        this.solicitudOrden.setCodigoSecundario("S.O-" + uuid + uuid2);
+        this.solicitudOrden.setCodigoSecundario("ODPR-" + uuid + uuid2);
     }
 
     public void deleteFila(productosOrden producto) {

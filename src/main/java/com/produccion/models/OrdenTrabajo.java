@@ -67,6 +67,12 @@ public class OrdenTrabajo {
         this.cantidad = cantidad;
     }
 
+    public OrdenTrabajo(int codigo_registro, int codigo_formula, float cantidad) {
+        this.codigo_registro = codigo_registro;
+        this.codigo_formula = codigo_formula;
+        this.cantidad = cantidad;
+    }
+
     public OrdenTrabajo(String estado) {
         this.estado = estado;
     }
