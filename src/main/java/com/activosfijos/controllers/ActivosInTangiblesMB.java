@@ -97,7 +97,6 @@ public class ActivosInTangiblesMB implements Serializable {
             intangibledao.guardar3(activosFijos, activoingantible);
             System.out.println("Registrado correctamente");
             PrimeFaces.current().executeScript("PF('NuevoIntangible').hide()");
-            PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
             PFE("Activo intangible agregado correctamente");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -168,12 +167,14 @@ public class ActivosInTangiblesMB implements Serializable {
 
             this.activosFijos.setProveedor(event.getObject().getNombre());
             this.activosFijos.setIdproveedor(event.getObject().getIdProveedor());
-            setNombre(event.getObject().getNombre());
-            setId_proveedor(event.getObject().getIdProveedor());
             System.out.println("Nombre del proveedor seleccionado:  " + activosFijos.getProveedor());
             System.out.println("Nombre del proveedor seleccionado variable :  " + getNombre());
-
             this.listaintangible.setIdproveedor(event.getObject().getIdProveedor());
+            setNombre(event.getObject().getNombre());
+            setId_proveedor(event.getObject().getIdProveedor());
+
+            PrimeFaces.current().ajax().update(":formintangible:panelnuevodepreciableintangible");
+
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

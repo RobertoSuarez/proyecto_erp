@@ -408,7 +408,10 @@
                                              requiredMessage="Ingrese su Correo"
                                              class="tamanoInputClienteNJ"
                                              value="#{personaController.persona_Natural.correo}"
-                                             placeholder="example@hotmail.com"/>
+                                             placeholder="example@hotmail.com"
+                                             validatorMessage="Email no valido, por favor, ingrese un correo electronico valido">
+                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                </p:inputText>
 
                                 <p:outputLabel for="tipoClienteNaturalOption" 
                                                value="Tipo de Cliente:"
@@ -516,7 +519,10 @@
                                              requiredMessage="Ingrese su Correo"
                                              class="tamanoInputClienteNJ"
                                              placeholder="example@hotmail.com"
-                                             value="#{personaController.persona_Juridica.correo}"/>
+                                             value="#{personaController.persona_Juridica.correo}"
+                                             validatorMessage="Email no valido, por favor, ingrese un correo electronico valido">
+                                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                </p:inputText>
 
                                 <p:outputLabel for="nomContactoClienteJ"
                                                value="Nombre de Contacto:"

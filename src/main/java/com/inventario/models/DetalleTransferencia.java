@@ -9,26 +9,33 @@ import java.io.Serializable;
 
 public class DetalleTransferencia implements Serializable {
 
-   private int idDetalle;
+   private boolean verifica;
    private int cod_transferencia;
    private int cod_articulo;
-   private ArticulosInventario articulosInventario;
    private int cant;
    private double costo;
    private String nombreArticulo;
-
+   private char estado;
     public DetalleTransferencia() {
     }
 
-    public DetalleTransferencia(int idDetalle, int cod_transferencia, int cod_articulo, int cant, double costo, ArticulosInventario articulosInventario, String nombrearticulo) {
-        this.idDetalle = idDetalle;
+    public DetalleTransferencia(int cod_transferencia, int cod_articulo, int cant, double costo) {
         this.cod_transferencia = cod_transferencia;
         this.cod_articulo = cod_articulo;
         this.cant = cant;
-        this.costo=costo;
-        this.articulosInventario=articulosInventario;
-        this.nombreArticulo=nombrearticulo;
+        this.costo = costo;
     }
+
+    public DetalleTransferencia(int cod_articulo, int cant, double costo, String nombreArticulo) {
+        this.cod_articulo = cod_articulo;
+        this.cant = cant;
+        this.costo = costo;
+        this.nombreArticulo = nombreArticulo;
+    }
+    
+    
+
+    
 
     public double getCosto() {
         return costo;
@@ -38,13 +45,16 @@ public class DetalleTransferencia implements Serializable {
         this.costo = costo;
     }
 
-    public int getIdDetalle() {
-        return idDetalle;
+    public char getEstado() {
+        return estado;
     }
 
-    public void setIdDetalle(int idDetalle) {
-        this.idDetalle = idDetalle;
+    public void setEstado(char estado) {
+        this.estado = estado;
     }
+
+   
+   
 
     public int getCod_transferencia() {
         return cod_transferencia;
@@ -70,13 +80,6 @@ public class DetalleTransferencia implements Serializable {
         this.cant = cant;
     }
 
-    public ArticulosInventario getArticulosInventario() {
-        return articulosInventario;
-    }
-
-    public void setArticulosInventario(ArticulosInventario articulosInventario) {
-        this.articulosInventario = articulosInventario;
-    }
 
     public String getNombreArticulo() {
         return nombreArticulo;
@@ -84,6 +87,14 @@ public class DetalleTransferencia implements Serializable {
 
     public void setNombreArticulo(String nombreArticulo) {
         this.nombreArticulo = nombreArticulo;
+    }
+
+    public boolean isVerifica() {
+        return verifica;
+    }
+
+    public void setVerifica(boolean verifica) {
+        this.verifica = verifica;
     }
     
    

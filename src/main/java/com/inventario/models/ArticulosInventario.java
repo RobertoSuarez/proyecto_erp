@@ -29,6 +29,20 @@ public class ArticulosInventario {
     public ArticulosInventario() {
     }
 
+    public ArticulosInventario(int id, int cat_cod, String nombre, int id_tipo, String descripcion, int id_bodega, int cantidad, int costo, int iva, int ice) {
+        this.id = id;
+        this.cat_cod = cat_cod;
+        this.nombre = nombre;
+        this.id_tipo = id_tipo;
+        this.descripcion = descripcion;
+        this.id_bodega = id_bodega;
+        this.cantidad = cantidad;
+        this.costo = costo;
+        this.iva = iva;
+        this.ice = ice;
+    }
+
+    
     public ArticulosInventario(int id, int cat_cod, String nombre, 
             int id_categoria, int id_tipo, int cod, String descripcion, 
             int id_bodega, int min_stock, int max_stock, int cantidad, 
@@ -169,6 +183,8 @@ public class ArticulosInventario {
     public void setIce(int ice) {
         this.ice = ice;
     }
+
+   
     
     
     

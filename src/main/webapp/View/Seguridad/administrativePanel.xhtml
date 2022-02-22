@@ -91,10 +91,12 @@
                                     <h:outputText value="#{ListaRolesUsuarios.nombre}"/>
                                 </p:column>
                                 <p:column headerText="Accion" width="20%" style="font-size: 17px">
-                                    <p:commandButton icon="pi pi-trash" type="button" 
+                                    <p:commandButton icon="pi pi-trash"
                                                      class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                      process="@this"
-                                                     />
+                                                     onclick="PF('userDat').hide()"
+                                                     update="RolUser"
+                                                     actionListener="#{usuarioMB.deleteRolsForUser(ListaRolesUsuarios)}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:panel>
@@ -119,7 +121,10 @@
                                 <h:outputText value="#{ListaRolesGenerales.detalle}"></h:outputText>
                             </p:column>
                             <p:column headerText="Accion" width="10%" style="font-size: 17px">
-                                <p:commandButton icon="pi pi-check" type="button" value="Agregar"/>
+                                <p:commandButton icon="pi pi-check" value="Agregar"
+                                                 actionListener="#{usuarioMB.addRolsForUser(ListaRolesGenerales)}"
+                                                 oncomplete = "PF('rolesData').hide() PF('userData').hide()"
+                                                 update="RolUser"/>
                             </p:column>
                         </p:dataTable>
                     </h:form>

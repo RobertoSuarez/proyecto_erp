@@ -322,4 +322,16 @@ public class UsuarioController implements Serializable {
     public void chargeRols(){
         this.generalRols = this.rDao.GetRolsDifferentOfUser(this.infoUser.getIdUsuario());
     }
+    
+    public void addRolsForUser(Rol rolAux){
+        this.rDao.addRolUser(rolAux.getId(), this.infoUser.getIdUsuario());
+        FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Nuevo rol ingresado");
+        FacesContext.getCurrentInstance().addMessage(null, messages);
+    }
+    
+    public void deleteRolsForUser(Rol rolAux){
+        this.rDao.deleteRolUser(rolAux.getId(), this.infoUser.getIdUsuario());
+        FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Éxito", "Nuevo rol ingresado");
+        FacesContext.getCurrentInstance().addMessage(null, messages);
+    }
 }

@@ -809,7 +809,7 @@
                                                                     for="@next" 
                                                                     value="Descripción: "/>
                                                                 <p:inputText 
-                                                                                                                              
+
                                                                     value="#{activosFijosMB.activosFijos.detalle_de_activo}" 
                                                                     required="true" />
 
@@ -913,12 +913,12 @@
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
                                                             action="#{activosFijosMB.setRegistrarNoDepreciable}"
-                                                            update=":formnuevoNodepreciable:paneldialogoingresarNodepreciable,:fromverNodepreciable,:msgs"
-                                                            onclick="PF('NuevoNoDepreciable').hide()"
-                                                            ajax="false"/>
+                                                            update=":formnuevoNodepreciable:panelNuevoNoDepreciable,:fromverNodepreciable,:msgs"
+                                                            />
                                                         <p:commandButton 
                                                             value="Cancelar" 
                                                             icon="pi pi-times" 
+                                                            oncomplete="location.reload()"
                                                             onclick="PF('NuevoNoDepreciable').hide()"
                                                             class="ui-button-danger"/>
                                                     </f:facet>
@@ -1214,7 +1214,7 @@
                                             rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                             <div  style="display: flex;justify-content: center">
 
-                                                <p:outputPanel class="ui-fluid">
+                                                <p:outputPanel id="panelNuevoAgotable" class="ui-fluid">
                                                     <p:outputPanel>
                                                         <div class="p-formgrid p-grid">
                                                             <div class="p-field p-col">
@@ -1275,10 +1275,51 @@
                                                                     for="@next" 
                                                                     value="Proveedor"/>
                                                                 <p:inputText 
-                                                                    value="#{activosFijosMB.activosFijos.idproveedor}" 
-                                                                    required="true"  /> 
+                                                                    id="proveedor"
+                                                                    type="button"
+                                                                    value="#{activosFijosMB.nombre}" 
+                                                                    /> 
                                                             </div>
                                                         </div>
+                                                        <p:overlayPanel
+                                                            for="proveedor" 
+                                                            dynamic="true" 
+                                                            style="width:600px"
+                                                            widgetVar="moviePicker">
+                                                            <p:dataTable 
+                                                                var="proveedor" 
+                                                                value="#{BuscarMB.listaProveedor}" 
+                                                                rows="3"
+                                                                paginator="true"
+                                                                selectionMode="single"
+                                                                selection="#{BuscarMB.proveedor}"
+                                                                rowKey="#{proveedor.nombre}">
+                                                                <p:ajax 
+                                                                    event="rowSelect" 
+                                                                    listener="#{activosFijosMB.onRowSelect}" 
+                                                                    onsuccess="PF('moviePicker').hide()" 
+                                                                    update=":formnuevoagotable:panelNuevoAgotable @this"
+
+                                                                    />
+
+                                                                <p:column 
+                                                                    headerText="Proveedor">
+                                                                    <h:outputText 
+                                                                        value="#{proveedor.codigo}"/>
+                                                                </p:column>
+                                                                <p:column 
+                                                                    headerText="Nombre">
+                                                                    <h:outputText 
+                                                                        value="#{proveedor.nombre}"/>
+                                                                </p:column>
+                                                                <p:column 
+                                                                    headerText="Ruc">
+                                                                    <h:outputText 
+                                                                        value="#{proveedor.ruc}"/>
+                                                                </p:column>
+                                                            </p:dataTable>
+                                                        </p:overlayPanel>
+
                                                     </p:outputPanel>
                                                 </p:outputPanel>
 
@@ -1287,12 +1328,14 @@
                                                         <p:commandButton
                                                             value="Guardar" 
                                                             icon="pi pi-check" 
-                                                            update=":msgs"
+                                                            update=":formagotable,:msgs"
                                                             action="#{activosFijosMB.setRegistrarAgotables}"
-                                                            ajax="false"/>
+                                                            />
                                                         <p:commandButton 
                                                             value="Cancelar"
                                                             icon="pi pi-times" 
+                                                            oncomplete="location.reload()"
+                                                            
                                                             onclick="PF('NuevoAgotable').hide()"
                                                             class="ui-button-danger"/>
                                                     </f:facet>
@@ -1400,7 +1443,10 @@
                                                                  update=":msgs"
                                                                  action="#{activosFijosMB.setEditarAgotables}" 
                                                                  ajax="false"/>
-                                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                <p:commandButton value="Cancelar" 
+                                                                 icon="pi pi-times" 
+                                                                 oncomplete="location.reload()"
+                                                            
                                                                  onclick="PF('EditarAgotable').hide()"
                                                                  class="ui-button-danger"/>
                                                 <p:commandButton 

@@ -7,11 +7,13 @@ package com.inventario.controllers;
 
 import com.inventario.DAO.ArticulosInventarioDAO;
 import com.inventario.DAO.BodegaDAO;
+import com.inventario.DAO.TransferenciasDAO;
 import com.inventario.models.ArticulosInventario;
 import com.inventario.models.Bodega;
 import com.inventario.models.DetalleTransferencia;
 import com.inventario.models.EncabezadoTransferencia;
 import static com.primefaces.Messages.addMessage;
+import static com.primefaces.Messages.showWarn;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Asynchronous;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -29,22 +32,29 @@ import javax.inject.Named;
 public class TransferenciaManagedBean implements Serializable {
 
     private Bodega bodega = new Bodega();
-    private EncabezadoTransferencia transferencia= new EncabezadoTransferencia();
-    private DetalleTransferencia detalleTransferencia= new DetalleTransferencia(); 
+    private TransferenciasDAO transferenciaDAO=new TransferenciasDAO();
+    private boolean verificar;
+    private EncabezadoTransferencia transferencia = new EncabezadoTransferencia();
+    private DetalleTransferencia detalleTransferencia = new DetalleTransferencia();
     private BodegaDAO bodegaDAO = new BodegaDAO();
     private List<Bodega> listaBodega = new ArrayList<>();
     private ArticulosInventario articulosInventario = new ArticulosInventario();
     private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
     private List<ArticulosInventario> listaArticulos = new ArrayList<>();
     private int codBodegaOrigen;
+
     private int codBodegaDestino;
     private String NombreBodegaOrigen;
     private String NombreBodegaDestino;
+    private List<DetalleTransferencia> listaAritculosTransferencia = new ArrayList<>();
     private int codArticulo;
     private String nombreArticulo;
     private EncabezadoTransferencia bodegaseleccionada;
     private DetalleTransferencia prodselecionado;
     private List<DetalleTransferencia> listDetalle;
+     private List<DetalleTransferencia> listArticulos;
+    
+   
 
     private int cantidad;
 
@@ -53,6 +63,7 @@ public class TransferenciaManagedBean implements Serializable {
         System.out.println("PostConstruct");
         this.listaBodega = bodegaDAO.getBodega();
         this.listaArticulos = articulosInventarioDAO.getArticulos();
+        this.listaAritculosTransferencia=transferenciaDAO.getArticulos();
         this.bodega = new Bodega();
         this.articulosInventario = new ArticulosInventario();
         this.codBodegaOrigen = 0;
@@ -66,7 +77,8 @@ public class TransferenciaManagedBean implements Serializable {
         this.prodselecionado = null;
 
         this.cantidad = 1;
-        this.listDetalle= new ArrayList<>();
+        this.listDetalle = new ArrayList<>();
+        this.listArticulos=new ArrayList<>();
 
     }
 
@@ -110,37 +122,38 @@ public class TransferenciaManagedBean implements Serializable {
         }
     }
 
-    @Asynchronous
-    public void AgregarArticulosLista() {
-        try {
-            if (this.articulosInventario.getCod() > 0) {
-                if (this.articulosInventario.getCantidad() < this.cantidad) {
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No hay Stock suficiente");
-                } else {
-                    if (this.cantidad <= 0) {
-                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Valor invalido");
-                    }else{
-                        
-                        //poner los articulos en el detalle
-                        DetalleTransferencia dt=new DetalleTransferencia();
-                        dt.setIdDetalle(this.detalleTransferencia.getIdDetalle());
-                        dt.setCod_transferencia(this.transferencia.getCodemcabezado());
-                        dt.setCod_articulo(this.articulosInventario.getCod());
-                        dt.setIdDetalle(codArticulo);
-                        dt.setCant(this.cantidad);
-                        dt.setCosto(this.articulosInventario.getCosto());
-                        
-                        this.listDetalle.add(dt);
-                       
-                    }
+    public void agregarArticulos(DetalleTransferencia articulos) {
+        if (articulos.isVerifica() == true) {
+            listDetalle.add(new DetalleTransferencia(articulos.getCod_articulo(), articulos.getCant(), articulos.getCosto(), articulos.getNombreArticulo()));
+        } else {
+            for (DetalleTransferencia lista : listDetalle) {
+                if (lista.getCod_articulo() == articulos.getCod_articulo()) {
+                    listDetalle.remove(lista);
                 }
-            }else{
-                 System.out.println("Ningun articulo seleccionado");
+            }
+        }
+    }
+    
+    public void llenaProductoConfirmado() {
+        for (DetalleTransferencia lista : listDetalle) {
+            if (duplicidadDatos(lista)) {
+                showWarn("El producto ya se encuentra agregado");
+            } else {
+                lista.setEstado('P');
+                listArticulos.add(lista);
             }
 
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
+    }
+    
+    public boolean duplicidadDatos(DetalleTransferencia articulo) {
+        boolean confirmacion = false;
+        for (DetalleTransferencia lista : listArticulos) {
+            if (lista.getCod_articulo() == articulo.getCod_articulo()) {
+                confirmacion = true;
+            }
+        }
+        return confirmacion;
     }
 
     public void SeleccionarBodegaOrigen(Bodega b) {
@@ -239,6 +252,15 @@ public class TransferenciaManagedBean implements Serializable {
         return nombreArticulo;
     }
 
+    public List<DetalleTransferencia> getListArticulos() {
+        return listArticulos;
+    }
+
+    public void setListArticulos(List<DetalleTransferencia> listArticulos) {
+        this.listArticulos = listArticulos;
+    }
+    
+
     public void setNombreArticulo(String nombreArticulo) {
         this.nombreArticulo = nombreArticulo;
     }
@@ -282,7 +304,21 @@ public class TransferenciaManagedBean implements Serializable {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-    
-    
+
+    public List<DetalleTransferencia> getListaAritculosTransferencia() {
+        return listaAritculosTransferencia;
+    }
+
+    public void setListaAritculosTransferencia(List<DetalleTransferencia> listaAritculosTransferencia) {
+        this.listaAritculosTransferencia = listaAritculosTransferencia;
+    }
+
+    public boolean isVerificar() {
+        return verificar;
+    }
+
+    public void setVerificar(boolean verificar) {
+        this.verificar = verificar;
+    }
 
 }
