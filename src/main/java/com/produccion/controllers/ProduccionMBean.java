@@ -8,6 +8,7 @@ package com.produccion.controllers;
 import com.produccion.dao.OrdenProduccionDAO;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
+import com.produccion.models.FormulaMateriales;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenTrabajo;
 import com.produccion.models.SolicitudOrden;
@@ -38,6 +39,9 @@ public class ProduccionMBean implements Serializable {
     /**
      * Creates a new instance of ProduccionMBean
      */
+    float materiaPrimaCosto = 0;
+    float costosD = 0;
+    float costosI = 0;
     private OrdenTrabajo ordenTrabajo;
     private SolicitudOrden ordenAsiento;
     OrdenProduccionDAO ordenDao;
@@ -52,12 +56,17 @@ public class ProduccionMBean implements Serializable {
     private List<FormulaProduccion> listaMovimientos;
     private List<OrdenTrabajo> listaCostoProduccion;
     private List<ArticuloFormula> listaCformula;
+    private List<FormulaProduccion> materiaPrima;
+    private List<FormulaMateriales> listaMateriaPrimaAdicional;
+    private List<FormulaMateriales> listaMaterialesConfirmados;
+    private FormulaMateriales materialesFormula;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
     public ProduccionMBean() {
         ordenTrabajo = new OrdenTrabajo();
         ordenDao = new OrdenProduccionDAO();
         ordenAsiento = new SolicitudOrden();
+        materialesFormula = new FormulaMateriales();
 
         listaCostos = new ArrayList<>();
         listaProducto = new ArrayList<>();
@@ -70,6 +79,9 @@ public class ProduccionMBean implements Serializable {
         listaMovimientos = new ArrayList<>();
         listaCostoProduccion = new ArrayList<>();
         listaCformula = new ArrayList<>();
+        materiaPrima = new ArrayList<>();
+        listaMateriaPrimaAdicional = new ArrayList<>();
+        listaMaterialesConfirmados = new ArrayList<>();
     }
 
     @PostConstruct
@@ -147,6 +159,14 @@ public class ProduccionMBean implements Serializable {
         return listaCostos;
     }
 
+    public List<FormulaMateriales> getListaMateriaPrimaAdicional() {
+        return listaMateriaPrimaAdicional;
+    }
+
+    public void setListaMateriaPrimaAdicional(List<FormulaMateriales> listaMateriaPrimaAdicional) {
+        this.listaMateriaPrimaAdicional = listaMateriaPrimaAdicional;
+    }
+
     public void setListaCostos(List<FormulaProduccion> listaCostos) {
         this.listaCostos = listaCostos;
     }
@@ -205,6 +225,22 @@ public class ProduccionMBean implements Serializable {
         this.listaCformula = listaCformula;
     }
 
+    public List<FormulaProduccion> getMateriaPrima() {
+        return materiaPrima;
+    }
+
+    public void setMateriaPrima(List<FormulaProduccion> materiaPrima) {
+        this.materiaPrima = materiaPrima;
+    }
+
+    public List<FormulaMateriales> getListaMaterialesConfirmados() {
+        return listaMaterialesConfirmados;
+    }
+
+    public void setListaMaterialesConfirmados(List<FormulaMateriales> listaMaterialesConfirmados) {
+        this.listaMaterialesConfirmados = listaMaterialesConfirmados;
+    }
+
     public void llenarCantidad() {
         float cantidad = 0;
         for (OrdenTrabajo producto : listaProducto) {
@@ -220,20 +256,20 @@ public class ProduccionMBean implements Serializable {
         ordenTrabajo.setState(ordenDao.renderProduccionDetallada(ordenTrabajo.getCodigo_formula()));
         ordenTrabajo.setNombre_proceso(ordenDao.getProceso(ordenTrabajo.getCodigo_formula()));
         listaMateriaPrima = ordenDao.getListaConsumoMateriales(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad());
+        materiaPrima = ordenDao.getArticulos();
         costoMateriaPrima();
     }
 
     public void costoMateriaPrima() {
-        float materiaPrima = 0;
-        float costosD = 0;
-        float costosI = 0;
+
         detalleListaMateriaPrima = new ArrayList<>();
         for (ArticuloFormula materiales : listaMateriaPrima) {
             materiales.setTotal(materiales.getCantidad() * materiales.getCosto());
             detalleListaMateriaPrima.add(materiales);
-            materiaPrima += materiales.getTotal();
+            materiaPrimaCosto += materiales.getTotal();
         }
-        ordenTrabajo.setTotalMateria(materiaPrima);
+
+        ordenTrabajo.setTotalMateria(materiaPrimaCosto);
         listaCostosDirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCodigo_registro(), ordenTrabajo.getCantidad(), "cmdunitario");
         listaCostosIndirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCodigo_registro(), ordenTrabajo.getCantidad(), "cifunitario");
         listaCostos = ordenDao.getListaCosto(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad());
@@ -274,6 +310,9 @@ public class ProduccionMBean implements Serializable {
         } else {
             if (ordenDao.registrarProduccion(ordenTrabajo) > 0) {
                 if (ordenDao.actualizarOrden(ordenTrabajo.getCodigo_registro()) > 0) {
+                    for(FormulaMateriales materiaAdicional : listaMaterialesConfirmados){
+                        ordenDao.registrarDetalleProduccion(materiaAdicional,ordenTrabajo.getCodigo_registro());
+                    }
                     if (ordenDao.verificaOrden(ordenTrabajo.getCodigo_orden())) {
                         if (ordenDao.actualizaEstado(ordenTrabajo.getCodigo_orden()) > 0) {
                             ordenAsiento = ordenDao.calculaProduccion(ordenTrabajo.getCodigo_orden());
@@ -308,7 +347,7 @@ public class ProduccionMBean implements Serializable {
                                 listaMateriaPrima = new ArrayList<>();
                             }
 
-                            ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales);
+//                            ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales);
                         }
                     } else {
                         showWarn("No se pudo generar la Orden de producción");
@@ -381,6 +420,112 @@ public class ProduccionMBean implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(ProduccionMBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void addMateriales2(FormulaProduccion producto) {
+        FormulaMateriales verifica = llenarMateriales(producto);
+        if (verifica != null) {
+            if (producto.isVerifica()) {
+                listaMateriaPrimaAdicional.add(verifica);
+            }
+        }
+    }
+
+    public FormulaMateriales llenarMateriales(FormulaProduccion materiales) {
+        if (materiales.isVerifica()) {
+            materialesFormula = new FormulaMateriales(materiales.getNombre(),
+                    materiales.getDescripcionProducto(), ordenTrabajo.getCodigo_registro(), materiales.getCodigo_producto(), materiales.getCosto());
+            return materialesFormula;
+        } else {
+            FormulaMateriales buscar = new FormulaMateriales(materiales.getNombre(),
+                    materiales.getDescripcionProducto(), ordenTrabajo.getCodigo_registro(),
+                    materiales.getCodigo_producto(), materiales.getCosto());
+            for (FormulaMateriales lista : listaMateriaPrimaAdicional) {
+                if (lista.getCodigoProducto() == buscar.getCodigoProducto()) {
+                    listaMateriaPrimaAdicional.remove(lista);
+                }
+
+            }
+            return null;
+        }
+
+    }
+
+    public void llenaMaterialiesConfirmados() {
+        for (FormulaMateriales materiales : listaMateriaPrimaAdicional) {
+            if (materiales != null) {
+                if (duplicidadDatos(materiales)) {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "",
+                                    "El producto ya se encuentra agregado"));
+                } else {
+                    listaMaterialesConfirmados.add(materiales);
+                }
+            }
+        }
+    }
+
+    public boolean duplicidadDatos(FormulaMateriales datos) {
+        boolean confirmacion = false;
+        for (FormulaMateriales materiales : listaMaterialesConfirmados) {
+            if (materiales.getCodigoProducto() == datos.getCodigoProducto()) {
+                confirmacion = true;
+            }
+        }
+        return confirmacion;
+    }
+
+    public void deleteFila(FormulaMateriales producto) {
+        for (ArticuloFormula eliminarArticulo : detalleListaMateriaPrima) {
+            if (producto.getCodigoProducto() == eliminarArticulo.getId()) {
+                detalleListaMateriaPrima.remove(eliminarArticulo);
+                materiaPrimaCosto -= eliminarArticulo.getTotal();
+            }
+        }
+        ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+        ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
+        ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+        listaMaterialesConfirmados.remove(producto);
+
+    }
+
+    public boolean verificaCampos() {
+        boolean verifica = false;
+        for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+            if (materiaAdicional.getCantidad() <= 0 || "".equals(materiaAdicional.getUnidadMedida())) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
+    }
+
+    public void llenarMaterialesAdicionales() {
+        boolean verifica = false;
+        for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+            for (ArticuloFormula listaexistencia : detalleListaMateriaPrima) {
+                if (materiaAdicional.getCodigoProducto() == listaexistencia.getId()) {
+                    verifica = true;
+                    break;
+                }
+            }
+        }
+        if (!verifica) {
+            if (!verificaCampos()) {
+                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+                    detalleListaMateriaPrima.add(new ArticuloFormula(materiaAdicional.getCodigoProducto(), materiaAdicional.getNombre(), materiaAdicional.getDescripcion(),
+                            materiaAdicional.getPrecio(), materiaAdicional.getCantidad(), materiaAdicional.getCantidad() * materiaAdicional.getPrecio()));
+                    materiaPrimaCosto += materiaAdicional.getCantidad() * materiaAdicional.getPrecio();
+                }
+                ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+                ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
+                ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+            }else{
+                showWarn("Debe de ingresar valores en la materia prima que agrego.");
+            }
+
+        }
+
     }
 
 }

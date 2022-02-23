@@ -35,6 +35,15 @@ public class ArticuloFormula {
         this.cantidadMaxima = cantidadMaxima;
     }
 
+    public ArticuloFormula(int id, String nombre, String descripcion, float costo, float cantidad, float total) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.costo = costo;
+        this.cantidad = cantidad;
+        this.total = total;
+    }
+
     public ArticuloFormula(int id, String nombre, String descripcion, String tipo, float cantidad, 
             String UnidadMedida,float costo,
             int idSubcuenta,String subCuenta) {

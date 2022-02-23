@@ -3,6 +3,7 @@ package com.produccion.dao;
 import com.global.config.Conexion;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
+import com.produccion.models.FormulaMateriales;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenProduccion;
 import com.produccion.models.OrdenTrabajo;
@@ -231,6 +232,25 @@ public class OrdenProduccionDAO {
 
     }
 
+    public int registrarDetalleProduccion(FormulaMateriales ordenTrabajo,int id_registro) {
+        sentenciaSql = String.format("INSERT INTO public.detalle_produccion(\n"
+                + "	precio, cantidad, codigo_producto, codigo_registro)\n"
+                + "	VALUES ("+ordenTrabajo.getPrecio()+", "+ordenTrabajo.getCantidad()+", "+ordenTrabajo.getCodigoProducto()+", "+id_registro+");");
+        try {
+
+            if (conexion.insertar(sentenciaSql) > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
     public int actualizarOrden(int codigoOrden) {
         sentenciaSql = String.format("UPDATE public.registro_orden_produccion\n"
                 + "	SET estado='T'\n"
@@ -353,7 +373,7 @@ public class OrdenProduccionDAO {
         return costosMovimiento;
     }
 
-    public void insertAsiento(SolicitudOrden orden, List<FormulaProduccion> listaMovimientos,float directo,float indirect,float materiales ) {
+    public void insertAsiento(SolicitudOrden orden, List<FormulaProduccion> listaMovimientos, float directo, float indirect, float materiales) {
         try {
             int iddiario = 0;
             String cadena = " select iddiario from diariocontable \n"
@@ -417,6 +437,29 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
         return materiales;
+    }
+
+    public List<FormulaProduccion> getArticulos() {
+        List<FormulaProduccion> Materiales = new ArrayList<>();
+        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock \n"
+                + "	from articulos as a	inner join categoria as c on a.id_categoria=c.cod\n"
+                + "	inner join tipo as t on t.cod=a.id_tipo where t.tipo='Producto SemiElaborado' or t.tipo='Materia Prima'";
+
+        try {
+
+            resultSet = conexion.ejecutarSql(sqlSentencia);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                Materiales.add(new FormulaProduccion(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("nom_categoria"),
+                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cantidad"), resultSet.getFloat("max_stock")));
+
+            }
+
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return Materiales;
     }
 
 }

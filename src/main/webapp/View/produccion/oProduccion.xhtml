@@ -71,7 +71,7 @@
                                                 <p:selectOneMenu id="formuls" value="#{produccionMBean.ordenTrabajo.codigo_formula}" editable="false">
                                                     <f:selectItem itemLabel="Seleccione una formula" itemValue="" noSelectionOption="true"/>
                                                     <p:ajax listener="#{produccionMBean.llenarProceso()}" update=":form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,
-                                                            :form:produccionDetallada,:form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos"/>
+                                                            :form:produccionDetallada,:form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima"/>
                                                     <f:selectItems value="#{produccionMBean.listaFormula}"
                                                                    var="listaformula"
                                                                    itemLabel="#{listaformula.nombre_formula}" 
@@ -286,7 +286,7 @@
                                 <p:outputPanel id="materialesOrdenProduccion">
                                     <div class="p-grid p-justify-start">
                                         <div class="p-field p-col-12 p-md-3">
-                                            <!-- comment <p:commandButton style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle" oncomplete="PF('aggproducto').show()"/>-->
+                                            <p:commandButton style="margin-right: 6px;" value="Agregar" styleClass="ui-button-primary" icon="pi pi-plus-circle" oncomplete="PF('aggproducto').show()"/>
 
                                         </div>
 
@@ -317,17 +317,83 @@
                                                         <p:column headerText="Tipo" filterStyle="display : none">
                                                             <h:outputText value="#{materiales.tipo}" />
                                                         </p:column>
-                                                        <p:column headerText="Acciones">
-                                                            <p:commandButton icon="pi pi-times" action="#"  
-                                                                             styleClass="edit-button rounded-button ui-button-danger" process="@this"
-                                                                             oncomplete="">
+                                                    </p:dataTable>
 
-                                                            </p:commandButton>
+
+                                                </div>
+
+                                                <div class="p-col-12">
+                                                    <p:dataTable id="MaterialesProducto" editable="true" reflow="true" var="Materiales"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="#{produccionMBean.listaMaterialesConfirmados}">
+                                                        <p:column headerText="Nombre">
+                                                            <h:outputText value="#{Materiales.nombre}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción">
+                                                            <h:outputText value="#{Materiales.descripcion}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Unidad de Medida">
+                                                            <p:cellEditor>
+                                                                <f:facet name="output">
+                                                                    <h:outputText value="#{Materiales.unidadMedida}"/>
+                                                                </f:facet>
+                                                                <f:facet name="input">
+                                                                    <p:inputText value="#{Materiales.unidadMedida}" 
+                                                                                 style="width:100%">
+                                                                        <p:ajax event="blur" update=":form:MaterialesProducto"/>
+                                                                    </p:inputText>
+                                                                </f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
+                                                        <p:column headerText="Cantidad">
+                                                            <p:cellEditor>
+                                                                <f:facet name="output">
+                                                                    <h:outputText value="#{Materiales.cantidad}"/>
+                                                                </f:facet>
+                                                                <f:facet name="input">
+                                                                    <p:inputNumber value="#{Materiales.cantidad}" 
+                                                                                   style="width:100%">
+                                                                        <p:ajax event="blur" update=":form:MaterialesProducto"/>
+                                                                    </p:inputNumber>
+                                                                </f:facet>
+                                                            </p:cellEditor>
+                                                        </p:column>
+                                                        <p:column headerText="Precio">
+                                                            <h:outputText value="#{Materiales.precio}" />
+                                                        </p:column>
+                                                        <p:column headerText="Acciones">
+                                                            <p:column headerText="Acciones">
+                                                                <p:commandButton icon="pi pi-trash" actionListener="#{produccionMBean.deleteFila(Materiales)}"
+                                                                                 styleClass="edit-button rounded-button ui-button-danger"
+                                                                                 update=":form:MaterialesProducto,:form:valoresTotales"
+                                                                                 process="@this">
+
+                                                                </p:commandButton>
+                                                            </p:column>
                                                         </p:column>
                                                     </p:dataTable>
                                                 </div>
+
                                             </div>
                                             <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Confirmar"  
+                                                                     icon="pi pi-check" 
+                                                                     actionListener="#{produccionMBean.llenarMaterialesAdicionales()}" 
+                                                                     styleClass="ui-button-primary"
+                                                                     process="@this"
+                                                                     update=":form:costoMateriaPrima,:form:growl,:form:valoresTotales"
+                                                                     oncomplete="PF('materiaprima').hide()"/>
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('materiaprima').hide()"/>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -338,7 +404,7 @@
                                   widgetVar="aggproducto" responsive="true" width="60%"
                                   draggable="false" height="500">
 
-                            <p:outputPanel class="ui-fluid">
+                            <p:outputPanel class="ui-fluid" id="materiaPrimaAdicional">
                                 <p:outputPanel>
                                     <div class="p-grid p-justify-around">
                                         <div class="p-col-1 p-md-1 p-lg-5">
@@ -352,34 +418,32 @@
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-12">
-                                                    <p:dataTable editable="true" reflow="true"
+                                                    <p:dataTable id="nuevaMateriaPrima" editable="true" reflow="true"
                                                                  editInitEvent="dblclick" editMode="cell"
-                                                                 value="">
+                                                                 value="#{produccionMBean.materiaPrima}"
+                                                                 var="materiaPrimanueva">
                                                         <p:column headerText="Acciones">
-                                                            <p:selectBooleanCheckbox value="" />
+                                                            <p:selectBooleanCheckbox value="#{materiaPrimanueva.verifica}">
+                                                                <p:ajax listener="#{produccionMBean.addMateriales2(materiaPrimanueva)}"/>
+                                                            </p:selectBooleanCheckbox>
                                                         </p:column>
 
                                                         <p:column headerText="Código" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                            <h:outputText value="#{materiaPrimanueva.codigo_producto}" />
                                                         </p:column>
 
                                                         <p:column headerText="Nombre" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                            <h:outputText value="#{materiaPrimanueva.nombre}" />
                                                         </p:column>
 
                                                         <p:column headerText="Descripción" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                            <h:outputText value="#{materiaPrimanueva.descripcion}" />
                                                         </p:column>
                                                         <p:column headerText="Unidad Medida" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                            <h:outputText value="#{materiaPrimanueva.tipo}" />
                                                         </p:column>
                                                         <p:column headerText="Existencias" filterStyle="display : none">
-                                                            <h:outputText value="#" />
-                                                            <p:skeleton rendered="#"></p:skeleton>
+                                                            <h:outputText value="#{materiaPrimanueva.cantidad}" />
                                                         </p:column>
                                                     </p:dataTable>
                                                 </div>
@@ -389,7 +453,11 @@
                                                 <div class="p-col-2">
                                                     <p:commandButton value="Confirmar"  
                                                                      icon="pi pi-check" 
-                                                                     disabled="#" styleClass="ui-button-primary"/>
+                                                                     actionListener="#{produccionMBean.llenaMaterialiesConfirmados()}" 
+                                                                     styleClass="ui-button-primary"
+                                                                     update=":form:MaterialesProducto,:form:growl"
+                                                                     process=" @this"
+                                                                     oncomplete="PF('aggproducto').hide()"/>
                                                 </div>
                                                 <div class="p-col-2">
                                                     <p:commandButton value="Cerrar" icon="pi pi-times"
