@@ -232,10 +232,10 @@ public class OrdenProduccionDAO {
 
     }
 
-    public int registrarDetalleProduccion(FormulaMateriales ordenTrabajo,int id_registro) {
+    public int registrarDetalleProduccion(FormulaMateriales ordenTrabajo, int id_registro) {
         sentenciaSql = String.format("INSERT INTO public.detalle_produccion(\n"
                 + "	precio, cantidad, codigo_producto, codigo_registro)\n"
-                + "	VALUES ("+ordenTrabajo.getPrecio()+", "+ordenTrabajo.getCantidad()+", "+ordenTrabajo.getCodigoProducto()+", "+id_registro+");");
+                + "	VALUES (" + ordenTrabajo.getPrecio() + ", " + ordenTrabajo.getCantidad() + ", " + ordenTrabajo.getCodigoProducto() + ", " + id_registro + ");");
         try {
 
             if (conexion.insertar(sentenciaSql) > 0) {
@@ -385,7 +385,7 @@ public class OrdenProduccionDAO {
             String sentencia1, sentencia;
 
             sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + orden.getTotal()
-                    + ",\"documento\": \"" + orden.getCodigoSecundario() + " R\",\"detalle\": \""
+                    + ",\"documento\": \"" + orden.getCodigoSecundario() + "\",\"detalle\": \""
                     + orden.getDescripcion() + "\",\"fechaCreacion\": \""
                     + new SimpleDateFormat("dd-MM-yyyy").format(orden.getFecha_orden()) + "\",\"fechaCierre\":\""
                     + new SimpleDateFormat("dd-MM-yyyy").format(orden.getFecha_fin()) + "\"}";
@@ -399,6 +399,7 @@ public class OrdenProduccionDAO {
                     + directo + "\",\"tipoMovimiento\":\"Produccion en proceso\"},{\"idSubcuenta\":\"17\",\"debe\":\"0\",\"haber\":\""
                     + materiales + "\",\"tipoMovimiento\":\"Produccion en proceso\"},{\"idSubcuenta\":\"143\",\"debe\":\"0\",\"haber\":\""
                     + indirect + "\",\"tipoMovimiento\":\"Produccion en proceso\"}]";
+
             intJson(sentencia, sentencia1);
         } catch (SQLException e) {
         } finally {
@@ -460,6 +461,82 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
         return Materiales;
+    }
+
+    public List<ArticuloFormula> getArticuloAdicionales(int codigo) {
+        List<ArticuloFormula> articulosFormula = new ArrayList<>();
+        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,a.id,a.nombre,a.descripcion,dp.cantidad,t.tipo,a.costo  from orden_produccion as op \n"
+                + "inner join registro_orden_produccion as rop\n"
+                + "on op.codigo_orden=rop.codigo_orden\n"
+                + "inner join detalle_produccion as dp \n"
+                + "on dp.codigo_registro=rop.codigo_registro\n"
+                + "inner join articulos as a on a.id=dp.codigo_producto\n"
+                + "inner join subcuenta as sc on sc.idsubcuenta=a.id_subcuenta\n"
+                + "inner join tipo as t on t.cod=a.id_tipo\n"
+                + "where op.codigo_orden=" + codigo + "");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                articulosFormula.add(new ArticuloFormula(resultSet.getInt("id"), resultSet.getString("nombre"),
+                        resultSet.getString("descripcion"), resultSet.getString("tipo"),
+                        resultSet.getFloat("cantidad"), "U.M", resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo")));
+            }
+            return articulosFormula;
+        } catch (SQLException e) {
+            return articulosFormula;
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
+    public float verificaProducto(int id_registro, int id_producto) {
+        try {
+            float cantidad = 0;
+            sentenciaSql = String.format("select cantidad from detalle_produccion\n"
+                    + "where codigo_registro=" + id_registro + " and codigo_producto=" + id_producto + "");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                cantidad = resultSet.getFloat("cantidad");
+            }
+            return cantidad;
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public float actualizaAdicionales(float valor, int id_registro, int id_producto) {
+        try {
+            float cantidad = 0;
+            sentenciaSql = String.format("UPDATE public.detalle_produccion\n"
+                    + "	SET cantidad=" + valor + " \n"
+                    + "	WHERE codigo_producto=" + id_producto + " and codigo_registro=" + id_registro + ";");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                cantidad = resultSet.getFloat("cantidad");
+            }
+            return cantidad;
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int cancelarOrden(int id_registro) {
+        try {
+            sentenciaSql = String.format("DELETE FROM public.detalle_produccion\n"
+                    + "	WHERE codigo_registro=" + id_registro + ";");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+
     }
 
 }
