@@ -349,19 +349,20 @@ public class ProduccionMBean implements Serializable {
                                 for (ArticuloFormula articulo : listaMateriaPrima) {
                                     listaMovimientos.add(new FormulaProduccion(articulo.getDescripcion(), articulo.getCantidad() * articulo.getCosto(), articulo.getIdSubcuenta()));
                                     materiales += articulo.getCantidad() * articulo.getCosto();
+                                    ordenDao.extraccionMateriales(articulo.getId(), articulo.getCantidad());
                                 }
                                 listaMateriaPrima = new ArrayList<>();
                             }
                             for (ArticuloFormula adicionales : listaAdicionales) {
                                 listaMovimientos.add(new FormulaProduccion(adicionales.getDescripcion(), adicionales.getCantidad() * adicionales.getCosto(), adicionales.getIdSubcuenta()));
                                 materiales += adicionales.getCantidad() * adicionales.getCosto();
+                                ordenDao.extraccionMateriales(adicionales.getId(), adicionales.getCantidad());
                             }
-
                             ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales);
+
                         }
-                    } else {
-                        showWarn("No se pudo generar la Orden de producción");
-                    }
+                    } 
+                    ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
                     showInfo("Orden de producción registrada");
                     vaciar();
                 } else {

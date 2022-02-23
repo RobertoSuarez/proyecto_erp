@@ -12,6 +12,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -45,6 +46,7 @@ public class SolicitudOrdenMB implements Serializable {
     public void init() {
         listaProductOrden = solicitudDAO.getAticulosOrden();
         aleatorioIdenti();
+        solicitudOrden.setFecha_orden(new Date());
     }
 
     public SolicitudOrden getSolicitudOrden() {
@@ -95,12 +97,13 @@ public class SolicitudOrdenMB implements Serializable {
                 showWarn("Ingrese una fecha de finalización");
             } else if ("".equals(solicitudOrden.getDescripcion())) {
                 showWarn("Ingrese una descripción");
-            }else if(!verificaLista()){
+            } else if (!verificaLista()) {
                 showWarn("Ingrese un producto a la solicitud");
-            }
-            else if(!verificaCampos()){
+            } else if (!verificaCampos()) {
                 showWarn("Ingrese valores en cantidad y unidad de medida");
-            }else {
+            } else if (solicitudOrden.getFecha_fin().before(solicitudOrden.getFecha_orden())) {
+                showWarn("La fecha no puede ser anterior a la fecha de inicio de la Solicitud");
+            } else {
                 solicitudOrden.setEstado('P');
                 if (solicitudDAO.insertarSolicitud(solicitudOrden) > 0) {
                     int codigo = solicitudDAO.idSolicitud();
@@ -143,10 +146,11 @@ public class SolicitudOrdenMB implements Serializable {
         }
         return verifica;
     }
-    public boolean verificaLista(){
-        if(listaOrdenConfirmados.size()>0){
+
+    public boolean verificaLista() {
+        if (listaOrdenConfirmados.size() > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

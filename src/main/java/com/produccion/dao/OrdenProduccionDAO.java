@@ -539,4 +539,29 @@ public class OrdenProduccionDAO {
 
     }
 
+    public int extraccionMateriales(int id_producto,float cantidad) {
+        try {
+            sentenciaSql = String.format("UPDATE public.articulos\n"
+                    + "	SET cantidad=(select cantidad as cantidad from articulos where id="+id_producto+")-"+cantidad+"\n"
+                    + "	WHERE id="+id_producto+";");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+    public int ingresoMateriales(int id_producto,float cantidad) {
+        try {
+            sentenciaSql = String.format("UPDATE public.articulos\n"
+                    + "	SET cantidad=(select cantidad as cantidad from articulos where id="+id_producto+")+"+cantidad+"\n"
+                    + "	WHERE id="+id_producto+";");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
 }
