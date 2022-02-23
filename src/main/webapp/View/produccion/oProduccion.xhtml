@@ -274,9 +274,6 @@
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
-
-
-
                         </p:dialog>
                         <p:dialog header="Consumo de materia prima" showEffect="fade" modal="true"
                                   widgetVar="materiaprima" responsive="true" width="80%"
@@ -385,7 +382,7 @@
                                                                      actionListener="#{produccionMBean.llenarMaterialesAdicionales()}" 
                                                                      styleClass="ui-button-primary"
                                                                      process="@this"
-                                                                     update=":form:costoMateriaPrima,:form:growl,:form:valoresTotales"
+                                                                     update=":form:costoMateriaPrima,:form:growl,:form:valoresTotales,:form:MaterialesProducto"
                                                                      oncomplete="PF('materiaprima').hide()"/>
                                                 </div>
                                                 <div class="p-col-2">
@@ -455,7 +452,7 @@
                                                                      icon="pi pi-check" 
                                                                      actionListener="#{produccionMBean.llenaMaterialiesConfirmados()}" 
                                                                      styleClass="ui-button-primary"
-                                                                     update=":form:MaterialesProducto,:form:growl"
+                                                                     update=":form:MaterialesProducto,:form:growl,:form:materiaPrimaAdicional"
                                                                      process=" @this"
                                                                      oncomplete="PF('aggproducto').hide()"/>
                                                 </div>
@@ -543,8 +540,10 @@
                                                  icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
                             </div>
                             <div class="p-col-1">
-                                <p:button style="margin-right: 6px;margin-top: 15px;" value="Cancelar" styleClass="ui-button-danger" icon="pi pi-times"
-                                          outcome="listaOrdenProduccion.xhtml"/>
+                                <p:commandButton style="margin-right: 6px;margin-top: 15px;" value="Cancelar " actionListener="#{produccionMBean.cancelarOrden()}"
+                                                 process="ordenProduccion @this"
+                                                 update="@form"
+                                                 styleClass="ui-button-danger" icon="pi pi-times"></p:commandButton>
                             </div>
                         </div>
                     </div>
