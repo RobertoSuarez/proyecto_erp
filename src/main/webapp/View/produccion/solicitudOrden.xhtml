@@ -60,21 +60,24 @@
                             <p:outputPanel class="ui-fluid">
                                 <p:outputPanel>
                                     <div class="p-grid p-justify-around">
-                                        <div class="p-col-1 p-md-1 p-lg-5">
-                                            <div class="p-grid">
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Nombre Producto:"></p:outputLabel>
-                                                    <p:inputText value="" placeholder="Buscar"></p:inputText>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-12">
-                                                    <p:dataTable id="dtArticuloSolicitud" reflow="true"
+                                                    <p:dataTable id="dtArticuloSolicitud" reflow="true" widgetVar="articulosSolicitudB"
                                                                  editInitEvent="dblclick" editMode="cell"
                                                                  value="#{solicitudOrdenMB.listaProductOrden}" 
                                                                  var="articuloSolicitud" paginatorPosition="bottom" rows="4">
+                                                        <f:facet name="header">
+                                                                <div class="p-grid">
+                                                                    <div class="p-col-4">
+                                                                        <p:outputLabel value="Nombre Producto:"></p:outputLabel>
+                                                                        <p:inputText id="globalFilter"
+                                                                                     onkeyup="PF('articulosSolicitudB').filter()"
+                                                                                     placeholder="Buscar"></p:inputText>
+                                                                    </div>
+                                                                </div>
+                                                        </f:facet>
 
                                                         <p:column headerText="Acciones">
                                                             <p:selectBooleanCheckbox value="#{articuloSolicitud.verifica}">
@@ -87,8 +90,12 @@
                                                             <h:outputText value="#{articuloSolicitud.codigoProducto}" />
                                                         </p:column>
 
-                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <p:column headerText="Nombre" 
+                                                                  sortBy="#{articuloSolicitud.nombreProducto}"
+                                                                  filterBy="#{articuloSolicitud.nombreProducto}"
+                                                                  filterStyle="display : none">
                                                             <h:outputText value="#{articuloSolicitud.nombreProducto}" />
+                                                            <p:skeleton rendered="#{solicitudOrdenMB.listaProductOrden == null}"></p:skeleton>
                                                         </p:column>
 
                                                         <p:column headerText="Descripción" filterStyle="display : none">
@@ -158,7 +165,7 @@
                                     </f:facet>
                                     <f:facet name="input">
                                         <p:inputNumber value="#{orden.cantidad}" 
-                                                     style="width:100%">
+                                                       style="width:100%">
                                             <p:ajax event="blur" update=":form:listaProductos"/>
                                         </p:inputNumber>
                                     </f:facet>
