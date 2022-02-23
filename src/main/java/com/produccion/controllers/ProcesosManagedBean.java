@@ -8,20 +8,18 @@ package com.produccion.controllers;
 import com.produccion.dao.ProcesoProduccionDAO;
 import com.produccion.models.ProcesoProduccion;
 import com.produccion.models.SubProceso;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -41,6 +39,7 @@ public class ProcesosManagedBean implements Serializable {
     TreeNode documents;
     SubProceso sProceso;
     TreeNode document1;
+    ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
     public ProcesosManagedBean() {
         procesoProduccionDAO = new ProcesoProduccionDAO();
@@ -92,9 +91,11 @@ public class ProcesosManagedBean implements Serializable {
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
 
                 PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
+                externalContext.redirect("/proyecto_erp/View/produccion/procesoProduccion.xhtml");
+
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));

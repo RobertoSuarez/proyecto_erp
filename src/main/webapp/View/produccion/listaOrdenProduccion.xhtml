@@ -24,8 +24,9 @@
                             </p:toolbarGroup>
                         </p:toolbar>
                         <!-- Tabla de datos -->
-                        <p:dataTable editable="true" reflow="true"
-                                     editInitEvent="dblclick" editMode="cell"
+                        <p:dataTable editable="true" reflow="true" paginator="true" 
+                                     rows="4" 
+                                     paginatorPosition="bottom"
                                      value="#{ordenProduccionMB.listaOrden}" var="ordenProduccion">
                             <f:facet name="header">
                                 <div class="p-d-flex p-jc-between p-ai-center">

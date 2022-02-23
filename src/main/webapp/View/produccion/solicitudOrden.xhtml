@@ -157,10 +157,10 @@
                                         <h:outputText value="#{orden.cantidad}"/>
                                     </f:facet>
                                     <f:facet name="input">
-                                        <p:inputText value="#{orden.cantidad}" 
+                                        <p:inputNumber value="#{orden.cantidad}" 
                                                      style="width:100%">
                                             <p:ajax event="blur" update=":form:listaProductos"/>
-                                        </p:inputText>
+                                        </p:inputNumber>
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>

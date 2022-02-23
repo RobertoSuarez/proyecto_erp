@@ -26,7 +26,7 @@ public class OrdenProduccionDAO {
 
     public List<OrdenProduccion> getListaOrden() {
         List<OrdenProduccion> ordenProduccion = new ArrayList<>();
-        sentenciaSql = String.format("select * from orden_produccion;");
+        sentenciaSql = String.format("select * from orden_produccion order by estado;");
         try {
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
