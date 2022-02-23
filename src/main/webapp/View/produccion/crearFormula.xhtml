@@ -202,21 +202,25 @@ and open the template in the editor.
                         <p:outputPanel class="ui-fluid">
                             <p:outputPanel>
                                 <div class="p-grid p-justify-around">
-                                    <div class="p-col-1 p-md-1 p-lg-5">
-                                        <div class="p-grid">
-                                            <div class="p-col-12">
-                                                <p:outputLabel value="Producto:"></p:outputLabel>
-                                                <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="p-col-11">
                                         <div class="p-grid">
                                             <div class="p-col-12">
-                                                <p:dataTable id="dtBuscarMateriaPrima" reflow="true" paginator="true" rows="4" 
+                                                <p:dataTable id="dtBuscarMateriaPrima" reflow="true" 
+                                                             widgetVar="TablaBuscarProducto" paginator="true" rows="4" 
                                                              rowSelectMode="add" paginatorPosition="bottom" 
                                                              editInitEvent="dblclick" editMode="cell"
                                                              value="#{formulaMBeans.productoTerminado}" var="TablaBuscarMateriaPrima">
+                                                    <f:facet name="header">
+                                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                                            <div class="p-col-6">
+                                                                <p:outputLabel value="Producto:"></p:outputLabel>
+                                                                <p:inputText 
+                                                                    id="globalFilter"
+                                                                    onkeyup="PF('TablaBuscarProducto').filter()"
+                                                                    placeholder="Buscar mi producto" ></p:inputText>
+                                                            </div>
+                                                        </div>
+                                                    </f:facet>
                                                     <p:column headerText="Acciones">
                                                         <p:commandButton
                                                             class="rounded-button"
@@ -231,8 +235,12 @@ and open the template in the editor.
                                                         <h:outputText value="#{TablaBuscarMateriaPrima.codigo_producto}" />
                                                     </p:column>
 
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <p:column headerText="Nombre" 
+                                                              sortBy="#{TablaBuscarMateriaPrima.nombre}"
+                                                              filterBy="#{TablaBuscarMateriaPrima.nombre}"
+                                                              filterStyle="display : none">
                                                         <h:outputText value="#{TablaBuscarMateriaPrima.nombre}" />
+                                                        <p:skeleton rendered="#{formulaMBeans.formulaProduccion == null}"></p:skeleton>
                                                     </p:column>
 
                                                     <p:column headerText="Descripción" filterStyle="display : none">
@@ -269,20 +277,23 @@ and open the template in the editor.
                         <p:outputPanel id="materiaPrima" class="ui-fluid">
                             <p:outputPanel>
                                 <div class="p-grid p-justify-around">
-                                    <div class="p-col-1 p-md-1 p-lg-5">
-                                        <div class="p-grid">
-                                            <div class="p-col-12">
-                                                <p:outputLabel value="Materia Prima:"></p:outputLabel>
-                                                <p:inputText value="" placeholder="Buscar" readonly="false"></p:inputText>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="p-col-11">
                                         <div class="p-grid">
                                             <div class="p-col-12">
                                                 <p:dataTable id="dtMateriaPrimaPrin" editable="true" reflow="true"
+                                                              widgetVar="TablaMateriaBuscar"
                                                              editInitEvent="dblclick" editMode="cell"
                                                              value="#{formulaMBeans.productoTerminado}" var="TablaMateriaPrima">
+                                                    <f:facet name="header">
+                                                        <div class="p-grid">
+                                                            <div class="p-col-6">
+                                                                <p:outputLabel value="Materia Prima:"></p:outputLabel>
+                                                                <p:inputText id="globalFilter"
+                                                                             onkeyup="PF('TablaMateriaBuscar').filter()"
+                                                                             placeholder="Buscar" ></p:inputText>
+                                                            </div>
+                                                        </div>
+                                                    </f:facet>
                                                     <p:column headerText="Acciones">
                                                         <p:selectBooleanCheckbox value="#{TablaMateriaPrima.verifica}">
                                                             <p:ajax listener="#{formulaMBeans.addMateriales2(TablaMateriaPrima)}" 
@@ -296,9 +307,12 @@ and open the template in the editor.
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
 
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <p:column headerText="Nombre" 
+                                                              sortBy="#{TablaMateriaPrima.nombre}"
+                                                              filterBy="#{TablaMateriaPrima.nombre}"
+                                                              filterStyle="display : none">
                                                         <h:outputText value="#{TablaMateriaPrima.nombre}" />
-                                                        <p:skeleton rendered="#"></p:skeleton>
+                                                        <p:skeleton rendered="#{formulaMBeans.formulaProduccion == null}"></p:skeleton>
                                                     </p:column>
 
                                                     <p:column headerText="Descripción" filterStyle="display : none">

@@ -185,7 +185,8 @@
 
                         <!-- Tabla principal de formula -->
                         <p:dataTable 
-                            id="dtformulaPrin" 
+                            id="dtformulaPrin"
+                            widgetVar="TablaformulaB"
                             reflow="true" 
                             paginator="true" 
                             rows="4" 
@@ -203,7 +204,8 @@
                                     <span class="filter-container ui-input-icon-left">
                                         <i class="pi pi-search"></i>
                                         <p:inputText 
-                                            id="globalFilter" 
+                                            id="globalFilter"
+                                            onkeyup="PF('TablaformulaB').filter()"
                                             placeholder="Buscar"/>
                                     </span>
                                 </div>
@@ -214,9 +216,13 @@
                                     value="#{Tablaformula.codigo_formula}"/>
                             </p:column>
                             <p:column 
-                                headerText="Nombre Fórmula" >
+                                headerText="Nombre Fórmula" 
+                                sortBy="#{Tablaformula.nombre_formula}"
+                                filterBy="#{Tablaformula.nombre_formula}"
+                                filterStyle="display : none">
                                 <h:outputText 
                                     value="#{Tablaformula.nombre_formula}"/>
+                                <p:skeleton rendered="#{formulaMB.formulaProduccion == null}"></p:skeleton>
                             </p:column>
                             <p:column headerText="Descripción" >
                                 <h:outputText 

@@ -442,7 +442,8 @@
                         </p:confirmDialog>
 
                         <!-- Tabla de datos -->
-                        <p:treeTable id="dtProcesoPrin" 
+                        <p:treeTable id="dtProcesoPrin"
+                                     widgetVar="documentB"
                                      value="#{procesoMB.root}" 
                                      var="document" 
                                      paginator="true" 
@@ -464,17 +465,24 @@
                                           font-size: 24px">Procesos</span>
                                     <span class="filter-container ui-input-icon-left">
                                         <i class="pi pi-search"></i>
-                                        <p:inputText id="globalFilter" placeholder="Buscar"/>
+                                        <p:inputText 
+                                            id="globalFilter"
+                                            onkeyup="PF('documentB').filter()"
+                                            placeholder="Buscar"/>
                                     </span>
                                 </div>
                             </f:facet>
                             <p:column headerText="Código principal">
                                 <h:outputText value="#{document.codigo_proceso}"/>
                             </p:column>
-                            <p:column headerText="Nombre">
+                            <p:column headerText="Nombre"
+                                      sortBy="#{document.nombre}"
+                                      filterBy="#{document.nombre}"
+                                      filterStyle="display : none">
                                 <p:cellEditor>
                                     <f:facet name="output">
                                         <h:outputText value="#{document.nombre}"/>
+                                        <p:skeleton rendered="#{procesoMB.procesoProduccion == null}"></p:skeleton>
                                     </f:facet>
                                     <f:facet name="input">
                                         <p:inputText value="#{document.nombre}" 
