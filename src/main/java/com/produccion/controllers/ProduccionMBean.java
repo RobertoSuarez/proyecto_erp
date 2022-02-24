@@ -104,9 +104,15 @@ public class ProduccionMBean implements Serializable {
     }
 
     public int idOrden() {
-        Map params = externalContext.getRequestParameterMap();
-        Integer categorySelected = new Integer((String) params.get("orden"));
-        return categorySelected;
+        try {
+            Map params = externalContext.getRequestParameterMap();
+            params = externalContext.getRequestParameterMap();
+            Integer categorySelected = new Integer((String) params.get("orden"));
+            return categorySelected;
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+
     }
 
     public OrdenTrabajo getOrdenTrabajo() {
