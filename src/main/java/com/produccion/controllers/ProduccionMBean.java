@@ -312,6 +312,8 @@ public class ProduccionMBean implements Serializable {
             showWarn("Ingrese una descripción");
         } else if (verificaCampos()) {
             showWarn("Debe de ingresar valores en la materia prima que agrego.");
+        } else if (!verificarMateriales()) {
+            showWarn("No se puede inivciar la producción por falta de materiales en el inventario.");
         } else {
             if (ordenDao.registrarProduccion(ordenTrabajo) > 0) {
                 if (ordenDao.actualizarOrden(ordenTrabajo.getCodigo_registro()) > 0) {
@@ -360,7 +362,7 @@ public class ProduccionMBean implements Serializable {
                         }
                     }
                 }
-                ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(),ordenTrabajo.getCantidad());
+                ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
                 showInfo("Orden de producción registrada");
                 vaciar();
             } else {
@@ -373,6 +375,8 @@ public class ProduccionMBean implements Serializable {
         int orden = ordenTrabajo.getCodigo_orden();
         ordenTrabajo = new OrdenTrabajo();
         ordenDao = new OrdenProduccionDAO();
+        ordenAsiento = new SolicitudOrden();
+        materialesFormula = new FormulaMateriales();
 
         listaCostos = new ArrayList<>();
         listaProducto = new ArrayList<>();
@@ -382,19 +386,16 @@ public class ProduccionMBean implements Serializable {
         detalleListaMateriaPrima = new ArrayList<>();
         listaCostosDirectos = new ArrayList<>();
         listaCostosIndirectos = new ArrayList<>();
-        listaMaterialesConfirmados = new ArrayList<>();
+        listaMovimientos = new ArrayList<>();
+        listaCostoProduccion = new ArrayList<>();
+        listaCformula = new ArrayList<>();
         materiaPrima = new ArrayList<>();
+        listaMateriaPrimaAdicional = new ArrayList<>();
+        listaMaterialesConfirmados = new ArrayList<>();
+        listaAdicionales = new ArrayList<>();
         ordenTrabajo.setCodigo_orden(orden);
         if (ordenDao.verificaOrden(ordenTrabajo.getCodigo_orden())) {
             showInfo("Orden de producción Finaliza, regrese a las listas de ordenes de trabajo.");
-            Timer timer = new Timer();
-            TimerTask tarea = new TimerTask() {
-                @Override
-                public void run() {
-                    redireccion();
-                }
-            };
-            timer.schedule(tarea, 5000);
             ordenDao = new OrdenProduccionDAO();
         } else {
             listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden());
@@ -417,14 +418,6 @@ public class ProduccionMBean implements Serializable {
 
     public void showError(String message) {
         addMessage(FacesMessage.SEVERITY_WARN, "Error", message);
-    }
-
-    private void redireccion() {
-        try {
-            externalContext.redirect("/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml");
-        } catch (IOException ex) {
-            Logger.getLogger(ProduccionMBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void addMateriales2(FormulaProduccion producto) {
@@ -456,6 +449,7 @@ public class ProduccionMBean implements Serializable {
     }
 
     public void llenaMaterialiesConfirmados() {
+        materiaPrima = ordenDao.getArticulos();
         for (FormulaMateriales materiales : listaMateriaPrimaAdicional) {
             if (materiales != null) {
                 if (duplicidadDatos(materiales)) {
@@ -467,6 +461,7 @@ public class ProduccionMBean implements Serializable {
                 }
             }
         }
+
     }
 
     public boolean duplicidadDatos(FormulaMateriales datos) {
@@ -566,6 +561,18 @@ public class ProduccionMBean implements Serializable {
     public void cancelarOrden() throws IOException {
         ordenDao.cancelarOrden(ordenTrabajo.getCodigo_registro());
         externalContext.redirect("/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml");
+    }
+
+    public boolean verificarMateriales() {
+        boolean verifica = true;
+        for (FormulaProduccion material : materiaPrima) {
+            for (ArticuloFormula articulos : detalleListaMateriaPrima) {
+                if (material.getCantidad() < articulos.getCantidad()) {
+                    verifica = false;
+                }
+            }
+        }
+        return verifica;
     }
 
 }
