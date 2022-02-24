@@ -106,12 +106,14 @@ public class EstadoResultadoManageBean implements Serializable {
                         dateFormat.format(fecha2));
 //Resultado total
         total = ingresos - (ventas + egresos);
+
+        System.out.println(total + "-" + ingresos + "-" + ventas);
         infomacion = estadoResultadoDAO.informacion(dateFormat.format(fecha), dateFormat.format(fecha2));
         System.out.println("Inicio");
         for (int x = 0; x < infomacion.size(); x++) {
             System.out.println(infomacion.get(x));
         }
-        System.out.println("Fin");
+        System.out.println(total + "-" + ingresos + "-" + ventas);
 
     }
 
@@ -153,10 +155,14 @@ public class EstadoResultadoManageBean implements Serializable {
                         dateFormat.format(fecha2));
 //Resultado total 
         total = ingresos - (ventas + egresos);
+
+        System.out.println(total + "-" + ingresos + "-" + ventas);
         infomacion = estadoResultadoDAO.informacion(dateFormat.format(fecha), dateFormat.format(fecha2));
         for (int x = 0; x < infomacion.size(); x++) {
             System.out.println(infomacion.get(x));
         }
+
+        System.out.println(total + "-" + ingresos + "-" + ventas);
 
     }
 
@@ -180,7 +186,7 @@ public class EstadoResultadoManageBean implements Serializable {
             parametros.put("fecha", dateFormat.format(fecha));
             parametros.put("fecha2", dateFormat.format(fecha2));
             parametros.put("nombreEmpresa", empresa);
-           // parametros.put("sumTotal", total);
+            parametros.put("sumTotal", total);
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
                     .getCurrentInstance()
