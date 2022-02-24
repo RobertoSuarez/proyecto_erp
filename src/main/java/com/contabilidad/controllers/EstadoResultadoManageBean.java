@@ -42,6 +42,8 @@ public class EstadoResultadoManageBean implements Serializable {
     private List<EstadoResultado> estadoResultadoEg;
     private List<EstadoResultado> estadoResultadoVen;
     private EstadoResultadoDAO estadoResultadoDAO;
+    private ArrayList<EstadoResultado> informacionER;
+    private List<EstadoResultado> infomacion;
     private SimpleDateFormat dateFormat;
     private Date fecha;
     private Date fecha2;
@@ -60,6 +62,8 @@ public class EstadoResultadoManageBean implements Serializable {
         estadoResultadoEg = new ArrayList<>();
         estadoResultadoIn = new ArrayList<>();
         estadoResultadoDAO = new EstadoResultadoDAO();
+        infomacion = new ArrayList<>();
+
     }
 
     /**
@@ -102,6 +106,13 @@ public class EstadoResultadoManageBean implements Serializable {
                         dateFormat.format(fecha2));
 //Resultado total
         total = ingresos - (ventas + egresos);
+        infomacion = estadoResultadoDAO.informacion(dateFormat.format(fecha), dateFormat.format(fecha2));
+        System.out.println("Inicio");
+        for (int x = 0; x < infomacion.size(); x++) {
+            System.out.println(infomacion.get(x));
+        }
+        System.out.println("Fin");
+
     }
 
     /**
@@ -142,6 +153,11 @@ public class EstadoResultadoManageBean implements Serializable {
                         dateFormat.format(fecha2));
 //Resultado total 
         total = ingresos - (ventas + egresos);
+        infomacion = estadoResultadoDAO.informacion(dateFormat.format(fecha), dateFormat.format(fecha2));
+        for (int x = 0; x < infomacion.size(); x++) {
+            System.out.println(infomacion.get(x));
+        }
+
     }
 
     public void exportpdf() throws IOException, JRException {
@@ -162,20 +178,20 @@ public class EstadoResultadoManageBean implements Serializable {
             dateFormat = new SimpleDateFormat("dd/MM/yyyy", new Locale("es_ES"));
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("fecha", dateFormat.format(fecha));
-            parametros.put("sumPasivoPatrimonio", ingresos + "");
+            parametros.put("fecha2", dateFormat.format(fecha2));
             parametros.put("nombreEmpresa", empresa);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/EstadoResultado.jasper"));
+                    .getRealPath("/PlantillasReportes/EstadoResultados.jasper"));
 
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrintIn = JasperFillManager.fillReport(
                     filetext.getPath(),
                     parametros,
-                    new JRBeanCollectionDataSource(this.estadoResultadoIn)
+                    new JRBeanCollectionDataSource(this.infomacion)
             );
 
             // exportamos a pdf.
@@ -195,6 +211,14 @@ public class EstadoResultadoManageBean implements Serializable {
 
     public boolean getBold(String cuenta) {
         return cuenta.split(" ")[0].length() <= 5;
+    }
+
+    public List<EstadoResultado> getInfomacion() {
+        return infomacion;
+    }
+
+    public void setInfomacion(List<EstadoResultado> infomacion) {
+        this.infomacion = infomacion;
     }
 
     public Date getFecha() {
@@ -267,6 +291,14 @@ public class EstadoResultadoManageBean implements Serializable {
 
     public void setEstadoResultadoVen(List<EstadoResultado> estadoResultadoVen) {
         this.estadoResultadoVen = estadoResultadoVen;
+    }
+
+    public ArrayList<EstadoResultado> getInformacionER() {
+        return informacionER;
+    }
+
+    public void setInformacionER(ArrayList<EstadoResultado> informacionER) {
+        this.informacionER = informacionER;
     }
 
     public double getTotal() {

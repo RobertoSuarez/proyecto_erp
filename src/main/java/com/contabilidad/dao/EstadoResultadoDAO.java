@@ -39,6 +39,33 @@ public class EstadoResultadoDAO {
         conexion = new Conexion();
         gson = new Gson();
     }
+
+    public List<EstadoResultado> informacion(String fecha, String fecha2) {
+        this.fecha = fecha;
+        this.fecha2 = fecha2;
+        List<EstadoResultado> estadoResultado = new ArrayList<>();
+        List<EstadoResultado> estadoResultadoIng = generateEstadoResultadoEg(fecha, fecha2);
+        List<EstadoResultado> estadoResultadoVen = generateEstadoResultante(fecha, fecha2);
+        List<EstadoResultado> estadoResultadoCos = estadoResultadoVen(fecha, fecha2);
+        estadoResultadoIng.forEach(g -> {
+            estadoResultado.add(g);
+
+            estadoResultadoCos.forEach(cos -> {
+                if (cos.getParent() == g.getId()) {
+                    estadoResultado.add(cos);
+
+                    estadoResultadoVen.forEach(ven -> {
+                        if (ven.getParent() == cos.getId()) {
+                            estadoResultado.add(ven);
+                        }
+                    });
+
+                }
+
+            });
+        });
+        return estadoResultado;
+    }
 //------------------------SUMA INGRESOS---------------------------\\
 
     /**
