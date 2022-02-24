@@ -180,7 +180,7 @@ public class EstadoResultadoManageBean implements Serializable {
             parametros.put("fecha", dateFormat.format(fecha));
             parametros.put("fecha2", dateFormat.format(fecha2));
             parametros.put("nombreEmpresa", empresa);
-
+           // parametros.put("sumTotal", total);
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
                     .getCurrentInstance()
