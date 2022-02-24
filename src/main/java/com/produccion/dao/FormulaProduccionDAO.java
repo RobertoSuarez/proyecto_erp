@@ -2,6 +2,7 @@ package com.produccion.dao;
 
 import com.global.config.Conexion;
 import com.produccion.models.ArticuloFormula;
+import com.produccion.models.FormulaMateriales;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.SubProceso;
 import java.sql.ResultSet;
@@ -52,6 +53,20 @@ public class FormulaProduccionDAO {
             conexion.desconectar();
         }
         return formula;
+    }
+    public int InsertarMateriales(FormulaMateriales materiales,int id) {
+        try {
+            String consulta = "INSERT INTO public.detalle_formula(\n"
+                    + "	codigo_formula, cantidad_unitaria, unidad_medida, precio, codigo_producto,codigo_subproceso,\"cantidadUnidad\")\n"
+                    + "	VALUES (" + id + ", " + materiales.getCantidad() + ", '" + materiales.getUnidadMedida() + "',"
+                    + materiales.getPrecio() + ", " + materiales.getCodigoProducto() + ", " + materiales.getCodigoSuproceso() + ", " + materiales.getCantidadUnidad() + ");";
+            return conexion.insertar(consulta);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+
     }
 
     public List<SubProceso> getSubProceso(int id) {
@@ -125,6 +140,25 @@ public class FormulaProduccionDAO {
                     + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ", " + f.getTiempoFormula() + ", " + f.getTiempoUnidad() + ", " + f.getMODUnidad() + ", " + f.getCIFUnidad() + ");";
             return conexion.insertar(cadena);
         } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int idFormula() {
+        int id=0;
+        String sqlSentencia = "select max(codigo_formula)as id from formula";
+
+        try {
+
+            resultSet = conexion.ejecutarSql(sqlSentencia);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                id=resultSet.getInt("id");
+            }
+            return id;
+        } catch (SQLException e) {
             return -1;
         } finally {
             conexion.desconectar();
