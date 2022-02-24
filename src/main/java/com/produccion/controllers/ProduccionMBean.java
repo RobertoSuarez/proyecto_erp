@@ -315,12 +315,10 @@ public class ProduccionMBean implements Serializable {
         } else {
             if (ordenDao.registrarProduccion(ordenTrabajo) > 0) {
                 if (ordenDao.actualizarOrden(ordenTrabajo.getCodigo_registro()) > 0) {
-
                     if (ordenDao.verificaOrden(ordenTrabajo.getCodigo_orden())) {
                         if (ordenDao.actualizaEstado(ordenTrabajo.getCodigo_orden()) > 0) {
                             float materiales = 0, indirectos = 0, directos = 0;
                             listaAdicionales = ordenDao.getArticuloAdicionales(ordenTrabajo.getCodigo_orden());
-
                             ordenAsiento = ordenDao.calculaProduccion(ordenTrabajo.getCodigo_orden());
                             ordenAsiento = ordenDao.movimientosProduccion(ordenTrabajo.getCodigo_orden());
                             listaCostoProduccion = ordenDao.listaCostoProduccion(ordenTrabajo.getCodigo_orden());
@@ -359,22 +357,16 @@ public class ProduccionMBean implements Serializable {
                                 ordenDao.extraccionMateriales(adicionales.getId(), adicionales.getCantidad());
                             }
                             ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales);
-
                         }
-                    } 
-                    ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
-                    showInfo("Orden de producción registrada");
-                    vaciar();
-                } else {
-                    showWarn("No se pudo generar la Orden de producción");
+                    }
                 }
-
+                ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(),ordenTrabajo.getCantidad());
+                showInfo("Orden de producción registrada");
+                vaciar();
             } else {
                 showWarn("No se pudo generar la Orden de producción");
             }
-
         }
-
     }
 
     public void vaciar() {
@@ -457,7 +449,6 @@ public class ProduccionMBean implements Serializable {
                 if (lista.getCodigoProducto() == buscar.getCodigoProducto()) {
                     listaMateriaPrimaAdicional.remove(lista);
                 }
-
             }
             return null;
         }
@@ -489,15 +480,6 @@ public class ProduccionMBean implements Serializable {
     }
 
     public void deleteFila(FormulaMateriales producto) {
-//        for (ArticuloFormula eliminarArticulo : detalleListaMateriaPrima) {
-//            if (producto.getCodigoProducto() == eliminarArticulo.getId()) {
-//                detalleListaMateriaPrima.remove(eliminarArticulo);
-//                materiaPrimaCosto -= eliminarArticulo.getTotal();
-//            }
-//        }
-//        ordenTrabajo.setTotalMateria(materiaPrimaCosto);
-//        ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
-//        ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
         listaMaterialesConfirmados.remove(producto);
 
     }
