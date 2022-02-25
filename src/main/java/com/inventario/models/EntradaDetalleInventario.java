@@ -4,13 +4,13 @@
  */
 package com.inventario.models;
 
+import com.inventario.DAO.ArticulosInventarioDAO;
+
 /**
  *
  * @author angul
  */
 public class EntradaDetalleInventario {
-
-
 
     private int idEntradaDetalle;
 
@@ -28,9 +28,25 @@ public class EntradaDetalleInventario {
 
     private int subtotal;
 
-    private ArticulosInventario articulosInventario;
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
 
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
 
+    public String getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
+    }
+    private String nombreProducto;
+    private String nombreCategoria;
+
+    private ArticulosInventario articuloInventario;
 
     public EntradaDetalleInventario() {
     }
@@ -44,9 +60,9 @@ public class EntradaDetalleInventario {
         this.iva = iva;
         this.ice = ice;
         this.subtotal = subtotal;
-        this.articulosInventario = null;
+        this.articuloInventario = null;
     }
-    
+
     public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, int cant, int costo, int iva, int ice, int subtotal, ArticulosInventario articulosInventario) {
         this.idEntradaDetalle = idEntradaDetalle;
         this.idEntrada = idEntrada;
@@ -56,7 +72,7 @@ public class EntradaDetalleInventario {
         this.iva = iva;
         this.ice = ice;
         this.subtotal = subtotal;
-        this.articulosInventario = articulosInventario;
+        this.articuloInventario = articulosInventario;
     }
 
     public int getIdEntradaDetalle() {
@@ -123,18 +139,13 @@ public class EntradaDetalleInventario {
         this.subtotal = subtotal;
     }
 
-    public ArticulosInventario getArticulosInventario() {
-        return articulosInventario;
+    public ArticulosInventario getArticuloInventario() {
+
+        return this.articuloInventario;
     }
 
-    public void setArticulosInventario(ArticulosInventario articulosInventario) {
-        this.articulosInventario = articulosInventario;
+    public void setArticuloInventario(ArticulosInventario articuloInventario) {
+        this.articuloInventario = articuloInventario;
     }
-
-
-
-  
-
-    
 
 }
