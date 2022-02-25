@@ -383,7 +383,6 @@ public class ProduccionMBean implements Serializable {
         ordenDao = new OrdenProduccionDAO();
         ordenAsiento = new SolicitudOrden();
         materialesFormula = new FormulaMateriales();
-
         listaCostos = new ArrayList<>();
         listaProducto = new ArrayList<>();
         listaFormula = new ArrayList<>();
@@ -459,9 +458,7 @@ public class ProduccionMBean implements Serializable {
         for (FormulaMateriales materiales : listaMateriaPrimaAdicional) {
             if (materiales != null) {
                 if (duplicidadDatos(materiales)) {
-                    FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "",
-                                    "El producto ya se encuentra agregado"));
+                    showWarn("El producto ya se encuentra agregado");
                 } else {
                     listaMaterialesConfirmados.add(materiales);
                 }
@@ -482,7 +479,6 @@ public class ProduccionMBean implements Serializable {
 
     public void deleteFila(FormulaMateriales producto) {
         listaMaterialesConfirmados.remove(producto);
-
     }
 
     public boolean verificaCampos() {
@@ -496,73 +492,123 @@ public class ProduccionMBean implements Serializable {
         return verifica;
     }
 
-    public void llenarMaterialesAdicionales() {
-        boolean verifica = false;
-        for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
-            for (ArticuloFormula listaexistencia : detalleListaMateriaPrima) {
-                if (materiaAdicional.getCodigoProducto() == listaexistencia.getId()) {
-                    verifica = true;
-                    break;
-                }
-            }
-        }
+    public void llenaAdicionales() {
+        float valor;
         if (!verificaCampos()) {
-            if (!verifica) {
-                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
-                    detalleListaMateriaPrima.add(new ArticuloFormula(materiaAdicional.getCodigoProducto(), materiaAdicional.getNombre(), materiaAdicional.getDescripcion(),
-                            materiaAdicional.getPrecio(), materiaAdicional.getCantidad(), materiaAdicional.getCantidad() * materiaAdicional.getPrecio()));
-                    materiaPrimaCosto += materiaAdicional.getCantidad() * materiaAdicional.getPrecio();
-                }
-                ordenTrabajo.setTotalMateria(materiaPrimaCosto);
-                ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
-                ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
-                float valor;
-                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
-                    valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
-                    if (valor > 0) {
-                        valor += materiaAdicional.getCantidad();
-                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
-                        showInfo("Productos agregados con exito.");
-                    } else {
-                        ordenDao.registrarDetalleProduccion(materiaAdicional, ordenTrabajo.getCodigo_registro());
-                        showInfo("Productos agregados con exito.");
-                    }
-                }
-                listaMaterialesConfirmados = new ArrayList<>();
-            } else {
-                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
-                    for (ArticuloFormula listaexistencia : detalleListaMateriaPrima) {
-                        if (materiaAdicional.getCodigoProducto() == listaexistencia.getId()) {
-                            listaexistencia.setCantidad(materiaAdicional.getCantidad() + listaexistencia.getCantidad());
-                            listaexistencia.setTotal(listaexistencia.getCantidad() * listaexistencia.getCosto());
-                            materiaPrimaCosto += materiaAdicional.getCantidad() * listaexistencia.getCosto();
+            for (int j = 0; j < detalleListaMateriaPrima.size(); j++) {
+                for (int i = 0; i < listaMaterialesConfirmados.size(); i++) {
+
+                    if (listaMaterialesConfirmados.get(i).getCodigoProducto() == detalleListaMateriaPrima.get(j).getId()) {
+                        detalleListaMateriaPrima.get(j).setCantidad(listaMaterialesConfirmados.get(i).getCantidad() + detalleListaMateriaPrima.get(j).getCantidad());
+                        detalleListaMateriaPrima.get(j).setTotal(detalleListaMateriaPrima.get(j).getCantidad() * detalleListaMateriaPrima.get(j).getCosto());
+                        materiaPrimaCosto += listaMaterialesConfirmados.get(i).getCantidad() * detalleListaMateriaPrima.get(j).getCosto();
+                        valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), listaMaterialesConfirmados.get(i).getCodigoProducto());
+                        if (valor > 0) {
+                            valor += listaMaterialesConfirmados.get(i).getCantidad();
+                            ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), listaMaterialesConfirmados.get(i).getCodigoProducto());
+                        } else {
+                            ordenDao.registrarDetalleProduccion(listaMaterialesConfirmados.get(i), ordenTrabajo.getCodigo_registro());
                         }
+                        listaMaterialesConfirmados.remove(listaMaterialesConfirmados.get(i));
                     }
                 }
-                ordenTrabajo.setTotalMateria(materiaPrimaCosto);
-                ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
-                ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
-                float valor;
-                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
-                    valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
-                    if (valor > 0) {
-                        valor += materiaAdicional.getCantidad();
-                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
-                        showInfo("Productos agregados con exito.");
-                    } else {
-                        ordenDao.registrarDetalleProduccion(materiaAdicional, ordenTrabajo.getCodigo_registro());
-                        showInfo("Productos agregados con exito.");
-
-                    }
-                }
-                listaMaterialesConfirmados = new ArrayList<>();
             }
-
+            ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+            ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
+            ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+            valor = 0;
+            for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+                detalleListaMateriaPrima.add(new ArticuloFormula(materiaAdicional.getCodigoProducto(), materiaAdicional.getNombre(), materiaAdicional.getDescripcion(),
+                        materiaAdicional.getPrecio(), materiaAdicional.getCantidad(), materiaAdicional.getCantidad() * materiaAdicional.getPrecio()));
+                materiaPrimaCosto += materiaAdicional.getCantidad() * materiaAdicional.getPrecio();
+                for (FormulaMateriales materiaA : listaMaterialesConfirmados) {
+                    valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), materiaA.getCodigoProducto());
+                    if (valor > 0) {
+                        valor += materiaA.getCantidad();
+                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaA.getCodigoProducto());
+                    } else {
+                        ordenDao.registrarDetalleProduccion(materiaA, ordenTrabajo.getCodigo_registro());
+                    }
+                }
+            }
+            ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+            ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
+            ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+            showInfo("Productos agregados con exito.");
+            listaMaterialesConfirmados = new ArrayList<>();
         } else {
             showWarn("Debe de ingresar valores en la materia prima que agrego.");
         }
 
     }
+
+//    public void llenarMaterialesAdicionales() {
+//        boolean verifica = false;
+//        for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+//            for (ArticuloFormula listaexistencia : detalleListaMateriaPrima) {
+//                if (materiaAdicional.getCodigoProducto() == listaexistencia.getId()) {
+//                    verifica = true;
+//                    break;
+//                }
+//            }
+//        }
+//        if (!verificaCampos()) {
+//            if (!verifica) {
+//                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+//                    detalleListaMateriaPrima.add(new ArticuloFormula(materiaAdicional.getCodigoProducto(), materiaAdicional.getNombre(), materiaAdicional.getDescripcion(),
+//                            materiaAdicional.getPrecio(), materiaAdicional.getCantidad(), materiaAdicional.getCantidad() * materiaAdicional.getPrecio()));
+//                    materiaPrimaCosto += materiaAdicional.getCantidad() * materiaAdicional.getPrecio();
+//                }
+//                ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+//                ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
+//                ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+//                float valor;
+//                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+//                    valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
+//                    if (valor > 0) {
+//                        valor += materiaAdicional.getCantidad();
+//                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
+//                        showInfo("Productos agregados con exito.");
+//                    } else {
+//                        ordenDao.registrarDetalleProduccion(materiaAdicional, ordenTrabajo.getCodigo_registro());
+//                        showInfo("Productos agregados con exito.");
+//                    }
+//                }
+//                listaMaterialesConfirmados = new ArrayList<>();
+//            } else {
+//                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+//                    for (ArticuloFormula listaexistencia : detalleListaMateriaPrima) {
+//                        if (materiaAdicional.getCodigoProducto() == listaexistencia.getId()) {
+//                            listaexistencia.setCantidad(materiaAdicional.getCantidad() + listaexistencia.getCantidad());
+//                            listaexistencia.setTotal(listaexistencia.getCantidad() * listaexistencia.getCosto());
+//                            materiaPrimaCosto += materiaAdicional.getCantidad() * listaexistencia.getCosto();
+//                        }
+//                    }
+//                }
+//                ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+//                ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
+//                ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+//                float valor;
+//                for (FormulaMateriales materiaAdicional : listaMaterialesConfirmados) {
+//                    valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
+//                    if (valor > 0) {
+//                        valor += materiaAdicional.getCantidad();
+//                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaAdicional.getCodigoProducto());
+//                        showInfo("Productos agregados con exito.");
+//                    } else {
+//                        ordenDao.registrarDetalleProduccion(materiaAdicional, ordenTrabajo.getCodigo_registro());
+//                        showInfo("Productos agregados con exito.");
+//
+//                    }
+//                }
+//                listaMaterialesConfirmados = new ArrayList<>();
+//            }
+//
+//        } else {
+//            showWarn("Debe de ingresar valores en la materia prima que agrego.");
+//        }
+//
+//    }
 
     public void cancelarOrden() throws IOException {
         ordenDao.cancelarOrden(ordenTrabajo.getCodigo_registro());
