@@ -74,8 +74,8 @@ public class EntradaDao {
 
             //Insertar nueva venta
             String query = "INSERT INTO public.entrada("
-                    + "cod, num_comprobante, fecha, id_proveedor, id_bodega)"
-                    + "VALUES(" + entradaInventario.getCod()+ ",'" + entradaInventario.getNumComprobante()  +"', " + entradaInventario.getFecha()+ ", " + entradaInventario.getIdProveedor()+ ", " + entradaInventario.getIdBodega()+ ")";
+                    + "num_comprobante, fecha, id_proveedor, id_bodega)"
+                    + "VALUES(" +  "'" + entradaInventario.getNumComprobante()  +"', " + entradaInventario.getFecha()+ ", " + entradaInventario.getIdProveedor()+ ", " + entradaInventario.getIdBodega()+ ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
