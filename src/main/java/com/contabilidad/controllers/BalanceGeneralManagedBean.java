@@ -1,4 +1,3 @@
-
 package com.contabilidad.controllers;
 
 import com.contabilidad.dao.BalanceGeneralDAO;
@@ -9,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,37 +30,38 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Named(value = "balanceGeneralMB")
 @ViewScoped
 public class BalanceGeneralManagedBean implements Serializable {
+
     private List<BalanceGeneral> balanceGeneral;
     private BalanceGeneralDAO balanceGeneralDAO;
     private SimpleDateFormat dateFormat;
     private Date fecha;
     private double pasivoPatrimonio;
     private String empresa;
-  
+
     public BalanceGeneralManagedBean() {
         balanceGeneral = new ArrayList<>();
         balanceGeneralDAO = new BalanceGeneralDAO();
     }
-    
+
     @PostConstruct
     public void init() {
         fecha = new Date();
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
         balanceGeneral = balanceGeneralDAO.generateBalanceGeneral(dateFormat.format(fecha));
-        pasivoPatrimonio =balanceGeneralDAO.sumaPasivoPatrimonio(dateFormat.format(fecha));
+        pasivoPatrimonio = balanceGeneralDAO.sumaPasivoPatrimonio(dateFormat.format(fecha));
     }
-    
+
     public void recibiendoFecha() {
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         balanceGeneral = balanceGeneralDAO.generateBalanceGeneral(dateFormat.format(fecha));
         pasivoPatrimonio = balanceGeneralDAO.sumaPasivoPatrimonio(dateFormat.format(fecha));
     }
-    
-    public void exportpdf() throws IOException, JRException {                
+
+    public void exportpdf() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
-        
+
         // Cabecera de la respuesta.
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
@@ -69,12 +70,14 @@ public class BalanceGeneralManagedBean implements Serializable {
 
         // tomamos el stream para llenarlo con el pdf.
         try (OutputStream stream = ec.getResponseOutputStream()) {
-            
+
             // Parametros para el reporte.
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy", new Locale("es_ES"));
+            dateFormat = new SimpleDateFormat(
+                    "dd/MM/yyyy",
+                    new Locale("es_ES"));
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("fecha", dateFormat.format(fecha));
-            parametros.put("sumPasivoPatrimonio", pasivoPatrimonio+"");
+            parametros.put("sumPasivoPatrimonio", pasivoPatrimonio + "");
             parametros.put("nombreEmpresa", empresa);
 
             // leemos la plantilla para el reporte.
@@ -96,7 +99,7 @@ public class BalanceGeneralManagedBean implements Serializable {
 
             stream.flush();
             stream.close();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {
             // enviamos la respuesta.
@@ -105,7 +108,19 @@ public class BalanceGeneralManagedBean implements Serializable {
     }
 
     public boolean getBold(String cuenta) {
-        return cuenta.split(" ")[0].length() <= 5;
+        return cuenta.split(" ")[0].length() <= 1;
+    }
+
+    public boolean getBoldSub(String cuenta) {
+        return cuenta.split(" ")[0].length() == 3;
+    }
+
+    public boolean getBoldE(String cuenta) {
+        return cuenta.split(" ")[0].length() == 5;
+    }
+
+    public boolean getBoldEX(String cuenta) {
+        return cuenta.split(" ")[0].length() > 5;
     }
 
     public List<BalanceGeneral> getBalanceGeneral() {
@@ -138,5 +153,21 @@ public class BalanceGeneralManagedBean implements Serializable {
 
     public void setEmpresa(String empresa) {
         this.empresa = empresa;
+    }
+
+    public String estado() {
+        String css = "";
+        List<BalanceGeneral> bgs = new ArrayList<>();
+        bgs = balanceGeneralDAO.getCalculoGrupo();
+        double Activo = bgs.get(0).getSaldo();
+        System.out.println(Activo + "----ESTADO----");
+
+        if (Activo == pasivoPatrimonio) {
+            css = "hidden";
+        } else {
+            css = "visible";
+        }
+        System.out.println(css + "-----" + Activo);
+        return css;
     }
 }

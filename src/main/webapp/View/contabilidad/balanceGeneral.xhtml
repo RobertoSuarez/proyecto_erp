@@ -10,8 +10,10 @@
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <h:form>
+
                     <ui:include src="./subheadercontabilidad.xhtml"/>
                     <p:toolbar>
+
                         <p:toolbarGroup style="margin-top: 3.5%; width: 50%" align="Left">
                             <p:commandButton actionListener="#{balanceGeneralMB.exportpdf}" ajax="false"
                                              value="Guardar PDF" icon="pi pi-download"
@@ -25,10 +27,16 @@
                                              action="#{balanceGeneralMB.recibiendoFecha()}"
                                              update="dt-libros"/>
                         </p:toolbarGroup>
+
                     </p:toolbar>
+                    <div class="ui-fluid"> 
+                        <p:staticMessage severity="warn" summary="Advertencia: " detail="Las cuentas del BALANCE GENERAL no cuadran" style="width: 100%; visibility:#{balanceGeneralMB.estado()};" />
+                    </div>
+
                     <p:dataTable id="dt-libros" widgetVar="dtBalance" var="balance"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
-                                 value="#{balanceGeneralMB.balanceGeneral}" rows="7" paginator="true"
+                                 value="#{balanceGeneralMB.balanceGeneral}" 
+                                 stickyHeader="true" stickyTopAt=".layout-topbar"
                                  paginatorPosition="bottom">
 
                         <f:facet name="header">
@@ -50,10 +58,17 @@
                             <h:outputText value="#{balance.nombre}" rendered="#{balanceGeneralMB.getBold(balance.nombre)}" style="font-weight: bold" />
                             <h:outputText value="#{balance.nombre}" rendered="#{!balanceGeneralMB.getBold(balance.nombre)}" />
                         </p:column>
-
-                        <p:column colspan="2" headerText="Saldo" responsivePriority="2">
+                        <p:column colspan="2" headerText="Sub-Cuentas" responsivePriority="1">
+                            <h:outputText value="#{balance.saldo}" rendered="#{balanceGeneralMB.getBoldEX(balance.nombre)}" />
+                        </p:column>
+                        <p:column colspan="2" headerText="Cuentas"  responsivePriority="1">
+                            <h:outputText value="#{balance.saldo}" rendered="#{balanceGeneralMB.getBoldE(balance.nombre)}" style="font-weight: bold" />
+                        </p:column>
+                        <p:column colspan="2" headerText="Sub-Grupo"  responsivePriority="1">
+                            <h:outputText value="#{balance.saldo}" rendered="#{balanceGeneralMB.getBoldSub(balance.nombre)}" style="font-weight: bold" />
+                        </p:column>
+                        <p:column colspan="2" headerText="Saldo" responsivePriority="1">
                             <h:outputText value="#{balance.saldo}" rendered="#{balanceGeneralMB.getBold(balance.nombre)}" style="font-weight: bold" />
-                            <h:outputText value="#{balance.saldo}" rendered="#{!balanceGeneralMB.getBold(balance.nombre)}" />
                         </p:column>
 
                         <f:facet name="footer">

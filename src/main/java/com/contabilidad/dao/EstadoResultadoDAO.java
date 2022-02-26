@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  *
- * @author Ebert Guatanga
+ * @author Ebert Guaranga
  */
 public class EstadoResultadoDAO {
 
