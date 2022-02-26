@@ -92,13 +92,13 @@ public class ActivosInTangiblesMB implements Serializable {
 
     public void setRegistrar3() {
         String data = "";
-        IntangibleDAO intangibledao = new IntangibleDAO();
+        intangibledao = new IntangibleDAO();
         try {
             intangibledao.guardar3(activosFijos, activoingantible);
             System.out.println("Registrado correctamente");
             PrimeFaces.current().executeScript("PF('NuevoIntangible').hide()");
             PFE("Activo intangible agregado correctamente");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
@@ -117,13 +117,13 @@ public class ActivosInTangiblesMB implements Serializable {
     public void setEditar3() {
         String data = "";
         try {
-            activoingantible.setId_activo_fijo(idactivofijo);
+            listaintangible.setId_activo_fijo(idactivofijo);
             intangibledao.editar2(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
             PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
             PFE("Activo intangible actualizado");
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
@@ -132,7 +132,7 @@ public class ActivosInTangiblesMB implements Serializable {
 
     public void setDeshabilitarintangible() {
         String data = "";
-        IntangibleDAO intangibledao = new IntangibleDAO();
+        intangibledao = new IntangibleDAO();
         try {
             activoingantible.setId_activo_fijo(idactivofijo);
             intangibledao.deshabilitarintangible(listaintangible);
@@ -170,9 +170,9 @@ public class ActivosInTangiblesMB implements Serializable {
             System.out.println("Nombre del proveedor seleccionado:  " + activosFijos.getProveedor());
             System.out.println("Nombre del proveedor seleccionado variable :  " + getNombre());
             this.listaintangible.setIdproveedor(event.getObject().getIdProveedor());
+            this.listaintangible.setProveedor(event.getObject().getNombre());
             setNombre(event.getObject().getNombre());
             setId_proveedor(event.getObject().getIdProveedor());
-
             PrimeFaces.current().ajax().update(":formintangible:panelnuevodepreciableintangible");
 
         } catch (Exception ex) {

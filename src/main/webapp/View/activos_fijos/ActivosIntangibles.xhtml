@@ -225,7 +225,7 @@ and open the template in the editor.
                                     <p:commandButton value="Guardar" 
                                                      icon="pi pi-check" 
                                                      actionListener="#{activosintangilesMB.setRegistrar3}"
-                                                     update=":formintangible:panelnuevodepreciableintangible,:formintangible:verListaIntangibles,:formintangible:msgs"/>
+                                                     update=":formintangible:verListaIntangibles,:formintangible:msgs"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('NuevoIntangible').hide()"
                                                      oncomplete="location.reload()"
@@ -258,7 +258,7 @@ and open the template in the editor.
                                             <p:ajax event="rowSelect" 
                                                     listener="#{activosintangilesMB.onRowSelect}" 
                                                     oncomplete="PF('moviePicker').hide()" 
-                                                    update=":formintangible:proveedoredit" 
+                                                    update=":formintangible:paneleditar @this" 
 
                                                     />
 
@@ -282,12 +282,12 @@ and open the template in the editor.
                                                 <p:inputText
                                                     id="proveedoredit" 
                                                     type="button"
-                                                    value="#{activosintangilesMB.listaintangible.proveedor}" required="true" /> 
+                                                    value="#{activosintangilesMB.listaintangible.proveedor}" /> 
 
                                             </div>
                                             <div class="p-field p-col">
                                                 <p:outputLabel for="@next" value="Descripción: " />
-                                                <p:inputText value="#{activosintangilesMB.listaintangible.detalle_de_activo}" required="true" />
+                                                <p:inputText value="#{activosintangilesMB.listaintangible.detalle_de_activo}"/>
 
                                             </div>
                                         </div>
@@ -320,19 +320,19 @@ and open the template in the editor.
                                         <p:commandButton value="Guardar" 
                                                          icon="pi pi-check"
                                                          action="#{activosintangilesMB.setEditar3}" 
-
-                                                         process="verListaIntangibles @this" />
+                                                         update=":formintangible:verListaIntangibles,:formintangible:msgs"
+                                                         />
                                         <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                          onclick="PF('EditarIntangible').hide()" 
+                                                         oncomplete="location.reload()"
                                                          class="ui-button-danger"/>
                                         <p:commandButton 
                                             value="Deshabilitar"
                                             action="#{activosintangilesMB.setDeshabilitarintangible}"
                                             icon="pi pi-times"                                            
-                                            styleClass="ui-button-danger"  
-
+                                            styleClass="ui-button-secondary" 
                                             onclick="PF('EditarIntangible').hide()"
-                                            process="paneleditar @this" />
+                                          />
 
                                     </f:facet>
                                 </div>

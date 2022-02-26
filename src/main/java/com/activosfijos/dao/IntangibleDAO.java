@@ -25,16 +25,23 @@ public class IntangibleDAO {
     public boolean guardar3(ActivosFijos activosFijos, ActivoIntangible activointangible) throws SQLException {
 
         Conexion conexion = new Conexion();
-        String consulta = String.format("INSERT INTO activos_fijos(\n"
-                + "	detalle_de_activo,  valor_adquisicion, fecha_adquisicion,idproveedor,numero_factura,estado)\n"
-                + "	VALUES ('%s', '%s', '%s', '%s', '%s','habilitado')returning id_activo_fijo;", activosFijos.getDetalle_de_activo(),
-                activosFijos.getValor_adquisicion(), activosFijos.getFecha_adquisicion(), activosFijos.getIdproveedor(), activosFijos.getNumero_factura());
-        String idactivofijo = conexion.obtenerValor(consulta, 1);
-        String consulta2 = String.format("INSERT INTO public.fijo_intangible(\n"
-                + "	 id_activo_fijo)\n"
-                + "	VALUES ('%s');", idactivofijo);
-        conexion.ejecutarSql(consulta2);
-        System.out.println(consulta + "\n" + consulta2);
+        try {
+            String consulta = String.format("INSERT INTO activos_fijos(\n"
+                    + "	detalle_de_activo,  valor_adquisicion, fecha_adquisicion,idproveedor,numero_factura,estado)\n"
+                    + "	VALUES ('%s', '%s', '%s', '%s', '%s','habilitado')returning id_activo_fijo;", activosFijos.getDetalle_de_activo(),
+                    activosFijos.getValor_adquisicion(), activosFijos.getFecha_adquisicion(), activosFijos.getIdproveedor(), activosFijos.getNumero_factura());
+            String idactivofijo = conexion.obtenerValor(consulta, 1);
+            String consulta2 = String.format("INSERT INTO public.fijo_intangible(\n"
+                    + "	 id_activo_fijo)\n"
+                    + "	VALUES ('%s');", idactivofijo);
+            conexion.ejecutarSql(consulta2);
+            System.out.println(consulta + "\n" + consulta2);
+        } catch (Exception e) {
+            System.out.println("com.activosfijos.dao.IntangibleDAO.guardar3()");
+        } finally {
+            conexion.desconectar();
+        }
+
         return true;
     }
 
@@ -105,7 +112,7 @@ public class IntangibleDAO {
                 listInta.add(listaintangible);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw e;
         } finally {
             conexion.desconectar();
@@ -117,37 +124,57 @@ public class IntangibleDAO {
     public boolean editar2(ListarIntangible li) throws SQLException {
 
         Conexion conexion = new Conexion();
-        String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET detalle_de_activo='%s', valor_adquisicion='%s', fecha_adquisicion='%s',   idproveedor='%s', numero_factura='%s'\n"
-                + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
-                li.getFecha_adquisicion(), li.getIdproveedor(), li.getNumero_factura(), li.getId_activo_fijo());
-        //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutarSql(consulta);
-        System.out.println("update 1: " + consulta);
+        try {
+            String consulta = String.format("UPDATE public.activos_fijos\n"
+                    + "	SET detalle_de_activo='%s', valor_adquisicion='%s', fecha_adquisicion='%s',   idproveedor='%s', numero_factura='%s'\n"
+                    + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
+                    li.getFecha_adquisicion(), li.getIdproveedor(), li.getNumero_factura(), li.getId_activo_fijo());
+            // String idactivofijo = conexion.obtenerValor(consulta, 1);
+            System.out.println("update Editar intangible: " + consulta);
+            conexion.ejecutarSql(consulta);
+        } catch (Exception e) {
+            System.out.println("com.activosfijos.dao.IntangibleDAO.editar2()");
+        } finally {
+            conexion.desconectar();
+        }
+
         return true;
     }
 
     public boolean deshabilitarintangible(ListarIntangible li) throws SQLException {
 
         Conexion conexion = new Conexion();
-        String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET  estado='deshabilitado'\n"
-                + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
-        //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutarSql(consulta);
-        System.out.println("update 1: " + consulta);
+        try {
+            String consulta = String.format("UPDATE public.activos_fijos\n"
+                    + "	SET  estado='deshabilitado'\n"
+                    + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
+            //String idactivofijo = conexion.obtenerValor(consulta, 1);
+            conexion.ejecutarSql(consulta);
+            System.out.println("update 1: " + consulta);
+        } catch (Exception e) {
+            System.out.println("com.activosfijos.dao.IntangibleDAO.deshabilitarintangible()");
+        } finally {
+            conexion.desconectar();
+        }
         return true;
     }
 
     public boolean habilitarintangible(ActivoIntangible li) throws SQLException {
 
         Conexion conexion = new Conexion();
-        String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET  estado='habilitado'\n"
-                + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
-        //String idactivofijo = conexion.obtenerValor(consulta, 1);
-        conexion.ejecutarSql(consulta);
-        System.out.println("update 1: " + consulta);
+        try {
+            String consulta = String.format("UPDATE public.activos_fijos\n"
+                    + "	SET  estado='habilitado'\n"
+                    + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
+            //String idactivofijo = conexion.obtenerValor(consulta, 1);
+            conexion.ejecutarSql(consulta);
+            System.out.println("update 1: " + consulta);
+        } catch (Exception e) {
+            System.out.println("com.activosfijos.dao.IntangibleDAO.habilitarintangible()");
+        } finally {
+            conexion.desconectar();
+        }
+
         return true;
     }
 
