@@ -180,7 +180,6 @@ public class ProduccionMBean implements Serializable {
     }
 
     public void llenarFormula() {
-        listaFormula = ordenDao.getListaFormula(ordenTrabajo.getCodigo_producto());
         if (ordenTrabajo.getCodigo_producto() == 0) {
             vaciar();
         } else {
