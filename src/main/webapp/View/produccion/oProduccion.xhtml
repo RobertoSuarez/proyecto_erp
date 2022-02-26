@@ -63,7 +63,8 @@
                                                                    itemLabel="#{produto.nombre_producto}"
                                                                    itemValue="#{produto.codigo_producto}">
                                                     </f:selectItems>
-                                                    <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls,:form:cantidad"/>
+                                                    <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls,:form:cantidad,:form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,
+                                                            :form:produccionDetallada,:form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima"/>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
@@ -332,17 +333,7 @@
                                                         </p:column>
 
                                                         <p:column headerText="Unidad de Medida">
-                                                            <p:cellEditor>
-                                                                <f:facet name="output">
-                                                                    <h:outputText value="#{Materiales.unidadMedida}"/>
-                                                                </f:facet>
-                                                                <f:facet name="input">
-                                                                    <p:inputText value="#{Materiales.unidadMedida}" 
-                                                                                 style="width:100%">
-                                                                        <p:ajax event="blur" update=":form:MaterialesProducto"/>
-                                                                    </p:inputText>
-                                                                </f:facet>
-                                                            </p:cellEditor>
+                                                            <h:outputText value="#{Materiales.unidadMedida}"/>
                                                         </p:column>
                                                         <p:column headerText="Cantidad">
                                                             <p:cellEditor>

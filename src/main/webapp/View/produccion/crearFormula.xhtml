@@ -119,17 +119,7 @@ and open the template in the editor.
                                     </p:column>
 
                                     <p:column headerText="Unidad de Medida">
-                                        <p:cellEditor>
-                                            <f:facet name="output">
-                                                <h:outputText value="#{Materiales.unidadMedida}"/>
-                                            </f:facet>
-                                            <f:facet name="input">
-                                                <p:inputText value="#{Materiales.unidadMedida}" 
-                                                             style="width:100%">
-                                                    <p:ajax event="blur" update=":form-princFormula:MaterialesProducto"/>
-                                                </p:inputText>
-                                            </f:facet>
-                                        </p:cellEditor>
+                                        <h:outputText value="#{Materiales.unidadMedida}"/>
                                     </p:column>
                                     <p:column headerText="Cantidad">
                                         <p:cellEditor>
@@ -281,9 +271,9 @@ and open the template in the editor.
                                         <div class="p-grid">
                                             <div class="p-col-12">
                                                 <p:dataTable id="dtMateriaPrimaPrin" editable="true" reflow="true"
-                                                              widgetVar="TablaMateriaBuscar"
+                                                             widgetVar="TablaMateriaBuscar"
                                                              editInitEvent="dblclick" editMode="cell"
-                                                             value="#{formulaMBeans.productoTerminado}" var="TablaMateriaPrima">
+                                                             value="#{formulaMBeans.productoSM}" var="TablaMateriaPrima">
                                                     <f:facet name="header">
                                                         <div class="p-grid">
                                                             <div class="p-col-6">

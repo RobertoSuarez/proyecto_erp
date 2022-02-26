@@ -77,7 +77,7 @@ public class FormulaProduccionManagedBean implements Serializable {
     public void init() {
         listaFormula = formulaProduccionDAO.getFormula();
         listProceso = procesoProduccionDao.getProcesosProduccion();
-        articuloMateriaP = formulaProduccionDAO.getArticulos();
+//        articuloMateriaP = formulaProduccionDAO.getArticulos();
     }
 
     public List<FormulaMateriales> getListaMateriales() {

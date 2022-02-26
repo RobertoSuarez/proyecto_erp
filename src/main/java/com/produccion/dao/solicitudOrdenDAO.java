@@ -66,10 +66,7 @@ public class solicitudOrdenDAO {
 
     public List<productosOrden> getAticulosOrden() {
         List<productosOrden> ordenProducto = new ArrayList<>();
-        sentenciaSql = String.format("select * from articulos as a \n"
-                + "	inner join tipo as t on a.id_tipo=t.cod\n"
-                + "	where tipo='Producto Terminado'or tipo='Producto SemiElaborado'");
-        sentenciaSql = String.format("select distinct a.id,a.nombre,a.descripcion,a.cantidad,a.costo,t.tipo from articulos as a\n"
+        sentenciaSql = String.format("select distinct a.id,a.nombre,a.descripcion,a.cantidad,a.costo,t.tipo,a.unidadmedida from articulos as a\n"
                 + "	inner join tipo as t on a.id_tipo=t.cod\n"
                 + "	inner join formula as f on a.id=f.codigo_producto\n"
                 + "	where tipo='Producto Terminado'or tipo='Producto SemiElaborado'");
@@ -79,7 +76,7 @@ public class solicitudOrdenDAO {
             while (resultSet.next()) {
                 ordenProducto.add(new productosOrden(resultSet.getInt("id"),
                         resultSet.getString("nombre"), resultSet.getString("descripcion"),
-                        resultSet.getFloat("cantidad"), resultSet.getFloat("costo"), resultSet.getString("tipo")));
+                        resultSet.getFloat("cantidad"), resultSet.getFloat("costo"), resultSet.getString("tipo"), resultSet.getString("unidadmedida")));
 
             }
         } catch (SQLException e) {

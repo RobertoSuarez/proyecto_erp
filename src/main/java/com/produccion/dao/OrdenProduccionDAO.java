@@ -124,7 +124,7 @@ public class OrdenProduccionDAO {
 
     public List<ArticuloFormula> getListaConsumoMateriales(int codigo, float cantidad) {
         List<ArticuloFormula> articulosFormula = new ArrayList<>();
-        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,a.id,a.nombre,a.descripcion, df.\"cantidadUnidad\"*" + cantidad + " as cantidadUnidad,t.tipo ,df.unidad_medida "
+        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,a.id,a.nombre,a.descripcion, df.\"cantidadUnidad\"*" + cantidad + " as cantidadUnidad,t.tipo ,a.unidadmedida "
                 + ",a.costo from detalle_formula as df \n"
                 + "	inner join articulos as a on df.codigo_producto=a.id\n"
                 + "     inner join subcuenta as sc on sc.idsubcuenta=a.id_subcuenta\n"
@@ -136,7 +136,7 @@ public class OrdenProduccionDAO {
             while (resultSet.next()) {
                 articulosFormula.add(new ArticuloFormula(resultSet.getInt("id"), resultSet.getString("nombre"),
                         resultSet.getString("descripcion"), resultSet.getString("tipo"),
-                        resultSet.getFloat("cantidadUnidad"), resultSet.getString("unidad_medida"), resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo")));
+                        resultSet.getFloat("cantidadUnidad"), resultSet.getString("unidadmedida"), resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo")));
             }
         } catch (SQLException e) {
         } finally {
@@ -442,7 +442,7 @@ public class OrdenProduccionDAO {
 
     public List<FormulaProduccion> getArticulos() {
         List<FormulaProduccion> Materiales = new ArrayList<>();
-        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock \n"
+        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock,a.unidadmedida \n"
                 + "	from articulos as a	inner join categoria as c on a.id_categoria=c.cod\n"
                 + "	inner join tipo as t on t.cod=a.id_tipo where t.tipo='Producto SemiElaborado' or t.tipo='Materia Prima'";
 
@@ -452,7 +452,7 @@ public class OrdenProduccionDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 Materiales.add(new FormulaProduccion(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("nom_categoria"),
-                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cantidad"), resultSet.getFloat("max_stock")));
+                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cantidad"), resultSet.getFloat("max_stock"), resultSet.getString("unidadmedida")));
 
             }
 
@@ -539,11 +539,30 @@ public class OrdenProduccionDAO {
 
     }
 
-    public int extraccionMateriales(int id_producto,float cantidad) {
+    public int registroExistencia(int id_registro) {
+        try {
+            int existencia=0;
+            sentenciaSql = String.format("select * from detalle_produccion\n"
+                    + "	where codigo_registro=" + id_registro + ";");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                existencia++;
+                break;
+            }
+            return existencia;
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
+    public int extraccionMateriales(int id_producto, float cantidad) {
         try {
             sentenciaSql = String.format("UPDATE public.articulos\n"
-                    + "	SET cantidad=(select cantidad as cantidad from articulos where id="+id_producto+")-"+cantidad+"\n"
-                    + "	WHERE id="+id_producto+";");
+                    + "	SET cantidad=(select cantidad as cantidad from articulos where id=" + id_producto + ")-" + cantidad + "\n"
+                    + "	WHERE id=" + id_producto + ";");
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
@@ -551,11 +570,12 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
     }
-    public int ingresoMateriales(int id_producto,float cantidad) {
+
+    public int ingresoMateriales(int id_producto, float cantidad) {
         try {
             sentenciaSql = String.format("UPDATE public.articulos\n"
-                    + "	SET cantidad=(select cantidad as cantidad from articulos where id="+id_producto+")+"+cantidad+"\n"
-                    + "	WHERE id="+id_producto+";");
+                    + "	SET cantidad=(select cantidad as cantidad from articulos where id=" + id_producto + ")+" + cantidad + "\n"
+                    + "	WHERE id=" + id_producto + ";");
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;

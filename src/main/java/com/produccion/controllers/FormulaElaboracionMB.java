@@ -44,6 +44,7 @@ public class FormulaElaboracionMB implements Serializable {
     private List<FormulaMateriales> listaMateriales;
     private List<FormulaMateriales> listaMaterialesConfirmados;
     private List<FormulaProduccion> productoTerminado;
+    private List<FormulaProduccion> productoSM;
 
     public FormulaElaboracionMB() {
         formulaProduccion = new FormulaProduccion();
@@ -56,7 +57,8 @@ public class FormulaElaboracionMB implements Serializable {
         listaMateriales = new ArrayList<>();
         productoTerminado = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
-        
+        productoSM = new ArrayList<>();
+
         formulaMaterialesDAO = new FormulaMaterialesDAO();
     }
 
@@ -64,7 +66,8 @@ public class FormulaElaboracionMB implements Serializable {
     public void init() {
         listaFormula = formulaProduccionDAO.getFormula();
         listProceso = procesoProduccionDAO.getProcesosProduccion();
-        productoTerminado = formulaProduccionDAO.getArticulos();
+        productoTerminado = formulaProduccionDAO.getArticulosT("Materia Prima");
+        productoSM = formulaProduccionDAO.getArticulosT("Producto Terminado");
     }
 
     public String getRender() {
@@ -131,6 +134,14 @@ public class FormulaElaboracionMB implements Serializable {
         this.productoTerminado = productoTerminado;
     }
 
+    public List<FormulaProduccion> getProductoSM() {
+        return productoSM;
+    }
+
+    public void setProductoSM(List<FormulaProduccion> productoSM) {
+        this.productoSM = productoSM;
+    }
+
     //nuevo
     public boolean isVerificar() {
         return verificar;
@@ -171,13 +182,13 @@ public class FormulaElaboracionMB implements Serializable {
             } else if (!validaMateriales()) {
                 showWarn("Ingrese valores Unidad de Medida, Cantidades y seleccione un Subproceso");
             } else {
-                
+
                 if (formulaProduccionDAO.insertarFormula(formulaProduccion) > 0) {
                     formulaProduccion.setCodigo_formula(formulaProduccionDAO.idFormula());
                     for (FormulaMateriales lista : listaMaterialesConfirmados) {
                         if (lista.getCantidad() != 0 && !"".equals(lista.getUnidadMedida())) {
                             lista.setCantidadUnidad(lista.getCantidad() / formulaProduccion.getRendimiento());
-                            formulaProduccionDAO.InsertarMateriales(lista,formulaProduccion.getCodigo_formula());
+                            formulaProduccionDAO.InsertarMateriales(lista, formulaProduccion.getCodigo_formula());
                         } else {
                             showWarn("Ingrese valores Unidad de Medida y Cantidades");
                         }
@@ -238,11 +249,13 @@ public class FormulaElaboracionMB implements Serializable {
         if (materiales.isVerifica()) {
             materialesFormula = new FormulaMateriales(materiales.getNombre(),
                     materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(), materiales.getCodigo_producto(), materiales.getCosto());
+            materialesFormula.setUnidadMedida(materiales.getUnidadMedida());
             return materialesFormula;
         } else {
             FormulaMateriales buscar = new FormulaMateriales(materiales.getNombre(),
                     materiales.getDescripcionProducto(), formulaProduccion.getCodigo_formula(),
                     materiales.getCodigo_producto(), materiales.getCosto());
+            buscar.setUnidadMedida(materiales.getUnidadMedida());
             for (FormulaMateriales lista : listaMateriales) {
                 if (lista.getCodigoProducto() == buscar.getCodigoProducto()) {
                     listaMateriales.remove(lista);
@@ -286,6 +299,7 @@ public class FormulaElaboracionMB implements Serializable {
                 materialesFormula.setPrecio(productoE.getCosto());
                 materialesFormula.setNombre(productoE.getNombre());
                 materialesFormula.setDescripcion(productoE.getDescripcion());
+                materialesFormula.setUnidadMedida(productoE.getUnidadMedida());
                 break;
             }
         }
@@ -299,10 +313,10 @@ public class FormulaElaboracionMB implements Serializable {
                 formulaProduccion.getRendimiento()));
         formulaProduccion.setTiempoFormula(formulaProduccionDAO.tiempoFormula(formulaProduccion.getCodigo_proceso(),
                 formulaProduccion.getRendimiento()));
-        
-        formulaProduccion.setTiempoUnidad(formulaProduccion.getTiempoFormula()/formulaProduccion.getRendimiento());
-        formulaProduccion.setMODUnidad(formulaProduccion.getMOD()/formulaProduccion.getTiempoFormula());
-        formulaProduccion.setCIFUnidad(formulaProduccion.getCIF()/formulaProduccion.getTiempoFormula());
+
+        formulaProduccion.setTiempoUnidad(formulaProduccion.getTiempoFormula() / formulaProduccion.getRendimiento());
+        formulaProduccion.setMODUnidad(formulaProduccion.getMOD() / formulaProduccion.getTiempoFormula());
+        formulaProduccion.setCIFUnidad(formulaProduccion.getCIF() / formulaProduccion.getTiempoFormula());
     }
 
     public void limpiarFormulario() {
@@ -320,7 +334,8 @@ public class FormulaElaboracionMB implements Serializable {
         formulaMaterialesDAO = new FormulaMaterialesDAO();
         listaFormula = formulaProduccionDAO.getFormula();
         listProceso = procesoProduccionDAO.getProcesosProduccion();
-        productoTerminado = formulaProduccionDAO.getArticulos();
+        productoTerminado = formulaProduccionDAO.getArticulosT("Producto Terminado");
+        productoSM = formulaProduccionDAO.getArticulosT("Materia Prima");
     }
 
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {

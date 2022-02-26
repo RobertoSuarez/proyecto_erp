@@ -126,7 +126,8 @@ public class SolicitudOrdenMB implements Serializable {
         if (producto.isVerifica() == true) {
             listaOrden.add(new productosOrden(producto.getCodigoProducto(),
                     producto.getNombreProducto(),
-                    producto.getDescripcion(), producto.getTipoProducto()));
+                    producto.getDescripcion(), producto.getTipoProducto(),producto.getUnidadMedida()));
+            
         } else {
             for (productosOrden lista : listaOrden) {
                 if (lista.getCodigoProducto() == producto.getCodigoProducto()) {

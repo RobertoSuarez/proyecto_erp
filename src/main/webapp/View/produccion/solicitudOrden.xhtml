@@ -69,14 +69,14 @@
                                                                  value="#{solicitudOrdenMB.listaProductOrden}" 
                                                                  var="articuloSolicitud" paginatorPosition="bottom" rows="4">
                                                         <f:facet name="header">
-                                                                <div class="p-grid">
-                                                                    <div class="p-col-4">
-                                                                        <p:outputLabel value="Nombre Producto:"></p:outputLabel>
-                                                                        <p:inputText id="globalFilter"
-                                                                                     onkeyup="PF('articulosSolicitudB').filter()"
-                                                                                     placeholder="Buscar"></p:inputText>
-                                                                    </div>
+                                                            <div class="p-grid">
+                                                                <div class="p-col-4">
+                                                                    <p:outputLabel value="Nombre Producto:"></p:outputLabel>
+                                                                    <p:inputText id="globalFilter"
+                                                                                 onkeyup="PF('articulosSolicitudB').filter()"
+                                                                                 placeholder="Buscar"></p:inputText>
                                                                 </div>
+                                                            </div>
                                                         </f:facet>
 
                                                         <p:column headerText="Acciones">
@@ -173,17 +173,7 @@
                             </p:column>
 
                             <p:column headerText="Unidad de Medida" >
-                                <p:cellEditor>
-                                    <f:facet name="output">
-                                        <h:outputText value="#{orden.unidadMedida}"/>
-                                    </f:facet>
-                                    <f:facet name="input">
-                                        <p:inputText value="#{orden.unidadMedida}" 
-                                                     style="width:100%">
-                                            <p:ajax event="blur" update=":form:listaProductos"/>
-                                        </p:inputText>
-                                    </f:facet>
-                                </p:cellEditor>
+                                <h:outputText value="#{orden.unidadMedida}"/>
                             </p:column>
                             <p:column headerText="Tipo" >
                                 <h:outputText value="#{orden.tipoProducto}" />

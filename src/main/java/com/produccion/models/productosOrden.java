@@ -31,13 +31,14 @@ public class productosOrden {
         this.tipoProducto = tipoProducto;
     }
 
-    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, float cantidad, float precio, String tipoProducto) {
+    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, float cantidad, float precio, String tipoProducto,String unidadMedida) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.cantidad = cantidad;
         this.precio = precio;
         this.tipoProducto = tipoProducto;
+        this.unidadMedida = unidadMedida;
     }
     public productosOrden(int codigoProducto, int codigoOrden, String nombreProducto, float cantidad, String unidadMedida, String tipoProducto, char estado) {
         this.codigoProducto = codigoProducto;
@@ -58,11 +59,12 @@ public class productosOrden {
         this.estado = estado;
     }
 
-    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, String tipoProducto) {
+    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, String tipoProducto,String unidadMedida) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.tipoProducto = tipoProducto;
+        this.unidadMedida = unidadMedida;
     }
     
     
