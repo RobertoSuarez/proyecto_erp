@@ -19,15 +19,15 @@ import com.activosfijos.model.ListaNoDepreciable;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 //import javax.faces.bean.ViewScoped;
 //import javax.faces.bean.SessionScoped;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
+//import javax.ws.rs.client.Client;
+//import javax.ws.rs.client.WebTarget;
+//import javax.ws.rs.core.Response;
 import org.primefaces.event.SelectEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -156,6 +156,9 @@ public class ActivosFijosMB implements Serializable {
         this.activodepreciable = activodepreciable;
     }
 
+//----------------------------Activos fijos tangibles-------------------------\\
+//---------- DEPRECIABLES
+//Registrar un tangible depreciable
     public void setRegistrarTangible() {
         String data = "";
         TangibleDAO tangibledao = new TangibleDAO();
@@ -177,7 +180,7 @@ public class ActivosFijosMB implements Serializable {
             } else if ("".equals(getNombre())) {
                 PFW("Agrege un proveedor");
             } else {
-                tangibledao.guardar(activosFijos, activodepreciable);
+                tangibledao.registrarTangibleDepreciable(activosFijos, activodepreciable);
                 System.out.println("Registrado correctamente");
                 PFE("Activo tangible depreciable agregado");
                 PrimeFaces.current().executeScript("PF('NuevoDepreciable').hide()");
@@ -198,10 +201,7 @@ public class ActivosFijosMB implements Serializable {
         System.out.println(data);
 
     }
-
-    public void rest() {
-
-    }
+//Editar un tangible depreciable
 
     public void setEditarTangibles() {
         String data = "";
@@ -224,14 +224,11 @@ public class ActivosFijosMB implements Serializable {
                 PFW("Agrege un tiempo de depreciacion mensual");
             } else if ("".equals(listadepreciable.getPorcentaje_depreciacion()) || listadepreciable.getPorcentaje_depreciacion() <= 0.0) {
                 PFW("Agrege un porcentaje de depreciación");
-            } else if ("".equals(getNombre())) {
-                PFW("Agrege un proveedor");
             } else {
 
-                tangibledao.editar(listadepreciable);
+                tangibledao.editarTangibleDepreciable(listadepreciable);
                 System.out.println("Actualizado correctamente");
                 PFE("Activo tangible depreciable actualizado");
-
                 PrimeFaces.current().executeScript("PF('EditarDepreciable').hide()");
                 activosFijos.setDetalle_de_activo("");
                 activosFijos.setValor_adquisicion(0);
@@ -251,34 +248,147 @@ public class ActivosFijosMB implements Serializable {
         System.out.println(data);
 
     }
+//Habilitar tangible depreciable
+
+    public void setHabilitarTangibleDepreciable(int id) {
+        String data = "";
+
+        try {
+            activodepreciable.setId_activo_fijo(id);
+            tangibleDAO.habilitardepreciable(activodepreciable);
+            System.out.println("Actualizado correctamente");
+            PFE("Activo tangible habilitado");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println(data);
+
+    }
+//Deshabilitar tangible depreciable
+
+    public void setDeshabilitarTangibleDepreciable() {
+        String data = "";
+        try {
+            activodepreciable.setId_activo_fijo(idactivofijo);
+            tangibleDAO.deshabilitartangible(listadepreciable);
+            System.out.println("Actualizado correctamente");
+            PFE("Activo tangible deshabilitado");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println(data);
+
+    }
+//--------- NO DEPRECIABLES
+//Registrar un tangible no depreciable
+
+    public void setRegistrarNoDepreciable() {
+        String data = "";
+        NoDepreciableDAO nodepreciable = new NoDepreciableDAO();
+        try {
+            if ("".equals(activosFijos.getDetalle_de_activo())) {
+                PFW("Agregue una descripcion al activo no depreciable");
+            } else if ("".equals(activosFijos.getValor_adquisicion())||activosFijos.getValor_adquisicion()<=0) {
+                PFW("Agregue un costo de adquisición ");
+            } else if ("".equals(activosFijos.getFecha_adquisicion())) {
+                PFW("Agregue una fecha de adquisición");
+            } else if ("".equals(activoNoDepreciable.getPlusvalia())||activoNoDepreciable.getPlusvalia()<=0) {
+                PFW("Agregue un valor de plusvalia");
+            } else if ("".equals(activosFijos.getNumero_factura())) {
+                PFW("Agregue un numero de factura");
+            } else if ("".equals(getNombre())) {
+                PFW("Agregue un proveedor");
+            } else {
+                nodepreciable.registrarTangibleNoDepreciable(activosFijos, activoNoDepreciable);
+                System.out.println("Registrado correctamente");
+                PFE("Activo no depreciable registrado");
+                activosFijos.setDetalle_de_activo("");
+                activosFijos.setValor_adquisicion(0);
+                activosFijos.setNumero_factura("001-001-000000000");
+                activosFijos.setFecha_adquisicion(LocalDate.now());
+                activoNoDepreciable.setPlusvalia(0.0);
+                setNombre("");
+                PrimeFaces.current().executeScript("PF('NuevoNoDepreciable').hide()");
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println(data + "se ingreso no depreciable");
+
+    }
+    //Editar un tangible no depreciable
 
     public void setEditarNoDepreciable() {
 
-        NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
+        nodepreciabledao = new NoDepreciableDAO();
         try {
-            activoNoDepreciable.setId_activo_fijo(idactivofijo);
-            nodepreciabledao.editar1(listanodepreciable);
-            System.out.println("Actualizado correctamente");
-            PFE("Activo tangible no depreciable actualizado");
+
+            listanodepreciable.setId_activo_fijo(idactivofijo);
+
+            if ("".equals(listanodepreciable.getDetalle_de_activo())) {
+                PFW("Agregue una descripcion al activo no depreciable");
+            } else if ("".equals(listanodepreciable.getValor_adquisicion())||listanodepreciable.getValor_adquisicion()<=0) {
+                PFW("Agregue un costo de adquisición ");
+            } else if ("".equals(listanodepreciable.getFecha_adquisicion())) {
+                PFW("Agregue una fecha de adquisición");
+            } else if ("".equals(listanodepreciable.getPlusvalia())||listanodepreciable.getPlusvalia()<=0) {
+                PFW("Agregue un valor de plusvalia");
+            } else if ("".equals(listanodepreciable.getNumero_factura())) {
+                PFW("Agregue un numero de factura");
+            } else if ("".equals(listanodepreciable.getProveedor())) {
+                PFW("Agregue un proveedor");
+            } else {
+                nodepreciabledao.editarNoDepreciable(listanodepreciable);
+                System.out.println("Actualizado correctamente");
+                PFE("Activo tangible no depreciable actualizado");
+                activosFijos.setDetalle_de_activo("");
+                activosFijos.setValor_adquisicion(0);
+                activosFijos.setNumero_factura("001-001-000000000");
+                activosFijos.setFecha_adquisicion(LocalDate.now());
+                activoNoDepreciable.setPlusvalia(0.0);
+                setNombre("");
+                PrimeFaces.current().executeScript("PF('EditarNoDepreciable').hide()");
+
+            }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
 
     }
 
-    public void setEditarAgotables() {
+//Habilitar tangible no depreciable
+    public void setHabilitarintangibleNoDepreciable(int id) {
+        String data = "";
 
-        AgotableDAO agotablesdao = new AgotableDAO();
         try {
-            activosagotables.setId_activo_fijo(idactivofijo);
-            agotablesdao.editar2(listaragotables);
+            activoNoDepreciable.setId_activo_fijo(id);
+            nodepreciabledao.habilitarnoDepreciable(activoNoDepreciable);
             System.out.println("Actualizado correctamente");
-            PFE("Activo agotable actualizado");
-        } catch (Exception e) {
+            PFE("Activo tangible no depreciable habilitado");
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
+        System.out.println(data);
 
     }
+
+//Deshabilitar tangible no depreciable
+    public void setDeshabilitarnodepreciable() {
+        String data = "";
+        nodepreciabledao = new NoDepreciableDAO();
+        try {
+            activoNoDepreciable.setId_activo_fijo(idactivofijo);
+            nodepreciabledao.deshabilitarnoDepreciable(listanodepreciable);
+            System.out.println("Actualizado correctamente");
+            PFE("Activo no depreciable deshabilitado");
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println(data);
+
+    }
+//--------- INTANGIBLES
 
     public void setEliminar() {
         String data = "";
@@ -299,7 +409,7 @@ public class ActivosFijosMB implements Serializable {
         this.listadepreciable = lista;
         idactivofijo = lista.getId_activo_fijo();
         System.out.println("Id obtenido de activo: " + lista.getId_activo_fijo());
-        System.out.println("Id obtenido de empresa: " + lista.getId_empresa());
+        System.out.println("Id obtenido de empresa: " + lista.getProveedor());
 
     }
 
@@ -307,10 +417,81 @@ public class ActivosFijosMB implements Serializable {
         this.listanodepreciable = listanp;
         idactivofijo = listanp.getId_activo_fijo();
         System.out.println("Id obtenido de activo: " + listanp.getId_activo_fijo());
-        System.out.println("Id obtenido de empresa: " + listanp.getId_empresa());
+        System.out.println("Id obtenido de empresa: " + listanp.getProveedor());
 
     }
+//Seleccion de proveedor en depreciables
 
+    public void onRowSelectDepreciable(SelectEvent<Proveedor> event) {
+        try {
+            int idProveedor = event.getObject().getIdProveedor();
+            String nombreProveedor = event.getObject().getNombre();
+            //activos fijos 
+            this.activosFijos.setProveedor(nombreProveedor);
+            this.activosFijos.setIdproveedor(idProveedor);
+            //LISTA DEPRECIABLE
+            this.listadepreciable.setIdproveedor(idProveedor);
+            this.listadepreciable.setProveedor(nombreProveedor);
+            setNombre(nombreProveedor);
+            PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
+            //  PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+//Seleccion de proveedor en no depreciables
+
+    public void onRowSelectNoDepreciable(SelectEvent<Proveedor> event) {
+        try {
+
+            int idProveedor = event.getObject().getIdProveedor();
+            String nombreProveedor = event.getObject().getNombre();
+            //activos fijos 
+            this.activosFijos.setProveedor(nombreProveedor);
+            this.activosFijos.setIdproveedor(idProveedor);
+            PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable");
+
+            //LISTA NO DEPRECIABLE
+            this.listanodepreciable.setIdproveedor(idProveedor);
+            this.listanodepreciable.setProveedor(nombreProveedor);
+            setNombre(nombreProveedor);
+            PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable");
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+// mensajes de advertencia
+
+    public void PFW(String msj) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_WARN, warnMsj, msj));
+
+    }
+//mensajes de exito
+
+    public void PFE(String msj) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, infMsj, msj));
+
+    }
+    /*
+    public void setEditarAgotables() {
+
+        AgotableDAO agotablesdao = new AgotableDAO();
+        try {
+            activosagotables.setId_activo_fijo(idactivofijo);
+            agotablesdao.editar2(listaragotables);
+            System.out.println("Actualizado correctamente");
+            PFE("Activo agotable actualizado");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+    }
+    
     public void obtenerdatosAgotables(ListaAgotable listaago) {
         this.listaragotables = listaago;
         idactivofijo = listaago.getId_activo_fijo();
@@ -318,22 +499,7 @@ public class ActivosFijosMB implements Serializable {
         System.out.println("Id obtenido de empresa: " + listaago.getId_empresa());
 
     }
-
-    public void setRegistrarNoDepreciable() {
-        String data = "";
-        NoDepreciableDAO nodepreciable = new NoDepreciableDAO();
-        try {
-            nodepreciable.guardar1(activosFijos, activoNoDepreciable);
-            System.out.println("Registrado correctamente");
-            PFE("Activo no depreciable registrado");
-            PrimeFaces.current().executeScript("PF('NuevoNoDepreciable').hide()");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        System.out.println(data + "se ingreso no depreciable");
-
-    }
-
+    
     public void setRegistrarAgotables() {
         String data = "";
         AgotableDAO tangibleDAO = new AgotableDAO();
@@ -349,37 +515,8 @@ public class ActivosFijosMB implements Serializable {
         System.out.println(data + "se ingreso no depreciable");
 
     }
-
-    public void setDeshabilitartangible() {
-        String data = "";
-        try {
-            activodepreciable.setId_activo_fijo(idactivofijo);
-            tangibleDAO.deshabilitartangible(listadepreciable);
-            System.out.println("Actualizado correctamente");
-            PFE("Activo tangible deshabilitado");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        System.out.println(data);
-
-    }
-
-    public void setDeshabilitarnodepreciable() {
-        String data = "";
-        NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
-        try {
-            activoNoDepreciable.setId_activo_fijo(idactivofijo);
-            nodepreciabledao.deshabilitarnoDepreciable(listanodepreciable);
-            System.out.println("Actualizado correctamente");
-            PFE("Activo no depreciable deshabilitado");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        System.out.println(data);
-
-    }
-
-    public void setDeshabilitaragotable() {
+   
+public void setDeshabilitaragotable() {
         String data = "";
         try {
             activosagotables.setId_activo_fijo(idactivofijo);
@@ -393,37 +530,8 @@ public class ActivosFijosMB implements Serializable {
 
     }
 
-    public void setHabilitarintangible(int id) {
-        String data = "";
-
-        try {
-            activodepreciable.setId_activo_fijo(id);
-            tangibleDAO.habilitardepreciable(activodepreciable);
-            System.out.println("Actualizado correctamente");
-            PFE("Activo tangible habilitado");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        System.out.println(data);
-
-    }
-
-    public void setHabilitarintangibleNoDepreciable(int id) {
-        String data = "";
-
-        try {
-            activoNoDepreciable.setId_activo_fijo(id);
-            nodepreciabledao.habilitarnoDepreciable(activoNoDepreciable);
-            System.out.println("Actualizado correctamente");
-            PFE("Activo tangible no depreciable habilitado");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        System.out.println(data);
-
-    }
-
-    public void setHabilitarintangibleAgotables(int id) {
+    
+public void setHabilitarintangibleAgotables(int id) {
         String data = "";
 
         try {
@@ -439,64 +547,13 @@ public class ActivosFijosMB implements Serializable {
 
     }
 
-    public void onRowSelect(SelectEvent<Proveedor> event) {
-        try {
-            int ms1 = event.getObject().getIdProveedor();
-            String ms2 = event.getObject().getNombre();
-            this.activosFijos.setProveedor(ms2);
-            this.activosFijos.setIdproveedor(ms1);
-
-            System.out.println(ms2);
-            System.out.println(ms1);
-            this.listadepreciable.setIdproveedor(ms1);
-            setNombre(ms2);
-            PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
-            PrimeFaces.current().ajax().update(":formnuevoNodepreciable:panelNuevoNoDepreciable");
-            PrimeFaces.current().ajax().update(":formnuevoagotable:panelNuevoAgotable");
-          } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public void onRowSelect2(SelectEvent<Proveedor> event) {
-        try {
-
-            int ms1 = event.getObject().getIdProveedor();
-            String ms2 = event.getObject().getNombre();
-            this.activosFijos.setProveedor(ms2);
-            this.activosFijos.setIdproveedor(ms1);
-            System.out.println(ms2);
-            System.out.println(ms1);
-            this.listadepreciable.setIdproveedor(ms1);
-            this.listadepreciable.setProveedor(ms2);
-            setNombre(ms2);
-            PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
-
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public void PFW(String msj) {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_WARN, warnMsj, msj));
-
-    }
-
-    public void PFE(String msj) {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_INFO, infMsj, msj));
-
-    }
 
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Exito", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-
+/*
     public void getDataApi() {
         String data = "";
         data = "{\"detalle_de_activo\":\"" + activosFijos.getDetalle_de_activo()
@@ -528,4 +585,5 @@ public class ActivosFijosMB implements Serializable {
         System.out.println(r.getStatus());
         System.out.println(result);
     }
+     */
 }

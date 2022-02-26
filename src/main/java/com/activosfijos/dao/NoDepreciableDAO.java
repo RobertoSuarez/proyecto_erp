@@ -26,7 +26,7 @@ public class NoDepreciableDAO {
     Conexion conexion = new Conexion();
     ResultSet result;
 
-    public boolean guardar1(ActivosFijos activosFijos, ActivoNoDepreciable activoNoDepreciable) throws SQLException {
+    public boolean registrarTangibleNoDepreciable(ActivosFijos activosFijos, ActivoNoDepreciable activoNoDepreciable) throws SQLException {
 
         Conexion conexion = new Conexion();
         String consulta = String.format("INSERT INTO activos_fijos(\n"
@@ -44,7 +44,7 @@ public class NoDepreciableDAO {
         return true;
     }
 
-    public boolean editar1(ListaNoDepreciable li) throws SQLException {
+    public boolean editarNoDepreciable(ListaNoDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
         String consulta = String.format("UPDATE public.activos_fijos\n"
