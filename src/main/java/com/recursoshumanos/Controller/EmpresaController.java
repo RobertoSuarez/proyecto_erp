@@ -204,8 +204,7 @@ public class EmpresaController implements Serializable {
         idProvincia = 0;
         sucursal = new Sucursal();
         sucursal.setEmpresa(empresa);
-        PrimeFaces.current().ajax().update("form:messages", 
-                "form:manage-sucursal-content");
+        PrimeFaces.current().ajax().update("form:messages", "form:manage-sucursal-content");
     }
 
     /**
