@@ -332,6 +332,8 @@ public class VentaManagedBean implements Serializable {
                             daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
                             listSize += 1;
                         }
+                        
+                        this.ventaDao.insertasiento(ventaActual);
 
                         return "listaVenta";
                     }

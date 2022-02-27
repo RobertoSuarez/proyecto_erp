@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
 
-                                <div>
+                                
                                     <div style="float: left; padding-left: 10px;">
                                         <p:outputLabel value="Fecha Crédito: " 
                                                        for="fechaEmision" 
@@ -120,11 +120,12 @@
                                                          id="btnDeuda"
                                                          icon="pi pi-replay" 
                                                          actionListener="#{abonoController.cargarDeuda()}"
-                                                         update="growl fechaVencida fechaEmision tblRegistroCobro"
+                                                         update="growl fechaVencida fechaEmision tblRegistroCobro btncobro"
                                                          styleClass="ui-button-secondary"/>
                                     </div>
                                     <div style="float: left; padding-top: 18px; padding-left: 5px;">
                                         <p:commandButton value="Nuevo Cobro"
+                                                         id="btncobro"
                                                          ajax="false"
                                                          disabled="#{(abonoController.getFechasPlan()[0] == null)}"
                                                          actionListener="#{abonoController.nuevoAbono}"
@@ -132,7 +133,7 @@
                                                          rendered="#{seguridadCtsXCbr.renderForGerente()}"/>
                                     </div>
                                     </div>
-                                </div>
+                                
                             </div>
                             <p:dataTable id="tblRegistroCobro" var="varRegistroCobro"
                                          emptyMessage="No existen Registros." 
@@ -280,10 +281,10 @@
                                         <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
                                         <f:selectItem itemLabel="Efectivo" itemValue="2"/>
                                         <f:selectItem itemLabel="Cheque" itemValue="3"/>
-                                        <f:selectItem itemLabel="Tarjeta de Débito" 
+<!--                                        <f:selectItem itemLabel="Tarjeta de Débito" 
                                                       itemValue="4"/>
                                         <f:selectItem itemLabel="Tarjeta de Crédito" 
-                                                      itemValue="5"/>
+                                                      itemValue="5"/>-->
                                     </p:selectOneMenu>
 
                                     <p:outputLabel for="fechaAbono" 
