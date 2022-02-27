@@ -19,42 +19,47 @@
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
                     <br/><br/><br/><br/>
-                    <div>
-                        <p:panel header="Cliente" >
-                            <h:panelGrid columns="4" width="50%" >
-                                <p:outputLabel value="Identificación: "/>
-                                <p:inputText id="IdNumCliente" value="#{ProformaMB.clienteIdNum}" />
-                                <p:outputLabel value="Nombre: "/>
-                                <p:inputText id="NombreCliente" value="#{ProformaMB.clienteNombre}" disabled="true" />
-                                <p:commandButton actionListener="#{ProformaMB.BuscarClienteVenta}" value="Buscar" update="ventaForm" />
-                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
-                            </h:panelGrid>
-                        </p:panel>
+                    <p:panel id="outclientes" header="Clientes">
+                        <h:panelGrid columns="7" width="80%">
+                            <p:outputLabel value="Identificación: "/>
+                            <p:inputText id="IdNumCliente" value="#{ProformaMB.clienteIdNum}" />
+
+                            <p:outputLabel value="Nombre: "/>
+                            <p:inputText id="NombreCliente" value="#{ProformaMB.clienteNombre}" disabled="true" />
+
+                            <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
+
+                            <p:commandButton actionListener="#{ProformaMB.buscarClienteVenta}" 
+                                             value="Buscar" update=":ventaForm:outclientes" 
+                                             style="visibility: hidden"/>
+                            <p:inputText value="#{ProformaMB.descuento}" style="visibility: hidden"/>
+                        </h:panelGrid>
+                    </p:panel>
 
 
-                        <p:panel id="busquedaProductoPanel" header="Búsqueda de productos" style="widht: 45%; position: relative" >
-                            <h:panelGrid columns="2">
-                                <p:outputLabel value="Codigo: "/>
-                                <p:inputText id="ItemCodigo" value="#{ProformaMB.codigoProducto}" />
-                                <p:commandButton value="Buscar" actionListener="#{ProformaMB.BuscarProducto}" update="detalleProducto"/>
-                                <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" />
-                            </h:panelGrid>
-                            <p:divider align="vertical"/>
-                            <h:panelGrid id="detalleProducto" columns="3" >
-                                <p:outputLabel value="Producto"/>
-                                <p:inputText id="NombreProducto" value="#{ProformaMB.nombreProducto}" disabled="true" />
-                                <div/>
-                                <p:outputLabel value="Precio: "/>
-                                <p:inputNumber id="priceTextBox" value="#{ProformaMB.precioProducto}" modifyValueOnWheel="false" disabled="false" />
-                                <div/>
-                                <p:outputLabel value="Cantidad: "/>
-                                <p:inputNumber value="#{ProformaMB.cantidad}" modifyValueOnWheel="true" minValue="0" decimalPlaces="0" />
-                                <div/>
-                                <p:commandButton value="Agregar" actionListener="#{ProformaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData growl" />
-                            </h:panelGrid>
-                        </p:panel>
-                    </div>
+                    <p:panel id="busquedaProductoPanel" header="Buscar producto" style="margin-top: 10px;" visible="#{ProformaMB.visible}">
+                        <h:panelGrid columns="4" width="50%" >
+                            <p:outputLabel value="Codigo: "/>
+                            <p:inputText id="ItemCodigo" value="#{ProformaMB.codigoProducto}" type="number" />
+                            <p:commandButton value="Buscar" actionListener="#{ProformaMB.BuscarProducto}" update="detalleProducto" style="position: center"/>
+                            <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" style="position: center"/>
+                        </h:panelGrid>
+                    </p:panel>
 
+
+                    <p:panel id="detalleProducto" header="Detalle producto" style="margin-top: 20px" visible="#{ProformaMB.visible}">
+                        <h:panelGrid columns="9" width="90%" >
+                            <p:outputLabel value="Producto: "/>
+                            <p:inputText id="NombreProducto" value="#{ProformaMB.nombreProducto}" disabled="true" />
+                            <p:outputLabel value="Precio: "/>
+                            <p:inputNumber id="priceTextBox" value="#{ProformaMB.precioProducto}" modifyValueOnWheel="false" disabled="true" />
+                            <p:outputLabel value="Cantidad: "/>
+                            <p:inputNumber value="#{ProformaMB.cantidad}" minValue="0" decimalPlaces="0" />
+                            <p:outputLabel value="Descuento: "/>
+                            <p:inputNumber value="#{ProformaMB.descuento}" minValue="0" decimalPlaces="0" disabled="true"/>
+                            <p:commandButton value="Agregar" actionListener="#{ProformaMB.AgregarProductoLista}" update=":ventaForm:outclientes itemsTable detalleProducto busquedaProductoPanel FactData growl" />
+                        </h:panelGrid>
+                    </p:panel>
 
                     <div style="height: 30px" />
 
@@ -79,7 +84,7 @@
                         </p:column>
 
                         <p:column headerText="Cod">
-                            <h:outputText value="#{ListaItems.producto.codigoAux}" />
+                            <h:outputText value="#{ListaItems.codigoProducto}" />
                         </p:column>
 
                         <p:column headerText="Producto" >
@@ -87,13 +92,13 @@
                         </p:column>
 
                         <p:column headerText="Precio Unitario">
-                            <h:outputText value="#{ListaItems.producto.precioUnitario}" >
+                            <h:outputText value="#{ListaItems.price}" >
                                 <f:convertNumber pattern="#0.00" />
                             </h:outputText>
                         </p:column>
 
                         <p:column headerText="Descuento">
-                            <h:outputText value="#{ListaItems.producto.descuento}" >
+                            <h:outputText value="#{ListaItems.descuento}" >
                                 <f:convertNumber pattern="#0.00" />
                             </h:outputText>
                         </p:column>
@@ -105,15 +110,15 @@
                         </p:column>
 
                         <p:column headerText="Subtotal">
-                            <h:outputText value="#{ListaItems.subTotal}">
+                            <h:outputText value="#{ListaItems.subtotal}">
                                 <f:convertNumber pattern="#0.00" />
                             </h:outputText>
                         </p:column>
 
                         <p:columnGroup type="footer" id="colgrp">
                             <p:row id="rowfoot">
-                                <p:column colspan="6" style="text-align:right" footerText="Total:"/>
-                                <p:column style="text-align:left" footerText="#{ProformaMB.subTotalVenta}" id="subtotalVenta" />
+                                <p:column colspan="6" style="text-align:right" footerText="Subtotal:"/>
+                                <p:column style="text-align:left" footerText="#{ProformaMB.subTotalProforma}" id="subtotalVenta" />
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
@@ -136,7 +141,9 @@
                                 <p:outputLabel value="Subtotal 0%"/>
                                 <p:inputText value="#{ProformaMB.subtotal0}" disabled="true"/>
                                 <p:outputLabel value="DESCUENTO"/>
-                                <p:inputText value="#{ProformaMB.descuento}" disabled="true"/>
+                                <p:inputText value="#{ProformaMB.totalDescuento}" disabled="true"/>
+                                <p:outputLabel value="SUBTOTAL"/>
+                                <p:inputText value="${ProformaMB.subtotal0 + ProformaMB.subtotal12}" disabled="true"/>
                                 <p:outputLabel value="ICE"/>
                                 <p:inputText value="#{ProformaMB.ice}" disabled="true"/>
                                 <p:outputLabel value="IVA 12%"/>

@@ -5,6 +5,9 @@
  */
 package com.recursoshumanos.Controller;
 
+import com.contabilidad.dao.CuentaDAO;
+import com.contabilidad.dao.DiarioDAO;
+import com.contabilidad.models.SubCuenta;
 import com.recursoshumanos.Model.DAO.AmonestacionDAO;
 import com.recursoshumanos.Model.DAO.DetalleRolPagoDAO;
 import com.recursoshumanos.Model.DAO.EmpleadoDAO;
@@ -68,7 +71,6 @@ public class RolDePagoController implements Serializable {
     private final EmpleadoDAO empleadoDAO;
     private final SueldoDAO sueldoDAO;
     private final MultaDAO multaDAO;
-
     private static HttpSession httpSession;
 
     /**
@@ -116,7 +118,6 @@ public class RolDePagoController implements Serializable {
         empleadoDAO = new EmpleadoDAO();
         sueldoDAO = new SueldoDAO();
         multaDAO = new MultaDAO();
-
         httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
         /**
@@ -613,6 +614,7 @@ public class RolDePagoController implements Serializable {
             mensaje = "El rol de pagos no se pudo guardar";
         }
         if (result) {
+            rolPagosDAO.insertarAsiento(rolPagos);
             verRoldePago(rolPagos);
             mostrarMensajeInformacion("Datos guardados correctamente");
         } else {
