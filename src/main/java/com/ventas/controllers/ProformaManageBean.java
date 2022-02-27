@@ -141,6 +141,7 @@ public class ProformaManageBean implements Serializable {
         
         Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 	this.isNewProforma = Boolean.valueOf(params.get("new"));
+        showAlert();
     }
 
     //Buscar cliente
@@ -305,7 +306,7 @@ public class ProformaManageBean implements Serializable {
                     listSize += 1;
                 }
             }
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml/?new=true");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?new=true");
         } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
         }

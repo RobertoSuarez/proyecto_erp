@@ -13,8 +13,6 @@
             <ui:define name="content">
 
                 <ui:include src="menuVentas.xhtml"/>
-
-                <f:event type="preRenderView" listener="#{ProformaMB.showAlert()}"/>
                 
                 <f:metadata>
                     <f:viewParam name="new" value="#{ProformaMB.isNewProforma}"/>
