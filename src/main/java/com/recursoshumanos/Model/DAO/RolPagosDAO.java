@@ -5,14 +5,18 @@
  */
 package com.recursoshumanos.Model.DAO;
 
+import com.contabilidad.dao.CuentaDAO;
+import com.contabilidad.dao.DiarioDAO;
 import com.global.config.Conexion;
 import com.recursoshumanos.Model.Entidad.Empleado;
 import com.recursoshumanos.Model.Entidad.RolPagos;
 import com.recursoshumanos.Model.Interfaces.IDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -27,26 +31,36 @@ import org.jetbrains.annotations.Nullable;
 public class RolPagosDAO implements IDAO<RolPagos> {
 
     private final Conexion conexion;
+    private final DiarioDAO diarioDAO;
+    private final CuentaDAO cuentaDAO;
     private RolPagos rolPagos;
 
     public RolPagosDAO() {
         this.conexion = new Conexion();
         this.rolPagos = new RolPagos();
+        diarioDAO = new DiarioDAO();
+        cuentaDAO = new CuentaDAO();
     }
 
     public RolPagosDAO(Conexion conexion) {
         this.conexion = conexion;
         this.rolPagos = new RolPagos();
+        diarioDAO = new DiarioDAO();
+        cuentaDAO = new CuentaDAO();
     }
 
     public RolPagosDAO(RolPagos rolPagos) {
         this.conexion = new Conexion();
         this.rolPagos = rolPagos;
+        diarioDAO = new DiarioDAO();
+        cuentaDAO = new CuentaDAO();
     }
 
     public RolPagosDAO(Conexion conexion, RolPagos rolPagos) {
         this.conexion = conexion;
         this.rolPagos = rolPagos;
+        diarioDAO = new DiarioDAO();
+        cuentaDAO = new CuentaDAO();
     }
 
     public RolPagos getRolPagos() {
@@ -390,5 +404,66 @@ public class RolPagosDAO implements IDAO<RolPagos> {
             }
         }
         return null;
+    }
+
+    public void insertarAsiento(RolPagos rolPagos) {
+        try {
+            String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("Modulo cuentas por pagar").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
+                        + ",\"documento\": \"" + rolPagos.getCodigo() + "\",\"detalle\": \"Rol de pago: "
+                        + rolPagos.getEmpleado().nombreCompleto() + "\",\"fechaCreacion\": \""
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-MM-dd HH:mm:SS") + "\",\"fechaCierre\":\""
+                        + DateFormatUtils.format(rolPagos.getFechaAprobacion(), "yyyy-MM-dd HH:mm:SS") + "\"}";
+
+                sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
+                        + rolPagos.getValor() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
+                        + "{\"idSubcuenta\":\"" + this.cuentaDAO.ObtenerIdSubCuentaPorNombre("Cuentas y documentos por Pagar Personal") + "\",\"debe\":\"0\",\"haber\":\""
+                        + rolPagos.getValor() + "\",\"tipoMovimiento\":\"Pago\"}]";
+                System.out.println(sentencia1);
+            intJson(sentencia, sentencia1);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage() + " error en conectarse");
+        }
+    }
+
+    public void deshabilitarAsiento(RolPagos rolPagos) {
+        try {
+            String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("Modulo cuentas por pagar").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
+                        + ",\"documento\": \"" + rolPagos.getCodigo() + " R\",\"detalle\": \"Rol de pago: :"
+                        + rolPagos.getEmpleado().nombreCompleto() + " R\",\"fechaCreacion\": \""
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-MM-dd HH:mm:SS")  + "\",\"fechaCierre\":\""
+                        + DateFormatUtils.format(rolPagos.getFechaAprobacion(), "yyyy-MM-dd HH:mm:SS") + "\"}";
+
+                sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
+                        + rolPagos.getValor() + "\",\"tipoMovimiento\":\"Pago\"},"
+                        + "{\"idSubcuenta\":\"" + this.cuentaDAO.ObtenerIdSubCuentaPorNombre("Cuentas y documentos por Pagar Personal") + "\",\"debe\":\""
+                        + rolPagos.getValor() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"}]";
+                System.out.println(sentencia1);
+            intJson(sentencia, sentencia1);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage() + " error en conectarse");
+        }
+    }
+
+    /**
+     * Envia los datos tipo json a insertar
+     *
+     * @param a Sentencia del tipo json (asiento)
+     * @param b Sentencia del tipo json (movimiento)
+     */
+    public void intJson(String a, String b) {
+        if (conexion.isEstado()) {
+            try {
+                String cadena = "SELECT public.generateasientocotableexternal('"
+                        + a + "','" + b + "')";
+                System.out.println(cadena);
+                conexion.ejecutarSql(cadena);
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
     }
 }

@@ -69,6 +69,24 @@ public class DiarioDAO {
         return diario;
     }
 
+    public Diario obtenerIdDiarioByNombre(String nombre) {
+        Diario diario = new Diario();
+        String sql = String.format("SELECT * FROM public.diariocontable where nombre like '%1%'", nombre);
+        try {
+            conexion.conectar();
+            resultSet = conexion.ejecutarSql(sql);
+            while (resultSet.next()) {
+                diario = new Diario(resultSet.getInt("iddiario"), resultSet.getString("nombre"),
+                        resultSet.getDate("fechaApertura"), resultSet.getDate("fechaCierre"), resultSet.getString("descripcion"));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return diario;
+    }
+
     public boolean addNewDiario(Diario diario) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String sql = String.format("select addNewDiario('%1$s','%2$s','%3$s','%4$s')", diario.getNombre(),
