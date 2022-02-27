@@ -192,8 +192,8 @@ public class VentaManagedBean implements Serializable {
                         detalle.setSubTotal(new BigDecimal(this.producto.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
                         detalle.setDescuento(0);
                         if (this.tipo) {
-                            detalle.setDescuento(this.descuento);
-                            detalle.setDescuento(detalle.getSubTotal() * (detalle.getDescuento() / 100));
+                            //detalle.setDescuento(this.descuento);
+                            detalle.setDescuento(detalle.getSubTotal() * (this.descuento / 100));
                         } else {
                             for (int i = 0; i < this.listadescuento.size(); i++) {
                                 if (this.listadescuento.get(i).getCodigo() == detalle.getCodprincipal()) {

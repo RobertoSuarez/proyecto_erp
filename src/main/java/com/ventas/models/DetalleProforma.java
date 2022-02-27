@@ -15,11 +15,13 @@ public class DetalleProforma implements Serializable {
     private int idDetalle;
     private int idProforma;
     private int codigoProducto;
-    private int cantidad;
-    private float descuento;
-    private float price;
+    private double cantidad;
+    private double descuento;
+    private double price;
     private String nombrecliente;
     private String identificacionCliente;
+    private Producto producto;
+    private double subtotal;
 
     public DetalleProforma() {
     }
@@ -48,27 +50,27 @@ public class DetalleProforma implements Serializable {
         this.codigoProducto = codigoProducto;
     }
 
-    public int getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 
-    public float getDescuento() {
+    public double getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(float descuento) {
+    public void setDescuento(double descuento) {
         this.descuento = descuento;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -87,6 +89,25 @@ public class DetalleProforma implements Serializable {
     public void setIdentificacionCliente(String identificacionCliente) {
         this.identificacionCliente = identificacionCliente;
     }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    
+    
     
     
     
