@@ -30,7 +30,7 @@
 
                     </p:toolbar>
                     <div class="ui-fluid"> 
-                        <p:staticMessage severity="warn" summary="Advertencia: " detail="Las cuentas del BALANCE GENERAL no cuadran" style="width: 100%; visibility:#{balanceGeneralMB.estado()};" />
+                        <p:staticMessage severity="warn" summary="Advertencia: " detail="La suma de los pasivos mas patrimonio no coinciden con la suma de los activos" style="width: 100%; visibility:#{balanceGeneralMB.estado()};" />
                     </div>
 
                     <p:dataTable id="dt-libros" widgetVar="dtBalance" var="balance"

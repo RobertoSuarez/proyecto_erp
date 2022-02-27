@@ -7,6 +7,7 @@ package com.ventas.dao;
 
 import com.global.config.Conexion;
 import com.ventas.models.DetalleVenta;
+import java.time.format.DateTimeFormatter;
 import com.ventas.models.Venta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +19,7 @@ public class VentaDAO {
 
     private Venta venta;
     private Conexion con;
+    private ResultSet result;
 
     public VentaDAO() {
         this.con = new Conexion();
@@ -80,6 +82,82 @@ public class VentaDAO {
         }
         return 0;
     }
+    
+    //asiento contable
+    public void insertasiento(Venta venta) {
+        if (con.isEstado())
+        {
+            try
+            {
+                int iddiario = 0;
+                String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por cobrar'";
+                result = con.ejecutarSql(cadena);
+                while (result.next())
+                {
+                    iddiario = result.getInt("iddiario");
+                }
+                //JSON asiento contable
+                String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + venta.getTotalFactura()
+                        + ",\"documento\": \"CPC-VNT-" + venta.getIdVenta() + "\",\"detalle\": "
+                        + "\"Cuentas por cobrar cliente\",\"fechaCreacion\": \""
+                        + LocalDate.now().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) +"\",\"fechaCierre\":\""
+                        + LocalDate.now().plusDays(venta.getDiasCredito()).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
+                System.out.println(sentencia);
+                //JSON un solo movimiento
+
+                int formaPago;
+                String tipomovimiento;
+                switch (venta.getIdFormaPago()) {
+                    case 1:
+                        formaPago=77;
+                        tipomovimiento = "Ventas con tarifa 12%";
+                        break;
+                    case 2:
+                        formaPago=1;
+                        tipomovimiento = "Caja";
+                        break;
+                    default:
+                        formaPago=3;
+                        tipomovimiento = "Banco";
+                        break;
+                }
+                    
+                    sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\""+ venta.getTotalFactura() 
+                            + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de venta\"},"
+                            + "{\"idSubcuenta\":\""+formaPago+"\",\"debe\":\"0\",\"haber\":\""+ venta.getTotalFactura() 
+                            +"\",\"tipoMovimiento\":\""+tipomovimiento+"\"}]";
+                    System.out.println(sentencia1);
+                    
+                intJson(sentencia, sentencia1);
+            } catch (SQLException ex)
+            {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally
+            {
+                con.desconectar();
+            }
+        }
+    }
+    
+     public void intJson(String a, String b) {
+        if (con.isEstado())
+        {
+            try
+            {
+                String cadena = "SELECT public.generateasientocotableexternal('"
+                        + a + "','" + b + "')";
+                System.out.println(cadena);
+                result = con.ejecutarSql(cadena);
+            } catch (Exception ex)
+            {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally
+            {
+                con.desconectar();
+            }
+        }
+    }
 
     //Obtener Todas las ventas
     public List<Venta> TodasVentas() throws SQLException {
@@ -141,3 +219,24 @@ public class VentaDAO {
     }
 
 }
+//
+//switch (venta.getIdFormaPago()) {
+//                    case 2:
+//                        sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\""
+//                            + venta.getTotalFactura() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de venta\"},"
+//                            + "{\"idSubcuenta\":\"1\",\"debe\":\"0\",\"haber\":\""+ venta.getTotalFactura() 
+//                            +"\",\"tipoMovimiento\":\"Caja\"}]";
+//                        break;
+//                    case 3:
+//                        sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\""
+//                            + venta.getTotalFactura() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de venta\"},"
+//                            + "{\"idSubcuenta\":\"3\",\"debe\":\"0\",\"haber\":\""+ venta.getTotalFactura() 
+//                            +"\",\"tipoMovimiento\":\"Banco\"}]";
+//                        break;
+//                }
+//                    
+//                    sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\""
+//                            + venta.getTotalFactura() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de venta\"},"
+//                            + "{\"idSubcuenta\":\"77\",\"debe\":\"0\",\"haber\":\""+ venta.getTotalFactura() 
+//                            +"\",\"tipoMovimiento\":\"Ventas con tarifa 12%\"}]";
+//                    System.out.println(sentencia1);

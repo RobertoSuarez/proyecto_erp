@@ -282,12 +282,12 @@ public class AbonoController implements Serializable {
         try {
 
             //@return diasDeCredito Retorna los dias de credito
-            int diasDeCredito = (int) ChronoUnit.DAYS.between(fechasPlan[0], fechasPlan[1]);
+            double diasDeCredito = (double) ChronoUnit.DAYS.between(fechasPlan[0], fechasPlan[1]);
 
             //@return valor Retorna el valor mensual a pagar del plan de pago.
             double valorMensual = ((totalPendiente + totalAbonos) / (diasDeCredito / 30));
             valorMensual = Double.valueOf(df.format(valorMensual).replace(',', '.'));
-
+            
             //Si el totalPendiente es menor al valor mensual
             //Retorno el valor pendiente, caso contrario se devuelve el valor Mensual
             if (totalPendiente <= valorMensual) {
@@ -303,6 +303,7 @@ public class AbonoController implements Serializable {
                 mostrarMensajeAdvertencia("No se puede ingresar un abono a una Factura que"
                         + "no corresponda a un crédito.");
             } else {
+
                 current.executeScript("PF('nuevoCobro').show();");
             }
         } catch (Exception ex) {
@@ -334,6 +335,7 @@ public class AbonoController implements Serializable {
             } else if (abonoDAO.insertarNuevoAbono(idFactura, idPlanDePago) > 0) {
 
                 mostrarMensajeInformacion("Se Registró Correctamente");
+                abonoDAO.insertasiento(idFactura);
                 PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
                 this.list_Abonos = abonoDAO.obtenerAbonos(idCliente);
 
@@ -341,7 +343,7 @@ public class AbonoController implements Serializable {
                 mostrarMensajeError("No se Registró Correctamente");
             }
         } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            System.out.println("Error2: " + ex.getMessage());
         }
     }
 
