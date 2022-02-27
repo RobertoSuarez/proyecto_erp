@@ -69,7 +69,7 @@ public class DiarioDAO {
         return diario;
     }
 
-    public Diario obtenerIdDiarioByNombre(String nombre) {
+    public Diario obtenerDiarioByNombre(String nombre) {
         Diario diario = new Diario();
         String sql = String.format("SELECT * FROM public.diariocontable where nombre like '%1%'", nombre);
         try {
