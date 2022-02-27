@@ -59,6 +59,25 @@ public class BalanceGeneralManagedBean implements Serializable {
     }
 
     public void exportpdf() throws IOException, JRException {
+        List<BalanceGeneral> balanceGeneralString = new ArrayList<>();
+        balanceGeneralString = this.balanceGeneral;
+
+        String nombre;
+        for (int x = 0; x < balanceGeneralString.size(); x++) {
+
+            if (balanceGeneralString.get(x).getNombre().charAt(5) == ' ') {
+                nombre = balanceGeneralString.get(x).getNombre();
+                balanceGeneralString.get(x).setNombre("       " + nombre);
+            }
+            nombre = "";
+            if (balanceGeneralString.get(x).getNombre().charAt(7) == ' ') {
+                nombre = balanceGeneralString.get(x).getNombre();
+                balanceGeneralString.get(x).setNombre("              " + nombre);
+            }
+
+            balanceGeneralString.get(x).setSaldo(pasivoPatrimonio);
+        }
+
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
 
@@ -90,7 +109,7 @@ public class BalanceGeneralManagedBean implements Serializable {
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     filetext.getPath(),
                     parametros,
-                    new JRBeanCollectionDataSource(this.balanceGeneral)
+                    new JRBeanCollectionDataSource(balanceGeneralString)
             );
 
             // exportamos a pdf.
