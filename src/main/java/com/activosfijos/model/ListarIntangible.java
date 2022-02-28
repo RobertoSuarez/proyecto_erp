@@ -21,7 +21,7 @@ public class ListarIntangible {
     private int id_intangible;
     private int idproveedor;
     private String proveedor;
-    private String numero_factura ;
+    private String numero_factura;
 
     public ListarIntangible() {
     }
@@ -37,7 +37,15 @@ public class ListarIntangible {
         this.numero_factura = numero_factura;
     }
 
-    
+    public ListarIntangible(String detalle_de_activo,
+            int valor_adquisicion, String proveedor, String numero_factura) {
+
+        this.detalle_de_activo = detalle_de_activo;
+        this.valor_adquisicion = valor_adquisicion;
+        this.proveedor = proveedor;
+        this.numero_factura = numero_factura;
+    }
+
     public int getIdproveedor() {
         return idproveedor;
     }
@@ -45,8 +53,6 @@ public class ListarIntangible {
     public void setIdproveedor(int idproveedor) {
         this.idproveedor = idproveedor;
     }
-
-  
 
     public String getProveedor() {
         return proveedor;
@@ -63,8 +69,6 @@ public class ListarIntangible {
     public void setNumero_factura(String numero_factura) {
         this.numero_factura = numero_factura;
     }
-
- 
 
     public int getId_activo_fijo() {
         return id_activo_fijo;

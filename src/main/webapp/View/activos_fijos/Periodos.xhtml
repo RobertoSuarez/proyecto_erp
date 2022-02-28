@@ -7,9 +7,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <h:body>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+       <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
 
@@ -24,39 +23,66 @@
                     <p:growl id="growl" showDetail="true" />
                     <p:panel>
                         <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
+                        <table class="table table-striped">
+                            <thead>
 
-                        <p:column headerText="Reporte" exportValue="false">
-                            <p:commandButton
-                                value="Exportar PDF" 
-                                ajax="false"
-                                actionListener="#{periodosactivosfijosMB.exportPdfDepreciable}"
-                                icon="pi pi-file-pdf" 
-                                styleClass="ui-button-raised" />
-                        </p:column>
-                        <p:column headerText="Activos fijos" >
-                            <h:outputText value="Activos depreciables" />  
-                        </p:column>
 
-                        <p:column headerText="Reporte" exportValue="false">
-                            <p:commandButton
-                                value="Exportar PDF" 
-                                ajax="false"
-                                actionListener="#{periodosactivosfijosMB.exportPdfNoDepreciable()}"
-                                icon="pi pi-file-pdf" 
-                                styleClass="ui-button-raised" />
-                        </p:column>
-                        <p:column headerText="Activos fijos" >
-                            <h:outputText value="Activos no depreciables" />  
-                            <p:commandButton
-                                value="Exportar PDF" 
-                                ajax="false"
-                                actionListener="#{periodosactivosfijosMB.exportPdfIntangible()}"
-                                icon="pi pi-file-pdf" 
-                                styleClass="ui-button-raised" />
-                        </p:column>
-                        <p:column headerText="Activos fijos" >
-                            <h:outputText value="Activos ntangibles" />  
-                        </p:column>
+                                <tr>
+
+                                    <th scope="col">Reporte</th>
+
+                                    <th scope="col">Tipo</th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>  
+                                <tr>
+
+                                    <td>  <p:outputLabel value="Reporte Activos Fijos Depreciables"/></td>                               
+
+                                    <td> <p:commandButton
+                                            value="Exportar PDF" 
+                                            ajax="false"
+                                            actionListener="#{periodosactivosfijosMB.exportPdfDepreciable()}"
+                                            icon="pi pi-file-pdf" 
+                                            styleClass="ui-button-raised" /></td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>  <p:outputLabel value="Reporte Activos Fijos no Depreciables"/></td>                             
+
+                                    <td><p:commandButton
+                                            value="Exportar PDF" 
+                                            ajax="false"
+                                            actionListener="#{periodosactivosfijosMB.exportPdfNoDepreciable()}"
+                                            icon="pi pi-file-pdf" 
+                                            styleClass="ui-button-raised" /></td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td>   <p:outputLabel value="Reporte Activos Intangibles"/></td>
+
+
+
+                                    <td>  <p:commandButton
+                                            value="Exportar PDF" 
+                                            ajax="false"
+                                            actionListener="#{periodosactivosfijosMB.exportPdfIntangible()}"
+                                            icon="pi pi-file-pdf" 
+                                            styleClass="ui-button-raised" /></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
 
                     </p:panel>
                 </h:form>

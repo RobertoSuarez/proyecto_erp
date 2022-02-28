@@ -42,6 +42,7 @@ and open the template in the editor.
                                 <p:toolbarGroup>
 
                                     <p:commandButton
+
                                         value="Nuevo" icon="pi pi-plus"   
                                         oncomplete="PF('NuevoIntangible').show()"   
                                         styleClass="ui-button-primary" 
@@ -55,6 +56,16 @@ and open the template in the editor.
                                                      styleClass="ui-button-secondary" 
                                                      style="margin-right: .3rem " >                                
                                     </p:commandButton>
+                                   
+                                        <p:commandButton
+                                            value="Exportar PDF" 
+                                            id="btnIntangible"
+                                            ajax="false"
+                                            actionListener="#{periodosactivosfijosMB.exportPdfIntangible()}"
+                                            icon="pi pi-file-pdf" 
+                                            styleClass="ui-button-raised" />
+                                 
+
 
 
                                 </p:toolbarGroup>                       
@@ -332,7 +343,7 @@ and open the template in the editor.
                                             icon="pi pi-times"                                            
                                             styleClass="ui-button-secondary" 
                                             onclick="PF('EditarIntangible').hide()"
-                                          />
+                                            />
 
                                     </f:facet>
                                 </div>

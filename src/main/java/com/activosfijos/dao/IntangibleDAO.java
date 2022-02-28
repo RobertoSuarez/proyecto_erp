@@ -107,8 +107,7 @@ public class IntangibleDAO {
                 ListarIntangible listaintangible = new ListarIntangible();
                 listaintangible.setDetalle_de_activo(rs.getString("detalle_de_activo"));
                 listaintangible.setValor_adquisicion(rs.getInt("valor_adquisicion"));
-                listaintangible.setFecha_adquisicion(rs.getObject("fecha_adquisicion", LocalDate.class));
-               listaintangible.setProveedor(rs.getString("nombre"));
+                listaintangible.setProveedor(rs.getString("nombre"));
                 listaintangible.setNumero_factura(rs.getString("numero_factura"));
                 listInta.add(listaintangible);
             }
