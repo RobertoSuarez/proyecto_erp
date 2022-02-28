@@ -24,34 +24,16 @@
                     <p:growl id="growl" showDetail="true" />
                     <p:panel>
                         <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
-                        <p:dataTable id="listarperiodo"
-                                     value="#{periodosactivosfijosMB.listaPeriodosActivosFijos}" 
-                                     var="periodoactivofijo"
-                                     rowKey="#{periodoactivofijo.anio}" editable="true" 
-                                     rowIndexVar="row" >
-                            <p:column headerText="Fecha Inicio">
-                                <h:outputText value="#{periodoactivofijo.inicio}"/>
-                            </p:column>
-                            <p:column headerText="Fecha Fin">
-                                <h:outputText value="#{periodoactivofijo.fin}"/>
-                            </p:column>
-                            <p:column headerText="Monto" >
-                                <h:outputText value="#{periodoactivofijo.monto_total}">
-                                    <f:convertNumber currencySymbol="$" type="currency"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Año" >
-                                <h:outputText value="#{periodoactivofijo.anio}" />  
-                            </p:column>
+                       
                             <p:column headerText="Reporte" exportValue="false">
                                 <p:commandButton
                                     value="Exportar PDF" 
                                     ajax="false"
-                                    actionListener="#{periodosactivosfijosMB.exportpdf(periodoactivofijo.anio)}"
+                                    actionListener="#{periodosactivosfijosMB.exportpdf}"
                                     icon="pi pi-file-pdf" 
                                     styleClass="ui-button-raised" />
                             </p:column>
-                        </p:dataTable>
+                        
                     </p:panel>
                 </h:form>
             </ui:define>
