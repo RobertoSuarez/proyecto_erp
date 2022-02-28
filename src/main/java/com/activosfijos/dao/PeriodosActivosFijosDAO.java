@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class PeriodosActivosFijosDAO {
 
-    public List<ListaPeriodosActivosFijos> listarperiodosactivofijo() throws Exception {
+    public List<ListaPeriodosActivosFijos> listarActivosDepreciablesReporte() throws Exception {
         List<ListaPeriodosActivosFijos> listperiodo = new ArrayList<>();
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");

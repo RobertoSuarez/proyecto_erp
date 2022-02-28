@@ -12,9 +12,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                
+
                 <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-                
+
                 <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
                     <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
@@ -24,16 +24,31 @@
                     <p:growl id="growl" showDetail="true" />
                     <p:panel>
                         <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
-                       
-                            <p:column headerText="Reporte" exportValue="false">
-                                <p:commandButton
-                                    value="Exportar PDF" 
-                                    ajax="false"
-                                    actionListener="#{periodosactivosfijosMB.exportpdf}"
-                                    icon="pi pi-file-pdf" 
-                                    styleClass="ui-button-raised" />
-                            </p:column>
-                        
+
+                        <p:column headerText="Reporte" exportValue="false">
+                            <p:commandButton
+                                value="Exportar PDF" 
+                                ajax="false"
+                                actionListener="#{periodosactivosfijosMB.exportPdfDepreciable}"
+                                icon="pi pi-file-pdf" 
+                                styleClass="ui-button-raised" />
+                        </p:column>
+                        <p:column headerText="Activos fijos" >
+                            <h:outputText value="Activos depreciables" />  
+                        </p:column>
+
+                        <p:column headerText="Reporte" exportValue="false">
+                            <p:commandButton
+                                value="Exportar PDF" 
+                                ajax="false"
+                                actionListener="#{periodosactivosfijosMB.exportPdfNoDepreciable()}"
+                                icon="pi pi-file-pdf" 
+                                styleClass="ui-button-raised" />
+                        </p:column>
+                        <p:column headerText="Activos fijos" >
+                            <h:outputText value="Activos no depreciables" />  
+                        </p:column>
+
                     </p:panel>
                 </h:form>
             </ui:define>

@@ -5,8 +5,7 @@
  */
 package com.activosfijos.model;
 
-import java.text.DecimalFormat;
-import java.time.LocalDate;
+import java.text.DecimalFormat; 
 
 /**
  *
