@@ -5,10 +5,12 @@
  */
 package com.activosfijos.controllers;
 
+import com.activosfijos.dao.IntangibleDAO;
 import com.activosfijos.dao.NoDepreciableDAO;
 import com.activosfijos.dao.PeriodosActivosFijosDAO;
 import com.activosfijos.model.ListaNoDepreciable;
 import com.activosfijos.model.ListaPeriodosActivosFijos;
+import com.activosfijos.model.ListarIntangible;
 import com.cuentasporpagar.models.ManagerCalendario;
 import java.io.File;
 import java.io.IOException;
@@ -40,8 +42,10 @@ public class PeriodosActivosFijosMB implements Serializable {
 
     PeriodosActivosFijosDAO periodosactivosfijosdao = new PeriodosActivosFijosDAO();
     NoDepreciableDAO depreciableDAO = new NoDepreciableDAO();
+    IntangibleDAO intangibleDAO = new IntangibleDAO();
     List<ListaPeriodosActivosFijos> listaDepreciablesActivosFijos;
     List<ListaNoDepreciable> listaNoDepreciablesActivosFijos;
+    List<ListarIntangible> listaIntangible;
 
     public PeriodosActivosFijosMB() {
     }
@@ -52,6 +56,7 @@ public class PeriodosActivosFijosMB implements Serializable {
         try {
             this.listaDepreciablesActivosFijos = periodosactivosfijosdao.listarActivosDepreciablesReporte();
             this.listaNoDepreciablesActivosFijos = depreciableDAO.ListarNodepreciableReporte();
+            this.listaIntangible = intangibleDAO.listaIntangiblesReporte();
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
@@ -163,6 +168,59 @@ public class PeriodosActivosFijosMB implements Serializable {
             JasperPrint jasperPrint = JasperFillManager.fillReport(filetext.getPath(),
                     parametros,
                     new JRBeanCollectionDataSource(this.listaNoDepreciablesActivosFijos)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+
+            System.out.println("fin proccess");
+        }
+    }
+
+    public void exportPdfIntangible() throws IOException, JRException {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
+        //RequestContext requestContext = RequestContext.getCurrentInstance();
+        //requestContext.execute("window.print();");
+        //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        for (int x = 0; x < listaIntangible.size(); x++) {
+            System.err.println(listaIntangible.get(x).getDetalle_de_activo() + "<---->");
+        }
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; filename=Reporte.pdf");
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+            ManagerCalendario mc = new ManagerCalendario();
+
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("nombreEmpresa", "ERP Contable");
+            parametros.put("fecha2", LocalDate.now().toString());
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/Simple_Blue_2.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.listaIntangible)
             );
 
             // exportamos a pdf.

@@ -83,6 +83,45 @@ public class IntangibleDAO {
         return listInta;
     }
 
+    public List<ListarIntangible> listaIntangiblesReporte() throws Exception {
+        List<ListarIntangible> listInta = new ArrayList<>();
+        Conexion conexion = new Conexion();
+        System.out.println("Conectado a la db");
+        try {
+            conexion.conectar();
+            // Consulta.
+            PreparedStatement st = conexion.connection.prepareStatement(
+                    "select af.detalle_de_activo,\n"
+                    + "af.valor_adquisicion,\n"
+                    + "af.numero_factura,\n"
+                    + "af.fecha_adquisicion,\n"
+                    + "proveedor.nombre\n"
+                    + "from activos_fijos af, fijo_intangible afi, proveedor\n"
+                    + "where afi.id_activo_fijo = af.id_activo_fijo\n"
+                    + "and af.idproveedor=proveedor.idproveedor\n"
+                    + "and af.estado='habilitado';");
+            // Ejecución
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                ListarIntangible listaintangible = new ListarIntangible();
+                listaintangible.setDetalle_de_activo(rs.getString("detalle_de_activo"));
+                listaintangible.setValor_adquisicion(rs.getInt("valor_adquisicion"));
+                listaintangible.setFecha_adquisicion(rs.getObject("fecha_adquisicion", LocalDate.class));
+               listaintangible.setProveedor(rs.getString("nombre"));
+                listaintangible.setNumero_factura(rs.getString("numero_factura"));
+                listInta.add(listaintangible);
+            }
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            conexion.desconectar();
+        }
+
+        return listInta;
+    }
+
     public List<ListarIntangible> listaragotablesdeshabilitados() throws Exception {
         List<ListarIntangible> listInta = new ArrayList<>();
         Conexion conexion = new Conexion();

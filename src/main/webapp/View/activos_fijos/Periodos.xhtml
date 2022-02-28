@@ -47,6 +47,15 @@
                         </p:column>
                         <p:column headerText="Activos fijos" >
                             <h:outputText value="Activos no depreciables" />  
+                            <p:commandButton
+                                value="Exportar PDF" 
+                                ajax="false"
+                                actionListener="#{periodosactivosfijosMB.exportPdfIntangible()}"
+                                icon="pi pi-file-pdf" 
+                                styleClass="ui-button-raised" />
+                        </p:column>
+                        <p:column headerText="Activos fijos" >
+                            <h:outputText value="Activos ntangibles" />  
                         </p:column>
 
                     </p:panel>
