@@ -37,20 +37,30 @@ public class EntradaDetalleDAO {
     }
 
     public List<EntradaDetalleInventario> getEntradasDetalle() {
+        return getEntradasDetalle(0);
+    }
+
+    public List<EntradaDetalleInventario> getEntradasDetalle(int idEntrada) {
         List<EntradaDetalleInventario> ListEntrada = new ArrayList<>();
-        String sql = String.format("Select * FROM entrada_detalle");
+
+        String sql = "";
+        if (idEntrada > 0) {
+            sql = "Select * FROM entrada_detalle WHERE id_entrada=" + idEntrada;
+        } else {
+            sql = "Select * FROM entrada_detalle";
+        }
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
                 EntradaDetalleInventario detalle = new EntradaDetalleInventario();
-                                        detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
-                                        detalle.setIdEntrada(resultSet.getInt("id_entrada")); 
-                                        detalle.setCant(resultSet.getInt("cant"));
-                                        detalle.setCosto(resultSet.getInt("costo"));
-                                        detalle.setIva(resultSet.getInt("ice"));
-                                        detalle.setIce(resultSet.getInt("ice"));
-                                        
+                detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
+                detalle.setIdEntrada(resultSet.getInt("id_entrada"));
+                detalle.setCant(resultSet.getInt("cant"));
+                detalle.setCosto(resultSet.getInt("costo"));
+                detalle.setIva(resultSet.getInt("ice"));
+                detalle.setIce(resultSet.getInt("ice"));
+
                 ListEntrada.add(detalle);
 
             }

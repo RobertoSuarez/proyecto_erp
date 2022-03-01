@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class Proveedor {
+ public class Proveedor {
 
     int idProveedor;
     String codigo;
