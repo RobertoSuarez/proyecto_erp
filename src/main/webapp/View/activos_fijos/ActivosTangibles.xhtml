@@ -19,8 +19,7 @@
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles"
                                 url="./ActivosIntangibles.xhtml"/>
-                    <p:menuitem value="Reporte" 
-                                url="./Periodos.xhtml"/>
+                  
                 </p:menubar>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
@@ -52,6 +51,13 @@
                                                         styleClass="ui-button-secondary" 
                                                         style="margin-right: .3rem " >                                
                                                     </p:commandButton>
+                                                    <p:commandButton
+                                                        value="Exportar PDF" 
+                                                        id="btnDepreciable"
+                                                        ajax="false"
+                                                        actionListener="#{periodosactivosfijosMB.exportPdfDepreciable()}"
+                                                        icon="pi pi-file-pdf" 
+                                                        styleClass="ui-button-raised" />
                                                 </h:form>
                                             </p:toolbarGroup>                       
                                         </p:toolbar> 
@@ -591,6 +597,15 @@
                                                     styleClass="ui-button-secondary" 
                                                     style="margin-right: .3rem " >                                
                                                 </p:commandButton>
+                                                <h:form>
+                                                    <p:commandButton
+                                                        value="Exportar PDF" 
+                                                        id="btnNoDepreciable"
+                                                        ajax="false"
+                                                        actionListener="#{periodosactivosfijosMB.exportPdfNoDepreciable()}"
+                                                        icon="pi pi-file-pdf" 
+                                                        styleClass="ui-button-raised" />
+                                                </h:form>
                                             </p:toolbarGroup>                       
                                         </p:toolbar> 
                                         <!-- Tabla visual de datos  !-->

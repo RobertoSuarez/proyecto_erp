@@ -147,6 +147,45 @@ public class NoDepreciableDAO {
         return listaNP;
     }
 
+    public List<ListaNoDepreciable> ListarNodepreciableReporte() throws Exception {
+        List<ListaNoDepreciable> listaNP = new ArrayList<>();
+        String sentencia = "";
+        try {
+            conexion.conectar();
+            // Consulta.
+            sentencia
+                    = "select \n"
+                    + "af.detalle_de_activo,\n"
+                    + "af.valor_adquisicion,\n"
+                    + "atnd.plusvalia,\n"
+                    + "af.numero_factura,\n"
+                    + "proveedor.nombre\n"
+                    + "from activos_fijos af, fijo_tanginle_no_depreciable atnd, proveedor\n"
+                    + "where atnd.id_activo_fijo = af.id_activo_fijo\n"
+                    + "and af.idproveedor=proveedor.idproveedor\n"
+                    + "and af.estado='habilitado';";
+            // Ejecución
+            result = conexion.ejecutarSql(sentencia);
+
+            while (result.next()) {
+                ListaNoDepreciable listaNoDepreciable = new ListaNoDepreciable();
+                listaNoDepreciable.setDetalle_de_activo(result.getString("detalle_de_activo"));
+                listaNoDepreciable.setValor_adquisicion(result.getInt("valor_adquisicion"));
+                listaNoDepreciable.setPlusvalia(result.getDouble("plusvalia"));
+                listaNoDepreciable.setProveedor(result.getString("nombre"));
+                listaNoDepreciable.setNumero_factura(result.getString("numero_factura"));
+                listaNP.add(listaNoDepreciable);
+            }
+            conexion.desconectar();
+        } catch (SQLException e) {
+            e.toString();
+            conexion.desconectar();
+        } finally {
+            conexion.desconectar();
+        }
+        return listaNP;
+    }
+
     public boolean deshabilitarnoDepreciable(ListaNoDepreciable li) throws SQLException {
         String consulta = "";
         try {

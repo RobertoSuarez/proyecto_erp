@@ -310,6 +310,7 @@ public class ProformaDAO {
         } finally {
             con.desconectar();
         }
+        this.ventaDao.insertasiento(this.venta);
         return codigoventa;
     }
 
