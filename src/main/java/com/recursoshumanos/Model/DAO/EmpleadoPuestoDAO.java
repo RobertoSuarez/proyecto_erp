@@ -187,9 +187,7 @@ public class EmpleadoPuestoDAO implements IDAO<EmpleadoPuesto> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("empleado_puesto", 
-                        "id_empleado_puesto, id_puesto, id_horario_laboral, fecha_cambio, observaciones", 
-                        "estado = true AND id_empleado = " + empleado.getId(), null);
+                result = conexion.selecionar("empleado_puesto","id_empleado_puesto, id_puesto, id_horario_laboral, fecha_cambio, observaciones","estado = true AND id_empleado = " + empleado.getId(), null);
                 PuestoLaboralDAO pldao = new PuestoLaboralDAO();
                 HorarioLaboralDAO hldao = new HorarioLaboralDAO();
                 while (result.next()) {
