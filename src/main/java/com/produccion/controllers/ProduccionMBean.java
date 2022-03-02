@@ -375,7 +375,13 @@ public class ProduccionMBean implements Serializable {
                                     materiales += adicionales.getCantidad() * adicionales.getCosto();
                                     ordenDao.extraccionMateriales(adicionales.getId(), adicionales.getCantidad());
                                 }
-                                ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales);
+                                if (ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales) < 1) {
+                                    ordenDao.cancelarOrdenProduccion(ordenTrabajo.getCodigo_orden());
+                                    ordenDao.updateRegistro(ordenTrabajo.getCodigo_orden());
+                                    ordenDao.updateOrden(ordenTrabajo.getCodigo_orden());
+                                    showWarn("No se pudo generar la Orden de producción");
+                                }
+
                             }
                         }
                     }

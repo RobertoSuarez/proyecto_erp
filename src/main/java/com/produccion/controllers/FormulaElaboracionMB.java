@@ -15,6 +15,7 @@ import com.produccion.models.SubProceso;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -45,6 +46,7 @@ public class FormulaElaboracionMB implements Serializable {
     private List<FormulaMateriales> listaMaterialesConfirmados;
     private List<FormulaProduccion> productoTerminado;
     private List<FormulaProduccion> productoSM;
+    private List<FormulaProduccion> listaEditar;
 
     public FormulaElaboracionMB() {
         formulaProduccion = new FormulaProduccion();
@@ -58,6 +60,7 @@ public class FormulaElaboracionMB implements Serializable {
         productoTerminado = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
         productoSM = new ArrayList<>();
+        listaEditar = new ArrayList<>();
 
         formulaMaterialesDAO = new FormulaMaterialesDAO();
     }
@@ -157,6 +160,14 @@ public class FormulaElaboracionMB implements Serializable {
 
     public void setListaMaterialesConfirmados(List<FormulaMateriales> listaMaterialesConfirmados) {
         this.listaMaterialesConfirmados = listaMaterialesConfirmados;
+    }
+
+    public List<FormulaProduccion> getListaEditar() {
+        return listaEditar;
+    }
+
+    public void setListaEditar(List<FormulaProduccion> listaEditar) {
+        this.listaEditar = listaEditar;
     }
 
     //metodos
@@ -361,6 +372,52 @@ public class FormulaElaboracionMB implements Serializable {
 
     public void deleteFila(FormulaMateriales producto) {
         listaMaterialesConfirmados.remove(producto);
+    }
+
+    //Todo lo nuevo de editar
+    public void editaFormula(FormulaProduccion formula) {
+        listaEditar = formulaProduccionDAO.traemeFormula(formula.getCodigo_formula());
+        for (FormulaProduccion lista : listaEditar) {
+            formulaProduccion.setCodigo_formula(lista.getCodigo_formula());
+            formulaProduccion.setNombre_formula(lista.getNombre_formula());
+            formulaProduccion.setNombre_producto(lista.getNombre_producto());
+            formulaProduccion.setDescripcion(lista.getDescripcion());
+            formulaProduccion.setRendimiento(lista.getRendimiento());
+            formulaProduccion.setNombre(lista.getNombre());
+            formulaProduccion.setCategoria(lista.getCategoria());
+            formulaProduccion.setTipo(lista.getTipo());
+        }
+        listaEditar = formulaProduccionDAO.listaMateriales(formula.getCodigo_formula());
+    }
+
+    public void editarFormula() {
+        try {
+            if ("".equals(formulaProduccion.getNombre_formula())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un Nombre"));
+            } else if ("".equals(formulaProduccion.getDescripcion())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else if ("".equals(formulaProduccion.getRendimiento())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una Descripción"));
+            } else {
+                formulaProduccionDAO.update(formulaProduccion);
+                for (FormulaProduccion listEdit : listaEditar) {
+                    if (listEdit.getCantidad()>0) {
+                        formulaProduccionDAO.actualizarMateriales(formulaProduccion.getCodigo_formula(), listEdit.getCodigo_articulo(), listEdit.getCantidad());
+                    }else{
+                         showWarn("Ingese una cantidad mayor a cero.");
+                    }
+                }
+                showInfo("Formula Modificada");
+                listaFormula = formulaProduccionDAO.getFormula();
+                listaEditar = new ArrayList<>();
+            }
+        } catch (SQLException e) {
+            showWarn("Error al guardar");
+        }
+    }
+
+    public void deleteEdit(FormulaProduccion producto) {
+        listaEditar.remove(producto);
     }
 
 }
