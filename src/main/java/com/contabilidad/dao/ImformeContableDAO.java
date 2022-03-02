@@ -70,4 +70,23 @@ public class ImformeContableDAO {
         }
         return libros;
     }
+    
+    public List<Libro> filtrateLibroByCuenta(int idcuenta) {
+        String sql = String.format("select * from filllibromayorByCuenta(%1$d);", idcuenta);
+        List<Libro> libros = new ArrayList<>();
+        try {
+            conexion.conectar();
+            resultSet = conexion.ejecutarSql(sql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                libros.add(new Libro(resultSet.getString("Codigo"), resultSet.getString("SubCuenta"), resultSet.getString("Fecha"),
+                        resultSet.getString("Asiento"), resultSet.getString("Descripcion"), resultSet.getDouble("Debe"), resultSet.getDouble("Haber")));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally {
+            conexion.desconectar();
+        }
+        return libros;
+    }
 }
