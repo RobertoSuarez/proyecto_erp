@@ -335,7 +335,7 @@ public class FacturaManagedBean {
      }
 
      public void ejemplofac() {
-          this.factura.setNfactura("000-000-000000000");
+          this.factura.setNfactura("000-000-00000");
      }
 
      /**
@@ -348,8 +348,14 @@ public class FacturaManagedBean {
           f.setImporteD(datoImporte);
           f.setDetalle(datoDetalle);
           //f.setCuenta(datoCuenta);
-          datoImporte = 0;
-          datoDetalle = "";
+          
+          int importe = 0;
+          for (int i = 0; i < detalleFactura.size(); i++) {
+               importe+= detalleFactura.get(i).getImporteD();
+          }
+          this.factura.setImporte(importe);
+          PrimeFaces.current().ajax().update("form:importe");
+          
           //datoCuenta = "";
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle Editado"));
      }
@@ -384,6 +390,8 @@ public class FacturaManagedBean {
           //listaCuentas.clear();
           listaProductos.clear();
           llenarCuenta();
+          datoImporte = 0;
+          datoDetalle = "";
           //System.out.println("Cantidad detalle 2: " + listaCuentas.size());
      }
 

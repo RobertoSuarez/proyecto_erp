@@ -223,7 +223,7 @@ public class FacturaDAO {
                 //JSON un solo movimiento
                 sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
                         + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
-                        + selectedFactura.get(0).getDetalle() + "\"},"
+                        + "Inventario de Suministro y Materiales\"},"
                         + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
                         + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
                 System.out.println(sentencia1);
@@ -255,7 +255,7 @@ public class FacturaDAO {
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\"0\",\"haber\":\""
                         + selectedFactura.get(0).getImporteD() + "\",\"tipoMovimiento\":\""
-                        + selectedFactura.get(0).getDetalle() + "\"},"
+                        + "Inventario de Suministro y Materiales\"},"
                         + "{\"idSubcuenta\":\"28\",\"debe\":\""
                         + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de compra\"}]";
                 intJson(sentencia, sentencia1);
@@ -274,7 +274,7 @@ public class FacturaDAO {
                 String cadena = "SELECT public.generateasientocotableexternal('"
                         + a + "','" + b + "')";
                 System.out.println(cadena);
-                conexion.Ejecutar2(cadena);
+                result=conexion.ejecutarSql(cadena);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
             } finally {
