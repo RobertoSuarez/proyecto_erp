@@ -417,7 +417,7 @@ public class OrdenProduccionDAO {
             return 1;
         } catch (Exception ex) {
             return -1;
-            
+
         } finally {
             conexion.desconectar();
         }
@@ -544,7 +544,7 @@ public class OrdenProduccionDAO {
 
     public int registroExistencia(int id_registro) {
         try {
-            int existencia=0;
+            int existencia = 0;
             sentenciaSql = String.format("select * from detalle_produccion\n"
                     + "	where codigo_registro=" + id_registro + ";");
             resultSet = conexion.ejecutarSql(sentenciaSql);
@@ -579,6 +579,45 @@ public class OrdenProduccionDAO {
             sentenciaSql = String.format("UPDATE public.articulos\n"
                     + "	SET cantidad=(select cantidad as cantidad from articulos where id=" + id_producto + ")+" + cantidad + "\n"
                     + "	WHERE id=" + id_producto + ";");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public void cancelarOrdenProduccion(int id_orden) {
+        try {
+            sentenciaSql = String.format("delete from detalleproceso\n"
+                    + "	where codigo_registro IN (select rop.codigo_registro from registro_orden_produccion as rop \n"
+                    + "	inner join detalleproceso as dp on rop.codigo_registro=dp.codigo_registro\n"
+                    + "	where codigo_orden=" + id_orden + ")");
+            conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int updateRegistro(int id_orden) {
+        try {
+            sentenciaSql = String.format("UPDATE public.registro_orden_produccion\n"
+                    + "	SET estado='P'\n"
+                    + "	WHERE codigo_orden=" + id_orden + ";");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int updateOrden(int id_orden) {
+        try {
+            sentenciaSql = String.format("UPDATE public.orden_produccion\n"
+                    + "	SET estado='P'\n"
+                    + "	WHERE codigo_orden=" + id_orden + ";");
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
