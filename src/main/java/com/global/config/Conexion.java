@@ -27,7 +27,7 @@ public class Conexion implements Serializable {
     //Nuevos parametros estandarizados
 
     //Credenciales para la conexion
-    private String url = "jdbc:postgresql://190.15.134.7:8080/erpcontableappweb";
+    private String url = "jdbc:postgresql://190.15.134.7:7070/erpcontableappweb";
     private String usuario = "appweb";
     private String clave = "@Aplicaciones@Web@2021";
     private String classForName = "org.postgresql.Driver";
