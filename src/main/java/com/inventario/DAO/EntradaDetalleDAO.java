@@ -45,9 +45,12 @@ public class EntradaDetalleDAO {
 
         String sql = "";
         if (idEntrada > 0) {
-            sql = "Select * FROM entrada_detalle WHERE id_entrada=" + idEntrada;
+            sql =     "SELECT cod_articulo,id_entrada,cant,entrada_detalle.costo as costo,entrada_detalle.ice as ice,nombre,entrada_detalle.iva as iva,nombre,descripcion FROM entrada_detalle "
+                    + "INNER JOIN articulos ON cod_articulo = id "
+                    + "WHERE id_entrada=" + idEntrada;
         } else {
-            sql = "Select * FROM entrada_detalle";
+            sql = "SELECT cod_articulo,id_entrada,cant,entrada_detalle.costo as costo,entrada_detalle.ice as ice,nombre,entrada_detalle.iva as iva,descripcion FROM entrada_detalle "
+                    + "INNER JOIN articulos ON cod_articulo = id ";
         }
         try {
             resultSet = conexion.ejecutarSql(sql);
@@ -58,9 +61,10 @@ public class EntradaDetalleDAO {
                 detalle.setIdEntrada(resultSet.getInt("id_entrada"));
                 detalle.setCant(resultSet.getInt("cant"));
                 detalle.setCosto(resultSet.getInt("costo"));
-                detalle.setIva(resultSet.getInt("ice"));
+                detalle.setIva(resultSet.getInt("iva"));
                 detalle.setIce(resultSet.getInt("ice"));
-
+                detalle.setNombreCategoria(resultSet.getString("descripcion"));
+                detalle.setNombreProducto(resultSet.getString("nombre"));
                 ListEntrada.add(detalle);
 
             }
