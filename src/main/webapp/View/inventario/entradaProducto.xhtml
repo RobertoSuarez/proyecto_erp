@@ -23,6 +23,8 @@
                                                  icon="pi pi-plus" 
                                                  oncomplete="PF('entradaproducto').show()">
                                 </p:commandButton>
+                                <p:commandButton icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" 
+                                                 actionListener="#{EntradaMB.verFactura()}" />
                             </p:toolbarGroup>
                         </p:toolbar>
 
@@ -43,7 +45,7 @@
 
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Proveedor: *"></p:outputLabel>
-                                                    <h:form id="buscar-proveedor-form">
+                                                    <h:form id="buscar-proveedor-vista">
                                                         <div class="ui-inputgroup">
                                                             <p:commandButton icon="pi pi-search"
                                                                              oncomplete="PF('BuscarProveedor').show()"
@@ -58,7 +60,7 @@
                                             <div class="p-grid">
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Fecha: *"></p:outputLabel>
-                                                    <p:calendar value="" pattern="yyyy/MM/dd"
+                                                    <p:calendar value="#{EntradaMB.fechaComprobante}" pattern="yyyy/MM/dd"
 
                                                                 disabled="">
                                                     </p:calendar>
@@ -120,7 +122,6 @@
 
                                             </div>
                                         </div>
-
                                         <div class="p-col-11">
                                             <div class="p-grid">
                                                 <div class="p-col-2">
@@ -209,12 +210,16 @@
 
 
                         <!-- Dialogo de buscar proveedor parte 2 -->
-                        <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaProveedor"
+                        <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaProveedorDialog"
                                   minHeight="600" width="70%" showEffect="fade">
-                            <h:form>
+                            <h:form id="busqueda-proveedores-form">
                                 <p:dataTable var="ListaProveedores" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaProveedores}" 
                                              selection="#{EntradaMB.proveedorSeleccionado}" rowKey="#{ListaProveedores.idProveedor}" 
-                                             scrollable="true" scrollHeight="250">
+                                             scrollable="true" scrollHeight="250"
+                                             paginator="true" 
+                                             rows="5" 
+                                             paginatorPosition="bottom" style="visibility: false"
+                                             >
 
                                     <f:facet name="header">
                                         Proveedores Registrados
@@ -223,9 +228,9 @@
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
                                                          actionListener="#{EntradaMB.SeleccionarProveedor(ListaProveedores)}" 
-                                                         update="entradaForm:buscar-proveedor-form:NombreProveedor"
+                                                         update="entradaForm:buscar-proveedor-vista:NombreProveedor"
                                                          oncomplete="PF('BuscarProveedor').hide();"/>
-                                        
+
                                     </p:column>
 
                                     <p:column headerText="Cod">
@@ -236,7 +241,7 @@
                                         <h:outputText value="#{ListaProveedores.nombre}" />
                                     </p:column>
 
-                                    <p:column headerText="Identificacion">
+                                    <p:column headerText="Razon social">
                                         <h:outputText value="#{ListaProveedores.razonSocial}" >
                                         </h:outputText>
                                     </p:column>
@@ -261,7 +266,7 @@
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
                                                          actionListener="#{EntradaMB.SeleccionarProducto(ListaProductos)}" 
-                                                         update="entradaForm:buscar-producto-vista:NombreProducto entradaForm:codigoProductoSelect entradaForm:cantidadProductoSelect entradaForm:stockProductoSelect entradaForm:costoProductoSelect entradaForm:ivaProductoSelect entradaForm:iceProductoSelect"
+                                                         update="entradaForm:buscar-producto-vista"
                                                          oncomplete="PF('BuscarProducto').hide();"/>
                                     </p:column>
 
@@ -298,7 +303,7 @@
                                                          actionListener="#{EntradaMB.SeleccionarBodega(ListaBodegas)}" 
                                                          update="entradaForm:busqueda-bodega-form:NombreBodega"
                                                          oncomplete="PF('BuscarBodega').hide();" />
-                                                                        
+
                                     </p:column>
 
                                     <p:column headerText="Cod">
@@ -349,7 +354,8 @@
                             </p:column>
 
                             <p:column headerText="Acción" filterStyle="display : none">
-                                <p:button icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"/>
+                                <p:commandButton icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" 
+                                                 actionListener="#{EntradaMB.verFactura()}" />
                                 <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-pencil"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
                                 <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-trash" styleClass="rounded-button ui-button-danger"/>
                             </p:column>

@@ -37,6 +37,7 @@ public class Factura{
     private String cuentadetalle;
     private String cuenta;
     private int aux;
+    private String producto;
     
     public Factura() {
     }
@@ -140,6 +141,14 @@ public class Factura{
 
     public float getImporte() {
         return importe;
+    }
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
     }
 
     public void setImporte(float importe) {

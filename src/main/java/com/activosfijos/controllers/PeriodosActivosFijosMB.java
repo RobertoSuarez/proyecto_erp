@@ -5,20 +5,21 @@
  */
 package com.activosfijos.controllers;
 
+import com.activosfijos.dao.IntangibleDAO;
+import com.activosfijos.dao.NoDepreciableDAO;
 import com.activosfijos.dao.PeriodosActivosFijosDAO;
+import com.activosfijos.model.ListaNoDepreciable;
 import com.activosfijos.model.ListaPeriodosActivosFijos;
-import com.cuentasporpagar.daos.FacturaDAO;
+import com.activosfijos.model.ListarIntangible;
 import com.cuentasporpagar.models.ManagerCalendario;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -30,7 +31,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -39,35 +39,37 @@ import org.primefaces.PrimeFaces;
 @ManagedBean(name = "periodosactivosfijosMB")
 @ViewScoped
 public class PeriodosActivosFijosMB implements Serializable {
-    
-    PeriodosActivosFijosDAO periodosactivosfijosdao =new PeriodosActivosFijosDAO();
-    
-    List<ListaPeriodosActivosFijos> listaPeriodosActivosFijos ;
+
+    PeriodosActivosFijosDAO periodosactivosfijosdao = new PeriodosActivosFijosDAO();
+    NoDepreciableDAO depreciableDAO = new NoDepreciableDAO();
+    IntangibleDAO intangibleDAO = new IntangibleDAO();
+    List<ListaPeriodosActivosFijos> listaDepreciablesActivosFijos;
+    List<ListaNoDepreciable> listaNoDepreciablesActivosFijos;
+    List<ListarIntangible> listaIntangible;
 
     public PeriodosActivosFijosMB() {
     }
 
     @PostConstruct
     public void init() {
-        
+
         try {
-            this.listaPeriodosActivosFijos = periodosactivosfijosdao.listarperiodosactivofijo();
-        } 
-        catch (Exception ex) {
+            this.listaDepreciablesActivosFijos = periodosactivosfijosdao.listarActivosDepreciablesReporte();
+            this.listaNoDepreciablesActivosFijos = depreciableDAO.ListarNodepreciableReporte();
+            this.listaIntangible = intangibleDAO.listaIntangiblesReporte();
+        } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
-        
+
     }
 
-    public List<ListaPeriodosActivosFijos> getListaPeriodosActivosFijos() {
-        return listaPeriodosActivosFijos;
+    public List<ListaPeriodosActivosFijos> getListaDepreciablesActivosFijos() {
+        return listaDepreciablesActivosFijos;
     }
 
-    public void setListaPeriodosActivosFijos(List<ListaPeriodosActivosFijos> listaPeriodosActivosFijos) {
-        this.listaPeriodosActivosFijos = listaPeriodosActivosFijos;
+    public void setListaDepreciablesActivosFijos(List<ListaPeriodosActivosFijos> listaDepreciablesActivosFijos) {
+        this.listaDepreciablesActivosFijos = listaDepreciablesActivosFijos;
     }
-    
- 
 
     public PeriodosActivosFijosDAO getPeriodosactivosfijosdao() {
         return periodosactivosfijosdao;
@@ -76,37 +78,19 @@ public class PeriodosActivosFijosMB implements Serializable {
     public void setPeriodosactivosfijosdao(PeriodosActivosFijosDAO periodosactivosfijosdao) {
         this.periodosactivosfijosdao = periodosactivosfijosdao;
     }
-    
-    
-        // Metodo funcional para exportar pdf
-    public void exportpdf(int anio) throws IOException, JRException {
+
+    // Metodo funcional para exportar pdf
+    public void exportPdfDepreciable() throws IOException, JRException {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
         //RequestContext requestContext = RequestContext.getCurrentInstance();
         //requestContext.execute("window.print();");
         //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
 
-        ListaPeriodosActivosFijos periodo = new ListaPeriodosActivosFijos();
-        listaPeriodosActivosFijos.forEach(p -> {
-            if (anio == p.getAnio()) {
-                periodo.setAnio(p.getAnio());
-                periodo.setMonto_total(p.getMonto_total());
-                periodo.setInicio(p.getInicio());
-                periodo.setFin(p.getFin());
-                periodo.setTotal_depreciables(p.getTotal_depreciables());
-                periodo.setTotal_no_depreciables(p.getTotal_no_depreciables());
-                periodo.setTotal_agotables(p.getTotal_agotables());
-                periodo.setTotal_intangibles(p.getTotal_intangibles());
-            }
-        });
-        
-        List<ListaPeriodosActivosFijos> lista = listaPeriodosActivosFijos.stream().filter(p -> p.getAnio()==anio).collect(Collectors.toList());
-    
-        
-        
-        
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
-
+        for (int x = 0; x < listaDepreciablesActivosFijos.size(); x++) {
+            System.err.println(listaDepreciablesActivosFijos.get(x).getDetalle_de_activo() + "<---->");
+        }
         // Cabecera de la respuesta.
         ec.responseReset();
         ec.setResponseContentType("application/pdf");
@@ -118,21 +102,19 @@ public class PeriodosActivosFijosMB implements Serializable {
 
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Reporte desde java");
-            parametros.put("fecha", LocalDate.now().toString());
-            parametros.put("año", periodo.getAnio());
+            parametros.put("nombreEmpresa", "ERP Contable");
+            parametros.put("fecha2", LocalDate.now().toString());
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/activos_fijos.jasper"));
+                    .getRealPath("/PlantillasReportes/Simple_Blue_Table_Based.jasper"));
 
             // llenamos la plantilla con los datos.
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    filetext.getPath(),
+            JasperPrint jasperPrint = JasperFillManager.fillReport(filetext.getPath(),
                     parametros,
-                    new JRBeanCollectionDataSource(lista)
+                    new JRBeanCollectionDataSource(this.listaDepreciablesActivosFijos)
             );
 
             // exportamos a pdf.
@@ -141,7 +123,7 @@ public class PeriodosActivosFijosMB implements Serializable {
 
             stream.flush();
             stream.close();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         } finally {
             // enviamos la respuesta.
@@ -150,6 +132,111 @@ public class PeriodosActivosFijosMB implements Serializable {
             System.out.println("fin proccess");
         }
     }
-    
-    
+
+    public void exportPdfNoDepreciable() throws IOException, JRException {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
+        //RequestContext requestContext = RequestContext.getCurrentInstance();
+        //requestContext.execute("window.print();");
+        //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        for (int x = 0; x < listaNoDepreciablesActivosFijos.size(); x++) {
+            System.err.println(listaNoDepreciablesActivosFijos.get(x).getDetalle_de_activo() + "<---->");
+        }
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; filename=Reporte.pdf");
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+            ManagerCalendario mc = new ManagerCalendario();
+
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("nombreEmpresa", "ERP Contable");
+            parametros.put("fecha2", LocalDate.now().toString());
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/Simple_Blue_1.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.listaNoDepreciablesActivosFijos)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+
+            System.out.println("fin proccess");
+        }
+    }
+
+    public void exportPdfIntangible() throws IOException, JRException {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
+        //RequestContext requestContext = RequestContext.getCurrentInstance();
+        //requestContext.execute("window.print();");
+        //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        for (int x = 0; x < listaIntangible.size(); x++) {
+            System.err.println(listaIntangible.get(x).getDetalle_de_activo() + "<---->");
+        }
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", "attachment; filename=Reporte.pdf");
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+            ManagerCalendario mc = new ManagerCalendario();
+
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("nombreEmpresa", "ERP Contable");
+            parametros.put("fecha2", LocalDate.now().toString());
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/Simple_Blue_2.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.listaIntangible)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+
+            System.out.println("fin proccess");
+        }
+    }
+
 }

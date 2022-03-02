@@ -106,14 +106,12 @@ public class EstadoResultadoManageBean implements Serializable {
                         dateFormat.format(fecha2));
 //Resultado total
         total = ingresos - (ventas + egresos);
-
-        System.out.println(total + "-" + ingresos + "-" + ventas);
-        infomacion = estadoResultadoDAO.informacion(dateFormat.format(fecha), dateFormat.format(fecha2));
-        System.out.println("Inicio");
+        infomacion.addAll(estadoResultadoIn);
+        infomacion.addAll(estadoResultadoEg);
+        infomacion.addAll(estadoResultadoVen);
         for (int x = 0; x < infomacion.size(); x++) {
             System.out.println(infomacion.get(x));
         }
-        System.out.println(total + "-" + ingresos + "-" + ventas);
 
     }
 
@@ -122,6 +120,7 @@ public class EstadoResultadoManageBean implements Serializable {
      * informacion de los estados resultantes
      */
     public void recibiendoFecha() {
+        infomacion.clear();
         /**
          * damos el formato simple a nuestra fecha para que solo reciba el dia,
          * mes y año
@@ -157,12 +156,15 @@ public class EstadoResultadoManageBean implements Serializable {
         total = ingresos - (ventas + egresos);
 
         System.out.println(total + "-" + ingresos + "-" + ventas);
-        infomacion = estadoResultadoDAO.informacion(dateFormat.format(fecha), dateFormat.format(fecha2));
+
+        total = ingresos - (ventas + egresos);
+
+        infomacion.addAll(estadoResultadoIn);
+        infomacion.addAll(estadoResultadoEg);
+        infomacion.addAll(estadoResultadoVen);
         for (int x = 0; x < infomacion.size(); x++) {
             System.out.println(infomacion.get(x));
         }
-
-        System.out.println(total + "-" + ingresos + "-" + ventas);
 
     }
 

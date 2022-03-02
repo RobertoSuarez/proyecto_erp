@@ -7,6 +7,7 @@
  */
 package com.inventario.controllers;
 
+import com.contabilidad.models.BalanceGeneral;
 import com.cuentasporpagar.daos.ProveedorDAO;
 import com.cuentasporpagar.models.Proveedor;
 import com.inventario.DAO.ArticulosInventarioDAO;
@@ -17,7 +18,11 @@ import com.inventario.models.ArticulosInventario;
 import com.inventario.models.Bodega;
 import com.inventario.models.EntradaDetalleInventario;
 import com.inventario.models.EntradaInventario;
+import com.inventario.report.ProductoReport;
+import java.io.File;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,7 +34,16 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import javax.faces.context.ExternalContext;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
  *
@@ -38,7 +52,11 @@ import java.util.Date;
 @Named(value = "EntradaMB")
 @ViewScoped
 public class EntradaManagedBean implements Serializable {
-    
+
+    ArticulosInventarioDAO daoReport = new ArticulosInventarioDAO();
+
+    List<ProductoReport> productosReport;
+
     private Proveedor proveedor;
     private ProveedorDAO proveedorDAO;
     private String proveedordINum;
@@ -70,7 +88,7 @@ public class EntradaManagedBean implements Serializable {
     }
     private Boolean SiICE;
     private Boolean SiIVA;
-    
+
     private Bodega bodega;
     private BodegaDAO bodegaDAO;
     private int codBodega;
@@ -95,9 +113,7 @@ public class EntradaManagedBean implements Serializable {
     }
     private String numeroComprobante;
     private Date fechaComprobante;
-    
-    private EntradaDao enntradaDAO;
-    
+
     private EntradaDetalleInventario productoSeleccionado;
     private Proveedor proveedorSeleccionado;
     private Bodega bodegaSeleccionada;
@@ -122,12 +138,12 @@ public class EntradaManagedBean implements Serializable {
     private int total;
 
     private EntradaInventario entrada;
-    private EntradaDao entradaDao;
+    private EntradaDao entradaDAO;
 
     private int efectivo;
     private int cambio;
     private int diasPago;
-    
+
     private List<Proveedor> listaProveedores;
     private List<ArticulosInventario> listaProductos;
     private List<Bodega> listaBodegas;
@@ -140,10 +156,13 @@ public class EntradaManagedBean implements Serializable {
         this.listaEntradas = listaEntradas;
     }
     private List<EntradaInventario> listaEntradas;
-    
+
     //Constructor
     @PostConstruct
     public void EntradaManagedBean() {
+
+        this.productosReport = daoReport.getArticulosReport();
+        
         this.proveedor = new Proveedor();
         this.proveedorDAO = new ProveedorDAO();
         this.nombreCategoria = "XXXX";
@@ -151,9 +170,7 @@ public class EntradaManagedBean implements Serializable {
         this.fechaComprobante = new Date();
         this.bodega = new Bodega();
         this.bodegaDAO = new BodegaDAO();
-        
-        
-        
+
         this.producto = new ArticulosInventario();
         this.productoDao = new ArticulosInventarioDAO();
         this.codigoProducto = 0;
@@ -169,17 +186,15 @@ public class EntradaManagedBean implements Serializable {
 
         this.listaDetalle = new ArrayList<>();
         this.cantidad = 1;
-        
+
         this.entrada = new EntradaInventario();
-        this.entradaDao = new EntradaDao();
-        
-        this.listaEntradas = entradaDao.getEntradas();
+        this.entradaDAO = new EntradaDao();
+
+        this.listaEntradas = entradaDAO.getEntradas();
         this.listaBodegas = bodegaDAO.getBodega();
         this.productoSeleccionado = null;
-        this.proveedorSeleccionado=null;
-        this.bodegaSeleccionada= null;
-
-        
+        this.proveedorSeleccionado = null;
+        this.bodegaSeleccionada = null;
 
         this.efectivo = 0;
         this.cambio = 0;
@@ -190,9 +205,10 @@ public class EntradaManagedBean implements Serializable {
         this.listaProveedores = new ArrayList<>();
         this.listaProveedores = proveedorDAO.ListarProveedor();
         this.listaProductos = productoDao.getArticulos();
-        
+
         System.out.print(listaProveedores.get(0).getNombre());
     }
+
     //Mostrar algun mensaje
     @Asynchronous
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
@@ -228,10 +244,10 @@ public class EntradaManagedBean implements Serializable {
         this.precioProducto = 0;
 
         this.producto = this.productoDao.ObtenerProducto(this.codigoProducto);
-        if(producto != null){
+        if (producto != null) {
             this.nombreCategoria = this.productoDao.getCategoria(this.producto.getCat_cod()).getNom_categoria();
         }
-      
+
         if (this.producto.getDescripcion() == null) {
             System.out.println("Producto nulo");
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto no existe");
@@ -239,20 +255,106 @@ public class EntradaManagedBean implements Serializable {
             System.out.println("Existe el producto" + this.nombreProducto);
 
             this.nombreProducto = this.producto.getDescripcion();
-            
-            this.precioProducto =  this.producto.getCosto();
+
+            this.precioProducto = this.producto.getCosto();
         }
+    }
+
+    
+    public void verFactura() {
+
+        int idEntrada = 1;
+        EntradaInventario entrada = entradaDAO.getEntradas(idEntrada).get(0);
+
+        if (entrada != null) {
+            List<EntradaDetalleInventario> detalleEntradas = new ArrayList<>();
+            EntradaDetalleDAO dao = new EntradaDetalleDAO();
+            detalleEntradas = dao.getEntradasDetalle(idEntrada);
+
+            List<ProductoReport> dataset = new ArrayList<>();
+            float subtotal = 0.0f;
+            float ice = 0.0f;
+            float iva = 0.0f;
+            float descuento = 0.0f;
+            if (detalleEntradas.size() > 0) {
+                for (EntradaDetalleInventario inv : detalleEntradas) {
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
+                    subtotal += Float.valueOf(inv.getCosto()) * Float.valueOf(inv.getCant());
+                    ice += Float.valueOf(inv.getIce());
+                    iva += Float.valueOf(inv.getIva());
+
+                }
+            }
+
+            Bodega bod = bodegaDAO.obtenerBodega(entrada.getIdBodega());
+            Proveedor pro = proveedorDAO.BuscarProveedor(entrada.getIdProveedor());
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext ec = fc.getExternalContext();
+
+            // Cabecera de la respuesta.
+            ec.responseReset();
+            ec.setResponseContentType("application/pdf");
+            ec.setResponseHeader("Content-disposition", "attachment; "
+                    + "filename=factura.pdf");
+
+            // tomamos el stream para llenarlo con el pdf.
+            try ( OutputStream stream = ec.getResponseOutputStream()) {
+
+                // Parametros para el reporte.
+                SimpleDateFormat dateFormat = new SimpleDateFormat(
+                        "dd/MM/yyyy",
+                        new Locale("es_ES"));
+                Map<String, Object> parametros = new HashMap<>();
+                parametros.put("FECHA", dateFormat.format(entrada.getFecha()));
+                parametros.put("COMPROBANTE", entrada.getNumComprobante());
+                parametros.put("NOMBREBODEGA", bod.getNomBodega());
+                parametros.put("RUCPROVEEDOR", pro.getRuc());
+                parametros.put("NOMBREPROVEEDOR", pro.getNombre());
+
+                parametros.put("SUBTOTAL", String.format("%.2f", subtotal));
+                parametros.put("DESCUENTO", String.format("%.2f", descuento));
+                parametros.put("IVA", String.format("%.2f", iva));
+                parametros.put("ICE", String.format("%.2f", ice));
+                parametros.put("TOTAL", String.format("%.2f", (subtotal + iva + ice)));
+
+                // leemos la plantilla para el reporte.
+                File filetext = new File(FacesContext
+                        .getCurrentInstance()
+                        .getExternalContext()
+                        .getRealPath("/PlantillasReportes/entradas.jasper"));
+
+                // llenamos la plantilla con los datos.
+                JasperPrint jasperPrint = JasperFillManager.fillReport(
+                        filetext.getPath(),
+                        parametros,
+                        new JRBeanCollectionDataSource(this.productosReport)
+                );
+
+                // exportamos a pdf.
+                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+                //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+                stream.flush();
+                stream.close();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage().toString());
+            } finally {
+                // enviamos la respuesta.
+                fc.responseComplete();
+            }
+        }
+
     }
 
     //Agregar producto a la lista de detalle
     @Asynchronous
     public void AgregarProductoLista() {
         try {
-            if (this.producto.getId()> 0) {
+            if (this.producto.getId() > 0) {
                 int stock_maximo = this.producto.getMax_stock();
                 int _cantidad = this.cantidad;
-                if ( stock_maximo  < _cantidad ) {
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.producto.getMax_stock()+ ")");
+                if (stock_maximo < _cantidad) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.producto.getMax_stock() + ")");
                 } else {
                     if (this.cantidad <= 0) {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
@@ -265,25 +367,25 @@ public class EntradaManagedBean implements Serializable {
                         detalle.setIva(this.producto.getIva());
                         detalle.setIce(this.producto.getIce());
                         detalle.setCosto(this.producto.getCosto());
-                        detalle.setSubtotal(this.producto.getCosto()* this.cantidad);
-                        detalle.setNombreProducto(nombreProducto);                      
+                        detalle.setSubtotal(this.producto.getCosto() * this.cantidad);
+                        detalle.setNombreProducto(nombreProducto);
                         detalle.setNombreCategoria(nombreCategoria);
-                        
+
                         detalle.setArticuloInventario(producto);
                         //Cálculo de los valores
-                        this.subTotalEntrada = this.subTotalEntrada + detalle.getSubtotal() ;
+                        this.subTotalEntrada = this.subTotalEntrada + detalle.getSubtotal();
                         this.listaDetalle.add(detalle);
                         this.cantidad = 1;
                         this.codigoProducto = 0;
                         this.nombreProducto = "";
-                        double subtemp =  (this.producto.getCosto()* detalle.getCant());
+                        double subtemp = (this.producto.getCosto() * detalle.getCant());
                         if (this.producto.getIva() != 0) {
                             this.subtotal12 += subtemp;
                         } else {
                             this.subtotal0 += subtemp;
                         }
 
-                        this.iva += this.producto.getIva() * detalle.getCant()* detalle.getCosto();
+                        this.iva += this.producto.getIva() * detalle.getCant() * detalle.getCosto();
                         this.ice += this.producto.getIce() * detalle.getCant();
 
                         this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
@@ -308,14 +410,14 @@ public class EntradaManagedBean implements Serializable {
     @Asynchronous
     public void EliminarProducto(EntradaDetalleInventario detalle) {
         try {
-            double subtemp = detalle.getArticuloInventario().getCosto()* detalle.getCant();
+            double subtemp = detalle.getArticuloInventario().getCosto() * detalle.getCant();
             if (detalle.getArticuloInventario().getIva() != 0) {
                 this.subtotal12 -= subtemp;
             } else {
                 this.subtotal0 -= subtemp;
             }
 
-            this.iva -= (detalle.getArticuloInventario().getIva() * detalle.getCant()* detalle.getCosto());
+            this.iva -= (detalle.getArticuloInventario().getIva() * detalle.getCant() * detalle.getCosto());
             this.ice -= (detalle.getArticuloInventario().getIce() * detalle.getCant());
 
             this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
@@ -329,7 +431,6 @@ public class EntradaManagedBean implements Serializable {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
-
 
     @Asynchronous
     public String RegistrarEntrada() {
@@ -354,13 +455,11 @@ public class EntradaManagedBean implements Serializable {
                     entradaActual.setNumComprobante(numeroComprobante);
                     entradaActual.setFecha(currentDate2);
 
-
                     //Verificación en consola
                     System.out.println(entradaActual.getProveedor().getNombre());
-       
 
                     //Guardar la entrada desde DAO
-                    int entradaRealizada = this.entradaDao.GuardarEntrada(entradaActual);
+                    int entradaRealizada = this.entradaDAO.GuardarEntrada(entradaActual);
 
                     //Verificar que se haya ingresado la entrada
                     if (entradaRealizada == 0) {
@@ -374,15 +473,15 @@ public class EntradaManagedBean implements Serializable {
                         while (listSize < this.listaDetalle.size()) {
                             int codProd = this.listaDetalle.get(listSize).getArticuloInventario().getId();
                             double qty = this.listaDetalle.get(listSize).getCant();
-                       
+
                             double price = this.listaDetalle.get(listSize).getCosto();
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
-                            System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-"  + "-" + price);
+                            System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
                             daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price);
                             listSize += 1;
                         }
-                        
+
                         return "listaEntrada";
                     }
                 }
@@ -392,28 +491,28 @@ public class EntradaManagedBean implements Serializable {
         }
         return null;
     }
-    
-    public void SeleccionarProveedor(Proveedor prov){
+
+    public void SeleccionarProveedor(Proveedor prov) {
         this.proveedorNombre = prov.getNombre();
         this.proveedordINum = prov.getRazonSocial();
         this.proveedor = prov;
     }
-    
-    public void SeleccionarProducto(ArticulosInventario pr){
-    this.codigoProducto = pr.getId();
-    this.nombreProducto = pr.getDescripcion();
-    this.precioProducto = pr.getCosto();
-    if(this.SiICE){
-        this.ice = pr.getCosto()* 15 /100;
-    }
-    if(this.SiIVA){
-        this.iva = pr.getCosto()* 12 /100;
-    }
-    
-    this.producto = pr;
-}
 
-    public void SeleccionarBodega(Bodega bod){
+    public void SeleccionarProducto(ArticulosInventario pr) {
+        this.codigoProducto = pr.getId();
+        this.nombreProducto = pr.getDescripcion();
+        this.precioProducto = pr.getCosto();
+        if (this.SiICE) {
+            this.ice = pr.getCosto() * 15 / 100;
+        }
+        if (this.SiIVA) {
+            this.iva = pr.getCosto() * 12 / 100;
+        }
+
+        this.producto = pr;
+    }
+
+    public void SeleccionarBodega(Bodega bod) {
         this.codBodega = bod.getCod();
         this.nombreBodega = bod.getNomBodega();
         this.ciudadBodega = bod.getNomCiudad();
@@ -427,9 +526,7 @@ public class EntradaManagedBean implements Serializable {
     public void setNombreBodega(String nombreBodega) {
         this.nombreBodega = nombreBodega;
     }
-    
-    
-    
+
     public Bodega getBodega() {
         return bodega;
     }
@@ -485,8 +582,6 @@ public class EntradaManagedBean implements Serializable {
     public void setListaBodegas(List<Bodega> listaBodegas) {
         this.listaBodegas = listaBodegas;
     }
-    
-    
 
     public Proveedor getProveedor() {
         return proveedor;
@@ -518,14 +613,6 @@ public class EntradaManagedBean implements Serializable {
 
     public void setProveedorNombre(String proveedorNombre) {
         this.proveedorNombre = proveedorNombre;
-    }
-
-    public EntradaDao getEnntradaDAO() {
-        return enntradaDAO;
-    }
-
-    public void setEnntradaDAO(EntradaDao enntradaDAO) {
-        this.enntradaDAO = enntradaDAO;
     }
 
     public EntradaDetalleInventario getProductoSeleccionado() {
@@ -681,11 +768,11 @@ public class EntradaManagedBean implements Serializable {
     }
 
     public EntradaDao getEntradaDao() {
-        return entradaDao;
+        return entradaDAO;
     }
 
     public void setEntradaDao(EntradaDao entradaDao) {
-        this.entradaDao = entradaDao;
+        this.entradaDAO = entradaDao;
     }
 
     public int getEfectivo() {
@@ -728,7 +815,4 @@ public class EntradaManagedBean implements Serializable {
         this.listaProductos = listaProductos;
     }
 
-   
-
-   
 }

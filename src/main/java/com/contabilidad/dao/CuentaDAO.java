@@ -109,4 +109,19 @@ public class CuentaDAO {
         }
         return false;
     }
+
+    public int ObtenerIdSubCuentaPorNombre(String nombreSubCuenta) {
+        try {
+            conexion.conectar();
+            result = conexion.ejecutarSql("select idsubcuenta from subcuenta where nombre = '" + nombreSubCuenta + "'");
+            if (result.next()) {
+                return result.getInt("idsubcuenta");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error ObtenerIdSubCuentaPorNombre: " + ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return 0;
+    }
 }

@@ -5,99 +5,90 @@
  */
 package com.activosfijos.model;
 
+import java.text.DecimalFormat; 
+
 /**
  *
  * @author desta
  */
 public class ListaPeriodosActivosFijos {
-    private int anio;
-    private int monto_total;
-    private String inicio;
-    private String fin;
-    private double total_depreciables;
-    private double total_no_depreciables;
-    private double total_agotables;
-    private double total_intangibles;
+
+    DecimalFormat formato1 = new DecimalFormat("#.00");
+    private String detalle_de_activo = "";
+    private int valor_adquisicion = 0;
+    private double cuota_depresiacion = 0.0;
+    private double valor_neto_libros = 0.0;
+    private int depreciacion_meses = 0;
+    private double porcentaje_depreciacion = 0.0;
+    private String numero_factura = "";
 
     public ListaPeriodosActivosFijos() {
     }
 
-    public ListaPeriodosActivosFijos(int anio, int monto_total, String inicio, String fin, double total_depreciables, double total_no_depreciables, double total_agotables, double total_intangibles) {
-        this.anio = anio;
-        this.monto_total = monto_total;
-        this.inicio = inicio;
-        this.fin = fin;
-        this.total_depreciables = total_depreciables;
-        this.total_no_depreciables = total_no_depreciables;
-        this.total_agotables = total_agotables;
-        this.total_intangibles = total_intangibles;
+    public ListaPeriodosActivosFijos(String detalle_de_activo, int valor_adquisicion, double cuota_depresiacion, double valor_neto_libros, int depreciacion_meses, double porcentaje_depreciacion, String numero_factura) {
+        this.detalle_de_activo = detalle_de_activo;
+        this.valor_adquisicion = valor_adquisicion;
+        this.cuota_depresiacion =  Math.round(cuota_depresiacion * Math.pow(10, 2))/ Math.pow(10, 2);
+        this.valor_neto_libros =  Math.round(valor_neto_libros * Math.pow(10, 2))/ Math.pow(10, 2);
+        this.depreciacion_meses = depreciacion_meses;
+        this.porcentaje_depreciacion = porcentaje_depreciacion;
+        this.numero_factura = numero_factura;
     }
 
-    public double getTotal_depreciables() {
-        return total_depreciables;
+    public String getDetalle_de_activo() {
+        return detalle_de_activo;
     }
 
-    public void setTotal_depreciables(double total_depreciables) {
-        this.total_depreciables = total_depreciables;
+    public void setDetalle_de_activo(String detalle_de_activo) {
+        this.detalle_de_activo = detalle_de_activo;
     }
 
-    public double getTotal_no_depreciables() {
-        return total_no_depreciables;
+    public int getValor_adquisicion() {
+        return valor_adquisicion;
     }
 
-    public void setTotal_no_depreciables(double total_no_depreciables) {
-        this.total_no_depreciables = total_no_depreciables;
+    public void setValor_adquisicion(int valor_adquisicion) {
+        this.valor_adquisicion = valor_adquisicion;
     }
 
-    public double getTotal_agotables() {
-        return total_agotables;
+    public double getCuota_depresiacion() {
+        return   Math.round(cuota_depresiacion * Math.pow(10, 2))/ Math.pow(10, 2);
     }
 
-    public void setTotal_agotables(double total_agotables) {
-        this.total_agotables = total_agotables;
+    public void setCuota_depresiacion(double cuota_depresiacion) {
+        this.cuota_depresiacion = Math.round(cuota_depresiacion * Math.pow(10, 2))/ Math.pow(10, 2);
     }
 
-    public double getTotal_intangibles() {
-        return total_intangibles;
+    public double getValor_neto_libros() {
+        return  Math.round(valor_neto_libros * Math.pow(10, 2))/ Math.pow(10, 2);
     }
 
-    public void setTotal_intangibles(double total_intangibles) {
-        this.total_intangibles = total_intangibles;
+    public void setValor_neto_libros(double valor_neto_libros) {
+        this.valor_neto_libros =  Math.round(valor_neto_libros * Math.pow(10, 2))/ Math.pow(10, 2);
     }
 
-
-    public int getAnio() {
-        return anio;
+    public int getDepreciacion_meses() {
+        return depreciacion_meses;
     }
 
-    public void setAnio(int anio) {
-        this.anio = anio;
+    public void setDepreciacion_meses(int depreciacion_meses) {
+        this.depreciacion_meses = depreciacion_meses;
     }
 
-    public int getMonto_total() {
-        return monto_total;
+    public double getPorcentaje_depreciacion() {
+        return porcentaje_depreciacion;
     }
 
-    public void setMonto_total(int monto_total) {
-        this.monto_total = monto_total;
+    public void setPorcentaje_depreciacion(double porcentaje_depreciacion) {
+        this.porcentaje_depreciacion = porcentaje_depreciacion;
     }
 
-    public String getInicio() {
-        return inicio;
+    public String getNumero_factura() {
+        return numero_factura;
     }
 
-    public void setInicio(String inicio) {
-        this.inicio = inicio;
+    public void setNumero_factura(String numero_factura) {
+        this.numero_factura = numero_factura;
     }
 
-    public String getFin() {
-        return fin;
-    }
-
-    public void setFin(String fin) {
-        this.fin = fin;
-    }
-
-    
-    
 }

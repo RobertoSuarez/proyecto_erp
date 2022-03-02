@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class TangibleDAO {
 
-    public boolean guardar(ActivosFijos activosFijos, ActivoDepreciable activodepreciable) throws SQLException {
+    public boolean registrarTangibleDepreciable(ActivosFijos activosFijos, ActivoDepreciable activodepreciable) throws SQLException {
 
         Conexion conexion = new Conexion();
         String consulta = String.format("INSERT INTO activos_fijos(\n"
@@ -40,7 +40,7 @@ public class TangibleDAO {
         return true;
     }
 
-    public boolean editar(ListaDepreciable li) throws SQLException {
+    public boolean editarTangibleDepreciable(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
         String consulta = String.format("UPDATE public.activos_fijos\n"

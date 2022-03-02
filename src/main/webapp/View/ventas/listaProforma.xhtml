@@ -12,7 +12,12 @@
 
             <ui:define name="content">
 
-               <ui:include src="menuVentas.xhtml"/>
+                <ui:include src="menuVentas.xhtml"/>
+                
+                <f:metadata>
+                    <f:viewParam name="new" value="#{ProformaMB.isNewProforma}"/>
+                </f:metadata>
+
 
                 <h:form id="listaDeProforma" >
                     <br/><br/><br/><br/>
@@ -65,7 +70,7 @@
                             </h:panelGrid>
                         </p:panel>
 
-                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ProformaMB.listaDetalles}">
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ProformaMB.listaDetallesPorProforma}">
                             <p:column headerText="Codigo" width="10%">
                                 <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
                             </p:column>

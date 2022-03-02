@@ -17,6 +17,7 @@ import java.util.List;
  * @author angul
  */
 public class EntradaDao {
+
     Conexion conexion = new Conexion();
     private EntradaInventario entradaInventario;
     private ResultSet resultSet;
@@ -34,9 +35,15 @@ public class EntradaDao {
         this.entradaInventario = entradaInventario;
     }
 
-    public List<EntradaInventario> getEntradas() {
+    public List<EntradaInventario> getEntradas(int idEntrada) {
         List<EntradaInventario> ListEntrada = new ArrayList<>();
-        String sql = String.format("Select * FROM entrada");
+        String sql = "";
+        if (idEntrada > 0) {
+            sql ="Select * FROM entrada WHERE cod=" + idEntrada;
+        } else {
+            sql = "Select * FROM entrada";
+        }
+
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
@@ -45,26 +52,29 @@ public class EntradaDao {
                         resultSet.getString("num_comprobante"),
                         resultSet.getDate("fecha"),
                         resultSet.getInt("id_bodega"),
-                        resultSet.getInt("id_proveedor") ));
-             }
-             
-             
-         } catch (SQLException e){
-             System.out.println(e.getMessage());
-         }finally{
+                        resultSet.getInt("id_proveedor")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
             conexion.desconectar();
         }
         return ListEntrada;
-         }
-    
-        public int GuardarEntrada(EntradaInventario entradaInventario) {
+    }
+
+    public List<EntradaInventario> getEntradas() {
+        return getEntradas(0);
+    }
+
+    public int GuardarEntrada(EntradaInventario entradaInventario) {
         try {
             ResultSet rs = null;
 
             this.conexion.conectar();
             rs = this.conexion.ejecutarSql("select cod, num_comprobante from public.entrada order by cod desc limit 1;");
             int codigo = 1;
-            
+
             //Asignar los valores de la siguiente venta y secuencia.
             while (rs.next()) {
                 codigo = rs.getInt(1) + 1;
@@ -75,12 +85,9 @@ public class EntradaDao {
             //Insertar nueva venta
             String query = "INSERT INTO public.entrada("
                     + "num_comprobante, fecha, id_proveedor, id_bodega)"
-                    + "VALUES(" +  "'" + entradaInventario.getNumComprobante()  +"', " + entradaInventario.getFecha()+ ", " + entradaInventario.getIdProveedor()+ ", " + entradaInventario.getIdBodega()+ ")";
+                    + "VALUES(" + "'" + entradaInventario.getNumComprobante() + "', " + entradaInventario.getFecha() + ", " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
-
-            
-
 
             this.conexion.desconectar();
 
@@ -97,5 +104,5 @@ public class EntradaDao {
         }
         return 0;
     }
-    
+
 }

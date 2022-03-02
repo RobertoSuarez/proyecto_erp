@@ -118,7 +118,7 @@
 
                                 <!-- CAMPOS DEL DIALOG-->
                                 <div class="p-formgrid p-grid">
-                                    
+
                                     <div class="p-field p-col">
                                         <p:outputLabel for="proveedor">Proveedor: *</p:outputLabel>
                                         <p:inputText type="button" id="proveedor"
@@ -134,7 +134,7 @@
                                     <div class="p-field p-col">
                                         <p:outputLabel for="importe">Importe:</p:outputLabel>
                                         <p:inputText type="number" id="importe" value="#{facturaMB.factura.importe}" 
-                                                     required="true"/>
+                                                     disabled="true"/>
                                     </div>
 
                                     <div class="p-field p-col">
@@ -211,22 +211,26 @@
                                     <p:column headerText="Detalle">
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{detalle.detalle}"/></f:facet>
-                                            <f:facet name="input"><p:inputText value="#{facturaMB.datoDetalle}" style="width:100%"
-                                                                               label="Importe"/></f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-
-                                    <p:column headerText="Cuenta contable">
-                                        <p:cellEditor>
-                                            <f:facet name="output"><h:outputText value="#{detalle.cuenta}"/></f:facet>
                                             <f:facet name="input">
-                                                <p:selectOneMenu id="group" value="#{facturaMB.datoCuenta}">
+                                                <p:selectOneMenu id="group1" value="#{facturaMB.datoDetalle}">
                                                     <f:selectItem itemLabel="Seleccionar" itemValue=""/>
-                                                    <f:selectItems value="#{facturaMB.listaCuentas}"/>
+                                                    <f:selectItems value="#{facturaMB.listaProductos}"/>
                                                 </p:selectOneMenu>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
+
+                                    <!--                                    <p:column headerText="Cuenta contable">
+                                                                            <p:cellEditor>
+                                                                                <f:facet name="output"><h:outputText value="{detalle.cuenta}"/></f:facet>
+                                                                                <f:facet name="input">
+                                                                                    <p:selectOneMenu id="group" value="{facturaMB.datoCuenta}">
+                                                                                        <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                                                                        <f:selectItems value="{facturaMB.listaCuentas}"/>
+                                                                                    </p:selectOneMenu>
+                                                                                </f:facet>
+                                                                            </p:cellEditor>
+                                                                        </p:column>-->
 
                                     <p:column headerText="Importe">
                                         <p:cellEditor>
@@ -238,6 +242,12 @@
 
                                     <p:column style="width:6rem">
                                         <p:rowEditor/>
+                                    </p:column>
+
+                                    <p:column style="width: 50px">
+                                        <p:commandButton styleClass="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                         actionListener="#{facturaMB.deleteRow(detalle)}" update="form:importe">
+                                        </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
 

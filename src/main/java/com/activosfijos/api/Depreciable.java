@@ -73,7 +73,7 @@ public class Depreciable {
 
         TangibleDAO tangibledao = new TangibleDAO();
         try {
-            tangibledao.guardar(activosFijos, activodepreciable);
+            tangibledao.registrarTangibleDepreciable(activosFijos, activodepreciable);
             System.out.println("Registrado correctamente");
 
         } catch (Exception e) {

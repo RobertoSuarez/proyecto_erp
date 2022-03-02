@@ -28,7 +28,8 @@
                             </p:toolbarGroup>
                         </p:toolbar>
                         <f:facet name="header">
-                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" outcome="CrearEmpleado" disabled="#{rolMB.rol()}"
+                            <p:linkButton value="Nuevo Empleado" icon="pi pi-plus" 
+                                          outcome="CrearEmpleado" disabled="#{rolMB.rol()}"
                                           class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem"/>
 
                         </f:facet>
@@ -39,7 +40,7 @@
                                      rowKey="#{empleado.id}" paginator="true"
                                      rows="10" rowSelectMode="add" 
                                      paginatorPosition="bottom" 
-                                     filteredValue="#{empresaView.filteredEmpleado}">
+                                     filteredValue="#{empleadoView.filteredEmpleado}">
 
                             <p:column headerText="Identificación" width="12%" >
                                 <h:outputText value="#{empleado.persona.identificacion}"/>
@@ -50,9 +51,6 @@
                             <p:column headerText="Nombres">
                                 <h:outputText value="#{empleado.nombres}"/>
                             </p:column>
-
-
-
                             <p:column headerText="Ingreso" width="9%">
                                 <h:outputText value="#{empleadoView.darFormato(empleado.fechaIngreso)}"/>
                             </p:column>

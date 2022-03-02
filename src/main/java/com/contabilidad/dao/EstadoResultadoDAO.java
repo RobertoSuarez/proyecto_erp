@@ -10,11 +10,12 @@ import com.google.gson.Gson;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  *
- * @author Ebert Guatanga
+ * @author Ebert Guaranga
  */
 public class EstadoResultadoDAO {
 
@@ -39,7 +40,7 @@ public class EstadoResultadoDAO {
         conexion = new Conexion();
         gson = new Gson();
     }
-
+    
     public List<EstadoResultado> informacion(String fecha, String fecha2) {
         this.fecha = fecha;
         this.fecha2 = fecha2;
@@ -49,21 +50,22 @@ public class EstadoResultadoDAO {
         List<EstadoResultado> estadoResultadoCos = estadoResultadoVen(fecha, fecha2);
         estadoResultadoIng.forEach(g -> {
             estadoResultado.add(g);
-
+            
             estadoResultadoCos.forEach(cos -> {
                 if (cos.getParent() == g.getId()) {
                     estadoResultado.add(cos);
-
+                    
                     estadoResultadoVen.forEach(ven -> {
                         if (ven.getParent() == cos.getId()) {
                             estadoResultado.add(ven);
                         }
                     });
-
+                    
                 }
-
+                
             });
         });
+        
         return estadoResultado;
     }
 //------------------------SUMA INGRESOS---------------------------\\
@@ -75,7 +77,7 @@ public class EstadoResultadoDAO {
      * @return Retorna el calculo de los asientos grupo
      */
     private List<EstadoResultado> getCalculoGrupo() {
-
+        
         String sql = "select  public.getcalculogrupoer('" + fecha + "', '" + fecha2 + "',4)";
         List<EstadoResultado> listaCalculosGrupo = new ArrayList<>();
         try {
@@ -156,7 +158,7 @@ public class EstadoResultadoDAO {
      * @return Retorna el calculo de los asientos de una subCuenta
      */
     private List<EstadoResultado> getCalculoSubCuenta() {
-
+        
         String sql = "select public.getcalculosubcuentaer('" + fecha + "', '" + fecha2 + "')";
         List<EstadoResultado> listaCalculosSubCuenta = new ArrayList<>();
         try {
@@ -192,17 +194,17 @@ public class EstadoResultadoDAO {
         List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupo();
         List<EstadoResultado> calculoCuenta = getCalculoCuenta();
         List<EstadoResultado> calculoSubCuenta = getCalculoSubCuenta();
-
+        
         calculoGrupo.forEach(g -> {
             balanceGeneral.add(g);
             calculoSubGrupo.forEach(sg -> {
                 if (sg.getParent() == g.getId()) {
                     balanceGeneral.add(sg);
-
+                    
                     calculoCuenta.forEach(c -> {
                         if (c.getParent() == sg.getId()) {
                             balanceGeneral.add(c);
-
+                            
                             calculoSubCuenta.forEach(sc -> {
                                 if (sc.getParent() == c.getId()) {
                                     balanceGeneral.add(sc);
@@ -283,13 +285,13 @@ public class EstadoResultadoDAO {
         List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupoEg();
         List<EstadoResultado> calculoCuenta = getCalculoCuentaEg();
         List<EstadoResultado> calculoSubCuenta = getCalculoSubCuentaEg();
-
+        
         calculoGrupo.forEach(g -> {
             estadoResultado.add(g);
             calculoSubGrupo.forEach(sg -> {
                 if (sg.getParent() == g.getId()) {
                     estadoResultado.add(sg);
-
+                    
                     calculoCuenta.forEach(c -> {
                         if (c.getParent() == sg.getId()) {
                             estadoResultado.add(c);
@@ -453,17 +455,17 @@ public class EstadoResultadoDAO {
         List<EstadoResultado> calculoSubGrupo = getCalculoSubGrupoVen();
         List<EstadoResultado> calculoCuenta = getCalculoCuentaVen();
         List<EstadoResultado> calculoSubCuenta = getCalculoSubCuentaVen();
-
+        
         calculoGrupo.forEach(g -> {
             estadoResultado.add(g);
             calculoSubGrupo.forEach(sg -> {
                 if (sg.getParent() == g.getId()) {
                     estadoResultado.add(sg);
-
+                    
                     calculoCuenta.forEach(c -> {
                         if (c.getParent() == sg.getId()) {
                             estadoResultado.add(c);
-
+                            
                             calculoSubCuenta.forEach(sc -> {
                                 if (sc.getParent() == c.getId()) {
                                     estadoResultado.add(sc);
@@ -474,6 +476,9 @@ public class EstadoResultadoDAO {
                 }
             });
         });
+        for (int x = 0; x < estadoResultado.size(); x++) {
+            System.out.println(estadoResultado.get(x )+"  -->Ge");
+        }
         return estadoResultado;
     }
 
@@ -580,4 +585,5 @@ public class EstadoResultadoDAO {
         }
         return 0;
     }
+    
 }

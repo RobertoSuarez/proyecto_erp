@@ -14,15 +14,15 @@ import java.time.LocalDate;
 public class ListaNoDepreciable {
 
     private int id_activo_fijo;
-    private String detalle_de_activo ;
-    private int valor_adquisicion ;
+    private String detalle_de_activo;
+    private int valor_adquisicion;
     private LocalDate fecha_adquisicion = LocalDate.now();
     private int id_empresa;
-    private int tiempo_amortizacion ;
-    private double porcentaje_amortizacion ;
-    private int capitalizacion_meses ;
-    private double revalorizar ;
-    private double plusvalia ;
+    private int tiempo_amortizacion;
+    private double porcentaje_amortizacion;
+    private int capitalizacion_meses;
+    private double revalorizar;
+    private double plusvalia;
     private int idproveedor;
     private String proveedor;
     private String numero_factura;
@@ -42,9 +42,19 @@ public class ListaNoDepreciable {
         this.numero_factura = numero_factura;
     }
 
-    
-    
-    
+    public ListaNoDepreciable(
+            String detalle_de_activo,
+            int valor_adquisicion,
+            double plusvalia,
+            String proveedor,
+            String numero_factura) {
+        this.detalle_de_activo = detalle_de_activo;
+        this.valor_adquisicion = valor_adquisicion;
+        this.plusvalia = plusvalia;
+        this.proveedor = proveedor;
+        this.numero_factura = numero_factura;
+    }
+
     public int getIdproveedor() {
         return idproveedor;
     }
@@ -52,8 +62,6 @@ public class ListaNoDepreciable {
     public void setIdproveedor(int idproveedor) {
         this.idproveedor = idproveedor;
     }
-
-    
 
     public ListaNoDepreciable() {
     }
