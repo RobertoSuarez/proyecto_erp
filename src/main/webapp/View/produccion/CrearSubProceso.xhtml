@@ -45,7 +45,9 @@
                                             </p:selectOneMenu>
                                             <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
                                             <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
-                                                         mask="99:99:99"/>
+                                                         mask="99:99:99">
+                                                <p:ajax event="blur" process="@this"/>
+                                            </p:inputMask>
                                             <p:outputLabel value="Rendimiento:"></p:outputLabel>
                                             <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
                                             <p:outputLabel value="." style="color: white"/>
@@ -72,7 +74,8 @@
                         <div class="p-formgrid p-grid">
                             <div class="p-field p-col-12 p-md-6">
                                 <p:dataTable id="costoDirecto" reflow="true" paginator="true" rows="2" 
-                                             rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoDirecto}" var="nDirecto">
+                                             rowSelectMode="add" paginatorPosition="bottom" value="#{SubProcesoMB.nuevolistaCostoDirecto}" 
+                                             var="nDirecto" editInitEvent="dblclick" editable="true" editMode="cell">
                                     <!-- Buscador -->
                                     <f:facet name="header">
                                         <div class="p-d-flex p-jc-between p-ai-center">
@@ -100,10 +103,18 @@
                                     </p:column>
 
                                     <p:column headerText="Costo">
-                                        <p:inputNumber required="true" value="#{nDirecto.costo}" size="8" maxlength="10">
-                                            <p:ajax event="blur" update=":form_subproceso:totalDirectos" process="@this" listener="#{SubProcesoMB.sumarDirectos()}"/>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{nDirecto.costo}"/>
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputNumber required="true" value="#{nDirecto.costo}" size="8" maxlength="10">
+                                                    <p:ajax event="blur" update=":form_subproceso:totalDirectos" process="@this" listener="#{SubProcesoMB.sumarDirectos()}"/>
 
-                                        </p:inputNumber>
+                                                </p:inputNumber>
+                                            </f:facet>
+                                        </p:cellEditor>
+
                                     </p:column>
                                     <p:column headerText="Acciones">
                                         <p:commandButton class="ui-button-danger rounded-button"
@@ -118,10 +129,6 @@
                                         <div class=" p-lg-4">
                                             <p:outputLabel value="Total : "></p:outputLabel>
                                             <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
-                                        </div>
-                                        <div class=" p-lg-4">
-                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                            <p:inputText disabled="#"  value=""></p:inputText>
                                         </div>
                                     </div>
                                 </p:outputPanel>
@@ -177,10 +184,6 @@
                                             <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>
 
                                         </div>
-                                        <div class=" p-lg-4">
-                                            <p:outputLabel value="Costo por Hora : "></p:outputLabel>
-                                            <p:inputText disabled="#"  value=""></p:inputText>
-                                        </div>
                                     </div>
                                 </p:outputPanel>
                             </div>
@@ -218,7 +221,7 @@
                                                              rowSelectMode="add" paginatorPosition="bottom" 
                                                              editInitEvent="dblclick" editMode="cell"
                                                              value="#{SubProcesoMB.listaPersonal}" var="Tablaempleado">
-                                                    
+
                                                     <p:column headerText="Acciones">
                                                         <p:commandButton
                                                             class="rounded-button"
@@ -234,7 +237,7 @@
                                                     </p:column>
 
                                                     <p:column headerText="Nombre" 
-                                                              
+
                                                               filterStyle="display : none">
                                                         <h:outputText value="#{Tablaempleado.nombre}" />
                                                     </p:column>

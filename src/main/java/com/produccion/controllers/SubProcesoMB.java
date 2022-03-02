@@ -281,18 +281,50 @@ public class SubProcesoMB implements Serializable {
     }
 
     public void addDirecto() {
+        float minutos;
+        if (!"".equals(sproceso.getHora())) {
+            minutos = convertMinutos(sproceso.getHora());
+        }else{
+            minutos=0;
+            showWarn("Ingrese las Horas de trabajo.");
+        }
+        float horasTrabajo = 8;
+        float diasTrabajo = 25;
+        float totalMinutosTrabajo = 12000;
+        float cotoMiniuto;
         Costo costoDirecto = costoD();
         if (!verificaCostoD(costoDirecto)) {
             if ("Sueldos y Salarios directos".equals(costoDirecto.getNombre_subcuenta())) {
-                costoDirecto.setCosto(valorManoObra());
+                cotoMiniuto = valorManoObra() / totalMinutosTrabajo;
+                costoDirecto.setCosto(minutos * cotoMiniuto);
+                NuevolistaCostoDirecto.add(costoDirecto);
                 sumarDirectos();
+                costo = new Costo();
+            } else {
+                NuevolistaCostoDirecto.add(costoDirecto);
+                sumarDirectos();
+                costo = new Costo();
             }
-            NuevolistaCostoDirecto.add(costoDirecto);
-            costo = new Costo();
+
         } else {
             showWarn("Ya ha agregado este Costo Directo");
         }
 
+    }
+
+    public float convertMinutos(String hora) {
+        float minutos = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(hora);
+        } catch (ParseException e) {
+            System.out.println("" + e);
+        }
+        minutos += date.getSeconds() / 60;
+        minutos += date.getHours() * 60;
+        minutos += date.getMinutes();
+        return minutos;
     }
 
     public float valorManoObra() {
@@ -389,9 +421,13 @@ public class SubProcesoMB implements Serializable {
 
     public void llenaPersonal(PersonalSubproceso personal) {
         if (!llenarTrabajador(personal)) {
-            listaPersonalImplicado.add(personal);
-            listaPersonal.remove(personal);
-            showInfo("Se realizo la asignación");
+            if (!"".equals(sproceso.getHora())) {
+                listaPersonalImplicado.add(personal);
+                listaPersonal.remove(personal);
+                showInfo("Se realizo la asignación");
+            } else {
+                showWarn("Ingrese las horas de trabajo");
+            }
         } else {
             showWarn("Ya se encuentra asignado al subproceso");
         }
