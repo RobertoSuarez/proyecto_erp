@@ -58,7 +58,8 @@ public class LibroManagedBean implements Serializable {
     }
 
     private void llenarLibro() {
-        libros = imformes.getImformeLibroMayor();
+        //libros = imformes.getImformeLibroMayor();
+        libros = imformes.getImformeLibroMayorV2();
         saldoTotal = getSaldoTotal(libros);
     }
 
@@ -127,7 +128,7 @@ public class LibroManagedBean implements Serializable {
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/imformelibromayor.jasper"));
+                    .getRealPath("/PlantillasReportes/LibroMayorV2.jasper"));
 
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(

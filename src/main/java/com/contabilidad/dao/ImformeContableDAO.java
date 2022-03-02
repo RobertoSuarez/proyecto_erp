@@ -31,6 +31,26 @@ public class ImformeContableDAO {
         }
         return libros;
     }
+    
+    //Testeando nueva función
+    public List<Libro> getImformeLibroMayorV2() {
+        String sql = String.format("select * from generateLibroMayorV2();");
+        List<Libro> libros = new ArrayList<>();
+        try {
+            conexion.conectar();
+            resultSet = conexion.ejecutarSql(sql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                libros.add(new Libro(resultSet.getString("Codigo"), resultSet.getString("SubCuenta"), resultSet.getString("Fecha"),
+                        resultSet.getString("Asiento"), resultSet.getString("Descripcion"), resultSet.getDouble("Debe"), resultSet.getDouble("Haber")));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally{ 
+            conexion.desconectar();
+        }
+        return libros;
+    }
 
     public List<Libro> filtrateLibroByDiario(int idiario) {
         String sql = String.format("select * from fillLibroMayor(%1$d);", idiario);
