@@ -336,7 +336,7 @@ public class ProduccionMBean implements Serializable {
                     if (ordenDao.actualizarOrden(ordenTrabajo.getCodigo_registro()) > 0) {
                         if (ordenDao.verificaOrden(ordenTrabajo.getCodigo_orden())) {
                             if (ordenDao.actualizaEstado(ordenTrabajo.getCodigo_orden()) > 0) {
-                                float materiales = 0, indirectos = 0, directos = 0;
+                                Double materiales = 0.0, indirectos = 0.0, directos = 0.0;
                                 listaAdicionales = ordenDao.getArticuloAdicionales(ordenTrabajo.getCodigo_orden());
                                 ordenAsiento = ordenDao.calculaProduccion(ordenTrabajo.getCodigo_orden());
                                 ordenAsiento = ordenDao.movimientosProduccion(ordenTrabajo.getCodigo_orden());
@@ -386,7 +386,7 @@ public class ProduccionMBean implements Serializable {
                     showWarn("No se pudo generar la Orden de producción");
                 }
             } catch (Exception e) {
-                showWarn("No se pudo generar la Orden de producción"+e);
+                showWarn("No se pudo generar la Orden de producción" + e);
             }
 
         }
@@ -554,7 +554,10 @@ public class ProduccionMBean implements Serializable {
             ordenTrabajo.setTotalMateria(materiaPrimaCosto);
             ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
             ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
-            showInfo("Productos agregados con exito.");
+            if (listaMaterialesConfirmados.size() > 0) {
+                showInfo("Productos agregados con exito.");
+
+            }
             listaMaterialesConfirmados = new ArrayList<>();
         } else {
             showWarn("Debe de ingresar valores en la materia prima que agrego.");

@@ -32,7 +32,7 @@
                                             <p:inputTextarea  value="#{SubProcesoMB.sproceso.descripcion}"
                                                               maxlength="250"
                                                               placeholder="Descripcion maximo 255 caracteres maximo"
-                                                              rows="5" 
+                                                              rows="7" 
                                                               autoResize="false"/>
                                         </div>
                                         <div class="  p-lg-4">
@@ -48,6 +48,12 @@
                                                          mask="99:99:99"/>
                                             <p:outputLabel value="Rendimiento:"></p:outputLabel>
                                             <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
+                                            <p:outputLabel value="." style="color: white"/>
+
+
+                                            <p:commandButton style="margin-right: 6px;" value="Personal" 
+                                                             styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('empleado').show()">
+                                            </p:commandButton>
                                         </div>
 
                                     </div>
@@ -75,7 +81,7 @@
                                             <p:selectOneMenu value="#{SubProcesoMB.costo.codigo_subcuenta}" editable="false">
                                                 <f:selectItem itemLabel="Seleccione un Costo" itemValue="" noSelectionOption="true"/>
                                                 <p:ajax listener="#{SubProcesoMB.addDirecto()}" 
-                                                        update=":form_subproceso:costoDirecto ,:form_subproceso:growl" process="@this"/>
+                                                        update=":form_subproceso:costoDirecto ,:form_subproceso:growl,:form_subproceso:totalDirectos" process="@this"/>
                                                 <f:selectItems value="#{SubProcesoMB.listaCostoDirecto}" var="cDirecto"
                                                                itemLabel="#{cDirecto.nombre_subcuenta}" itemValue="#{cDirecto.codigo_subcuenta}">
 
@@ -194,6 +200,56 @@
                             </p:button>
                         </div>
                     </div>
+
+
+
+                    <p:dialog header="Seleccionar empleados" showEffect="fade" modal="true"
+                              widgetVar="empleado" responsive="true" width="60%"
+                              draggable="false" height="500">
+
+                        <p:outputPanel class="ui-fluid">
+                            <p:outputPanel>
+                                <div class="p-grid p-justify-around">
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:dataTable id="dtBuscarEmpleado" reflow="true" 
+                                                             widgetVar="TablaBuscarProducto" paginator="true" rows="4" 
+                                                             rowSelectMode="add" paginatorPosition="bottom" 
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="#{SubProcesoMB.listaPersonal}" var="Tablaempleado">
+                                                    
+                                                    <p:column headerText="Acciones">
+                                                        <p:commandButton
+                                                            class="rounded-button"
+                                                            icon="pi pi-check">
+                                                            <p:ajax listener="#{SubProcesoMB.llenaPersonal(Tablaempleado)}" 
+                                                                    update=":form_subproceso:dtBuscarEmpleado,:form_subproceso:growl"
+                                                                    oncomplete="PF('empleado').hide()"/>
+                                                        </p:commandButton>
+                                                    </p:column>
+
+                                                    <p:column headerText="N°" filterStyle="display : none">
+                                                        <h:outputText value="#{Tablaempleado.idEmpleado}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Nombre" 
+                                                              
+                                                              filterStyle="display : none">
+                                                        <h:outputText value="#{Tablaempleado.nombre}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Sueldo" filterStyle="display : none">
+                                                        <h:outputText value="#{Tablaempleado.sueldo}" />
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </p:dialog>
                 </h:form>
             </ui:define>
         </ui:composition>
