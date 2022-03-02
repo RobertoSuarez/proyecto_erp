@@ -32,6 +32,7 @@ public class FacturaManagedBean {
      private List<Factura> listaFactura;
      private List<Factura> detalleFactura;
      private List<SelectItem> listaCuentas;
+     private List<SelectItem> listaProductos;
      private float datoImporte;
      private String datoDetalle;
      private String datoCuenta;
@@ -43,6 +44,7 @@ public class FacturaManagedBean {
           listaFactura = new ArrayList<>();
           listaCuentas = new ArrayList<>();
           detalleFactura = new ArrayList<>();
+          listaProductos = new ArrayList<>();
           this.listaFactura.clear();
           this.listaFactura = this.facturaDAO.llenarP("1");
      }
@@ -87,6 +89,14 @@ public class FacturaManagedBean {
      public void setListaCuentas(List<SelectItem> listaCuentas) {
           this.listaCuentas = listaCuentas;
      }
+
+    public List<SelectItem> getListaProductos() {
+        return listaProductos;
+    }
+
+    public void setListaProductos(List<SelectItem> listaProductos) {
+        this.listaProductos = listaProductos;
+    }
 
      //GETTER AND SETTER DETALLE FACTURA
      public float getDatoImporte() {
@@ -325,7 +335,7 @@ public class FacturaManagedBean {
      }
 
      public void ejemplofac() {
-          this.factura.setNfactura("000-000-000");
+          this.factura.setNfactura("000-000-000000000");
      }
 
      /**
@@ -337,10 +347,10 @@ public class FacturaManagedBean {
           Factura f = (Factura) event.getObject();
           f.setImporteD(datoImporte);
           f.setDetalle(datoDetalle);
-          f.setCuenta(datoCuenta);
+          //f.setCuenta(datoCuenta);
           datoImporte = 0;
           datoDetalle = "";
-          datoCuenta = "";
+          //datoCuenta = "";
           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Detalle Editado"));
      }
 
@@ -368,19 +378,27 @@ public class FacturaManagedBean {
       */
      public void onAddNew() {
           // Add one new product to the table:
-          System.out.println("Cantidad detalle: " + listaCuentas.size());
+          //System.out.println("Cantidad detalle: " + listaCuentas.size());
           Factura newFactura = new Factura(0, "Detalle", "Cuenta contable", "code");
           detalleFactura.add(newFactura);
-          listaCuentas.clear();
+          //listaCuentas.clear();
+          listaProductos.clear();
           llenarCuenta();
-          System.out.println("Cantidad detalle 2: " + listaCuentas.size());
+          //System.out.println("Cantidad detalle 2: " + listaCuentas.size());
      }
 
      public void llenarCuenta() {
-          List<Factura> auxiliar = facturaDAO.llenarCuentas();
+//          List<Factura> auxiliar = facturaDAO.llenarCuentas();
+//          for (int i = 0; i < auxiliar.size(); i++) {
+//               SelectItem Cuentas = new SelectItem(auxiliar.get(i).getCuentadetalle(), auxiliar.get(i).getCuentadetalle());
+//               listaCuentas.add(Cuentas);
+//          }
+//          auxiliar.clear();
+          List<Factura> auxiliar = facturaDAO.llenarProductos();
+          
           for (int i = 0; i < auxiliar.size(); i++) {
-               SelectItem Cuentas = new SelectItem(auxiliar.get(i).getCuentadetalle(), auxiliar.get(i).getCuentadetalle());
-               listaCuentas.add(Cuentas);
+               SelectItem product = new SelectItem(auxiliar.get(i).getCuentadetalle(), auxiliar.get(i).getCuentadetalle());
+               listaProductos.add(product);
           }
      }
 
