@@ -65,4 +65,23 @@ public class dSubprocesoDAO {
         }
         return costo;
     }
+
+    public List<PersonalSubproceso> getListaEmpleado() {
+        List<PersonalSubproceso> personal = new ArrayList<>();
+        sentenciaSql = String.format("select e.id_empleado,e.nombre1,s.valor from empleado_bck_rrhh as e \n"
+                + "inner join sueldo as s on e.id_empleado=s.id_empleado");
+        try {
+            //enviamos la sentencia
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                personal.add(new PersonalSubproceso(resultSet.getInt("id_empleado"), resultSet.getString("nombre1"),
+                         resultSet.getFloat("valor")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return personal;
+    }
 }

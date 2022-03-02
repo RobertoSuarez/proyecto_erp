@@ -324,7 +324,7 @@ public class EntradaManagedBean implements Serializable {
                         .getRealPath("/PlantillasReportes/entradas.jasper"));
 
                 // llenamos la plantilla con los datos.
-                JasperPrint jasperPrint = JasperFillManager.fillReport(
+                 JasperPrint jasperPrint = JasperFillManager.fillReport(
                         filetext.getPath(),
                         parametros,
                         new JRBeanCollectionDataSource(this.productosReport)

@@ -186,9 +186,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("empleado_bck_rrhh",
-                        "id_empleado, nombre1, nombre2, apellido1, apellido2, fecha_ingreso, fecha_egreso",
-                        null, "nombre1, nombre2, apellido1, apellido2 ASC");
+                result = conexion.selecionar("empleado_bck_rrhh","id_empleado, nombre1, nombre2, apellido1, apellido2, fecha_ingreso, fecha_egreso",null, "nombre1, nombre2, apellido1, apellido2 ASC");
                 
                 while (result.next()) {
                     empleados.add(new Empleado(
@@ -203,7 +201,6 @@ public class EmpleadoDAO implements IDAO<Empleado> {
                             result.getDate("fecha_egreso")
                     ));
                 }
-                conexion.desconectar();
                 result.close();
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -224,10 +221,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("empleado_bck_rrhh AS e INNER JOIN public.persona_bck_rrhh AS p ON p.id_persona = e.id_persona",
-                                             "id_empleado, e.id_persona, nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle, fecha_nacimiento, fecha_ingreso, fecha_egreso",
-                                             "p.estado = true",
-                                             "nombre1, nombre2, apellido1, apellido2 ASC");
+                result = conexion.selecionar("empleado_bck_rrhh AS e INNER JOIN public.persona_bck_rrhh AS p ON p.id_persona = e.id_persona","id_empleado, e.id_persona, nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle, fecha_nacimiento, fecha_ingreso, fecha_egreso","p.estado = true","nombre1, nombre2, apellido1, apellido2 ASC");
                 while (result.next()) {
                     empleados.add(new Empleado(
                             result.getInt("id_empleado"),
@@ -267,7 +261,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
         if (conexion.isEstado()) {
             ResultSet result;
             try {
-                result = conexion.selecionar("empleado_bck_rrhh", "id_empleado, id_persona, nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle, fecha_nacimiento, fecha_ingreso, fecha_egreso", restricciones, OrdenarAgrupar);
+                result = conexion.selecionar("empleado_bck_rrhh","id_empleado, id_persona, nombre1, nombre2, apellido1, apellido2, sexo, genero, detalle, fecha_nacimiento, fecha_ingreso, fecha_egreso",restricciones, OrdenarAgrupar);
                 while (result.next()) {
                     empleados.add(new Empleado(
                             result.getInt("id_empleado"),

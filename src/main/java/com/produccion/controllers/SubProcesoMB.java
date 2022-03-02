@@ -5,6 +5,7 @@
  */
 package com.produccion.controllers;
 
+import com.produccion.dao.PersonalSubproceso;
 import com.produccion.dao.SubProcesoDAO;
 import com.produccion.dao.dSubprocesoDAO;
 import com.produccion.models.Costo;
@@ -42,6 +43,8 @@ public class SubProcesoMB implements Serializable {
     private List<Costo> listaCostoIndirecto;
     private List<Costo> NuevolistaCostoDirecto;
     private List<Costo> NuevolistaCostoIndirecto;
+    private List<PersonalSubproceso> listaPersonal;
+    List<PersonalSubproceso> listaPersonalImplicado;
 
     List<dSubproceso> listaDsubprocesoDirecta;
     List<dSubproceso> listaDsubprocesoInirecta;
@@ -65,6 +68,8 @@ public class SubProcesoMB implements Serializable {
 
         listaDsubprocesoDirecta = new ArrayList<>();
         listaDsubprocesoInirecta = new ArrayList<>();
+        listaPersonal = new ArrayList<>();
+        listaPersonalImplicado = new ArrayList<>();
     }
 
     @PostConstruct
@@ -72,7 +77,7 @@ public class SubProcesoMB implements Serializable {
         listaProceso = subProcesoDAO.getProcesosProduccion();
         listaCostoDirecto = detalleSuprocesoDAO.getCostoDirecto();
         listaCostoIndirecto = detalleSuprocesoDAO.getCostoIndirecto();
-
+        listaPersonal = detalleSuprocesoDAO.getListaEmpleado();
     }
 
     public float getTotalDirecto() {
@@ -155,6 +160,14 @@ public class SubProcesoMB implements Serializable {
         this.sproceso = sproceso;
     }
 
+    public List<PersonalSubproceso> getListaPersonal() {
+        return listaPersonal;
+    }
+
+    public void setListaPersonal(List<PersonalSubproceso> listaPersonal) {
+        this.listaPersonal = listaPersonal;
+    }
+
     public void insertarSubProceso() {
 
         if ("".equals(sproceso.getNombre())) {
@@ -188,14 +201,14 @@ public class SubProcesoMB implements Serializable {
                 minutos += date.getMinutes();
                 for (dSubproceso subproceso : listaDsubprocesoDirecta) {
                     //insertamos costo directo
-                    subproceso.setHora_costo(minutos/sproceso.getRendimiento());
+                    subproceso.setHora_costo(minutos / sproceso.getRendimiento());
                     subproceso.setModunitario(subproceso.getCosto_mano_obra() / sproceso.getRendimiento());
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
                 llenarDetalleInirecto();
                 for (dSubproceso subproceso : listaDsubprocesoInirecta) {
                     //insertamos costo indirecto
-                    subproceso.setHora_costo(minutos/sproceso.getRendimiento());
+                    subproceso.setHora_costo(minutos / sproceso.getRendimiento());
                     subproceso.setCifunitario(subproceso.getCosto_indirecto() / sproceso.getRendimiento());
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
@@ -235,10 +248,13 @@ public class SubProcesoMB implements Serializable {
 
         listaDsubprocesoDirecta = new ArrayList<>();
         listaDsubprocesoInirecta = new ArrayList<>();
+        listaPersonal = new ArrayList<>();
+        listaPersonalImplicado = new ArrayList<>();
 
         listaProceso = subProcesoDAO.getProcesosProduccion();
         listaCostoDirecto = detalleSuprocesoDAO.getCostoDirecto();
         listaCostoIndirecto = detalleSuprocesoDAO.getCostoIndirecto();
+        listaPersonal = detalleSuprocesoDAO.getListaEmpleado();
 
         totalDirecto = 0;
         totalIndirecto = 0;
@@ -267,11 +283,24 @@ public class SubProcesoMB implements Serializable {
     public void addDirecto() {
         Costo costoDirecto = costoD();
         if (!verificaCostoD(costoDirecto)) {
+            if ("Sueldos y Salarios directos".equals(costoDirecto.getNombre_subcuenta())) {
+                costoDirecto.setCosto(valorManoObra());
+                sumarDirectos();
+            }
             NuevolistaCostoDirecto.add(costoDirecto);
             costo = new Costo();
         } else {
             showWarn("Ya ha agregado este Costo Directo");
         }
+
+    }
+
+    public float valorManoObra() {
+        float valor = 0;
+        for (PersonalSubproceso personaActivo : listaPersonalImplicado) {
+            valor += personaActivo.getSueldo();
+        }
+        return valor;
     }
 
     public void addIndirecto() {
@@ -356,6 +385,28 @@ public class SubProcesoMB implements Serializable {
     public void deleteFilaIndirecto(Costo directo) {
         NuevolistaCostoIndirecto.remove(directo);
         sumarIndirectos();
+    }
+
+    public void llenaPersonal(PersonalSubproceso personal) {
+        if (!llenarTrabajador(personal)) {
+            listaPersonalImplicado.add(personal);
+            listaPersonal.remove(personal);
+            showInfo("Se realizo la asignación");
+        } else {
+            showWarn("Ya se encuentra asignado al subproceso");
+        }
+    }
+
+    public boolean llenarTrabajador(PersonalSubproceso personal) {
+        boolean verifica = false;
+
+        for (PersonalSubproceso personaActivo : listaPersonalImplicado) {
+            if (personaActivo.getIdEmpleado() == personal.getIdEmpleado()) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
     }
 
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {

@@ -373,7 +373,7 @@ public class OrdenProduccionDAO {
         return costosMovimiento;
     }
 
-    public void insertAsiento(SolicitudOrden orden, List<FormulaProduccion> listaMovimientos, float directo, float indirect, float materiales) {
+    public int insertAsiento(SolicitudOrden orden, List<FormulaProduccion> listaMovimientos, Double directo, Double indirect, Double materiales) {
         try {
             int iddiario = 0;
             String cadena = " select iddiario from diariocontable \n"
@@ -400,21 +400,24 @@ public class OrdenProduccionDAO {
                     + materiales + "\",\"tipoMovimiento\":\"Produccion en proceso\"},{\"idSubcuenta\":\"143\",\"debe\":\"0\",\"haber\":\""
                     + indirect + "\",\"tipoMovimiento\":\"Produccion en proceso\"}]";
 
-            intJson(sentencia, sentencia1);
+            return intJson(sentencia, sentencia1);
         } catch (SQLException e) {
+            return -1;
         } finally {
             conexion.desconectar();
         }
     }
 
-    public void intJson(String a, String b) {
+    public int intJson(String a, String b) {
 
         try {
             String cadena = "SELECT public.generateasientocotableexternal('"
                     + a + "','" + b + "')";
             conexion.ejecutarSql(cadena);
+            return 1;
         } catch (Exception ex) {
-            System.out.println(ex.getMessage() + " error en conectarse");
+            return -1;
+            
         } finally {
             conexion.desconectar();
         }

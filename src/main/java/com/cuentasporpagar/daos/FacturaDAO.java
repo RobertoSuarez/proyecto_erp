@@ -222,7 +222,7 @@ public class FacturaDAO {
                 System.out.println(sentencia);
                 //JSON un solo movimiento
                 sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
-                        + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                        + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
                         + "Inventario de Suministro y Materiales\"},"
                         + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
                         + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
@@ -254,7 +254,7 @@ public class FacturaDAO {
                         + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\"0\",\"haber\":\""
-                        + selectedFactura.get(0).getImporteD() + "\",\"tipoMovimiento\":\""
+                        + factura.getImporte() + "\",\"tipoMovimiento\":\""
                         + "Inventario de Suministro y Materiales\"},"
                         + "{\"idSubcuenta\":\"28\",\"debe\":\""
                         + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de compra\"}]";
