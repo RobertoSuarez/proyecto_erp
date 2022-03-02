@@ -70,6 +70,20 @@ public class FormulaProduccionDAO {
 
     }
 
+    public int actualizarMateriales(int idFormula,int idproducto,float cantidad) {
+        try {
+            String consulta = "UPDATE public.detalle_formula\n"
+                    + "	SET cantidad_unitaria="+cantidad+"\n"
+                    + "	WHERE codigo_formula="+idFormula+" and codigo_producto="+idproducto+";";
+            return conexion.insertar(consulta);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
     public List<SubProceso> getSubProceso(int id) {
         List<SubProceso> subProceso = new ArrayList<>();
         String sql = String.format("select SP.codigo_subproceso,SP.nombre from subproceso as SP \n"
@@ -116,7 +130,7 @@ public class FormulaProduccionDAO {
                 + "	a.costo,a.cantidad,a.max_stock,a.unidadmedida\n"
                 + "	from articulos as a	inner join categoria as c on a.id_categoria=c.cod\n"
                 + "	inner join tipo as t on t.cod=a.id_tipo\n"
-                + "	where c.nom_categoria!='"+nombre+"'";
+                + "	where c.nom_categoria!='" + nombre + "'";
 
         try {
 
