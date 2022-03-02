@@ -19,6 +19,8 @@ import com.inventario.models.Bodega;
 import com.inventario.models.EntradaDetalleInventario;
 import com.inventario.models.EntradaInventario;
 import com.inventario.report.ProductoReport;
+
+import javax.servlet.ServletOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -40,6 +42,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import javax.faces.context.ExternalContext;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -261,11 +265,10 @@ public class EntradaManagedBean implements Serializable {
     }
 
     
-    public void verFactura() {
+    public JasperPrint verFactura(int idEntrada) throws JRException {
 
-        int idEntrada = 1;
         EntradaInventario entrada = entradaDAO.getEntradas(idEntrada).get(0);
-
+            JasperPrint jaspert=null;
         if (entrada != null) {
             List<EntradaDetalleInventario> detalleEntradas = new ArrayList<>();
             EntradaDetalleDAO dao = new EntradaDetalleDAO();
@@ -276,9 +279,10 @@ public class EntradaManagedBean implements Serializable {
             float ice = 0.0f;
             float iva = 0.0f;
             float descuento = 0.0f;
+            String nombre = "Hola Mundo";
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), nombre, inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
                     subtotal += Float.valueOf(inv.getCosto()) * Float.valueOf(inv.getCant());
                     ice += Float.valueOf(inv.getIce());
                     iva += Float.valueOf(inv.getIva());
@@ -292,13 +296,13 @@ public class EntradaManagedBean implements Serializable {
             ExternalContext ec = fc.getExternalContext();
 
             // Cabecera de la respuesta.
-            ec.responseReset();
+            /*ec.responseReset();
             ec.setResponseContentType("application/pdf");
             ec.setResponseHeader("Content-disposition", "attachment; "
                     + "filename=factura.pdf");
-
+*/
             // tomamos el stream para llenarlo con el pdf.
-            try ( OutputStream stream = ec.getResponseOutputStream()) {
+            //try ( OutputStream stream = ec.getResponseOutputStream()) {
 
                 // Parametros para el reporte.
                 SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -321,31 +325,53 @@ public class EntradaManagedBean implements Serializable {
                 File filetext = new File(FacesContext
                         .getCurrentInstance()
                         .getExternalContext()
-                        .getRealPath("/PlantillasReportes/entradas.jasper"));
+                        .getRealPath("PlantillasReportes/entradas.jasper"));
 
                 // llenamos la plantilla con los datos.
-                 JasperPrint jasperPrint = JasperFillManager.fillReport(
+                 /*JasperPrint jasperPrint = JasperFillManager.fillReport(
                         filetext.getPath(),
                         parametros,
-                        new JRBeanCollectionDataSource(this.productosReport)
-                );
-
+                        new JRBeanCollectionDataSource(dataset)*/
+                 jaspert= JasperFillManager.fillReport(
+                        filetext.getPath(),
+                        parametros,
+                        new JRBeanCollectionDataSource(this.productosReport));
+                
                 // exportamos a pdf.
-                JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+               /* JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
                 //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
 
                 stream.flush();
-                stream.close();
-            } catch (Exception ex) {
+                stream.close();*/
+           /* } catch (Exception ex) {
                 System.out.println(ex.getMessage().toString());
             } finally {
                 // enviamos la respuesta.
                 fc.responseComplete();
-            }
+            }*/
         }
+        return jaspert;
 
     }
 
+    public void imprimirPDF(int idEntrada) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		try {
+				HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
+						.getExternalContext().getResponse();
+				httpServletResponse.addHeader("Content-disposition",
+						"attachment; filename=" + "facturaEntradas" + ".pdf");
+				try (ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
+					JasperExportManager.exportReportToPdfStream(verFactura(idEntrada),servletOutputStream);
+					servletOutputStream.flush();
+					FacesContext.getCurrentInstance().responseComplete();
+				}
+		} catch (Exception ex) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "hola", ex.getMessage()));
+		}
+	}
+	
     //Agregar producto a la lista de detalle
     @Asynchronous
     public void AgregarProductoLista() {
