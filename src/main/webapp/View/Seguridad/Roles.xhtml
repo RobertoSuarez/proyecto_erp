@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../WEB-INF/InicioTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content" >
+        <h:form id="form" style="width: 100%;">
+            <ui:include src="./menuSeguridad.xhtml" />
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <br/><br/><br/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <div class="products-table-header" style="text-align: center">
+                                <span style="font-weight: bold; font-size: 25px;" > Roles </span>
+                            </div>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <br/>
+                    <p:dataTable id="dt_rols" value="#{RolMB.listOfRoles}" var="ListaRoles"
+                                 size="small" liveResize="true" rowKey="#{ListaRoles.id}"
+                                 selection="#{RolMB.rolSeleccionado}"
+                                 selectionMode="single"
+                                 reflow="true">
+                        <p:column headerText="Codigo" width="5%" style="font-size: 17px">
+                            <h:outputText value="#{ListaRoles.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Rol" style="font-size: 17px" width="20%">
+                            <h:outputText value="#{ListaRoles.nombre}"/>
+                        </p:column>
+
+                        <p:column headerText="Descripcion" style="font-size: 17px" width="50%">
+                            <h:outputText value="#{ListaRoles.detalle}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" style="font-size: 17px" width="10%">
+                            <h:outputText value="#{ListaRoles.habilitado}"/>
+                        </p:column>
+
+                        <p:column exportable="false" width="4%">
+                            <p:commandButton icon="pi pi-pencil"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
