@@ -18,6 +18,7 @@ public class OrdenProduccion {
     private Date fecha_fin;
     private String descripcion;
     private String estado;
+    private float porcentaje;
 
     public OrdenProduccion() {
     }
@@ -28,6 +29,15 @@ public class OrdenProduccion {
         this.fecha_fin = fecha_fin;
         this.descripcion = descripcion;
         this.estado = estado;
+    }
+
+    public OrdenProduccion(int codigo_orden, Date fecha_emision, Date fecha_fin, String descripcion, String estado, float porcentaje) {
+        this.codigo_orden = codigo_orden;
+        this.fecha_emision = fecha_emision;
+        this.fecha_fin = fecha_fin;
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.porcentaje = porcentaje;
     }
 
     public int getCodigo_orden() {
@@ -68,6 +78,14 @@ public class OrdenProduccion {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public float getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(float porcentaje) {
+        this.porcentaje = porcentaje;
     }
 
 }

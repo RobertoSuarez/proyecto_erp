@@ -51,11 +51,15 @@
                             <p:column headerText="Estado" >
                                 <h:outputText value="#{ordenProduccion.estado}" />
                             </p:column>
+                            <p:column headerText="Progreso">
+                                <p:progressBar style="width:70px;color:rgba(255,0,0,0.5); " value="#{ordenProduccion.porcentaje}" labelTemplate="{value}%" displayOnly="true"/>
+                            </p:column>
                             <p:column headerText="Acción" filterStyle="display : none">
                                 <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml?orden=#{ordenProduccion.codigo_orden}"
                                           disabled="#{ordenProduccion.estado=='P' eq false}">
                                 </p:button>
                             </p:column>
+
                         </p:dataTable>
                     </div>
                 </h:form>
