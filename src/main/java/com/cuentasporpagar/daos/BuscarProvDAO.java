@@ -56,7 +56,7 @@ public class BuscarProvDAO {
             try {
                 String sentencia = "select p.idproveedor, p.codigo, p.nombre, p.ruc, c.cantdiasvencidos "
                         +" from proveedor p inner join condiciones c on " +
-                        "(c.idproveedor = p.idproveedor);";
+                        "(c.idproveedor = p.idproveedor) where p.estado = 'true';";
                 result = conexion.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaProveedor.add(new Proveedor(result.getInt("idproveedor"),

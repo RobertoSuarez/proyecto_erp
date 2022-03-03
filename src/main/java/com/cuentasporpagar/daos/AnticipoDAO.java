@@ -56,8 +56,8 @@ public class AnticipoDAO {
 
     public List<Anticipo> getAncitipoByProveedor(int idProveedor) {
         Conexion conn = new Conexion();
+        List<Anticipo> anticipos = new ArrayList<>();
         try {
-            List<Anticipo> anticipos = new ArrayList<>();
             String query = "select \"id_anticipo\", \"importe\", \"id_proveedor\" from public.anticipo where \"id_proveedor\" = " + String.valueOf(idProveedor) + ";";
             ResultSet rs = conn.ejecutarSql(query);
             Anticipo aux;
@@ -67,17 +67,13 @@ public class AnticipoDAO {
                 aux.setImporte(rs.getDouble("importe"));
                 anticipos.add(aux);
             }
-            rs.close();
-            if(anticipos.size() > 0){
-                return anticipos;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         finally{
             conn.desconectar();
         }
-        return null;
+        return anticipos;
     }
 
     // GetAllDBProveedor va iterando por cada anticipo y va a traer el proveedor
