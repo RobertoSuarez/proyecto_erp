@@ -19,6 +19,15 @@
                             </p:commandButton>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right" style="width: 27%; margin-top: 3.5%">
+                            
+                            <p:selectOneMenu style="width: 100%;" id="labeled2" value="#{libroManagedBean.onSelectedCuenta.id}" label="Seleccione una cuenta" editable="false">
+                                <f:selectItem itemLabel="Seleccione una Cuenta" itemValue="0" noSelectionOption="true"/>
+                                <p:ajax listener="#{libroManagedBean.filtrateLibroMayorPorCuenta()}" update=":form:dt-libros"/>
+                                <f:selectItems value="#{libroManagedBean.subcuentas}" var="cuenta"
+                                               itemLabel="#{cuenta.nombre}" itemValue="#{cuenta.id}"/>
+                                
+                            </p:selectOneMenu>
+                                
                             <p:selectOneMenu style="width: 100%;" id="labeled" value="#{libroManagedBean.onSelectedDiario.idDiario}" label="Seleccione un diario" editable="false">
                                 <f:selectItem itemLabel="Seleccione un Diario Contable" itemValue="0" noSelectionOption="true"/>
                                 <p:ajax listener="#{libroManagedBean.filtrateLibroMayor()}" update=":form:dt-libros"/>

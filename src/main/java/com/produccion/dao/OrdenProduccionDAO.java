@@ -626,4 +626,21 @@ public class OrdenProduccionDAO {
         }
     }
 
+    public List<OrdenTrabajo> progresoProduccion(int id_orden) {
+        List<OrdenTrabajo> state = new ArrayList<>();
+        sentenciaSql = String.format("select estado from registro_orden_produccion\n"
+                + "	where codigo_orden=" + id_orden + "");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                state.add(new OrdenTrabajo(resultSet.getString("estado").trim()));
+            }
+            return state;
+        } catch (SQLException e) {
+            return state;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
 }
