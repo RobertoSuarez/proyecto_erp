@@ -34,7 +34,7 @@ public class EmpleadoDAO implements IDAO<Empleado> {
     public EmpleadoDAO() {
         conexion = new Conexion();
         empleado = new Empleado();
-        personaDAO = new PersonaDAO(conexion);
+        personaDAO = new PersonaDAO();
     }
 
     public EmpleadoDAO(Empleado empleado) {

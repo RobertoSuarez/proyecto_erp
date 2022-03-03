@@ -34,6 +34,12 @@
                                                      styleClass="ui-button-success" 
                                                      style="margin-right: .5rem">
                                     </p:commandButton>
+                                    <p:commandButton value="Registrar asiento contable" icon="pi pi-book" 
+                                                     actionListener="#{rolDePagoView.GenerarAsiento(rolDePagoView.rolPagos)}"
+                                                     update="dt-rolPago" process="dt-rolPago @this"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
                                 </p:toolbarGroup>
                             </p:toolbar>
                             <p:panel id="dt-rolPago" class="ui-fluid">

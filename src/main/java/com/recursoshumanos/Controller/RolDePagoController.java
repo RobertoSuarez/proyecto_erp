@@ -614,7 +614,7 @@ public class RolDePagoController implements Serializable {
             mensaje = "El rol de pagos no se pudo guardar";
         }
         if (result) {
-            rolPagosDAO.insertarAsiento(rolPagos);
+            GenerarAsiento(rolPagos);
             verRoldePago(rolPagos);
             mostrarMensajeInformacion("Datos guardados correctamente");
         } else {
@@ -622,6 +622,13 @@ public class RolDePagoController implements Serializable {
         }
         PrimeFaces.current().ajax().update("form:messages", "form:DATOS");
         return result ? "RolDePago" : "";
+    }
+
+
+    public void GenerarAsiento(RolPagos rolPagos)
+    {
+        rolPagosDAO.insertarAsiento(rolPagos);
+            mostrarMensajeInformacion("Asiento generado correctamente");
     }
 
     /**

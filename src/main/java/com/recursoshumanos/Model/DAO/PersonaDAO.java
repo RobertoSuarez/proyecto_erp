@@ -178,7 +178,7 @@ public class PersonaDAO implements IDAO<Persona> {
             List<Persona> personas;
             try {
                 result = conexion.selecionar("persona_bck_rrhh",
-                        "id_persona, identificacion, tipo_identificacion, "
+                        "id_persona, tipo_identificacion, identificacion, "
                         + "correo1, telefono1, telefono2, direccion, estado",
                         restricciones, OrdenarAgrupar);
                 personas = new ArrayList<>();
