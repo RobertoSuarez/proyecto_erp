@@ -413,7 +413,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
                         + ",\"documento\": \"" + rolPagos.getCodigo() + "\",\"detalle\": \"Rol de pago: "
                         + rolPagos.getEmpleado().nombreCompleto() + "\",\"fechaCreacion\": \""
                         + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-MM-dd HH:mm:SS") + "\",\"fechaCierre\":\""
-                        + DateFormatUtils.format(rolPagos.getFechaAprobacion(), "yyyy-MM-dd HH:mm:SS") + "\"}";
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-MM-dd HH:mm:SS") + "\"}";
 
                 sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
                         + rolPagos.getValor() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
@@ -433,7 +433,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
                         + ",\"documento\": \"" + rolPagos.getCodigo() + " R\",\"detalle\": \"Rol de pago: :"
                         + rolPagos.getEmpleado().nombreCompleto() + " R\",\"fechaCreacion\": \""
                         + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-MM-dd HH:mm:SS")  + "\",\"fechaCierre\":\""
-                        + DateFormatUtils.format(rolPagos.getFechaAprobacion(), "yyyy-MM-dd HH:mm:SS") + "\"}";
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-MM-dd HH:mm:SS") + "\"}";
 
                 sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
                         + rolPagos.getValor() + "\",\"tipoMovimiento\":\"Pago\"},"

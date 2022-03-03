@@ -215,7 +215,7 @@ public class FacturaDAO {
                 //JSON asiento contable
                 String sentencia1, sentencia;
                 sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + factura.getImporte()
-                        + ",\"documento\": \"FAC-" + factura.getNfactura().substring(5) + "\",\"detalle\": \""
+                        + ",\"documento\": \"FAC-" + factura.getNfactura().substring(10) + "\",\"detalle\": \""
                         + factura.getDescripcion() + "\",\"fechaCreacion\": \""
                         + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
@@ -249,7 +249,7 @@ public class FacturaDAO {
 
                 String sentencia1, sentencia;
                 sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + factura.getImporte()
-                        + ",\"documento\": \"FAC-" + factura.getNfactura().substring(5) + " R\",\"detalle\": \""
+                        + ",\"documento\": \"FAC-" + factura.getNfactura().substring(10) + " R\",\"detalle\": \""
                         + factura.getDescripcion() + "\",\"fechaCreacion\": \""
                         + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
