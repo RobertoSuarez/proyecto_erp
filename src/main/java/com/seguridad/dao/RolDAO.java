@@ -24,9 +24,7 @@ public class RolDAO {
         ResultSet rs;
         try {
             this.conexion.conectar();
-
             rs = conexion.ejecutarSql(query);
-
             while (rs.next()) {
                 rolAux = new Rol();
                 rolAux.setId(rs.getInt("idRol"));
@@ -106,5 +104,31 @@ public class RolDAO {
         catch(Exception e){
             e.toString();
         }
+    }
+    
+    public List<Rol> GetRols() {
+        List<Rol> roles = new ArrayList<>();
+        Rol rolAux;
+        String query = "select * \n"
+                + "from  rol";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = conexion.ejecutarSql(query);
+            while (rs.next()) {
+                rolAux = new Rol();
+                rolAux.setId(rs.getInt("idRol"));
+                rolAux.setNombre(rs.getString("nombreRol"));
+                rolAux.setDetalle(rs.getString("detalleRol"));
+                roles.add(rolAux);
+            }
+            rs.close();
+            this.conexion.desconectar();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            conexion.desconectar();
+        }
+        return roles;
     }
 }

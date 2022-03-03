@@ -47,6 +47,7 @@ public class UsuarioController implements Serializable {
 
     public UsuarioController() {
         usuario = new Usuario();
+        this.rolesUser= new ArrayList<>();
         this.selectionUser = null;
         this.infoUser = null;
         usuarioDAO = new UsuarioDAO();
