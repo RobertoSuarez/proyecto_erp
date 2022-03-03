@@ -10,12 +10,19 @@ import com.cuentasporcobrar.daos.Plan_PagoDAO;
 import com.cuentasporcobrar.models.Persona;
 import com.cuentasporcobrar.models.Plan_Pago;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.joda.time.LocalDate;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
@@ -46,11 +53,25 @@ public class Plan_PagoController implements Serializable {
     //Variable con la identificacion;
     String identificacion = "";
 
+    //Variables de fecha del rango especificado de fecha con rangos por defecto
+    Date fechaInicio;
+    Date fechaCulminacion;
+    SimpleDateFormat formatoFecha;
+
     /**
-     * Constructor Plan_PagoController vacio.
+     * Constructor Plan_PagoController con la inicializacion de variables.
      */
     public Plan_PagoController() {
+        lista_Cobros = new ArrayList<>();
+        plan_PagoDAO = new Plan_PagoDAO();
+    }
 
+    @PostConstruct
+    public void Init() {
+        fechaInicio = new Date();
+        fechaCulminacion = new Date();
+        formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+        lista_Cobros = plan_PagoDAO.obtenerCobrosFecha(formatoFecha.format(fechaInicio), formatoFecha.format(fechaCulminacion));
     }
 
     /**
@@ -119,6 +140,26 @@ public class Plan_PagoController implements Serializable {
         }
     }
 
+    /**
+     * Se realiza la búsqueda de los cobros pendientes.
+     */
+    public void PendingPaymentsDate() {
+        System.err.println("Entra al metodo");
+        try {
+            if (fechaInicio.before(fechaCulminacion)) {
+                lista_Cobros = new ArrayList<>();
+                formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+                lista_Cobros = plan_PagoDAO.obtenerCobrosFecha(formatoFecha.format(fechaInicio), formatoFecha.format(fechaCulminacion));
+            }
+            else{
+                mostrarMensajeAdvertencia("Ingrese las fechas segun corresponda");
+            }
+        }catch(Exception ex){
+            System.err.println(ex.toString());
+        }
+
+    }
+
     //Getters y Setters de las Listas
     //Inicio
     public Persona getPersona() {
@@ -144,8 +185,24 @@ public class Plan_PagoController implements Serializable {
     public List<Plan_Pago> getLista_Cobros() {
         return lista_Cobros;
     }
-    //Fin
 
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaCulminacion() {
+        return fechaCulminacion;
+    }
+
+    public void setFechaCulminacion(Date fechaCulminacion) {
+        this.fechaCulminacion = fechaCulminacion;
+    }
+
+    //Fin
     /**
      * Se Indican los mensajes de información.
      *

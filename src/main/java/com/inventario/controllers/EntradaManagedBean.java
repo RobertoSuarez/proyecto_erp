@@ -282,7 +282,7 @@ public class EntradaManagedBean implements Serializable {
             String nombre = "Hola Mundo";
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), nombre, inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
                     subtotal += Float.valueOf(inv.getCosto()) * Float.valueOf(inv.getCant());
                     ice += Float.valueOf(inv.getIce());
                     iva += Float.valueOf(inv.getIva());
@@ -335,7 +335,7 @@ public class EntradaManagedBean implements Serializable {
                  jaspert= JasperFillManager.fillReport(
                         filetext.getPath(),
                         parametros,
-                        new JRBeanCollectionDataSource(this.productosReport));
+                        new JRBeanCollectionDataSource(dataset));
                 
                 // exportamos a pdf.
                /* JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
