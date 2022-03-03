@@ -186,5 +186,61 @@ public class Plan_PagoDAO implements Serializable {
         }
         return lista_cobros;
     }
+    
+    public List<Plan_Pago> obtenerCobrosFecha(String FechaInicio, String FechaCulminacion) {
+
+        //Se inicializa un objeto de lista_cobros.
+        lista_cobros = new ArrayList<>();
+
+        //Verificamos el estado de la conexión.
+        if (conex.isEstado()) {
+            try {
+
+                /*Se guarda en una variable de tipo string el procedimiento 
+                  almacenado. */
+                String sentencia = "Select idventa_r, fechacredito_r, diasdecredito_r, fechavencimiento_r, diasmora_r\n" +
+"			, valortotalfactura_r,valortotalfactura_r-valorpendiente_r as totalabonos,\n" +
+"			valorpendiente_r as saldoPendiente, descripcionestado_r,v.id_sucursal,v.puntoemision,v.secuencia  \n" +
+"			from Obtener_Facturas_Pendientes() fp\n" +
+"			inner join venta v on fp.idventa_r=v.idventa \n" +
+"			where fechacredito_r between '"+ FechaInicio +"' and '"+ FechaCulminacion +"'\n" +
+"			order by fechacredito_r desc, valortotalfactura_r asc;";
+                result = conex.ejecutarSql(sentencia);
+
+                //Instanciamos la clase AbonoDAO.        
+                AbonoDAO abonoDAO = new AbonoDAO();
+
+                //Recorremos la TABLA retornada y la almacenamos en la lista.
+                while (result.next()) {
+
+                    //Concatenamos la sucursal, el punto de emision y el numero de la factura
+                    String numFact = abonoDAO.obtenerConcatenacionFactura(result.getInt("id_sucursal"),
+                            result.getInt("puntoemision"), result.getInt("secuencia"));
+
+                    lista_cobros.add(
+                            new Plan_Pago(result.getObject("fechacredito_r", LocalDate.class),
+                                    result.getInt("diasdecredito_r"),
+                                    result.getObject("fechavencimiento_r", LocalDate.class),
+                                    result.getInt("idventa_r"),
+                                    result.getDouble("valortotalfactura_r"),
+                                    result.getDouble("saldopendiente"),
+                                    result.getDouble("totalabonos"),
+                                    result.getString("descripcionestado_r"),
+                                    result.getInt("diasmora_r"),
+                                    numFact));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                lista_cobros.add(
+                        new Plan_Pago(null, -1, null, -1, -1, -1, -1, "", -1, ""));
+            } finally {
+
+                //Se cierra la conexión.
+                conex.desconectar();
+
+            }
+        }
+        return lista_cobros;
+    }
 
 }

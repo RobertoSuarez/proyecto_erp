@@ -2,8 +2,10 @@ package com.contabilidad.controllers;
 
 import com.contabilidad.dao.DiarioDAO;
 import com.contabilidad.dao.ImformeContableDAO;
+import com.contabilidad.dao.SubCuentaDAO;
 import com.contabilidad.models.Diario;
 import com.contabilidad.models.Libro;
+import com.contabilidad.models.SubCuenta;
 import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,7 @@ public class LibroManagedBean implements Serializable {
     private List<Libro> libros = new ArrayList<>();
     private ImformeContableDAO imformes = new ImformeContableDAO();
     private DiarioDAO diarioDAO = new DiarioDAO();
+    private SubCuentaDAO subcuentaDAO = new SubCuentaDAO();
     private static DecimalFormat toTwoDecimal = new DecimalFormat("#.##");
     
     private String empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
@@ -43,6 +46,9 @@ public class LibroManagedBean implements Serializable {
 
     private Diario onSelectedDiario;
     private List<Diario> diarios;
+    
+    private SubCuenta onSelectedCuenta;
+    private List<SubCuenta> subcuentas;
 
     //Opciones para creacion de pdf
     
@@ -50,6 +56,7 @@ public class LibroManagedBean implements Serializable {
     public void mainLibroMayor() {
         llenarLibro();
         loadDiarios();
+        loadCuentas();
     }
 
     public void loadDiarios() {
@@ -61,6 +68,11 @@ public class LibroManagedBean implements Serializable {
         //libros = imformes.getImformeLibroMayor();
         libros = imformes.getImformeLibroMayorV2();
         saldoTotal = getSaldoTotal(libros);
+    }
+    
+    private void loadCuentas() {
+        onSelectedCuenta = new SubCuenta();
+        subcuentas = subcuentaDAO.getSubcuentas();
     }
 
     public double calculateSaldoCuenta(String codigo) {
@@ -99,6 +111,15 @@ public class LibroManagedBean implements Serializable {
     public void filtrateLibroMayor() {
         if (onSelectedDiario.getIdDiario() != 0) {
             libros = imformes.filtrateLibroByDiario(onSelectedDiario.getIdDiario());
+            saldoTotal = getSaldoTotal(libros);
+        } else {
+            llenarLibro();
+        }
+    }
+    
+    public void filtrateLibroMayorPorCuenta(){
+        if (onSelectedCuenta.getId() != 0) {
+            libros = imformes.filtrateLibroByCuenta(onSelectedCuenta.getId());
             saldoTotal = getSaldoTotal(libros);
         } else {
             llenarLibro();
@@ -203,4 +224,21 @@ public class LibroManagedBean implements Serializable {
         this.diarios = diarios;
     }
 
+    public SubCuenta getOnSelectedCuenta() {
+        return onSelectedCuenta;
+    }
+
+    public void setOnSelectedCuenta(SubCuenta onSelectedCuenta) {
+        this.onSelectedCuenta = onSelectedCuenta;
+    }
+
+    public List<SubCuenta> getSubcuentas() {
+        return subcuentas;
+    }
+
+    public void setSubcuentas(List<SubCuenta> subcuentas) {
+        this.subcuentas = subcuentas;
+    }
+
+    
 }
