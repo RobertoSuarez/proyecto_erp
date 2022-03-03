@@ -95,9 +95,12 @@ public class BuscarProvManagedBean implements Serializable {
         AnticipoDAO antiDao = new AnticipoDAO();
         List<Anticipo> anticipos = new ArrayList<>();
         anticipos = antiDao.getAncitipoByProveedor(idProv);
-        for(int i = 0; i < anticipos.size(); i++){
-            this.totalAnticipo += anticipos.get(i).getImporte();
+        if (anticipos.size() > 0) {
+            for (int i = 0; i < anticipos.size(); i++) {
+                this.totalAnticipo += anticipos.get(i).getImporte();
+            }
         }
+
         System.out.println("Nombre: " + msg2);
         System.out.println("Ruc: " + msg3);
         System.out.println("Vence: " + msg4);
@@ -116,9 +119,7 @@ public class BuscarProvManagedBean implements Serializable {
     public void setTotalAnticipo(int totalAnticipo) {
         this.totalAnticipo = totalAnticipo;
     }
-    
-    
-    
+
     public void onRowSelect2(SelectEvent<Proveedor> event) {
         LocalDate fecha = (LocalDate) event.getComponent().getAttributes().get("fech");
         String msg2 = event.getObject().getNombre();
@@ -132,7 +133,7 @@ public class BuscarProvManagedBean implements Serializable {
         setNvenc(msg4);
         setVence(fecha.plusDays(msg4));
         System.out.println(fecha + "----" + getVence());
-        PrimeFaces.current().ajax().update("form:editdven","form:editvencimiento");
+        PrimeFaces.current().ajax().update("form:editdven", "form:editvencimiento");
     }
 
     public void sumfechas(int d1, LocalDate d2) {
