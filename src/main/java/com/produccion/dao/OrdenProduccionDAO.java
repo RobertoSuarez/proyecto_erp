@@ -43,12 +43,12 @@ public class OrdenProduccionDAO {
         return ordenProduccion;
     }
 
-    public List<OrdenTrabajo> getListaProducto(int codigo_orden) {
+    public List<OrdenTrabajo> getListaProducto(int codigo_orden,String estado) {
         List<OrdenTrabajo> ordenProducto = new ArrayList<>();
         sentenciaSql = String.format("select a.id,rop.codigo_registro,a.nombre,rop.cantidad from orden_produccion as op\n"
                 + "	inner join registro_orden_produccion as rop on op.codigo_orden=rop.codigo_orden\n"
                 + "	inner join articulos as a on rop.\"Codigo_producto\"=a.id\n"
-                + "	where op.codigo_orden=" + codigo_orden + "and rop.estado='P';");
+                + "	where op.codigo_orden=" + codigo_orden + "and rop.estado='"+estado+"';");
         try {
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);

@@ -52,16 +52,42 @@
                                 <h:outputText value="#{ordenProduccion.estado}" />
                             </p:column>
                             <p:column headerText="Progreso">
-                                <p:progressBar style="width:70px;color:rgba(255,0,0,0.5); " value="#{ordenProduccion.porcentaje}" labelTemplate="{value}%" displayOnly="true"/>
+                                <p:progressBar style="width:70px;font-weight: bold;text-align: center;" value="#{ordenProduccion.porcentaje}" labelTemplate="{value}%" displayOnly="true"/>
                             </p:column>
                             <p:column headerText="Acción" filterStyle="display : none">
+                                <p:commandButton icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" disabled="#{ordenProduccion.estado=='T' eq false}" onclick="PF('dlg4').show()" 
+                                                 actionListener="#{ordenProduccionMB.llenarCombox(ordenProduccion.codigo_orden)}"
+                                                 update=":form:producto">
+                                </p:commandButton>
                                 <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml?orden=#{ordenProduccion.codigo_orden}"
                                           disabled="#{ordenProduccion.estado=='P' eq false}">
                                 </p:button>
                             </p:column>
-
                         </p:dataTable>
                     </div>
+                    <p:dialog header="Header" widgetVar="dlg4" minHeight="40" width="350" showEffect="fade" minimizable="true" maximizable="true">
+                        <p:outputPanel id="ordenProduccion" class="ui-fluid">
+                            <div class="card ui-fluid ">
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col-12 p-md-12">
+                                        <p:outputLabel value="Producto a elaborar" for="@next"/>
+                                        <p:selectOneMenu id="producto" value="#{ordenProduccionMB.ordenTerminada.codigo_producto}" editable="false">
+                                            <f:selectItem itemLabel="Seleccione un producto" itemValue="" noSelectionOption="true"/>
+                                            <f:selectItems value="#{ordenProduccionMB.listaProducto}"
+                                                           var="produto"
+                                                           itemLabel="#{produto.nombre_producto}"
+                                                           itemValue="#{produto.codigo_producto}">
+                                            </f:selectItems>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-12">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </p:outputPanel>
+                    </p:dialog>
                 </h:form>
             </ui:define>
         </ui:composition>
