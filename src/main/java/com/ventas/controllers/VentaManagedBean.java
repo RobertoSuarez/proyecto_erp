@@ -335,7 +335,11 @@ public class VentaManagedBean implements Serializable {
                         
                         this.ventaDao.insertasiento(ventaActual);
 
-                        return "listaVenta";
+                        FacesContext context = FacesContext.getCurrentInstance();
+                        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Compra Guardada satisfactoriamente"));
+                        context.getExternalContext().getFlash().setKeepMessages(true);
+                        //FacesContext.getCurrentInstance().getExternalContext().redirect("listaVentas.xhtml?faces-redirect=true");
+                        return "listaVentas.xhtml?faces-redirect=true";
                     }
                 }
             }

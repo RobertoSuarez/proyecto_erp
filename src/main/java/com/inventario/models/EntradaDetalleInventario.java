@@ -22,7 +22,7 @@ public class EntradaDetalleInventario {
 
     private int costo;
 
-    private int iva;
+    private double iva;
 
     private int ice;
 
@@ -115,11 +115,11 @@ public class EntradaDetalleInventario {
         this.costo = costo;
     }
 
-    public int getIva() {
+    public double getIva() {
         return iva;
     }
 
-    public void setIva(int iva) {
+    public void setIva(double iva) {
         this.iva = iva;
     }
 

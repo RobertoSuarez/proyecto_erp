@@ -269,7 +269,7 @@ public class ProformaManageBean implements Serializable {
     }
 
     @Asynchronous
-    public void RegistrarProforma() throws IOException, SQLException {
+    public String RegistrarProforma() throws IOException, SQLException {
         try {
             int listSize = 0;
             int codigo = 0;
@@ -306,11 +306,15 @@ public class ProformaManageBean implements Serializable {
                     listSize += 1;
                 }
             }
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?new=true");
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada satisfactoriamente"));
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?faces-redirect=true");
+            return "listaProforma.xhtml?faces-redirect=true";
         } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
         }
-
+        return null;
     }
 
     @Asynchronous

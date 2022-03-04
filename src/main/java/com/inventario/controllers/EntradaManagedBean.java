@@ -390,7 +390,7 @@ public class EntradaManagedBean implements Serializable {
                         EntradaDetalleInventario detalle = new EntradaDetalleInventario();
                         detalle.setIdEntrada(this.producto.getCod());
                         detalle.setCant(this.cantidad);
-                        detalle.setIva(this.producto.getIva());
+                        detalle.setIva(this.producto.getCosto()*0.12);
                         detalle.setIce(this.producto.getIce());
                         detalle.setCosto(this.producto.getCosto());
                         detalle.setSubtotal(this.producto.getCosto() * this.cantidad);
