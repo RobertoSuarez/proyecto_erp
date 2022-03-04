@@ -16,14 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.collections4.list.AbstractLinkedList;
 
 @Named(value = "usuarioMB")
 @SessionScoped
@@ -136,7 +133,7 @@ public class UsuarioController implements Serializable {
     
     
 
-    public String registrarUsuario() throws Exception {
+    public void registrarUsuario() throws Exception {
 
         Pattern pattern = Pattern
                 .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -146,50 +143,49 @@ public class UsuarioController implements Serializable {
         try {
 
             if ("".equals(usuario.getNombre())) {
-                PFW("Ingrese un Nombre");
+                mensajeDeAdvertencia("Ingrese un Nombre");
 
                 //  PrimeFaces.current().ajax().update("form:messages");
             } else if ("".equals(usuario.getApellido())) {
-                PFW("Ingrese un Apellido");
+                mensajeDeAdvertencia("Ingrese un Apellido");
 
             } else if ("".equals(usuario.getUsername())) {
-                PFW("Ingrese un Usuario");
+                mensajeDeAdvertencia("Ingrese un Usuario");
 
             } else if ("".equals(usuario.getPassword())) {
-                PFW("Ingrese una Contraseña");
+                mensajeDeAdvertencia("Ingrese una Contraseña");
             }/* else if (usuario.isHabilitado() == false) {
-                PFW("Aceptar los terminos y condiciones");
+                mensajeDeAdvertencia("Aceptar los terminos y condiciones");
 
             } */ else if (matcher.find() == false) {
-                PFW("Ingrese un email válido");
+                mensajeDeAdvertencia("Ingrese un email válido");
             } else {
-                this.usuarioDAO.registrarUsuario(usuario);
-                PFE("Usuario registrado");
-                return "/View/login_and_registro/login.xhtml";
+               // this.usuarioDAO.registrarUsuario(usuario);
+                mensajeDeExito("Usuario registrado");
+               
             }
         } catch (Exception e) {
 
         }
-        return "";
     }
 
     public void iniciarSesion() throws IOException, SQLException {
         Usuario usuarioSesion = new Usuario();
         if ("".equals(usuario.getUsername())) {
-            PFW("Ingrese un usuario");
+            mensajeDeAdvertencia("Ingrese un usuario");
         }
         if ("".equals(usuario.getPassword())) {
-            PFW("Ingrese una contraseña");
+            mensajeDeAdvertencia("Ingrese una contraseña");
         }
         if (!usuario.getUsername().isEmpty() && !usuario.getPassword().isEmpty()) {
             usuarioSesion = usuarioDAO.iniciarSesion(usuario);
             System.out.println(usuarioSesion.getApellido());
             if (usuarioSesion != null) {
                 if (usuarioSesion.getCodigoAux() < 1) {
-                    PFW(usuarioSesion.getMensajeAux());
+                    mensajeDeAdvertencia(usuarioSesion.getMensajeAux());
 
                 } else {
-                    PFE(usuarioSesion.getMensajeAux());
+                    mensajeDeExito(usuarioSesion.getMensajeAux());
 
                     usuario = usuarioSesion;
                     List<Rol> rolesSesion = rolDao.
@@ -208,11 +204,11 @@ public class UsuarioController implements Serializable {
                                     usuarioDAO.rolRRHH(
                                             usuarioSesion.getIdUsuario()));
                     facesContext.getExternalContext()
-                            .redirect("/proyecto_erp/View/Global/Main.xhtml");
+                            .redirect("../Global/Main.xhtml");
 
                 }
             } else {
-                PFE("Error de conexión al intentar iniciar sesión.");
+                mensajeDeExito("Error de conexión al intentar iniciar sesión.");
             }
         }
     }
@@ -224,21 +220,21 @@ public class UsuarioController implements Serializable {
         System.out.println(httpSession.getAttribute(
                 "usuario") + "Holas CESION");
         facesContext.getExternalContext().redirect(
-                "/proyecto_erp/View/login_and_registro/login.xhtml");
+                "../login_and_registro/login.xhtml");
         usuario.setPassword("");
         usuario.setUsername("");
         System.out.println(httpSession.getAttribute(
                 "usuario") + "Holas CESION");
     }
 
-    public void PFW(String msj) {
+    public void mensajeDeAdvertencia(String msj) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(
                         FacesMessage.SEVERITY_WARN, warnMsj, msj));
 
     }
 
-    public void PFE(String msj) {
+    public void mensajeDeExito(String msj) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
@@ -253,7 +249,7 @@ public class UsuarioController implements Serializable {
         try {
             if (usuarioSesion == null || usuarioSesion.getIdUsuario() < 1) {
                 context.getExternalContext()
-                        .redirect("/proyecto_erp/View/login_and_registro/login.xhtml");
+                        .redirect("../login_and_registro/login.xhtml");
             }
         } catch (Exception e) {
             e.printStackTrace();
