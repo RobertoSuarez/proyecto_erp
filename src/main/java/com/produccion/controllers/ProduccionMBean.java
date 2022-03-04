@@ -91,7 +91,7 @@ public class ProduccionMBean implements Serializable {
         int id = idOrden();
         if (id > 0) {
             ordenTrabajo.setCodigo_orden(id);
-            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden());
+            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(),"P");
             listaCentro = ordenDao.getListaCentro();
         } else {
             try {
@@ -427,7 +427,7 @@ public class ProduccionMBean implements Serializable {
             showInfo("Orden de producción Finaliza, regrese a las listas de ordenes de trabajo.");
             ordenDao = new OrdenProduccionDAO();
         } else {
-            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden());
+            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(),"P");
             listaCentro = ordenDao.getListaCentro();
         }
     }

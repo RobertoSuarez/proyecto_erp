@@ -43,12 +43,12 @@ public class OrdenProduccionDAO {
         return ordenProduccion;
     }
 
-    public List<OrdenTrabajo> getListaProducto(int codigo_orden) {
+    public List<OrdenTrabajo> getListaProducto(int codigo_orden, String estado) {
         List<OrdenTrabajo> ordenProducto = new ArrayList<>();
         sentenciaSql = String.format("select a.id,rop.codigo_registro,a.nombre,rop.cantidad from orden_produccion as op\n"
                 + "	inner join registro_orden_produccion as rop on op.codigo_orden=rop.codigo_orden\n"
                 + "	inner join articulos as a on rop.\"Codigo_producto\"=a.id\n"
-                + "	where op.codigo_orden=" + codigo_orden + "and rop.estado='P';");
+                + "	where op.codigo_orden=" + codigo_orden + "and rop.estado='" + estado + "';");
         try {
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
@@ -641,6 +641,34 @@ public class OrdenProduccionDAO {
         } finally {
             conexion.desconectar();
         }
+    }
+
+    public List<OrdenTrabajo> getListaProductoElaborado(int codigo_orden) {
+        List<OrdenTrabajo> ordenProducto = new ArrayList<>();
+        sentenciaSql = String.format("select a.id,a.nombre,rop.codigo_registro,f.codigo_formula,f.codigo_proceso,dp.descripcion \n"
+                + ",rop.cantidad,dp.fecha_inicio,dp.fecha_fin,dp.costomateriaprima,dp.costodirecto,\n"
+                + "dp.costoindirecto,dp.costos_generado,dp.costounitario,dp.tiempo_proceso\n"
+                + "from Orden_produccion as op \n"
+                + "inner join registro_orden_produccion as rop on rop.codigo_orden=op.codigo_orden\n"
+                + "inner join articulos as a on a.id=rop.\"Codigo_producto\"\n"
+                + "inner join detalleproceso as dp on dp.codigo_registro=rop.codigo_registro\n"
+                + "inner join formula as f on f.codigo_formula=dp.codigo_formula\n"
+                + "where op.codigo_orden="+codigo_orden+";");
+        try {
+            //enviamos la sentencia
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                ordenProducto.add(new OrdenTrabajo(resultSet.getInt("id"),resultSet.getString("nombre"),
+                        resultSet.getInt("codigo_registro"),resultSet.getInt("codigo_formula"), resultSet.getInt("codigo_proceso"), resultSet.getString("descripcion"),
+                        resultSet.getFloat("cantidad"), resultSet.getDate("fecha_inicio"), resultSet.getDate("fecha_fin"), resultSet.getFloat("costomateriaprima"), resultSet.getFloat("costodirecto"),
+                                resultSet.getFloat("costoindirecto"), resultSet.getFloat("costos_generado"), resultSet.getFloat("costounitario"), resultSet.getFloat("tiempo_proceso")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return ordenProducto;
     }
 
 }

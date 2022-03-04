@@ -52,16 +52,134 @@
                                 <h:outputText value="#{ordenProduccion.estado}" />
                             </p:column>
                             <p:column headerText="Progreso">
-                                <p:progressBar style="width:70px;color:rgba(255,0,0,0.5); " value="#{ordenProduccion.porcentaje}" labelTemplate="{value}%" displayOnly="true"/>
+                                <p:progressBar style="width:70px;font-weight: bold;text-align: center;" value="#{ordenProduccion.porcentaje}" labelTemplate="{value}%" displayOnly="true"/>
                             </p:column>
                             <p:column headerText="Acción" filterStyle="display : none">
+                                <p:commandButton icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" disabled="#{ordenProduccion.estado=='T' eq false}" onclick="PF('dlg4').show()" 
+                                                 actionListener="#{ordenProduccionMB.llenarCombox(ordenProduccion.codigo_orden)}"
+                                                 update=":form:producto">
+                                </p:commandButton>
                                 <p:button icon="pi pi-pencil" styleClass="rounded-button" outcome="oProduccion.xhtml?orden=#{ordenProduccion.codigo_orden}"
                                           disabled="#{ordenProduccion.estado=='P' eq false}">
                                 </p:button>
                             </p:column>
-
                         </p:dataTable>
                     </div>
+                    <p:dialog header="Detalle de Producción" widgetVar="dlg4" minHeight="40" width="550" height="400" showEffect="fade" minimizable="true" maximizable="true">
+                        <p:outputPanel id="ordenProduccion" class="ui-fluid">
+                            <div class="card ui-fluid ">
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col-12 p-md-12">
+                                        <p:outputLabel value="Producto a elaborar" for="@next"/>
+                                        <p:selectOneMenu id="producto" value="#{ordenProduccionMB.ordenTerminada.codigo_producto}" editable="false">
+                                            <f:selectItem itemLabel="Seleccione un producto" itemValue="" noSelectionOption="true"/>
+                                            <p:ajax listener="#{ordenProduccionMB.llenarCostos()}" update=":form:CostosProduccionDI,:form:valoresTotales"/>
+                                            <f:selectItems value="#{ordenProduccionMB.listaProducto}"
+                                                           var="produto"
+                                                           itemLabel="#{produto.nombre_producto}"
+                                                           itemValue="#{produto.codigo_producto}">
+                                            </f:selectItems>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-12">
+                                        <p:commandButton value="Generar Reporte"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </p:outputPanel>
+                        <p:toolbar style="margin-top: 2em">
+                            <p:toolbarGroup>
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Costos directos e indirectos</span>
+
+                                </div>
+                                <p:outputPanel id="CostosProduccionDI" class="ui-fluid">
+
+                                    <p:outputPanel>
+                                        <div class="p-grid p-justify-around">
+                                            <p:dataTable id="costosProduccionDirectos" editable="true" reflow="true"
+                                                         editInitEvent="dblclick" editMode="cell"
+                                                         value="#{ordenProduccionMB.listaCostosDirectos}" var="costos">
+                                                <p:column headerText="Subcuenta" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.codigoSubcuenta}" />
+                                                </p:column>
+
+                                                <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.nombreCuenta}" />
+                                                </p:column>
+                                                <p:column headerText="Descripción" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.nombre}" />
+                                                </p:column>
+                                                <p:column headerText="Costo Directo" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.costo}" />
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </div>
+                                        <div class="p-grid p-justify-around">
+                                            <p:dataTable id="costosProduccionIndirectos" editable="true" reflow="true"
+                                                         editInitEvent="dblclick" editMode="cell"
+                                                         value="#{ordenProduccionMB.listaCostosIndirectos}" var="costos">
+                                                <p:column headerText="Subcuenta" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.codigoSubcuenta}" />
+                                                </p:column>
+
+                                                <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.nombreCuenta}" />
+                                                </p:column>
+                                                <p:column headerText="Descripción" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.nombre}" />
+                                                </p:column>
+                                                <p:column headerText="Costo Indirecto" filterStyle="display : none">
+                                                    <h:outputText value="#{costos.costo}" />
+                                                </p:column>
+
+                                            </p:dataTable>
+                                        </div>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                                <p:outputPanel class="ui-fluid" style="margin-top: 2em">
+
+                                    <p:outputPanel id="valoresTotales">
+                                        <div class="p-grid p-justify-around">
+                                            <div class="p-col-6 p-md-12 p-lg-12">
+                                                <div class="p-grid">
+                                                    <div class="p-col-2">
+                                                        <p:outputLabel value="Materia Prima" for="@next"/>
+                                                        <p:inputText value="#{ordenProduccionMB.ordenTerminada.totalMateria}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-2">
+                                                        <p:outputLabel value="Costo directo" for="@next"/>
+                                                        <p:inputText value="#{ordenProduccionMB.ordenTerminada.totalMOD}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-2">
+                                                        <p:outputLabel value="Costo Indirecto" for="@next"/>
+                                                        <p:inputText value="#{ordenProduccionMB.ordenTerminada.totalCIF}" readonly="true"/>
+                                                    </div>
+
+                                                    <div class="p-col-2">
+                                                        <p:outputLabel value="Cantidad Producida" for="@next"/>
+                                                        <p:inputText value="#{ordenProduccionMB.ordenTerminada.cantidad}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-2">
+                                                        <p:outputLabel value="Costo Unitario" for="@next"/>
+                                                        <p:inputText value="#{ordenProduccionMB.ordenTerminada.costoUnitario}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-2">
+                                                        <p:outputLabel value="Costo Total Fabricación" for="@next"/>
+                                                        <p:inputText value="#{ordenProduccionMB.ordenTerminada.costoTotal}" readonly="true"/>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </p:dialog>
                 </h:form>
             </ui:define>
         </ui:composition>

@@ -49,6 +49,24 @@ public class OrdenTrabajo {
         this.costoUnitario = costoUnitario;
         this.tiempo = tiempo;
     }
+    public OrdenTrabajo(int codigo_producto,String nombre_producto,int codigo_registro, int codigo_formula, int codigo_proceso, String Descripcion, float cantidad, Date fecha_inicio, Date fecha_fin, float totalMateria, float totalMOD, float totalCIF, float costoTotal, float costoUnitario, float tiempo) {
+        this.codigo_producto=codigo_producto;
+        this.nombre_producto=nombre_producto;
+        this.codigo_registro = codigo_registro;
+        this.codigo_formula = codigo_formula;
+        this.codigo_proceso = codigo_proceso;
+        this.Descripcion = Descripcion;
+        this.cantidad = cantidad;
+        this.fecha_inicio = fecha_inicio;
+        this.fecha_fin = fecha_fin;
+        this.totalMateria = totalMateria;
+        this.totalMOD = totalMOD;
+        this.totalCIF = totalCIF;
+        this.costoTotal = costoTotal;
+        this.costoUnitario = costoUnitario;
+        this.tiempo = tiempo;
+    }
+
 
     public OrdenTrabajo(String nombre_proceso, int codigo_proceso) {
         this.nombre_proceso = nombre_proceso;

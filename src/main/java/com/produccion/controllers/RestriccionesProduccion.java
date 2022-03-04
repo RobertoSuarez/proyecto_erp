@@ -43,9 +43,9 @@ public class RestriccionesProduccion implements Serializable {
 
     public String restriccionUser() {
         if (listaRoles.get(0).getNombre().equals("Jefe de Producción")) {
-            return "/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml";
+            return "../produccion/listaOrdenProduccion.xhtml";
         } else {
-            return "/proyecto_erp/View/produccion/procesoProduccion.xhtml";
+            return "../produccion/procesoProduccion.xhtml";
         }
     }
     public String renderizarMenuInicio() {

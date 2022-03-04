@@ -285,7 +285,7 @@ public class EntradaManagedBean implements Serializable {
                     dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
                     subtotal += Float.valueOf(inv.getCosto()) * Float.valueOf(inv.getCant());
                     ice += Float.valueOf(inv.getIce());
-                    iva += Float.valueOf(inv.getIva());
+                    iva += (float) inv.getIva();
 
                 }
             }
@@ -390,7 +390,7 @@ public class EntradaManagedBean implements Serializable {
                         EntradaDetalleInventario detalle = new EntradaDetalleInventario();
                         detalle.setIdEntrada(this.producto.getCod());
                         detalle.setCant(this.cantidad);
-                        detalle.setIva(this.producto.getIva());
+                        detalle.setIva(this.producto.getCosto()*0.12);
                         detalle.setIce(this.producto.getIce());
                         detalle.setCosto(this.producto.getCosto());
                         detalle.setSubtotal(this.producto.getCosto() * this.cantidad);
