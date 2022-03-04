@@ -44,7 +44,7 @@ public class UsuarioController implements Serializable {
 
     public UsuarioController() {
         usuario = new Usuario();
-        this.rolesUser= new ArrayList<>();
+        this.rolesUser = new ArrayList<>();
         this.selectionUser = null;
         this.infoUser = null;
         usuarioDAO = new UsuarioDAO();
@@ -130,8 +130,6 @@ public class UsuarioController implements Serializable {
     public void setGeneralRols(List<Rol> generalRols) {
         this.generalRols = generalRols;
     }
-    
-    
 
     public void registrarUsuario() throws Exception {
 
@@ -160,12 +158,12 @@ public class UsuarioController implements Serializable {
             } */ else if (matcher.find() == false) {
                 mensajeDeAdvertencia("Ingrese un email válido");
             } else {
-               // this.usuarioDAO.registrarUsuario(usuario);
+                this.usuarioDAO.registrarUsuario(usuario);
                 mensajeDeExito("Usuario registrado");
-               
+
             }
         } catch (Exception e) {
-
+            e.getMessage();
         }
     }
 
@@ -208,7 +206,7 @@ public class UsuarioController implements Serializable {
 
                 }
             } else {
-                mensajeDeExito("Error de conexión al intentar iniciar sesión.");
+                mensajeDeAdvertencia("Error de conexión al intentar iniciar sesión.");
             }
         }
     }
@@ -315,18 +313,18 @@ public class UsuarioController implements Serializable {
         this.userName = seleccion.getUsername();
         this.rolesUser = this.rDao.getRolesByUsers(seleccion.getIdUsuario());
     }
-    
-    public void chargeRols(){
+
+    public void chargeRols() {
         this.generalRols = this.rDao.GetRolsDifferentOfUser(this.infoUser.getIdUsuario());
     }
-    
-    public void addRolsForUser(Rol rolAux){
+
+    public void addRolsForUser(Rol rolAux) {
         this.rDao.addRolUser(rolAux.getId(), this.infoUser.getIdUsuario());
         FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Nuevo rol ingresado");
         FacesContext.getCurrentInstance().addMessage(null, messages);
     }
-    
-    public void deleteRolsForUser(Rol rolAux){
+
+    public void deleteRolsForUser(Rol rolAux) {
         this.rDao.deleteRolUser(rolAux.getId(), this.infoUser.getIdUsuario());
         FacesMessage messages = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Éxito", "Nuevo rol ingresado");
         FacesContext.getCurrentInstance().addMessage(null, messages);
