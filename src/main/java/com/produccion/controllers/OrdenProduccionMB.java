@@ -6,6 +6,7 @@
 package com.produccion.controllers;
 
 import com.produccion.dao.OrdenProduccionDAO;
+import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenProduccion;
 import com.produccion.models.OrdenTrabajo;
 import javax.inject.Named;
@@ -32,6 +33,8 @@ public class OrdenProduccionMB implements Serializable {
     private List<OrdenProduccion> listaOrden;
     List<OrdenTrabajo> listaState;
     private List<OrdenTrabajo> listaProducto;
+    private List<FormulaProduccion> listaCostosDirectos;
+    private List<FormulaProduccion> listaCostosIndirectos;
 
     public OrdenProduccionMB() {
         ordenTerminada = new OrdenTrabajo();
@@ -40,6 +43,8 @@ public class OrdenProduccionMB implements Serializable {
         listaOrden = new ArrayList<>();
         listaState = new ArrayList<>();
         listaProducto = new ArrayList<>();
+        listaCostosDirectos = new ArrayList<>();
+        listaCostosIndirectos = new ArrayList<>();
     }
 
     public OrdenProduccion getOrdenTrabajo() {
@@ -66,6 +71,22 @@ public class OrdenProduccionMB implements Serializable {
 
     public void setOrdenTerminada(OrdenTrabajo ordenTerminada) {
         this.ordenTerminada = ordenTerminada;
+    }
+
+    public List<FormulaProduccion> getListaCostosDirectos() {
+        return listaCostosDirectos;
+    }
+
+    public void setListaCostosDirectos(List<FormulaProduccion> listaCostosDirectos) {
+        this.listaCostosDirectos = listaCostosDirectos;
+    }
+
+    public List<FormulaProduccion> getListaCostosIndirectos() {
+        return listaCostosIndirectos;
+    }
+
+    public void setListaCostosIndirectos(List<FormulaProduccion> listaCostosIndirectos) {
+        this.listaCostosIndirectos = listaCostosIndirectos;
     }
 
     public List<OrdenProduccion> state() {
@@ -104,7 +125,24 @@ public class OrdenProduccionMB implements Serializable {
     }
 
     public void llenarCombox(int idOrden) {
-        listaProducto = ordenDAO.getListaProducto(idOrden, "T");
+        listaProducto = ordenDAO.getListaProductoElaborado(idOrden);
+    }
+
+    public void llenarCostos() {
+        for (OrdenTrabajo orden : listaProducto) {
+            if (orden.getCodigo_producto() == ordenTerminada.getCodigo_producto()) {
+                System.out.println("hola");
+                listaCostosDirectos = ordenDAO.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cmdunitario");
+                listaCostosIndirectos = ordenDAO.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cifunitario");
+                ordenTerminada.setCantidad(orden.getCantidad());
+                ordenTerminada.setCostoTotal(orden.getCostoTotal());
+                ordenTerminada.setTotalMateria(orden.getTotalMateria());
+                ordenTerminada.setTotalMOD(orden.getTotalMOD());
+                ordenTerminada.setTotalCIF(orden.getTotalCIF());
+                ordenTerminada.setCostoUnitario(orden.getCostoUnitario());
+                break;
+            }
+        }
     }
 
 }
