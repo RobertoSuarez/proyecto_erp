@@ -137,6 +137,33 @@
 
                                             </p:dataTable>
                                         </div>
+                                        <div class="p-grid p-justify-around">
+                                            <p:dataTable id="materiaPrimaOrden" editable="true" reflow="true"
+                                                         editInitEvent="dblclick" editMode="cell"
+                                                         value="#{ordenProduccionMB.listaMateriaPrimaTotal}" var="materiales">
+                                                <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <h:outputText value="#{materiales.nombre}" />
+                                                </p:column>
+
+                                                <p:column headerText="Costo" filterStyle="display : none">
+                                                    <h:outputText value="#{materiales.costo}" />
+                                                </p:column>
+                                                <p:column headerText="Cantidad Requerida" filterStyle="display : none">
+                                                    <h:outputText value="#{materiales.cantidad}" />
+                                                </p:column>
+                                                <p:column headerText="Unidad Medidad" filterStyle="display : none">
+                                                    <h:outputText value="#{materiales.unidadMedida}" />
+                                                </p:column>
+                                                <p:column headerText="Tipo" filterStyle="display : none">
+                                                    <h:outputText value="#{materiales.tipo}" />
+                                                </p:column>
+                                                <p:column headerText="Total" filterStyle="display : none">
+                                                    <h:outputText value="#{materiales.total}" />
+                                                </p:column>
+                                            </p:dataTable>
+
+
+                                        </div>
                                     </p:outputPanel>
                                 </p:outputPanel>
                                 <p:outputPanel class="ui-fluid" style="margin-top: 2em">

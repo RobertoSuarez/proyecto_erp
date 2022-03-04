@@ -6,6 +6,7 @@
 package com.produccion.controllers;
 
 import com.produccion.dao.OrdenProduccionDAO;
+import com.produccion.models.ArticuloFormula;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenProduccion;
 import com.produccion.models.OrdenTrabajo;
@@ -35,6 +36,9 @@ public class OrdenProduccionMB implements Serializable {
     private List<OrdenTrabajo> listaProducto;
     private List<FormulaProduccion> listaCostosDirectos;
     private List<FormulaProduccion> listaCostosIndirectos;
+    private List<ArticuloFormula> listaMateriaPrima;
+    List<ArticuloFormula> listaMateriaPrimaAdicional;
+    private List<ArticuloFormula> listaMateriaPrimaTotal;
 
     public OrdenProduccionMB() {
         ordenTerminada = new OrdenTrabajo();
@@ -45,6 +49,9 @@ public class OrdenProduccionMB implements Serializable {
         listaProducto = new ArrayList<>();
         listaCostosDirectos = new ArrayList<>();
         listaCostosIndirectos = new ArrayList<>();
+        listaMateriaPrima = new ArrayList<>();
+        listaMateriaPrimaAdicional = new ArrayList<>();
+        listaMateriaPrimaTotal = new ArrayList<>();
     }
 
     public OrdenProduccion getOrdenTrabajo() {
@@ -89,6 +96,22 @@ public class OrdenProduccionMB implements Serializable {
         this.listaCostosIndirectos = listaCostosIndirectos;
     }
 
+    public List<ArticuloFormula> getListaMateriaPrima() {
+        return listaMateriaPrima;
+    }
+
+    public void setListaMateriaPrima(List<ArticuloFormula> listaMateriaPrima) {
+        this.listaMateriaPrima = listaMateriaPrima;
+    }
+
+    public List<ArticuloFormula> getListaMateriaPrimaTotal() {
+        return listaMateriaPrimaTotal;
+    }
+
+    public void setListaMateriaPrimaTotal(List<ArticuloFormula> listaMateriaPrimaTotal) {
+        this.listaMateriaPrimaTotal = listaMateriaPrimaTotal;
+    }
+
     public List<OrdenProduccion> state() {
         int contador = 0;
         int size = 0;
@@ -125,15 +148,33 @@ public class OrdenProduccionMB implements Serializable {
     }
 
     public void llenarCombox(int idOrden) {
+        ordenTerminada = new OrdenTrabajo();
+        listaCostosDirectos = new ArrayList<>();
+        listaCostosIndirectos = new ArrayList<>();
+        listaMateriaPrima = new ArrayList<>();
+        listaMateriaPrimaAdicional = new ArrayList<>();
+        listaMateriaPrimaTotal = new ArrayList<>();
         listaProducto = ordenDAO.getListaProductoElaborado(idOrden);
     }
 
     public void llenarCostos() {
+        ordenTerminada.setCantidad(0);
+        ordenTerminada.setCostoTotal(0);
+        ordenTerminada.setTotalMateria(0);
+        ordenTerminada.setTotalMOD(0);
+        ordenTerminada.setTotalCIF(0);
+        ordenTerminada.setCostoUnitario(0);
+        listaCostosDirectos = new ArrayList<>();
+        listaCostosIndirectos = new ArrayList<>();
+        listaMateriaPrima = new ArrayList<>();
+        listaMateriaPrimaAdicional = new ArrayList<>();
+        listaMateriaPrimaTotal = new ArrayList<>();
         for (OrdenTrabajo orden : listaProducto) {
             if (orden.getCodigo_producto() == ordenTerminada.getCodigo_producto()) {
-                System.out.println("hola");
                 listaCostosDirectos = ordenDAO.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cmdunitario");
                 listaCostosIndirectos = ordenDAO.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cifunitario");
+                listaMateriaPrima = ordenDAO.getListaConsumoMateriales(orden.getCodigo_formula(), orden.getCantidad());
+                listaMateriaPrimaAdicional = ordenDAO.getlistaMaterialAdicional(orden.getCodigo_registro());
                 ordenTerminada.setCantidad(orden.getCantidad());
                 ordenTerminada.setCostoTotal(orden.getCostoTotal());
                 ordenTerminada.setTotalMateria(orden.getTotalMateria());
@@ -142,6 +183,23 @@ public class OrdenProduccionMB implements Serializable {
                 ordenTerminada.setCostoUnitario(orden.getCostoUnitario());
                 break;
             }
+        }
+        for (ArticuloFormula materiales : listaMateriaPrima) {
+            for (ArticuloFormula materialesAdicional : listaMateriaPrimaAdicional) {
+                if (materialesAdicional.getId() == materiales.getId()) {
+                    materiales.setCantidad(materiales.getCantidad() + materialesAdicional.getCantidad());
+                    listaMateriaPrimaAdicional.remove(materialesAdicional);
+                    break;
+                }
+            }
+        }
+        for (ArticuloFormula materiales : listaMateriaPrima) {
+            materiales.setTotal(materiales.getCantidad() * materiales.getCosto());
+            listaMateriaPrimaTotal.add(materiales);
+        }
+        for (ArticuloFormula materiales : listaMateriaPrimaAdicional) {
+            materiales.setTotal(materiales.getCantidad() * materiales.getCosto());
+            listaMateriaPrimaTotal.add(materiales);
         }
     }
 

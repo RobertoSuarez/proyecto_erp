@@ -95,7 +95,7 @@ public class ProduccionMBean implements Serializable {
             listaCentro = ordenDao.getListaCentro();
         } else {
             try {
-                externalContext.redirect("/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml");
+                externalContext.redirect("../produccion/listaOrdenProduccion.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(ProduccionMBean.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -573,7 +573,7 @@ public class ProduccionMBean implements Serializable {
 
     public void cancelarOrden() throws IOException {
         ordenDao.cancelarOrden(ordenTrabajo.getCodigo_registro());
-        externalContext.redirect("/proyecto_erp/View/produccion/listaOrdenProduccion.xhtml");
+        externalContext.redirect("../produccion/listaOrdenProduccion.xhtml");
     }
 
     public boolean verificarMateriales() {

@@ -44,18 +44,27 @@ public class ArticuloFormula {
         this.total = total;
     }
 
-    public ArticuloFormula(int id, String nombre, String descripcion, String tipo, float cantidad, 
-            String UnidadMedida,float costo,
-            int idSubcuenta,String subCuenta) {
+    public ArticuloFormula(int id, String nombre, String tipo, float costo, float cantidad, String UnidadMedida) {
+        this.id = id;
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.costo = costo;
+        this.cantidad = cantidad;
+        this.UnidadMedida = UnidadMedida;
+    }
+
+    public ArticuloFormula(int id, String nombre, String descripcion, String tipo, float cantidad,
+            String UnidadMedida, float costo,
+            int idSubcuenta, String subCuenta) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
         this.cantidad = cantidad;
         this.UnidadMedida = UnidadMedida;
-        this.costo=costo;
-        this.idSubcuenta=idSubcuenta;
-        this.subCuenta=subCuenta;
+        this.costo = costo;
+        this.idSubcuenta = idSubcuenta;
+        this.subCuenta = subCuenta;
     }
 
     public ArticuloFormula(int id, float cantidad) {

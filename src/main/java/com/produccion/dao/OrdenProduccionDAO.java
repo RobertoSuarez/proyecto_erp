@@ -653,22 +653,43 @@ public class OrdenProduccionDAO {
                 + "inner join articulos as a on a.id=rop.\"Codigo_producto\"\n"
                 + "inner join detalleproceso as dp on dp.codigo_registro=rop.codigo_registro\n"
                 + "inner join formula as f on f.codigo_formula=dp.codigo_formula\n"
-                + "where op.codigo_orden="+codigo_orden+";");
+                + "where op.codigo_orden=" + codigo_orden + ";");
         try {
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                ordenProducto.add(new OrdenTrabajo(resultSet.getInt("id"),resultSet.getString("nombre"),
-                        resultSet.getInt("codigo_registro"),resultSet.getInt("codigo_formula"), resultSet.getInt("codigo_proceso"), resultSet.getString("descripcion"),
+                ordenProducto.add(new OrdenTrabajo(resultSet.getInt("id"), resultSet.getString("nombre"),
+                        resultSet.getInt("codigo_registro"), resultSet.getInt("codigo_formula"), resultSet.getInt("codigo_proceso"), resultSet.getString("descripcion"),
                         resultSet.getFloat("cantidad"), resultSet.getDate("fecha_inicio"), resultSet.getDate("fecha_fin"), resultSet.getFloat("costomateriaprima"), resultSet.getFloat("costodirecto"),
-                                resultSet.getFloat("costoindirecto"), resultSet.getFloat("costos_generado"), resultSet.getFloat("costounitario"), resultSet.getFloat("tiempo_proceso")));
+                        resultSet.getFloat("costoindirecto"), resultSet.getFloat("costos_generado"), resultSet.getFloat("costounitario"), resultSet.getFloat("tiempo_proceso")));
             }
         } catch (SQLException e) {
         } finally {
             conexion.desconectar();
         }
         return ordenProducto;
+    }
+
+    public List<ArticuloFormula> getlistaMaterialAdicional(int idRegistro) {
+        List<ArticuloFormula> articulosFormula = new ArrayList<>();
+        sentenciaSql = String.format("select a.id, a.nombre,a.costo,dp.cantidad,a.unidadmedida,t.tipo from detalle_produccion as dp\n"
+                + "inner join articulos as a on dp.codigo_producto=a.id\n"
+                + "inner join tipo as t on t.cod=a.id_tipo\n"
+                + "where codigo_registro="+idRegistro+"");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                articulosFormula.add(new ArticuloFormula(resultSet.getInt("id"), resultSet.getString("nombre"),
+                         resultSet.getString("tipo"),resultSet.getFloat("costo"),
+                        resultSet.getFloat("cantidad"), resultSet.getString("unidadmedida")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return articulosFormula;
     }
 
 }
