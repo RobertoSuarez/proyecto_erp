@@ -169,7 +169,9 @@ public class ArticulosInventarioDAO {
             this.conexion.conectar();
             rs = this.conexion.ejecutarSql("select id from articulos order by id desc limit 1;");
             int cod = 1;
-
+            int tipo = 1;
+            int bodegaid = 1;
+            int categoriaid =1;
             while (rs.next()) {
                 cod = rs.getInt(1) + 1;
             }
@@ -177,8 +179,8 @@ public class ArticulosInventarioDAO {
             System.out.println("Articulo: " + articulo.getId());
 
             sentenciaSql = "INSERT INTO public.articulos(id,nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad,costo,iva,ice)\n"
-                    + "	VALUES (" + articulo.getId() + "'" + articulo.getNombre() + "', " + articulo.getId_categoria() + ", " + articulo.getId_tipo() + ",'" + articulo.getDescripcion()
-                    + "'," + articulo.getId_bodega() + "," + articulo.getCantidad() + "," + articulo.getCosto() + ",12,0)";
+                    + "	VALUES (" + articulo.getId() + "'," + articulo.getNombre() + "', " + categoriaid + ", " + tipo + ",'" + articulo.getDescripcion()
+                    + "'," + bodegaid + "," + articulo.getCantidad() + "," + articulo.getCosto() + ",12,0)";
             //enviamos la sentencia
             conexion.ejecutarSql(sentenciaSql);
             this.conexion.desconectar();
