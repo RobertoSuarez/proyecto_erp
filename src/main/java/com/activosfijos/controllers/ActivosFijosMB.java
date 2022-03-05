@@ -5,15 +5,12 @@
  */
 package com.activosfijos.controllers;
 
-import com.activosfijos.dao.AgotableDAO;
 import com.activosfijos.dao.NoDepreciableDAO;
 import com.activosfijos.dao.TangibleDAO;
-import com.activosfijos.model.ActivoAgotable;
 import java.io.Serializable;
 import com.activosfijos.model.ActivosFijos;
 import com.activosfijos.model.ActivoDepreciable;
 import com.activosfijos.model.ActivoNoDepreciable;
-import com.activosfijos.model.ListaAgotable;
 import com.activosfijos.model.ListaDepreciable;
 import com.activosfijos.model.ListaNoDepreciable;
 import com.cuentasporpagar.models.Proveedor;
@@ -37,13 +34,10 @@ public class ActivosFijosMB implements Serializable {
     ActivosFijos activosFijos = new ActivosFijos();
     ActivoDepreciable activodepreciable = new ActivoDepreciable();
     ActivoNoDepreciable activoNoDepreciable = new ActivoNoDepreciable();
-    ActivoAgotable activosagotables = new ActivoAgotable();
     TangibleDAO tangibleDAO = new TangibleDAO();
     NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
-    AgotableDAO agotablesdao = new AgotableDAO();
     ListaDepreciable listadepreciable = new ListaDepreciable();
     ListaNoDepreciable listanodepreciable = new ListaNoDepreciable();
-    ListaAgotable listaragotables = new ListaAgotable();
     int idactivofijo;
     int id_proveedor = 0;
     String nombre = "";
@@ -73,30 +67,6 @@ public class ActivosFijosMB implements Serializable {
 
     public void setActivosFijos(ActivosFijos activosFijos) {
         this.activosFijos = activosFijos;
-    }
-
-    public ListaAgotable getListaragotables() {
-        return listaragotables;
-    }
-
-    public void setListaragotables(ListaAgotable listaragotables) {
-        this.listaragotables = listaragotables;
-    }
-
-    public AgotableDAO getAgotablesdao() {
-        return agotablesdao;
-    }
-
-    public void setAgotablesdao(AgotableDAO agotablesdao) {
-        this.agotablesdao = agotablesdao;
-    }
-
-    public ActivoAgotable getActivosagotables() {
-        return activosagotables;
-    }
-
-    public void setActivosagotables(ActivoAgotable activosagotables) {
-        this.activosagotables = activosagotables;
     }
 
     public NoDepreciableDAO getNodepreciabledao() {
