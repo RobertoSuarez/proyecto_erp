@@ -79,12 +79,9 @@ public class PeriodosActivosFijosMB implements Serializable {
         this.periodosactivosfijosdao = periodosactivosfijosdao;
     }
 
-    // Metodo funcional para exportar pdf
+    // Metodo funcional para exportar pdf de ACTIVOS DEPRECIABLES
     public void exportPdfDepreciable() throws IOException, JRException {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
-        //RequestContext requestContext = RequestContext.getCurrentInstance();
-        //requestContext.execute("window.print();");
-        //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
 
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -132,12 +129,10 @@ public class PeriodosActivosFijosMB implements Serializable {
             System.out.println("fin proccess");
         }
     }
+//Metodo funcional para exportar pdf de ACTIVOS NO DEPRECIABLES
 
     public void exportPdfNoDepreciable() throws IOException, JRException {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
-        //RequestContext requestContext = RequestContext.getCurrentInstance();
-        //requestContext.execute("window.print();");
-        //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
 
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
@@ -185,12 +180,10 @@ public class PeriodosActivosFijosMB implements Serializable {
             System.out.println("fin proccess");
         }
     }
+//Metodo funcional para exportar pdf de ACTIVOS INTANGIBLES
 
     public void exportPdfIntangible() throws IOException, JRException {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Reporte generado"));
-        //RequestContext requestContext = RequestContext.getCurrentInstance();
-        //requestContext.execute("window.print();");
-        //PrimeFaces.current().executeScript("reportebalanceactivosfijos("+anio+");");
 
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
