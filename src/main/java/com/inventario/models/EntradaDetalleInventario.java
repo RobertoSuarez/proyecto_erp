@@ -5,12 +5,13 @@
 package com.inventario.models;
 
 import com.inventario.DAO.ArticulosInventarioDAO;
+import java.io.Serializable;
 
 /**
  *
  * @author angul
  */
-public class EntradaDetalleInventario {
+public class EntradaDetalleInventario implements Serializable {
 
     private int idEntradaDetalle;
 

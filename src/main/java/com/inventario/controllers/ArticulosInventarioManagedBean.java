@@ -31,6 +31,7 @@ import org.primefaces.PrimeFaces;
 
 public class ArticulosInventarioManagedBean implements Serializable {
 
+    private int preparando;
     private ArticulosInventario articulosInventario = new ArticulosInventario();
     private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
     private List<ArticulosInventario> listaArticulos = new ArrayList<>();
@@ -40,25 +41,42 @@ public class ArticulosInventarioManagedBean implements Serializable {
     private List<Categoria> listaCategoria = new ArrayList<>();
     private int codCategoria;
     private String nomCategoria;
+    private Categoria categoriaSeleccionada;
+
+    public Categoria getCategoriaSeleccionada() {
+        return categoriaSeleccionada;
+    }
+
+    public void setCategoriaSeleccionada(Categoria categoriaSeleccionada) {
+        this.categoriaSeleccionada = categoriaSeleccionada;
+    }
+
 
     @PostConstruct
     public void init() {
+        this.preparando = 0;
         System.out.println("PostConstruct");
         listaArticulos = articulosInventarioDAO.getArticulos();
         this.listaCategoria = categoriaDAO.getCategoria();
         this.categoria = new Categoria();
         this.codCategoria = 0;
         this.nomCategoria = "XXXXXX";
+        this.categoriaSeleccionada = null;
 
     }
 
     public void seleccionarCategoria(Categoria c) {
-        this.codCategoria = c.getIdCat();
-        this.nomCategoria = c.getNom_categoria();
         this.categoria = c;
+        
+
+        
+        this.articulosInventario.setId_categoria(c.getIdCat());
+        int preparando =5;
+        
     }
 
     public void insertararticulo() {
+        int valor = preparando;
         try {
             if ("".equals(articulosInventario.getId_bodega())) {
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -92,6 +110,8 @@ public class ArticulosInventarioManagedBean implements Serializable {
                             "Error al guardar"));
         }
     }
+    
+    
 
     public ArticulosInventario getArticulosInventario() {
         return articulosInventario;

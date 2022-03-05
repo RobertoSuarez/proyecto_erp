@@ -5,7 +5,9 @@
  */
 package com.inventario.models;
 
-public class Bodega {
+import java.io.Serializable;
+
+public class Bodega implements Serializable{
     
     private int cod;
     private String nomBodega;
