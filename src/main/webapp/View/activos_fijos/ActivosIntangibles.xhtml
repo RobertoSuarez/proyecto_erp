@@ -71,7 +71,7 @@ and open the template in the editor.
                             </p:toolbar> 
                             <!-- Tabla visual de datos  !-->
                             <p:dataTable id="verListaIntangibles"
-                                         value="#{activosintangilesMB.intangibledao.listaragotables()}" 
+                                         value="#{activosintangilesMB.intangibledao.listararIntangibles()}" 
                                          var="intangible" 
                                          rowKey="#{intangible.id_activo_fijo}" editable="true">
                                 <p:column headerText="Descripción"  >
@@ -116,7 +116,7 @@ and open the template in the editor.
                             <div  style="display: flex;justify-content: center">
 
                                 <p:dataTable id="verListaIntangiblesdeshabilitados"
-                                             value="#{activosintangilesMB.intangibledao.listaragotablesdeshabilitados()}" 
+                                             value="#{activosintangilesMB.intangibledao.listarIntangiblesDeshabilitados()}" 
                                              var="intangible" 
                                              rowKey="#{intangible.id_activo_fijo}" editable="true" >
                                     <p:column headerText="Descripción"  >

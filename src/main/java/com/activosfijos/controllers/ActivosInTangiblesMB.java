@@ -93,7 +93,7 @@ public class ActivosInTangiblesMB implements Serializable {
         String data = "";
         intangibledao = new IntangibleDAO();
         try {
-            intangibledao.guardar3(activosFijos, activoingantible);
+            intangibledao.guardarActivoIntangible(activosFijos, activoingantible);
             System.out.println("Registrado correctamente");
             PrimeFaces.current().executeScript("PF('NuevoIntangible').hide()");
             mensajeDeExito("Activo intangible agregado correctamente");
@@ -119,7 +119,7 @@ public class ActivosInTangiblesMB implements Serializable {
         String data = "";
         try {
             listaintangible.setId_activo_fijo(idactivofijo);
-            intangibledao.editar2(listaintangible);
+            intangibledao.editarActivosIntangibles(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
             PrimeFaces.current().ajax().update("formintangible:verListaIntangibles");
@@ -137,7 +137,7 @@ public class ActivosInTangiblesMB implements Serializable {
         intangibledao = new IntangibleDAO();
         try {
             activoingantible.setId_activo_fijo(idactivofijo);
-            intangibledao.deshabilitarintangible(listaintangible);
+            intangibledao.deshabilitarIntangible(listaintangible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('EditarIntangible').hide()");
             PrimeFaces.current().ajax().update(":formintangible");
@@ -153,7 +153,7 @@ public class ActivosInTangiblesMB implements Serializable {
         String data = "";
         try {
             activoingantible.setId_activo_fijo(id);
-            intangibledao.habilitarintangible(activoingantible);
+            intangibledao.habilitarIntangible(activoingantible);
             System.out.println("activos_fijos/Actualizado correctamente");
             PrimeFaces.current().executeScript("PF('deshabilitadosintangible').hide()");
             PrimeFaces.current().ajax().update(":formintangible");
