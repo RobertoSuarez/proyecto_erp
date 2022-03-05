@@ -148,7 +148,6 @@ public class OrdenProduccionMB implements Serializable {
     }
 
     public void llenarCombox(int idOrden) {
-        ordenTerminada = new OrdenTrabajo();
         listaCostosDirectos = new ArrayList<>();
         listaCostosIndirectos = new ArrayList<>();
         listaMateriaPrima = new ArrayList<>();
