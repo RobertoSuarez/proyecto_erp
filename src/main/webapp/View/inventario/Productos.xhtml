@@ -212,7 +212,7 @@
                                   minHeight="300" width="30%" showEffect="fade">
                             <h:form id="categoriaVista"> 
                                 <p:dataTable var="ListaCategorias" id="listaProveedores" selectionMode="single" value="#{articulosMB.listaCategoria}" 
-                                             selection="#{articulosMB.categoriaSeleccionada}" rowKey="#{ListaCategorias.cod}" 
+                                             selection="#{articulosMB.categoriaSeleccionada}" rowKey="#{ListaCategorias.idCat}" 
                                              scrollable="true" scrollHeight="250">
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
@@ -220,7 +220,7 @@
                                     </p:column>
 
                                     <p:column headerText="Cod">
-                                        <h:outputText value="#{ListaCategorias.cod}" />
+                                        <h:outputText value="#{ListaCategorias.idCat}" />
                                     </p:column>
 
                                     <p:column headerText="Categoria" >
