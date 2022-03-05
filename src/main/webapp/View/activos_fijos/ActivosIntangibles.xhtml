@@ -139,7 +139,7 @@ and open the template in the editor.
                                         <h:outputText value="#{intangible.proveedor}"/>
                                     </p:column>
                                     <p:column headerText="Habilitar  " rendered="#{seguridadActvFijo.renderSoloGerente()}">
-                                        <p:commandButton action="#{activosintangilesMB.setHabilitarintangible(intangible.id_activo_fijo)}" 
+                                        <p:commandButton action="#{activosintangilesMB.setHabilitarIntangible(intangible.id_activo_fijo)}" 
 
                                                          icon="pi pi-check"
                                                          styleClass="rounded-button" 
@@ -234,7 +234,7 @@ and open the template in the editor.
                                 <f:facet name="footer">
                                     <p:commandButton value="Guardar" 
                                                      icon="pi pi-check" 
-                                                     actionListener="#{activosintangilesMB.setRegistrar3}"
+                                                     actionListener="#{activosintangilesMB.setRegistrarIntangible}"
                                                      update=":formintangible:verListaIntangibles,:formintangible:msgs"/>
                                     <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                      onclick="PF('NuevoIntangible').hide()"
@@ -329,7 +329,7 @@ and open the template in the editor.
                                     <f:facet name="footer">
                                         <p:commandButton value="Guardar" 
                                                          icon="pi pi-check"
-                                                         action="#{activosintangilesMB.setEditar3}" 
+                                                         action="#{activosintangilesMB.setEditarIntangible}" 
                                                          update=":formintangible:verListaIntangibles,:formintangible:msgs"
                                                          />
                                         <p:commandButton value="Cancelar" icon="pi pi-times" 
@@ -338,7 +338,7 @@ and open the template in the editor.
                                                          class="ui-button-danger"/>
                                         <p:commandButton 
                                             value="Deshabilitar"
-                                            action="#{activosintangilesMB.setDeshabilitarintangible}"
+                                            action="#{activosintangilesMB.setDeshabilitarIntangible}"
                                             icon="pi pi-times"                                            
                                             styleClass="ui-button-secondary" 
                                             onclick="PF('EditarIntangible').hide()"
