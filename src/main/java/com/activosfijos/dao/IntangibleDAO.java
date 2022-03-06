@@ -52,7 +52,7 @@ public class IntangibleDAO {
     }
 
 //Método que permite listar los activos tangibles habilitados de la base de datos
-    public List<ListarIntangible> listararIntangibles() throws Exception {
+    public List<ListarIntangible> listarIntangibles() throws Exception {
         List<ListarIntangible> listInta = new ArrayList<>();
         Conexion conexion = new Conexion();
         System.out.println("Conectado a la db");
