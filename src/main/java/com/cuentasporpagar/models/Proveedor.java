@@ -6,12 +6,13 @@
 package com.cuentasporpagar.models;
 
 import com.global.config.Conexion;
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
- public class Proveedor {
+ public class Proveedor implements Serializable {
 
     int idProveedor;
     String codigo;

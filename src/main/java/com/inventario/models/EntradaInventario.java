@@ -5,6 +5,7 @@
 package com.inventario.models;
 
 import com.cuentasporpagar.models.Proveedor;
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -13,7 +14,7 @@ import java.util.Date;
  *
  * @author angul
  */
-public class EntradaInventario {
+public class EntradaInventario implements Serializable{
        private static final long serialVersionUID = 1L;
 
     private int cod;

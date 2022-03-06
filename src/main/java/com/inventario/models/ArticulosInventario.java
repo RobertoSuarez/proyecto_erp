@@ -6,9 +6,10 @@
 package com.inventario.models;
 
 import com.produccion.models.FormulaMateriales;
+import java.io.Serializable;
 import java.util.List;
 
-public class ArticulosInventario {
+public class ArticulosInventario implements Serializable {
     
     private int id;
     private int cat_cod;

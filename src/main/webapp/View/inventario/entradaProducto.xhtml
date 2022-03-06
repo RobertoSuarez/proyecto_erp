@@ -37,7 +37,6 @@
                                                 <div class="p-col-12">
                                                     <p:outputLabel value="Nro de comprobante:"></p:outputLabel>
                                                     <p:inputText value="#{EntradaMB.entrada.numComprobante}"
-
                                                                  placeholder="Nro de Comprobante"></p:inputText>
                                                 </div>
 
@@ -93,7 +92,7 @@
                                                 </div>
                                                 <div class="p-col-2">
                                                     <p:outputLabel value="Codigo Producto *"></p:outputLabel>
-                                                    <p:inputText id="codigoProductoSelect" value="#{EntradaMB.codigoProducto}"></p:inputText>
+                                                    <p:inputText id="codigoProductoSelect" disabled="true" value="#{EntradaMB.codigoProducto}"></p:inputText>
                                                 </div>
                                                 <div class="p-col-2">
                                                     <p:outputLabel value="Cantidad:"></p:outputLabel>
@@ -101,23 +100,12 @@
                                                 </div>
                                                 <div class="p-col-2">
                                                     <p:outputLabel value="Stock Maximo:"></p:outputLabel>
-                                                    <p:inputText id="stockProductoSelect" value="#{EntradaMB.producto.max_stock}"></p:inputText>
+                                                    <p:inputText id="stockProductoSelect" disabled="true" value="#{EntradaMB.producto.max_stock}"></p:inputText>
                                                 </div>
                                                 <div class="p-col-2">
                                                     <p:outputLabel value="Costo:"></p:outputLabel>
-                                                    <p:inputText id="costoProductoSelect" value="#{EntradaMB.precioProducto}"></p:inputText>
+                                                    <p:inputText id="costoProductoSelect" disabled="true" value="#{EntradaMB.precioProducto}"></p:inputText>
                                                 </div>
-                                                <div class="p-col-1">
-                                                    <h6>IVA</h6>
-                                                    <p:inputSwitch id="ivaProductoSelect" value="#{EntradaMB.siIVA}"/>
-                                                </div>        
-                                                <div class="p-col-1">
-                                                    <h6>ICE</h6>
-                                                    <p:inputSwitch id="iceProductoSelect" value="#{EntradaMB.siICE}" />
-                                                </div>
-
-
-
                                             </div>
                                         </div>
                                         <div class="p-col-11">
@@ -125,15 +113,16 @@
                                                 <div class="p-col-2">
 
                                                     <p:commandButton value="Agregar" process="@this"
-                                                                     actionListener ="#{EntradaMB.AgregarProductoLista()}"
+                                                                     action ="#{EntradaMB.AgregarProductoLista()}"
                                                                      oncomplete=""
-                                                                     update="itemsEntradaDetalle" 
+                                                                     update="entradaForm:itemsEntradaDetalle entradaForm:buscar-producto-vista entradaForm:buscar-producto-vista:NombreProducto entradaForm:codigoProductoSelect entradaForm:cantidadProductoSelect entradaForm:stockProductoSelect entradaForm:costoProductoSelect" 
                                                                      icon="pi pi-plus"/>
                                                 </div>
                                                 <div class="p-col-2">
-                                                    <p:commandButton value="Otro Producto" process="@this"
-                                                                     disabled=""
+                                                    <p:commandButton value="Limpiar" process="@this"
+                                                                     action ="#{EntradaMB.LimpiarProducto()}"
                                                                      oncomplete=""
+                                                                     update="entradaForm:itemsEntradaDetalle entradaForm:buscar-producto-vista entradaForm:buscar-producto-vista:NombreProducto entradaForm:codigoProductoSelect entradaForm:cantidadProductoSelect entradaForm:stockProductoSelect entradaForm:costoProductoSelect" 
                                                                      icon="pi pi-plus" 
                                                                      styleClass="ui-button-success p-mr-2 p-mb-2"/>
                                                 </div>
@@ -214,9 +203,6 @@
                                 <p:dataTable var="ListaProveedores" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaProveedores}" 
                                              selection="#{EntradaMB.proveedorSeleccionado}" rowKey="#{ListaProveedores.idProveedor}" 
                                              scrollable="true" scrollHeight="250"
-                                             paginator="true" 
-                                             rows="5" 
-                                             paginatorPosition="bottom" style="visibility: false"
                                              >
 
                                     <f:facet name="header">
@@ -264,7 +250,7 @@
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
                                                          actionListener="#{EntradaMB.SeleccionarProducto(ListaProductos)}" 
-                                                         update="entradaForm:buscar-producto-vista"
+                                                         update="entradaForm:buscar-producto-vista entradaForm:buscar-producto-vista:NombreProducto entradaForm:codigoProductoSelect entradaForm:cantidadProductoSelect entradaForm:stockProductoSelect entradaForm:costoProductoSelect"
                                                          oncomplete="PF('BuscarProducto').hide();"/>
                                     </p:column>
 
@@ -288,7 +274,7 @@
                         <p:dialog header="Busqueda de Bodegas" widgetVar="BuscarBodega" id="busquedaBodega"
                                   minHeight="600" width="70%" showEffect="fade">
                             <h:form>
-                                <p:dataTable var="ListaBodegas" id="listaBodegas" selectionMode="single" value="#{EntradaMB.listaBodegas}" 
+                                    <p:dataTable var="ListaBodegas" id="listaBodegas" selectionMode="single" value="#{EntradaMB.listaBodegas}" 
                                              selection="#{EntradaMB.bodegaSeleccionada}" rowKey="#{ListaBodegas.cod}" 
                                              scrollable="true" scrollHeight="250">
 
