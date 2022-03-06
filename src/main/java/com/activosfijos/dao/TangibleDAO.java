@@ -21,7 +21,8 @@ import java.util.List;
  * @author desta
  */
 public class TangibleDAO {
-
+//funcion boleana para registrar un activo tangible depreciable el cual 
+// recibe 2 parametros de tipo activo fijo y de activo depreciable
     public boolean registrarTangibleDepreciable(ActivosFijos activosFijos, ActivoDepreciable activodepreciable) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -40,6 +41,7 @@ public class TangibleDAO {
         return true;
     }
 
+//retornar un boleano si el activo ha sido editable
     public boolean editarTangibleDepreciable(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -72,7 +74,7 @@ public class TangibleDAO {
         System.out.println("update 1: " + consulta);
         return true;
     }
-
+// lsitamos los activos depreciables 
     public List<ListaDepreciable> Listardepreciable() throws Exception {
         List<ListaDepreciable> lista = new ArrayList<>();
         Conexion conexion = new Conexion();
@@ -111,7 +113,7 @@ public class TangibleDAO {
         }
         return lista;
     }
-
+// deshabilitamos un activo depreciable
     public boolean deshabilitartangible(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -123,7 +125,7 @@ public class TangibleDAO {
         System.out.println("update 1: " + consulta);
         return true;
     }
-
+//listamos un activo depreciable deshabilitado 
     public List<ListaDepreciable> listaradepreciablesdeshabilitados() throws Exception {
         List<ListaDepreciable> listtang = new ArrayList<>();
         Conexion conexion = new Conexion();
@@ -164,7 +166,7 @@ public class TangibleDAO {
 
         return listtang;
     }
-
+//funsion para habilitar un activo depreciable
     public boolean habilitardepreciable(ActivoDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
