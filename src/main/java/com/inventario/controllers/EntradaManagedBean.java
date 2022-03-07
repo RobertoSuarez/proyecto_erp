@@ -61,6 +61,17 @@ public class EntradaManagedBean implements Serializable {
 
     List<ProductoReport> productosReport;
 
+    private int idProveedor;
+
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+    
+    
     private Proveedor proveedor;
     private ProveedorDAO proveedorDAO;
     private String proveedordINum;
@@ -118,10 +129,12 @@ public class EntradaManagedBean implements Serializable {
 
         this.productosReport = daoReport.getArticulosReport();
 
+        this.idProveedor = 0;
         this.proveedor = new Proveedor();
         this.proveedorDAO = new ProveedorDAO();
         this.nombreCategoria = "XXXX";
         this.numeroComprobante = "";
+        aleatorioCod();
         this.fechaComprobante = new Date();
         this.bodega = new Bodega();
         this.bodegaDAO = new BodegaDAO();
@@ -326,7 +339,11 @@ public class EntradaManagedBean implements Serializable {
     //Agregar producto a la lista de detalle
     @Asynchronous
     public void AgregarProductoLista() {
+        
         try {
+            Proveedor prueba = this.proveedor;
+            Bodega prueba2 = this.bodega;
+            ArticulosInventario prueba3 = this.producto;
             if (this.producto.getId() > 0) {
                 int stock_maximo = this.producto.getMax_stock();
                 int _cantidad = this.cantidad;
@@ -383,6 +400,7 @@ public class EntradaManagedBean implements Serializable {
 
     }
 
+    
     //Eliminar un producto de la lista
     @Asynchronous
     public void EliminarProducto(EntradaDetalleInventario detalle) {
@@ -429,7 +447,7 @@ public class EntradaManagedBean implements Serializable {
                     entradaActual.setProveedor(this.proveedor);
                     entradaActual.setIdProveedor(this.proveedor.getIdProveedor());
                     entradaActual.setIdBodega(this.bodega.getCod());
-                    entradaActual.setNumComprobante(numeroComprobante);
+                    entradaActual.setNumComprobante(this.numeroComprobante);
                     entradaActual.setFecha(currentDate2);
 
                     //Verificación en consola
@@ -455,10 +473,12 @@ public class EntradaManagedBean implements Serializable {
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
                             System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
+                  //          daoDetail.GuardarEntrada(this.listaDetalle);
                             daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price);
                             listSize += 1;
                         }
 
+                        addMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se guardo la entrada");
                         return "listaEntrada";
                     }
                 }
@@ -471,6 +491,7 @@ public class EntradaManagedBean implements Serializable {
 
     
     public void SeleccionarProveedor(Proveedor prov) {
+        this.idProveedor = prov.getIdProveedor();
         this.proveedorNombre = prov.getNombre();
         this.proveedordINum = prov.getRazonSocial();
         this.proveedor = prov;
@@ -510,6 +531,7 @@ public class EntradaManagedBean implements Serializable {
         this.nombreBodega = bod.getNomBodega();
         this.ciudadBodega = bod.getNomCiudad();
         this.direccionBodega = bod.getDireccion();
+        this.bodega = bod;
     }
 
     public String getNombreBodega() {
@@ -856,4 +878,10 @@ public class EntradaManagedBean implements Serializable {
     public void setListaEntradas(List<EntradaInventario> listaEntradas) {
         this.listaEntradas = listaEntradas;
     }
+    
+         public void aleatorioCod() {
+          String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
+          String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
+          this.numeroComprobante = ("AF" + uuid + uuid2).toUpperCase();
+     }
 }
