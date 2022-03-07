@@ -122,7 +122,7 @@ public class EntradaDetalleDAO {
             this.conexion.conectar();
 
             //Recibir siguiente código de detalle venta
-            String query = "select iddetalleventa from public.detalleventa order by iddetalleventa desc limit 1;";
+            String query = "select id_entrada_detalle from public.entrada_detalle order by id_entrada_detalle desc limit 1;";
             rs = this.conexion.ejecutarSql(query);
 
             while (rs.next()) {
@@ -130,23 +130,23 @@ public class EntradaDetalleDAO {
             }
 
             //insertar detalle venta
-            query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
+            query = "insert into public.entrada_detalle(id_entrada_detalle, id_entrada, cod_articulo, cant, costo) values(" + idDetalle + "," + idVenta + ","
                     + idProducto + "," + cantidad + "," + precio + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
             //Reducir stock
             int cantidadActual = 0;
-            query = "select cantidad from public.productos where codprincipal = " + idProducto + ";";
+            query = "select cantidad from public.articulos where id =" + idProducto + ";";
             rs = this.conexion.ejecutarSql(query);
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
-            query = "update public.productos set cantidad = " + (cantidadActual - cantidad) + " where codprincipal = " + idProducto + ";";
+            query = "update public.articulos set cantidad = " + (cantidadActual - (int) cantidad) + " where id = " + idProducto + ";";
             this.conexion.ejecutarSql(query);
 
             this.conexion.desconectar();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             if (conexion.isEstado()) {
                 conexion.desconectar();
             }

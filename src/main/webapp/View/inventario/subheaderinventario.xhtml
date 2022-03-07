@@ -11,7 +11,10 @@
         <p:menuitem value="Bodegas" outcome="/View/inventario/Bodegas"/>
         <p:submenu label="Operaciones">
             <p:menuitem value="Entrada de producto" outcome="/View/inventario/entradaProducto" icon="pi pi-list" />
+            <p:menuitem value="Lista de entradas" outcome="/View/inventario/entradaProductoLista" icon="pi pi-list" />
             <p:menuitem value="Salida de producto" outcome="/View/inventario/salidaProducto" icon="pi pi-list" />
+            <p:menuitem value="Lista de salidas" outcome="/View/inventario/salidaProductoLista" icon="pi pi-list" />
+            
         </p:submenu>
         <p:submenu label="Transferencia">
             <p:menuitem value="Lista Transferencias" outcome="/View/inventario/Transferencias" icon="pi pi-list" />
@@ -20,7 +23,7 @@
         <p:submenu label="Ajuste de Inventario">
             <p:menuitem value="Listado" outcome="/View/inventario/ajusteInventario"/>
             <p:menuitem value="Nuevo Ajsute" outcome="/View/inventario/NuevaAjuste"/>
-        </p:submenu>
+        </p:submenu>   
     </p:menubar>
 
 </ui:composition>

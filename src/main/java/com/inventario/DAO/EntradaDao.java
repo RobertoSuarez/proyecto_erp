@@ -83,9 +83,9 @@ public class EntradaDao {
             System.out.println("Entrada: " + entradaInventario.getCod());
 
             //Insertar nueva venta
-            String query = "INSERT INTO public.entrada("
+            String query = "INSERT INTO public.entrada( cod, "
                     + "num_comprobante, fecha, id_proveedor, id_bodega)"
-                    + "VALUES(" + "'" + entradaInventario.getNumComprobante() + "', " + entradaInventario.getFecha() + ", " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
+                    + "VALUES(" + entradaInventario.getCod() + ",'" + entradaInventario.getNumComprobante() + "', '" + entradaInventario.getFecha() + "', " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
@@ -94,7 +94,7 @@ public class EntradaDao {
             System.out.println("Entrada Guardada exitosamente");
 
             return entradaInventario.getCod();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             if (conexion.isEstado()) {
                 conexion.desconectar();
             }
