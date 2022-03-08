@@ -13,6 +13,7 @@ public class ActivoDepreciable {
     private int id_activo_fijo=0;
     private int depreciacion_meses=0;
     private double porcentaje_depreciacion=0;
+    private double cuota_depresiacion;
 
     
     public ActivoDepreciable() {
@@ -41,9 +42,13 @@ public class ActivoDepreciable {
         this.depreciacion_meses = depreciacion_meses;
     }
 
- 
+    public double getCuota_depresiacion() {
+        return cuota_depresiacion;
+    }
 
-
+    public void setCuota_depresiacion(double cuota_depresiacion) {
+        this.cuota_depresiacion = cuota_depresiacion;
+    }
 
     public double getPorcentaje_depreciacion() {
         return porcentaje_depreciacion;
