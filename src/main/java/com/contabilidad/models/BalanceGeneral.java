@@ -1,10 +1,18 @@
-
 package com.contabilidad.models;
 
 public class BalanceGeneral {
+
     private int parent, id;
-    private String nombre;
+    private String nombre, saltoString;
     private double saldo;
+
+    public String getSaltoString() {
+        return saltoString;
+    }
+
+    public void setSaltoString(String saltoString) {
+        this.saltoString = saltoString;
+    }
 
     public BalanceGeneral() {
     }
@@ -58,6 +66,9 @@ public class BalanceGeneral {
     public String toString() {
         return "BalanceGeneral{" + "parent=" + parent + ", id=" + id + ", nombre=" + nombre + ", saldo=" + saldo + '}';
     }
-    
-    
+
+    public String toStringInfo() {
+        return "{nombre=" + nombre + ", saldo=" + saldo + '}';
+    }
+
 }

@@ -154,7 +154,6 @@ public class BalanceGeneralDAO {
                 }
             });
         });
-
         return balanceGeneral;
     }
 
