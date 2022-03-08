@@ -20,6 +20,8 @@ public class SolicitudOrden {
     private String descripcion;
     private float total;
     private char estado;
+    private String nombreBodega;
+    private int codigo_bodega;
 
     public SolicitudOrden() {
     }
@@ -87,6 +89,21 @@ public class SolicitudOrden {
     public void setTotal(float total) {
         this.total = total;
     }
-    
+
+    public String getNombreBodega() {
+        return nombreBodega;
+    }
+
+    public void setNombreBodega(String nombreBodega) {
+        this.nombreBodega = nombreBodega;
+    }
+
+    public int getCodigo_bodega() {
+        return codigo_bodega;
+    }
+
+    public void setCodigo_bodega(int codigo_bodega) {
+        this.codigo_bodega = codigo_bodega;
+    }
 
 }

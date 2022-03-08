@@ -1,7 +1,6 @@
 package com.produccion.dao;
 
 import com.global.config.Conexion;
-import com.inventario.models.Bodega;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
 import com.produccion.models.FormulaMateriales;
@@ -121,23 +120,6 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
         return centro;
-    }
-    public List<Bodega> getBodega() {
-        List<Bodega> bodega = new ArrayList<>();
-        sentenciaSql = String.format("select * from bodega;");
-        try {
-            //enviamos la sentencia
-            resultSet = conexion.ejecutarSql(sentenciaSql);
-            //Llena la lista de los datos
-            while (resultSet.next()) {
-                bodega.add(new Bodega(resultSet.getInt("cod"),
-                        resultSet.getString("nombre_bodega")));
-            }
-        } catch (SQLException e) {
-        } finally {
-            conexion.desconectar();
-        }
-        return bodega;
     }
 
     public List<ArticuloFormula> getListaConsumoMateriales(int codigo, float cantidad) {

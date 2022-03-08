@@ -5,6 +5,7 @@
  */
 package com.produccion.controllers;
 
+import com.inventario.models.Bodega;
 import com.produccion.dao.solicitudOrdenDAO;
 import com.produccion.models.SolicitudOrden;
 import com.produccion.models.productosOrden;
@@ -32,6 +33,7 @@ public class SolicitudOrdenMB implements Serializable {
     private List<productosOrden> listaProductOrden;
     private List<productosOrden> listaOrden;
     private List<productosOrden> listaOrdenConfirmados;
+    private List<Bodega> bodega;
 
     public SolicitudOrdenMB() {
         solicitudOrden = new SolicitudOrden();
@@ -40,6 +42,7 @@ public class SolicitudOrdenMB implements Serializable {
         listaOrdenConfirmados = new ArrayList<>();
         solicitudDAO = new solicitudOrdenDAO();
         ordenSolicitud = new productosOrden();
+        bodega = new ArrayList<>();
     }
 
     @PostConstruct
@@ -47,6 +50,7 @@ public class SolicitudOrdenMB implements Serializable {
         listaProductOrden = solicitudDAO.getAticulosOrden();
         aleatorioIdenti();
         solicitudOrden.setFecha_orden(new Date());
+        bodega = solicitudDAO.getBodega();
     }
 
     public SolicitudOrden getSolicitudOrden() {
@@ -89,6 +93,14 @@ public class SolicitudOrdenMB implements Serializable {
         this.listaOrdenConfirmados = listaOrdenConfirmados;
     }
 
+    public List<Bodega> getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(List<Bodega> bodega) {
+        this.bodega = bodega;
+    }
+
     public void insertarSolicitud() {
         try {
             if (solicitudOrden.getFecha_orden() == null) {
@@ -103,6 +115,8 @@ public class SolicitudOrdenMB implements Serializable {
                 showWarn("Ingrese valores en cantidad y unidad de medida");
             } else if (solicitudOrden.getFecha_fin().before(solicitudOrden.getFecha_orden())) {
                 showWarn("La fecha no puede ser anterior a la fecha de inicio de la Solicitud");
+            } else if (solicitudOrden.getCodigo_bodega() < 1) {
+                showWarn("Seleccione una Bodega");
             } else {
                 solicitudOrden.setEstado('P');
                 if (solicitudDAO.insertarSolicitud(solicitudOrden) > 0) {
@@ -126,8 +140,8 @@ public class SolicitudOrdenMB implements Serializable {
         if (producto.isVerifica() == true) {
             listaOrden.add(new productosOrden(producto.getCodigoProducto(),
                     producto.getNombreProducto(),
-                    producto.getDescripcion(), producto.getTipoProducto(),producto.getUnidadMedida()));
-            
+                    producto.getDescripcion(), producto.getTipoProducto(), producto.getUnidadMedida()));
+
         } else {
             for (productosOrden lista : listaOrden) {
                 if (lista.getCodigoProducto() == producto.getCodigoProducto()) {
