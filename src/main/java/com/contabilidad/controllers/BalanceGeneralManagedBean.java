@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -62,19 +61,39 @@ public class BalanceGeneralManagedBean implements Serializable {
         List<BalanceGeneral> balanceGeneralString = new ArrayList<>();
         balanceGeneralString = this.balanceGeneral;
 
-        String nombre;
         for (int x = 0; x < balanceGeneralString.size(); x++) {
-
-            if (balanceGeneralString.get(x).getNombre().charAt(5) == ' ') {
-                nombre = balanceGeneralString.get(x).getNombre();
-                balanceGeneralString.get(x).setNombre("       " + nombre);
-            }
-            nombre = "";
-            if (balanceGeneralString.get(x).getNombre().charAt(7) == ' ') {
-                nombre = balanceGeneralString.get(x).getNombre();
-                balanceGeneralString.get(x).setNombre("              " + nombre);
-            }
+            double saldo = balanceGeneralString.get(x).getSaldo();
+            String mySalgo = Double.toString(saldo);
+            balanceGeneralString.get(x).setSaltoString(mySalgo);
         }
+        for (int x = 0; x < balanceGeneralString.size(); x++) {
+            if (balanceGeneralString.get(x).getNombre().charAt(1) == ' ') {
+                double saldo = balanceGeneralString.get(x).getSaldo();
+
+                String mySalgo = Double.toString(saldo);
+
+                balanceGeneralString.get(x).setSaltoString("                                                       " + mySalgo);
+            }
+            if (balanceGeneralString.get(x).getNombre().charAt(3) == ' ') {
+                double saldo = balanceGeneralString.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+             
+balanceGeneralString
+                .get(x).setSaltoString("                                   " + mySalgo);
+            }
+            if (balanceGeneralString.get(x).getNombre().charAt(5) == ' ') {
+                double saldo = balanceGeneralString.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+                balanceGeneralString.get(x).setSaltoString("                    " + mySalgo);
+            }
+            if (balanceGeneralString.get(x).getNombre().charAt(7) == ' ') {
+                double saldo = balanceGeneralString.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+                balanceGeneralString.get(x).setSaltoString(mySalgo);
+            }
+
+        }
+
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
 
@@ -109,8 +128,9 @@ public class BalanceGeneralManagedBean implements Serializable {
                     new JRBeanCollectionDataSource(balanceGeneralString)
             );
 
-            // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+// exportamos a pdf.
+            JasperExportManager
+                    .exportReportToPdfStream(jasperPrint, stream);
             //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
 
             stream.flush();

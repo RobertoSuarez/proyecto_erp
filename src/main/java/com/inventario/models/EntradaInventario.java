@@ -28,6 +28,10 @@ public class EntradaInventario implements Serializable{
     private int idProveedor;
     
     private Proveedor proveedor;
+    
+    private String nombreProveedor;
+    
+    private String nombreBodega;
 
     
     public EntradaInventario() {
@@ -43,6 +47,16 @@ public class EntradaInventario implements Serializable{
         this.fecha = fecha;
         this.idBodega = idBodega;
         this.idProveedor = idProveedor;
+       }
+    
+        public EntradaInventario(int cod, String numComprobante, Date fecha, int idBodega, int idProveedor, String nombreProveedor, String nombreBodega  ) {
+        this.cod = cod;
+        this.numComprobante = numComprobante;
+        this.fecha = fecha;
+        this.idBodega = idBodega;
+        this.idProveedor = idProveedor;
+        this.nombreProveedor = nombreProveedor;
+        this.nombreBodega = nombreBodega;
        }
 
 
@@ -92,6 +106,22 @@ public class EntradaInventario implements Serializable{
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public String getNombreProveedor() {
+        return nombreProveedor;
+    }
+
+    public void setNombreProveedor(String nombreProveedor) {
+        this.nombreProveedor = nombreProveedor;
+    }
+
+    public String getNombreBodega() {
+        return nombreBodega;
+    }
+
+    public void setNombreBodega(String nombreBodega) {
+        this.nombreBodega = nombreBodega;
     }
 
     
