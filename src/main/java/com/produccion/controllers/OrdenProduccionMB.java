@@ -28,6 +28,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
@@ -52,6 +53,7 @@ public class OrdenProduccionMB implements Serializable {
     private List<ArticuloFormula> listaMateriaPrima;
     List<ArticuloFormula> listaMateriaPrimaAdicional;
     private List<ArticuloFormula> listaMateriaPrimaTotal;
+    List<FormulaProduccion> reporte;
     private String empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
 
     public OrdenProduccionMB() {
@@ -66,6 +68,7 @@ public class OrdenProduccionMB implements Serializable {
         listaMateriaPrima = new ArrayList<>();
         listaMateriaPrimaAdicional = new ArrayList<>();
         listaMateriaPrimaTotal = new ArrayList<>();
+        reporte = new ArrayList<>();
     }
 
     public OrdenProduccion getOrdenTrabajo() {
@@ -188,6 +191,7 @@ public class OrdenProduccionMB implements Serializable {
                 listaCostosIndirectos = ordenDAO.getListaCostos(orden.getCodigo_formula(), orden.getCodigo_registro(), orden.getCantidad(), "cifunitario");
                 listaMateriaPrima = ordenDAO.getListaConsumoMateriales(orden.getCodigo_formula(), orden.getCantidad());
                 listaMateriaPrimaAdicional = ordenDAO.getlistaMaterialAdicional(orden.getCodigo_registro());
+                ordenTerminada.setNombre_producto(orden.getNombre_producto());
                 ordenTerminada.setCantidad(orden.getCantidad());
                 ordenTerminada.setCostoTotal(orden.getCostoTotal());
                 ordenTerminada.setTotalMateria(orden.getTotalMateria());
@@ -209,10 +213,18 @@ public class OrdenProduccionMB implements Serializable {
         for (ArticuloFormula materiales : listaMateriaPrima) {
             materiales.setTotal(materiales.getCantidad() * materiales.getCosto());
             listaMateriaPrimaTotal.add(materiales);
+            reporte.add(new FormulaProduccion(materiales.getNombre(), materiales.getTipo(), materiales.getCosto()));
         }
         for (ArticuloFormula materiales : listaMateriaPrimaAdicional) {
             materiales.setTotal(materiales.getCantidad() * materiales.getCosto());
             listaMateriaPrimaTotal.add(materiales);
+            reporte.add(new FormulaProduccion(materiales.getNombre(), materiales.getTipo(), materiales.getCosto()));
+        }
+        for (FormulaProduccion directo : listaCostosDirectos) {
+            reporte.add(new FormulaProduccion(directo.getNombreCuenta(), directo.getNombre(), directo.getCosto()));
+        }
+        for (FormulaProduccion indirecto : listaCostosIndirectos) {
+            reporte.add(new FormulaProduccion(indirecto.getNombreCuenta(), indirecto.getNombre(), indirecto.getCosto()));
         }
     }
 
@@ -231,25 +243,26 @@ public class OrdenProduccionMB implements Serializable {
             // Parametros para el reporte.
             Map<String, Object> parametros = new HashMap<String, Object>();
             parametros.put("nombreempresa", empresa);
+            parametros.put("nombreproducto", ordenTerminada.getNombre_producto());
             parametros.put("cantidad", ordenTerminada.getCantidad());
             parametros.put("costoTotal", ordenTerminada.getCostoTotal());
             parametros.put("totalMateria", ordenTerminada.getTotalMateria());
             parametros.put("totalMOD", ordenTerminada.getTotalMOD());
             parametros.put("totalCIF", ordenTerminada.getTotalCIF());
+            parametros.put("listaCostosDirectos", listaCostosDirectos);
 
             // leemos la plantilla para el reporte.
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("/PlantillasReportes/produccionReporte.jasper"));
+                    .getRealPath("/PlantillasReportes/reporteProduccion.jasper"));
 
             // llenamos la plantilla con los datos.
             JasperPrint jasperPrint = JasperFillManager.fillReport(
                     filetext.getPath(),
                     parametros,
-                    new JRBeanCollectionDataSource(this.listaMateriaPrimaTotal)
+                    new JRBeanCollectionDataSource(this.reporte)
             );
-
             // exportamos a pdf.
             JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
             //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
