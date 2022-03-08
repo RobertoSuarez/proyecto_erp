@@ -142,7 +142,7 @@ public class EntradaDetalleDAO {
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
-            query = "update public.articulos set cantidad = " + (cantidadActual - (int) cantidad) + " where id = " + idProducto + ";";
+            query = "update public.articulos set cantidad = " + (cantidadActual + (int) cantidad) + " where id = " + idProducto + ";";
             this.conexion.ejecutarSql(query);
 
             this.conexion.desconectar();
