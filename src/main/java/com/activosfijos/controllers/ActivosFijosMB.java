@@ -141,8 +141,10 @@ public class ActivosFijosMB implements Serializable {
             } else if ("".equals(getNombre())) {
                 mensajeDeAdvertencia("Agrege un proveedor");
             } else {
+               
                 tangibledao.registrarTangibleDepreciable(activosFijos, activodepreciable);
                 System.out.println("Registrado correctamente");
+                tangibledao.actualizarcuotadepresiacion();
                 mensajeDeExito("Activo tangible depreciable agregado");
                 PrimeFaces.current().executeScript("PF('NuevoDepreciable').hide()");
                 activosFijos.setDetalle_de_activo("");
