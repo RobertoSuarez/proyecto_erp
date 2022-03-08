@@ -21,7 +21,7 @@
                                                  disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}"
                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                  icon="pi pi-plus" 
-                                                 oncomplete="PF('entradaproducto').show()">
+                                                 oncomplete="">
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -52,10 +52,10 @@
                             </p:column>
 
                             <p:column headerText="Proveedor" >
-                                <h:outputText value="#{ListaEntradas.idProveedor}" />
+                                <h:outputText value="#{ListaEntradas.nombreProveedor}" />
                             </p:column>
                             <p:column headerText="Bodega" >
-                                <h:outputText value="#{ListaEntradas.idBodega}" />
+                                <h:outputText value="#{ListaEntradas.nombreBodega}" />
                             </p:column>
 
                             <p:column headerText="Acción" filterStyle="display : none">
