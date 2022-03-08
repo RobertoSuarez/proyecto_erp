@@ -81,7 +81,8 @@
                                                  onclick="PF('rolesData').show()" 
                                                  update="RolesGenerales" 
                                                  actionListener="#{usuarioMB.chargeRols()}"
-                                                 style="position: relative; width: 100%; height: 10%; margin-top: 10px;"/>                                         
+                                                 style="position: relative; width: 100%; height: 10%; margin-top: 10px;"
+                                                 disabled="#{usuarioMB.status}"/>                                         
                             </h:panelGrid>
                             <p:dataTable id="dt_users" value="#{usuarioMB.rolesUser}" var="ListaRolesUsuarios"
                                          size="small" liveResize="true" rowKey="#{ListaRolesUsuarios.id}"
