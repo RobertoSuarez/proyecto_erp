@@ -7,8 +7,8 @@ package com.inventario.models;
 
 import java.io.Serializable;
 
-public class Bodega implements Serializable{
-    
+public class Bodega implements Serializable {
+
     private int cod;
     private String nomBodega;
     private String direccion;
@@ -28,6 +28,11 @@ public class Bodega implements Serializable{
         this.nomCiudad = nomCiudad;
     }
 
+    public Bodega(int cod, String nomBodega) {
+        this.cod = cod;
+        this.nomBodega = nomBodega;
+    }
+
     public int getCod() {
         return cod;
     }
@@ -35,7 +40,6 @@ public class Bodega implements Serializable{
     public void setCod(int cod) {
         this.cod = cod;
     }
-
 
     public String getNomBodega() {
         return nomBodega;
@@ -76,5 +80,5 @@ public class Bodega implements Serializable{
     public void setNomCiudad(String nomCiudad) {
         this.nomCiudad = nomCiudad;
     }
-    
+
 }

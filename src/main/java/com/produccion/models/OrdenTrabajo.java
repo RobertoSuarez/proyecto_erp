@@ -8,6 +8,7 @@ import java.util.Date;
  */
 public class OrdenTrabajo {
 
+    private int codigo_bodega;
     private int codigo_producto;
     private int codigo_orden;
     private int codigo_registro;
@@ -30,6 +31,7 @@ public class OrdenTrabajo {
     private float costoUnitario;
     private float tiempo;
     private String estado;
+    private String nombreBodega;
 
     public OrdenTrabajo() {
     }
@@ -49,9 +51,10 @@ public class OrdenTrabajo {
         this.costoUnitario = costoUnitario;
         this.tiempo = tiempo;
     }
-    public OrdenTrabajo(int codigo_producto,String nombre_producto,int codigo_registro, int codigo_formula, int codigo_proceso, String Descripcion, float cantidad, Date fecha_inicio, Date fecha_fin, float totalMateria, float totalMOD, float totalCIF, float costoTotal, float costoUnitario, float tiempo) {
-        this.codigo_producto=codigo_producto;
-        this.nombre_producto=nombre_producto;
+
+    public OrdenTrabajo(int codigo_producto, String nombre_producto, int codigo_registro, int codigo_formula, int codigo_proceso, String Descripcion, float cantidad, Date fecha_inicio, Date fecha_fin, float totalMateria, float totalMOD, float totalCIF, float costoTotal, float costoUnitario, float tiempo) {
+        this.codigo_producto = codigo_producto;
+        this.nombre_producto = nombre_producto;
         this.codigo_registro = codigo_registro;
         this.codigo_formula = codigo_formula;
         this.codigo_proceso = codigo_proceso;
@@ -66,7 +69,6 @@ public class OrdenTrabajo {
         this.costoUnitario = costoUnitario;
         this.tiempo = tiempo;
     }
-
 
     public OrdenTrabajo(String nombre_proceso, int codigo_proceso) {
         this.nombre_proceso = nombre_proceso;
@@ -269,6 +271,22 @@ public class OrdenTrabajo {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public int getCodigo_bodega() {
+        return codigo_bodega;
+    }
+
+    public void setCodigo_bodega(int codigo_bodega) {
+        this.codigo_bodega = codigo_bodega;
+    }
+
+    public String getNombreBodega() {
+        return nombreBodega;
+    }
+
+    public void setNombreBodega(String nombreBodega) {
+        this.nombreBodega = nombreBodega;
     }
 
 }

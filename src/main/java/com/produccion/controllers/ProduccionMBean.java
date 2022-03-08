@@ -5,6 +5,7 @@
  */
 package com.produccion.controllers;
 
+import com.inventario.models.Bodega;
 import com.produccion.dao.OrdenProduccionDAO;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
@@ -59,6 +60,7 @@ public class ProduccionMBean implements Serializable {
     private List<FormulaProduccion> materiaPrima;
     private List<FormulaMateriales> listaMateriaPrimaAdicional;
     private List<FormulaMateriales> listaMaterialesConfirmados;
+    private List<Bodega> bodega;
     List<ArticuloFormula> listaAdicionales;
     private FormulaMateriales materialesFormula;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -84,6 +86,7 @@ public class ProduccionMBean implements Serializable {
         listaMateriaPrimaAdicional = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
         listaAdicionales = new ArrayList<>();
+        bodega = new ArrayList<>();
     }
 
     @PostConstruct
@@ -91,8 +94,9 @@ public class ProduccionMBean implements Serializable {
         int id = idOrden();
         if (id > 0) {
             ordenTrabajo.setCodigo_orden(id);
-            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(),"P");
+            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(), "P");
             listaCentro = ordenDao.getListaCentro();
+            bodega= ordenDao.getBodega();
         } else {
             try {
                 externalContext.redirect("../produccion/listaOrdenProduccion.xhtml");
@@ -240,6 +244,14 @@ public class ProduccionMBean implements Serializable {
         this.listaCformula = listaCformula;
     }
 
+    public List<Bodega> getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(List<Bodega> bodega) {
+        this.bodega = bodega;
+    }
+
     public List<FormulaProduccion> getMateriaPrima() {
         return materiaPrima;
     }
@@ -326,6 +338,8 @@ public class ProduccionMBean implements Serializable {
             showWarn("Seleccione un centro de costo");
         } else if ("".equals(ordenTrabajo.getDescripcion())) {
             showWarn("Ingrese una descripción");
+        }else if (ordenTrabajo.getCodigo_bodega()<1) {
+            showWarn("Seleccione una Bodega");
         } else if (verificaCampos()) {
             showWarn("Debe de ingresar valores en la materia prima que agrego.");
         } else if (!verificarMateriales()) {
@@ -427,7 +441,7 @@ public class ProduccionMBean implements Serializable {
             showInfo("Orden de producción Finaliza, regrese a las listas de ordenes de trabajo.");
             ordenDao = new OrdenProduccionDAO();
         } else {
-            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(),"P");
+            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(), "P");
             listaCentro = ordenDao.getListaCentro();
         }
     }
