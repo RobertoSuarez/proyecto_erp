@@ -39,6 +39,12 @@ public class FormulaProduccion {
     private String codigoSubcuenta;
     private String nombreCuenta;
 
+    public FormulaProduccion(String nombre, String descripcionProducto, float costo) {
+        this.nombre = nombre;
+        this.descripcionProducto = descripcionProducto;
+        this.costo = costo;
+    }
+
     public FormulaProduccion(String nombre, float costo, int subcuenta, String codigoSubcuenta, String nombreCuenta) {
         this.nombre = nombre;
         this.costo = costo;
@@ -82,7 +88,7 @@ public class FormulaProduccion {
 
     public FormulaProduccion(int codigo_producto, String nombre,
             String categoria, String descripcionProducto,
-            String tipo, float costo, float cantidad, float cantidadMaxima,String unidadMedida) {
+            String tipo, float costo, float cantidad, float cantidadMaxima, String unidadMedida) {
         this.codigo_producto = codigo_producto;
         this.nombre = nombre;
         this.categoria = categoria;

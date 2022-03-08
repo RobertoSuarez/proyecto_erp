@@ -72,6 +72,12 @@ public class ArticuloFormula {
         this.cantidad = cantidad;
     }
 
+    public ArticuloFormula(String nombre, String descripcion, float total) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.total = total;
+    }
+
     public ArticuloFormula() {
     }
 
