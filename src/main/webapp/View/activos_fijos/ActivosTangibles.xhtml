@@ -150,11 +150,11 @@
                                                         oncomplete="PF('EditarDepreciable').show()">  
                                                     </p:commandButton>
 
-
+                                                    <!-- Ojo para ver la Depresiacion por Mes -->
                                                     <p:commandButton 
-                                                        update="ListaMesesDepreciables"
+                                                        update="ListaMesesDepreciables,:ListaMesesDepreciables:tablaD"
                                                         styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"
-
+                                                        actionListener="#{activosFijosMB.ListarMesesDepreciables(depreciable)}"
                                                         icon="pi pi-eye"
                                                         oncomplete="PF('listaDepreciableMes').show()">  
                                                     </p:commandButton>
@@ -278,7 +278,7 @@
                                             minHeight="40" 
                                             height="auto" 
                                             width="60%" 
-                                            showEffect="fade"
+                                            showEffect="false"
                                             responsive="true"
                                             rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                             modal="true" 
@@ -371,29 +371,25 @@
 
                                                         </div>
                                                     </div>
-
+                                                    <!-- SELECCIONAR PROVEEDOR -->
                                                     <p:overlayPanel
                                                         for="proveedor" 
-                                                        dynamic="true" 
-                                                        style="width:600px"
-                                                        widgetVar="moviePicker">
+                                                        dynamic="true"
+                                                        style="width:600px; position: relative">
                                                         <p:dataTable 
-                                                            var="proveedor" 
+                                                            var="proveedor"
                                                             value="#{BuscarMB.listaProveedor}" 
                                                             rows="3"
-                                                            paginator="true"
+                                                            paginator="true" 
                                                             selectionMode="single"
                                                             selection="#{BuscarMB.proveedor}"
                                                             rowKey="#{proveedor.nombre}">
                                                             <p:ajax 
-                                                                event="rowSelect" 
+                                                                event="rowSelect"
                                                                 listener="#{activosFijosMB.onRowSelectDepreciable}" 
                                                                 onsuccess="PF('moviePicker').hide()" 
-                                                                update=":formnuevoDepreciable:panelnuevodepreciable @this"
-
-                                                                />
-
-                                                            <p:column 
+                                                                update=":formnuevoDepreciable:panelnuevodepreciable @this"/>
+                                                            <p:column
                                                                 headerText="Proveedor">
                                                                 <h:outputText 
                                                                     value="#{proveedor.codigo}"/>
@@ -595,43 +591,47 @@
                                     <!-- LISTAR DEPRECIABLES X MES -->
                                     <h:form id="ListaMesesDepreciables">
                                         <p:dialog 
-                                            header="Lista de Depreciación por cada Mes"  
+                                            header="Lista de Depreciación por cada Mes"
+                                            rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                             minHeight="40" 
                                             height="auto"
                                             width="40%" 
                                             showEffect="fade"
                                             modal="true"
                                             widgetVar="listaDepreciableMes">
-                                            
-                                             
                                             <div  style="display: flex;justify-content: center">
-                                              
+
                                                 <p:outputPanel class="ui-fluid">
                                                     <div class="p-field p-col-4">
-                                                  
-                                                       <p:outputLabel 
+
+                                                        <p:outputLabel 
                                                             for="@next" 
                                                             value="Descripción: "/>
                                                         <p:inputText  
                                                             value="#{activosFijosMB.listadepreciable.detalle_de_activo}" />
-                                           
-                                                        </div>
-                                                    <p:dataTable var="ListaMesesDepresiacion" value="#">
+
+                                                    </div>
+                                                    <p:dataTable id="tablaD"
+                                                        var="TablaMesesD" 
+                                                        scrollable="true"
+                                                        scrollHeight="250"
+                                                                 value="#{activosFijosMB.listamesesD}">
                                                         <p:column headerText="Mes">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{TablaMesesD.depreciacion_meses}" />
                                                         </p:column>
 
                                                         <p:column headerText="Depresiación">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{TablaMesesD.porcentaje_depreciacion}" />
                                                         </p:column>
 
                                                         <p:column headerText="Saldo">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{TablaMesesD.saldo_depresiacion}" />
                                                         </p:column>
 
                                                     </p:dataTable>
 
                                                 </p:outputPanel>
+                                                
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
                                                 <div > 
                                                     <f:facet name="footer">
@@ -945,8 +945,7 @@
                                                         <p:overlayPanel
                                                             for="proveedor" 
                                                             dynamic="true" 
-                                                            style="width:600px"
-                                                            widgetVar="moviePicker">
+                                                            style="width:600px; position: relative">
                                                             <p:dataTable 
                                                                 var="proveedor" 
                                                                 value="#{BuscarMB.listaProveedor}" 
