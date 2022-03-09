@@ -18,10 +18,20 @@ public class ProductoReport implements Serializable{
     
     int cantidad;
     
-    int costo;
+    double costo;
     
-    int total;
+    double total;
 
+    public ProductoReport(String codigo, String producto, int cantidad, double costo, double total) {
+        this.codigo = codigo;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.costo = costo;
+        this.total = total;
+    }
+
+    
+    
     public ProductoReport(String codigo, String producto, int cantidad, int costo, int total) {
         this.codigo = codigo;
         this.producto = producto;
@@ -58,19 +68,19 @@ public class ProductoReport implements Serializable{
         this.cantidad = cantidad;
     }
 
-    public int getCosto() {
+    public double getCosto() {
         return costo;
     }
 
-    public void setCosto(int costo) {
+    public void setCosto(double costo) {
         this.costo = costo;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         this.total = total;
     }
     
