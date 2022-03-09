@@ -91,7 +91,8 @@ public class ProduccionMBean implements Serializable {
         int id = idOrden();
         if (id > 0) {
             ordenTrabajo.setCodigo_orden(id);
-            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(),"P");
+            ordenTrabajo.setCodigo_bodega(ordenDao.bodega(ordenTrabajo.getCodigo_orden()));
+            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(), "P");
             listaCentro = ordenDao.getListaCentro();
         } else {
             try {
@@ -375,6 +376,17 @@ public class ProduccionMBean implements Serializable {
                                     materiales += adicionales.getCantidad() * adicionales.getCosto();
                                     ordenDao.extraccionMateriales(adicionales.getId(), adicionales.getCantidad());
                                 }
+                                ordenTrabajo.setCodigo_bodega(ordenDao.bodega(ordenTrabajo.getCodigo_orden()));
+//                                ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
+                                ordenDao.entradaInventario("PR-" + ordenTrabajo.getCodigo_orden(), ordenTrabajo.getFecha_fin(), ordenTrabajo.getCodigo_bodega());
+                                //productos ingreso
+                                listaProducto = new ArrayList<>();
+                                int identrada;
+                                identrada = ordenDao.idEntrada("PR-" + ordenTrabajo.getCodigo_orden());
+                                listaProducto = ordenDao.getInventario(ordenTrabajo.getCodigo_orden());
+                                for (OrdenTrabajo entrada : listaProducto) {
+                                    ordenDao.entradaInventarioMateriales(entrada.getCodigo_producto(), identrada, entrada.getCantidad(), entrada.getCostoUnitario());
+                                }
                                 if (ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales) < 1) {
                                     ordenDao.cancelarOrdenProduccion(ordenTrabajo.getCodigo_orden());
                                     ordenDao.updateRegistro(ordenTrabajo.getCodigo_orden());
@@ -385,7 +397,6 @@ public class ProduccionMBean implements Serializable {
                             }
                         }
                     }
-                    ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
                     showInfo("Orden de producción registrada");
                     vaciar();
                 } else {
@@ -427,7 +438,7 @@ public class ProduccionMBean implements Serializable {
             showInfo("Orden de producción Finaliza, regrese a las listas de ordenes de trabajo.");
             ordenDao = new OrdenProduccionDAO();
         } else {
-            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(),"P");
+            listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(), "P");
             listaCentro = ordenDao.getListaCentro();
         }
     }

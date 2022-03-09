@@ -36,7 +36,6 @@ public class RolController implements Serializable {
     private List<Rol> lstOfRoles;
     private Rol rolSeleccionado;
     private List<Modulo> lstOfModules;
-    private String[] selectedModules;
     private List<String> modules;
     String nameRol="";
     String descriptionRol="";
@@ -104,14 +103,6 @@ public class RolController implements Serializable {
 
     public void setLstOfModules(List<Modulo> lstOfModules) {
         this.lstOfModules = lstOfModules;
-    }
-
-    public String[] getSelectedModules() {
-        return selectedModules;
-    }
-
-    public void setSelectedModules(String[] selectedModules) {
-        this.selectedModules = selectedModules;
     }
 
     public List<String> getModules() {

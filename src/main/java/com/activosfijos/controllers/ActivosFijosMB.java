@@ -144,6 +144,7 @@ public class ActivosFijosMB implements Serializable {
                
                 tangibledao.registrarTangibleDepreciable(activosFijos, activodepreciable);
                 System.out.println("Registrado correctamente");
+                //Aqui se llama a la funcion de depreciable
                 tangibledao.actualizarcuotadepresiacion();
                 mensajeDeExito("Activo tangible depreciable agregado");
                 PrimeFaces.current().executeScript("PF('NuevoDepreciable').hide()");
