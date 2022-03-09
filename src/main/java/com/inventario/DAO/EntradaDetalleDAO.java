@@ -115,7 +115,7 @@ public class EntradaDetalleDAO {
         return 0;
     }
 
-    public void RegistrarProductos(int idVenta, int idProducto, double cantidad, double precio) {
+    public void RegistrarProductos(int idVenta, int idProducto, double cantidad, double precio, double iva, double ice) {
         try {
             int idDetalle = 1;
             ResultSet rs = null;
@@ -130,8 +130,8 @@ public class EntradaDetalleDAO {
             }
 
             //insertar detalle venta
-            query = "insert into public.entrada_detalle(id_entrada_detalle, id_entrada, cod_articulo, cant, costo) values(" + idDetalle + "," + idVenta + ","
-                    + idProducto + "," + cantidad + "," + precio + ")";
+            query = "insert into public.entrada_detalle(id_entrada_detalle, id_entrada, cod_articulo, cant, costo, iva, ice) values(" + idDetalle + "," + idVenta + ","
+                    + idProducto + "," + cantidad + "," + precio +", " + iva + ", " + ice + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 

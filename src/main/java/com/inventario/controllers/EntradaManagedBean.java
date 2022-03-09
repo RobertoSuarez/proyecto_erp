@@ -469,12 +469,15 @@ public class EntradaManagedBean implements Serializable {
                             int codProd = this.listaDetalle.get(listSize).getArticuloInventario().getId();
                             double qty = this.listaDetalle.get(listSize).getCant();
 
+                            
                             double price = this.listaDetalle.get(listSize).getCosto();
+                            double iva = this.listaDetalle.get(listSize).getIva() * this.listaDetalle.get(listSize).getCant();
+                            double ice = this.listaDetalle.get(listSize).getIce();
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
                             System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
                   //          daoDetail.GuardarEntrada(this.listaDetalle);
-                            daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price);
+                            daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice);
                             listSize += 1;
                         }
 
