@@ -211,6 +211,7 @@ public class SolicitudOrdenMB implements Serializable {
         ordenSolicitud = new productosOrden();
         listaProductOrden = solicitudDAO.getAticulosOrden();
         aleatorioIdenti();
+        solicitudOrden.setFecha_orden(new Date());
     }
 
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
