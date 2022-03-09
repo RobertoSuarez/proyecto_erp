@@ -63,6 +63,7 @@ public class TangibleDAO {
         return true;
     }
 
+    //Operacion para la depresiacion
     public int actualizarcuotadepresiacion() {
             Conexion conexion = new Conexion();
         try {
