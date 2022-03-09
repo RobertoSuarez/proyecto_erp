@@ -278,7 +278,7 @@
                                             minHeight="40" 
                                             height="auto" 
                                             width="60%" 
-                                            showEffect="fade"
+                                            showEffect="false"
                                             responsive="true"
                                             rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                             modal="true" 
@@ -371,29 +371,25 @@
 
                                                         </div>
                                                     </div>
-
+                                                    <!-- SELECCIONAR PROVEEDOR -->
                                                     <p:overlayPanel
                                                         for="proveedor" 
-                                                        dynamic="true" 
-                                                        style="width:600px"
-                                                        widgetVar="moviePicker">
+                                                        dynamic="true"
+                                                        style="width:600px; position: relative">
                                                         <p:dataTable 
-                                                            var="proveedor" 
+                                                            var="proveedor"
                                                             value="#{BuscarMB.listaProveedor}" 
                                                             rows="3"
-                                                            paginator="true"
+                                                            paginator="true" 
                                                             selectionMode="single"
                                                             selection="#{BuscarMB.proveedor}"
                                                             rowKey="#{proveedor.nombre}">
                                                             <p:ajax 
-                                                                event="rowSelect" 
+                                                                event="rowSelect"
                                                                 listener="#{activosFijosMB.onRowSelectDepreciable}" 
                                                                 onsuccess="PF('moviePicker').hide()" 
-                                                                update=":formnuevoDepreciable:panelnuevodepreciable @this"
-
-                                                                />
-
-                                                            <p:column 
+                                                                update=":formnuevoDepreciable:panelnuevodepreciable @this"/>
+                                                            <p:column
                                                                 headerText="Proveedor">
                                                                 <h:outputText 
                                                                     value="#{proveedor.codigo}"/>
