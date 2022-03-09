@@ -60,9 +60,9 @@ public class EntradaDetalleDAO {
                 detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
                 detalle.setIdEntrada(resultSet.getInt("id_entrada"));
                 detalle.setCant(resultSet.getInt("cant"));
-                detalle.setCosto(resultSet.getInt("costo"));
-                detalle.setIva(resultSet.getInt("iva"));
-                detalle.setIce(resultSet.getInt("ice"));
+                detalle.setCosto(resultSet.getDouble("costo"));
+                detalle.setIva(resultSet.getDouble("iva"));
+                detalle.setIce(resultSet.getDouble("ice"));
                 detalle.setNombreCategoria(resultSet.getString("descripcion"));
                 detalle.setNombreProducto(resultSet.getString("nombre"));
                 ListEntrada.add(detalle);

@@ -96,7 +96,7 @@ public class EntradaManagedBean implements Serializable {
     private int codigoProducto;
     private String nombreProducto;
     private int precioProducto;
-    private int subTotalEntrada;
+    private double subTotalEntrada;
 
     private EntradaDetalleInventario detalleEntrada;
     private EntradaDetalleDAO detalleDAO;
@@ -241,16 +241,16 @@ public class EntradaManagedBean implements Serializable {
             detalleEntradas = dao.getEntradasDetalle(idEntrada);
 
             List<ProductoReport> dataset = new ArrayList<>();
-            float subtotal = 0.0f;
-            float ice = 0.0f;
-            float iva = 0.0f;
-            float descuento = 0.0f;
+            double subtotal = 0.0f;
+            double ice = 0.0f;
+            double iva = 0.0f;
+            double descuento = 0.0f;
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
-                    subtotal += Float.valueOf(inv.getCosto()) * Float.valueOf(inv.getCant());
-                    ice += Float.valueOf(inv.getIce());
-                    iva += (float) inv.getIva();
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
+                    subtotal += inv.getCosto() * (double) inv.getCant();
+                    ice += inv.getIce();
+                    iva += inv.getIva();
 
                 }
             }
@@ -689,7 +689,7 @@ public class EntradaManagedBean implements Serializable {
         this.precioProducto = precioProducto;
     }
 
-    public int getSubTotalEntrada() {
+    public double getSubTotalEntrada() {
         return subTotalEntrada;
     }
 
