@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../WEB-INF/InicioTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form id="ModuloGeneral" style="width: 100%;">
+            <ui:include src="./menuSeguridad.xhtml" />
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <br/><br/><br/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <div class="products-table-header" style="text-align: center">
+                                <span style="font-weight: bold; font-size: 25px;" > Modulos </span>
+                            </div>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <f:facet name="header">
+                        <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
+                                         process="@this"
+                                         onclick="PF('ModuleData').show()"
+                                         update="ModuleDATA">
+                        </p:commandButton>
+                    </f:facet>
+                    <br/>
+                    <p:dataTable id="dt_rols" value="#{ModuleMB.lstModuleObject}" var="ListaModulos"
+                                 size="small" liveResize="true" rowKey="#{ListaModulos.idModule}"
+                                 selectionMode="single"
+                                 reflow="true">
+                        <p:column headerText="Codigo" width="5%" style="font-size: 17px">
+                            <h:outputText value="#{ListaModulos.idModule}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre del modulo" style="font-size: 17px" width="20%">
+                            <h:outputText value="#{ListaModulos.nameModule}"/>
+                        </p:column>
+
+                        <p:column headerText="Descripcion" style="font-size: 17px" width="50%">
+                            <h:outputText value="#{ListaModulos.descriptionModule}"/>
+                        </p:column>
+
+                        <p:column headerText="Estado" style="font-size: 17px" width="10%">
+                            <h:outputText value="#{ListaModulos.enabled}"/>
+                        </p:column>
+
+                        <p:column exportable="false" width="4%">
+                            <p:commandButton icon="pi pi-pencil"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="@this"
+                                             onclick="PF('ModuleDataEdit').show()"
+                                             update="ModuleDATAedit"
+                                             actionListener="#{ModuleMB.prepareEditModuleData(ListaModulos)}">
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-trash"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="@this"
+                                             update="ModuloGeneral"
+                                             actionListener="#{ModuleMB.deleteModuleData(ListaModulos)}">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+        </h:form>
+        <p:dialog id="ModuloNuevo" header="Informacion del modulo" widgetVar="ModuleData"
+                  height="70%" width="30%" showEffect="fade">
+            <h:form id="ModuleDATA">
+                <p:panelGrid columns="1" style="width: 100%">
+                    <p:outputLabel value="Nombre del modulo"/>
+                    <p:inputText required="true" value="#{ModuleMB.moduleNew.nameModule}"/>
+                    <p:outputLabel value="Detalle del modulo"/>
+                    <p:inputTextarea required="true" value="#{ModuleMB.moduleNew.descriptionModule}"/>
+                </p:panelGrid>
+                <p:commandButton icon="pi pi-plus"                                                         
+                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                 process="@this"
+                                 onclick="PF('ModuleData').hide()"
+                                 update="ModuloGeneral"
+                                 value="Agregar Modulo"
+                                 actionListener="#{ModuleMB.insertModuleData()}">
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="EdicionModulo" header="Editar datos del modulo" widgetVar="ModuleDataEdit"
+                  height="70%" width="30%" showEffect="fade">
+            <h:form id="ModuleDATAedit">
+                <p:panel header="Modulos" style="text-align: left; width: 100%; float: left">
+                    <p:panelGrid columns="1" style="width: 100%">
+                        <p:outputLabel value="Codigo del modulo"/>
+                        <p:inputText required="true" value="#{ModuleMB.moduleEditable.idModule}" disabled="true"/>
+                        <p:outputLabel value="Nombre del modulo"/>
+                        <p:inputText required="true" value="#{ModuleMB.moduleEditable.nameModule}"/>
+                        <p:outputLabel value="Detalle del modulo"/>
+                        <p:inputTextarea required="true" value="#{ModuleMB.moduleEditable.descriptionModule}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton icon="pi pi-pencil"                                                         
+                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                 process="@this"
+                                 value="Editar"
+                                 actionListener="#{ModuleMB.editModuleData()}"
+                                 onclick="PF('ModuleDataEdit').hide()"
+                                 update="ModuloGeneral">
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
