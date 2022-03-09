@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="form" style="padding-left: 30px; padding-right: 30px">
+                    <p:growl id="messages" showDetail="true"/>
+                    <h1 style="text-align: center; color: black; margin-top: 4%">Listado de Entradas</h1>
+                    <p:dataTable id="dt-facturas" value="#{entradaProductosMB.listaEntrada}" 
+                                 var="factura"  
+                                 reflow="true" rows="5" paginator="true"
+                                 resizableColumns="true" paginatorPosition="bottom">
+
+                        <p:column headerText="N° Comprobante" >
+                            <h:outputText value="#{factura.num_comprobante}"/>
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{factura.fecha}"/>
+                        </p:column>
+                        <p:column headerText="Proveedor">
+                            <h:outputText value="#{factura.nombre_proveedor}"/>
+                        </p:column>
+                        <p:column headerText="Bodega" >
+                            <h:outputText value="#{factura.nombreBodega}"/>
+                        </p:column>
+                        <p:column headerText="Acciones">
+                            <p:commandButton icon="pi pi-eye" update=":form:outputvisu"
+                                             oncomplete="PF('eyeEntrada').show()"
+                                             styleClass="rounded-button ui-button-secondary ui-button-flat"
+                                             action="#{entradaProductosMB.cargarDatos(factura)}"
+                                             process="@this">
+
+                            </p:commandButton>
+                        </p:column>  
+
+                    </p:dataTable> 
+
+                    <!-- Dialogo Visualizar-->
+                    <p:dialog  header="Detalle Entrada" showEffect="fade" modal="true"
+                               widgetVar="eyeEntrada" height="350"
+                               width="70%" closable="false">
+                        <p:outputPanel id="outputvisu" class="ui-fluid">
+
+                            <!-- CAMPOS DEL DIALOG-->
+                            <div class="p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="proveedor">Proveedor * : </p:outputLabel>
+                                    <p:inputText type="button" id="proveedor"
+                                                 value="#{entradaProductosMB.entradaProducto.nombre_proveedor}" 
+                                                 disabled="true"/>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="nComprobante">No. Comprobante :</p:outputLabel>
+                                    <p:inputText id="nComprobante" value="#{entradaProductosMB.entradaProducto.num_comprobante}" 
+                                                 disabled="true"/>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <label for="fecha" >Fecha Emision:</label>
+                                    <p:inputText value="#{entradaProductosMB.entradaProducto.fecha}"
+                                                 disabled="true"/>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="p-formgrid p-grid">
+                                <div class="p-field p-col-3">
+                                    <label for="bodega" >Bodega:</label>
+                                    <p:inputText value="#{entradaProductosMB.entradaProducto.nombreBodega}"
+                                                 disabled="true"/>
+                                </div>
+                            </div>
+
+
+
+                            <!-- FINAL CAMPOS DEL DIALOG-->
+
+                            <!-- TABLA DE DIALOG -->
+
+
+                            <p:dataTable id="dt-detalle"  
+                                         var="detalle" value="#{entradaProductosMB.listaDetalle}"
+                                         editable="true"   editMode="cell" class="p-mt-3">
+
+                                <p:ajax event="cellEdit" process="@this" update=":form:dt-detalle"/>
+                                <f:facet name="header">
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold">DETALLE</span>
+                                    </div>
+                                </f:facet>
+                                <p:column headerText="Producto">
+                                    <h:outputText value="#{detalle.nombre_producto}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <h:outputText value="#{detalle.detalleProduto}"/>
+                                </p:column>
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{detalle.cantidad}"/>
+                                </p:column>
+                                <p:column headerText="Costo">
+                                    <h:outputText value="#{detalle.costo}"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:outputPanel>
+                        <f:facet name="footer">
+
+                            <p:commandButton value="Cerrar" styleClass="ui-button-danger" 
+                                             onclick="PF('eyeEntrada').hide()"
+                                             process="@this"
+                                             actionListener="#{entradaProductosMB.reset()}"/>
+                            <p:commandButton value="Facturas de Entrada" icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" 
+                                             action="/View/inventario/entradaProductoLista" />
+                        </f:facet>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
