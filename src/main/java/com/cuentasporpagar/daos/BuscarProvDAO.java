@@ -54,7 +54,8 @@ public class BuscarProvDAO {
     public List<Proveedor> llenar() {
         if (conexion.isEstado()) {
             try {
-                String sentencia = "select p.idproveedor, p.codigo, p.nombre, p.ruc, c.cantdiasvencidos "
+                String sentencia = "select p.idproveedor, p.codigo, p.nombre, p.ruc,"
+                        + " (c.cantdiasvencidos + c.diasneto) as cantdiasvencidos "
                         +" from proveedor p inner join condiciones c on " +
                         "(c.idproveedor = p.idproveedor) where p.estado = 'true';";
                 result = conexion.ejecutarSql(sentencia);

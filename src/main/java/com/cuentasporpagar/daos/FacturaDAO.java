@@ -104,7 +104,7 @@ public class FacturaDAO {
         listaFacturas.clear();
         if (conexion.isEstado()) {
             try {
-                String sentencia = "select nombre from subcuenta where tiposaldo = 'Deudor';";
+                String sentencia = "select * from subcuenta where idcuenta = 49;";
                 result = conexion.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaFacturas.add(new Factura(result.getString("nombre")));
@@ -182,15 +182,26 @@ public class FacturaDAO {
     }
 
     //Insertar Detalle
-    public void insertdetalle(List<Factura> selectedFactura, Factura factura) {
+    public void insertdetalle(List<Factura> selectedFactura, Factura factura,int op) {
         if (conexion.isEstado()) {
             try {
-                for (int i = 0; i < selectedFactura.size(); i++) {
+                if(op==1){
+                    for (int i = 0; i < selectedFactura.size(); i++) {
                     String cadena = "SELECT public.insertdetallefac('"
                             + factura.getNfactura() + "',"
                             + selectedFactura.get(i).getImporteD() + ", '"
                             + selectedFactura.get(i).getDetalle()
                             + "','Inventario de Suministro y Materiales')";
+                    conexion.Ejecutar2(cadena);
+                    System.out.println(cadena);
+                }
+                }
+                for (int i = 0; i < selectedFactura.size(); i++) {
+                    String cadena = "SELECT public.insertdetallefac('"
+                            + factura.getNfactura() + "',"
+                            + selectedFactura.get(i).getImporteD() + ", '"
+                            + selectedFactura.get(i).getDetalle() + "','"
+                            + selectedFactura.get(i).getDetalle() + "')";
                     conexion.Ejecutar2(cadena);
                     System.out.println(cadena);
                 }
@@ -203,13 +214,17 @@ public class FacturaDAO {
     }
 
     //asiento contable
-    public void insertasiento(List<Factura> selectedFactura, Factura factura) {
-        if (conexion.isEstado()) {
-            try {
+     //asiento contable
+    public void insertasiento(List<Factura> selectedFactura, Factura factura, int op, String dato) {
+        if (conexion.isEstado())
+        {
+            try
+            {
                 int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
                 result = conexion.ejecutarSql(cadena);
-                while (result.next()) {
+                while (result.next())
+                {
                     iddiario = result.getInt("iddiario");
                 }
                 //JSON asiento contable
@@ -221,29 +236,59 @@ public class FacturaDAO {
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
                 //JSON un solo movimiento
-                sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
+
+                if(op == 1){
+                    sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
                         + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
                         + "Inventario de Suministro y Materiales\"},"
                         + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
                         + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
                 System.out.println(sentencia1);
+                }
+                else if (selectedFactura.size() == 1)
+                {
+                    sentencia1 = "[{\"idSubcuenta\":\""
+                            + Listaids(selectedFactura.get(0).getDetalle()) + "\",\"debe\":\""
+                            + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                            + selectedFactura.get(0).getDetalle() + "\"},"
+                            + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\""+dato+"\"}]";
+                    System.out.println(sentencia1);
+                } else
+                {
+                    sentencia1 = "[";
+                    for (int i = 0; i < selectedFactura.size(); i++)
+                    {
+                        sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getDetalle()) + "\",\"debe\":\""
+                                + selectedFactura.get(i).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                                + selectedFactura.get(i).getDetalle() + "\"},";
+                        System.out.println(sentencia1);
+                    }
+                    sentencia1 += "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
+                            + factura.getImporte() + "\",\"tipoMovimiento\":\""+dato+"\"}]";
+                }
                 intJson(sentencia, sentencia1);
                 updateAsiento(factura.getNfactura());
-            } catch (SQLException ex) {
+            } catch (SQLException ex)
+            {
                 System.out.println(ex.getMessage() + " error en conectarse");
-            } finally {
+            } finally
+            {
                 conexion.desconectar();
             }
         }
     }
 
     public void revasiento(List<Factura> selectedFactura, Factura factura) {
-        if (conexion.isEstado()) {
-            try {
+        if (conexion.isEstado())
+        {
+            try
+            {
                 int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por pagar'";
                 result = conexion.ejecutarSql(cadena);
-                while (result.next()) {
+                while (result.next())
+                {
                     iddiario = result.getInt("iddiario");
                 }
 
@@ -253,16 +298,37 @@ public class FacturaDAO {
                         + factura.getDescripcion() + "\",\"fechaCreacion\": \""
                         + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
-                sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\"0\",\"haber\":\""
-                        + factura.getImporte() + "\",\"tipoMovimiento\":\""
-                        + "Inventario de Suministro y Materiales\"},"
-                        + "{\"idSubcuenta\":\"28\",\"debe\":\""
-                        + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de compra\"}]";
+                System.out.println(sentencia);
+                if (selectedFactura.size() == 1)
+                {
+                    sentencia1 = "[{\"idSubcuenta\":\""
+                            + Listaids(selectedFactura.get(0).getCuenta()) + "\",\"debe\":\"0\",\"haber\":\""
+                            + selectedFactura.get(0).getImporteD() + "\",\"tipoMovimiento\":\""
+                            + selectedFactura.get(0).getDetalle() + "\"},"
+                            + "{\"idSubcuenta\":\"28\",\"debe\":\""
+                            + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de compra\"}]";
+                    System.out.println(sentencia1);
+                } //JSON mas de un movimiento
+                else
+                {
+                    sentencia1 = "[";
+                    for (int i = 0; i < selectedFactura.size(); i++)
+                    {
+                        sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getCuenta()) + "\",\"debe\":\"0\",\"haber\":\""
+                                + selectedFactura.get(i).getImporteD() + "\",\"tipoMovimiento\":\""
+                                + selectedFactura.get(i).getDetalle() + "\"},";
+                        System.out.println(sentencia1);
+                    }
+                    sentencia1 += "{\"idSubcuenta\":\"28\",\"debe\":\""
+                            + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de compra\"}]";
+                }
                 intJson(sentencia, sentencia1);
                 dhabilitar(factura.getNfactura(), 0);
-            } catch (SQLException ex) {
+            } catch (SQLException ex)
+            {
                 System.out.println(ex.getMessage() + " error en conectarse");
-            } finally {
+            } finally
+            {
                 conexion.desconectar();
             }
         }
