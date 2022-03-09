@@ -5,7 +5,6 @@
  */
 package com.produccion.controllers;
 
-import com.inventario.models.Bodega;
 import com.produccion.dao.OrdenProduccionDAO;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
@@ -60,7 +59,6 @@ public class ProduccionMBean implements Serializable {
     private List<FormulaProduccion> materiaPrima;
     private List<FormulaMateriales> listaMateriaPrimaAdicional;
     private List<FormulaMateriales> listaMaterialesConfirmados;
-    private List<Bodega> bodega;
     List<ArticuloFormula> listaAdicionales;
     private FormulaMateriales materialesFormula;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -86,7 +84,6 @@ public class ProduccionMBean implements Serializable {
         listaMateriaPrimaAdicional = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
         listaAdicionales = new ArrayList<>();
-        bodega = new ArrayList<>();
     }
 
     @PostConstruct
@@ -94,9 +91,9 @@ public class ProduccionMBean implements Serializable {
         int id = idOrden();
         if (id > 0) {
             ordenTrabajo.setCodigo_orden(id);
+            ordenTrabajo.setCodigo_bodega(ordenDao.bodega(ordenTrabajo.getCodigo_orden()));
             listaProducto = ordenDao.getListaProducto(ordenTrabajo.getCodigo_orden(), "P");
             listaCentro = ordenDao.getListaCentro();
-            bodega= ordenDao.getBodega();
         } else {
             try {
                 externalContext.redirect("../produccion/listaOrdenProduccion.xhtml");
@@ -244,14 +241,6 @@ public class ProduccionMBean implements Serializable {
         this.listaCformula = listaCformula;
     }
 
-    public List<Bodega> getBodega() {
-        return bodega;
-    }
-
-    public void setBodega(List<Bodega> bodega) {
-        this.bodega = bodega;
-    }
-
     public List<FormulaProduccion> getMateriaPrima() {
         return materiaPrima;
     }
@@ -338,8 +327,6 @@ public class ProduccionMBean implements Serializable {
             showWarn("Seleccione un centro de costo");
         } else if ("".equals(ordenTrabajo.getDescripcion())) {
             showWarn("Ingrese una descripción");
-        }else if (ordenTrabajo.getCodigo_bodega()<1) {
-            showWarn("Seleccione una Bodega");
         } else if (verificaCampos()) {
             showWarn("Debe de ingresar valores en la materia prima que agrego.");
         } else if (!verificarMateriales()) {
@@ -389,6 +376,17 @@ public class ProduccionMBean implements Serializable {
                                     materiales += adicionales.getCantidad() * adicionales.getCosto();
                                     ordenDao.extraccionMateriales(adicionales.getId(), adicionales.getCantidad());
                                 }
+                                ordenTrabajo.setCodigo_bodega(ordenDao.bodega(ordenTrabajo.getCodigo_orden()));
+//                                ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
+                                ordenDao.entradaInventario("PR-" + ordenTrabajo.getCodigo_orden(), ordenTrabajo.getFecha_fin(), ordenTrabajo.getCodigo_bodega());
+                                //productos ingreso
+                                listaProducto = new ArrayList<>();
+                                int identrada;
+                                identrada = ordenDao.idEntrada("PR-" + ordenTrabajo.getCodigo_orden());
+                                listaProducto = ordenDao.getInventario(ordenTrabajo.getCodigo_orden());
+                                for (OrdenTrabajo entrada : listaProducto) {
+                                    ordenDao.entradaInventarioMateriales(entrada.getCodigo_producto(), identrada, entrada.getCantidad(), entrada.getCostoUnitario());
+                                }
                                 if (ordenDao.insertAsiento(ordenAsiento, listaMovimientos, directos, indirectos, materiales) < 1) {
                                     ordenDao.cancelarOrdenProduccion(ordenTrabajo.getCodigo_orden());
                                     ordenDao.updateRegistro(ordenTrabajo.getCodigo_orden());
@@ -399,7 +397,6 @@ public class ProduccionMBean implements Serializable {
                             }
                         }
                     }
-                    ordenDao.ingresoMateriales(ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCantidad());
                     showInfo("Orden de producción registrada");
                     vaciar();
                 } else {

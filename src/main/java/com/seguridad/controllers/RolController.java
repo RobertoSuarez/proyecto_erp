@@ -9,6 +9,8 @@ import com.seguridad.dao.UsuarioDAO;
 import com.seguridad.dao.RolDAO;
 import com.seguridad.models.Roles;
 import com.seguridad.models.Rol;
+import com.seguridad.models.Modulo;
+import com.seguridad.dao.ModuleDAO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +29,22 @@ public class RolController implements Serializable {
 
     private RolDAO rolDao; 
     private UsuarioDAO usuarioDAO;
+    private ModuleDAO moduleDAO;
     FacesContext context = FacesContext.getCurrentInstance();
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     private List<Rol> lstOfRoles;
     private Rol rolSeleccionado;
+    private List<Modulo> lstOfModules;
+    private List<String> modules;
+    String nameRol="";
+    String descriptionRol="";
     
     public RolController() {
         usuarioDAO = new UsuarioDAO();
         rolSeleccionado = new Rol();
         rolDao = new RolDAO();
+        moduleDAO = new ModuleDAO();
         this.lstOfRoles = new ArrayList<>();
         this.lstOfRoles = rolDao.GetRols();
     }
@@ -47,6 +55,14 @@ public class RolController implements Serializable {
         } else {
             return "false";
         }
+    }
+    
+    public void chargeDataModulesAndRol(Rol rolSeleccionado){
+        this.lstOfModules = new ArrayList<>();
+        modules= new ArrayList<>();
+        nameRol=rolSeleccionado.getNombre();
+        descriptionRol=rolSeleccionado.getDetalle();
+        this.lstOfModules = this.moduleDAO.invokeAllModules();
     }
 
     public List<Rol> getListOfRoles() {
@@ -64,7 +80,37 @@ public class RolController implements Serializable {
     public void setRolSeleccionado(Rol rolSeleccionado) {
         this.rolSeleccionado = rolSeleccionado;
     }
-    
-    
+
+    public String getNameRol() {
+        return nameRol;
+    }
+
+    public void setNameRol(String nameRol) {
+        this.nameRol = nameRol;
+    }
+
+    public String getDescriptionRol() {
+        return descriptionRol;
+    }
+
+    public void setDescriptionRol(String descriptionRol) {
+        this.descriptionRol = descriptionRol;
+    }
+
+    public List<Modulo> getLstOfModules() {
+        return lstOfModules;
+    }
+
+    public void setLstOfModules(List<Modulo> lstOfModules) {
+        this.lstOfModules = lstOfModules;
+    }
+
+    public List<String> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<String> modules) {
+        this.modules = modules;
+    }
 
 }

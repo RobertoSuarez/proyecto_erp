@@ -80,7 +80,7 @@
                                                 </p:selectOneMenu>
                                             </div>
 
-                                            <div class="p-field p-col-12 p-md-2">
+                                            <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Centro costo" for="@next"/>
                                                 <p:selectOneMenu id="costo" value="#{produccionMBean.ordenTrabajo.codigo_centro_trabajo}" editable="false" 
                                                                  disabled="#">
@@ -88,16 +88,6 @@
                                                     <f:selectItems value="#{produccionMBean.listaCentro}" var="centro" 
                                                                    itemLabel="#{centro.nombre}" 
                                                                    itemValue="#{centro.codigo_centroc}"></f:selectItems>
-                                                </p:selectOneMenu>
-                                            </div>
-                                            <div class="p-field p-col-12 p-md-2">
-                                                <p:outputLabel value="Bodega" for="@next"/>
-                                                <p:selectOneMenu id="bodega" value="#{produccionMBean.ordenTrabajo.codigo_bodega}" editable="false" 
-                                                                 disabled="#">
-                                                    <f:selectItem itemLabel="Seleccione una Bodega" itemValue="" noSelectionOption="true"/>
-                                                    <f:selectItems value="#{produccionMBean.bodega}" var="centro" 
-                                                                   itemLabel="#{centro.nomBodega}" 
-                                                                   itemValue="#{centro.cod}"></f:selectItems>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">

@@ -6,6 +6,7 @@
 package com.produccion.dao;
 
 import com.global.config.Conexion;
+import com.inventario.models.Bodega;
 import com.produccion.models.SolicitudOrden;
 import com.produccion.models.productosOrden;
 import java.sql.ResultSet;
@@ -33,12 +34,7 @@ public class solicitudOrdenDAO {
                     + "	codigo_orden, cantidad, unidad_medida, estado, \"Codigo_producto\")\n"
                     + "	VALUES (" + producto.getCodigoOrden() + "," + producto.getCantidad() + ",'" + producto.getUnidadMedida() + "','"
                     + producto.getEstado() + "', " + producto.getCodigoProducto() + ");";
-            if (conexion.insertar(sentenciaSql) > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
-
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {
@@ -48,15 +44,10 @@ public class solicitudOrdenDAO {
 
     public int insertarSolicitud(SolicitudOrden orden) {
         try {
-            sentenciaSql = "INSERT INTO public.orden_produccion(fecha_orden, fecha_fin, descripcion, estado, codigo_secundario)\n"
+            sentenciaSql = "INSERT INTO public.orden_produccion(fecha_orden, fecha_fin, descripcion, estado, codigo_secundario, codido_bodega)\n"
                     + "	VALUES ('" + orden.getFecha_orden() + "', '" + orden.getFecha_fin() + "', "
-                    + "'" + orden.getDescripcion() + "', '" + orden.getEstado()+ "', '" + orden.getCodigoSecundario()+ "');";
-            if (conexion.insertar(sentenciaSql) > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
-
+                    + "'" + orden.getDescripcion() + "', '" + orden.getEstado() + "', '" + orden.getCodigoSecundario() + "'," + orden.getCodigo_bodega() + ");";
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {
@@ -103,4 +94,21 @@ public class solicitudOrdenDAO {
         }
     }
 
+    public List<Bodega> getBodega() {
+        List<Bodega> bodega = new ArrayList<>();
+        sentenciaSql = String.format("select * from bodega;");
+        try {
+            //enviamos la sentencia
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                bodega.add(new Bodega(resultSet.getInt("cod"),
+                        resultSet.getString("nombre_bodega")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return bodega;
+    }
 }

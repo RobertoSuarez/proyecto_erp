@@ -1,7 +1,6 @@
 package com.produccion.dao;
 
 import com.global.config.Conexion;
-import com.inventario.models.Bodega;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
 import com.produccion.models.FormulaMateriales;
@@ -14,6 +13,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OrdenProduccionDAO {
@@ -122,23 +122,6 @@ public class OrdenProduccionDAO {
         }
         return centro;
     }
-    public List<Bodega> getBodega() {
-        List<Bodega> bodega = new ArrayList<>();
-        sentenciaSql = String.format("select * from bodega;");
-        try {
-            //enviamos la sentencia
-            resultSet = conexion.ejecutarSql(sentenciaSql);
-            //Llena la lista de los datos
-            while (resultSet.next()) {
-                bodega.add(new Bodega(resultSet.getInt("cod"),
-                        resultSet.getString("nombre_bodega")));
-            }
-        } catch (SQLException e) {
-        } finally {
-            conexion.desconectar();
-        }
-        return bodega;
-    }
 
     public List<ArticuloFormula> getListaConsumoMateriales(int codigo, float cantidad) {
         List<ArticuloFormula> articulosFormula = new ArrayList<>();
@@ -236,12 +219,7 @@ public class OrdenProduccionDAO {
                 + ordenTrabajo.getCantidad() + ", " + ordenTrabajo.getTotalMateria() + ", " + ordenTrabajo.getTotalMOD() + ", "
                 + ordenTrabajo.getTotalCIF() + ", " + ordenTrabajo.getCostoUnitario() + ");");
         try {
-
-            if (conexion.insertar(sentenciaSql) > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {
@@ -312,7 +290,6 @@ public class OrdenProduccionDAO {
                     + "	SET estado='T'\n"
                     + "	WHERE codigo_orden=" + orden + ";");
             return conexion.insertar(sentenciaSql);
-
         } catch (Exception e) {
             return -1;
         } finally {
@@ -605,6 +582,31 @@ public class OrdenProduccionDAO {
         }
     }
 
+    public int entradaInventario(String comprobante, Date fecha, int bodega) {
+        try {
+            sentenciaSql = String.format("INSERT INTO public.entrada(num_comprobante, fecha, id_proveedor, id_bodega)\n"
+                    + "	VALUES ('" + comprobante + "', '" + fecha + "', 16, " + bodega + ");");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int entradaInventarioMateriales(int idProducto, int idEntrada, float cantidad, float costo) {
+        try {
+            sentenciaSql = String.format("INSERT INTO public.entrada_detalle(\n"
+                    + "	cod_articulo, id_entrada, cant, costo)\n"
+                    + "	VALUES (" + idProducto + "," + idEntrada + "," + cantidad + "," + costo + ");");
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
     public void cancelarOrdenProduccion(int id_orden) {
         try {
             sentenciaSql = String.format("delete from detalleproceso\n"
@@ -694,13 +696,13 @@ public class OrdenProduccionDAO {
         sentenciaSql = String.format("select a.id, a.nombre,a.costo,dp.cantidad,a.unidadmedida,t.tipo from detalle_produccion as dp\n"
                 + "inner join articulos as a on dp.codigo_producto=a.id\n"
                 + "inner join tipo as t on t.cod=a.id_tipo\n"
-                + "where codigo_registro="+idRegistro+"");
+                + "where codigo_registro=" + idRegistro + "");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
                 articulosFormula.add(new ArticuloFormula(resultSet.getInt("id"), resultSet.getString("nombre"),
-                         resultSet.getString("tipo"),resultSet.getFloat("costo"),
+                        resultSet.getString("tipo"), resultSet.getFloat("costo"),
                         resultSet.getFloat("cantidad"), resultSet.getString("unidadmedida")));
             }
         } catch (SQLException e) {
@@ -708,6 +710,60 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
         return articulosFormula;
+    }
+
+    public int bodega(int idOrden) {
+        try {
+            int bodega = 0;
+            sentenciaSql = String.format("select codido_bodega from orden_produccion \n"
+                    + "	where codigo_orden=" + idOrden + "");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                bodega = resultSet.getInt("codido_bodega");
+            }
+            return bodega;
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public int idEntrada(String numEntrada) {
+        try {
+            int idEntrada = 0;
+            sentenciaSql = String.format("select cod from entrada\n"
+                    + "	where num_comprobante='" + numEntrada + "'");
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            while (resultSet.next()) {
+                idEntrada = resultSet.getInt("cod");
+            }
+            return idEntrada;
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            conexion.desconectar();
+        }
+    }
+
+    public List<OrdenTrabajo> getInventario(int codigo_orden) {
+        List<OrdenTrabajo> ordenProductoInventario = new ArrayList<>();
+        sentenciaSql = String.format("select rop.\"Codigo_producto\",rop.cantidad,dp.costounitario from orden_produccion as op \n"
+                + "	inner join registro_orden_produccion as rop on op.codigo_orden=rop.codigo_orden\n"
+                + "	inner join detalleproceso as dp on dp.codigo_registro=rop.codigo_registro\n"
+                + "	where op.codigo_orden=" + codigo_orden + ";");
+        try {
+            //enviamos la sentencia
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                ordenProductoInventario.add(new OrdenTrabajo(resultSet.getInt("Codigo_producto"), resultSet.getFloat("cantidad"), resultSet.getFloat("costounitario")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return ordenProductoInventario;
     }
 
 }

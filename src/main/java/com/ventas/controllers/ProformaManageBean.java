@@ -365,7 +365,7 @@ public class ProformaManageBean implements Serializable {
     }
 
     public void SeleccionarProducto(Producto pr) {
-        this.codigoProducto = pr.getCodigoAux();
+        this.codigoProducto = pr.getCodigo();
         this.nombreProducto = pr.getDescripcion();
         this.precioProducto = pr.getPrecioUnitario();
         this.producto = pr;
@@ -723,7 +723,7 @@ public class ProformaManageBean implements Serializable {
             DetalleProforma detalle = new DetalleProforma();
             detalle.setCodigoProducto(this.producto.getCodigo());
             detalle.setCantidad(this.cantidad);
-            detalle.setDescuento(this.producto.getDescuento());
+            detalle.setDescuento(0);
             detalle.setPrice(this.precioProducto);
             detalle.setProducto(this.producto);
 

@@ -31,7 +31,6 @@ public class OrdenTrabajo {
     private float costoUnitario;
     private float tiempo;
     private String estado;
-    private String nombreBodega;
 
     public OrdenTrabajo() {
     }
@@ -91,6 +90,12 @@ public class OrdenTrabajo {
         this.codigo_registro = codigo_registro;
         this.codigo_formula = codigo_formula;
         this.cantidad = cantidad;
+    }
+
+    public OrdenTrabajo(int codigo_producto, float cantidad, float costoUnitario) {
+        this.codigo_producto = codigo_producto;
+        this.cantidad = cantidad;
+        this.costoUnitario = costoUnitario;
     }
 
     public OrdenTrabajo(String estado) {
@@ -279,14 +284,6 @@ public class OrdenTrabajo {
 
     public void setCodigo_bodega(int codigo_bodega) {
         this.codigo_bodega = codigo_bodega;
-    }
-
-    public String getNombreBodega() {
-        return nombreBodega;
-    }
-
-    public void setNombreBodega(String nombreBodega) {
-        this.nombreBodega = nombreBodega;
     }
 
 }

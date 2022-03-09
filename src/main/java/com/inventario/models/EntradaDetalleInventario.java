@@ -19,15 +19,15 @@ public class EntradaDetalleInventario implements Serializable {
 
     private int idArticulo;
 
-    private int cant;
+    private double cant;
 
-    private int costo;
+    private double costo;
 
     private double iva;
 
-    private int ice;
+    private double ice;
 
-    private int subtotal;
+    private double subtotal;
 
     public String getNombreProducto() {
         return nombreProducto;
@@ -50,6 +50,20 @@ public class EntradaDetalleInventario implements Serializable {
     private ArticulosInventario articuloInventario;
 
     public EntradaDetalleInventario() {
+
+    }
+
+    //Reporte data
+    public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, double cant, double costo, double iva, double ice, double subtotal) {
+        this.idEntradaDetalle = idEntradaDetalle;
+        this.idEntrada = idEntrada;
+        this.idArticulo = idArticulo;
+        this.cant = cant;
+        this.costo = costo;
+        this.iva = iva;
+        this.ice = ice;
+        this.subtotal = subtotal;
+        this.articuloInventario = null;
     }
 
     public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, int cant, int costo, int iva, int ice, int subtotal) {
@@ -100,19 +114,19 @@ public class EntradaDetalleInventario implements Serializable {
         this.idArticulo = idArticulo;
     }
 
-    public int getCant() {
+    public double getCant() {
         return cant;
     }
 
-    public void setCant(int cant) {
+    public void setCant(double cant) {
         this.cant = cant;
     }
 
-    public int getCosto() {
+    public double getCosto() {
         return costo;
     }
 
-    public void setCosto(int costo) {
+    public void setCosto(double costo) {
         this.costo = costo;
     }
 
@@ -124,15 +138,15 @@ public class EntradaDetalleInventario implements Serializable {
         this.iva = iva;
     }
 
-    public int getIce() {
+    public double getIce() {
         return ice;
     }
 
-    public void setIce(int ice) {
+    public void setIce(double ice) {
         this.ice = ice;
     }
 
-    public int getSubtotal() {
+    public double getSubtotal() {
         return subtotal;
     }
 

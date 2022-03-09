@@ -3,7 +3,9 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../../WEB-INF/InicioTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content" >
         <h:form id="form" style="width: 100%;">
@@ -43,7 +45,11 @@
 
                         <p:column exportable="false" width="4%">
                             <p:commandButton icon="pi pi-pencil"                                                         
-                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" process="@this">
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="@this"
+                                             onclick="PF('RolData').show()"
+                                             update="RolDATA"
+                                             actionListener="#{RolMB.chargeDataModulesAndRol(ListaRoles)}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
@@ -53,10 +59,45 @@
         <p:dialog id="RolInfo" header="Informacion del Rol" widgetVar="RolData"
                   height="70%" width="70%" showEffect="fade">
             <h:form id="RolDATA">
-                
+                <p:panel header="Detalles del rol" 
+                         style="width: 50%; text-align: left; float: left">
+                    <p:panelGrid columns="1">
+                        <p:outputLabel value="#{RolMB.nameRol}"/>
+                        <p:outputLabel value="#{RolMB.descriptionRol}"/>
+                    </p:panelGrid>
+
+                </p:panel>
+                <p:panel header="Roles activos"
+                         style="width: 50%; text-align: left;float: right">
+                    <p:panelGrid columns="1">
+                        <p:dataTable id="dt-modules" value="#{RolMB.lstOfModules}"
+                                     var="ListaModules" size="small"
+                                     rowKey="#{ListaModules.idModule}">
+                            <p:column headerText="Nombre del modulo" width="45%">
+                                <p:outputLabel value="#{ListaModules.nameModule}"/>
+                            </p:column>
+                            <p:column headerText="Establecer acceso">
+                                <p:commandButton icon="pi pi-pencil"                                                         
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                 process="@this"
+                                                 value="Agregar"
+                                                 update="RolDATA">
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="Quitar acceso">
+                                <p:commandButton icon="pi pi-pencil"                                                         
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                 process="@this"
+                                                 value="Eliminar"
+                                                 update="RolDATA">
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panelGrid>
+                </p:panel>
             </h:form>
         </p:dialog>
-        
+
     </ui:define>
 
 </ui:composition>
