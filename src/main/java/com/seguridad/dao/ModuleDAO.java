@@ -81,7 +81,7 @@ public class ModuleDAO {
     public void insertModule(Modulo mod) {
         String query = "INSERT INTO security.\"Modulo\"(\n"
                 + "	\"idModulo\", \"nombreModulo\", descripcion, habilitado)\n"
-                + "	VALUES ((Select CASE WHEN MAX(\"idModulo\") IS NULL then 0 else MAX(\"idModulo\") END as idModulo from security.\"Modulo\")+1, '" 
+                + "	VALUES ((Select CASE WHEN MAX(\"idModulo\") IS NULL then 0 else MAX(\"idModulo\") END as idModulo from security.\"Modulo\")+1, '"
                 + String.valueOf(mod.getNameModule()) + "', '"
                 + String.valueOf(mod.getDescriptionModule()) + "','true');";
         try {
@@ -95,10 +95,10 @@ public class ModuleDAO {
     }
 
     public void editModule(Modulo module) {
-        String query = "UPDATE public.modulo\n"
-                + "	SET \"nombreModulo\"='" + String.valueOf(module.getNameModule()) + "'"
-                + ", descripcion='" + String.valueOf(module.getDescriptionModule()) + "'"
-                + "	WHERE \"idModulo\"= " + String.valueOf(module.getIdModule()) + ";";
+        String query = "UPDATE security.\"Modulo\"\n"
+                + "	SET  \"nombreModulo\"='" + String.valueOf(module.getNameModule()) + "', \n"
+                + "	descripcion='" + String.valueOf(module.getDescriptionModule()) + "', habilitado='true'\n"
+                + "	WHERE \"idModulo\"=" + String.valueOf(module.getIdModule()) + ";";
         try {
             this.conexion.conectar();
             this.conexion.ejecutarSql(query);
@@ -108,10 +108,10 @@ public class ModuleDAO {
             this.conexion.desconectar();
         }
     }
-    
+
     public void deleteModule(Modulo module) {
-        String query = "DELETE FROM public.modulo\n" +
-"	WHERE \"idModulo\"= "+String.valueOf(module.getIdModule())+";";
+        String query = "DELETE FROM security.\"Modulo\"\n"
+                + "	WHERE \"idModulo\"="+ String.valueOf(module.getIdModule())+";";
         try {
             this.conexion.conectar();
             this.conexion.ejecutarSql(query);

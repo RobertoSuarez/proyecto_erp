@@ -52,17 +52,17 @@ public class ModuleController implements Serializable {
 
     @PostConstruct
     public void Init() {
-        this.moduleNew= new Modulo();
-        this.moduleNew.setNameModule("Scrum Master");
+        this.moduleNew = new Modulo();
     }
 
     public void insertModuleData() {
-        System.out.println(this.moduleNew.getNameModule());
-        if (this.moduleNew.getNameModule() == null) {
+        if (this.moduleNew.getNameModule() == null || this.moduleNew.getNameModule() == " ") {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ingreso Fallido", "Error no se puede cargar el modulo");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } else {
             this.moduleDao.insertModule(moduleNew);
+            this.lstModuleObject = new ArrayList<>();
+            this.lstModuleObject = this.moduleDao.invokeAllModules();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ingreso Exitoso", "Modulo registrado en la base de datos");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
@@ -74,10 +74,16 @@ public class ModuleController implements Serializable {
 
     public void editModuleData() {
         this.moduleDao.editModule(this.moduleEditable);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Edicion exitoso", "La edicion se realizo de manera exitosa");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void deleteModuleData(Modulo mod) {
         this.moduleDao.deleteModule(mod);
+        this.lstModuleObject = new ArrayList<>();
+        this.lstModuleObject = this.moduleDao.invokeAllModules();
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Borrado Exitoso", "Se ha quitado un modulo del sistema");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public Modulo getModuleOject() {
