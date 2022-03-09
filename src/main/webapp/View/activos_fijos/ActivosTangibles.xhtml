@@ -95,7 +95,7 @@
                                                 <p:column 
                                                     headerText="% de Depreciación">
                                                     <h:outputText 
-                                                        value="#{depreciable.porcentaje_depreciacion}"
+                                                        value="#{depreciable.porcentaje_depreciacion} %"
                                                         style="font-weight: 700">
                                                         <f:convertNumber
                                                             currencySymbol="%" 
@@ -167,8 +167,8 @@
                                     <h:form id="formverdeshabilitadodepreciable" >
                                         <p:dialog
                                             header="Activo  Depreciables Deshabilitados"
-                                            minHeight="40" 
-                                            height="auto" 
+                                            minHeight="100" 
+                                            height="80%" 
                                             width="60%"
                                             showEffect="fade"
                                             modal="true" 
@@ -177,6 +177,8 @@
                                             <div style="display: flex;justify-content: center">
                                                 <p:dataTable
                                                     id="verListaDepreciable"
+                                                    scrollable="true"
+                                                    scrollHeight="250"
                                                     reflow="true"
                                                     value="#{activosFijosMB.tangibleDAO.listaradepreciablesdeshabilitados()}" 
                                                     var="depreciable" 
@@ -592,7 +594,6 @@
                                     <h:form id="ListaMesesDepreciables">
                                         <p:dialog 
                                             header="Lista de Depreciación por cada Mes"
-                                            rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                             minHeight="40" 
                                             height="auto"
                                             width="40%" 
@@ -612,26 +613,41 @@
 
                                                     </div>
                                                     <p:dataTable id="tablaD"
-                                                        var="TablaMesesD" 
-                                                        scrollable="true"
-                                                        scrollHeight="250"
+                                                                 var="TablaMesesD" 
+                                                                 scrollable="true"
+                                                                 scrollHeight="250"
                                                                  value="#{activosFijosMB.listamesesD}">
                                                         <p:column headerText="Mes">
                                                             <h:outputText value="#{TablaMesesD.depreciacion_meses}" />
                                                         </p:column>
 
-                                                        <p:column headerText="Depresiación">
-                                                            <h:outputText value="#{TablaMesesD.porcentaje_depreciacion}" />
+                                                        <p:column headerText="Depreciación">
+
+                                                            <h:outputText 
+                                                                value="#{TablaMesesD.porcentaje_depreciacion}"
+                                                                style="font-weight: 700">
+                                                                <f:convertNumber 
+                                                                    currencySymbol="$"
+                                                                    type="currency"/>
+                                                            </h:outputText>
+
+
                                                         </p:column>
 
                                                         <p:column headerText="Saldo">
-                                                            <h:outputText value="#{TablaMesesD.saldo_depresiacion}" />
+                                                            <h:outputText 
+                                                                value="#{TablaMesesD.saldo_depresiacion}" 
+                                                                style="font-weight: 700">
+                                                                <f:convertNumber 
+                                                                    currencySymbol="$"
+                                                                    type="currency"/>
+                                                            </h:outputText>
                                                         </p:column>
 
                                                     </p:dataTable>
 
                                                 </p:outputPanel>
-                                                
+
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
                                                 <div > 
                                                     <f:facet name="footer">

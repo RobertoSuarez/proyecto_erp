@@ -169,6 +169,7 @@ public class ActivosFijosMB implements Serializable {
                 activosFijos.setFecha_adquisicion(LocalDate.now());
                 activodepreciable.setDepreciacion_meses(0);
                 activodepreciable.setPorcentaje_depreciacion(0.0);
+                activodepreciable.setCuota_depresiacion(0);
                 setNombre("");
                 PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
 
@@ -461,7 +462,7 @@ public class ActivosFijosMB implements Serializable {
         listamesesD = new ArrayList<>();
         double cuota = MesesDepre.getCuota_depresiacion();
         double valorDepresiacion = MesesDepre.getValor_adquisicion();
-
+        
         int meses_depre = MesesDepre.getDepreciacion_meses();
         for (int x = 0; x <= meses_depre; x++) {
             if (x == 0) {
@@ -471,8 +472,7 @@ public class ActivosFijosMB implements Serializable {
             }
 
         }
-        System.out.println(MesesDepre.getCuota_depresiacion());
-        System.out.println(MesesDepre.getValor_adquisicion());
+     
     }
 
 }
