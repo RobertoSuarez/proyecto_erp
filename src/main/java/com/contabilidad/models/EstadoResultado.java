@@ -11,8 +11,27 @@ package com.contabilidad.models;
 public class EstadoResultado {
 
     private int parent, id;
-    private String nombre;
+    private String nombre, saldoCadena;
     private double saldo;
+
+    public EstadoResultado(int parent, int id, String nombre, String saldoCadena, double saldo) {
+        this.parent = parent;
+        this.id = id;
+        this.nombre = nombre;
+        this.saldoCadena = saldoCadena;
+        this.saldo = saldo;
+    }
+
+    public EstadoResultado() {
+    }
+
+    public String getSaldoCadena() {
+        return saldoCadena;
+    }
+
+    public void setSaldoCadena(String saldoCadena) {
+        this.saldoCadena = saldoCadena;
+    }
 
     public int getParent() {
         return parent;

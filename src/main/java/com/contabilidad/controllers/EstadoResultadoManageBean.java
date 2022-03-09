@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -171,6 +172,41 @@ public class EstadoResultadoManageBean implements Serializable {
     public void exportpdf() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
+        List<EstadoResultado> copiListEstadoResultado = new ArrayList<>();
+        copiListEstadoResultado = this.infomacion;
+// asignacion de informacion a la lista copia
+        for (int x = 0; x < copiListEstadoResultado.size(); x++) {
+            double saldo = copiListEstadoResultado.get(x).getSaldo();
+            String mySalgo = Double.toString(saldo);
+            copiListEstadoResultado.get(x).setSaldoCadena(mySalgo);
+        }
+        for (int x = 0; x < copiListEstadoResultado.size(); x++) {
+            if (copiListEstadoResultado.get(x).getNombre().charAt(1) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+
+                String mySalgo = Double.toString(saldo);
+
+                copiListEstadoResultado.get(x).setSaldoCadena("                                                       " + mySalgo);
+            }
+            if (copiListEstadoResultado.get(x).getNombre().charAt(3) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+
+                copiListEstadoResultado
+                        .get(x).setSaldoCadena("                                   " + mySalgo);
+            }
+            if (copiListEstadoResultado.get(x).getNombre().charAt(5) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+                copiListEstadoResultado.get(x).setSaldoCadena("                    " + mySalgo);
+            }
+            if (copiListEstadoResultado.get(x).getNombre().charAt(7) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+                copiListEstadoResultado.get(x).setSaldoCadena(mySalgo);
+            }
+
+        }
 
         // Cabecera de la respuesta.
         ec.responseReset();
@@ -199,7 +235,7 @@ public class EstadoResultadoManageBean implements Serializable {
             JasperPrint jasperPrintIn = JasperFillManager.fillReport(
                     filetext.getPath(),
                     parametros,
-                    new JRBeanCollectionDataSource(this.infomacion)
+                    new JRBeanCollectionDataSource(copiListEstadoResultado)
             );
 
             // exportamos a pdf.
