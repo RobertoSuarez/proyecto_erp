@@ -49,7 +49,7 @@ public class ActivosFijosMB implements Serializable {
     String infMsj = "Exito";
 
     public ActivosFijosMB() {
-       listamesesD=new ArrayList<>();
+        listamesesD = new ArrayList<>();
     }
 
     public List<ListaDepreciable> getListamesesD() {
@@ -59,7 +59,7 @@ public class ActivosFijosMB implements Serializable {
     public void setListamesesD(List<ListaDepreciable> listamesesD) {
         this.listamesesD = listamesesD;
     }
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -156,7 +156,7 @@ public class ActivosFijosMB implements Serializable {
             } else if ("".equals(getNombre())) {
                 mensajeDeAdvertencia("Agrege un proveedor");
             } else {
-               
+
                 tangibledao.registrarTangibleDepreciable(activosFijos, activodepreciable);
                 System.out.println("Registrado correctamente");
                 //Aqui se llama a la funcion de depreciable
@@ -267,11 +267,11 @@ public class ActivosFijosMB implements Serializable {
         try {
             if ("".equals(activosFijos.getDetalle_de_activo())) {
                 mensajeDeAdvertencia("Agregue una descripcion al activo no depreciable");
-            } else if ("".equals(activosFijos.getValor_adquisicion())||activosFijos.getValor_adquisicion()<=0) {
+            } else if ("".equals(activosFijos.getValor_adquisicion()) || activosFijos.getValor_adquisicion() <= 0) {
                 mensajeDeAdvertencia("Agregue un costo de adquisición ");
             } else if ("".equals(activosFijos.getFecha_adquisicion())) {
                 mensajeDeAdvertencia("Agregue una fecha de adquisición");
-            } else if ("".equals(activoNoDepreciable.getPlusvalia())||activoNoDepreciable.getPlusvalia()<=0) {
+            } else if ("".equals(activoNoDepreciable.getPlusvalia()) || activoNoDepreciable.getPlusvalia() <= 0) {
                 mensajeDeAdvertencia("Agregue un valor de plusvalia");
             } else if ("".equals(activosFijos.getNumero_factura())) {
                 mensajeDeAdvertencia("Agregue un numero de factura");
@@ -307,11 +307,11 @@ public class ActivosFijosMB implements Serializable {
 
             if ("".equals(listanodepreciable.getDetalle_de_activo())) {
                 mensajeDeAdvertencia("Agregue una descripcion al activo no depreciable");
-            } else if ("".equals(listanodepreciable.getValor_adquisicion())||listanodepreciable.getValor_adquisicion()<=0) {
+            } else if ("".equals(listanodepreciable.getValor_adquisicion()) || listanodepreciable.getValor_adquisicion() <= 0) {
                 mensajeDeAdvertencia("Agregue un costo de adquisición ");
             } else if ("".equals(listanodepreciable.getFecha_adquisicion())) {
                 mensajeDeAdvertencia("Agregue una fecha de adquisición");
-            } else if ("".equals(listanodepreciable.getPlusvalia())||listanodepreciable.getPlusvalia()<=0) {
+            } else if ("".equals(listanodepreciable.getPlusvalia()) || listanodepreciable.getPlusvalia() <= 0) {
                 mensajeDeAdvertencia("Agregue un valor de plusvalia");
             } else if ("".equals(listanodepreciable.getNumero_factura())) {
                 mensajeDeAdvertencia("Agregue un numero de factura");
@@ -456,21 +456,23 @@ public class ActivosFijosMB implements Serializable {
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
 
     }
-    
-    
-    public void ListarMesesDepreciables(ListaDepreciable MesesDepre)
-    {
-       double cuota= MesesDepre.getCuota_depresiacion();
- 
+
+    public void ListarMesesDepreciables(ListaDepreciable MesesDepre) {
+        listamesesD = new ArrayList<>();
+        double cuota = MesesDepre.getCuota_depresiacion();
+        double valorDepresiacion = MesesDepre.getValor_adquisicion();
+
         int meses_depre = MesesDepre.getDepreciacion_meses();
-        for(int x=0; x < meses_depre; x++)
-        {
-         listamesesD.add(new ListaDepreciable (x+1,cuota,MesesDepre.getValor_adquisicion()-cuota));
-         
-        
+        for (int x = 0; x <= meses_depre; x++) {
+            if (x == 0) {
+                listamesesD.add(new ListaDepreciable(x, cuota, valorDepresiacion));
+            } else {
+                listamesesD.add(new ListaDepreciable(x, cuota, valorDepresiacion -= cuota));
+            }
+
         }
         System.out.println(MesesDepre.getCuota_depresiacion());
         System.out.println(MesesDepre.getValor_adquisicion());
     }
-   
+
 }
