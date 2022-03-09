@@ -7,11 +7,12 @@ package com.ventas.controllers;
 import com.ventas.dao.PreciosDAO;
 import com.ventas.models.Precios;
 import com.ventas.models.Producto;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.ManagedBean;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.PrimeFaces;
@@ -21,9 +22,9 @@ import org.primefaces.event.SelectEvent;
  *
  * @author ninat
  */
-@ManagedBean(name = "preciosMB")
+@ManagedBean(value="preciosMB")
 @SessionScoped
-public class PreciosController {
+public class PreciosController implements Serializable {
 
     private Precios precios;
     private Producto producto;

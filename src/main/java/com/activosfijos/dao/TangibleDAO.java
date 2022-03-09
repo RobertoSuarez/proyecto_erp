@@ -27,6 +27,7 @@ public class TangibleDAO {
     public boolean registrarTangibleDepreciable(ActivosFijos activosFijos, ActivoDepreciable activodepreciable) throws SQLException {
 
         Conexion conexion = new Conexion();
+        try{
         String consulta = String.format("INSERT INTO activos_fijos(\n"
                 + "	detalle_de_activo,  valor_adquisicion, fecha_adquisicion,idproveedor,numero_factura,estado)\n"
                 + "	VALUES ('%s', '%s', '%s', '%s', '%s','habilitado')returning id_activo_fijo;", activosFijos.getDetalle_de_activo(),
@@ -40,12 +41,19 @@ public class TangibleDAO {
         conexion.ejecutarSql(consulta3);
         System.out.println(consulta + "\n" + consulta2 + "\n funcion : " + consulta3);
         return true;
+        } catch (Exception e) {
+            return false;
+        }
+        finally{
+            conexion.desconectar();
+        }
     }
 
 //retornar un boleano si el activo ha sido editable
     public boolean editarTangibleDepreciable(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
+        try{
         String consulta = String.format("UPDATE public.activos_fijos\n"
                 + "	SET detalle_de_activo='%s', valor_adquisicion='%s', fecha_adquisicion='%s', idproveedor='%s', numero_factura='%s'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
@@ -61,6 +69,12 @@ public class TangibleDAO {
         conexion.ejecutarSql(consulta3);
         System.out.println("update 1: " + consulta + "\n update 2: " + consulta2 + "\n funcion : " + consulta3);
         return true;
+        } catch (Exception e) {
+            return false;
+        }
+        finally{
+            conexion.desconectar();
+        }
     }
 
     //Operacion para la depreciacion
@@ -87,6 +101,7 @@ public class TangibleDAO {
     public boolean eliminar(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
+        try{
         String consulta = String.format("UPDATE public.activos_fijos\n"
                 + "	SET  estado='deshabilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
@@ -95,6 +110,12 @@ public class TangibleDAO {
 
         System.out.println("update 1: " + consulta);
         return true;
+        } catch (Exception e) {
+            return false;
+        }
+        finally{
+            conexion.desconectar();
+        }
     }
 // lsitamos los activos depreciables 
 
@@ -141,6 +162,7 @@ public class TangibleDAO {
     public boolean deshabilitartangible(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
+        try{
         String consulta = String.format("UPDATE public.activos_fijos\n"
                 + "	SET  estado='deshabilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
@@ -148,6 +170,12 @@ public class TangibleDAO {
         conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
+        } catch (Exception e) {
+            return false;
+        }
+        finally{
+            conexion.desconectar();
+        }
     }
 //listamos un activo depreciable deshabilitado 
 
@@ -196,6 +224,7 @@ public class TangibleDAO {
     public boolean habilitardepreciable(ActivoDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
+        try{
         String consulta = String.format("UPDATE public.activos_fijos\n"
                 + "	SET  estado='habilitado'\n"
                 + "	WHERE id_activo_fijo='%s';", li.getId_activo_fijo());
@@ -203,5 +232,11 @@ public class TangibleDAO {
         conexion.ejecutarSql(consulta);
         System.out.println("update 1: " + consulta);
         return true;
+        } catch (Exception e) {
+            return false;
+        }
+        finally{
+            conexion.desconectar();
+        }
     }
 }
