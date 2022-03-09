@@ -38,6 +38,16 @@
                                                 <p:outputLabel value="Descripción" for="@next"/>
                                                 <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
                                             </div>
+                                            <div class="p-field p-col-12 p-md-4">
+                                                <p:outputLabel value="Bodega" for="@next"/>
+                                                <p:selectOneMenu id="bodega" value="#{solicitudOrdenMB.solicitudOrden.codigo_bodega}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una Bodega" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{solicitudOrdenMB.bodega}" var="centro" 
+                                                                   itemLabel="#{centro.nomBodega}" 
+                                                                   itemValue="#{centro.cod}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
 
                                             <div class="p-field p-col-12 p-md-2">
                                                 <p:outputLabel value="buscar" for="@next" style="color: white"/>
