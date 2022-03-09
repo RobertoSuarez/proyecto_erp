@@ -66,24 +66,37 @@
                     </p:dataTable>
                 </p:panel>
             </div>
+
             <p:dialog id="ModuloNuevo" header="Informacion del modulo" widgetVar="ModuleData"
                       height="70%" width="30%" showEffect="fade">
-                <p:panelGrid columns="1" style="width: 100%">
-                    <p:outputLabel value="Nombre del modulo"/>
-                    <p:inputText id="NameModuleNew" value="#{ModuleMB.moduleNew.nameModule}"/>
-                    <p:outputLabel value="Detalle del modulo"/>
-                    <p:inputTextarea id="DescriptionModuleNew" value="#{ModuleMB.moduleNew.descriptionModule}"/>
-                </p:panelGrid>
-                <p:commandButton icon="pi pi-plus"                                                         
-                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                 process="@this"
-                                 onclick="PF('ModuleData').hide()"
-                                 update="ModuloGeneral"
-                                 value="Agregar Modulo"
-                                 actionListener="#{ModuleMB.insertModuleData}">
-                </p:commandButton>
-
+                <p:outputPanel id="form-modulo" class="ui-fluid">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <p:outputLabel value="Nombre del modulo:"/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:inputText value="#{ModuleMB.moduleNew.nameModule}"/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:outputLabel value="Detalle del modulo: "/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:inputTextarea value="#{ModuleMB.moduleNew.descriptionModule}"/>
+                        </div>
+                        <div class="p-col-6">
+                            <p:commandButton icon="pi pi-plus"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="form-modulo @this"
+                                             onclick="PF('ModuleData').hide()"
+                                             update=":ModuloGeneral:form-modulo"
+                                             value="Agregar Modulo"
+                                             actionListener="#{ModuleMB.insertModuleData}">
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </p:outputPanel>
             </p:dialog>
+
         </h:form>
 
 
