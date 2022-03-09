@@ -340,6 +340,7 @@ public class FormulaElaboracionMB implements Serializable {
         listSubProceso = new ArrayList<>();
         listaMateriales = new ArrayList<>();
         productoTerminado = new ArrayList<>();
+        productoSM = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
         formulaProduccion.setCodigo_formula(formulaProduccionDAO.IdFormula());
         formulaMaterialesDAO = new FormulaMaterialesDAO();
@@ -401,10 +402,10 @@ public class FormulaElaboracionMB implements Serializable {
             } else {
                 formulaProduccionDAO.update(formulaProduccion);
                 for (FormulaProduccion listEdit : listaEditar) {
-                    if (listEdit.getCantidad()>0) {
+                    if (listEdit.getCantidad() > 0) {
                         formulaProduccionDAO.actualizarMateriales(formulaProduccion.getCodigo_formula(), listEdit.getCodigo_articulo(), listEdit.getCantidad());
-                    }else{
-                         showWarn("Ingese una cantidad mayor a cero.");
+                    } else {
+                        showWarn("Ingese una cantidad mayor a cero.");
                     }
                 }
                 showInfo("Formula Modificada");
