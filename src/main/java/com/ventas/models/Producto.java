@@ -9,15 +9,18 @@ import java.io.Serializable;
 
 public class Producto implements Serializable {
     private int codigo;
-    private int codigoAux;
-    private int stock;
+    private String nombre;
+    private int idCategoria;
+    private int idTipo;
     private String descripcion;
-    private String detalleAdicional;
+    private int idBodega;
+    private int stock;
+    private float iva;
+    private float ice;
+    private int id_subcuenta;
+    private String unidadMedida;
     private float precioUnitario;
     private float subsidio;
-    private float ice;
-    private float iva;
-    private float descuento;
 
     public Producto() {
         
@@ -31,20 +34,28 @@ public class Producto implements Serializable {
         this.codigo = codigo;
     }
 
-    public int getCodigoAux() {
-        return codigoAux;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setCodigoAux(int codigoAux) {
-        this.codigoAux = codigoAux;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public int getStock() {
-        return stock;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public int getIdTipo() {
+        return idTipo;
+    }
+
+    public void setIdTipo(int idTipo) {
+        this.idTipo = idTipo;
     }
 
     public String getDescripcion() {
@@ -55,12 +66,52 @@ public class Producto implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public String getDetalleAdicional() {
-        return detalleAdicional;
+    public int getIdBodega() {
+        return idBodega;
     }
 
-    public void setDetalleAdicional(String detalleAdicional) {
-        this.detalleAdicional = detalleAdicional;
+    public void setIdBodega(int idBodega) {
+        this.idBodega = idBodega;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public float getIva() {
+        return iva;
+    }
+
+    public void setIva(float iva) {
+        this.iva = iva;
+    }
+
+    public float getIce() {
+        return ice;
+    }
+
+    public void setIce(float ice) {
+        this.ice = ice;
+    }
+
+    public int getIdSubcuenta() {
+        return id_subcuenta;
+    }
+
+    public void setIdSubcuenta(int id_subcuenta) {
+        this.id_subcuenta = id_subcuenta;
+    }
+    
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
     }
 
     public float getPrecioUnitario() {
@@ -78,29 +129,6 @@ public class Producto implements Serializable {
     public void setSubsidio(float subsidio) {
         this.subsidio = subsidio;
     }
-
-    public float getIce() {
-        return ice;
-    }
-
-    public void setIce(float ice) {
-        this.ice = ice;
-    }
-
-    public float getIva() {
-        return iva;
-    }
-
-    public void setIva(float iva) {
-        this.iva = iva;
-    }
-
-    public float getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(float descuento) {
-        this.descuento = descuento;
-    }
-
+    
+    
 }

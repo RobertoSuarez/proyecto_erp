@@ -47,7 +47,7 @@ public class ProductoDAO {
         try {
             String code = String.valueOf(id);
             con.conectar();
-            rs = con.ejecutarSql("select * from public.buscarproductocodigo(" + code.trim() + ")");
+            rs = con.ejecutarSql("SELECT * FROM public.articulos where id = " + code.trim() + ";");
             
             if (rs == null) {
                 System.out.println("No existen registros");
@@ -55,16 +55,20 @@ public class ProductoDAO {
                 System.out.println("Existen registros");
                 
                 while (rs.next()) {
-                    System.out.print("Producto " + rs.getInt(1));
-                    temp.setCodigo(rs.getInt(1));
-                    temp.setCodigoAux(rs.getInt(2));
-                    temp.setStock(rs.getInt(3));
-                    temp.setDescripcion(rs.getString(4));
-                    temp.setPrecioUnitario(rs.getFloat(5));
-                    temp.setSubsidio(rs.getFloat(6));
-                    temp.setIce(rs.getFloat(7));
-                    temp.setIva(rs.getFloat(8));
-                    temp.setDescuento(rs.getFloat(9));
+                    System.out.print("Producto " + rs.getInt("id") + ": " + rs.getString("nombre"));
+                    temp.setCodigo(rs.getInt("id"));
+                    temp.setNombre(rs.getString("nombre"));
+                    temp.setIdCategoria(rs.getInt("id_categoria"));
+                    temp.setIdTipo(rs.getInt("id_tipo"));
+                    temp.setDescripcion(rs.getString("descripcion"));
+                    temp.setIdBodega(rs.getInt("id_bodega"));
+                    temp.setStock(rs.getInt("cantidad"));
+                    temp.setIva(rs.getFloat("iva"));
+                    temp.setIce(rs.getFloat("ice"));
+                    temp.setIdSubcuenta(rs.getInt("id_subcuenta"));
+                    temp.setUnidadMedida(rs.getString("id"));
+                    temp.setPrecioUnitario(rs.getFloat("id"));
+                    temp.setSubsidio(rs.getFloat("id"));
                 }
             }
             con.desconectar();
@@ -88,7 +92,7 @@ public class ProductoDAO {
         ResultSet rs;
         try{
             con.conectar();
-            rs=con.ejecutarSql("Select * from productos");
+            rs=con.ejecutarSql("SELECT * FROM public.articulos order by id;");
             if (rs == null) {
                 System.out.println("No existen registros");
             } else {
@@ -96,16 +100,19 @@ public class ProductoDAO {
                 
                 while (rs.next()) {
                     temp = new Producto();
-                    temp.setCodigo(rs.getInt(1));
-                    temp.setCodigoAux(rs.getInt(2));
-                    temp.setStock(rs.getInt(3));
-                    temp.setDescripcion(rs.getString(4));
-                    temp.setDetalleAdicional(rs.getString(5));
-                    temp.setPrecioUnitario(rs.getFloat(6));
-                    temp.setSubsidio(rs.getFloat(7));
-                    temp.setIce(rs.getFloat(8));
-                    temp.setIva(rs.getFloat(9));
-                    temp.setDescuento(rs.getFloat(10));
+                    temp.setCodigo(rs.getInt("id"));
+                    temp.setNombre(rs.getString("nombre"));
+                    temp.setIdCategoria(rs.getInt("id_categoria"));
+                    temp.setIdTipo(rs.getInt("id_tipo"));
+                    temp.setDescripcion(rs.getString("descripcion"));
+                    temp.setIdBodega(rs.getInt("id_bodega"));
+                    temp.setStock(rs.getInt("cantidad"));
+                    temp.setIva(rs.getFloat("iva"));
+                    temp.setIce(rs.getFloat("ice"));
+                    temp.setIdSubcuenta(rs.getInt("id_subcuenta"));
+                    temp.setUnidadMedida(rs.getString("id"));
+                    temp.setPrecioUnitario(rs.getFloat("id"));
+                    temp.setSubsidio(rs.getFloat("id"));
                     listaventa.add(temp);
                 }
                 con.desconectar();

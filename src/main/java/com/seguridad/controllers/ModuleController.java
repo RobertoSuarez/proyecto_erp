@@ -25,8 +25,8 @@ public class ModuleController implements Serializable {
     private ModuleDAO moduleDao;
     private Modulo moduleNew;
     private Modulo moduleEditable;
-    String nameModule="";
-    String descriptionModule="";
+    String nameModule;
+    String descriptionModule;
 
     public ModuleController() {
         this.moduleNew = new Modulo();
@@ -35,6 +35,8 @@ public class ModuleController implements Serializable {
         this.lstModuleObject= new ArrayList<>();
         this.moduleDao= new ModuleDAO();
         this.lstModuleObject = this.moduleDao.invokeAllModules();
+        this.nameModule = "";
+        this.descriptionModule = "";
     }
 
     public ModuleController(Modulo moduleOject, List<Modulo> lstModuleObject, ModuleDAO moduleDao) {
@@ -46,7 +48,10 @@ public class ModuleController implements Serializable {
     
     public void insertModuleData(){
         System.out.println(this.moduleNew.getNameModule()+this.moduleNew.getDescriptionModule());
-        this.moduleDao.insertModule(this.moduleNew);
+        Modulo temp = new Modulo(nameModule, descriptionModule);
+        this.moduleDao.insertModule(temp);
+        this.nameModule = "";
+        this.descriptionModule = "";
     }
     
     public void prepareEditModuleData(Modulo mod){
