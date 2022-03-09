@@ -150,11 +150,11 @@
                                                         oncomplete="PF('EditarDepreciable').show()">  
                                                     </p:commandButton>
 
-
+                                                    <!-- Ojo para ver la Depresiacion por Mes -->
                                                     <p:commandButton 
-                                                        update="ListaMesesDepreciables"
+                                                        update="ListaMesesDepreciables,:ListaMesesDepreciables:tablaD"
                                                         styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"
-
+                                                        actionListener="#{activosFijosMB.ListarMesesDepreciables(depreciable)}"
                                                         icon="pi pi-eye"
                                                         oncomplete="PF('listaDepreciableMes').show()">  
                                                     </p:commandButton>
@@ -602,31 +602,33 @@
                                             showEffect="fade"
                                             modal="true"
                                             widgetVar="listaDepreciableMes">
-                                            
-                                             
                                             <div  style="display: flex;justify-content: center">
-                                              
+
                                                 <p:outputPanel class="ui-fluid">
                                                     <div class="p-field p-col-4">
-                                                  
-                                                       <p:outputLabel 
+
+                                                        <p:outputLabel 
                                                             for="@next" 
                                                             value="Descripción: "/>
                                                         <p:inputText  
                                                             value="#{activosFijosMB.listadepreciable.detalle_de_activo}" />
-                                           
-                                                        </div>
-                                                    <p:dataTable var="ListaMesesDepresiacion" value="#">
+
+                                                    </div>
+                                                    <p:dataTable id="tablaD"
+                                                        var="TablaMesesD" 
+                                                        scrollable="true"
+                                                        scrollHeight="250"
+                                                                 value="#{activosFijosMB.listamesesD}">
                                                         <p:column headerText="Mes">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{TablaMesesD.depreciacion_meses}" />
                                                         </p:column>
 
                                                         <p:column headerText="Depresiación">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{TablaMesesD.depreciacion_meses}" />
                                                         </p:column>
 
                                                         <p:column headerText="Saldo">
-                                                            <h:outputText value="#" />
+                                                            <h:outputText value="#{TablaMesesD.saldo_depresiacion}" />
                                                         </p:column>
 
                                                     </p:dataTable>

@@ -14,8 +14,11 @@ import com.activosfijos.model.ActivoNoDepreciable;
 import com.activosfijos.model.ListaDepreciable;
 import com.activosfijos.model.ListaNoDepreciable;
 import com.cuentasporpagar.models.Proveedor;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
@@ -38,13 +41,25 @@ public class ActivosFijosMB implements Serializable {
     NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
     ListaDepreciable listadepreciable = new ListaDepreciable();
     ListaNoDepreciable listanodepreciable = new ListaNoDepreciable();
+    private List<ListaDepreciable> listamesesD;
     int idactivofijo;
     int id_proveedor = 0;
     String nombre = "";
-
     String warnMsj = "Advertencia";
     String infMsj = "Exito";
 
+    public ActivosFijosMB() {
+       listamesesD=new ArrayList<>();
+    }
+
+    public List<ListaDepreciable> getListamesesD() {
+        return listamesesD;
+    }
+
+    public void setListamesesD(List<ListaDepreciable> listamesesD) {
+        this.listamesesD = listamesesD;
+    }
+    
     public String getNombre() {
         return nombre;
     }
@@ -440,6 +455,22 @@ public class ActivosFijosMB implements Serializable {
                 addMessage(null, new FacesMessage(
                         FacesMessage.SEVERITY_INFO, infMsj, msj));
 
+    }
+    
+    
+    public void ListarMesesDepreciables(ListaDepreciable MesesDepre)
+    {
+       double cuota= MesesDepre.getCuota_depresiacion();
+ 
+        int meses_depre = MesesDepre.getDepreciacion_meses();
+        for(int x=0; x < meses_depre; x++)
+        {
+         listamesesD.add(new ListaDepreciable (x+1,cuota,MesesDepre.getValor_adquisicion()-cuota));
+         
+        
+        }
+        System.out.println(MesesDepre.getCuota_depresiacion());
+        System.out.println(MesesDepre.getValor_adquisicion());
     }
    
 }
