@@ -36,6 +36,8 @@ public class FacturaManagedBean {
     private float datoImporte;
     private String datoDetalle;
     private String datoCuenta;
+    private String tipoDocumento;
+    private int opciones;
     private List<Anticipo> anriciposVigentes;
 
     //Constructor
@@ -123,19 +125,34 @@ public class FacturaManagedBean {
         this.datoCuenta = datoCuenta;
     }
 
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public int getOpciones() {
+        return opciones;
+    }
+
+    public void setOpciones(int opciones) {
+        this.opciones = opciones;
+    }
+
     /**
      * Método para insertar una factura
      *
      */
     public void insertarfactura() {
-        System.out.println("factura.getNfactura().length()");
-        float comp = 0;
-        for (int i = 0; i < detalleFactura.size(); i++) {
-            comp += detalleFactura.get(i).getImporteD();
-        }
-        if (factura.getImporte() != comp) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Importe debe ser igual al total del detalle"));
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Importe= " + factura.getImporte() + " ; Total detalle= " + comp));
+//        System.out.println("factura.getNfactura().length()");
+//        float comp = 0;
+//        for (int i = 0; i < detalleFactura.size(); i++) {
+//            comp += detalleFactura.get(i).getImporteD();
+//        }
+        if (tipoDocumento=="0" || detalleFactura.isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
         } else {
             if (factura.getNfactura().length() < 15) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "El número de factura debe tener 15 digitos"));
@@ -147,8 +164,8 @@ public class FacturaManagedBean {
                     } else {
                         if (facturaDAO.Insertar(factura) == 0) {
                             System.out.println("YA INSERTE, AHORA EL DETALLE");
-                            facturaDAO.insertdetalle(detalleFactura, factura);
-                            facturaDAO.insertasiento(detalleFactura, factura);
+                            facturaDAO.insertdetalle(detalleFactura, factura,opciones);
+                            facturaDAO.insertasiento(detalleFactura, factura,opciones,tipoDocumento);
                             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
                             PrimeFaces.current().executeScript("PF('newFactura').hide()");
                             listaFactura.clear();
@@ -379,8 +396,8 @@ public class FacturaManagedBean {
     public void deleteRow(Factura f) {
         float importe = f.getImporteD();
         this.detalleFactura.remove(f);
-        
-        this.factura.setImporte(factura.getImporte()-importe);
+
+        this.factura.setImporte(factura.getImporte() - importe);
         PrimeFaces.current().ajax().update("form:dt-detalle");
     }
 
@@ -389,29 +406,40 @@ public class FacturaManagedBean {
      */
     public void onAddNew() {
         // Add one new product to the table:
-        //System.out.println("Cantidad detalle: " + listaCuentas.size());
         Factura newFactura = new Factura(0, "Detalle", "Cuenta contable", "code");
-        detalleFactura.add(newFactura);
-        //listaCuentas.clear();
-        listaProductos.clear();
-        llenarCuenta();
+        listaCuentas.clear();
+        switch (opciones) {
+            case 1:
+                llenarProductos();
+                detalleFactura.add(newFactura);
+                break;
+            case 2:
+                llenarCuenta();
+                detalleFactura.add(newFactura);
+                break;
+            default:
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Por favor seleccione un tipo"));
+                PrimeFaces.current().ajax().update("form:messages");
+                break;
+        }
         datoImporte = 0;
         datoDetalle = "";
-        //System.out.println("Cantidad detalle 2: " + listaCuentas.size());
     }
 
     public void llenarCuenta() {
-//          List<Factura> auxiliar = facturaDAO.llenarCuentas();
-//          for (int i = 0; i < auxiliar.size(); i++) {
-//               SelectItem Cuentas = new SelectItem(auxiliar.get(i).getCuentadetalle(), auxiliar.get(i).getCuentadetalle());
-//               listaCuentas.add(Cuentas);
-//          }
-//          auxiliar.clear();
+        List<Factura> auxiliar = facturaDAO.llenarCuentas();
+        for (int i = 0; i < auxiliar.size(); i++) {
+            SelectItem Cuentas = new SelectItem(auxiliar.get(i).getCuentadetalle(), auxiliar.get(i).getCuentadetalle());
+            listaCuentas.add(Cuentas);
+        }
+    }
+
+    public void llenarProductos() {
         List<Factura> auxiliar = facturaDAO.llenarProductos();
 
         for (int i = 0; i < auxiliar.size(); i++) {
             SelectItem product = new SelectItem(auxiliar.get(i).getCuentadetalle(), auxiliar.get(i).getCuentadetalle());
-            listaProductos.add(product);
+            listaCuentas.add(product);
         }
     }
 
