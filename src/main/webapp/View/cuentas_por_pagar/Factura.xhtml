@@ -131,6 +131,7 @@
                                                      maxlength="15" >                                                      
                                         </p:inputText>
                                     </div>
+
                                     <div class="p-field p-col">
                                         <p:outputLabel for="importe">Importe:</p:outputLabel>
                                         <p:inputText type="number" id="importe" value="#{facturaMB.factura.importe}" 
@@ -140,31 +141,37 @@
                                     <div class="p-field p-col">
                                         <p:outputLabel for="saldofavor">Anticipos favorables:</p:outputLabel>
                                         <p:inputText type="number" id="saldofavor" value="#{BuscarMB.totalAnticipo}" 
-                                                     required="true"/>
+                                                     required="true" disabled="true"/>
                                     </div>
+                                </div>
 
+
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="descripcion" >Descripción:</p:outputLabel>
+                                        <p:inputText id="descripcion" value="#{facturaMB.factura.descripcion}"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="Op">Tipo de Documento:</p:outputLabel>
+                                        <p:selectOneMenu id="Op" value="#{facturaMB.tipoDocumento}">
+                                            <f:selectItem itemLabel="Select One" itemValue="0"/>
+                                            <f:selectItem itemLabel="Factura" itemValue="Factura"/>
+                                            <f:selectItem itemLabel="Nota o boleta de venta" itemValue="Nota o boleta de venta"/>
+                                            <f:selectItem itemLabel="Boletos o entradas a espectaculos publicos" itemValue="Boletos o entradas a espectaculos publicos"/>
+                                            <f:selectItem itemLabel="Documentos emitidos por instituciones financieras" itemValue="Documentos emitidos por instituciones financieras"/>
+                                        </p:selectOneMenu>
+                                    </div>
                                     <div class="p-field p-col">
                                         <p:inputText id="hola" value="#{BuscarMB.cod}" type="hidden" />
                                         <p:outputLabel value="#{facturaMB.factura.ruc=BuscarMB.cod}" style="visibility: hidden"/>
                                         <p:inputText type="number" value="#{facturaMB.factura.ruc}" style="visibility: hidden"/>
                                     </div>
 
-
                                 </div>
 
-                                <div class="p-formgrid p-grid">
-
-                                    <div class="p-field p-col">
-                                        <p:outputLabel for="descripcion" >Descripción:</p:outputLabel>
-                                        <p:inputText id="descripcion" value="#{facturaMB.factura.descripcion}"/>
-                                    </div>
-
-                                </div>
-
-
-                                <div class="p-formgrid p-grid">
-
-                                </div>
 
                                 <p:panel header="Dias plazo del proveedor: #{facturaMB.factura.aux=BuscarMB.nvenc}">
                                     <div class="p-formgrid p-grid">
@@ -186,6 +193,18 @@
                                         </div>
                                     </div>
                                 </p:panel>
+                                <br/>
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="Aplicar">Tipo: </p:outputLabel>
+                                        <p:selectOneRadio id="Aplicar" value="#{facturaMB.opciones}" 
+                                                          unselectable="true" >
+                                            <f:selectItem itemLabel="Productos" itemValue="1"/>
+                                            <f:selectItem itemLabel="Servicios" itemValue="2"/>
+                                            <p:ajax update=":form:dt-detalle"/>
+                                        </p:selectOneRadio>                                                     
+                                    </div>
+                                </div>
 
                                 <!-- FINAL CAMPOS DEL DIALOG-->
 
@@ -214,23 +233,11 @@
                                             <f:facet name="input">
                                                 <p:selectOneMenu id="group1" value="#{facturaMB.datoDetalle}">
                                                     <f:selectItem itemLabel="Seleccionar" itemValue=""/>
-                                                    <f:selectItems value="#{facturaMB.listaProductos}"/>
+                                                    <f:selectItems value="#{facturaMB.listaCuentas}"/>
                                                 </p:selectOneMenu>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
-
-                                    <!--                                    <p:column headerText="Cuenta contable">
-                                                                            <p:cellEditor>
-                                                                                <f:facet name="output"><h:outputText value="{detalle.cuenta}"/></f:facet>
-                                                                                <f:facet name="input">
-                                                                                    <p:selectOneMenu id="group" value="{facturaMB.datoCuenta}">
-                                                                                        <f:selectItem itemLabel="Seleccionar" itemValue=""/>
-                                                                                        <f:selectItems value="{facturaMB.listaCuentas}"/>
-                                                                                    </p:selectOneMenu>
-                                                                                </f:facet>
-                                                                            </p:cellEditor>
-                                                                        </p:column>-->
 
                                     <p:column headerText="Importe">
                                         <p:cellEditor>
