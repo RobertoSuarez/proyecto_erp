@@ -598,36 +598,28 @@
                                             showEffect="fade"
                                             modal="true"
                                             widgetVar="listaDepreciableMes">
-                                            
-                                             
                                             <div  style="display: flex;justify-content: center">
-                                              
                                                 <p:outputPanel class="ui-fluid">
                                                     <div class="p-field p-col-4">
-                                                  
                                                        <p:outputLabel 
                                                             for="@next" 
                                                             value="Descripción: "/>
                                                         <p:inputText  
                                                             value="#{activosFijosMB.listadepreciable.detalle_de_activo}" />
-                                           
                                                         </div>
                                                     <p:dataTable var="ListaMesesDepresiacion" value="#">
                                                         <p:column headerText="Mes">
                                                             <h:outputText value="#" />
                                                         </p:column>
-
                                                         <p:column headerText="Depresiación">
                                                             <h:outputText value="#" />
                                                         </p:column>
-
                                                         <p:column headerText="Saldo">
                                                             <h:outputText value="#" />
                                                         </p:column>
-
                                                     </p:dataTable>
-
                                                 </p:outputPanel>
+                                                
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
                                                 <div > 
                                                     <f:facet name="footer">
@@ -941,8 +933,7 @@
                                                         <p:overlayPanel
                                                             for="proveedor" 
                                                             dynamic="true" 
-                                                            style="width:600px"
-                                                            widgetVar="moviePicker">
+                                                            style="width:600px; position: relative">
                                                             <p:dataTable 
                                                                 var="proveedor" 
                                                                 value="#{BuscarMB.listaProveedor}" 
