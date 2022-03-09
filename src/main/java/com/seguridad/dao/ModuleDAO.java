@@ -63,10 +63,10 @@ public class ModuleDAO {
             rs = this.conexion.ejecutarSql(query);
             while (rs.next()) {
                 moduleAux = new Modulo();
-                moduleAux.setIdModule(rs.getInt("idModule"));
-                moduleAux.setNameModule(rs.getString("nombreModulo"));
-                moduleAux.setDescriptionModule(rs.getString("descripcion"));
-                moduleAux.setEnabled(rs.getBoolean("habilitado"));
+                moduleAux.setIdModule(rs.getInt(1));
+                moduleAux.setNameModule(rs.getString(2));
+                moduleAux.setDescriptionModule(rs.getString(3));
+                moduleAux.setEnabled(rs.getBoolean(4));
                 lstModules.add(moduleAux);
             }
             rs.close();
@@ -78,4 +78,49 @@ public class ModuleDAO {
         return lstModules;
     }
 
+    public void insertModule(Modulo mod) {
+        String query = "INSERT INTO public.modulo(\n"
+                + "	\"idModulo\", \"nombreModulo\", descripcion, habilitado)\n"
+                + "	VALUES ((Select \"idModulo\"\n"
+                + "	from public.modulo\n"
+                + "	order by \"idModulo\" desc\n"
+                + "	limit 1)+1, '" + String.valueOf(mod.getNameModule()) + "', '"
+                + String.valueOf(mod.getDescriptionModule()) + "','true');";
+        try {
+            this.conexion.conectar();
+            this.conexion.ejecutarSql(query);
+        } catch (Exception e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+    }
+
+    public void editModule(Modulo module) {
+        String query = "UPDATE public.modulo\n"
+                + "	SET \"nombreModulo\"='" + String.valueOf(module.getNameModule()) + "'"
+                + ", descripcion='" + String.valueOf(module.getDescriptionModule()) + "'"
+                + "	WHERE \"idModulo\"= " + String.valueOf(module.getIdModule()) + ";";
+        try {
+            this.conexion.conectar();
+            this.conexion.ejecutarSql(query);
+        } catch (Exception e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+    }
+    
+    public void deleteModule(Modulo module) {
+        String query = "DELETE FROM public.modulo\n" +
+"	WHERE \"idModulo\"= "+String.valueOf(module.getIdModule())+";";
+        try {
+            this.conexion.conectar();
+            this.conexion.ejecutarSql(query);
+        } catch (Exception e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+    }
 }
