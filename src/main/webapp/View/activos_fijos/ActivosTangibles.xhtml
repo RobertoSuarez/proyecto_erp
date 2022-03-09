@@ -591,7 +591,8 @@
                                     <!-- LISTAR DEPRECIABLES X MES -->
                                     <h:form id="ListaMesesDepreciables">
                                         <p:dialog 
-                                            header="Lista de Depreciación por cada Mes"  
+                                            header="Lista de Depreciación por cada Mes"
+                                            rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                             minHeight="40" 
                                             height="auto"
                                             width="40%" 
@@ -599,28 +600,27 @@
                                             modal="true"
                                             widgetVar="listaDepreciableMes">
                                             <div  style="display: flex;justify-content: center">
-                                                <p:outputPanel class="ui-fluid">
-                                                    <div class="p-field p-col-4">
-                                                        </div>
-                                                    <p:dataTable var="ListaMesesDepresiacion" 
-                                                                 value="#{BuscarMB.listaProveedor}"
-                                                                 rows="3"
-                                                                 paginator="true"
-                                                                 selection="#{BuscarMB.proveedor}"
-                                                                 rowKey="#{proveedor.nombre}">
-                                                        <p:column headerText="Mes">
-                                                            <h:outputText value="#{activosFijosMB.activodepreciable.depreciacion_meses}" />
-                                                        </p:column>
-                                                        <p:column headerText="Depresiación">
-                                                            <h:outputText value="#{activosFijosMB.activodepreciable.porcentaje_depreciacion}" />
-                                                        </p:column>
-                                                        <p:column headerText="Saldo">
-                                                            <h:outputText value="#{activosFijosMB.activodepreciable.cuota_depresiacion}" />
-                                                        </p:column>
-                                                        <p:column headerText="Descripción">
-                                                            <h:outputText value="#{activosFijosMB.activosFijos.detalle_de_activo}" />
-                                                        </p:column>
-                                                    </p:dataTable>
+                                                <p:outputPanel 
+                                                    class="ui-fluid">
+                                                            <p:dataTable var="ListaMesesDepresiacion" 
+                                                                         value="#{BuscarMB.listaProveedor}"
+                                                                         rows="5"
+                                                                         paginator="true"
+                                                                         selection="#{BuscarMB.proveedor}"
+                                                                         rowKey="#{proveedor.codigo}">
+                                                                <p:column headerText="Mes">
+                                                                    <h:outputText value="#{activosFijosMB.activodepreciable.depreciacion_meses}" />
+                                                                </p:column>
+                                                                <p:column headerText="Depresiación">
+                                                                    <h:outputText value="#{activosFijosMB.activodepreciable.porcentaje_depreciacion}" />
+                                                                </p:column>
+                                                                <p:column headerText="Saldo">
+                                                                    <h:outputText value="#{activosFijosMB.activodepreciable.cuota_depresiacion}" />
+                                                                </p:column>
+                                                                <p:column headerText="Descripción">
+                                                                    <h:outputText value="#{activosFijosMB.activosFijos.detalle_de_activo}" />
+                                                                </p:column>
+                                                            </p:dataTable>
                                                 </p:outputPanel>
                                                 
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
