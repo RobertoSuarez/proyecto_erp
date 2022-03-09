@@ -364,7 +364,7 @@ public class VentaManagedBean implements Serializable {
     }
 
     public void SeleccionarProducto(Producto pr) {
-        this.codigoProducto = pr.getCodigoAux();
+        this.codigoProducto = pr.getCodigo();
         this.nombreProducto = pr.getDescripcion();
         this.precioProducto = pr.getPrecioUnitario();
         this.producto = pr;

@@ -75,7 +75,7 @@ public class ProformaDAO {
             procedimiento = "INSERT INTO public.detalleproforma("
                     + "	iddetalleproforma, idproforma, codprincipal, cantidad, descuento, precio)"
                     + "	VALUES (" + codigo + "," + ProformaDetalle.getId_proforma() + "," + prod.getCodigo()
-                    + "," + prod.getStock() + "," + prod.getDescuento() + "," + prod.getPrecioUnitario() + ");";
+                    + "," + prod.getStock() + "," + 0 + "," + prod.getPrecioUnitario() + ");";
             rs = con.ejecutarSql(procedimiento);
             if (rs == null) {
                 System.out.println("Detalle de proforma incorrectamente");
