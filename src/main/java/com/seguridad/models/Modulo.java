@@ -16,7 +16,15 @@ public class Modulo {
     private boolean enabled;
 
     public Modulo() {
+        
     }
+
+    public Modulo(String nameModule, String descriptionModule) {
+        this.nameModule = nameModule;
+        this.descriptionModule = descriptionModule;
+    }
+    
+    
 
     public Modulo(int idModule, String nameModule, String descriptionModule, boolean enabled) {
         this.idModule = idModule;

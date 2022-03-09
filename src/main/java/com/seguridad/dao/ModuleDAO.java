@@ -27,7 +27,7 @@ public class ModuleDAO {
     public List<Modulo> invokeAllModules() {
         List<Modulo> lstModules = new ArrayList<>();
         Modulo moduleAux;
-        String query = "SELECT * FROM public.modulo\n"
+        String query = "SELECT * FROM security.\"Modulo\" \n"
                 + "ORDER BY \"idModulo\" ASC ";
         ResultSet rs;
         try {
@@ -79,12 +79,10 @@ public class ModuleDAO {
     }
 
     public void insertModule(Modulo mod) {
-        String query = "INSERT INTO public.modulo(\n"
+        String query = "INSERT INTO security.\"Modulo\"(\n"
                 + "	\"idModulo\", \"nombreModulo\", descripcion, habilitado)\n"
-                + "	VALUES ((Select \"idModulo\"\n"
-                + "	from public.modulo\n"
-                + "	order by \"idModulo\" desc\n"
-                + "	limit 1)+1, '" + String.valueOf(mod.getNameModule()) + "', '"
+                + "	VALUES ((Select CASE WHEN MAX(\"idModulo\") IS NULL then 0 else MAX(\"idModulo\") END as idModulo from security.\"Modulo\")+1, '" 
+                + String.valueOf(mod.getNameModule()) + "', '"
                 + String.valueOf(mod.getDescriptionModule()) + "','true');";
         try {
             this.conexion.conectar();
