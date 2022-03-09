@@ -109,7 +109,7 @@
                                     <div class="p-grid">
                                         <div class="p-col-1">
                                             <p:outputLabel value="Código:"></p:outputLabel>
-                                            <p:inputText id="cod" value="" disabled="true"></p:inputText>
+                                            <p:inputText id="cod" value="#{articulosMB.articulosInventario.id}" disabled="false"></p:inputText>
                                         </div>
                                         <div class="p-col-3">
                                             <p:outputLabel value="Bodega: *"></p:outputLabel>
@@ -135,7 +135,7 @@
                                             <h:form>
                                                 <div class="ui-inputgroup">
                                                     <p:commandButton icon="pi pi-search" oncomplete="PF('BuscarCategoria').show()" />
-                                                    <p:inputText id="codcate" placeholder="Categoria" value="#{articulosMB.nomCategoria}" />
+                                                    <p:inputText id="codcate" placeholder="Categoria" value="#{articulosMB.articulosInventario.id_categoria}" />
 
                                                 </div>
                                             </h:form>
@@ -210,9 +210,9 @@
 
                         <p:dialog header="Categorias" widgetVar="BuscarCategoria" id="busquedaCategoria"
                                   minHeight="300" width="30%" showEffect="fade">
-                            <h:form>
+                            <h:form id="categoriaVista"> 
                                 <p:dataTable var="ListaCategorias" id="listaProveedores" selectionMode="single" value="#{articulosMB.listaCategoria}" 
-                                             selection="#{articulosMB.categoria}" rowKey="#{ListaCategorias.idCat}" 
+                                             selection="#{articulosMB.categoriaSeleccionada}" rowKey="#{ListaCategorias.idCat}" 
                                              scrollable="true" scrollHeight="250">
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 

@@ -61,60 +61,29 @@ public class EntradaManagedBean implements Serializable {
 
     List<ProductoReport> productosReport;
 
+    private int idProveedor;
+
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+    
+    
     private Proveedor proveedor;
     private ProveedorDAO proveedorDAO;
     private String proveedordINum;
     private String proveedorNombre;
-
-    public String getNombreCategoria() {
-        return nombreCategoria;
-    }
-
-    public void setNombreCategoria(String nombreCategoria) {
-        this.nombreCategoria = nombreCategoria;
-    }
-    private String nombreCategoria;
-
-    public Boolean getSiICE() {
-        return SiICE;
-    }
-
-    public void setSiICE(Boolean SiICE) {
-        this.SiICE = SiICE;
-    }
-
-    public Boolean getSiIVA() {
-        return SiIVA;
-    }
-
-    public void setSiIVA(Boolean SiIVA) {
-        this.SiIVA = SiIVA;
-    }
     private Boolean SiICE;
     private Boolean SiIVA;
-
     private Bodega bodega;
     private BodegaDAO bodegaDAO;
     private int codBodega;
     private String nombreBodega;
     private String direccionBodega;
     private String ciudadBodega;
-
-    public String getNumeroComprobante() {
-        return numeroComprobante;
-    }
-
-    public void setNumeroComprobante(String numeroComprobante) {
-        this.numeroComprobante = numeroComprobante;
-    }
-
-    public Date getFechaComprobante() {
-        return fechaComprobante;
-    }
-
-    public void setFechaComprobante(Date fechaComprobante) {
-        this.fechaComprobante = fechaComprobante;
-    }
     private String numeroComprobante;
     private Date fechaComprobante;
 
@@ -152,13 +121,6 @@ public class EntradaManagedBean implements Serializable {
     private List<ArticulosInventario> listaProductos;
     private List<Bodega> listaBodegas;
 
-    public List<EntradaInventario> getListaEntradas() {
-        return listaEntradas;
-    }
-
-    public void setListaEntradas(List<EntradaInventario> listaEntradas) {
-        this.listaEntradas = listaEntradas;
-    }
     private List<EntradaInventario> listaEntradas;
 
     //Constructor
@@ -166,11 +128,13 @@ public class EntradaManagedBean implements Serializable {
     public void EntradaManagedBean() {
 
         this.productosReport = daoReport.getArticulosReport();
-        
+
+        this.idProveedor = 0;
         this.proveedor = new Proveedor();
         this.proveedorDAO = new ProveedorDAO();
         this.nombreCategoria = "XXXX";
         this.numeroComprobante = "";
+        aleatorioCod();
         this.fechaComprobante = new Date();
         this.bodega = new Bodega();
         this.bodegaDAO = new BodegaDAO();
@@ -210,6 +174,9 @@ public class EntradaManagedBean implements Serializable {
         this.listaProveedores = proveedorDAO.ListarProveedor();
         this.listaProductos = productoDao.getArticulos();
 
+        this.SiICE = false;
+        this.SiIVA = false;
+
         System.out.print(listaProveedores.get(0).getNombre());
     }
 
@@ -221,28 +188,28 @@ public class EntradaManagedBean implements Serializable {
     }
 
     //Buscar proveedor
-    @Asynchronous
-    public void BuscarProveedorEntrada() {
-        this.proveedor = proveedorDAO.BuscarProveedor(this.proveedordINum);
-        if (this.proveedor.getNombre() != null) {
-            this.proveedorNombre = this.proveedor.getNombre();
-        } else {
-            System.out.print("No hay proveedor");
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El proveedor no existe o se encuentra inactivo.");
-        }
-
-        if (this.proveedor.getNombre() != null) {
-            System.out.print("proveedor: " + proveedorNombre);
-        } else {
-            System.out.print("Sin proveedor");
-        }
-    }
+////    @Asynchronous
+////    public void BuscarProveedorEntrada() {
+////        this.proveedor = proveedorDAO.BuscarProveedor(this.proveedordINum);
+////        if (this.proveedor.getNombre() != null) {
+////            this.proveedorNombre = this.proveedor.getNombre();
+////        } else {
+////            System.out.print("No hay proveedor");
+////            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El proveedor no existe o se encuentra inactivo.");
+////        }
+////
+////        if (this.proveedor.getNombre() != null) {
+////            System.out.print("proveedor: " + proveedorNombre);
+////        } else {
+////            System.out.print("Sin proveedor");
+////        }
+////    }
 
     //Buscar Producto
     @Asynchronous
     public void BuscarProducto() {
         this.producto = null;
-        this.nombreProducto = "XXXXXX";
+        this.nombreProducto = "";
         this.nombreCategoria = "XXXXXX";
         this.cantidad = 1;
         this.precioProducto = 0;
@@ -264,11 +231,10 @@ public class EntradaManagedBean implements Serializable {
         }
     }
 
-    
     public JasperPrint verFactura(int idEntrada) throws JRException {
 
         EntradaInventario entrada = entradaDAO.getEntradas(idEntrada).get(0);
-            JasperPrint jaspert=null;
+        JasperPrint jaspert = null;
         if (entrada != null) {
             List<EntradaDetalleInventario> detalleEntradas = new ArrayList<>();
             EntradaDetalleDAO dao = new EntradaDetalleDAO();
@@ -279,7 +245,6 @@ public class EntradaManagedBean implements Serializable {
             float ice = 0.0f;
             float iva = 0.0f;
             float descuento = 0.0f;
-            String nombre = "Hola Mundo";
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
                     dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
@@ -300,50 +265,49 @@ public class EntradaManagedBean implements Serializable {
             ec.setResponseContentType("application/pdf");
             ec.setResponseHeader("Content-disposition", "attachment; "
                     + "filename=factura.pdf");
-*/
+             */
             // tomamos el stream para llenarlo con el pdf.
             //try ( OutputStream stream = ec.getResponseOutputStream()) {
+            // Parametros para el reporte.
+            SimpleDateFormat dateFormat = new SimpleDateFormat(
+                    "dd/MM/yyyy",
+                    new Locale("es_ES"));
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("FECHA", dateFormat.format(entrada.getFecha()));
+            parametros.put("COMPROBANTE", entrada.getNumComprobante());
+            parametros.put("NOMBREBODEGA", bod.getNomBodega());
+            parametros.put("RUCPROVEEDOR", pro.getRuc());
+            parametros.put("NOMBREPROVEEDOR", pro.getNombre());
 
-                // Parametros para el reporte.
-                SimpleDateFormat dateFormat = new SimpleDateFormat(
-                        "dd/MM/yyyy",
-                        new Locale("es_ES"));
-                Map<String, Object> parametros = new HashMap<>();
-                parametros.put("FECHA", dateFormat.format(entrada.getFecha()));
-                parametros.put("COMPROBANTE", entrada.getNumComprobante());
-                parametros.put("NOMBREBODEGA", bod.getNomBodega());
-                parametros.put("RUCPROVEEDOR", pro.getRuc());
-                parametros.put("NOMBREPROVEEDOR", pro.getNombre());
+            parametros.put("SUBTOTAL", String.format("%.2f", subtotal));
+            parametros.put("DESCUENTO", String.format("%.2f", descuento));
+            parametros.put("IVA", String.format("%.2f", iva));
+            parametros.put("ICE", String.format("%.2f", ice));
+            parametros.put("TOTAL", String.format("%.2f", (subtotal + iva + ice)));
 
-                parametros.put("SUBTOTAL", String.format("%.2f", subtotal));
-                parametros.put("DESCUENTO", String.format("%.2f", descuento));
-                parametros.put("IVA", String.format("%.2f", iva));
-                parametros.put("ICE", String.format("%.2f", ice));
-                parametros.put("TOTAL", String.format("%.2f", (subtotal + iva + ice)));
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("PlantillasReportes/entradas.jasper"));
 
-                // leemos la plantilla para el reporte.
-                File filetext = new File(FacesContext
-                        .getCurrentInstance()
-                        .getExternalContext()
-                        .getRealPath("PlantillasReportes/entradas.jasper"));
-
-                // llenamos la plantilla con los datos.
-                 /*JasperPrint jasperPrint = JasperFillManager.fillReport(
+            // llenamos la plantilla con los datos.
+            /*JasperPrint jasperPrint = JasperFillManager.fillReport(
                         filetext.getPath(),
                         parametros,
                         new JRBeanCollectionDataSource(dataset)*/
-                 jaspert= JasperFillManager.fillReport(
-                        filetext.getPath(),
-                        parametros,
-                        new JRBeanCollectionDataSource(dataset));
-                
-                // exportamos a pdf.
-               /* JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            jaspert = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(dataset));
+
+            // exportamos a pdf.
+            /* JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
                 //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
 
                 stream.flush();
                 stream.close();*/
-           /* } catch (Exception ex) {
+ /* } catch (Exception ex) {
                 System.out.println(ex.getMessage().toString());
             } finally {
                 // enviamos la respuesta.
@@ -355,27 +319,31 @@ public class EntradaManagedBean implements Serializable {
     }
 
     public void imprimirPDF(int idEntrada) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		try {
-				HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
-						.getExternalContext().getResponse();
-				httpServletResponse.addHeader("Content-disposition",
-						"attachment; filename=" + "facturaEntradas" + ".pdf");
-				try (ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
-					JasperExportManager.exportReportToPdfStream(verFactura(idEntrada),servletOutputStream);
-					servletOutputStream.flush();
-					FacesContext.getCurrentInstance().responseComplete();
-				}
-		} catch (Exception ex) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "hola", ex.getMessage()));
-		}
-	}
-	
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
+                    .getExternalContext().getResponse();
+            httpServletResponse.addHeader("Content-disposition",
+                    "attachment; filename=" + "facturaEntradas" + ".pdf");
+            try ( ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
+                JasperExportManager.exportReportToPdfStream(verFactura(idEntrada), servletOutputStream);
+                servletOutputStream.flush();
+                FacesContext.getCurrentInstance().responseComplete();
+            }
+        } catch (Exception ex) {
+            context.addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "hola", ex.getMessage()));
+        }
+    }
+
     //Agregar producto a la lista de detalle
     @Asynchronous
     public void AgregarProductoLista() {
+        
         try {
+            Proveedor prueba = this.proveedor;
+            Bodega prueba2 = this.bodega;
+            ArticulosInventario prueba3 = this.producto;
             if (this.producto.getId() > 0) {
                 int stock_maximo = this.producto.getMax_stock();
                 int _cantidad = this.cantidad;
@@ -388,7 +356,7 @@ public class EntradaManagedBean implements Serializable {
 
                         //Ingreso de valores al detalle de entrada
                         EntradaDetalleInventario detalle = new EntradaDetalleInventario();
-                        detalle.setIdEntrada(this.producto.getCod());
+                        detalle.setIdArticulo(this.producto.getId());
                         detalle.setCant(this.cantidad);
                         detalle.setIva(this.producto.getCosto()*0.12);
                         detalle.setIce(this.producto.getIce());
@@ -432,6 +400,7 @@ public class EntradaManagedBean implements Serializable {
 
     }
 
+    
     //Eliminar un producto de la lista
     @Asynchronous
     public void EliminarProducto(EntradaDetalleInventario detalle) {
@@ -478,7 +447,7 @@ public class EntradaManagedBean implements Serializable {
                     entradaActual.setProveedor(this.proveedor);
                     entradaActual.setIdProveedor(this.proveedor.getIdProveedor());
                     entradaActual.setIdBodega(this.bodega.getCod());
-                    entradaActual.setNumComprobante(numeroComprobante);
+                    entradaActual.setNumComprobante(this.numeroComprobante);
                     entradaActual.setFecha(currentDate2);
 
                     //Verificación en consola
@@ -504,10 +473,12 @@ public class EntradaManagedBean implements Serializable {
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
                             System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
+                  //          daoDetail.GuardarEntrada(this.listaDetalle);
                             daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price);
                             listSize += 1;
                         }
 
+                        addMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se guardo la entrada");
                         return "listaEntrada";
                     }
                 }
@@ -518,31 +489,49 @@ public class EntradaManagedBean implements Serializable {
         return null;
     }
 
+    
     public void SeleccionarProveedor(Proveedor prov) {
+        this.idProveedor = prov.getIdProveedor();
         this.proveedorNombre = prov.getNombre();
         this.proveedordINum = prov.getRazonSocial();
         this.proveedor = prov;
+
     }
 
+    
     public void SeleccionarProducto(ArticulosInventario pr) {
-        this.codigoProducto = pr.getId();
-        this.nombreProducto = pr.getDescripcion();
-        this.precioProducto = pr.getCosto();
-        if (this.SiICE) {
-            this.ice = pr.getCosto() * 15 / 100;
-        }
-        if (this.SiIVA) {
-            this.iva = pr.getCosto() * 12 / 100;
+        try {
+            this.codigoProducto = pr.getId();
+            this.nombreProducto = pr.getDescripcion();
+            this.precioProducto = pr.getCosto();
+            if (this.SiICE) {
+                this.ice = (int) (pr.getCosto() * 15 / 100);
+            }
+            this.iva = (int) (pr.getCosto() * 12 / 100);
+
+            this.producto = pr;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
 
-        this.producto = pr;
     }
 
+    @Asynchronous
+    public void LimpiarProducto() {
+        this.producto = null;
+        this.nombreProducto = "";
+        this.cantidad = 0;
+        this.codigoProducto = 0;
+        this.SiICE = false;
+    }
+
+    
     public void SeleccionarBodega(Bodega bod) {
         this.codBodega = bod.getCod();
         this.nombreBodega = bod.getNomBodega();
         this.ciudadBodega = bod.getNomCiudad();
         this.direccionBodega = bod.getDireccion();
+        this.bodega = bod;
     }
 
     public String getNombreBodega() {
@@ -841,4 +830,58 @@ public class EntradaManagedBean implements Serializable {
         this.listaProductos = listaProductos;
     }
 
+    public String getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
+    }
+    private String nombreCategoria;
+
+    public Boolean getSiICE() {
+        return SiICE;
+    }
+
+    public void setSiICE(Boolean SiICE) {
+        this.SiICE = SiICE;
+    }
+
+    public Boolean getSiIVA() {
+        return SiIVA;
+    }
+
+    public void setSiIVA(Boolean SiIVA) {
+        this.SiIVA = SiIVA;
+    }
+
+    public String getNumeroComprobante() {
+        return numeroComprobante;
+    }
+
+    public void setNumeroComprobante(String numeroComprobante) {
+        this.numeroComprobante = numeroComprobante;
+    }
+
+    public Date getFechaComprobante() {
+        return fechaComprobante;
+    }
+
+    public void setFechaComprobante(Date fechaComprobante) {
+        this.fechaComprobante = fechaComprobante;
+    }
+
+    public List<EntradaInventario> getListaEntradas() {
+        return listaEntradas;
+    }
+
+    public void setListaEntradas(List<EntradaInventario> listaEntradas) {
+        this.listaEntradas = listaEntradas;
+    }
+    
+         public void aleatorioCod() {
+          String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
+          String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
+          this.numeroComprobante = ("AF" + uuid + uuid2).toUpperCase();
+     }
 }

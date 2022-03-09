@@ -19,7 +19,7 @@
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles"
                                 url="./ActivosIntangibles.xhtml"/>
-                  
+
                 </p:menubar>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
@@ -143,7 +143,7 @@
                                                     headerText="Opciones" 
                                                     rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                                     <p:commandButton  
-                                                        actionListener="#{activosFijosMB.obtenerdatos(depreciable)}"
+                                                        actionListener="#{activosFijosMB.obtenerDatosDepreciables(depreciable)}"
                                                         update="editarDepreciable"
                                                         icon="pi pi-pencil"
                                                         oncomplete="PF('EditarDepreciable').show()">  
@@ -317,15 +317,23 @@
                                                     <!--j-->
                                                     <div class="p-formgrid p-grid">
                                                         <div class="p-field p-col">
-                                                            <p:outputLabel 
-                                                                for="@next" 
-                                                                value="Tiempo de depreciación en Meses:" />
-                                                            <p:inputText 
-                                                                type="number" 
-                                                                value="#{activosFijosMB.activodepreciable.depreciacion_meses}"
-                                                                >
-                                                                <p:keyFilter regEx="/[0-9]/i"/>
-                                                            </p:inputText>
+                                                            <div class=" p-col-3">
+                                                                <p:outputLabel 
+                                                                    for="@next" 
+                                                                    value="Tiempo de depreciación en Meses:" />
+                                                                <p:inputText 
+                                                                    type="number" 
+                                                                    value="#{activosFijosMB.activodepreciable.depreciacion_meses}"
+                                                                    >
+                                                                    <p:keyFilter regEx="/[0-9]/i"/>
+                                                                </p:inputText> 
+                                                            </div>
+                                                            <div class=" p-col-3">
+                                                                <p:commandButton  
+                                                                    icon="pi pi-pencil">  
+                                                                </p:commandButton>
+
+                                                            </div>
 
                                                         </div>
                                                         <div class="p-field p-col">

@@ -25,7 +25,7 @@ public class NoDepreciableDAO {
 
     Conexion conexion = new Conexion();
     ResultSet result;
-
+//funcion utilizada para el registro de un activo no depreciable
     public boolean registrarTangibleNoDepreciable(ActivosFijos activosFijos, ActivoNoDepreciable activoNoDepreciable) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -43,7 +43,7 @@ public class NoDepreciableDAO {
         System.out.println(consulta + "\n" + consulta2 + "\n funcion : " + consulta3);
         return true;
     }
-
+//funcion,la cual nos servira para editar un activo no depreciable
     public boolean editarNoDepreciable(ListaNoDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -105,7 +105,7 @@ public class NoDepreciableDAO {
 
         return listaNP;
     }
-
+// funcion que retorna un lista de un activo no depreciable 
     public List<ListaNoDepreciable> ListarNodepreciableDeshabilitados() throws Exception {
         List<ListaNoDepreciable> listaNP = new ArrayList<>();
         String sentencia = "";
@@ -185,7 +185,7 @@ public class NoDepreciableDAO {
         }
         return listaNP;
     }
-
+//funcion que retorna un valor boleando el cual lo deshabilita
     public boolean deshabilitarnoDepreciable(ListaNoDepreciable li) throws SQLException {
         String consulta = "";
         try {
@@ -201,7 +201,7 @@ public class NoDepreciableDAO {
         }
         return true;
     }
-
+//funcion que retorna un valor boleano para habilitar un activo no depreciables
     public boolean habilitarnoDepreciable(ActivoNoDepreciable li) throws SQLException {
         String consulta = "";
         try {

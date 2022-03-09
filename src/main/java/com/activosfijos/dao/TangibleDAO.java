@@ -21,6 +21,8 @@ import java.util.List;
  * @author desta
  */
 public class TangibleDAO {
+//funcion boleana para registrar un activo tangible depreciable el cual 
+// recibe 2 parametros de tipo activo fijo y de activo depreciable
 
     public boolean registrarTangibleDepreciable(ActivosFijos activosFijos, ActivoDepreciable activodepreciable) throws SQLException {
 
@@ -40,6 +42,7 @@ public class TangibleDAO {
         return true;
     }
 
+//retornar un boleano si el activo ha sido editable
     public boolean editarTangibleDepreciable(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -60,6 +63,26 @@ public class TangibleDAO {
         return true;
     }
 
+    public int actualizarcuotadepresiacion() {
+            Conexion conexion = new Conexion();
+        try {
+            String consulta = String.format("update fijo_tangible_depreciable set cuota_depresiacion=\n"
+                    + "(select (af.valor_adquisicion*(ftd.porcentaje_depreciacion/100))/ftd.depreciacion_meses as calculo from activos_fijos as af \n"
+                    + "inner join fijo_tangible_depreciable as ftd\n"
+                    + "on af.id_activo_fijo=ftd.id_activo_fijo\n"
+                    + "where id_depreciable=(select max(id_depreciable) from fijo_tangible_depreciable))\n"
+                    + "where id_depreciable=(select max(id_depreciable) from fijo_tangible_depreciable)");
+
+            conexion.ejecutarSql(consulta);
+            return 1;
+        } catch (Exception e) {
+            return -1;
+        }
+        finally{
+            conexion.desconectar();
+        }
+    }
+
     public boolean eliminar(ListaDepreciable li) throws SQLException {
 
         Conexion conexion = new Conexion();
@@ -72,6 +95,7 @@ public class TangibleDAO {
         System.out.println("update 1: " + consulta);
         return true;
     }
+// lsitamos los activos depreciables 
 
     public List<ListaDepreciable> Listardepreciable() throws Exception {
         List<ListaDepreciable> lista = new ArrayList<>();
@@ -111,6 +135,7 @@ public class TangibleDAO {
         }
         return lista;
     }
+// deshabilitamos un activo depreciable
 
     public boolean deshabilitartangible(ListaDepreciable li) throws SQLException {
 
@@ -123,6 +148,7 @@ public class TangibleDAO {
         System.out.println("update 1: " + consulta);
         return true;
     }
+//listamos un activo depreciable deshabilitado 
 
     public List<ListaDepreciable> listaradepreciablesdeshabilitados() throws Exception {
         List<ListaDepreciable> listtang = new ArrayList<>();
@@ -164,6 +190,7 @@ public class TangibleDAO {
 
         return listtang;
     }
+//funsion para habilitar un activo depreciable
 
     public boolean habilitardepreciable(ActivoDepreciable li) throws SQLException {
 

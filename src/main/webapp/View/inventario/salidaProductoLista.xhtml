@@ -17,7 +17,7 @@
                         <p:toolbar>
                             <p:toolbarGroup style="margin-top: 4%">
 
-                                <p:commandButton value="Nuevo" action="/View/inventario/entradaProducto"
+                                <p:commandButton value="Nuevo" action="#{asientoManagedBean.openNewAsiento()}"
                                                  disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}"
                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                                  icon="pi pi-plus" 

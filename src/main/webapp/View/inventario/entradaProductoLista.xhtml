@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+                <h:form id="entradaForm">
+                    <ui:include src="./subheaderinventario.xhtml"/>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup style="margin-top: 4%">
+
+                                <p:commandButton value="Nuevo" action="/View/inventario/entradaProducto"
+                                                 disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                 icon="pi pi-plus" 
+                                                 oncomplete="">
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+
+
+                        <p:dataTable 
+                            var="ListaEntradas" 
+                            value="#{EntradaMB.listaEntradas}" 
+                            editable="true" reflow="true"
+                            editInitEvent="dblclick" editMode="cell"
+                            >
+                            <f:facet name="header">
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Entrada de Productos</span>
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
+                                    </span>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="Nº de Comprobante" >
+                                <h:outputText value="#{ListaEntradas.numComprobante}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha" >
+                                <h:outputText value="#{ListaEntradas.fecha}" />
+                            </p:column>
+
+                            <p:column headerText="Proveedor" >
+                                <h:outputText value="#{ListaEntradas.nombreProveedor}" />
+                            </p:column>
+                            <p:column headerText="Bodega" >
+                                <h:outputText value="#{ListaEntradas.nombreBodega}" />
+                            </p:column>
+
+                            <p:column headerText="Acción" filterStyle="display : none">
+                                <p:commandButton value="Ver Factura" icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" 
+                                                 actionListener="#{EntradaMB.imprimirPDF(ListaEntradas.cod)}" update="entradaForm" 
+                                                 onclick="PF('msgs').hide();"/>
+                                <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-pencil"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-trash" styleClass="rounded-button ui-button-danger"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

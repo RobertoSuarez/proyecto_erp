@@ -521,7 +521,8 @@
                                                  update=":form-princ:dtProcesoPrin, :form-princ:growl"
                                                  class="ui-button-primary rounded-button p-mr-2 p-mb-2"
                                                  process="@this" 
-                                                 actionListener="#{procesoMB.edit2(document)}">
+                                                 actionListener="#{procesoMB.edit2(document)}"
+                                                 disabled="#{document.identificador==null eq true}">
                                     <p:resetInput target=":form-princ:dtProcesoPrin"/>
                                 </p:commandButton>
                             </p:column>

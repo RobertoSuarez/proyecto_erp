@@ -91,8 +91,7 @@ public class ProcesosManagedBean implements Serializable {
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Proceso Agregado"));
 
                 PrimeFaces.current().executeScript("PF('nuevoProcesoPrincDialog').hide()");
-                externalContext.redirect("/proyecto_erp/View/produccion/procesoProduccion.xhtml");
-
+                externalContext.redirect("../produccion/procesoProduccion.xhtml");
             }
 
         } catch (IOException e) {

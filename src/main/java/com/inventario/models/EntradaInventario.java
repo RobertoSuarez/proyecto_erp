@@ -5,6 +5,7 @@
 package com.inventario.models;
 
 import com.cuentasporpagar.models.Proveedor;
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -13,7 +14,7 @@ import java.util.Date;
  *
  * @author angul
  */
-public class EntradaInventario {
+public class EntradaInventario implements Serializable{
        private static final long serialVersionUID = 1L;
 
     private int cod;
@@ -27,6 +28,10 @@ public class EntradaInventario {
     private int idProveedor;
     
     private Proveedor proveedor;
+    
+    private String nombreProveedor;
+    
+    private String nombreBodega;
 
     
     public EntradaInventario() {
@@ -42,6 +47,16 @@ public class EntradaInventario {
         this.fecha = fecha;
         this.idBodega = idBodega;
         this.idProveedor = idProveedor;
+       }
+    
+        public EntradaInventario(int cod, String numComprobante, Date fecha, int idBodega, int idProveedor, String nombreProveedor, String nombreBodega  ) {
+        this.cod = cod;
+        this.numComprobante = numComprobante;
+        this.fecha = fecha;
+        this.idBodega = idBodega;
+        this.idProveedor = idProveedor;
+        this.nombreProveedor = nombreProveedor;
+        this.nombreBodega = nombreBodega;
        }
 
 
@@ -91,6 +106,22 @@ public class EntradaInventario {
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public String getNombreProveedor() {
+        return nombreProveedor;
+    }
+
+    public void setNombreProveedor(String nombreProveedor) {
+        this.nombreProveedor = nombreProveedor;
+    }
+
+    public String getNombreBodega() {
+        return nombreBodega;
+    }
+
+    public void setNombreBodega(String nombreBodega) {
+        this.nombreBodega = nombreBodega;
     }
 
     
