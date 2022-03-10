@@ -102,7 +102,7 @@
                                     placeholder="Contraseña"
                                     weakLabel="Débil"
                                     maxlength="15"
-                                    validatorMessage="#{usuarioMB.PFW('Contraseñas no coinciden')}"
+                                    validatorMessage="#{usuarioMB.mensajeDeAdvertencia('Contraseñas no coinciden')}"
                                     goodLabel="Bueno"
                                     strongLabel="Fuerte"
                                     match="password2"
@@ -127,12 +127,9 @@
 
                         <div class="ui-fluid p-grid" style="padding-top: 10px ">
 
-                            <p:selectManyCheckbox 
-                                layout="responsive" columns="1">
-                                <f:selectItem
-                                    itemLabel="" 
-                                    itemValue="1"  />
-                            </p:selectManyCheckbox>
+                            <h:selectBooleanCheckbox value="#{usuarioMB.status}">
+
+                            </h:selectBooleanCheckbox>
                             <u style="padding-top: 9px" >
                                 <a  href="#" onclick="PF('dlg2').show()"> 
                                     Aceptar terminos y condiciones 
