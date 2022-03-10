@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../WEB-INF/InicioTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form id="VistaGeneral" style="width: 100%;">
+            <ui:include src="./menuSeguridad.xhtml" />
+            <div class="card crud-demo">
+                <p:growl id="messages" showDetail="true"/>
+                <br/><br/><br/>
+                <p:panel>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <div class="products-table-header" style="text-align: center">
+                                <span style="font-weight: bold; font-size: 25px;" > Modulos </span>
+                            </div>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <f:facet name="header">
+                        <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
+                                         process="@this"
+                                         onclick="PF('VistaData').show()">
+                        </p:commandButton>
+                    </f:facet>
+                    <br/>
+                    <p:dataTable id="dt_views" value="#{ViewsMB.lstViews}" var="ListaVistas"
+                                 size="small" liveResize="true" rowKey="#{ListaVistas.id_Vista}"
+                                 selectionMode="single"
+                                 reflow="true">
+                        <p:column headerText="Codigo" width="5%" style="font-size: 17px">
+                            <h:outputText value="#{ListaVistas.id_Vista}"/>
+                        </p:column>
+
+                        <p:column headerText="Nombre de la vista" style="font-size: 17px" width="20%">
+                            <h:outputText value="#{ListaVistas.name_Vista}"/>
+                        </p:column>
+
+                        <p:column headerText="Descripcion" style="font-size: 17px" width="50%">
+                            <h:outputText value="#{ListaVistas.description_Vista}"/>
+                        </p:column>
+
+                        <p:column headerText="Modulo perteneciente" style="font-size: 17px" width="10%">
+                            <h:outputText value="#{ListaVistas.name_Modulo}"/>
+                        </p:column>
+
+                        <p:column exportable="false" width="4%">
+                            <p:commandButton icon="pi pi-pencil"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="@this"
+                                             onclick="PF('ViewsDataEdit').show()"
+                                             update="ViewsDATAedit"
+                                             actionListener="#{ViewsMB.prepareEditViews(ListaVistas)}">
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-trash"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="@this dt_views"
+                                             update="VistaGeneral"
+                                             actionListener="#{ViewsMB.erasedViews(ListaVistas)}">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+
+            <p:dialog id="VistaNueva" header="Informacion de la vista" widgetVar="VistaData"
+                      height="70%" width="30%" showEffect="fade">
+                <p:outputPanel id="form-Vista" class="ui-fluid">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <p:outputLabel value="Nombre de la vista:"/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:inputText value="#{ViewsMB.views.name_Vista}" />
+                        </div>
+                        <div class="p-col-12">
+                            <p:outputLabel value="Detalle de la vista: "/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:inputTextarea value="#{ViewsMB.views.description_Vista}"/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:outputLabel value="Modulo de la vista: "/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:selectOneMenu id="OpcionModulo" value="#{ViewsMB.views.id_Modulo}"
+                                             style="height: 35px; width: 185px !important;">
+                                <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
+                                <f:selectItems value="#{ViewsMB.lstModulesItems}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="p-col-6">
+                            <p:commandButton icon="pi pi-plus"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="form-Vista @this"
+                                             value="Agregar Vista"
+                                             onclick="PF('VistaData').hide()"
+                                             update="form-Vista VistaGeneral"
+                                             actionListener="#{ViewsMB.insertViews()}">
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+
+        </h:form>
+
+
+
+        <p:dialog id="EdicionVista" header="Editar datos de la vista" widgetVar="ViewsDataEdit"
+                  height="70%" width="30%" showEffect="fade">
+            <h:form id="ViewsDATAedit">
+                <p:panel id="Edit-Panel" header="Vistas" style="text-align: left; width: 100%; float: left">
+                    <p:panelGrid columns="1" style="width: 100%">
+                        <p:outputLabel value="Codigo de la vista"/>
+                        <p:inputText value="#{ViewsMB.views.id_Vista}" required="true"  disabled="true"/>
+                        <p:outputLabel value="Nombre de la vista"/>
+                        <p:inputText required="true" value="#{ViewsMB.views.name_Vista}" />
+                        <p:outputLabel value="Detalle de la vista"/>
+                        <p:inputTextarea required="true" value="#{ViewsMB.views.description_Vista}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:commandButton icon="pi pi-pencil"                                                         
+                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                 process="Edit-Panel @this"
+                                 value="Editar"
+                                 actionListener="#{ViewsMB.editViews()}"
+                                 onclick="PF('ViewsDataEdit').hide()"
+                                 update="VistaGeneral">
+                </p:commandButton>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>
