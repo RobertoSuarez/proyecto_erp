@@ -72,7 +72,7 @@ public class BalanceGeneralManagedBean implements Serializable {
 
                 String mySalgo = Double.toString(saldo);
 
-                balanceGeneralString.get(x).setSaltoString("                                                       " + mySalgo);
+                balanceGeneralString.get(x).setSaltoString("                                                         " + mySalgo);
             }
             if (balanceGeneralString.get(x).getNombre().charAt(3) == ' ') {
                 double saldo = balanceGeneralString.get(x).getSaldo();
