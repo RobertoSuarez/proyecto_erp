@@ -18,7 +18,7 @@ public class DetalleVenta implements Serializable {
     private double cantidad;
     private double descuento;
     private double precio;
-    private Producto producto;
+    private ProductoVenta producto;
     private double subTotal;
     private String nombreProducto;
 
@@ -26,7 +26,7 @@ public class DetalleVenta implements Serializable {
         
     }
 
-    public DetalleVenta(int iddetalleventa, int idventa, int codprincipal, double cantidad, double descuento, double precio, Producto prod) {
+    public DetalleVenta(int iddetalleventa, int idventa, int codprincipal, double cantidad, double descuento, double precio, ProductoVenta prod) {
         this.iddetalleventa = iddetalleventa;
         this.idventa = idventa;
         this.codprincipal = codprincipal;
@@ -84,11 +84,11 @@ public class DetalleVenta implements Serializable {
         this.precio = precio;
     }
 
-    public Producto getProducto() {
+    public ProductoVenta getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoVenta producto) {
         this.producto = producto;
     }
 
