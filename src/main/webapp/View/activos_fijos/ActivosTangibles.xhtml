@@ -95,11 +95,8 @@
                                                 <p:column 
                                                     headerText="% de Depreciación">
                                                     <h:outputText 
-                                                        value="#{depreciable.porcentaje_depreciacion} %"
-                                                        style="font-weight: 700">
-                                                        <f:convertNumber
-                                                            currencySymbol="%" 
-                                                            type="currency"/>
+                                                        value="#{depreciable.porcentaje_depreciacion} %">
+                                                     
                                                     </h:outputText>
                                                 </p:column>
 
@@ -591,7 +588,7 @@
                                     </h:form>
 
                                     <!-- LISTAR DEPRECIABLES X MES -->
-                                    <h:form id="ListaMesesDepreciables">
+                                    <h:form id="ListaMesesDepreciables" >
                                         <p:dialog 
                                             header="Lista de Depreciación por cada Mes"
                                             minHeight="40" 
@@ -602,14 +599,8 @@
                                             widgetVar="listaDepreciableMes">
                                             <div  style="display: flex;justify-content: center">
 
-                                                <p:outputPanel class="ui-fluid">
+                                                <p:outputPanel class="ui-fluid" >
                                                     <div class="p-field p-col-4">
-
-                                                        <p:outputLabel 
-                                                            for="@next" 
-                                                            value="Descripción: "/>
-                                                        <p:inputText  
-                                                            value="#{activosFijosMB.listadepreciable.detalle_de_activo}" />
 
                                                     </div>
                                                     <p:dataTable id="tablaD"
