@@ -7,7 +7,7 @@ package com.ventas.models;
 
 import java.io.Serializable;
 
-public class Producto implements Serializable {
+public class ProductoVenta implements Serializable {
     private int codigo;
     private String nombre;
     private int idCategoria;
@@ -17,13 +17,14 @@ public class Producto implements Serializable {
     private int stock;
     private float iva;
     private float ice;
-    private int id_subcuenta;
+    private int idSubcuenta;
     private String unidadMedida;
     private float precioUnitario;
     private float subsidio;
+    private float descuento;
 
-    public Producto() {
-        
+    public ProductoVenta() {
+        this.descuento = 0;
     }
 
     public int getCodigo() {
@@ -99,13 +100,13 @@ public class Producto implements Serializable {
     }
 
     public int getIdSubcuenta() {
-        return id_subcuenta;
+        return idSubcuenta;
     }
 
-    public void setIdSubcuenta(int id_subcuenta) {
-        this.id_subcuenta = id_subcuenta;
+    public void setIdSubcuenta(int idSubcuenta) {
+        this.idSubcuenta = idSubcuenta;
     }
-    
+
     public String getUnidadMedida() {
         return unidadMedida;
     }
@@ -129,6 +130,16 @@ public class Producto implements Serializable {
     public void setSubsidio(float subsidio) {
         this.subsidio = subsidio;
     }
+
+    public float getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(float descuento) {
+        this.descuento = descuento;
+    }
+
+    
     
     
 }

@@ -20,7 +20,7 @@ public class DetalleProforma implements Serializable {
     private double price;
     private String nombrecliente;
     private String identificacionCliente;
-    private Producto producto;
+    private ProductoVenta producto;
     private double subtotal;
 
     public DetalleProforma() {
@@ -90,11 +90,11 @@ public class DetalleProforma implements Serializable {
         this.identificacionCliente = identificacionCliente;
     }
 
-    public Producto getProducto() {
+    public ProductoVenta getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoVenta producto) {
         this.producto = producto;
     }
 
