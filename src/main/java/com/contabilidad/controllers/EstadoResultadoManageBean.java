@@ -257,6 +257,10 @@ public class EstadoResultadoManageBean implements Serializable {
         return cuenta.split(" ")[0].length() <= 5;
     }
 
+    public boolean getBold2(String cuenta) {
+        return cuenta.split(" ")[0].length() == 7;
+    }
+
     public List<EstadoResultado> getInfomacion() {
         return infomacion;
     }
