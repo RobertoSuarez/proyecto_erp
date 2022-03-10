@@ -5,8 +5,8 @@
  */
 package com.ventas.controllers;
 
-import com.ventas.dao.ProductoDAO;
-import com.ventas.models.Producto;
+import com.ventas.dao.ProductoVentaDAO;
+import com.ventas.models.ProductoVenta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +22,11 @@ public class ProductoManagedBean implements Serializable{
     float precioProducto;
     int cantidad;
 
-    public ProductoDAO getProductdao() {
+    public ProductoVentaDAO getProductdao() {
         return productdao;
     }
 
-    public void setProductdao(ProductoDAO productdao) {
+    public void setProductdao(ProductoVentaDAO productdao) {
         this.productdao = productdao;
     }
 
@@ -53,12 +53,12 @@ public class ProductoManagedBean implements Serializable{
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-    ProductoDAO productdao;
-    Producto product;
-    List<Producto> listaproforma = new ArrayList();
+    ProductoVentaDAO productdao;
+    ProductoVenta product;
+    List<ProductoVenta> listaproforma = new ArrayList();
     public ProductoManagedBean() {
-        productdao= new ProductoDAO();
-        product=new Producto();
+        productdao= new ProductoVentaDAO();
+        product=new ProductoVenta();
         
     }
 
@@ -70,11 +70,11 @@ public class ProductoManagedBean implements Serializable{
         this.codigoproducto = codigoproducto;
     }
 
-    public Producto getProduct() {
+    public ProductoVenta getProduct() {
         return product;
     }
 
-    public void setProduct(Producto product) {
+    public void setProduct(ProductoVenta product) {
         this.product = product;
     }
     

@@ -11,12 +11,12 @@ import javax.inject.Named;
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.PreciosDAO;
-import com.ventas.dao.ProductoDAO;
+import com.ventas.dao.ProductoVentaDAO;
 import com.ventas.dao.ProformaDAO;
 import com.ventas.models.ClienteVenta;
 import com.ventas.models.DetalleProforma;
 import com.ventas.models.DetalleVenta;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
 import com.ventas.models.Proforma;
 import java.io.IOException;
 import java.io.Serializable;
@@ -58,8 +58,8 @@ public class ProformaManageBean implements Serializable {
     private ClienteVenta clienteSeleccionado;
     private Proforma proformaSeleccionada;
 
-    private ProductoDAO productoDao;
-    private Producto producto;
+    private ProductoVentaDAO productoDao;
+    private ProductoVenta producto;
     private int codigoProducto;
     private String nombreProducto;
     private float precioProducto;
@@ -86,8 +86,8 @@ public class ProformaManageBean implements Serializable {
     private double total;
 
     private List<ClienteVenta> listaClientes;
-    private List<Producto> listaProductos;
-    private List<Producto> listadescuento;
+    private List<ProductoVenta> listaProductos;
+    private List<ProductoVenta> listadescuento;
 
     private boolean tipo;
     private String visible;
@@ -102,8 +102,8 @@ public class ProformaManageBean implements Serializable {
         this.clienteDAO = new ClienteVentaDao();
         this.client = new ClienteVenta();
 
-        this.producto = new Producto();
-        this.productoDao = new ProductoDAO();
+        this.producto = new ProductoVenta();
+        this.productoDao = new ProductoVentaDAO();
         this.proformas = new Proforma();
 
         this.codigoProducto = 0;
@@ -298,9 +298,9 @@ public class ProformaManageBean implements Serializable {
                 profor.setIce((float) this.ice);
                 profor.setTotalproforma((float) this.total);
                 profordao.IngresarProforma(profor);
-                Producto produc;
+                ProductoVenta produc;
                 while (listSize < this.listaDetalle.size()) {
-                    produc = new Producto();
+                    produc = new ProductoVenta();
                     produc = this.listaDetalle.get(listSize).getProducto();
                     profordao.ingresarDetalleProforma(produc, profor);
                     listSize += 1;
@@ -364,7 +364,7 @@ public class ProformaManageBean implements Serializable {
         setVisible("true");
     }
 
-    public void SeleccionarProducto(Producto pr) {
+    public void SeleccionarProducto(ProductoVenta pr) {
         this.codigoProducto = pr.getCodigo();
         this.nombreProducto = pr.getDescripcion();
         this.precioProducto = pr.getPrecioUnitario();
@@ -434,19 +434,19 @@ public class ProformaManageBean implements Serializable {
         this.clienteNombre = clienteNombre;
     }
 
-    public ProductoDAO getProductoDao() {
+    public ProductoVentaDAO getProductoDao() {
         return productoDao;
     }
 
-    public void setProductoDao(ProductoDAO productoDao) {
+    public void setProductoDao(ProductoVentaDAO productoDao) {
         this.productoDao = productoDao;
     }
 
-    public Producto getProducto() {
+    public ProductoVenta getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoVenta producto) {
         this.producto = producto;
     }
 
@@ -602,11 +602,11 @@ public class ProformaManageBean implements Serializable {
         this.clienteSeleccionado = clienteSeleccionado;
     }
 
-    public List<Producto> getListaProductos() {
+    public List<ProductoVenta> getListaProductos() {
         return listaProductos;
     }
 
-    public void setListaProductos(List<Producto> listaProductos) {
+    public void setListaProductos(List<ProductoVenta> listaProductos) {
         this.listaProductos = listaProductos;
     }
 
@@ -662,11 +662,11 @@ public class ProformaManageBean implements Serializable {
         this.client = client;
     }
 
-    public List<Producto> getListadescuento() {
+    public List<ProductoVenta> getListadescuento() {
         return listadescuento;
     }
 
-    public void setListadescuento(List<Producto> listadescuento) {
+    public void setListadescuento(List<ProductoVenta> listadescuento) {
         this.listadescuento = listadescuento;
     }
 
@@ -723,6 +723,7 @@ public class ProformaManageBean implements Serializable {
             DetalleProforma detalle = new DetalleProforma();
             detalle.setCodigoProducto(this.producto.getCodigo());
             detalle.setCantidad(this.cantidad);
+            //detalle.setDescuento(this.producto.getDescuento());
             detalle.setDescuento(0);
             detalle.setPrice(this.precioProducto);
             detalle.setProducto(this.producto);

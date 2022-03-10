@@ -6,7 +6,7 @@ package com.ventas.dao;
 
 import com.global.config.Conexion;
 import com.ventas.models.Precios;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,16 +21,16 @@ import javax.faces.model.SelectItemGroup;
 public class PreciosDAO {
 
     private List<Precios> listaprecios;
-    private List<Producto> listaproducto;
+    private List<ProductoVenta> listaproducto;
     private List<SelectItem> listatipos;
-    private Producto producto;
+    private ProductoVenta producto;
     private Precios precios;
     Conexion conexion;
     ResultSet result;
 
     public PreciosDAO() {
         precios = new Precios();
-        producto = new Producto();
+        producto = new ProductoVenta();
         conexion = new Conexion();
         listaprecios = new ArrayList<>();
         listatipos = new ArrayList<>();
@@ -74,7 +74,7 @@ public class PreciosDAO {
         return listatipos;
     }
 
-    public List<Producto> llenarProducto(int id) {
+    public List<ProductoVenta> llenarProducto(int id) {
         try {
             String Sentencia = " select d.codprincipal, p.descripcion from "
                     + "descuentocliente d inner join productos p on \n"
@@ -82,7 +82,7 @@ public class PreciosDAO {
                     + "(select idlistaprecios from listaprecios where idtipocliente = "+id+")";
             result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
-                Producto p = new Producto();
+                ProductoVenta p = new ProductoVenta();
                 p.setCodigo(result.getInt("codprincipal"));
                 p.setDescripcion(result.getString("descripcion"));
                 listaproducto.add(p);
@@ -145,7 +145,7 @@ public class PreciosDAO {
         return existe;
     }
 
-    public int insertProduct(int idtc, List<Producto> listaproduc) {
+    public int insertProduct(int idtc, List<ProductoVenta> listaproduc) {
         int existe = 1;
         try {
             for (int i = 0; i < listaproduc.size(); i++) {

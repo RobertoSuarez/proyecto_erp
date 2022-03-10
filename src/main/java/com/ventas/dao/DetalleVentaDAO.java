@@ -7,7 +7,7 @@ package com.ventas.dao;
 
 import com.global.config.Conexion;
 import com.ventas.models.DetalleVenta;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

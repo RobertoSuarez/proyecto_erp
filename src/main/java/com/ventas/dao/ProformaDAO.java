@@ -6,7 +6,7 @@
 package com.ventas.dao;
 
 import com.global.config.Conexion;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
 import com.ventas.models.Proforma;
 import com.ventas.models.DetalleProforma;
 import com.ventas.models.Venta;
@@ -64,7 +64,7 @@ public class ProformaDAO {
         }
     }
 
-    public void ingresarDetalleProforma(Producto prod, Proforma ProformaDetalle) throws SQLException {
+    public void ingresarDetalleProforma(ProductoVenta prod, Proforma ProformaDetalle) throws SQLException {
         String procedimiento;
         ResultSet rs;
         int estado, codigo;
