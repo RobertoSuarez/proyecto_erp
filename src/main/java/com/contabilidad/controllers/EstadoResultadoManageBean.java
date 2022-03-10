@@ -357,4 +357,16 @@ public class EstadoResultadoManageBean implements Serializable {
         this.total = total;
     }
 
+    public String utilidadMsj() {
+        String css = "";
+        if (total < 0) {
+            css = "visible";
+        } else {
+
+            css = "hidden";
+        }
+        System.out.println(css + "---" + total);
+        return css;
+    }
+
 }

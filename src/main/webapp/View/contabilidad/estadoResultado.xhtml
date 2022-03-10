@@ -63,11 +63,14 @@
                                     value="Aceptar" 
                                     style=" margin-top: 1%"
                                     action="#{estadoResultadolMB.recibiendoFecha()}"
-                                    update="dt-libros, dt-libros2,dt-libros3, sumaPP"
+                                    update="dt-libros, dt-libros2,dt-libros3, sumaPP, msj"
                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                     />                            
                             </p:toolbarGroup>
                         </p:toolbar>
+                        <div class="ui-fluid"> 
+                            <p:staticMessage id="msj" severity="warn" summary="Advertencia: " detail="La utilidad obtenida no es rentable" style="width: 100%; visibility:#{estadoResultadolMB.utilidadMsj()};" />
+                        </div>
                         <p:dataTable 
                             id="dt-libros" 
                             widgetVar="dtBalance" 
@@ -316,11 +319,11 @@
                     </div>
                     <div class="card">
                         <div class="p-grid">
-                            <div class="p-col-9">Total</div>
+                            <div class="p-col-9" style="font-weight: bold">Utilidad del ejercicio</div>
                             <div class="p-col-3" style="text-align: left">
                                 <p><h:outputText 
                                         id="sumaPP"
-                                        value="#{estadoResultadolMB.total}"/>
+                                        value="#{estadoResultadolMB.total}" style="font-weight: bold"/>
                                 </p>
                             </div>
                         </div>
