@@ -5,6 +5,7 @@
  */
 package com.ventas.controllers;
 
+import com.empresa.global.EmpresaMatrizDAO;
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.VentaDAO;
@@ -19,7 +20,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -88,6 +91,52 @@ public class ListaVentaManagedBean implements Serializable {
             this.nombreCliente = this.cliente.getNombre();
         }
 
+    }
+    
+    public void exportpdf() throws IOException, JRException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=Factura.pdf"));
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<String, Object>();
+            parametros.put("nombreempresa", EmpresaMatrizDAO.getEmpresa().getNombre());
+            parametros.put("razonsocial", EmpresaMatrizDAO.getEmpresa().getRazonsocial());
+            parametros.put("detalle", EmpresaMatrizDAO.getEmpresa().getDetalle());
+            parametros.put("numFactura", ventaActual.getFactura());
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/FacturaVenta.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.listaDetalle)
+            );
+
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+        }
     }
 
     public List<Venta> getListaVentas() {
