@@ -523,6 +523,22 @@ public class VentaManagedBean implements Serializable {
     public void setVisible(String visible) {
         this.visible = visible;
     }
+
+    public double getDescuentoGeneral() {
+        return descuentoGeneral;
+    }
+
+    public void setDescuentoGeneral(double descuentoGeneral) {
+        this.descuentoGeneral = descuentoGeneral;
+    }
+
+    public double getDescuentoActual() {
+        return descuentoActual;
+    }
+
+    public void setDescuentoActual(double descuentoActual) {
+        this.descuentoActual = descuentoActual;
+    }
     
 
 }

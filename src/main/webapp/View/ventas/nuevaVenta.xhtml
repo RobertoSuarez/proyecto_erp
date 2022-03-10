@@ -134,7 +134,7 @@
                           minHeight="600" width="70%" showEffect="fade" modal="true">
                     <h:form>
                         <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{VentaMB.listaClientes}" 
-                                     selection="#{VentaMB.clienteSeleccionado}" rowKey="#{ListaClientes.idCliente}" 
+                                     selection="#{VentaMB.cliente}" rowKey="#{ListaClientes.idCliente}" 
                                      scrollable="true" scrollHeight="250">
 
                             <f:facet name="header">
@@ -207,7 +207,7 @@
                 
                 <!--Datos de facturacion-->
                 <p:dialog id="FactData" header="Datos de facturacion" widgetVar="NewSale"
-                          height="100%" width="70%" showEffect="fade">
+                          height="100%" width="70%" showEffect="fade" modal="true" >
                     <h:form>
                         <p:panel header="Valor de venta" style="text-align: left; width: 100%; float: right">
                             <h:panelGrid columns="2">
@@ -232,7 +232,7 @@
 
 
                 <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
-                          minHeight="600" width="70%" showEffect="fade" id="Pagos">
+                          minHeight="600" width="70%" showEffect="fade" id="Pagos" modal="true">
                     <h:form>
                         <p:panel class="card">
                             <h:panelGrid columns="2">
