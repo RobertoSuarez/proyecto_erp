@@ -28,12 +28,22 @@
     <h:body styleClass="login-body" >
         <p:growl id="growl" widgetVar="growl" showDetail="true" life="3000"/>  
         <h:form id="registroPersona"  >
+
             <div class="login-panel">
+
                 <div class="p-grid">
+
                     <div class="p-col-12 p-lg-6 left-side">
                         <p:graphicImage name="images/Logo-ERP.png" class="login-image" />
                     </div>
                     <div class="p-col-12 p-lg-6 right-side ui-fluid">
+                        <div class="button-container">
+                            <p:button icon="pi pi-arrow-circle-left" 
+                                      outcome="/index" 
+                                      class="button--transparent button--close"
+                                      >
+                            </p:button>
+                        </div>
                         <div class="p-col-12 container">
                             <h3>Bienvenido !</h3>
                             <h2>Iniciar sesión en ERP contable</h2>
@@ -64,6 +74,7 @@
         <h:outputStylesheet name="css/primeicons.css" library="manhattan-layout"/>
         <h:outputStylesheet name="css/primeflex.min.css" library="manhattan-layout"/>
         <h:outputStylesheet name="css/login_.css" />
+        <h:outputStylesheet name="css/registro.css" />
     </h:body>
 
 </html>
