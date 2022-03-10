@@ -67,6 +67,10 @@ public class ListaVentaManagedBean implements Serializable {
         ObtenerTodasVentas();
     }
 
+    /**
+     * Obtiene la lista de las ventas realizadas.
+     * @throws SQLException 
+     */
     public void ObtenerTodasVentas() throws SQLException {
         try {
             VentaDAO vd = new VentaDAO();
@@ -76,6 +80,11 @@ public class ListaVentaManagedBean implements Serializable {
         }
     }
 
+    /**
+     * Carga una venta, recibida como parámetro, es cargada en pantalla con todos su items y detalles.
+     * @param ventaSeleccionada
+     * @throws SQLException 
+     */
     public void CargarVenta(Venta ventaSeleccionada) throws SQLException {
         this.listaDetalle = new ArrayList<>();
         this.ventaActual = ventaSeleccionada;
@@ -93,52 +102,6 @@ public class ListaVentaManagedBean implements Serializable {
 
     }
     
-    public void exportpdf() throws IOException, JRException {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ExternalContext ec = fc.getExternalContext();
-
-        // Cabecera de la respuesta.
-        ec.responseReset();
-        ec.setResponseContentType("application/pdf");
-        ec.setResponseHeader("Content-disposition",String.format("attachment; filename=Factura.pdf"));
-
-        // tomamos el stream para llenarlo con el pdf.
-        try (OutputStream stream = ec.getResponseOutputStream()) {
-
-            // Parametros para el reporte.
-            Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("nombreempresa", EmpresaMatrizDAO.getEmpresa().getNombre());
-            parametros.put("razonsocial", EmpresaMatrizDAO.getEmpresa().getRazonsocial());
-            parametros.put("detalle", EmpresaMatrizDAO.getEmpresa().getDetalle());
-            parametros.put("numFactura", ventaActual.getFactura());
-
-            // leemos la plantilla para el reporte.
-            File filetext = new File(FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .getRealPath("/PlantillasReportes/FacturaVenta.jasper"));
-
-            // llenamos la plantilla con los datos.
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    filetext.getPath(),
-                    parametros,
-                    new JRBeanCollectionDataSource(this.listaDetalle)
-            );
-
-            // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
-
-            stream.flush();
-            stream.close();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            // enviamos la respuesta.
-            fc.responseComplete();
-        }
-    }
-
     public List<Venta> getListaVentas() {
         return listaVentas;
     }
