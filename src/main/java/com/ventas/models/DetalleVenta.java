@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class DetalleVenta implements Serializable {
     private int iddetalleventa;
     private int idventa;
-    private int codprincipal;
+    private int codigo;
     private double cantidad;
     private double descuento;
     private double precio;
@@ -29,7 +29,7 @@ public class DetalleVenta implements Serializable {
     public DetalleVenta(int iddetalleventa, int idventa, int codprincipal, double cantidad, double descuento, double precio, ProductoVenta prod) {
         this.iddetalleventa = iddetalleventa;
         this.idventa = idventa;
-        this.codprincipal = codprincipal;
+        this.codigo = codprincipal;
         this.cantidad = cantidad;
         this.descuento = descuento;
         this.precio = precio;
@@ -52,12 +52,12 @@ public class DetalleVenta implements Serializable {
         this.idventa = idventa;
     }
 
-    public int getCodprincipal() {
-        return codprincipal;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setCodprincipal(int codprincipal) {
-        this.codprincipal = codprincipal;
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public double getCantidad() {

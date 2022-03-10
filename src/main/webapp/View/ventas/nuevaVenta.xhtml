@@ -54,14 +54,16 @@
                             <p:outputLabel value="Cantidad: "/>
                             <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
                             <p:outputLabel value="Descuento: "/>
-                            <p:inputNumber value="#{VentaMB.descuentoActual}" minValue="0" decimalPlaces="0" disabled="true"/>
-                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
+                            <p:inputNumber value="#{VentaMB.descuento}" minValue="0" decimalPlaces="0" disabled="true"/>
+                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
                         </h:panelGrid>
                     </p:panel>
+                    
+                    <!--Tabla de productos ingresados-->
                     <p:dataTable var="ListaItems" id="itemsTable" 
                                  value="#{VentaMB.listaDetalle}" 
                                  selection="#{VentaMB.productoSeleccionado}" 
-                                 rowKey="#{ListaItems.producto.codigoAux}" 
+                                 rowKey="#{ListaItems.producto.codigo}" 
                                  selectionMode="single" 
                                  paginator="true" 
                                  resizableColumns="true" 
@@ -214,7 +216,7 @@
                                 <p:outputLabel value="Subtotal 0%"/>
                                 <p:inputText value="#{VentaMB.subtotal0}" disabled="true"/>
                                 <p:outputLabel value="DESCUENTO"/>
-                                <p:inputText value="#{VentaMB.temporal}" disabled="true"/>
+                                <p:inputText value="#{VentaMB.descuentoAcumulado}" disabled="true"/>
                                 <p:outputLabel value="ICE"/>
                                 <p:inputText value="#{VentaMB.ice}" disabled="true"/>
                                 <p:outputLabel value="IVA 12%"/>
