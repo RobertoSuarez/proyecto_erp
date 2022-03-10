@@ -125,24 +125,65 @@
                             </div>
                         </div>
 
-                        <div class="ui-fluid">
+                        <div class="ui-fluid p-grid" style="padding-top: 10px ">
+
                             <p:selectManyCheckbox 
                                 layout="responsive" columns="1">
                                 <f:selectItem
-                                    itemLabel="Aceptar terminos y condiciones" 
-                                    itemValue="1" />
+                                    itemLabel="" 
+                                    itemValue="1"  />
                             </p:selectManyCheckbox>
+                            <a  href="#" onclick="PF('dlg2').show()" style="padding-top: 9px" > Aceptar terminos y condiciones  </a>
                         </div>
 
 
-                        <div  class="p-col-12 button-container ui-fluid" 
-                              >     
+
+                        <div  class="p-col-12 button-container ui-fluid">     
                             <p:commandButton
                                 value="Crear cuenta" 
                                 actionListener="#{usuarioMB.registrarUsuario()}"
-                                styleClass="p-mr-2 p-mb-2" update="messages"
+                                styleClass="ui-button-raised" update="messages"
                                 />
                         </div>
+
+                        <p:dialog header="Términos y Condiciones de Uso" widgetVar="dlg2" minHeight="40" width="650" height="500" showEffect="fade" modal="true">
+                            <h2>INFORMACIÓN RELEVANTE</h2>
+                            <p class="p-m-0" style="text-align: justify;">
+                                Es requisito necesario para la adquisición de los productos 
+                                que se ofrecen en este sitio, que lea y acepte los siguientes Términos y 
+                                Condiciones que a continuación se redactan. El uso de nuestros servicios, 
+                                así como la compra de nuestros productos implicará que usted ha leído y 
+                                aceptado los Términos y Condiciones de Uso en el presente documento.
+                                <br/>
+                                Todos los productos que son ofrecidos por nuestro sitio web pudieran ser 
+                                creados, cobrados, enviados o presentados por una página web tercera y en
+                                tal caso estarían sujetas a sus propios Términos y Condiciones. En algunos 
+                                casos, para adquirir un producto, será necesario el registro por parte del 
+                                usuario, con ingreso de datos personales fidedignos y definición de una
+                                contraseña.
+                                <br/>
+                                El usuario puede elegir y cambiar la clave de acceso de administración de 
+                                la cuenta en cualquier momento, en caso de que se haya registrado y que sea
+                                necesario para la compra de alguno de nuestros productos.
+                                <br/>
+                                <a href="https://aplicaciones.uteq.edu.ec/Erpcontable/"> https://aplicaciones.uteq.edu.ec/Erpcontable/ </a>
+                                no asume la responsabilidad en caso de que entregue dicha clave a terceros.
+                                <br/>
+                                Todas las compras y transacciones que se lleven a cabo por medio de este sitio 
+                                web están sujetas a un proceso de confirmación y verificación, el cual podría 
+                                incluir la verificación del stock y disponibilidad de producto, validación de 
+                                la forma de pago, validación de la factura (en caso de existir) y el cumplimiento 
+                                de las condiciones requeridas por el medio de pago seleccionado. En algunos casos 
+                                puede que se requiera una verificación por medio de correo electrónico.
+                            </p>
+
+                            <h2>LICENCIA</h2>
+                            <p class="p-m-0" style="text-align: justify;">
+                                ERP Contable a través de su sitio web concede una licencia para que los usuarios 
+                                utilicen los productos que son vendidos en este sitio web de acuerdo con los Términos
+                                y Condiciones que se describen en este documento.
+                            </p>
+                        </p:dialog>
                     </div>
                 </div>
             </div>
