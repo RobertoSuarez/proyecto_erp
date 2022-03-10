@@ -38,7 +38,7 @@
                             </p:column>
 
                             <p:column headerText="Cliente">
-                                <h:outputText value="#{ListaVentas.idCliente}" />
+                                <h:outputText value="#{ListaVentas.cliente.nombre}" />
                             </p:column>
 
                             <p:column headerText="Fecha">
@@ -83,29 +83,33 @@
                             <p:column headerText="Precio unitario" width="20%">
                                 <h:outputText value="#{FacturaDetailTB.precio}" />
                             </p:column>
+                            <p:column headerText="Descuento" width="20%">
+                                <h:outputText value="#{FacturaDetailTB.descuento}" />
+                            </p:column>
                             <p:column headerText="Subtotal" width="20%"  >
                                 <h:outputText value="#{FacturaDetailTB.subTotal}" />
                             </p:column>
 
                             <p:columnGroup type="footer" id="colgrp">
                                 <p:row id="Base12">
-                                    <p:column colspan="3" style="text-align:right" footerText="Base 12%"/>
+                                    <p:column colspan="4" style="text-align:right" footerText="Base 12%"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.base12}" />
                                 </p:row>
                                 <p:row id="Base0">
-                                    <p:column colspan="3" style="text-align:right" footerText="Base 0%"/>
+                                    <p:column colspan="4" style="text-align:right" footerText="Base 0%"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.base0}" />
+                               </p:row>
                                 </p:row>
                                 <p:row id="Iva">
-                                    <p:column colspan="3" style="text-align:right" footerText="Iva"/>
+                                    <p:column colspan="4" style="text-align:right" footerText="Iva"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.iva}"  />
                                 </p:row>
                                 <p:row id="Ice">
-                                    <p:column colspan="3" style="text-align:right" footerText="Ice"/>
+                                    <p:column colspan="4" style="text-align:right" footerText="Ice"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.ice}" />
                                 </p:row>
                                 <p:row id="Total">
-                                    <p:column colspan="3" style="text-align:right" footerText="Total:"/>
+                                    <p:column colspan="4" style="text-align:right" footerText="Total:"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.totalFactura}" id="subtotalVenta" />
                                 </p:row>
                             </p:columnGroup>
