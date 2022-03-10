@@ -38,16 +38,16 @@ public class SalidaDetalleDao {
         return getSalidasDetalle(0);
     }
 
-    public List<SalidaDetalleInventario> getSalidasDetalle(int idEntrada) {
+    public List<SalidaDetalleInventario> getSalidasDetalle(int idSalida) {
         List<SalidaDetalleInventario> ListSalida = new ArrayList<>();
 
         String sql = "";
-        if (idEntrada > 0) {
-            sql =     "SELECT cod_articulo,id_entrada,cant,entrada_detalle.costo as costo,entrada_detalle.ice as ice,nombre,entrada_detalle.iva as iva,nombre,descripcion FROM entrada_detalle "
+        if (idSalida > 0) {
+            sql =     "SELECT cod_articulo,id_salida,cant,salida_detalle.costo as costo,salida_detalle.ice as ice,nombre,salida_detalle.iva as iva,nombre,descripcion FROM salida_detalle "
                     + "INNER JOIN articulos ON cod_articulo = id "
-                    + "WHERE id_entrada=" + idEntrada;
+                    + "WHERE id_salida=" + idSalida;
         } else {
-            sql = "SELECT cod_articulo,id_entrada,cant,entrada_detalle.costo as costo,entrada_detalle.ice as ice,nombre,entrada_detalle.iva as iva,descripcion FROM entrada_detalle "
+            sql = "SELECT cod_articulo,id_salida,cant,salida_detalle.costo as costo,salida_detalle.ice as ice,nombre,salida_detalle.iva as iva,descripcion FROM salida_detalle "
                     + "INNER JOIN articulos ON cod_articulo = id ";
         }
         try {
@@ -75,25 +75,25 @@ public class SalidaDetalleDao {
         return ListSalida;
     }
 
-    public int GuardarEntrada(SalidaDetalleInventario entradaDetalleInventario) {
+    public int GuardarSalida(SalidaDetalleInventario SalidaDetalleInventario) {
         try {
             ResultSet rs = null;
 
             this.conexion.conectar();
-            rs = this.conexion.ejecutarSql("select cod from public.entrada_Detalle order by cod desc limit 1;");
+            rs = this.conexion.ejecutarSql("select cod from public.salida_Detalle order by cod desc limit 1;");
             int codigo = 1;
 
             //Asignar los valores de la siguiente venta y secuencia.
             while (rs.next()) {
                 codigo = rs.getInt(1) + 1;
             }
-            entradaDetalleInventario.setIdEntradaDetalle(codigo);
-            System.out.println("Entrada: " + entradaDetalleInventario.getIdEntradaDetalle());
+            salidaDetalleInventario.setIdEntradaDetalle(codigo);
+            System.out.println("Entrada: " + salidaDetalleInventario.getIdEntradaDetalle());
 
             //Insertar nueva venta
             String query = "INSERT INTO public.entrada("
                     + "cod_articulo, id_entrada_detalle, id_entrada, cant, costo, iva, ice)"
-                    + "VALUES(" + entradaDetalleInventario.getIdEntradaDetalle() + ",'" + entradaDetalleInventario.getIdEntradaDetalle() + "', " + entradaDetalleInventario.getCant() + ", " + entradaDetalleInventario.getCosto() + ", " + entradaDetalleInventario.getIva() + ", " + entradaDetalleInventario.getIce() + ")";
+                    + "VALUES(" + salidaDetalleInventario.getIdEntradaDetalle() + ",'" + salidaDetalleInventario.getIdEntradaDetalle() + "', " + salidaDetalleInventario.getCant() + ", " + salidaDetalleInventario.getCosto() + ", " + salidaDetalleInventario.getIva() + ", " + salidaDetalleInventario.getIce() + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
@@ -101,7 +101,7 @@ public class SalidaDetalleDao {
 
             System.out.println("Salida Guardada exitosamente");
 
-            return entradaDetalleInventario.getIdEntradaDetalle();
+            return salidaDetalleInventario.getIdEntradaDetalle();
         } catch (Exception e) {
             if (conexion.isEstado()) {
                 conexion.desconectar();
