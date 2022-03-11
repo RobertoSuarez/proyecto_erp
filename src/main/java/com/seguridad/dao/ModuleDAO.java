@@ -154,17 +154,4 @@ public class ModuleDAO {
             this.conexion.desconectar();
         }
     }
-
-    public void deleteModule(Modulo module) {
-        String query = "DELETE FROM security.\"Modulo\"\n"
-                + "	WHERE \"idModulo\"=" + String.valueOf(module.getIdModule()) + ";";
-        try {
-            this.conexion.conectar();
-            this.conexion.ejecutarSql(query);
-        } catch (Exception e) {
-            e.toString();
-        } finally {
-            this.conexion.desconectar();
-        }
-    }
 }

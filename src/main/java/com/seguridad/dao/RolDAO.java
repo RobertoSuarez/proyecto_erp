@@ -110,7 +110,7 @@ public class RolDAO {
         List<Rol> roles = new ArrayList<>();
         Rol rolAux;
         String query = "select * \n"
-                + "from  rol";
+                + "from  security.rol";
         ResultSet rs;
         try {
             this.conexion.conectar();
@@ -119,7 +119,7 @@ public class RolDAO {
                 rolAux = new Rol();
                 rolAux.setId(rs.getInt("idRol"));
                 rolAux.setNombre(rs.getString("nombreRol"));
-                rolAux.setDetalle(rs.getString("detalleRol"));
+                rolAux.setDetalle(rs.getString("descripcion"));
                 roles.add(rolAux);
             }
             rs.close();

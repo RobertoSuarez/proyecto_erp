@@ -58,9 +58,9 @@
         </h:form>
         <p:dialog id="RolInfo" header="Informacion del Rol" widgetVar="RolData"
                   height="70%" width="70%" showEffect="fade">
-            <h:form id="RolDATA">
+            <h:form id="RolDATA" style="height: 100%">
                 <p:panel header="Detalles del rol" 
-                         style="width: 50%; text-align: left; float: left">
+                         style="width: 50%; text-align: left; float: left; height: 50%;">
                     <p:panelGrid columns="1">
                         <p:outputLabel value="#{RolMB.nameRol}"/>
                         <p:outputLabel value="#{RolMB.descriptionRol}"/>
@@ -68,31 +68,14 @@
 
                 </p:panel>
                 <p:panel header="Roles activos"
-                         style="width: 50%; text-align: left;float: right">
-                    <p:panelGrid columns="1">
-                        <p:dataTable id="dt-modules" value="#{RolMB.lstOfModules}"
-                                     var="ListaModules" size="small"
-                                     rowKey="#{ListaModules.idModule}">
-                            <p:column headerText="Nombre del modulo" width="45%">
-                                <p:outputLabel value="#{ListaModules.nameModule}"/>
-                            </p:column>
-                            <p:column headerText="Establecer acceso">
-                                <p:commandButton icon="pi pi-pencil"                                                         
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                 process="@this"
-                                                 value="Agregar"
-                                                 update="RolDATA">
-                                </p:commandButton>
-                            </p:column>
-                            <p:column headerText="Quitar acceso">
-                                <p:commandButton icon="pi pi-pencil"                                                         
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                 process="@this"
-                                                 value="Eliminar"
-                                                 update="RolDATA">
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
+                         style="width: 50%; height: 50%; text-align: left;float: right">
+                    <p:panelGrid columns="1" style="width: 100%; text-align: left;float: left">
+                        <p:selectManyMenu showCheckbox="true" id="chbRoles"
+                                          value="#{RolMB.modulesActives}"
+                                          filter="true" filterMatchMode="contains"
+                                          styleClass="manymenu-advanced">
+                            <f:selectItems value="#{RolMB.lstModulesItem}" />
+                        </p:selectManyMenu>
                     </p:panelGrid>
                 </p:panel>
             </h:form>

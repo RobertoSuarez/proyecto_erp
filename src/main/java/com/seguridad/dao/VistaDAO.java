@@ -83,17 +83,4 @@ public class VistaDAO {
             this.conexion.desconectar();
         }
     }
-
-    public void deleteViews(Vista vst) {
-        String query = "DELETE FROM security.vista\n"
-                + "	WHERE \"idVista\"="+String.valueOf(vst.getId_Vista()) +";";
-        try {
-            this.conexion.conectar();
-            this.conexion.ejecutarSql(query);
-        } catch (Exception e) {
-            e.toString();
-        } finally {
-            this.conexion.desconectar();
-        }
-    }
 }
