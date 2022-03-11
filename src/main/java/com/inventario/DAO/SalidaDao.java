@@ -17,24 +17,24 @@ import java.util.List;
  */
 public class SalidaDao {
     Conexion conexion = new Conexion();
-    private SalidaInventario entradaInventario;
+    private SalidaInventario salidaInventario;
     private ResultSet resultSet;
     private List<SalidaInventario> listaArticulos;
     private List auxlista = new ArrayList<>();
 
     public SalidaDao() {
-        entradaInventario = new SalidaInventario();
+        salidaInventario = new SalidaInventario();
         conexion = new Conexion();
         listaArticulos = new ArrayList<>();
     }
 
     public SalidaDao(SalidaInventario salidaInventario) {
         conexion = new Conexion();
-        this.entradaInventario = entradaInventario;
+        this.salidaInventario = salidaInventario;
     }
 
     public List<SalidaInventario> getSalidas(int idSalida) {
-        List<SalidaInventario> ListEntrada = new ArrayList<>();
+            List<SalidaInventario> ListSalida = new ArrayList<>();
         String sql = "";
         if (idSalida > 0) {
             sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
@@ -53,7 +53,7 @@ public class SalidaDao {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
-                ListEntrada.add(new SalidaInventario(resultSet.getInt("cod"),
+                ListSalida.add(new SalidaInventario(resultSet.getInt("cod"),
                         resultSet.getString("num_comprobante"),
                         resultSet.getDate("fecha"),
                         resultSet.getInt("id_bodega"),
@@ -67,14 +67,14 @@ public class SalidaDao {
         } finally {
             conexion.desconectar();
         }
-        return ListEntrada;
+        return ListSalida;
     }
 
     public List<SalidaInventario> getSalidas() {
         return getSalidas(0);
     }
 
-    public int GuardarSalida(SalidaInventario entradaInventario) {
+    public int GuardarSalida(SalidaInventario salidaInventario) {
         try {
             ResultSet rs = null;
 
@@ -86,13 +86,13 @@ public class SalidaDao {
             while (rs.next()) {
                 codigo = rs.getInt(1) + 1;
             }
-            entradaInventario.setCod(codigo);
-            System.out.println("Entrada: " + entradaInventario.getCod());
+            salidaInventario.setCod(codigo);
+            System.out.println("Salida: " + salidaInventario.getCod());
 
             //Insertar nueva venta
             String query = "INSERT INTO public.salida("
                     + "num_comprobante, fecha, id_proveedor, id_bodega)"
-                    + "VALUES('" +  entradaInventario.getNumComprobante() + "', '" + entradaInventario.getFecha() + "', " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
+                    + "VALUES('" +  salidaInventario.getNumComprobante() + "', '" + salidaInventario.getFecha() + "', " + salidaInventario.getIdProveedor() + ", " + salidaInventario.getIdBodega() + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
@@ -100,7 +100,7 @@ public class SalidaDao {
 
             System.out.println("Salida Guardada exitosamente");
 
-            return entradaInventario.getCod();
+            return salidaInventario.getCod();
         } catch (SQLException e) {
             if (conexion.isEstado()) {
                 conexion.desconectar();
