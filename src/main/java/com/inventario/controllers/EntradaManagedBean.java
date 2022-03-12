@@ -187,23 +187,23 @@ public class EntradaManagedBean implements Serializable {
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    //Buscar proveedor
-////    @Asynchronous
-////    public void BuscarProveedorEntrada() {
-////        this.proveedor = proveedorDAO.BuscarProveedor(this.proveedordINum);
-////        if (this.proveedor.getNombre() != null) {
-////            this.proveedorNombre = this.proveedor.getNombre();
-////        } else {
-////            System.out.print("No hay proveedor");
-////            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El proveedor no existe o se encuentra inactivo.");
-////        }
-////
-////        if (this.proveedor.getNombre() != null) {
-////            System.out.print("proveedor: " + proveedorNombre);
-////        } else {
-////            System.out.print("Sin proveedor");
-////        }
-////    }
+//    Buscar proveedor
+    @Asynchronous
+    public void BuscarProveedorEntrada() {
+        this.proveedor = proveedorDAO.BuscarProveedor(this.proveedordINum);
+        if (this.proveedor.getNombre() != null) {
+            this.proveedorNombre = this.proveedor.getNombre();
+        } else {
+            System.out.print("No hay proveedor");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El proveedor no existe o se encuentra inactivo.");
+        }
+
+        if (this.proveedor.getNombre() != null) {
+            System.out.print("proveedor: " + proveedorNombre);
+        } else {
+            System.out.print("Sin proveedor");
+        }
+    }
 
     //Buscar Producto
     @Asynchronous
@@ -247,7 +247,7 @@ public class EntradaManagedBean implements Serializable {
             double descuento = 0.0f;
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(),  Math.round(inv.getCosto()*100.0)/100.0,Math.round(inv.getCosto() * inv.getCant()*100.0)/100.0 ));
                     subtotal += inv.getCosto() * (double) inv.getCant();
                     ice += inv.getIce();
                     iva += inv.getIva();
@@ -348,7 +348,7 @@ public class EntradaManagedBean implements Serializable {
                 int stock_maximo = this.producto.getMax_stock();
                 int _cantidad = this.cantidad;
                 if (stock_maximo < _cantidad) {
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.producto.getMax_stock() + ")");
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de la permitidas (" + this.producto.getMax_stock() + ")");
                 } else {
                     if (this.cantidad <= 0) {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
