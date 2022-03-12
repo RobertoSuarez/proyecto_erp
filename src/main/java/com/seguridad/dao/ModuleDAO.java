@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -49,6 +50,30 @@ public class ModuleDAO {
         }
         return lstModules;
     }
+    
+    public List<SelectItem> invokeAllModulesForViews() {
+        List<SelectItem> lstModules = new ArrayList<>();
+        SelectItem ItemModule;
+        String query = "SELECT * FROM security.\"Modulo\" \n"
+                + "ORDER BY \"idModulo\" ASC ";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                ItemModule = new SelectItem();
+                ItemModule.setLabel(rs.getString(2));
+                ItemModule.setValue(rs.getInt(1));
+                lstModules.add(ItemModule);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return lstModules;
+    }
 
     public List<Modulo> invokeModulesForRol(int idRol) {
         List<Modulo> lstModules = new ArrayList<>();
@@ -78,6 +103,27 @@ public class ModuleDAO {
         return lstModules;
     }
 
+    public String invokeModuleName(int idRol) {
+        String name_Module = "";
+        String query = "SELECT \"nombreModulo\"\n"
+                + "	FROM security.\"Modulo\"\n"
+                + "	where \"idModulo\"="+ String.valueOf(idRol) +";";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                name_Module = rs.getString(1);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return name_Module;
+    }
+
     public void insertModule(Modulo mod) {
         String query = "INSERT INTO security.\"Modulo\"(\n"
                 + "	\"idModulo\", \"nombreModulo\", descripcion, habilitado)\n"
@@ -99,19 +145,6 @@ public class ModuleDAO {
                 + "	SET  \"nombreModulo\"='" + String.valueOf(module.getNameModule()) + "', \n"
                 + "	descripcion='" + String.valueOf(module.getDescriptionModule()) + "', habilitado='true'\n"
                 + "	WHERE \"idModulo\"=" + String.valueOf(module.getIdModule()) + ";";
-        try {
-            this.conexion.conectar();
-            this.conexion.ejecutarSql(query);
-        } catch (Exception e) {
-            e.toString();
-        } finally {
-            this.conexion.desconectar();
-        }
-    }
-
-    public void deleteModule(Modulo module) {
-        String query = "DELETE FROM security.\"Modulo\"\n"
-                + "	WHERE \"idModulo\"="+ String.valueOf(module.getIdModule())+";";
         try {
             this.conexion.conectar();
             this.conexion.ejecutarSql(query);

@@ -54,14 +54,16 @@
                             <p:outputLabel value="Cantidad: "/>
                             <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
                             <p:outputLabel value="Descuento: "/>
-                            <p:inputNumber value="#{VentaMB.descuentoActual}" minValue="0" decimalPlaces="0" disabled="true"/>
-                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
+                            <p:inputNumber value="#{VentaMB.descuento}" minValue="0" decimalPlaces="0" disabled="true"/>
+                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
                         </h:panelGrid>
                     </p:panel>
+
+                    <!--Tabla de productos ingresados-->
                     <p:dataTable var="ListaItems" id="itemsTable" 
                                  value="#{VentaMB.listaDetalle}" 
                                  selection="#{VentaMB.productoSeleccionado}" 
-                                 rowKey="#{ListaItems.producto.codigoAux}" 
+                                 rowKey="#{ListaItems.producto.codigo}" 
                                  selectionMode="single" 
                                  paginator="true" 
                                  resizableColumns="true" 
@@ -113,14 +115,20 @@
                         <p:columnGroup type="footer" id="colgrp">
                             <p:row id="rowfoot">
                                 <p:column colspan="6" style="text-align:right" footerText="Total:"/>
-                                <p:column style="text-align:left" footerText="#{VentaMB.subTotalVenta}" id="subtotalVenta" />
+                                <p:column id="subtotalVenta">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{VentaMB.subTotalVenta}">
+                                            <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
                     <p:panel style=" width: 100%" visible="#{VentaMB.visible}">
                         <h:panelGrid columns="1" >
                             <p:button  value="Generar Factura" 
-                                       onclick="PF('NewSale').show()" 
+                                       onclick="PF('NewSale').show()"
                                        style="float: center;
                                        margin: 20px 0px; align-content: center" />
                         </h:panelGrid>
@@ -132,7 +140,7 @@
                           minHeight="600" width="70%" showEffect="fade" modal="true">
                     <h:form>
                         <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{VentaMB.listaClientes}" 
-                                     selection="#{VentaMB.clienteSeleccionado}" rowKey="#{ListaClientes.idCliente}" 
+                                     selection="#{VentaMB.cliente}" rowKey="#{ListaClientes.idCliente}" 
                                      scrollable="true" scrollHeight="250">
 
                             <f:facet name="header">
@@ -159,7 +167,7 @@
                         </p:dataTable>
                     </h:form>
                 </p:dialog>
-                
+
                 <!--Dialogo de busqueda de productos-->
                 <p:dialog header="Busqueda de productos" widgetVar="BuscarProductos" id="busquedaProducto"
                           minHeight="600" width="70%" showEffect="fade" modal="true">
@@ -193,8 +201,8 @@
                                 <h:outputText value="#{ListaProductos.stock}" >
                                 </h:outputText>
                             </p:column>
-                            
-                            
+
+
                             <p:column headerText="Unidad">
                                 <h:outputText value="#{ListaProductos.unidadMedida}" >
                                 </h:outputText>
@@ -202,25 +210,25 @@
                         </p:dataTable>
                     </h:form>
                 </p:dialog>
-                
+
                 <!--Datos de facturacion-->
                 <p:dialog id="FactData" header="Datos de facturacion" widgetVar="NewSale"
-                          height="100%" width="70%" showEffect="fade">
+                          height="100%" width="70%" showEffect="fade" modal="true" >
                     <h:form>
                         <p:panel header="Valor de venta" style="text-align: left; width: 100%; float: right">
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Subtotal 12%"/>
-                                <p:inputText value="#{VentaMB.subtotal12}" disabled="true" />
+                                <p:inputNumber value="#{VentaMB.subtotal12}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="Subtotal 0%"/>
-                                <p:inputText value="#{VentaMB.subtotal0}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.subtotal0}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="DESCUENTO"/>
-                                <p:inputText value="#{VentaMB.temporal}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.descuentoAcumulado}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="ICE"/>
-                                <p:inputText value="#{VentaMB.ice}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.ice}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="IVA 12%"/>
-                                <p:inputText value="#{VentaMB.iva}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.iva}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="TOTAL"/>
-                                <p:inputText value="#{VentaMB.total}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.total}" disabled="true" decimalPlaces="2"/>
                                 <div/>
                                 <p:commandButton value="Efectuar Pago" update="Pagos" type="button" onclick="PF('RealizarPago').show()"/>
                             </h:panelGrid>
@@ -230,7 +238,7 @@
 
 
                 <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
-                          minHeight="600" width="70%" showEffect="fade" id="Pagos">
+                          minHeight="600" width="70%" showEffect="fade" id="Pagos" modal="true">
                     <h:form>
                         <p:panel class="card">
                             <h:panelGrid columns="2">

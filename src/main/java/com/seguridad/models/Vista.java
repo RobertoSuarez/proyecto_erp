@@ -14,15 +14,17 @@ public class Vista {
     private String name_Vista;
     private String description_Vista;
     private int id_Modulo;
+    private String name_Modulo;
 
     public Vista() {
     }
 
-    public Vista(int id_Vista, String name_Vista, String description_Vista, int id_Modulo) {
+    public Vista(int id_Vista, String name_Vista, String description_Vista, int id_Modulo, String name_modulo) {
         this.id_Vista = id_Vista;
         this.name_Vista = name_Vista;
         this.description_Vista = description_Vista;
         this.id_Modulo = id_Modulo;
+        this.name_Modulo = name_modulo;
     }
 
     public int getId_Vista() {
@@ -55,6 +57,14 @@ public class Vista {
 
     public void setId_Modulo(int id_Modulo) {
         this.id_Modulo = id_Modulo;
+    }
+
+    public String getName_Modulo() {
+        return name_Modulo;
+    }
+
+    public void setName_Modulo(String name_Modulo) {
+        this.name_Modulo = name_Modulo;
     }
     
 }

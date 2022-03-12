@@ -57,47 +57,67 @@
             </div>
         </h:form>
         <p:dialog id="RolInfo" header="Informacion del Rol" widgetVar="RolData"
-                  height="70%" width="70%" showEffect="fade">
-            <h:form id="RolDATA">
+                  height="100%" width="70%" showEffect="fade">
+            <p:panel id="RolDATA" style="height: 100%">
                 <p:panel header="Detalles del rol" 
-                         style="width: 50%; text-align: left; float: left">
-                    <p:panelGrid columns="1">
-                        <p:outputLabel value="#{RolMB.nameRol}"/>
-                        <p:outputLabel value="#{RolMB.descriptionRol}"/>
-                    </p:panelGrid>
+                         style="width: 50%; text-align: left; float: left; height: 25%;">
+                    <p:inputText value="#{RolMB.nameRol}" size="57"/>
+                    <br/>
+                    <p:inputTextarea value="#{RolMB.descriptionRol}" cols="60" rows="9"/>
+                </p:panel>
+                <p:panel header="Modulos activos" id="form-rol"
+                         style="width: 50%; text-align: left; float: left; height: 15%;">
+                    <p:selectManyMenu showCheckbox="true" id="chbRoles"
+                                      value="#{RolMB.modulesActives}"
+                                      styleClass="manymenu-advanced">
+                        <f:selectItems value="#{RolMB.lstModulesItem}" />
+                    </p:selectManyMenu>
+                    <p:commandButton icon="pi pi-plus"                                                         
+                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                     process="RolDATA @this form-rol chbRoles"
+                                     update="somModulos"
+                                     value="Agregar modulos"
+                                     actionListener="#{RolMB.chargeRolesSelected()}">
+                    </p:commandButton>
+                </p:panel>
+                <p:divider/>
+                <p:selectOneMenu id="somModulos" value="#{RolMB.codigoModule}">
+                    <f:selectItem itemValue="-1" itemLabel="Seleccione..."/>
+                    <f:selectItems value="#{RolMB.lstModulesSelected}"/>
+                </p:selectOneMenu>
+                <p:commandButton icon="pi pi-spinner"                                                         
+                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                 process="somModulos @this"
+                                 update="dt_permisos"
+                                 value="Cargar vistas"
+                                 style="margin-left: 5%"
+                                 actionListener="#{RolMB.chargePermisosSelected()}">
+                </p:commandButton>
+                <p:dataTable id="dt_permisos" value="#{RolMB.lstPermisos}" var="ListaPermisos"
+                             size="small" liveResize="true" rowKey="#{ListaPermisos.id_vista}"
+                             selectionMode="single" style="width: 100%"
+                             reflow="true">
+                    <p:column headerText="Vista" width="28%" style="font-size: 17px">
+                        <h:outputText value="#{ListaPermisos.nameViews}"/>
+                    </p:column>
 
-                </p:panel>
-                <p:panel header="Roles activos"
-                         style="width: 50%; text-align: left;float: right">
-                    <p:panelGrid columns="1">
-                        <p:dataTable id="dt-modules" value="#{RolMB.lstOfModules}"
-                                     var="ListaModules" size="small"
-                                     rowKey="#{ListaModules.idModule}">
-                            <p:column headerText="Nombre del modulo" width="45%">
-                                <p:outputLabel value="#{ListaModules.nameModule}"/>
-                            </p:column>
-                            <p:column headerText="Establecer acceso">
-                                <p:commandButton icon="pi pi-pencil"                                                         
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                 process="@this"
-                                                 value="Agregar"
-                                                 update="RolDATA">
-                                </p:commandButton>
-                            </p:column>
-                            <p:column headerText="Quitar acceso">
-                                <p:commandButton icon="pi pi-pencil"                                                         
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                 process="@this"
-                                                 value="Eliminar"
-                                                 update="RolDATA">
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </p:panelGrid>
-                </p:panel>
-            </h:form>
+                    <p:column headerText="Puede ver" style="font-size: 17px" width="18%">
+                        <h:outputText value="#{ListaPermisos.can_views}"/>
+                    </p:column>
+
+                    <p:column headerText="Puede Borrar" style="font-size: 17px" width="18%">
+                        <h:outputText value="#{ListaPermisos.can_erased}"/>
+                    </p:column>
+
+                    <p:column headerText="Puede registrar" style="font-size: 17px" width="18%">
+                        <h:outputText value="#{ListaPermisos.can_insert}"/>
+                    </p:column>
+
+                    <p:column headerText="Puede editar" style="font-size: 17px" width="18%">
+                        <h:outputText value="#{ListaPermisos.can_edit}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
         </p:dialog>
-
     </ui:define>
-
 </ui:composition>

@@ -5,8 +5,6 @@
  */
 package com.ventas.controllers;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.PreciosDAO;
@@ -19,27 +17,18 @@ import com.ventas.models.Venta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.List;
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.ejb.Asynchronous;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.SelectEvent;
 
 @Named(value = "VentaMB")
 @ViewScoped
@@ -50,64 +39,56 @@ public class VentaManagedBean implements Serializable {
     private ProductoVenta productoActual;
     private DetalleVenta productoSeleccionado;
     private Venta venta;
-    
+
     //Objetos para acceder a datos
     private ClienteVentaDao clienteDAO;
     private ProductoVentaDAO productoDao;
     private DetalleVentaDAO detalleDAO;
     private VentaDAO ventaDao;
-    
+    private PreciosDAO preciosDAO;
+
     //Variables para manejar el descuento
     private double descuentoGeneral;
     private double descuentoActual;
-    
+    private double descuentoAcumulado;
+
     //Variables para controlar valores
     private int codigoProdBuscar;
     private double cantidad;
     private double subTotalVenta;
-    
+
     //Variables acumulativas para información
     private double subtotal12;
     private double subtotal0;
+    private double descuento;
     private double ice;
     private double iva;
     private double total;
-    
+
     //Variables para controlar la forma de pago
     private double efectivo;
     private double cambio;
     private int diasPago;
-    
+
     //Listas que se usan en la venta
     private List<ClienteVenta> listaClientes;
     private List<ProductoVenta> listaProductos;
     private List<DetalleVenta> listaDetalle; //Por definir que es
     private List<ProductoVenta> listadescuento;
-    
+
     //------------------------NO SE PLANEA USAR------------------------//
-    private String clienteIdNum; //BORRAR
-    private String clienteNombre; //BORRAR
-
-    private ClienteVenta clienteSeleccionado;
-
-
-    private PreciosDAO preciosDAO;
-
-    private double temporal;
-
-
     private boolean tipo;
     private String visible;
 
-
     /**
-     * Iniicaliza la clase controladora VentaManagedBean. Inicializa los objetos que forman parte de la misma.
+     * Iniicaliza la clase controladora VentaManagedBean. Inicializa los objetos
+     * que forman parte de la misma.
      */
     @PostConstruct
     public void VentaManagedBean() {
         this.cliente = new ClienteVenta();
         this.productoActual = new ProductoVenta();
-        
+
         this.clienteDAO = new ClienteVentaDao();
         this.preciosDAO = new PreciosDAO();
 
@@ -116,25 +97,18 @@ public class VentaManagedBean implements Serializable {
         this.visible = "false";
 
         this.descuentoGeneral = 0;
-        this.subtotal12 = 0;
-        this.subtotal0 = 0;
         this.descuentoActual = 0;
-        this.ice = 0;
-        this.iva = 0;
-        this.total = 0;
+        this.descuentoAcumulado = 0;
+
+        this.subtotal12 = convertTwoDecimal(0);
+        this.subtotal0 = convertTwoDecimal(0);
+        this.descuento = convertTwoDecimal(0);
+        this.ice = convertTwoDecimal(0);
+        this.iva = convertTwoDecimal(0);
+        this.total = convertTwoDecimal(0);
 
         this.listaDetalle = new ArrayList<>();
         this.cantidad = 1;
-
-        this.productoSeleccionado = null;
-        this.clienteSeleccionado = null;
-
-        this.venta = new Venta();
-        this.ventaDao = new VentaDAO();
-
-        this.efectivo = 0;
-        this.cambio = 0;
-        this.diasPago = 0;
 
         this.clienteDAO = new ClienteVentaDao();
         this.detalleDAO = new DetalleVentaDAO();
@@ -143,73 +117,70 @@ public class VentaManagedBean implements Serializable {
         this.listaClientes = clienteDAO.ListarClientes();
         this.listaProductos = productoDao.ListarProductos();
 
-        System.out.print(listaClientes.get(0).getNombre());
+        //Se podrian quitar
+        this.venta = new Venta();
+        this.ventaDao = new VentaDAO();
+
+        this.efectivo = 0;
+        this.cambio = 0;
+        this.diasPago = 0;
     }
 
-    //Buscar cliente
-    @Asynchronous
-    public void BuscarClienteVenta() {
-        this.cliente = clienteDAO.BuscarCliente(this.clienteIdNum);
-        if (this.cliente.getNombre() != null) {
-            this.clienteNombre = this.cliente.getNombre();
-        } else {
-            System.out.print("No hay cliente");
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El cliente no existe o se encuentra inactivo.");
-        }
-
-        if (this.cliente.getNombre() != null) {
-            System.out.print("Cliente: " + clienteNombre);
-        } else {
-            System.out.print("Sin cliente");
-        }
-    }
-
-    
     /**
-     * Recibe un cliente de venta como parámetro y carga sus datos en la clase controlador, en el objeto cienteSeleccionado y muestra datos en la interfaz de usuario.
-     * @param cliente 
+     * Recibe un cliente de venta como parámetro y carga sus datos en la clase
+     * controlador, en el objeto cienteSeleccionado y muestra datos en la
+     * interfaz de usuario.
+     *
+     * @param cliente
      */
     public void SeleccionarCliente(ClienteVenta cliente) {
         this.cliente = cliente;
 
         int idcliente = preciosDAO.idtipocliente(cliente.getIdentificacion());
         this.tipo = preciosDAO.opciones(idcliente);
-        this.descuentoActual = preciosDAO.descuento(idcliente);
+        this.descuentoGeneral = preciosDAO.descuento(idcliente);
         this.listadescuento.clear();
         this.listadescuento = preciosDAO.llenarProducto(idcliente);
         System.out.println(this.descuentoActual);
-        setVisible("true");
+        this.visible = "true";
+
+        descuento = descuentoGeneral + descuentoActual;
     }
 
     /**
-     * Recibe un producto que es guardado
-     * @param producto 
+     * Recibe un producto que es guardado en la clase controladora como el
+     * producto actual que podrá ser agregado a la venta
+     *
+     * @param producto
      */
     public void SeleccionarProducto(ProductoVenta producto) {
         this.productoActual = producto;
-        setVisible("true");
+        this.visible = "true";
     }
-    
-    
-    //Buscar Producto
-    @Asynchronous
+
+    /**
+     * Busca un producto por el identificador. Si existe el producto entonces lo
+     * guarda en la clase controladora.
+     */
     public void BuscarProducto() {
         this.productoActual = new ProductoVenta();
         this.cantidad = 1;
 
         this.productoActual = this.productoDao.ObtenerProducto(this.codigoProdBuscar);
-        
+
         if (this.productoActual.getNombre() == null) {
             System.out.println("Producto nulo");
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto no existe");
         } else {
             System.out.println("Existe el producto" + this.productoActual.getNombre());//Por borrar, solo controla
-            this.productoActual.setPrecioUnitario(new BigDecimal(this.productoActual.getPrecioUnitario()).setScale(2, RoundingMode.UP).floatValue());
+            this.productoActual.setPrecioUnitario((float) convertTwoDecimal(this.productoActual.getPrecioUnitario()));
         }
     }
 
-    //Agregar producto a la lista de detalle
-    @Asynchronous
+    /**
+     * Agrega un producto a la lista. El producto que hayamos buscado
+     * previamente en la interfaz será el que se añada.
+     */
     public void AgregarProductoLista() {
         try {
             if (this.productoActual.getCodigo() > 0) {
@@ -219,52 +190,33 @@ public class VentaManagedBean implements Serializable {
                     if (this.cantidad <= 0) {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
                     } else {
+                        DetalleVenta detalle = new DetalleVenta();
 
                         //Ingreso de valores al detalle
-                        DetalleVenta detalle = new DetalleVenta();
-                        detalle.setCodprincipal(this.productoActual.getCodigo());
-                        detalle.setCantidad(this.cantidad);
-
-                        detalle.setPrecio(new BigDecimal(this.productoActual.getPrecioUnitario()).setScale(2, RoundingMode.UP).doubleValue());
                         detalle.setProducto(this.productoActual);
-                        detalle.setSubTotal(new BigDecimal(this.productoActual.getPrecioUnitario() * this.cantidad).setScale(2, RoundingMode.UP).doubleValue());
-                        detalle.setDescuento(0);
-                        if (this.tipo) {
-                            //detalle.setDescuento(this.descuento);
-                            detalle.setDescuento(detalle.getSubTotal() * (this.descuentoActual / 100));
-                        } else {
-                            for (int i = 0; i < this.listadescuento.size(); i++) {
-                                if (this.listadescuento.get(i).getCodigo() == detalle.getCodprincipal()) {
-                                    detalle.setDescuento(this.descuentoActual);
-                                    detalle.setDescuento(detalle.getSubTotal() * (detalle.getDescuento() / 100));
-                                }
-                            }
-                        }
-                        this.temporal += new BigDecimal(detalle.getDescuento()).setScale(2, RoundingMode.UP).doubleValue();
-                        detalle.setSubTotal(new BigDecimal(detalle.getSubTotal() - detalle.getDescuento()).setScale(2, RoundingMode.UP).doubleValue());
+                        detalle.setCodigo(this.productoActual.getCodigo());
+                        detalle.setCantidad(this.cantidad);
+                        detalle.setPrecio(convertTwoDecimal(this.productoActual.getPrecioUnitario()));
+                        detalle.setDescuento(convertTwoDecimal(detalle.getPrecio() * ((this.descuentoGeneral + this.descuentoActual) / 100)));
+                        detalle.setSubTotal(convertTwoDecimal((detalle.getPrecio() - detalle.getDescuento()) * detalle.getCantidad()));
+                        
                         //Cálculo de los valores
-                        this.subTotalVenta = this.subTotalVenta + detalle.getSubTotal();
+                        this.subTotalVenta += detalle.getSubTotal();
+                        this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
                         this.listaDetalle.add(detalle);
-                        this.cantidad = 1;
-                        this.productoActual.setCodigo(0);
-                        this.productoActual.setNombre("");
-                        double subtemp = new BigDecimal(this.productoActual.getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+
                         if (this.productoActual.getIva() != 0) {
-                            this.subtotal12 += detalle.getSubTotal();
+                            this.subtotal12 += convertTwoDecimal(detalle.getSubTotal());
                         } else {
-                            this.subtotal0 += detalle.getSubTotal();
+                            this.subtotal0 += convertTwoDecimal(detalle.getSubTotal());
                         }
 
-                        this.iva += new BigDecimal(this.productoActual.getIva() * (detalle.getSubTotal())).setScale(2, RoundingMode.UP).doubleValue();
-                        this.ice += new BigDecimal(this.productoActual.getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
-
-                        this.total = new BigDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice).setScale(2, RoundingMode.UP).doubleValue();
+                        this.iva += convertTwoDecimal(this.productoActual.getIva() / 100 * detalle.getSubTotal());
+                        this.ice += convertTwoDecimal(this.productoActual.getIce() * detalle.getCantidad());
+                        this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
 
                         this.productoActual = new ProductoVenta();
                         this.cantidad = 1;
-                        this.productoActual.setPrecioUnitario(0);
-
-                        this.productoActual = null;
                     }
                 }
             } else {
@@ -276,107 +228,97 @@ public class VentaManagedBean implements Serializable {
 
     }
 
-    //Eliminar un producto de la lista
-    @Asynchronous
+    /**
+     * Elimina uno de los items que se hayan agregado a la lista de venta.
+     * Recibe dicho item como parámetro
+     *
+     * @param detalle
+     */
     public void EliminarProducto(DetalleVenta detalle) {
         try {
-            double subtemp = new BigDecimal(detalle.getProducto().getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
             if (detalle.getProducto().getIva() != 0) {
-                this.subtotal12 -= subtemp;
+                this.subtotal12 -= convertTwoDecimal(detalle.getSubTotal());
             } else {
-                this.subtotal0 -= subtemp;
+                this.subtotal0 -= convertTwoDecimal(detalle.getSubTotal());
             }
 
-            this.iva -= new BigDecimal(detalle.getProducto().getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
-            this.ice -= new BigDecimal(detalle.getProducto().getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+            this.iva -= convertTwoDecimal(detalle.getProducto().getIva() / 100 * detalle.getSubTotal());
+            this.ice -= convertTwoDecimal(detalle.getProducto().getIce() * detalle.getCantidad());
+            this.descuentoAcumulado -= convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
+            this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
+            this.subTotalVenta -= convertTwoDecimal(detalle.getSubTotal());
 
-            this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-            this.subTotalVenta -= detalle.getSubTotal();
-
+            detalle.getProducto().setStock((int) (detalle.getCantidad() + detalle.getProducto().getStock()));
             this.listaDetalle.remove(detalle);
-
+            this.listaProductos.add(detalle.getProducto());
+            
             PrimeFaces.current().ajax().update("ventaForm");
-            System.out.println("Eliminado");
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
 
-    //Mostrar algun mensaje
-    @Asynchronous
+    /**
+     * Muestra un mensaje en pantalla. Recibe como parámetros la sveridad que
+     * determina el color, un título y un detalle.
+     *
+     * @param severity
+     * @param summary
+     * @param detail
+     */
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    @Asynchronous
+    /**
+     * Recible un valor de tipo double y lo transforma para que tenga únicamente
+     * 2 decimales
+     *
+     * @param doubleNumero
+     * @return double decimalConvertido
+     */
+    public double convertTwoDecimal(double doubleNumero) {
+        double temp = new BigDecimal(doubleNumero).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return temp < 0 ? 0 : temp;
+    }
+
+    /**
+     * Toma todos los datos de la interfaz de usuario y los envía a la base de
+     * datos, registrando una nueva factura de venta.
+     *
+     * @param formaPago
+     * @return String redireccion
+     */
     public String RegistrarVenta(int formaPago) {
         try {
             Venta ventaActual = new Venta();
-            int listSize = 0;
             if (this.listaDetalle.isEmpty()) {
                 addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede  realizar una venta nula");
             } else {
-                if (this.clienteNombre == null || this.clienteNombre == "") {
+                if (this.cliente.getNombre() == null || this.cliente.getNombre() == "") {
                     addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe elegir un cliente para la venta");
                 } else {
                     DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
                     String currentDate = df.format(new Date());
 
                     //Asignar valores a la venta
-                    ventaActual.setCliente(this.cliente);
-                    ventaActual.setIdCliente(this.cliente.getIdCliente());
-                    ventaActual.setIdEmpleado(1);
-                    ventaActual.setIdFormaPago(formaPago);
-                    ventaActual.setIdDocumento(0);
-                    ventaActual.setSucursal(1);
-                    ventaActual.setFechaVenta(currentDate);
-                    ventaActual.setPuntoEmision(1);
-                    ventaActual.setSecuencia(0);
-                    ventaActual.setAutorizacion("849730964");
-                    ventaActual.setFechaEmision(currentDate);
-                    ventaActual.setFechaAutorizacion(currentDate);
-                    ventaActual.setBase12(this.subtotal12);
-                    ventaActual.setBase0(this.subtotal0);
-                    ventaActual.setIva(this.iva);
-                    ventaActual.setIce(this.ice);
-                    ventaActual.setTotalFactura(this.total);
-                    ventaActual.setDiasCredito(this.diasPago);
+                    ventaActual = cargarDatosVenta(ventaActual, formaPago, currentDate);
 
-                    //Verificación en consola
-                    System.out.println(ventaActual.getCliente().getNombre());
-                    System.out.println(ventaActual.getTotalFactura());
-
-                    //Guardar la venta desde DAO
+                    //Guardar la venta y su detalle desde DAO
                     int ventaRealizada = this.ventaDao.GuardarVenta(ventaActual);
+                    registrarItemsVenta(ventaRealizada);
 
                     //Verificar que se haya ingresado la venta
                     if (ventaRealizada == 0) {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo realizar la venta. Revise los datos ingresados");
                     } else {
-                        System.out.println("Venta realizada con Factura #" + ventaRealizada);
-
-                        DetalleVentaDAO daoDetail = new DetalleVentaDAO();
-
                         //Registro de cada producto (detalle) de la venta en la BD
-                        while (listSize < this.listaDetalle.size()) {
-                            int codProd = this.listaDetalle.get(listSize).getProducto().getCodigo();
-                            double qty = this.listaDetalle.get(listSize).getCantidad();
-                            double dsc = this.listaDetalle.get(listSize).getDescuento();
-                            double price = this.listaDetalle.get(listSize).getPrecio();
-
-                            System.out.println(this.listaDetalle.get(listSize).getProducto().getDescripcion());
-                            System.out.println(ventaRealizada + "-" + codProd + "-" + qty + "-" + dsc + "-" + price);
-                            daoDetail.RegistrarProductos(ventaRealizada, codProd, qty, dsc, price);
-                            listSize += 1;
-                        }
-                        
                         this.ventaDao.insertasiento(ventaActual);
 
                         FacesContext context = FacesContext.getCurrentInstance();
                         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Compra Guardada satisfactoriamente"));
                         context.getExternalContext().getFlash().setKeepMessages(true);
-                        //FacesContext.getCurrentInstance().getExternalContext().redirect("listaVentas.xhtml?faces-redirect=true");
                         return "listaVentas.xhtml?faces-redirect=true";
                     }
                 }
@@ -387,7 +329,58 @@ public class VentaManagedBean implements Serializable {
         return null;
     }
 
-    
+    /**
+     * Método interno que se encarga de registrar cada uno de los items de una
+     * venta una vez que esta ya ha sido guardada. Recibe como parámetro el
+     * código de dicha venta.
+     *
+     * @param codVenta
+     */
+    private void registrarItemsVenta(int codVenta) {
+        int listSize = 0;
+        while (listSize < this.listaDetalle.size()) {
+            int codProd = this.listaDetalle.get(listSize).getProducto().getCodigo();
+            double qty = convertTwoDecimal(this.listaDetalle.get(listSize).getCantidad());
+            double dsc = convertTwoDecimal(this.listaDetalle.get(listSize).getDescuento());
+            double price = convertTwoDecimal(this.listaDetalle.get(listSize).getPrecio());
+            DetalleVentaDAO daoDetail = new DetalleVentaDAO();
+            daoDetail.RegistrarProductos(codVenta, codProd, qty, dsc, price);
+            listSize += 1;
+        }
+    }
+
+    /**
+     * Función privada para completar el registro de la venta. Recibe una objeto
+     * venta, un entero que representa la forma de pago, y una cadena que
+     * representa la fecha. Con estos datos se rellenará la venta obtenida en
+     * los parámetros.
+     *
+     * @param venta
+     * @param formaPago
+     * @param currentDate
+     * @return Venta venta
+     */
+    private Venta cargarDatosVenta(Venta venta, int formaPago, String currentDate) {
+        venta.setCliente(this.cliente);
+        venta.setIdCliente(this.cliente.getIdCliente());
+        venta.setIdEmpleado(1);
+        venta.setIdFormaPago(formaPago);
+        venta.setSucursal(1);
+        venta.setFechaVenta(currentDate);
+        venta.setPuntoEmision(1);
+        venta.setSecuencia(0);
+        venta.setAutorizacion("849730964");
+        venta.setFechaEmision(currentDate);
+        venta.setFechaAutorizacion(currentDate);
+        venta.setBase12(this.subtotal12);
+        venta.setBase0(this.subtotal0);
+        venta.setIva(this.iva);
+        venta.setIce(this.ice);
+        venta.setTotalFactura(this.total);
+        venta.setDiasCredito(this.diasPago);
+        return venta;
+    }
+
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
         return cliente;
@@ -395,34 +388,6 @@ public class VentaManagedBean implements Serializable {
 
     public void setCliente(ClienteVenta cliente) {
         this.cliente = cliente;
-    }
-
-    public ClienteVentaDao getClienteDAO() {
-        return clienteDAO;
-    }
-
-    public String getClienteIdNum() {
-        return clienteIdNum;
-    }
-
-    public void setClienteIdNum(String clienteIdNum) {
-        this.clienteIdNum = clienteIdNum;
-    }
-
-    public String getClienteNombre() {
-        return clienteNombre;
-    }
-
-    public void setClienteNombre(String clienteNombre) {
-        this.clienteNombre = clienteNombre;
-    }
-
-    public ProductoVentaDAO getProductoDao() {
-        return productoDao;
-    }
-
-    public void setProductoDao(ProductoVentaDAO productoDao) {
-        this.productoDao = productoDao;
     }
 
     public ProductoVenta getProductoActual() {
@@ -433,20 +398,28 @@ public class VentaManagedBean implements Serializable {
         this.productoActual = productoActual;
     }
 
-    public DetalleVentaDAO getDetalleDAO() {
-        return detalleDAO;
+    public DetalleVenta getProductoSeleccionado() {
+        return productoSeleccionado;
     }
 
-    public void setDetalleDAO(DetalleVentaDAO detalleDAO) {
-        this.detalleDAO = detalleDAO;
+    public void setProductoSeleccionado(DetalleVenta productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
     }
 
-    public List<DetalleVenta> getListaDetalle() {
-        return listaDetalle;
+    public double getDescuentoAcumulado() {
+        return descuentoAcumulado;
     }
 
-    public void setListaDetalle(List<DetalleVenta> listaDetalle) {
-        this.listaDetalle = listaDetalle;
+    public void setDescuentoAcumulado(double descuentoAcumulado) {
+        this.descuentoAcumulado = descuentoAcumulado;
+    }
+
+    public int getCodigoProdBuscar() {
+        return codigoProdBuscar;
+    }
+
+    public void setCodigoProdBuscar(int codigoProdBuscar) {
+        this.codigoProdBuscar = codigoProdBuscar;
     }
 
     public double getCantidad() {
@@ -481,12 +454,12 @@ public class VentaManagedBean implements Serializable {
         this.subtotal0 = subtotal0;
     }
 
-    public double getDescuentoActual() {
-        return descuentoActual;
+    public double getDescuento() {
+        return descuento;
     }
 
-    public void setDescuentoActual(double descuentoActual) {
-        this.descuentoActual = descuentoActual;
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
     }
 
     public double getIce() {
@@ -513,46 +486,6 @@ public class VentaManagedBean implements Serializable {
         this.total = total;
     }
 
-    public DetalleVenta getProductoSeleccionado() {
-        return productoSeleccionado;
-    }
-
-    public void setProductoSeleccionado(DetalleVenta productoSeleccionado) {
-        this.productoSeleccionado = productoSeleccionado;
-    }
-
-    public Venta getVenta() {
-        return venta;
-    }
-
-    public void setVenta(Venta venta) {
-        this.venta = venta;
-    }
-
-    public VentaDAO getVentaDao() {
-        return ventaDao;
-    }
-
-    public void setVentaDao(VentaDAO ventaDao) {
-        this.ventaDao = ventaDao;
-    }
-
-    public double getEfectivo() {
-        return efectivo;
-    }
-
-    public void setEfectivo(double efectivo) {
-        this.efectivo = efectivo;
-    }
-
-    public double getCambio() {
-        return cambio;
-    }
-
-    public void setCambio(double cambio) {
-        this.cambio = cambio;
-    }
-
     public int getDiasPago() {
         return diasPago;
     }
@@ -569,20 +502,20 @@ public class VentaManagedBean implements Serializable {
         this.listaClientes = listaClientes;
     }
 
-    public ClienteVenta getClienteSeleccionado() {
-        return clienteSeleccionado;
-    }
-
-    public void setClienteSeleccionado(ClienteVenta clienteSeleccionado) {
-        this.clienteSeleccionado = clienteSeleccionado;
-    }
-
     public List<ProductoVenta> getListaProductos() {
         return listaProductos;
     }
 
     public void setListaProductos(List<ProductoVenta> listaProductos) {
         this.listaProductos = listaProductos;
+    }
+
+    public List<DetalleVenta> getListaDetalle() {
+        return listaDetalle;
+    }
+
+    public void setListaDetalle(List<DetalleVenta> listaDetalle) {
+        this.listaDetalle = listaDetalle;
     }
 
     public String getVisible() {
@@ -593,21 +526,20 @@ public class VentaManagedBean implements Serializable {
         this.visible = visible;
     }
 
-    public double getTemporal() {
-        return temporal;
+    public double getDescuentoGeneral() {
+        return descuentoGeneral;
     }
 
-    public void setTemporal(double temporal) {
-        this.temporal = temporal;
+    public void setDescuentoGeneral(double descuentoGeneral) {
+        this.descuentoGeneral = descuentoGeneral;
     }
 
-    public int getCodigoProdBuscar() {
-        return codigoProdBuscar;
+    public double getDescuentoActual() {
+        return descuentoActual;
     }
 
-    public void setCodigoProdBuscar(int codigoProdBuscar) {
-        this.codigoProdBuscar = codigoProdBuscar;
+    public void setDescuentoActual(double descuentoActual) {
+        this.descuentoActual = descuentoActual;
     }
 
-    
 }

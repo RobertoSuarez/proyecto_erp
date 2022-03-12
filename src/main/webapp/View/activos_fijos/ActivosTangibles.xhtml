@@ -5,21 +5,17 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <f:event type="preRenderView" 
                          listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-
                 <p:menubar 
                     autoDisplay="false"
                     style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles"
                                 url="./ActivosIntangibles.xhtml"/>
-
                 </p:menubar>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
@@ -95,11 +91,8 @@
                                                 <p:column 
                                                     headerText="% de Depreciación">
                                                     <h:outputText 
-                                                        value="#{depreciable.porcentaje_depreciacion} %"
-                                                        style="font-weight: 700">
-                                                        <f:convertNumber
-                                                            currencySymbol="%" 
-                                                            type="currency"/>
+                                                        value="#{depreciable.porcentaje_depreciacion} %">
+                                                     
                                                     </h:outputText>
                                                 </p:column>
 
@@ -162,7 +155,7 @@
                                                 </p:column>
                                             </p:dataTable>
                                         </h:form>
-
+                                        <!-- Parte de Depreciables Deshabilitados -->
                                     </div>    
                                     <h:form id="formverdeshabilitadodepreciable" >
                                         <p:dialog
@@ -175,6 +168,7 @@
                                             widgetVar="deshabilitadosdepreciables"
                                             id="dialogoingresarNodepreciable">
                                             <div style="display: flex;justify-content: center">
+                                                <!-- Tabla de Depreciables Deshabilitados -->
                                                 <p:dataTable
                                                     id="verListaDepreciable"
                                                     scrollable="true"
@@ -591,7 +585,7 @@
                                     </h:form>
 
                                     <!-- LISTAR DEPRECIABLES X MES -->
-                                    <h:form id="ListaMesesDepreciables">
+                                    <h:form id="ListaMesesDepreciables" >
                                         <p:dialog 
                                             header="Lista de Depreciación por cada Mes"
                                             minHeight="40" 
@@ -602,14 +596,8 @@
                                             widgetVar="listaDepreciableMes">
                                             <div  style="display: flex;justify-content: center">
 
-                                                <p:outputPanel class="ui-fluid">
+                                                <p:outputPanel class="ui-fluid" >
                                                     <div class="p-field p-col-4">
-
-                                                        <p:outputLabel 
-                                                            for="@next" 
-                                                            value="Descripción: "/>
-                                                        <p:inputText  
-                                                            value="#{activosFijosMB.listadepreciable.detalle_de_activo}" />
 
                                                     </div>
                                                     <p:dataTable id="tablaD"

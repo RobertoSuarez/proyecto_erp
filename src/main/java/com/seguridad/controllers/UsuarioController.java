@@ -162,13 +162,13 @@ public class UsuarioController implements Serializable {
 
             } else if ("".equals(usuario.getPassword())) {
                 mensajeDeAdvertencia("Ingrese una Contraseña");
-            }/* else if (usuario.isHabilitado() == false) {
+            } else if (status== false) {
                 mensajeDeAdvertencia("Aceptar los terminos y condiciones");
 
-            } */ else if (matcher.find() == false) {
+            }  else if (matcher.find() == false) {
                 mensajeDeAdvertencia("Ingrese un email válido");
             } else {
-                this.usuarioDAO.registrarUsuario(usuario);
+              this.usuarioDAO.registrarUsuario(usuario);
                 mensajeDeExito("Usuario registrado");
 
             }

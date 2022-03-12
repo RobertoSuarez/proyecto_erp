@@ -21,10 +21,10 @@ public class ProductoVenta implements Serializable {
     private String unidadMedida;
     private float precioUnitario;
     private float subsidio;
-    private float descuento;
 
     public ProductoVenta() {
-        this.descuento = 0;
+        this.precioUnitario = 0;
+        this.nombre = "";
     }
 
     public int getCodigo() {
@@ -130,16 +130,5 @@ public class ProductoVenta implements Serializable {
     public void setSubsidio(float subsidio) {
         this.subsidio = subsidio;
     }
-
-    public float getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(float descuento) {
-        this.descuento = descuento;
-    }
-
-    
-    
     
 }
