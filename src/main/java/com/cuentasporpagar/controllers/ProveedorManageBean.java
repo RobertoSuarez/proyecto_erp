@@ -150,9 +150,7 @@ public class ProveedorManageBean implements Serializable {
            * Condiciones datos
            */
           this.condiciones.setCantDiasVencidos(c.getCantDiasVencidos());
-          this.condiciones.setDescuento(c.getDescuento());
           this.condiciones.setDiasNeto(c.getDiasNeto());
-          this.condiciones.setDiasDescuento(c.getDiasDescuento());
           this.condiciones.setDescripcion(c.getDescripcion());
      }
 
@@ -195,12 +193,6 @@ public class ProveedorManageBean implements Serializable {
                     PrimeFaces.current().ajax().update("form:messages");
                } else if ("".equals(condiciones.getDiasNeto())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día neto"));
-
-               } else if ("".equals(condiciones.getDescuento())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un descuento"));
-
-               } else if ("".equals(condiciones.getDiasDescuento())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día descuento"));
 
                } else if ("".equals(condiciones.getCantDiasVencidos())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una cantidad de días vencidos"));
@@ -281,12 +273,6 @@ public class ProveedorManageBean implements Serializable {
                } else if ("".equals(condiciones.getDiasNeto())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día neto"));
 
-               } else if ("".equals(condiciones.getDescuento())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un descuento"));
-
-               } else if ("".equals(condiciones.getDiasDescuento())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese un día descuento"));
-
                } else if ("".equals(condiciones.getCantDiasVencidos())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese una cantidad de días vencidos"));
 
@@ -307,6 +293,7 @@ public class ProveedorManageBean implements Serializable {
                FacesContext.getCurrentInstance().
                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                                "Error al guardar"));
+               System.out.println(e);
 
           }
           PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");

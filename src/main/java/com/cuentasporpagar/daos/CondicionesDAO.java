@@ -119,12 +119,13 @@ public class CondicionesDAO implements Serializable {
                String sentencia = "INSERT INTO public.condiciones(descuento,"
                        + " diasneto, diasdescuento, cantdiasvencidos,"
                        + " descripcion, idproveedor)\n"
-                       + " VALUES (" + c.getDescuento() + "," + c.getDiasNeto() + "," + c.getDiasDescuento() + ","
+                       + " VALUES (0," + c.getDiasNeto() + ",0,"
                        + "" + c.getCantDiasVencidos() + ",'" + c.getDescripcion() + "',"
                        + "(SELECT idproveedor FROM proveedor ORDER BY idproveedor DESC LIMIT 1));";
 
                conexion.ejecutarSql(sentencia);
           } catch (Exception e) {
+              System.out.println(e);
                throw e;
           } finally {
                this.conexion.desconectar();
@@ -142,9 +143,7 @@ public class CondicionesDAO implements Serializable {
           try {
                this.conexion.conectar();
                String cadena = "UPDATE public.condiciones set "
-                       + "descuento = " + c.getDescuento() + ", "
                        + "diasneto = " + c.getDiasNeto() + ", "
-                       + "diasdescuento = " + c.getDiasDescuento() + ","
                        + "cantdiasvencidos = " + c.getCantDiasVencidos() + ", "
                        + "descripcion = '" + c.getDescripcion() + "' "
                        + "WHERE idproveedor = " + codigo + "";
