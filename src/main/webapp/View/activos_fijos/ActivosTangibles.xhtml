@@ -297,8 +297,18 @@
                                                                 <p:inputText   
                                                                     value="#{activosFijosMB.activosFijos.numero_factura}" />
                                                             </div>
-
-
+                                                            <div class="p-col-6">
+                                                                <h:outputLabel for="subCuentalist" value="Cuenta de activo depreciable: "/>
+                                                                <p:selectOneMenu id="subCuentalist" value="#{activosFijosMB.activodepreciable.subCuenta.id}"
+                                                                                 required="true" requiredMessage="Debe seleccionar una cuenta de activo depreciable" label="Cuenta"
+                                                                                 filter="true" filterMatchMode="startsWith">
+                                                                    <f:selectItem itemLabel="Seleccione una cuenta de activo depreciable" 
+                                                                                  itemValue="#{0}" noSelectionOption="true"/>
+                                                                    <f:selectItems value="#{activosFijosMB.subCuentaList}" var="subCuenta"
+                                                                                   itemLabel="#{subCuenta.nombre}" 
+                                                                                   itemValue="#{subCuenta.id}"/>
+                                                                </p:selectOneMenu>
+                                                            </div>
                                                             <div class="p-col-6">
                                                                 <p:outputLabel 
                                                                     for="proveedor" 
@@ -547,6 +557,18 @@
                                                                     value="Número de Factura: "/>
                                                                 <p:inputText  
                                                                     value="#{activosFijosMB.listadepreciable.numero_factura}" />
+                                                            </div>
+                                                            <div class="p-field p-col">
+                                                                <h:outputLabel for="subCuentalistEdit" value="Cuenta de activo depreciable: "/>
+                                                                <p:selectOneMenu id="subCuentalistEdit" value="#{activosFijosMB.listadepreciable.subCuenta.id}"
+                                                                                 required="true" requiredMessage="Debe seleccionar una cuenta de activo depreciable" label="Cuenta"
+                                                                                 filter="true" filterMatchMode="startsWith">
+                                                                    <f:selectItem itemLabel="Seleccione una cuenta de activo depreciable" 
+                                                                                  itemValue="#{0}" noSelectionOption="true"/>
+                                                                    <f:selectItems value="#{activosFijosMB.subCuentaList}" var="subCuenta"
+                                                                                   itemLabel="#{subCuenta.nombre}" 
+                                                                                   itemValue="#{subCuenta.id}"/>
+                                                                </p:selectOneMenu>
                                                             </div>
                                                         </div>
                                                         <p:outputLabel 

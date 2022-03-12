@@ -149,7 +149,7 @@ public class TangibleDAO {
                 listadepreciablevacia.setIdproveedor(rs.getInt("idproveedor"));
                 listadepreciablevacia.setProveedor(rs.getString("nombre"));
                 listadepreciablevacia.setNumero_factura(rs.getString("numero_factura"));
-                listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("idsubcuenta")));
+                listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("id_subcuenta")));
                 lista.add(listadepreciablevacia);
             }
 
@@ -211,7 +211,7 @@ public class TangibleDAO {
                 listadepreciablevacia.setIdproveedor(rs.getInt("idproveedor"));
                 listadepreciablevacia.setProveedor(rs.getString("nombre"));
                 listadepreciablevacia.setNumero_factura(rs.getString("numero_factura"));
-                listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("idsubcuenta")));
+                listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("id_subcuenta")));
                 listtang.add(listadepreciablevacia);
             }
 

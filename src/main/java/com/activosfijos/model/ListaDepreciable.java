@@ -49,6 +49,7 @@ public class ListaDepreciable {
         this.depreciacion_meses = depreciacion_meses;
         this.porcentaje_depreciacion = porcentaje_depreciacion;
         this.saldo_depresiacion = saldo_depresiacion;
+        this.subCuenta = new SubCuenta();
     }
 
     public double getSaldo_depresiacion() {

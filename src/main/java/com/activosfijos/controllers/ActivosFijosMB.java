@@ -13,6 +13,8 @@ import com.activosfijos.model.ActivoDepreciable;
 import com.activosfijos.model.ActivoNoDepreciable;
 import com.activosfijos.model.ListaDepreciable;
 import com.activosfijos.model.ListaNoDepreciable;
+import com.contabilidad.dao.SubCuentaDAO;
+import com.contabilidad.models.SubCuenta;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.Array;
 import java.sql.SQLException;
@@ -38,10 +40,12 @@ public class ActivosFijosMB implements Serializable {
     ActivoDepreciable activodepreciable = new ActivoDepreciable();
     ActivoNoDepreciable activoNoDepreciable = new ActivoNoDepreciable();
     TangibleDAO tangibleDAO = new TangibleDAO();
+    private SubCuentaDAO subCuentaDAO = new SubCuentaDAO();
     NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
     ListaDepreciable listadepreciable = new ListaDepreciable();
     ListaNoDepreciable listanodepreciable = new ListaNoDepreciable();
     private List<ListaDepreciable> listamesesD;
+    List<SubCuenta> subCuentaList;
     int idactivofijo;
     int id_proveedor = 0;
     String nombre = "";
@@ -50,6 +54,7 @@ public class ActivosFijosMB implements Serializable {
 
     public ActivosFijosMB() {
         listamesesD = new ArrayList<>();
+        subCuentaList = subCuentaDAO.getSubCuentas("Activos fijos tangibles depreciables");
     }
 
     public List<ListaDepreciable> getListamesesD() {
@@ -130,6 +135,14 @@ public class ActivosFijosMB implements Serializable {
 
     public void setActivodepreciable(ActivoDepreciable activodepreciable) {
         this.activodepreciable = activodepreciable;
+    }
+
+    public List<SubCuenta> getSubCuentaList() {
+        return subCuentaList;
+    }
+
+    public void setSubCuentaList(List<SubCuenta> subCuentaList) {
+        this.subCuentaList = subCuentaList;
     }
 
 //----------------------------Activos fijos tangibles-------------------------\\

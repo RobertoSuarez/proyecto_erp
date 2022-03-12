@@ -65,8 +65,11 @@ public class SubCuentaDAO {
             String query = "select * from public.subcuenta where idsubcuenta = " + idSubCuenta + ";";
             result = conexion.ejecutarSql(query);
             while(result.next()){
-                subcuentas.add(new SubCuenta(result.getInt("idsubcuenta"), result.getInt("idcuenta"), result.getInt("idimpuesto"), result.getString("codigo"),
-                            result.getString("nombre"), result.getString("tiposaldo")));
+                subCuenta = new SubCuenta(result.getInt("idsubcuenta"), result.getInt("idcuenta"), result.getInt("idimpuesto"), result.getString("codigo"),
+                            result.getString("nombre"), result.getString("tiposaldo"));
+                if(subcuentas != null){ 
+                    subcuentas.add(subCuenta);
+                }
             }
             return subCuenta;
         }catch(Exception e){

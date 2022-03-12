@@ -6,7 +6,12 @@ public class SubCuenta {
     private String codigo, nombre, tipo;
 
     public SubCuenta() {
-
+        this.id = 0;
+        this.cuenta = 0;
+        this.impuesto = 0;
+        this.codigo = "";
+        this.nombre = "";
+        this.tipo = "";
     }
 
     public SubCuenta(int id, int cuenta, int impuesto, String codigo, String nombre, String tipo) {
