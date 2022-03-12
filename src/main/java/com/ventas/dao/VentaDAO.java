@@ -187,6 +187,9 @@ public class VentaDAO {
             venta.setIva(rs.getDouble(16));
             venta.setIce(rs.getDouble(17));
             venta.setTotalFactura(rs.getFloat(18));
+            
+            ClienteVentaDao tempDao = new ClienteVentaDao();
+            venta.setCliente(tempDao.BuscarClientePorId(venta.getIdCliente()));
 
             String fact = "";
             int lon = String.valueOf(venta.getSucursal()).length();

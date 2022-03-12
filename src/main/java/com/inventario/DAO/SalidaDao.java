@@ -5,8 +5,7 @@
 package com.inventario.DAO;
 
 import com.global.config.Conexion;
-import com.inventario.models.ArticulosInventario;
-import com.inventario.models.EntradaInventario;
+import com.inventario.models.SalidaInventario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,37 +15,36 @@ import java.util.List;
  *
  * @author angul
  */
-public class EntradaDao {
-
+public class SalidaDao {
     Conexion conexion = new Conexion();
-    private EntradaInventario entradaInventario;
+    private SalidaInventario salidaInventario;
     private ResultSet resultSet;
-    private List<EntradaInventario> listaArticulos;
+    private List<SalidaInventario> listaArticulos;
     private List auxlista = new ArrayList<>();
 
-    public EntradaDao() {
-        entradaInventario = new EntradaInventario();
+    public SalidaDao() {
+        salidaInventario = new SalidaInventario();
         conexion = new Conexion();
         listaArticulos = new ArrayList<>();
     }
 
-    public EntradaDao(EntradaInventario entradaInventario) {
+    public SalidaDao(SalidaInventario salidaInventario) {
         conexion = new Conexion();
-        this.entradaInventario = entradaInventario;
+        this.salidaInventario = salidaInventario;
     }
 
-    public List<EntradaInventario> getEntradas(int idEntrada) {
-        List<EntradaInventario> ListEntrada = new ArrayList<>();
+    public List<SalidaInventario> getSalidas(int idSalida) {
+            List<SalidaInventario> ListSalida = new ArrayList<>();
         String sql = "";
-        if (idEntrada > 0) {
-            sql = "Select entrada.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
-                    + "FROM entrada\n"
+        if (idSalida > 0) {
+            sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+                    + "FROM salida\n"
                     + "inner join proveedor on id_proveedor = idproveedor \n"
                     + "inner join bodega on id_bodega = bodega.cod"
-                    + " WHERE entrada.cod=" + idEntrada;
+                    + " WHERE salida.cod=" + idSalida;
         } else {
-            sql = "Select entrada.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
-                    + "FROM entrada\n"
+            sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+                    + "FROM salida\n"
                     + "inner join proveedor on id_proveedor = idproveedor \n"
                     + "inner join bodega on id_bodega = bodega.cod";
         }
@@ -55,7 +53,7 @@ public class EntradaDao {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
-                ListEntrada.add(new EntradaInventario(resultSet.getInt("cod"),
+                ListSalida.add(new SalidaInventario(resultSet.getInt("cod"),
                         resultSet.getString("num_comprobante"),
                         resultSet.getDate("fecha"),
                         resultSet.getInt("id_bodega"),
@@ -69,40 +67,40 @@ public class EntradaDao {
         } finally {
             conexion.desconectar();
         }
-        return ListEntrada;
+        return ListSalida;
     }
 
-    public List<EntradaInventario> getEntradas() {
-        return getEntradas(0);
+    public List<SalidaInventario> getSalidas() {
+        return getSalidas(0);
     }
 
-    public int GuardarEntrada(EntradaInventario entradaInventario) {
+    public int GuardarSalida(SalidaInventario salidaInventario) {
         try {
             ResultSet rs = null;
 
             this.conexion.conectar();
-            rs = this.conexion.ejecutarSql("select cod, num_comprobante from public.entrada order by cod desc limit 1;");
+            rs = this.conexion.ejecutarSql("select cod, num_comprobante from public.salida order by cod desc limit 1;");
             int codigo = 1;
 
             //Asignar los valores de la siguiente venta y secuencia.
             while (rs.next()) {
                 codigo = rs.getInt(1) + 1;
             }
-            entradaInventario.setCod(codigo);
-            System.out.println("Entrada: " + entradaInventario.getCod());
+            salidaInventario.setCod(codigo);
+            System.out.println("Salida: " + salidaInventario.getCod());
 
             //Insertar nueva venta
-            String query = "INSERT INTO public.entrada("
+            String query = "INSERT INTO public.salida("
                     + "num_comprobante, fecha, id_proveedor, id_bodega)"
-                    + "VALUES('" +  entradaInventario.getNumComprobante() + "', '" + entradaInventario.getFecha() + "', " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
+                    + "VALUES('" +  salidaInventario.getNumComprobante() + "', '" + salidaInventario.getFecha() + "', " + salidaInventario.getIdProveedor() + ", " + salidaInventario.getIdBodega() + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
             this.conexion.desconectar();
 
-            System.out.println("Entrada Guardada exitosamente");
+            System.out.println("Salida Guardada exitosamente");
 
-            return entradaInventario.getCod();
+            return salidaInventario.getCod();
         } catch (SQLException e) {
             if (conexion.isEstado()) {
                 conexion.desconectar();
@@ -113,5 +111,4 @@ public class EntradaDao {
         }
         return 0;
     }
-
 }

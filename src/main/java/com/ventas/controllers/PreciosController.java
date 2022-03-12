@@ -6,12 +6,13 @@ package com.ventas.controllers;
 
 import com.ventas.dao.PreciosDAO;
 import com.ventas.models.Precios;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.ManagedBean;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.PrimeFaces;
@@ -21,16 +22,16 @@ import org.primefaces.event.SelectEvent;
  *
  * @author ninat
  */
-@ManagedBean(name = "preciosMB")
+@ManagedBean(value="preciosMB")
 @SessionScoped
-public class PreciosController {
+public class PreciosController implements Serializable {
 
     private Precios precios;
-    private Producto producto;
+    private ProductoVenta producto;
     private List<Precios> listaPrecios;
     private List<SelectItem> tiposClientes;
-    private List<Producto> listaProduc = new ArrayList<>();
-    private List<Producto> aux;
+    private List<ProductoVenta> listaProduc = new ArrayList<>();
+    private List<ProductoVenta> aux;
     private PreciosDAO preciosDAO;
     private String tipos;
     private String opciones;
@@ -40,7 +41,7 @@ public class PreciosController {
     public PreciosController() {
         precios = new Precios();
         preciosDAO = new PreciosDAO();
-        producto = new Producto();
+        producto = new ProductoVenta();
         listaPrecios = new ArrayList<>();
         tiposClientes = new ArrayList<>();
         listaPrecios = preciosDAO.mostrarPrecios();
@@ -61,7 +62,7 @@ public class PreciosController {
             }
         }
         if (f) {
-            Producto p = new Producto();
+            ProductoVenta p = new ProductoVenta();
             p.setCodigo(getCodigoProducto());
             p.setDescripcion(getNombreProducto());
             this.listaProduc.add(p);
@@ -129,19 +130,19 @@ public class PreciosController {
         this.tiposClientes = tiposClientes;
     }
 
-    public List<Producto> getListaProductos() {
+    public List<ProductoVenta> getListaProductos() {
         return listaProduc;
     }
 
-    public void setListaProductos(List<Producto> listaProductos) {
+    public void setListaProductos(List<ProductoVenta> listaProductos) {
         this.listaProduc = listaProductos;
     }
 
-    public Producto getProducto() {
+    public ProductoVenta getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoVenta producto) {
         this.producto = producto;
     }
 
@@ -292,7 +293,7 @@ public class PreciosController {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
     }
 
-    public void onRowSelect(SelectEvent<Producto> event) {
+    public void onRowSelect(SelectEvent<ProductoVenta> event) {
         setCodigoProducto(event.getObject().getCodigo());
         setNombreProducto(event.getObject().getDescripcion());
         productos();

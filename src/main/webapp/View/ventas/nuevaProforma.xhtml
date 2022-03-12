@@ -66,7 +66,7 @@
                     <p:dataTable var="ListaItems" id="itemsTable" 
                                  value="#{ProformaMB.listaDetalle}" 
                                  selection="#{ProformaMB.productoSeleccionado}" 
-                                 rowKey="#{ListaItems.producto.codigoAux}" 
+                                 rowKey="#{ListaItems.producto.codigo}" 
                                  selectionMode="single" 
                                  paginator="true" 
                                  resizableColumns="true" 
@@ -88,7 +88,7 @@
                         </p:column>
 
                         <p:column headerText="Producto" >
-                            <h:outputText value="#{ListaItems.producto.descripcion}" />
+                            <h:outputText value="#{ListaItems.producto.nombre}" />
                         </p:column>
 
                         <p:column headerText="Precio Unitario">
@@ -203,15 +203,15 @@
                             </p:column>
 
                             <p:column headerText="Cod">
-                                <h:outputText value="#{ListaProductos.codigoAux}" />
+                                <h:outputText value="#{ListaProductos.codigo}" />
                             </p:column>
 
                             <p:column headerText="Producto" >
-                                <h:outputText value="#{ListaProductos.descripcion}" />
+                                <h:outputText value="#{ListaProductos.nombre}" />
                             </p:column>
 
                             <p:column headerText="Detalle">
-                                <h:outputText value="#{ListaProductos.detalleAdicional}" >
+                                <h:outputText value="#{ListaProductos.descripcion}" >
                                 </h:outputText>
                             </p:column>
 

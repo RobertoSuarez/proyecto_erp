@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -27,7 +28,7 @@ public class ModuleDAO {
     public List<Modulo> invokeAllModules() {
         List<Modulo> lstModules = new ArrayList<>();
         Modulo moduleAux;
-        String query = "SELECT * FROM public.modulo\n"
+        String query = "SELECT * FROM security.\"Modulo\" \n"
                 + "ORDER BY \"idModulo\" ASC ";
         ResultSet rs;
         try {
@@ -40,6 +41,30 @@ public class ModuleDAO {
                 moduleAux.setDescriptionModule(rs.getString(3));
                 moduleAux.setEnabled(rs.getBoolean(4));
                 lstModules.add(moduleAux);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return lstModules;
+    }
+    
+    public List<SelectItem> invokeAllModulesForViews() {
+        List<SelectItem> lstModules = new ArrayList<>();
+        SelectItem ItemModule;
+        String query = "SELECT * FROM security.\"Modulo\" \n"
+                + "ORDER BY \"idModulo\" ASC ";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                ItemModule = new SelectItem();
+                ItemModule.setLabel(rs.getString(2));
+                ItemModule.setValue(rs.getInt(1));
+                lstModules.add(ItemModule);
             }
             rs.close();
         } catch (SQLException e) {
@@ -78,13 +103,32 @@ public class ModuleDAO {
         return lstModules;
     }
 
+    public String invokeModuleName(int idRol) {
+        String name_Module = "";
+        String query = "SELECT \"nombreModulo\"\n"
+                + "	FROM security.\"Modulo\"\n"
+                + "	where \"idModulo\"="+ String.valueOf(idRol) +";";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                name_Module = rs.getString(1);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return name_Module;
+    }
+
     public void insertModule(Modulo mod) {
-        String query = "INSERT INTO public.modulo(\n"
+        String query = "INSERT INTO security.\"Modulo\"(\n"
                 + "	\"idModulo\", \"nombreModulo\", descripcion, habilitado)\n"
-                + "	VALUES ((Select \"idModulo\"\n"
-                + "	from public.modulo\n"
-                + "	order by \"idModulo\" desc\n"
-                + "	limit 1)+1, '" + String.valueOf(mod.getNameModule()) + "', '"
+                + "	VALUES ((Select CASE WHEN MAX(\"idModulo\") IS NULL then 0 else MAX(\"idModulo\") END as idModulo from security.\"Modulo\")+1, '"
+                + String.valueOf(mod.getNameModule()) + "', '"
                 + String.valueOf(mod.getDescriptionModule()) + "','true');";
         try {
             this.conexion.conectar();
@@ -97,23 +141,10 @@ public class ModuleDAO {
     }
 
     public void editModule(Modulo module) {
-        String query = "UPDATE public.modulo\n"
-                + "	SET \"nombreModulo\"='" + String.valueOf(module.getNameModule()) + "'"
-                + ", descripcion='" + String.valueOf(module.getDescriptionModule()) + "'"
-                + "	WHERE \"idModulo\"= " + String.valueOf(module.getIdModule()) + ";";
-        try {
-            this.conexion.conectar();
-            this.conexion.ejecutarSql(query);
-        } catch (Exception e) {
-            e.toString();
-        } finally {
-            this.conexion.desconectar();
-        }
-    }
-    
-    public void deleteModule(Modulo module) {
-        String query = "DELETE FROM public.modulo\n" +
-"	WHERE \"idModulo\"= "+String.valueOf(module.getIdModule())+";";
+        String query = "UPDATE security.\"Modulo\"\n"
+                + "	SET  \"nombreModulo\"='" + String.valueOf(module.getNameModule()) + "', \n"
+                + "	descripcion='" + String.valueOf(module.getDescriptionModule()) + "', habilitado='true'\n"
+                + "	WHERE \"idModulo\"=" + String.valueOf(module.getIdModule()) + ";";
         try {
             this.conexion.conectar();
             this.conexion.ejecutarSql(query);

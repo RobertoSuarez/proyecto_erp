@@ -15,17 +15,18 @@ import java.time.LocalDate;
 public class ListaDepreciable {
 
     private int id_activo_fijo;
-    private String detalle_de_activo ;
-    private int valor_adquisicion ;
+    private String detalle_de_activo;
+    private int valor_adquisicion;
     private LocalDate fecha_adquisicion = LocalDate.now();
-    private int id_empresa ;
-    private int depreciacion_meses ;
-    private double cuota_depresiacion ;
-    private double porcentaje_depreciacion ;
-    private double valor_neto_libros ;
+    private int id_empresa;
+    private int depreciacion_meses;
+    private double cuota_depresiacion;
+    private double porcentaje_depreciacion;
+    private double valor_neto_libros;
     private int idproveedor;
     private String proveedor;
     private String numero_factura ;
+    private double saldo_depresiacion;
     private SubCuenta subCuenta;
     
     public ListaDepreciable(int id_activo_fijo, String detalle_de_activo, int valor_adquisicion, int id_empresa,
@@ -44,7 +45,20 @@ public class ListaDepreciable {
         this.subCuenta = subCuenta;
     }
 
-    
+    public ListaDepreciable(int depreciacion_meses, double porcentaje_depreciacion, double saldo_depresiacion) {
+        this.depreciacion_meses = depreciacion_meses;
+        this.porcentaje_depreciacion = porcentaje_depreciacion;
+        this.saldo_depresiacion = saldo_depresiacion;
+    }
+
+    public double getSaldo_depresiacion() {
+        return saldo_depresiacion;
+    }
+
+    public void setSaldo_depresiacion(double saldo_depresiacion) {
+        this.saldo_depresiacion = saldo_depresiacion;
+    }
+
     public int getIdproveedor() {
         return idproveedor;
     }
@@ -53,13 +67,9 @@ public class ListaDepreciable {
         this.idproveedor = idproveedor;
     }
 
- 
-
     public ListaDepreciable() {
         subCuenta = new SubCuenta();
     }
-
- 
 
     public int getId_activo_fijo() {
         return id_activo_fijo;

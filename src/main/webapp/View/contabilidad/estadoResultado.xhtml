@@ -63,17 +63,20 @@
                                     value="Aceptar" 
                                     style=" margin-top: 1%"
                                     action="#{estadoResultadolMB.recibiendoFecha()}"
-                                    update="dt-libros, dt-libros2,dt-libros3, sumaPP"
+                                    update="dt-libros, dt-libros2,dt-libros3, sumaPP, msj"
                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                     />                            
                             </p:toolbarGroup>
                         </p:toolbar>
+                        <div class="ui-fluid"> 
+                            <p:staticMessage id="msj" severity="warn" summary="Advertencia: " detail="La utilidad obtenida no es rentable" style="width: 100%; visibility:#{estadoResultadolMB.utilidadMsj()};" />
+                        </div>
                         <p:dataTable 
                             id="dt-libros" 
                             widgetVar="dtBalance" 
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                             var="pYg" 
-                            value="#{estadoResultadolMB.estadoResultadoIn}">
+                            value="#{estadoResultadolMB.estadoResultIngreso}">
                             <f:facet name="header">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -84,8 +87,8 @@
                                                     pattern="dd/MM/yyyy" />
                                             </h:outputText>
                                             <h:outputText value="Al  " style="margin-left:5%"></h:outputText>
-                                             <h:outputText 
-                                                             value="#{estadoResultadolMB.fecha2}">
+                                            <h:outputText 
+                                                value="#{estadoResultadolMB.fecha2}">
                                                 <f:convertDateTime
                                                     pattern="dd/MM/yyyy" />
                                             </h:outputText>
@@ -110,19 +113,42 @@
                                     "#{!estadoResultadolMB.getBold(pYg.nombre)}"  />
                             </p:column>
 
+                            <p:column colspan="2"
+                                      headerText="Sub-Cuentas" 
+                                      responsivePriority="1">
+                                <h:outputText
+                                    value="#{pYg.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldEX(pYg.nombre)}" />
+                            </p:column>
+                            <p:column
+                                colspan="2"
+                                headerText="Cuentas" 
+                                responsivePriority="1">
+                                <h:outputText 
+                                    value="#{pYg.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldE
+                                                (pYg.nombre)}" 
+                                    style="font-weight: bold" /> 
+                            </p:column>
+                            <p:column
+                                colspan="2"
+                                headerText="Sub-Grupo" 
+                                responsivePriority="1">
+                                <h:outputText 
+                                    value="#{pYg.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldSub
+                                                (pYg.nombre)}" 
+                                    style="font-weight: bold" /> 
+                            </p:column>
                             <p:column
                                 colspan="2"
                                 headerText="Saldo" 
-                                responsivePriority="2">
+                                responsivePriority="1">
                                 <h:outputText 
                                     value="#{pYg.saldo}"
-                                    rendered=
-                                    "#{estadoResultadolMB.getBold(pYg.nombre)}"
-                                    style="font-weight: bold" />
-                                <h:outputText 
-                                    value="#{pYg.saldo}"
-                                    rendered=
-                                    "#{!estadoResultadolMB.getBold(pYg.nombre)}"/>
+                                    rendered="#{balanceGeneralMB.getBold
+                                                (pYg.nombre)}" 
+                                    style="font-weight: bold" /> 
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
@@ -147,20 +173,7 @@
                             var="egresos"
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                             value="#{estadoResultadolMB.estadoResultadoEg}"
-                            paginatorPosition="bottom">
-                            <f:facet name="header">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h4 
-                                            style="font-weight: bold;">
-
-                                        </h4>
-                                    </div>
-                                    <div class="col-md-6">
-
-                                    </div>
-                                </div>
-                            </f:facet>
+                            paginatorPosition="bottom">                          
                             <p:column colspan="8"
                                       headerText="Cuenta Contable"
                                       responsivePriority="4">
@@ -176,21 +189,45 @@
                                        (egresos.nombre)}"/>
                             </p:column>
 
+                            <p:column colspan="2"
+                                      headerText="Sub-Cuentas" 
+                                      responsivePriority="1">
+                                <h:outputText
+                                    value="#{egresos.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldEX(egresos.nombre)}" />
+                            </p:column>
+                            <p:column
+                                colspan="2"
+                                headerText="Cuentas" 
+                                responsivePriority="1">
+                                <h:outputText 
+                                    value="#{egresos.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldE
+                                                (egresos.nombre)}" 
+                                    style="font-weight: bold" /> 
+                            </p:column>
+                            <p:column
+                                colspan="2"
+                                headerText="Sub-Grupo" 
+                                responsivePriority="1">
+                                <h:outputText 
+                                    value="#{egresos.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldSub
+                                                (egresos.nombre)}" 
+                                    style="font-weight: bold" /> 
+                            </p:column>
                             <p:column
                                 colspan="2"
                                 headerText="Saldo" 
-                                responsivePriority="2">
+                                responsivePriority="1">
                                 <h:outputText 
                                     value="#{egresos.saldo}"
-                                    rendered="#{estadoResultadolMB.getBold
-                                                (balance.nombre)}" 
-                                    style="font-weight: bold" />
-                                <h:outputText
-                                    value="#{egresos.saldo}"
-                                    rendered="#{!estadoResultadolMB.getBold
-                                                (balance.nombre)}" />
-
+                                    rendered="#{balanceGeneralMB.getBold
+                                                (egresos.nombre)}" 
+                                    style="font-weight: bold" /> 
                             </p:column>
+
+
                             <f:facet name="footer">
                                 <div class="p-grid">
                                     <div class="p-col-9">Total, Costos</div>
@@ -213,18 +250,7 @@
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                                      value="#{estadoResultadolMB.estadoResultadoVen}"
                                      paginatorPosition="bottom">
-                            <f:facet name="header">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h4 style="font-weight: bold;">
 
-                                        </h4>
-                                    </div>
-                                    <div class="col-md-6">
-
-                                    </div>
-                                </div>
-                            </f:facet>
                             <p:column 
                                 colspan="8"
                                 headerText="Cuenta Contable"
@@ -239,21 +265,42 @@
                                     rendered="#{!estadoResultadolMB.getBold
                                                 (compra.nombre)}"  />
                             </p:column>
-
+                            <p:column colspan="2"
+                                      headerText="Sub-Cuentas" 
+                                      responsivePriority="1">
+                                <h:outputText
+                                    value="#{compra.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldEX(compra.nombre)}" />
+                            </p:column>
+                            <p:column
+                                colspan="2"
+                                headerText="Cuentas" 
+                                responsivePriority="1">
+                                <h:outputText 
+                                    value="#{compra.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldE
+                                                (compra.nombre)}" 
+                                    style="font-weight: bold" /> 
+                            </p:column>
+                            <p:column
+                                colspan="2"
+                                headerText="Sub-Grupo" 
+                                responsivePriority="1">
+                                <h:outputText 
+                                    value="#{compra.saldo}"
+                                    rendered="#{balanceGeneralMB.getBoldSub
+                                                (compra.nombre)}" 
+                                    style="font-weight: bold" /> 
+                            </p:column>
                             <p:column
                                 colspan="2"
                                 headerText="Saldo" 
-                                responsivePriority="2">
+                                responsivePriority="1">
                                 <h:outputText 
                                     value="#{compra.saldo}"
-                                    rendered="#{estadoResultadolMB.getBold
-                                                (compra.nombre)}"
-                                    style="font-weight: bold" />
-                                <h:outputText 
-                                    value="#{compra.saldo}" 
-                                    rendered="#{!estadoResultadolMB.getBold
-                                                (compra.nombre)}" />
-
+                                    rendered="#{balanceGeneralMB.getBold
+                                                (compra.nombre)}" 
+                                    style="font-weight: bold" /> 
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
@@ -272,11 +319,11 @@
                     </div>
                     <div class="card">
                         <div class="p-grid">
-                            <div class="p-col-9">Total</div>
+                            <div class="p-col-9" style="font-weight: bold">Utilidad del ejercicio</div>
                             <div class="p-col-3" style="text-align: left">
                                 <p><h:outputText 
                                         id="sumaPP"
-                                        value="#{estadoResultadolMB.total}"/>
+                                        value="#{estadoResultadolMB.total}" style="font-weight: bold"/>
                                 </p>
                             </div>
                         </div>

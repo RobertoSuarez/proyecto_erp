@@ -34,12 +34,7 @@ public class solicitudOrdenDAO {
                     + "	codigo_orden, cantidad, unidad_medida, estado, \"Codigo_producto\")\n"
                     + "	VALUES (" + producto.getCodigoOrden() + "," + producto.getCantidad() + ",'" + producto.getUnidadMedida() + "','"
                     + producto.getEstado() + "', " + producto.getCodigoProducto() + ");";
-            if (conexion.insertar(sentenciaSql) > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
-
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {
@@ -51,13 +46,8 @@ public class solicitudOrdenDAO {
         try {
             sentenciaSql = "INSERT INTO public.orden_produccion(fecha_orden, fecha_fin, descripcion, estado, codigo_secundario, codido_bodega)\n"
                     + "	VALUES ('" + orden.getFecha_orden() + "', '" + orden.getFecha_fin() + "', "
-                    + "'" + orden.getDescripcion() + "', '" + orden.getEstado() + "', '" + orden.getCodigoSecundario()+ "'," + orden.getCodigo_bodega()+ ");";
-            if (conexion.insertar(sentenciaSql) > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
-
+                    + "'" + orden.getDescripcion() + "', '" + orden.getEstado() + "', '" + orden.getCodigoSecundario() + "'," + orden.getCodigo_bodega() + ");";
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {

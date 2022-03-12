@@ -219,12 +219,7 @@ public class OrdenProduccionDAO {
                 + ordenTrabajo.getCantidad() + ", " + ordenTrabajo.getTotalMateria() + ", " + ordenTrabajo.getTotalMOD() + ", "
                 + ordenTrabajo.getTotalCIF() + ", " + ordenTrabajo.getCostoUnitario() + ");");
         try {
-
-            if (conexion.insertar(sentenciaSql) > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
+            return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
         } finally {
@@ -295,7 +290,6 @@ public class OrdenProduccionDAO {
                     + "	SET estado='T'\n"
                     + "	WHERE codigo_orden=" + orden + ";");
             return conexion.insertar(sentenciaSql);
-
         } catch (Exception e) {
             return -1;
         } finally {

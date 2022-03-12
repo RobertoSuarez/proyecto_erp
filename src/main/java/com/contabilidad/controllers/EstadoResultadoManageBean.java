@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ViewScoped
 public class EstadoResultadoManageBean implements Serializable {
 
-    private List<EstadoResultado> estadoResultadoIn;
+    private List<EstadoResultado> estadoResultIngreso;
     private List<EstadoResultado> estadoResultadoEg;
     private List<EstadoResultado> estadoResultadoVen;
     private EstadoResultadoDAO estadoResultadoDAO;
@@ -60,7 +61,7 @@ public class EstadoResultadoManageBean implements Serializable {
     public EstadoResultadoManageBean() {
         estadoResultadoVen = new ArrayList<>();
         estadoResultadoEg = new ArrayList<>();
-        estadoResultadoIn = new ArrayList<>();
+        estadoResultIngreso = new ArrayList<>();
         estadoResultadoDAO = new EstadoResultadoDAO();
         infomacion = new ArrayList<>();
 
@@ -77,7 +78,7 @@ public class EstadoResultadoManageBean implements Serializable {
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
 //Ingresos, llena la lista dada por el dao
-        estadoResultadoIn = estadoResultadoDAO.generateEstadoResultante(
+        estadoResultIngreso = estadoResultadoDAO.generateEstadoResultante(
                 dateFormat.format(fecha),
                 dateFormat.format(fecha2));
 //Egresos,llena la lista dada por el dao 
@@ -106,7 +107,7 @@ public class EstadoResultadoManageBean implements Serializable {
                         dateFormat.format(fecha2));
 //Resultado total
         total = ingresos - (ventas + egresos);
-        infomacion.addAll(estadoResultadoIn);
+        infomacion.addAll(estadoResultIngreso);
         infomacion.addAll(estadoResultadoEg);
         infomacion.addAll(estadoResultadoVen);
         for (int x = 0; x < infomacion.size(); x++) {
@@ -127,7 +128,7 @@ public class EstadoResultadoManageBean implements Serializable {
          */
         dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 //Ingresos, llena la lista dada por el dao
-        estadoResultadoIn = estadoResultadoDAO.generateEstadoResultante(
+        estadoResultIngreso = estadoResultadoDAO.generateEstadoResultante(
                 dateFormat.format(fecha),
                 dateFormat.format(fecha2));
 //Egresos, llena la lista dada por el dao
@@ -159,7 +160,7 @@ public class EstadoResultadoManageBean implements Serializable {
 
         total = ingresos - (ventas + egresos);
 
-        infomacion.addAll(estadoResultadoIn);
+        infomacion.addAll(estadoResultIngreso);
         infomacion.addAll(estadoResultadoEg);
         infomacion.addAll(estadoResultadoVen);
         for (int x = 0; x < infomacion.size(); x++) {
@@ -171,6 +172,41 @@ public class EstadoResultadoManageBean implements Serializable {
     public void exportpdf() throws IOException, JRException {
         FacesContext fc = FacesContext.getCurrentInstance();
         ExternalContext ec = fc.getExternalContext();
+        List<EstadoResultado> copiListEstadoResultado = new ArrayList<>();
+        copiListEstadoResultado = this.infomacion;
+// asignacion de informacion a la lista copia
+        for (int x = 0; x < copiListEstadoResultado.size(); x++) {
+            double saldo = copiListEstadoResultado.get(x).getSaldo();
+            String mySalgo = Double.toString(saldo);
+            copiListEstadoResultado.get(x).setSaldoCadena(mySalgo);
+        }
+        for (int x = 0; x < copiListEstadoResultado.size(); x++) {
+            if (copiListEstadoResultado.get(x).getNombre().charAt(1) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+
+                String mySalgo = Double.toString(saldo);
+
+                copiListEstadoResultado.get(x).setSaldoCadena("                                                       " + mySalgo);
+            }
+            if (copiListEstadoResultado.get(x).getNombre().charAt(3) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+
+                copiListEstadoResultado
+                        .get(x).setSaldoCadena("                                   " + mySalgo);
+            }
+            if (copiListEstadoResultado.get(x).getNombre().charAt(5) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+                copiListEstadoResultado.get(x).setSaldoCadena("                    " + mySalgo);
+            }
+            if (copiListEstadoResultado.get(x).getNombre().charAt(7) == ' ') {
+                double saldo = copiListEstadoResultado.get(x).getSaldo();
+                String mySalgo = Double.toString(saldo);
+                copiListEstadoResultado.get(x).setSaldoCadena(mySalgo);
+            }
+
+        }
 
         // Cabecera de la respuesta.
         ec.responseReset();
@@ -199,7 +235,7 @@ public class EstadoResultadoManageBean implements Serializable {
             JasperPrint jasperPrintIn = JasperFillManager.fillReport(
                     filetext.getPath(),
                     parametros,
-                    new JRBeanCollectionDataSource(this.infomacion)
+                    new JRBeanCollectionDataSource(copiListEstadoResultado)
             );
 
             // exportamos a pdf.
@@ -219,6 +255,10 @@ public class EstadoResultadoManageBean implements Serializable {
 
     public boolean getBold(String cuenta) {
         return cuenta.split(" ")[0].length() <= 5;
+    }
+
+    public boolean getBold2(String cuenta) {
+        return cuenta.split(" ")[0].length() == 7;
     }
 
     public List<EstadoResultado> getInfomacion() {
@@ -277,12 +317,12 @@ public class EstadoResultadoManageBean implements Serializable {
         this.ventas = ventas;
     }
 
-    public List<EstadoResultado> getEstadoResultadoIn() {
-        return estadoResultadoIn;
+    public List<EstadoResultado> getEstadoResultIngreso() {
+        return estadoResultIngreso;
     }
 
-    public void setEstadoResultadoIn(List<EstadoResultado> estadoResultadoIn) {
-        this.estadoResultadoIn = estadoResultadoIn;
+    public void setEstadoResultIngreso(List<EstadoResultado> estadoResultIngreso) {
+        this.estadoResultIngreso = estadoResultIngreso;
     }
 
     public List<EstadoResultado> getEstadoResultadoEg() {
@@ -315,6 +355,18 @@ public class EstadoResultadoManageBean implements Serializable {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public String utilidadMsj() {
+        String css = "";
+        if (total < 0) {
+            css = "visible";
+        } else {
+
+            css = "hidden";
+        }
+        System.out.println(css + "---" + total);
+        return css;
     }
 
 }

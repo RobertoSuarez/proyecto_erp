@@ -4,18 +4,14 @@
  */
 package com.inventario.models;
 
-import com.inventario.DAO.ArticulosInventarioDAO;
-import java.io.Serializable;
-
 /**
  *
  * @author angul
  */
-public class EntradaDetalleInventario implements Serializable {
-
+public class SalidaDetalleInventario {
     private int idEntradaDetalle;
 
-    private int idEntrada;
+    private int idSalida;
 
     private int idArticulo;
 
@@ -49,14 +45,14 @@ public class EntradaDetalleInventario implements Serializable {
 
     private ArticulosInventario articuloInventario;
 
-    public EntradaDetalleInventario() {
+    public SalidaDetalleInventario() {
 
     }
 
     //Reporte data
-    public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, double cant, double costo, double iva, double ice, double subtotal) {
+    public SalidaDetalleInventario(int idEntradaDetalle, int idSalida, int idArticulo, double cant, double costo, double iva, double ice, double subtotal) {
         this.idEntradaDetalle = idEntradaDetalle;
-        this.idEntrada = idEntrada;
+        this.idSalida = idSalida;
         this.idArticulo = idArticulo;
         this.cant = cant;
         this.costo = costo;
@@ -66,9 +62,9 @@ public class EntradaDetalleInventario implements Serializable {
         this.articuloInventario = null;
     }
 
-    public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, int cant, int costo, int iva, int ice, int subtotal) {
+    public SalidaDetalleInventario(int idEntradaDetalle, int idSalida, int idArticulo, int cant, int costo, int iva, int ice, int subtotal) {
         this.idEntradaDetalle = idEntradaDetalle;
-        this.idEntrada = idEntrada;
+        this.idSalida = idSalida;
         this.idArticulo = idArticulo;
         this.cant = cant;
         this.costo = costo;
@@ -78,9 +74,9 @@ public class EntradaDetalleInventario implements Serializable {
         this.articuloInventario = null;
     }
 
-    public EntradaDetalleInventario(int idEntradaDetalle, int idEntrada, int idArticulo, int cant, int costo, int iva, int ice, int subtotal, ArticulosInventario articulosInventario) {
+    public SalidaDetalleInventario(int idEntradaDetalle, int idSalida, int idArticulo, int cant, int costo, int iva, int ice, int subtotal, ArticulosInventario articulosInventario) {
         this.idEntradaDetalle = idEntradaDetalle;
-        this.idEntrada = idEntrada;
+        this.idSalida = idSalida;
         this.idArticulo = idArticulo;
         this.cant = cant;
         this.costo = costo;
@@ -99,11 +95,11 @@ public class EntradaDetalleInventario implements Serializable {
     }
 
     public int getIdEntrada() {
-        return idEntrada;
+        return idSalida;
     }
 
     public void setIdEntrada(int idEntrada) {
-        this.idEntrada = idEntrada;
+        this.idSalida = idEntrada;
     }
 
     public int getIdArticulo() {
@@ -162,5 +158,5 @@ public class EntradaDetalleInventario implements Serializable {
     public void setArticuloInventario(ArticulosInventario articuloInventario) {
         this.articuloInventario = articuloInventario;
     }
-
+  
 }

@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BalanceGeneralDAO {
@@ -21,6 +20,7 @@ public class BalanceGeneralDAO {
         gson = new Gson();
     }
 
+    //Funcion para calcular los grupo de la cuenta
     public List<BalanceGeneral> getCalculoGrupo() {
         String sql = "select getcalculogrupobg('" + fecha + "')";
         List<BalanceGeneral> listaCalculosGrupo = new ArrayList<>();
@@ -41,6 +41,7 @@ public class BalanceGeneralDAO {
             conexion.desconectar();
         }
     }
+//funcion para calcular los subgrupos de la cuenta
 
     private List<BalanceGeneral> getCalculoSubGrupo() {
         String sql = "select getcalculosubgrupobg('" + fecha + "')";
@@ -61,6 +62,7 @@ public class BalanceGeneralDAO {
             conexion.desconectar();
         }
     }
+//funcion para calcular una cuenta
 
     private List<BalanceGeneral> getCalculoCuenta() {
         String sql = "select getcalculocuentabg('" + fecha + "')";
@@ -81,6 +83,7 @@ public class BalanceGeneralDAO {
             conexion.desconectar();
         }
     }
+//funcion para calcular una subCuenta
 
     private List<BalanceGeneral> getCalculoSubCuenta() {
         String sql = "select getcalculosubcuentabg('" + fecha + "')";
@@ -121,7 +124,8 @@ public class BalanceGeneralDAO {
             conexion.desconectar();
         }
     }
-
+//funcion en donde concatena cada uno de los metods
+// de la csubcuenta hata el grupo 
     public List<BalanceGeneral> generateBalanceGeneral(String fecha) {
         this.fecha = fecha;
         List<BalanceGeneral> balanceGeneral = new ArrayList<>();

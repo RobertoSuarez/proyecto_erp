@@ -7,7 +7,9 @@ package com.ventas.dao;
 
 import com.global.config.Conexion;
 import com.ventas.models.DetalleVenta;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -74,7 +76,8 @@ public class DetalleVentaDAO {
             this.con.conectar();
             DetalleVenta detail = new DetalleVenta();
             List<DetalleVenta> lista = new ArrayList<>();
-            String query = "select d.iddetalleventa, d.cantidad, pr.descripcion, d.precio, CAST((d.cantidad * d.precio) as DOUBLE PRECISION) as Subtotal from public.detalleventa d inner join public.productos pr on d.codprincipal = pr.codprincipal where idventa = " + idVenta + ";";
+            String query = "select d.iddetalleventa, d.cantidad, ar.nombre, d.precio, CAST((d.cantidad * d.precio) - d.descuento as DOUBLE PRECISION) as Subtotal, d.descuento "
+                    + "from public.detalleventa d inner join public.articulos ar on d.codprincipal = ar.id where idventa = " + idVenta + ";";
             System.out.println(query);
             ResultSet rs = this.con.ejecutarSql(query);
             
@@ -83,8 +86,10 @@ public class DetalleVentaDAO {
                 detail.setIddetalleventa(rs.getInt(1));
                 detail.setCantidad(rs.getInt(2));
                 detail.setNombreProducto(rs.getString(3));
-                detail.setPrecio(rs.getDouble(4));
-                detail.setSubTotal(rs.getDouble(5));
+                detail.setPrecio(convertTwoDecimal(rs.getDouble(4)));
+                detail.setSubTotal(convertTwoDecimal(rs.getDouble(5)));
+                detail.setDescuento(convertTwoDecimal(rs.getDouble(6)));
+                detail.setProducto(new ProductoVentaDAO().ObtenerProducto(detail.getCodigo()));
                 lista.add(detail);
             }
             
@@ -100,5 +105,16 @@ public class DetalleVentaDAO {
             this.con.desconectar();
         }
         return null;
+    }
+    
+    /**
+     * Recible un valor de tipo double y lo transforma para que tenga únicamente
+     * 2 decimales
+     *
+     * @param doubleNumero
+     * @return double decimalConvertido
+     */
+    public double convertTwoDecimal(double doubleNumero) {
+        return new BigDecimal(doubleNumero).setScale(2, RoundingMode.UP).doubleValue();
     }
 }
