@@ -5,6 +5,7 @@
  */
 package com.activosfijos.model;
 
+import com.contabilidad.models.SubCuenta;
 import java.time.LocalDate;
 
 /**
@@ -25,8 +26,11 @@ public class ListaDepreciable {
     private int idproveedor;
     private String proveedor;
     private String numero_factura ;
+    private SubCuenta subCuenta;
     
-    public ListaDepreciable(int id_activo_fijo, String detalle_de_activo, int valor_adquisicion, int id_empresa, int depreciacion_meses, double cuota_depresiacion, double porcentaje_depreciacion, double valor_neto_libros, int idproveedor, String proveedor) {
+    public ListaDepreciable(int id_activo_fijo, String detalle_de_activo, int valor_adquisicion, int id_empresa,
+                            int depreciacion_meses, double cuota_depresiacion, double porcentaje_depreciacion,
+                            double valor_neto_libros, int idproveedor, String proveedor, SubCuenta subCuenta) {
         this.id_activo_fijo = id_activo_fijo;
         this.detalle_de_activo = detalle_de_activo;
         this.valor_adquisicion = valor_adquisicion;
@@ -37,6 +41,7 @@ public class ListaDepreciable {
         this.valor_neto_libros = valor_neto_libros;
         this.idproveedor = idproveedor;
         this.proveedor = proveedor;
+        this.subCuenta = subCuenta;
     }
 
     
@@ -51,6 +56,7 @@ public class ListaDepreciable {
  
 
     public ListaDepreciable() {
+        subCuenta = new SubCuenta();
     }
 
  
@@ -143,5 +149,11 @@ public class ListaDepreciable {
         this.valor_neto_libros = valor_neto_libros;
     }
 
+    public SubCuenta getSubCuenta() {
+        return subCuenta;
+    }
 
+    public void setSubCuenta(SubCuenta subCuenta) {
+        this.subCuenta = subCuenta;
+    }
 }

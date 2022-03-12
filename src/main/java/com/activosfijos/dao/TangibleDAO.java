@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import com.activosfijos.model.ActivosFijos;
 import com.activosfijos.model.ActivoDepreciable;
 import com.activosfijos.model.ListaDepreciable;
+import com.contabilidad.dao.SubCuentaDAO;
 import com.global.config.Conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,8 +34,8 @@ public class TangibleDAO {
                 activosFijos.getValor_adquisicion(), activosFijos.getFecha_adquisicion(), activosFijos.getIdproveedor(), activosFijos.getNumero_factura());
         String idactivofijo = conexion.obtenerValor(consulta, 1);
         String consulta2 = String.format("INSERT INTO public.fijo_tangible_depreciable(\n"
-                + "	 id_activo_fijo, depreciacion_meses, porcentaje_depreciacion)\n"
-                + "	VALUES ( '%s', '%s', '%s');", idactivofijo, activodepreciable.getDepreciacion_meses(), activodepreciable.getPorcentaje_depreciacion());
+                + "	 id_activo_fijo, depreciacion_meses, porcentaje_depreciacion, id_subcuenta)\n"
+                + "	VALUES ( '%s', '%s', '%s', '%s');", idactivofijo, activodepreciable.getDepreciacion_meses(), activodepreciable.getPorcentaje_depreciacion(), activodepreciable.getSubCuenta().getId());
         conexion.ejecutarSql(consulta2);
         String consulta3 = String.format("select *from listardepreciables();");
         conexion.ejecutarSql(consulta3);
@@ -53,9 +54,9 @@ public class TangibleDAO {
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
         conexion.ejecutarSql(consulta);
         String consulta2 = String.format("UPDATE public.fijo_tangible_depreciable\n"
-                + "	SET  depreciacion_meses='%s',  porcentaje_depreciacion='%s' \n"
+                + "	SET  depreciacion_meses='%s',  porcentaje_depreciacion='%s',  id_subcuenta='%s' \n"
                 + "	WHERE id_activo_fijo='%s';", li.getDepreciacion_meses(),
-                li.getPorcentaje_depreciacion(), li.getId_activo_fijo());
+                li.getPorcentaje_depreciacion(), li.getSubCuenta().getId(), li.getId_activo_fijo());
         conexion.ejecutarSql(consulta2);
         String consulta3 = String.format("select *from listardepreciables();");
         conexion.ejecutarSql(consulta3);
@@ -112,6 +113,7 @@ public class TangibleDAO {
                     + "and activos_fijos.estado='habilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
+            SubCuentaDAO subCuentaDAO = new SubCuentaDAO();
             while (rs.next()) {
                 ListaDepreciable listadepreciablevacia = new ListaDepreciable();
                 listadepreciablevacia.setId_activo_fijo(rs.getInt("id_activo_fijo"));
@@ -126,6 +128,7 @@ public class TangibleDAO {
                 listadepreciablevacia.setIdproveedor(rs.getInt("idproveedor"));
                 listadepreciablevacia.setProveedor(rs.getString("nombre"));
                 listadepreciablevacia.setNumero_factura(rs.getString("numero_factura"));
+                listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("idsubcuenta")));
                 lista.add(listadepreciablevacia);
             }
 
@@ -165,7 +168,7 @@ public class TangibleDAO {
                     + "and activos_fijos.estado='deshabilitado';");
             // Ejecución
             ResultSet rs = st.executeQuery();
-
+            SubCuentaDAO subCuentaDAO = new SubCuentaDAO();
             while (rs.next()) {
                 ListaDepreciable listadepreciablevacia = new ListaDepreciable();
                 listadepreciablevacia.setId_activo_fijo(rs.getInt("id_activo_fijo"));
@@ -180,6 +183,7 @@ public class TangibleDAO {
                 listadepreciablevacia.setIdproveedor(rs.getInt("idproveedor"));
                 listadepreciablevacia.setProveedor(rs.getString("nombre"));
                 listadepreciablevacia.setNumero_factura(rs.getString("numero_factura"));
+                listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("idsubcuenta")));
                 listtang.add(listadepreciablevacia);
             }
 
