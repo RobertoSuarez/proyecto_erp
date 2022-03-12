@@ -5,21 +5,17 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <f:event type="preRenderView" 
                          listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-
                 <p:menubar 
                     autoDisplay="false"
                     style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles"
                                 url="./ActivosIntangibles.xhtml"/>
-
                 </p:menubar>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
@@ -159,7 +155,7 @@
                                                 </p:column>
                                             </p:dataTable>
                                         </h:form>
-
+                                        <!-- Parte de Depreciables Deshabilitados -->
                                     </div>    
                                     <h:form id="formverdeshabilitadodepreciable" >
                                         <p:dialog
@@ -172,6 +168,7 @@
                                             widgetVar="deshabilitadosdepreciables"
                                             id="dialogoingresarNodepreciable">
                                             <div style="display: flex;justify-content: center">
+                                                <!-- Tabla de Depreciables Deshabilitados -->
                                                 <p:dataTable
                                                     id="verListaDepreciable"
                                                     scrollable="true"
