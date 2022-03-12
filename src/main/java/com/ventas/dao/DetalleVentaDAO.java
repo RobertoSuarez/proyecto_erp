@@ -89,6 +89,7 @@ public class DetalleVentaDAO {
                 detail.setPrecio(convertTwoDecimal(rs.getDouble(4)));
                 detail.setSubTotal(convertTwoDecimal(rs.getDouble(5)));
                 detail.setDescuento(convertTwoDecimal(rs.getDouble(6)));
+                detail.setProducto(new ProductoVentaDAO().ObtenerProducto(detail.getCodigo()));
                 lista.add(detail);
             }
             
