@@ -18,24 +18,25 @@
                             <h2>NOMINA DE PAGOS</h2> 
                             <p:toolbar>
                                 <p:toolbarGroup>
-                                    <h:outputLabel for="fecha" value="Fecha: "/>
+                                    <h:outputLabel for="fecha" value="Fecha: " style="margin-right: .5rem"/>
                                     <p:datePicker id="fecha" value="#{rolDePagoView.fechaPago}"
                                                   monthNavigator="true" yearNavigator="true" 
                                                   mindate="01/01/1960" style="margin-right: .5rem"
                                                   pattern="dd/MM/yyyy" required="true" label="Fecha">
                                         <p:ajax listener="#{rolDePagoView.CargarNomina}" 
-                                                update="dt-roles totalTB"/>
+                                                update="dt-roles"/>
                                     </p:datePicker>
                                     <p:commandButton value="Exportar" icon="pi pi-book" 
-                                                     update="dt-roles totalTB" process="dt-roles @this"
+                                                     update="dt-roles" process="dt-roles @this"
                                                      styleClass="ui-button-success" 
                                                      style="margin-right: .5rem">
+                                        <p:dataExporter type="pdf" target="dt-roles" fileName="pagos"/>
                                     </p:commandButton>
                                 </p:toolbarGroup>
                                 <p:toolbarGroup align="right">
                                     <p:commandButton value="Volver a la lista" icon="pi pi-list" 
                                                      action="ListaRoles"
-                                                     update="dt-roles totalTB" process="dt-roles @this"
+                                                     update="dt-roles" process="dt-roles @this"
                                                      styleClass="ui-button-success" 
                                                      style="margin-right: .5rem">
                                     </p:commandButton>
@@ -51,23 +52,26 @@
                                     <h:outputText value="#{rolPago.empleado.nombreCompleto()}"/>
                                 </p:column>
                                 <p:column headerText="Generado" width="10%">
-                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaGenerado)}"/>
+                                    <h:outputText style="text-align:center" value="#{rolDePagoView.darFormato(rolPago.fechaGenerado)}"/>
                                 </p:column>
                                 <p:column headerText="Aprobado" width="10%">
-                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaAprobacion)}"/>
+                                    <h:outputText style="text-align:center" value="#{rolDePagoView.darFormato(rolPago.fechaAprobacion)}"/>
                                 </p:column>
                                 <p:column headerText="Pagado" width="10%">
-                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaPago)}"/>
+                                    <h:outputText style="text-align:center" value="#{rolDePagoView.darFormato(rolPago.fechaPago)}"/>
                                 </p:column>
                                 <p:column headerText="Valor" width="10%">
-                                    <h:outputText value="$ #{rolPago.valor}"/>
+                                    <h:outputText style="text-align:right" value="#{rolPago.valor}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
                                 </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column colspan="4" style="text-align:right" footerText="Total:"/>
+                                        <p:column footerText="$ #{rolDePagoView.total}"/>
+                                    </p:row>
+                                </p:columnGroup>
                             </p:dataTable>
-                            <p:toolbar id="totalTB">
-                                <p:toolbarGroup align="right">
-                                    <h:outputLabel value="Total: $ #{rolDePagoView.total}"/>
-                                </p:toolbarGroup>
-                            </p:toolbar>
                         </p:panel>
                     </div>
                 </h:form>
