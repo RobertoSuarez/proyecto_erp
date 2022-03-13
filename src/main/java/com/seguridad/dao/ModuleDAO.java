@@ -74,6 +74,30 @@ public class ModuleDAO {
         }
         return lstModules;
     }
+    
+    public List<SelectItem> invokeAllModulesForRol() {
+        List<SelectItem> lstModules = new ArrayList<>();
+        SelectItem ItemModule;
+        String query = "SELECT * FROM security.\"Modulo\" \n"
+                + "ORDER BY \"idModulo\" ASC ";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                ItemModule = new SelectItem();
+                ItemModule.setLabel(rs.getString(2));
+                ItemModule.setValue(rs.getInt(1));
+                lstModules.add(ItemModule);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return lstModules;
+    }
 
     public List<Modulo> invokeModulesForRol(int idRol) {
         List<Modulo> lstModules = new ArrayList<>();

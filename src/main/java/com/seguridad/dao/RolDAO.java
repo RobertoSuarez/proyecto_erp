@@ -3,6 +3,7 @@ package com.seguridad.dao;
 import com.global.config.Conexion;
 import com.seguridad.models.Rol;
 import com.seguridad.dao.ModuleDAO;
+import com.seguridad.models.Modulo;
 import com.seguridad.models.Permisos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
