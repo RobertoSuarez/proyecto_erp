@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.Nullable;
@@ -323,6 +324,11 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     @Override
     public List<RolPagos> Listar() {
         return buscar(null, null);
+    }
+    
+    
+    public List<RolPagos> ListarNomina(String fechaPago) {
+        return buscar("fecha_generado = '" + fechaPago + "'", null);
     }
 
     /**

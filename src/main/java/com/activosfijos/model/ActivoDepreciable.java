@@ -5,6 +5,8 @@
  */
 package com.activosfijos.model;
 
+import com.contabilidad.models.SubCuenta;
+
 /**
  *
  * @author desta
@@ -14,16 +16,19 @@ public class ActivoDepreciable {
     private int depreciacion_meses=0;
     private double porcentaje_depreciacion=0;
     private double cuota_depresiacion;
+    private SubCuenta subCuenta;
 
     
     public ActivoDepreciable() {
+        subCuenta = new SubCuenta();
     }
 
-    public ActivoDepreciable(int id_activo_fijo, int depreciacion_meses, double porcentaje_depreciacion, double valor_neto_libros) {
+    public ActivoDepreciable(int id_activo_fijo, int depreciacion_meses, double porcentaje_depreciacion,
+                             double valor_neto_libros, SubCuenta subCuenta) {
         this.id_activo_fijo = id_activo_fijo;
         this.depreciacion_meses = depreciacion_meses;
         this.porcentaje_depreciacion = porcentaje_depreciacion;
-   
+        this.subCuenta = subCuenta;
     }
 
     public int getId_activo_fijo() {
@@ -58,11 +63,12 @@ public class ActivoDepreciable {
         this.porcentaje_depreciacion = porcentaje_depreciacion;
     }
 
+    public SubCuenta getSubCuenta() {
+        return subCuenta;
+    }
 
- 
-    
-
-
-
+    public void setSubCuenta(SubCuenta subCuenta) {
+        this.subCuenta = subCuenta;
+    }
 
 }

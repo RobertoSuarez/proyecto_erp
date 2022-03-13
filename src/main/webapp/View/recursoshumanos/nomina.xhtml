@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content" class="Contenido">
+                <ui:include src="menuRRHH.xhtml"/>
+                <h:form id="form" style="width: 100%;">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel>
+                            <h2>NOMINA DE PAGOS</h2> 
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <h:outputLabel for="fecha" value="Fecha: "/>
+                                    <p:datePicker id="fecha" value="#{rolDePagoView.fechaPago}"
+                                                  monthNavigator="true" yearNavigator="true" 
+                                                  mindate="01/01/1960" style="margin-right: .5rem"
+                                                  pattern="dd/MM/yyyy" required="true" label="Fecha">
+                                        <p:ajax listener="#{rolDePagoView.CargarNomina}" 
+                                                update="dt-roles totalTB"/>
+                                    </p:datePicker>
+                                    <p:commandButton value="Exportar" icon="pi pi-book" 
+                                                     update="dt-roles totalTB" process="dt-roles @this"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                                <p:toolbarGroup align="right">
+                                    <p:commandButton value="Volver a la lista" icon="pi pi-list" 
+                                                     action="ListaRoles"
+                                                     update="dt-roles totalTB" process="dt-roles @this"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="dt-roles" widgetVar="dtRoles" var="rolPago" 
+                                         value="#{rolDePagoView.pagos}"
+                                         reflow="true" size="small" liveResize="true" 
+                                         styleClass="roles-table"
+                                         paginator="true" rows="10" rowSelectMode="add" 
+                                         paginatorPosition="bottom">
+                                <p:column headerText="Código" width="30%">
+                                    <h:outputText value="#{rolPago.empleado.nombreCompleto()}"/>
+                                </p:column>
+                                <p:column headerText="Generado" width="10%">
+                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaGenerado)}"/>
+                                </p:column>
+                                <p:column headerText="Aprobado" width="10%">
+                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaAprobacion)}"/>
+                                </p:column>
+                                <p:column headerText="Pagado" width="10%">
+                                    <h:outputText value="#{rolDePagoView.darFormato(rolPago.fechaPago)}"/>
+                                </p:column>
+                                <p:column headerText="Valor" width="10%">
+                                    <h:outputText value="$ #{rolPago.valor}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <p:toolbar id="totalTB">
+                                <p:toolbarGroup align="right">
+                                    <h:outputLabel value="Total: $ #{rolDePagoView.total}"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                        </p:panel>
+                    </div>
+                </h:form>
+                <div id="elementh"></div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

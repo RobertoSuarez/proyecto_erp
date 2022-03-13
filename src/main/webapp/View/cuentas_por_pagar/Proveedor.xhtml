@@ -374,18 +374,6 @@
                                 <h3>Condiciones</h3>
                                 <!---Sección 6 proveedor-->
                                 <div class="p-formgrid p-grid">
-                                    <!---Text descuento proveedor-->
-                                    <div class="p-field p-col">
-                                        <p:outputLabel 
-                                            for="descuento"> 
-                                            Descuento: * 
-                                        </p:outputLabel>
-                                        <p:inputText 
-                                            id ="descuento" 
-                                            value="#{proveedorDAO.condiciones.descuento}"
-                                            type="number"
-                                            maxlength="4"/>
-                                    </div>
                                     <!---Text días neto proveedor-->
                                     <div class="p-field p-col">
                                         <p:outputLabel 
@@ -398,21 +386,6 @@
                                             id ="diasNeto" 
                                             maxlength="3"                                                     
                                             value="#{proveedorDAO.condiciones.diasNeto}"
-                                            />
-                                    </div>
-                                    <!---Text días descuento proveedor-->
-                                    <div class="p-field p-col">
-                                        <p:outputLabel 
-                                            for="diaDescuento" 
-                                            > 
-                                            Dias descuento: * 
-                                        </p:outputLabel>
-                                        <p:inputMask
-                                            mask="9[999]"
-                                            validateMask="true" 
-                                            id ="diaDescuento"                                                       
-                                            maxlength="3"  
-                                            value="#{proveedorDAO.condiciones.diasDescuento}"
                                             />
                                     </div>
                                     <!---Text cant. dias vencidos proveedor-->
@@ -601,18 +574,6 @@
 
                                 <!---Sección 6 proveedor-->
                                 <div class="p-formgrid p-grid">
-                                    <!---Text descuento proveedor-->
-                                    <div class="p-field p-col">
-                                        <p:outputLabel 
-                                            for="descuento_"> 
-                                            Descuento: *
-                                        </p:outputLabel>
-                                        <p:inputText 
-                                            type="number"
-                                            id ="descuento_"
-                                            value="#{proveedorDAO.condiciones.descuento}"                                                     
-                                            maxlength="4"/>
-                                    </div>
                                     <!---Text días neto proveedor-->
                                     <div class="p-field p-col">
                                         <p:outputLabel 
@@ -625,20 +586,6 @@
                                             maxlength="3"
                                             id ="dias_Neto"
                                             value="#{proveedorDAO.condiciones.diasNeto}"
-                                            />
-                                    </div>
-                                    <!---Text dias descuento proveedor-->
-                                    <div class="p-field p-col">
-                                        <p:outputLabel 
-                                            for="dia_Descuento"> 
-                                            Dias descuento: *
-                                        </p:outputLabel>
-                                        <p:inputMask
-                                            mask="9[999]"
-                                            validateMask="true"
-                                            maxlength="3"
-                                            id ="dia_Descuento"
-                                            value="#{proveedorDAO.condiciones.diasDescuento}"
                                             />
                                     </div>
                                     <!---Text cant. días vencidos proveedor-->

@@ -5,6 +5,7 @@
  */
 package com.activosfijos.model;
 
+import com.contabilidad.models.SubCuenta;
 import java.time.LocalDate;
 
 /**
@@ -24,10 +25,13 @@ public class ListaDepreciable {
     private double valor_neto_libros;
     private int idproveedor;
     private String proveedor;
-    private String numero_factura;
+    private String numero_factura ;
     private double saldo_depresiacion;
-
-    public ListaDepreciable(int id_activo_fijo, String detalle_de_activo, int valor_adquisicion, int id_empresa, int depreciacion_meses, double cuota_depresiacion, double porcentaje_depreciacion, double valor_neto_libros, int idproveedor, String proveedor) {
+    private SubCuenta subCuenta;
+    
+    public ListaDepreciable(int id_activo_fijo, String detalle_de_activo, int valor_adquisicion, int id_empresa,
+                            int depreciacion_meses, double cuota_depresiacion, double porcentaje_depreciacion,
+                            double valor_neto_libros, int idproveedor, String proveedor, SubCuenta subCuenta) {
         this.id_activo_fijo = id_activo_fijo;
         this.detalle_de_activo = detalle_de_activo;
         this.valor_adquisicion = valor_adquisicion;
@@ -38,12 +42,14 @@ public class ListaDepreciable {
         this.valor_neto_libros = valor_neto_libros;
         this.idproveedor = idproveedor;
         this.proveedor = proveedor;
+        this.subCuenta = subCuenta;
     }
 
     public ListaDepreciable(int depreciacion_meses, double porcentaje_depreciacion, double saldo_depresiacion) {
         this.depreciacion_meses = depreciacion_meses;
         this.porcentaje_depreciacion = porcentaje_depreciacion;
         this.saldo_depresiacion = saldo_depresiacion;
+        this.subCuenta = new SubCuenta();
     }
 
     public double getSaldo_depresiacion() {
@@ -63,6 +69,7 @@ public class ListaDepreciable {
     }
 
     public ListaDepreciable() {
+        subCuenta = new SubCuenta();
     }
 
     public int getId_activo_fijo() {
@@ -153,4 +160,11 @@ public class ListaDepreciable {
         this.valor_neto_libros = valor_neto_libros;
     }
 
+    public SubCuenta getSubCuenta() {
+        return subCuenta;
+    }
+
+    public void setSubCuenta(SubCuenta subCuenta) {
+        this.subCuenta = subCuenta;
+    }
 }
