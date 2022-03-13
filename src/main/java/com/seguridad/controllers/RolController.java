@@ -32,37 +32,37 @@ public class RolController implements Serializable {
     private RolDAO rolDao; 
     private UsuarioDAO usuarioDAO;
     private ModuleDAO moduleDAO;
+    private Modulo mod;
     FacesContext context = FacesContext.getCurrentInstance();
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     private List<Rol> lstOfRoles;
     private Rol rolSeleccionado;
-    private List<Modulo> lstOfModules;
     private int[] modulesActives;
-    private List<SelectItem> lstModulesItem;
+    private List lstModulesItem;
     private List<SelectItem> lstModulesSelected;
     private List<Permisos> lstPermisos;
     private int CodigoModule;
-    String nameRol="";
-    String descriptionRol="";
+    String nameRol;
+    String descriptionRol;
     
     public RolController() {
-        usuarioDAO = new UsuarioDAO();
         rolSeleccionado = new Rol();
         rolDao = new RolDAO();
         moduleDAO = new ModuleDAO();
         this.lstOfRoles = new ArrayList<>();
         lstModulesItem = new ArrayList<>();
         lstModulesSelected = new ArrayList<>();
-        this.lstOfModules = new ArrayList<>();
         lstPermisos= new ArrayList<>();
         CodigoModule =0;
+        nameRol="";
+        descriptionRol="";
         SelectItem ItemDefault=new SelectItem();
         ItemDefault.setLabel("Seleccione..");
         ItemDefault.setValue(-1);
         lstModulesSelected.add(ItemDefault);
         this.lstOfRoles = rolDao.GetRols();
-        this.lstOfModules = this.moduleDAO.invokeAllModules();
+        this.lstModulesItem = moduleDAO.invokeAllModulesForRol();
     }
 
     public String renderPrincipalView() {
@@ -73,16 +73,13 @@ public class RolController implements Serializable {
         }
     }
     
-    public void chargeDataModulesAndRol(Rol rolSeleccionado){
-        nameRol=rolSeleccionado.getNombre();
-        descriptionRol=rolSeleccionado.getDetalle();
-        this.rolSeleccionado = rolSeleccionado;
-        lstModulesItem = moduleDAO.invokeAllModulesForViews();
+    public void chargeDataModulesAndRol(){
+        System.out.println(this.modulesActives.length);
     }
     
     public void chargeRolesSelected(){
-        this.lstModulesSelected = new ArrayList<>();
         System.out.println(this.modulesActives.length);
+        this.lstModulesSelected = new ArrayList<>();
         this.lstModulesSelected= rolDao.GetRolsSelected(this.modulesActives);
     }
     
@@ -124,30 +121,6 @@ public class RolController implements Serializable {
         this.descriptionRol = descriptionRol;
     }
 
-    public List<Modulo> getLstOfModules() {
-        return lstOfModules;
-    }
-
-    public void setLstOfModules(List<Modulo> lstOfModules) {
-        this.lstOfModules = lstOfModules;
-    }
-
-    public int[] getModules() {
-        return modulesActives;
-    }
-
-    public void setModules(int[] modules) {
-        this.modulesActives = modules;
-    }
-
-    public int[] getModulesActives() {
-        return modulesActives;
-    }
-
-    public void setModulesActives(int[] modulesActives) {
-        this.modulesActives = modulesActives;
-    }
-
     public List<SelectItem> getLstModulesItem() {
         return lstModulesItem;
     }
@@ -178,5 +151,13 @@ public class RolController implements Serializable {
 
     public void setLstPermisos(List<Permisos> lstPermisos) {
         this.lstPermisos = lstPermisos;
+    }
+
+    public int[] getModulesActives() {
+        return modulesActives;
+    }
+
+    public void setModulesActives(int[] modulesActives) {
+        this.modulesActives = modulesActives;
     }
 }

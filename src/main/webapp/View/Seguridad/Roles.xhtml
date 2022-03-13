@@ -21,6 +21,16 @@
                             </div>
                         </p:toolbarGroup>
                     </p:toolbar>
+                    <f:facet name="header">
+                        <p:commandButton icon="pi pi-plus"                                                         
+                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                         process="@this"
+                                         onclick="PF('RolData').show()"
+                                         value="Agregar nuevo rol"
+                                         actionListener="#{RolMB.chargeDataModulesAndRol()}">
+                        </p:commandButton>
+                    </f:facet>
+                    <br/>
                     <br/>
                     <p:dataTable id="dt_rols" value="#{RolMB.listOfRoles}" var="ListaRoles"
                                  size="small" liveResize="true" rowKey="#{ListaRoles.id}"
@@ -42,16 +52,6 @@
                         <p:column headerText="Estado" style="font-size: 17px" width="10%">
                             <h:outputText value="#{ListaRoles.habilitado}"/>
                         </p:column>
-
-                        <p:column exportable="false" width="4%">
-                            <p:commandButton icon="pi pi-pencil"                                                         
-                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                             process="@this"
-                                             onclick="PF('RolData').show()"
-                                             update="RolDATA"
-                                             actionListener="#{RolMB.chargeDataModulesAndRol(ListaRoles)}">
-                            </p:commandButton>
-                        </p:column>
                     </p:dataTable>
                 </p:panel>
             </div>
@@ -61,22 +61,25 @@
             <p:panel id="RolDATA" style="height: 100%">
                 <p:panel header="Detalles del rol" 
                          style="width: 50%; text-align: left; float: left; height: 25%;">
-                    <p:inputText value="#{RolMB.nameRol}" size="57"/>
+                    <p:inputText value="#{RolMB.nameRol}" size="57" required="true"
+                                 requiredMessage="Por favor, ingrese un nombre para el rol"/>
                     <br/>
-                    <p:inputTextarea value="#{RolMB.descriptionRol}" cols="60" rows="9"/>
+                    <p:inputTextarea value="#{RolMB.descriptionRol}" cols="60" rows="9" required="true"
+                                     requiredMessage="Por favor ingrese un comentario sobre la descripcion del rol"/>
                 </p:panel>
                 <p:panel header="Modulos activos" id="form-rol"
                          style="width: 50%; text-align: left; float: left; height: 15%;">
-                    <p:selectManyMenu showCheckbox="true" id="chbRoles"
+                    <p:selectManyMenu id="chbRoles"
                                       value="#{RolMB.modulesActives}"
+                                      showCheckbox="true" 
                                       styleClass="manymenu-advanced">
-                        <f:selectItems value="#{RolMB.lstModulesItem}" />
+                        <f:selectItems value="#{RolMB.lstModulesItem}"/>
                     </p:selectManyMenu>
                     <p:commandButton icon="pi pi-plus"                                                         
                                      class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                      process="RolDATA @this form-rol chbRoles"
-                                     update="somModulos"
                                      value="Agregar modulos"
+                                     update="somModulos"
                                      actionListener="#{RolMB.chargeRolesSelected()}">
                     </p:commandButton>
                 </p:panel>
@@ -94,8 +97,8 @@
                                  actionListener="#{RolMB.chargePermisosSelected()}">
                 </p:commandButton>
                 <p:dataTable id="dt_permisos" value="#{RolMB.lstPermisos}" var="ListaPermisos"
-                             size="small" liveResize="true" rowKey="#{ListaPermisos.id_vista}"
-                             selectionMode="single" style="width: 100%"
+                             size="small" liveResize="true" rowKey="#{ListaPermisos.id_vista}" 
+                             style="width: 100%"
                              reflow="true">
                     <p:column headerText="Vista" width="28%" style="font-size: 17px">
                         <h:outputText value="#{ListaPermisos.nameViews}"/>
