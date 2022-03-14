@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.math3.util.Precision;
 
 public class OrdenProduccionDAO {
 
@@ -173,7 +174,7 @@ public class OrdenProduccionDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 costos.add(new FormulaProduccion(resultSet.getString("nombre_formula"), resultSet.getFloat("tiempo"),
-                        resultSet.getFloat("mo"), resultSet.getFloat("cif")));
+                        Precision.round(resultSet.getFloat("mo"),2), Precision.round(resultSet.getFloat("cif"),2)));
             }
         } catch (SQLException e) {
         } finally {

@@ -63,13 +63,13 @@ public class RestriccionesProduccion implements Serializable {
         if (!"Jefe de Producción".equals(listaRoles.get(0).getNombre())&&
                 !"Operario".equals(listaRoles.get(0).getNombre())
                 && !"Gerente".equals(listaRoles.get(0).getNombre())) {
-            externalContext.redirect("/proyecto_erp/View/Global/Main.xhtml");
+            externalContext.redirect("../Global/Main.xhtml");
         }
     }
     public void redireccionInternas() throws IOException {
 
         if ("Operario".equals(listaRoles.get(0).getNombre())) {
-            externalContext.redirect("/proyecto_erp/View/produccion/procesoProduccion.xhtml");
+            externalContext.redirect("../produccion/procesoProduccion.xhtml");
         }
     }
 }

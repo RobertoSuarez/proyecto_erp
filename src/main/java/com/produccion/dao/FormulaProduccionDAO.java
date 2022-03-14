@@ -70,11 +70,11 @@ public class FormulaProduccionDAO {
 
     }
 
-    public int actualizarMateriales(int idFormula,int idproducto,float cantidad) {
+    public int actualizarMateriales(int idFormula, int idproducto, float cantidad) {
         try {
             String consulta = "UPDATE public.detalle_formula\n"
-                    + "	SET cantidad_unitaria="+cantidad+"\n"
-                    + "	WHERE codigo_formula="+idFormula+" and codigo_producto="+idproducto+";";
+                    + "	SET cantidad_unitaria=" + cantidad + "\n"
+                    + "	WHERE codigo_formula=" + idFormula + " and codigo_producto=" + idproducto + ";";
             return conexion.insertar(consulta);
         } catch (Exception e) {
             return -1;
@@ -336,6 +336,23 @@ public class FormulaProduccionDAO {
             conexion.desconectar();
         }
         return editFormula;
+    }
+
+    public int rendimiento(int idProceso) {
+        try {
+            int rendimiento = 0;
+            String sentencia = "select cantidad_estimada from proceso_produccion\n"
+                    + "where codigo_proceso="+idProceso+"";
+            resultSet = conexion.ejecutarSql(sentencia);
+            while (resultSet.next()) {
+                rendimiento = resultSet.getInt("cantidad_estimada");
+            }
+            return rendimiento;
+        } catch (SQLException e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
     }
 
 }
