@@ -78,14 +78,6 @@ public class ModuleController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void deleteModuleData(Modulo mod) {
-        this.moduleDao.deleteModule(mod);
-        this.lstModuleObject = new ArrayList<>();
-        this.lstModuleObject = this.moduleDao.invokeAllModules();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Borrado Exitoso", "Se ha quitado un modulo del sistema");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
     public Modulo getModuleOject() {
         return moduleOject;
     }

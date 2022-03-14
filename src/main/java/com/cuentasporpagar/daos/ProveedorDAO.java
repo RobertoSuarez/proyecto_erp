@@ -63,7 +63,7 @@ public class ProveedorDAO extends Conexion {
             conexion.desconectar();
 
         } catch (Exception e) {
-
+            System.out.println(e);
         } finally {
             conexion.desconectar();
         }

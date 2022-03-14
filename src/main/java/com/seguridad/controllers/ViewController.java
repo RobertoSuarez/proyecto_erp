@@ -71,14 +71,6 @@ public class ViewController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void erasedViews(Vista viewsAux) {
-        viewsDAO.deleteViews(viewsAux);
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Registro Eliminado", "La vista ha sido eliminada");
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        lstViews = new ArrayList<>();
-        lstViews = viewsDAO.GetAllViews();
-    }
-
     public List<Vista> getLstViews() {
         return lstViews;
     }

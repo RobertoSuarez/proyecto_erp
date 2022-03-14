@@ -54,15 +54,15 @@
                             <p:column headerText="Detalle">
                                 <p:commandButton value="Ver" onclick="PF('DetalleItem').show()" process="@this" 
                                                  actionListener="#{ListaVentaMB.CargarVenta(ListaVentas)}" update="datosFactura" />
-                            </p:column>
+                            </p:column>S
 
                         </p:dataTable>
                     </div>
                 </h:form>
 
-
-                <p:dialog widgetVar="DetalleItem" width="70%" height="80%" closeOnEscape="true">
+                <p:dialog widgetVar="DetalleItem" header="Detalle de factura" width="70%" height="80%" closeOnEscape="true" modal="true">
                     <h:form id="datosFactura">
+                        <p:commandButton value="Ver PDF" icon="pi pi-file-pdf" actionListener="#{ListaVentaMB.exportpdf()}" style="visibility: hiddenSS" />
                         <h2>Factura: <p:outputLabel value="#{ListaVentaMB.ventaActual.factura}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
                             <h:panelGrid columns="2">
@@ -77,7 +77,7 @@
                             <p:column headerText="Cantidad" width="10%">
                                 <h:outputText value="#{FacturaDetailTB.cantidad}" />
                             </p:column>
-                            <p:column headerText="Detalle" width="50%" >
+                            <p:column headerText="Nombre" width="50%" >
                                 <h:outputText value="#{FacturaDetailTB.nombreProducto}" />
                             </p:column>
                             <p:column headerText="Precio unitario" width="20%">
@@ -99,7 +99,6 @@
                                     <p:column colspan="4" style="text-align:right" footerText="Base 0%"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.base0}" />
                                </p:row>
-                                </p:row>
                                 <p:row id="Iva">
                                     <p:column colspan="4" style="text-align:right" footerText="Iva"/>
                                     <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.iva}"  />

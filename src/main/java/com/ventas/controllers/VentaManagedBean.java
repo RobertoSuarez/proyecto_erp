@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +77,6 @@ public class VentaManagedBean implements Serializable {
     private List<ProductoVenta> listadescuento;
 
     //------------------------NO SE PLANEA USAR------------------------//
-
     private boolean tipo;
     private String visible;
 
@@ -100,12 +100,12 @@ public class VentaManagedBean implements Serializable {
         this.descuentoActual = 0;
         this.descuentoAcumulado = 0;
 
-        this.subtotal12 = 0;
-        this.subtotal0 = 0;
-        this.descuento = 0;
-        this.ice = 0;
-        this.iva = 0;
-        this.total = 0;
+        this.subtotal12 = convertTwoDecimal(0);
+        this.subtotal0 = convertTwoDecimal(0);
+        this.descuento = convertTwoDecimal(0);
+        this.ice = convertTwoDecimal(0);
+        this.iva = convertTwoDecimal(0);
+        this.total = convertTwoDecimal(0);
 
         this.listaDetalle = new ArrayList<>();
         this.cantidad = 1;
@@ -197,12 +197,12 @@ public class VentaManagedBean implements Serializable {
                         detalle.setCodigo(this.productoActual.getCodigo());
                         detalle.setCantidad(this.cantidad);
                         detalle.setPrecio(convertTwoDecimal(this.productoActual.getPrecioUnitario()));
-                        detalle.setDescuento(convertTwoDecimal(detalle.getCantidad() * detalle.getPrecio() * ((this.descuentoGeneral + this.descuentoActual) / 100)));
-                        detalle.setSubTotal(convertTwoDecimal((detalle.getPrecio() * detalle.getCantidad()) - detalle.getDescuento()));
-
+                        detalle.setDescuento(convertTwoDecimal(detalle.getPrecio() * ((this.descuentoGeneral + this.descuentoActual) / 100)));
+                        detalle.setSubTotal(convertTwoDecimal((detalle.getPrecio() - detalle.getDescuento()) * detalle.getCantidad()));
+                        
                         //Cálculo de los valores
                         this.subTotalVenta += detalle.getSubTotal();
-                        this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento());
+                        this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
                         this.listaDetalle.add(detalle);
 
                         if (this.productoActual.getIva() != 0) {
@@ -217,7 +217,6 @@ public class VentaManagedBean implements Serializable {
 
                         this.productoActual = new ProductoVenta();
                         this.cantidad = 1;
-                        this.productoActual = new ProductoVenta();
                     }
                 }
             } else {
@@ -238,31 +237,34 @@ public class VentaManagedBean implements Serializable {
     public void EliminarProducto(DetalleVenta detalle) {
         try {
             if (detalle.getProducto().getIva() != 0) {
-                this.subtotal12 -= detalle.getSubTotal();
+                this.subtotal12 -= convertTwoDecimal(detalle.getSubTotal());
             } else {
-                this.subtotal0 -= detalle.getSubTotal();
+                this.subtotal0 -= convertTwoDecimal(detalle.getSubTotal());
             }
 
             this.iva -= convertTwoDecimal(detalle.getProducto().getIva() / 100 * detalle.getSubTotal());
             this.ice -= convertTwoDecimal(detalle.getProducto().getIce() * detalle.getCantidad());
-            this.descuentoAcumulado -= convertTwoDecimal(detalle.getDescuento());
+            this.descuentoAcumulado -= convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
             this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
             this.subTotalVenta -= convertTwoDecimal(detalle.getSubTotal());
 
+            detalle.getProducto().setStock((int) (detalle.getCantidad() + detalle.getProducto().getStock()));
             this.listaDetalle.remove(detalle);
-
+            this.listaProductos.add(detalle.getProducto());
+            
             PrimeFaces.current().ajax().update("ventaForm");
-            System.out.println("Eliminado");
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
 
     /**
-     * Muestra un mensaje en pantalla. Recibe como parámetros la sveridad que determina el color, un título y un detalle.
+     * Muestra un mensaje en pantalla. Recibe como parámetros la sveridad que
+     * determina el color, un título y un detalle.
+     *
      * @param severity
      * @param summary
-     * @param detail 
+     * @param detail
      */
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
@@ -277,7 +279,8 @@ public class VentaManagedBean implements Serializable {
      * @return double decimalConvertido
      */
     public double convertTwoDecimal(double doubleNumero) {
-        return new BigDecimal(doubleNumero).setScale(2, RoundingMode.UP).doubleValue();
+        double temp = new BigDecimal(doubleNumero).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return temp < 0 ? 0 : temp;
     }
 
     /**
@@ -379,7 +382,6 @@ public class VentaManagedBean implements Serializable {
     }
 
     //--------------------Getter y Setter-------------------//
-
     public ClienteVenta getCliente() {
         return cliente;
     }
@@ -539,6 +541,5 @@ public class VentaManagedBean implements Serializable {
     public void setDescuentoActual(double descuentoActual) {
         this.descuentoActual = descuentoActual;
     }
-    
 
 }

@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jetbrains.annotations.Nullable;
@@ -324,6 +325,11 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public List<RolPagos> Listar() {
         return buscar(null, null);
     }
+    
+    
+    public List<RolPagos> ListarNomina(String fechaPago) {
+        return buscar("fecha_generado = '" + fechaPago + "'", null);
+    }
 
     /**
      * Lista los roles de pago de un empleado
@@ -409,7 +415,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public void insertarAsiento(RolPagos rolPagos) {
         try {
             String sentencia1, sentencia;
-                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("Modulo cuentas por pagar").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
+                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("DIA-CPP-01").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
                         + ",\"documento\": \"ROL-" + rolPagos.getCodigo().split("-")[0] + "\",\"detalle\": \"Rol de pago: "
                         + rolPagos.getEmpleado().nombreCompleto() + "\",\"fechaCreacion\": \""
                         + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy") + "\",\"fechaCierre\":\""
@@ -429,7 +435,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public void deshabilitarAsiento(RolPagos rolPagos) {
         try {
             String sentencia1, sentencia;
-                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("Modulo cuentas por pagar").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
+                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("DIA-CPP-01").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
                         + ",\"documento\": \"ROL-" + rolPagos.getCodigo().split("-")[0] + " R\",\"detalle\": \"Rol de pago: :"
                         + rolPagos.getEmpleado().nombreCompleto() + " R\",\"fechaCreacion\": \""
                         + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy")  + "\",\"fechaCierre\":\""

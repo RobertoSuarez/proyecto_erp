@@ -104,7 +104,7 @@ public class FacturaDAO {
         listaFacturas.clear();
         if (conexion.isEstado()) {
             try {
-                String sentencia = "select * from subcuenta where idcuenta = 49;";
+                String sentencia = "select * from subcuenta where idcuenta = 49 or tiposaldo = 'Deudor' order by nombre asc;";
                 result = conexion.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaFacturas.add(new Factura(result.getString("nombre")));

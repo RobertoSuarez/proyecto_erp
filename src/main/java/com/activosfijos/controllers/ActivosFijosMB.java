@@ -5,19 +5,25 @@
  */
 package com.activosfijos.controllers;
 
+import com.activosfijos.dao.DepreciacionActivosFijosDAO;
 import com.activosfijos.dao.NoDepreciableDAO;
 import com.activosfijos.dao.TangibleDAO;
 import java.io.Serializable;
 import com.activosfijos.model.ActivosFijos;
 import com.activosfijos.model.ActivoDepreciable;
 import com.activosfijos.model.ActivoNoDepreciable;
+import com.activosfijos.model.DepreciacionActivosFijos;
 import com.activosfijos.model.ListaDepreciable;
 import com.activosfijos.model.ListaNoDepreciable;
+import com.contabilidad.dao.SubCuentaDAO;
+import com.contabilidad.models.SubCuenta;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.Array;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -38,10 +44,15 @@ public class ActivosFijosMB implements Serializable {
     ActivoDepreciable activodepreciable = new ActivoDepreciable();
     ActivoNoDepreciable activoNoDepreciable = new ActivoNoDepreciable();
     TangibleDAO tangibleDAO = new TangibleDAO();
+    private SubCuentaDAO subCuentaDAO;
+    private DepreciacionActivosFijosDAO depreciacionActivosFijosDAO;
     NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
     ListaDepreciable listadepreciable = new ListaDepreciable();
     ListaNoDepreciable listanodepreciable = new ListaNoDepreciable();
+    private DepreciacionActivosFijos depreciacionActivosFijos;
     private List<ListaDepreciable> listamesesD;
+    private List<DepreciacionActivosFijos> depreciacionesActivosFijos;
+    List<SubCuenta> subCuentaList;
     int idactivofijo;
     int id_proveedor = 0;
     String nombre = "";
@@ -49,7 +60,12 @@ public class ActivosFijosMB implements Serializable {
     String infMsj = "Exito";
 
     public ActivosFijosMB() {
-        listamesesD = new ArrayList<>();
+        this.listamesesD = new ArrayList<>();
+        this.depreciacionesActivosFijos = new ArrayList<>();
+        this.subCuentaDAO = new SubCuentaDAO();
+        this.depreciacionActivosFijosDAO = new DepreciacionActivosFijosDAO();
+        this.depreciacionActivosFijos = new DepreciacionActivosFijos();
+        this.subCuentaList = subCuentaDAO.getSubCuentas("Activos fijos tangibles depreciables");
     }
 
     public List<ListaDepreciable> getListamesesD() {
@@ -130,6 +146,30 @@ public class ActivosFijosMB implements Serializable {
 
     public void setActivodepreciable(ActivoDepreciable activodepreciable) {
         this.activodepreciable = activodepreciable;
+    }
+
+    public List<SubCuenta> getSubCuentaList() {
+        return subCuentaList;
+    }
+
+    public void setSubCuentaList(List<SubCuenta> subCuentaList) {
+        this.subCuentaList = subCuentaList;
+    }
+
+    public List<DepreciacionActivosFijos> getDepreciacionesActivosFijos() {
+        return depreciacionesActivosFijos;
+    }
+
+    public void setDepreciacionesActivosFijos(List<DepreciacionActivosFijos> depreciacionesActivosFijos) {
+        this.depreciacionesActivosFijos = depreciacionesActivosFijos;
+    }
+
+    public DepreciacionActivosFijos getDepreciacionActivosFijos() {
+        return depreciacionActivosFijos;
+    }
+
+    public void setDepreciacionActivosFijos(DepreciacionActivosFijos depreciacionActivosFijos) {
+        this.depreciacionActivosFijos = depreciacionActivosFijos;
     }
 
 //----------------------------Activos fijos tangibles-------------------------\\
@@ -474,5 +514,67 @@ public class ActivosFijosMB implements Serializable {
         }
      
     }
+    
+    public boolean ActivarBotonDepreciaciones(ListaDepreciable depreciable){
+        return (depreciable.getSubCuenta().getId() > 0) && (depreciable.isFaltanDepreciacion());
+    }
+    
+    public void ObtenerDepreciaciones(ListaDepreciable listaDepreciable){
+        this.listadepreciable = listaDepreciable;
+        this.depreciacionesActivosFijos = this.depreciacionActivosFijosDAO.Listar(listaDepreciable);
+    }
+    
+    public void ObtenerSiguienteDepreciacion(ListaDepreciable listaDepreciable){
+        this.depreciacionActivosFijos = this.depreciacionActivosFijosDAO.ObtenerSiguienteDepreciacion(listaDepreciable);
+    }
+    
+    public void GuardarDepreciacion(){
+        try {
+            int resultado = this.depreciacionActivosFijosDAO.insertar(this.depreciacionActivosFijos);
+            if(resultado > 0){
+                mostrarMensajeInformacion("Se registro la depreciación correctamente");
+                resultado = this.depreciacionActivosFijosDAO.insertarAsiento(this.depreciacionActivosFijos);
+                if(resultado > 0){
+                    mostrarMensajeInformacion("Se registro el asiento contable correctamente");
+                } else {
+                    mostrarMensajeError("No fue posible registrar asiento contable");
+                }
+            } else {
+                mostrarMensajeError("No fue posible registrar la depreciación");
+            }
 
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido Éxitoso el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
+    public void mostrarMensajeInformacion(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Evento que muestra el mensaje de informaciòn en la interfaz
+     * de que ha sido con Error el mensaje 
+     * @param mensaje Objeto que almacena la información
+     * ha ser mostrada en la interfaz.
+     */
+    public void mostrarMensajeError(String mensaje) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public String darFormato(Date fecha) {
+        return darFormato(fecha, "dd/MM/yyyy");
+    }
+
+    public String darFormato(Date fecha, String formato) {
+        return fecha != null ? new SimpleDateFormat(formato).format(fecha) : "";
+    }
 }
