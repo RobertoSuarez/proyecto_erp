@@ -130,8 +130,11 @@
                                                     <p:column headerText="Producto" width="12%" >
                                                         <h:outputText value="#{ListaItems.nombreProducto}"/>
                                                     </p:column>
+                                                    <p:column headerText="Categoría"  width="12%">
+                                                        <h:outputText value="#{ListaItems.articuloInventario.id_categoria}"/>
+                                                    </p:column>
                                                     <p:column headerText="Cantidad" width="12%">
-                                                        <h:outputText converter="javax.faces.Integer" value="#{ListaItems.cant}"/>
+                                                        <h:outputText value="#{ListaItems.cant}"/>
                                                     </p:column>
                                                     <p:column headerText="Costo" width="12%">
                                                         <h:outputText value="#{ListaItems.costo}"/>
@@ -221,7 +224,7 @@
                                         <h:outputText value="#{ListaProveedores.idProveedor}" />
                                     </p:column>
 
-                                    <p:column headerText="Proveedor" filterStyle="display : none"  sortBy="#{ListaProveedores.nombre}"
+                                    <p:column headerText="Proveedor" filterStyle="display : none" 
                                               filterBy="#{ListaProveedores.nombre}">
                                         <h:outputText value="#{ListaProveedores.nombre}" />
                                     </p:column>
@@ -254,7 +257,7 @@
                                             <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProducto').filter()" placeholder="Buscar"/>
                                         </span>
                                     </div>
-                                </f:facet> 
+                                </f:facet>
 
 
 
