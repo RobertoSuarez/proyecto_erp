@@ -12,6 +12,7 @@ public class SubCuenta {
         this.codigo = "";
         this.nombre = "";
         this.tipo = "";
+
     }
 
     public SubCuenta(int id, String nombre) {
