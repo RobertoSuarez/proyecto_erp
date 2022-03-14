@@ -7,11 +7,14 @@ package com.inventario.controllers;
 
 import com.contabilidad.models.SubCuenta;
 import com.inventario.DAO.ArticulosInventarioDAO;
+import com.inventario.DAO.BodegaDAO;
 import com.inventario.DAO.CategoriaDAO;
 import com.inventario.DAO.TipoDAO;
 import com.inventario.models.ArticulosInventario;
+import com.inventario.models.Bodega;
 import com.inventario.models.Categoria;
 import com.inventario.models.Tipo;
+import static com.primefaces.Messages.showWarn;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import org.primefaces.PrimeFaces;
-
 
 @ManagedBean(name = "articulosMB")
 
@@ -34,22 +36,27 @@ public class ArticulosInventarioManagedBean implements Serializable {
     private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
     private List<ArticulosInventario> listaArticulos = new ArrayList<>();
     private Categoria categoria = new Categoria();
-    
+
     private CategoriaDAO categoriaDAO = new CategoriaDAO();
     private List<Categoria> listaCategoria = new ArrayList<>();
     private int codCategoria;
     private String nomCategoria;
     private Categoria categoriaSeleccionada;
-    
-    private TipoDAO tipoDAO=new TipoDAO();
-    private Tipo tipo= new Tipo();
-    private List<Tipo> listaTipos= new ArrayList<>();
-    
-    
+
+    private TipoDAO tipoDAO = new TipoDAO();
+    private Tipo tipo = new Tipo();
+    private List<Tipo> listaTipos = new ArrayList<>();
+
     private SubCuenta subCuenta;
-    private List<SubCuenta>listaSubcuenta;
+    private List<SubCuenta> listaSubcuenta;
     private int codsubcuenta;
     private String nomSubCuenta;
+
+    private Bodega bodega = new Bodega();
+    private List<Bodega> listaBodega = new ArrayList<>();
+    private BodegaDAO bodegaDAO = new BodegaDAO();
+
+    private boolean isIva;
 
     public SubCuenta getSubCuenta() {
         return subCuenta;
@@ -67,6 +74,14 @@ public class ArticulosInventarioManagedBean implements Serializable {
         this.tipo = tipo;
     }
 
+    public BodegaDAO getBodegaDAO() {
+        return bodegaDAO;
+    }
+
+    public void setBodegaDAO(BodegaDAO bodegaDAO) {
+        this.bodegaDAO = bodegaDAO;
+    }
+
     public List<Tipo> getListaTipos() {
         return listaTipos;
     }
@@ -75,8 +90,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
         this.listaTipos = listaTipos;
     }
 
-    
-    
     public List<SubCuenta> getListaSubcuenta() {
         return listaSubcuenta;
     }
@@ -100,10 +113,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
     public void setNomSubCuenta(String nomSubCuenta) {
         this.nomSubCuenta = nomSubCuenta;
     }
-    
-    
-    
-    
 
     public Categoria getCategoriaSeleccionada() {
         return categoriaSeleccionada;
@@ -117,10 +126,25 @@ public class ArticulosInventarioManagedBean implements Serializable {
         return tipoDAO;
     }
 
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public List<Bodega> getListaBodega() {
+        return listaBodega;
+    }
+
+    public void setListaBodega(List<Bodega> listaBodega) {
+        this.listaBodega = listaBodega;
+    }
+
     public void setTipoDAO(TipoDAO tipoDAO) {
         this.tipoDAO = tipoDAO;
     }
-    
 
     public ArticulosInventarioManagedBean() {
         this.preparando = 0;
@@ -131,24 +155,21 @@ public class ArticulosInventarioManagedBean implements Serializable {
         this.codCategoria = 0;
         this.nomCategoria = "XXXXXX";
         this.categoriaSeleccionada = null;
-        subCuenta= new SubCuenta();
-        listaSubcuenta=articulosInventarioDAO.LlenarSubcuentas();
-        listaTipos=tipoDAO.getTipoArticulo();
+        subCuenta = new SubCuenta();
+        listaSubcuenta = articulosInventarioDAO.LlenarSubcuentas();
+        listaTipos = tipoDAO.getTipoArticulo();
+        listaBodega = bodegaDAO.getBodega();
+        isIva = true;
 
     }
 
     public void seleccionarCategoria(Categoria c) {
         this.categoria = c;
-        
 
-        
         this.articulosInventario.setId_categoria(c.getIdCat());
-        int preparando =5;
-        
+        int preparando = 5;
+
     }
-    
-    
-    
 
     public void insertararticulo() {
         int valor = preparando;
@@ -185,10 +206,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
                             "Error al guardar"));
         }
     }
-    
-    
-    
-    
 
     public ArticulosInventario getArticulosInventario() {
         return articulosInventario;
@@ -226,6 +243,14 @@ public class ArticulosInventarioManagedBean implements Serializable {
         return codCategoria;
     }
 
+    public boolean isIsIva() {
+        return isIva;
+    }
+
+    public void setIsIva(boolean isIva) {
+        this.isIva = isIva;
+    }
+
     public void setCodCategoria(int codCategoria) {
         this.codCategoria = codCategoria;
     }
@@ -252,6 +277,12 @@ public class ArticulosInventarioManagedBean implements Serializable {
 
     public void setListaArticulos(List<ArticulosInventario> listaArticulos) {
         this.listaArticulos = listaArticulos;
+    }
+
+    public void insertarArticulos() {
+                articulosInventarioDAO.insertArticulos(articulosInventario);
+                FacesContext.getCurrentInstance().
+                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
     }
 
 }

@@ -15,12 +15,12 @@
                     <div class="card">
                         <p:toolbar>
                             <p:toolbarGroup id="solicitudOrden">
-                                <p:outputPanel id="nuevaSolicitud" class="ui-fluid">
-                                    <div class="card ui-fluid ">
+                                <p:outputPanel id="nuevoproducto" class="ui-fluid">
+                                    <div class="card ui-nuevaproductofluid ">
                                         <div class="p-formgrid p-grid ">
                                             <div class="p-col-3">
                                                 <p:outputLabel value="Subcuenta" for="@next"/>
-                                                <p:selectOneMenu id="subcuenta" value="#{articulosMB.subCuenta.id}" editable="false" 
+                                                <p:selectOneMenu id="subcuenta" value="#{articulosMB.articulosInventario.idSubCuenta}" editable="false" 
                                                                  disabled="#">
                                                     <f:selectItem itemLabel="Seleccione una subcuenta" itemValue="" noSelectionOption="true"/>
                                                     <f:selectItems value="#{articulosMB.listaSubcuenta}" var="subcuenta" 
@@ -31,11 +31,11 @@
 
                                             <div class="p-col-3">
                                                 <p:outputLabel value="Nombre del producto" for="@next"/>
-                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.nombre}"/>
                                             </div>
                                             <div class="p-col-3">
                                                 <p:outputLabel value="Categoria" for="@next"/>
-                                                <p:selectOneMenu id="categoria" value="#{articulosMB.categoria.idCat}" editable="false" 
+                                                <p:selectOneMenu id="categoria" value="#{articulosMB.articulosInventario.cat_cod}" editable="false" 
                                                                  disabled="#">
                                                     <f:selectItem itemLabel="Seleccione una Categoría" itemValue="" noSelectionOption="true"/>
                                                     <f:selectItems value="#{articulosMB.listaCategoria}" var="categoria" 
@@ -45,7 +45,7 @@
                                             </div>
                                             <div class="p-col-3">
                                                 <p:outputLabel value="Tipo" for="@next"/>
-                                                <p:selectOneMenu id="tipo" value="#{articulosMB.tipo.id}" editable="false" 
+                                                <p:selectOneMenu id="tipo" value="#{articulosMB.articulosInventario.id_tipo}" editable="false" 
                                                                  disabled="#">
                                                     <f:selectItem itemLabel="Seleccione un tipo de producto" itemValue="" noSelectionOption="true"/>
                                                     <f:selectItems value="#{articulosMB.listaTipos}" var="tipo" 
@@ -55,21 +55,21 @@
                                             </div>
                                             <div class="p-col-3">
                                                 <p:outputLabel value="Descripcion" for="@next"/>
-                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.descripcion}"/>
                                             </div>
                                             <div class="p-col-2">
                                                 <p:outputLabel value="Bodega" for="@next"/>
-                                                <p:selectOneMenu id="bodega" value="#{solicitudOrdenMB.solicitudOrden.codigo_bodega}" editable="false" 
+                                                <p:selectOneMenu id="bodega" value="#{articulosMB.articulosInventario.id_bodega}" editable="false" 
                                                                  disabled="#">
                                                     <f:selectItem itemLabel="Seleccione una Bodega" itemValue="" noSelectionOption="true"/>
-                                                    <f:selectItems value="#{solicitudOrdenMB.bodega}" var="centro" 
-                                                                   itemLabel="#{centro.nomBodega}" 
-                                                                   itemValue="#{centro.cod}"></f:selectItems>
+                                                    <f:selectItems value="#{articulosMB.listaBodega}" var="bodega" 
+                                                                   itemLabel="#{bodega.nomBodega}" 
+                                                                   itemValue="#{bodega.cod}"></f:selectItems>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-col-2">
                                                 <p:outputLabel value="Unidad de Medida" for="@next"/>
-                                                <p:selectOneMenu id="medida" value="#{selectOneMenuView.selectedOption}" editable="false" 
+                                                <p:selectOneMenu id="medida" value="#{articulosMB.articulosInventario.unidadMedida}" editable="false" 
                                                                  disabled="#">
                                                     <f:selectItem itemLabel="Seleccione una unidad" itemValue="" noSelectionOption="true"/>
                                                     <f:selectItem itemLabel="Libras" itemValue="Libras" noSelectionOption="true"/>
@@ -79,11 +79,11 @@
                                             </div>
                                             <div class="p-col-1">
                                                 <p:outputLabel value="Cantidad" for="@next"/>
-                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.cantidad}"/>
                                             </div>
                                             <div class="p-col-1">
                                                 <p:outputLabel value="Costo" for="@next"/>
-                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.coast}"/>
                                             </div>
                                             <br></br>
                                             <div class="p-col-1">
@@ -96,16 +96,18 @@
                                             </div>
                                             <div class="p-col-1">
                                                 <p:outputLabel value="ICE" for="@next"/>
-                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.ice}"/>
                                             </div>
 
                                             <div class="p-col-1">
                                                 <br></br>
-                                                <p:commandButton  value="Guardar" 
+                                                <p:commandButton  value="Guardar" actionListener="#{articulosMB.insertarArticulos()}"
+                                                                  process="nuevoproducto @this"
                                                                   icon="pi pi-check" 
                                                                   class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                                  process="@this" 
-                                                                  oncomplete=""/>
+                                                                 
+                                                                  update=":articulos:msgs ,:articulos:nuevoproducto , :articulos:listaProductos"
+                                                                  />
                                             </div>
 
                                         </div>
@@ -127,7 +129,19 @@
                                     </p:column>
 
                                     <p:column headerText="Nombre" >
-                                        <h:outputText value="" />
+                                        <h:outputText value="#{productos.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Bodega" >
+                                        <h:outputText value="#{productos.nomBodega}" />
+                                    </p:column>
+                                    <p:column headerText="Unidad de Medida" >
+                                        <h:outputText value="#{productos.unidadMedida}" />
+                                    </p:column>
+                                    <p:column headerText="Cantidad" >
+                                        <h:outputText value="#{productos.cantidad}" />
+                                    </p:column>
+                                    <p:column headerText="Costo" >
+                                        <h:outputText value="#{productos.coast}" />
                                     </p:column>
                                     <p:column headerText="Acciones">
                                         <p:column headerText="Acciones">
