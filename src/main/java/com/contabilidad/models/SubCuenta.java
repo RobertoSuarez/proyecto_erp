@@ -9,6 +9,13 @@ public class SubCuenta {
 
     }
 
+    public SubCuenta(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+    
+    
+
     public SubCuenta(int id, int cuenta, int impuesto, String codigo, String nombre, String tipo) {
         this.id = id;
         this.cuenta = cuenta;

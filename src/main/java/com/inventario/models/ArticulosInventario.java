@@ -5,6 +5,7 @@
  */
 package com.inventario.models;
 
+import com.contabilidad.models.SubCuenta;
 import com.produccion.models.FormulaMateriales;
 import java.io.Serializable;
 import java.util.List;
@@ -24,6 +25,10 @@ public class ArticulosInventario implements Serializable {
     private int cantidad;
     private int costo;
     private int iva;
+    private String UnidadMedida;
+    private float precioventa;
+    private float iceproducto;
+    private SubCuenta subCuenta;
     private int ice ;
     private List<FormulaMateriales> formulaMateriales;
 
@@ -78,6 +83,22 @@ public class ArticulosInventario implements Serializable {
         this.ice = ice;
     }
 
+    public ArticulosInventario(String nombre, int id_categoria, int id_tipo, String descripcion, int id_bodega, int max_stock, int cantidad, int costo, int iva, float iceproducto,float precioventa) {
+        this.nombre = nombre;
+        this.id_categoria = id_categoria;
+        this.id_tipo = id_tipo;
+        this.descripcion = descripcion;
+        this.id_bodega = id_bodega;
+        this.max_stock = max_stock;
+        this.cantidad = cantidad;
+        this.costo = costo;
+        this.iva = iva;
+        this.iceproducto = ice;
+        this.precioventa=precioventa;
+    }
+    
+    
+
     public List<FormulaMateriales> getFormulaMateriales() {
         return formulaMateriales;
     }
@@ -85,11 +106,36 @@ public class ArticulosInventario implements Serializable {
     public void setFormulaMateriales(List<FormulaMateriales> formulaMateriales) {
         this.formulaMateriales = formulaMateriales;
     }
+
+    public float getPrecioventa() {
+        return precioventa;
+    }
+
+    public void setPrecioventa(float precioventa) {
+        this.precioventa = precioventa;
+    }
+
+    public float getIceproducto() {
+        return iceproducto;
+    }
+
+    public void setIceproducto(float iceproducto) {
+        this.iceproducto = iceproducto;
+    }
+
+    public SubCuenta getSubCuenta() {
+        return subCuenta;
+    }
+
+    public void setSubCuenta(SubCuenta subCuenta) {
+        this.subCuenta = subCuenta;
+    }
     
 
     public int getId() {
         return id;
     }
+    
 
     public void setId(int id) {
         this.id = id;
@@ -101,6 +147,14 @@ public class ArticulosInventario implements Serializable {
 
     public void setCat_cod(int cat_cod) {
         this.cat_cod = cat_cod;
+    }
+
+    public String getUnidadMedida() {
+        return UnidadMedida;
+    }
+
+    public void setUnidadMedida(String UnidadMedida) {
+        this.UnidadMedida = UnidadMedida;
     }
 
     public String getNombre() {

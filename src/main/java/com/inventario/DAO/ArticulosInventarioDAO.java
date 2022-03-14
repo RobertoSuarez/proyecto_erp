@@ -5,11 +5,13 @@
  */
 package com.inventario.DAO;
 
+import com.contabilidad.models.SubCuenta;
 import com.global.config.Conexion;
 import com.inventario.models.ArticulosInventario;
 import com.inventario.models.Categoria;
 import com.inventario.report.ProductoReport;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,20 +19,33 @@ public class ArticulosInventarioDAO {
 
     Conexion conexion = new Conexion();
     private ArticulosInventario articulosInventario;
+    private SubCuenta subCuenta;
     private ResultSet resultSet;
     private String sentenciaSql;
     private List<ArticulosInventario> listaArticulos;
+    private List<SubCuenta> listasubCuentas;
     private List auxlista = new ArrayList<>();
 
     public ArticulosInventarioDAO() {
         articulosInventario = new ArticulosInventario();
         conexion = new Conexion();
         listaArticulos = new ArrayList<>();
+        listasubCuentas = new ArrayList<>();
     }
 
     public ArticulosInventarioDAO(ArticulosInventario articulosInventario) {
         conexion = new Conexion();
         this.articulosInventario = articulosInventario;
+    }
+
+    public ArticulosInventarioDAO(SubCuenta subCuenta) {
+        conexion = new Conexion();
+        this.subCuenta = subCuenta;
+    }
+
+    public ArticulosInventarioDAO(SubCuenta subCuenta, List<SubCuenta> listasubCuentas) {
+        this.subCuenta = subCuenta;
+        this.listasubCuentas = listasubCuentas;
     }
 
     public List<ArticulosInventario> getArticulos() {
@@ -62,6 +77,28 @@ public class ArticulosInventarioDAO {
         }
         return ListaInv;
     }
+
+    //listar subcuenta
+    public List<SubCuenta> LlenarSubcuentas() {
+        if (conexion.isEstado()) {
+            try {
+                String consulta = "select idsubcuenta, nombre from subcuenta order by idsubcuenta desc";
+                resultSet = conexion.ejecutarSql(consulta);
+                while (resultSet.next()) {
+                    listasubCuentas.add(new SubCuenta(resultSet.getInt("idsubcuenta"),
+                            resultSet.getString("nombre")));
+                }
+                System.out.println(consulta);
+                resultSet.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
+        return listasubCuentas;
+    }
+    
 
     public Categoria getCategoria(int id) {
         ResultSet rs;

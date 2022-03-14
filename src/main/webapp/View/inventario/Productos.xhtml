@@ -7,279 +7,142 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
-
             <ui:define name="content">
-                <h:form id="articulos">
-                    <ui:include src="./subheaderinventario.xhtml"/>
+                <ui:include src="./subheaderinventario.xhtml"/>
+                <h:form id="articulos" style="margin-top: 4%;">
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel>
-                        <h1 style="text-align: center; color: black;">Articulos</h1>
-                        <div>
-                            <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
-                            <p:toolbar>
-                                <p:toolbarGroup>
-                                    <p:commandButton value="Nuevo" icon="pi pi-plus"   
-                                                     disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" 
-                                                     oncomplete="PF('productosNew').show()"   
-                                                     styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                     style="margin-right: .3rem">                               
-                                    </p:commandButton>
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup id="solicitudOrden">
+                                <p:outputPanel id="nuevaSolicitud" class="ui-fluid">
+                                    <div class="card ui-fluid ">
+                                        <div class="p-formgrid p-grid ">
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Subcuenta" for="@next"/>
+                                                <p:selectOneMenu id="subcuenta" value="#{articulosMB.subCuenta.id}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una subcuenta" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaSubcuenta}" var="subcuenta" 
+                                                                   itemLabel="#{subcuenta.nombre}" 
+                                                                   itemValue="#{subcuenta.id}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
 
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Nombre del producto" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Categoria" for="@next"/>
+                                                <p:selectOneMenu id="categoria" value="#{articulosMB.categoria.idCat}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una Categoría" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaCategoria}" var="categoria" 
+                                                                   itemLabel="#{categoria.nom_categoria}" 
+                                                                   itemValue="#{categoria.idCat}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Tipo" for="@next"/>
+                                                <p:selectOneMenu id="tipo" value="#{articulosMB.tipo.id}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione un tipo de producto" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaTipos}" var="tipo" 
+                                                                   itemLabel="#{tipo.tipo}" 
+                                                                   itemValue="#{tipo.id}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Descripcion" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Bodega" for="@next"/>
+                                                <p:selectOneMenu id="bodega" value="#{solicitudOrdenMB.solicitudOrden.codigo_bodega}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una Bodega" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{solicitudOrdenMB.bodega}" var="centro" 
+                                                                   itemLabel="#{centro.nomBodega}" 
+                                                                   itemValue="#{centro.cod}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Unidad de Medida" for="@next"/>
+                                                <p:selectOneMenu id="medida" value="#{selectOneMenuView.selectedOption}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una unidad" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItem itemLabel="Libras" itemValue="Libras" noSelectionOption="true"/>
+                                                    <f:selectItem itemLabel="Litros" itemValue="Litros" noSelectionOption="true"/>
+                                                    <f:selectItem itemLabel="Unidades" itemValue="Unidades" noSelectionOption="true"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="Cantidad" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="Costo" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                            </div>
+                                            <br></br>
+                                            <div class="p-col-1">
+                                                <br></br>
+                                                <p:outputLabel value="IVA " for="@next"  style="font-size: 150%" />
+                                                <p:selectBooleanCheckbox id="slcbtn" style="font-size: 100%"  
+                                                                         value=""
+                                                                         styleClass="ui-button-help p-mr-2 p-mb-2">                                    
+                                                </p:selectBooleanCheckbox> 
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="ICE" for="@next"/>
+                                                <p:inputText value="#{solicitudOrdenMB.solicitudOrden.descripcion}"/>
+                                            </div>
 
+                                            <div class="p-col-1">
+                                                <br></br>
+                                                <p:commandButton  value="Guardar" 
+                                                                  icon="pi pi-check" 
+                                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                                  process="@this" 
+                                                                  oncomplete=""/>
+                                            </div>
 
-                                </p:toolbarGroup>                       
-                            </p:toolbar> 
-                            <!-- Tabla visual de datos  !-->
-                            <p:dataTable id="dtArticulosPrin" editable="true" reflow="true"
-                                         editInitEvent="dblclick" editMode="cell"
-                                         value="#{articulosMB.listaArticulos}" var="TablaArticulos">
-                                <f:facet name="header">
-                                    <div class="p-d-flex p-jc-between p-ai-center">
-                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Productos</span>
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
-                                        </span>
-                                    </div>
-                                </f:facet>
-                                <p:column headerText="Codigo"  >
-                                    <h:outputText value="#{TablaArticulos.id}"/>
-                                </p:column>
-
-                                <p:column headerText="Articulo" >
-                                    <h:outputText value="#{TablaArticulos.nombre}"/>
-                                </p:column>                       
-
-                                <p:column headerText="Descripcion" >
-                                    <h:outputText value="#{TablaArticulos.descripcion}" />
-
-                                </p:column>
-
-                                <p:column headerText="Bodega">
-                                    <h:outputText value="#{TablaArticulos.id_bodega}"/>
-                                </p:column>
-
-                                <p:column headerText="Categoría">
-                                    <h:outputText value="#{TablaArticulos.id_categoria}"/>
-                                </p:column>
-
-                                <p:column headerText="Tipo">
-                                    <h:outputText styleClass="product-badge"
-                                                  value="#{TablaArticulos.id_tipo}"/>
-                                </p:column>
-                                <p:column headerText="Cantidad">
-                                    <h:outputText styleClass="product-badge"
-                                                  value="#{TablaArticulos.cantidad}"/>
-                                </p:column>
-                                <p:column headerText="Costo">
-                                    <h:outputText styleClass="product-badge"
-                                                  value="#{TablaArticulos.costo}"/>
-                                </p:column>
-                                <p:column headerText="IVA">
-                                    <h:outputText styleClass="product-badge"
-                                                  value="#{TablaArticulos.iva}"/>
-                                </p:column>
-                                <p:column headerText="ICE">
-                                    <h:outputText styleClass="product-badge"
-                                                  value="#{TablaArticulos.ice}"/>
-                                </p:column>
-                                <p:column headerText="Acción" filterStyle="display : none">
-                                    <p:button icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"/>
-                                    <p:commandButton icon="pi pi-pencil" disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" oncomplete="PF('productosEdit').show()"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
-                                    <p:commandButton icon="pi pi-trash" disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}"  styleClass="rounded-button ui-button-danger">
-                                        <p:confirm  header="Confirmation"
-                                                    message="Desea deshabilitar el 
-                                                    producto seleccionado?"
-                                                    icon="pi pi-exclamation-triangle" />
-
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </div>
-                        <!-- Model para agregar un nuevo articulo !-->
-
-                        <p:dialog header=" Agregar productos" showEffect="fade" modal="true"
-                                  widgetVar="productosNew" responsive="true" width="69%"
-                                  draggable="false" height="250">
-
-                            <p:outputPanel id="manage-asiento" class="ui-fluid">
-                                <div class="p-col-12 p-md-12 p-lg-12">
-                                    <div class="p-grid">
-                                        <div class="p-col-1">
-                                            <p:outputLabel value="Código:"></p:outputLabel>
-                                            <p:inputText id="cod" value="#{articulosMB.articulosInventario.id}" disabled="false"></p:inputText>
-                                        </div>
-                                        <div class="p-col-3">
-                                            <p:outputLabel value="Bodega: *"></p:outputLabel>
-                                            <h:form>
-                                                <div class="ui-inputgroup">
-                                                    <p:commandButton icon="pi pi-search" oncomplete="PF('BuscarBodega').show()" />
-                                                    <p:inputText placeholder="Bodega" id="NombreBodega" value="#{EntradaMB.nombreBodega}" />        
-                                                </div>
-                                            </h:form>
-                                        </div>
-                                        <div class="p-col-4">
-                                            <p:outputLabel  value="Tipo: *"></p:outputLabel>
-                                            <h:form>
-                                                <div class="ui-inputgroup">
-                                                    <p:commandButton icon="pi pi-search" oncomplete="PF('BuscarTipo').show()" />
-                                                    <p:inputText id="codtipo" placeholder="Tipo" value="#{tipoMB.nomTipo}" /> 
-
-                                                </div>
-                                            </h:form>
-                                        </div>
-                                        <div class="p-col-4">
-                                            <p:outputLabel  value="Categoria: *"></p:outputLabel>
-                                            <h:form>
-                                                <div class="ui-inputgroup">
-                                                    <p:commandButton icon="pi pi-search" oncomplete="PF('BuscarCategoria').show()" />
-                                                    <p:inputText id="codcate" placeholder="Categoria" value="#{articulosMB.articulosInventario.id_categoria}" />
-
-                                                </div>
-                                            </h:form>
-                                        </div>
-
-                                        <div class="p-col-4">
-                                            <p:outputLabel value="Descripción: *"></p:outputLabel>
-                                            <p:inputTextarea id="descripccion" disabled=""
-                                                             maxlength="150"
-                                                             value="#{articulosMB.articulosInventario.descripcion}" 
-                                                             rows="2" cols="12" autoResize="false"/>
-                                        </div>
-                                        <div class="p-col-3">
-                                            <p:outputLabel value="Nombre del articulo:"></p:outputLabel>
-                                            <p:inputText id="nombre" value="#{articulosMB.articulosInventario.nombre}"></p:inputText>
-                                        </div>
-                                        <div class="p-col-2">
-                                            <p:outputLabel  value="Cantidad:"></p:outputLabel>
-                                            <p:inputText id="cantidad" value="#{articulosMB.articulosInventario.cantidad}"></p:inputText>
-                                        </div>
-
-                                        <div class="p-col-2">
-                                            <p:outputLabel value="Costo:"></p:outputLabel>
-                                            <p:inputText id="costo" value="#{articulosMB.articulosInventario.costo}"></p:inputText>
-                                        </div>
-                                       
-
-
-                                    </div>
-                                    <div class="p-grid p-justify-end">
-                                        <div class="p-col-2">
-                                            <p:commandButton value="Guardar"
-                                                             actionListener="#{articulosMB.insertararticulo()}"
-                                                             process="manage-asiento @this"
-                                                             icon="pi pi-check"
-                                                             disabled=""
-                                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
-                                        </div>
-                                        <div class="p-col-2">
-                                            <p:commandButton value="Cerrar" icon="pi pi-times"
-                                                             styleClass="ui-button-danger" process="@this"
-                                                             oncomplete="PF('entradaproducto').hide()"/>
                                         </div>
                                     </div>
-                                </div>
+                                </p:outputPanel>
+                                <p:dataTable id="listaProductos" editable="true"
+                                             reflow="true" rows="4" paginator="true"
+                                             resizableColumns="true" paginatorPosition="bottom"
+                                             value="#{articulosMB.listaArticulos}" var="productos">
+                                    <!-- Buscador -->
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px;">Listado de Productos</span>
 
-                            </p:outputPanel>
-                        </p:dialog>
-
-
-                        <p:dialog header="Bodegas" widgetVar="BuscarBodega" id="busquedaBodega"
-                                  minHeight="300" width="30%" showEffect="fade">
-                            <h:form>
-                                <p:dataTable var="ListaBodegas" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaBodegas}" 
-                                             selection="#{EntradaMB.bodegaSeleccionada}" rowKey="#{ListaBodegas.cod}" 
-                                             scrollable="true" scrollHeight="250">
-                                    <p:column headerText="Seleccionar" >
-                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                         actionListener="#{EntradaMB.SeleccionarBodega(ListaBodegas)}" update="articulos" oncomplete="PF('productosNew').show();"/>
+                                        </div>
+                                    </f:facet>
+                                    <p:column headerText="Código">
+                                        <h:outputText value="#{productos.id}" />
                                     </p:column>
 
-                                    <p:column headerText="Cod">
-                                        <h:outputText value="#{ListaBodegas.cod}" />
+                                    <p:column headerText="Nombre" >
+                                        <h:outputText value="" />
                                     </p:column>
+                                    <p:column headerText="Acciones">
+                                        <p:column headerText="Acciones">
+                                            <p:commandButton icon="pi pi-trash"
+                                                             styleClass="edit-button rounded-button ui-button-danger"
+                                                             update=":articulos:listaProductos"
+                                                             process="@this">
 
-                                    <p:column headerText="Bodega" >
-                                        <h:outputText value="#{ListaBodegas.nomBodega}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </h:form>
-                        </p:dialog>
-
-                        <p:dialog header="Categorias" widgetVar="BuscarCategoria" id="busquedaCategoria"
-                                  minHeight="300" width="30%" showEffect="fade">
-                            <h:form id="categoriaVista"> 
-                                <p:dataTable var="ListaCategorias" id="listaProveedores" selectionMode="single" value="#{articulosMB.listaCategoria}" 
-                                             selection="#{articulosMB.categoriaSeleccionada}" rowKey="#{ListaCategorias.idCat}" 
-                                             scrollable="true" scrollHeight="250">
-                                    <p:column headerText="Seleccionar" >
-                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                         actionListener="#{articulosMB.seleccionarCategoria(ListaCategorias)}" update="articulos" oncomplete="PF('productosNew').show();"/>
-                                    </p:column>
-
-                                    <p:column headerText="Cod">
-                                        <h:outputText value="#{ListaCategorias.idCat}" />
-                                    </p:column>
-
-                                    <p:column headerText="Categoria" >
-                                        <h:outputText value="#{ListaCategorias.nom_categoria}" />
+                                            </p:commandButton>
+                                        </p:column>
                                     </p:column>
                                 </p:dataTable>
-                            </h:form>
-                        </p:dialog>
-
-                        <p:dialog header="Tipos de Articulos" widgetVar="BuscarTipo" id="busquedaTipo"
-                                  minHeight="300" width="30%" showEffect="fade">
-                            <h:form>
-                                <p:dataTable var="ListaTipo" id="listaProveedores" selectionMode="single" value="#{tipoMB.listTipo}" 
-                                             selection="#{tipoMB.tipo}" rowKey="#{ListaTipo.id}" 
-                                             scrollable="true" scrollHeight="250">
-                                    <p:column headerText="Seleccionar" >
-                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                         actionListener="#{tipoMB.SeleccionarTipo(ListaTipo)}" update="articulos" oncomplete="PF('productosNew').show();"/>
-                                    </p:column>
-
-                                    <p:column headerText="Cod">
-                                        <h:outputText value="#{ListaTipo.id}" />
-                                    </p:column>
-
-                                    <p:column headerText="Tipo" >
-                                        <h:outputText value="#{ListaTipo.tipo}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </h:form>
-                        </p:dialog>
-
-
-
-
-
-
-
-
-
-                        <p:confirmDialog widgetVar="deleteProveedorDialog" showEffect="fade" 
-                                         width="300" message="Delete the proveedor?" 
-                                         header="Confirm" severity="warn">
-                            <p:commandButton value="Yes" icon="pi pi-check" 
-                                             oncomplete="PF('deleteProveedorDialog').hide()"/>
-                            <p:commandButton value="No" type="button" 
-                                             styleClass="ui-button-secondary" 
-                                             icon="pi pi-times"
-                                             onclick="PF('deleteProveedorDialog').hide()"/>
-                        </p:confirmDialog>
-
-                        <p:confirmDialog global="true" showEffect="fade" width="300">
-                            <p:commandButton value="Yes" type="button" 
-                                             styleClass="ui-confirmdialog-yes" 
-                                             icon="pi pi-check"/>
-                            <p:commandButton value="No" type="button" 
-                                             styleClass="ui-confirmdialog-no ui-button-secondary"
-                                             icon="pi pi-times"/>
-                        </p:confirmDialog>
-                    </p:panel>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </div>
                 </h:form>
             </ui:define>
         </ui:composition>
