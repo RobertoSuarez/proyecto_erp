@@ -29,6 +29,7 @@
 
 
                         <p:dataTable 
+                            widgetVar="TablaListaEntradas"
                             var="ListaEntradas" 
                             value="#{EntradaMB.listaEntradas}" 
                             editable="true" reflow="true"
@@ -39,22 +40,22 @@
                                     <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Entrada de Productos</span>
                                     <span class="filter-container ui-input-icon-left">
                                         <i class="pi pi-search"></i>
-                                        <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
+                                        <p:inputText id="globalFilter" onkeyup="PF('TablaListaEntradas').filter()" placeholder="Buscar"/>
                                     </span>
                                 </div>
                             </f:facet>
-                            <p:column headerText="Nº de Comprobante" >
+                            <p:column headerText="Nº de Comprobante" sortBy="#{ListaEntradas.numComprobante}" filterBy="#{ListaEntradas.numComprobante}" filterStyle="display : none"  >
                                 <h:outputText value="#{ListaEntradas.numComprobante}" />
                             </p:column>
 
-                            <p:column headerText="Fecha" >
+                            <p:column headerText="Fecha" sortBy="#{ListaEntradas.fecha}" >
                                 <h:outputText value="#{ListaEntradas.fecha}" />
                             </p:column>
 
-                            <p:column headerText="Proveedor" >
+                            <p:column headerText="Proveedor" sortBy="#{ListaEntradas.nombreProveedor}"  filterBy="#{ListaEntradas.nombreProveedor}" filterStyle="display : none"  >
                                 <h:outputText value="#{ListaEntradas.nombreProveedor}" />
                             </p:column>
-                            <p:column headerText="Bodega" >
+                            <p:column headerText="Bodega" sortBy="#{ListaEntradas.nombreBodega}" filterBy="#{ListaEntradas.nombreBodega}" filterStyle="display : none"  >
                                 <h:outputText value="#{ListaEntradas.nombreBodega}" />
                             </p:column>
 
