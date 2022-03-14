@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="menuCPP.xhtml"/>
+                <!-- PRINCIPAL FACTURA -->
+
+                <br></br>
+                <br></br>
+                <br></br>
+                <h:form id="form" style="padding-left: 30px; padding-right: 30px">
+                    <p:growl id="messages" showDetail="true"/>
+                    <h1 style="text-align: center; color: black">Nueva Facturas de compras</h1>
+
+                    <p:outputPanel id="outputnuevo" class="ui-fluid">
+                        <p:outputPanel rendered="#{not empty facturaMB.factura}">
+
+                            <!-- CAMPOS DEL DIALOG-->
+                            <div class="p-formgrid p-grid">
+
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="proveedor">Proveedor: *</p:outputLabel>
+                                    <p:inputText type="button" id="proveedor"
+                                                 value="#{BuscarMB.nom}" />
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="nfactura">No. Factura:</p:outputLabel>
+                                    <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" 
+                                                 maxlength="15">                                                      
+                                    </p:inputText>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="importe">Importe:</p:outputLabel>
+                                    <p:inputText type="number" id="importe" value="#{facturaMB.factura.importe}" 
+                                                 disabled="true"/>
+                                </div>
+
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="saldofavor">Anticipos favorables:</p:outputLabel>
+                                    <p:inputText type="number" id="saldofavor" value="#{BuscarMB.totalAnticipo}" 
+                                                 required="true" disabled="true"/>
+                                </div>
+                            </div>
+
+
+                            <div class="p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="descripcion" >Descripción:</p:outputLabel>
+                                    <p:inputText id="descripcion" value="#{facturaMB.factura.descripcion}"/>
+                                </div>
+                            </div>
+
+                            <div class="p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="Op">Tipo de Documento:</p:outputLabel>
+                                    <p:selectOneMenu id="Op" value="#{facturaMB.tipoDocumento}">
+                                        <f:selectItem itemLabel="Select One" itemValue="0"/>
+                                        <f:selectItem itemLabel="Factura" itemValue="Factura"/>
+                                        <f:selectItem itemLabel="Nota o boleta de venta" itemValue="Nota o boleta de venta"/>
+                                        <f:selectItem itemLabel="Boletos o entradas a espectaculos publicos" itemValue="Boletos o entradas a espectaculos publicos"/>
+                                        <f:selectItem itemLabel="Documentos emitidos por instituciones financieras" itemValue="Documentos emitidos por instituciones financieras"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="p-field p-col">
+                                    <p:inputText id="hola" value="#{BuscarMB.cod}" type="hidden" />
+                                    <p:outputLabel value="#{facturaMB.factura.ruc=BuscarMB.cod}" style="visibility: hidden"/>
+                                    <p:inputText type="number" value="#{facturaMB.factura.ruc}" style="visibility: hidden"/>
+                                </div>
+
+                            </div>
+
+
+                            <p:panel header="Dias plazo del proveedor: #{facturaMB.factura.aux=BuscarMB.nvenc}">
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="fecha" >Fecha factura:</p:outputLabel>
+                                        <p:outputLabel value="#{facturaMB.factura.fecha=BuscarMB.fec}" style="visibility: hidden"/>
+                                        <p:datePicker id="fecha"  value="#{facturaMB.factura.fecha}"
+                                                      required="true">
+                                            <p:ajax listener="#{BuscarMB.sumfechas(facturaMB.factura.aux,facturaMB.factura.fecha)}"
+                                                    update=":form:vencimiento,:form:dven"/>
+                                        </p:datePicker>
+                                    </div>
+
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="vencimiento">Vencimiento:</p:outputLabel>
+                                        <p:outputLabel id="dven" value="#{facturaMB.factura.vencimiento=BuscarMB.vence}" style="visibility: hidden"/>
+                                        <p:datePicker id="vencimiento" value="#{facturaMB.factura.vencimiento}"
+                                                      disabled="true"/>
+                                    </div>
+                                </div>
+                            </p:panel>
+                            <br/>
+                            <div class="p-formgrid p-grid">
+                                <div class="p-field p-col">
+                                    <p:outputLabel for="Aplicar">Tipo: </p:outputLabel>
+                                    <p:selectOneRadio id="Aplicar" value="#{facturaMB.opciones}" 
+                                                      unselectable="true" >
+                                        <f:selectItem itemLabel="Productos" itemValue="1"/>
+                                        <f:selectItem itemLabel="Servicios" itemValue="2"/>
+                                        <p:ajax update=":form:dt-detalle"/>
+                                    </p:selectOneRadio>                                                     
+                                </div>
+                            </div>
+
+                            <!-- FINAL CAMPOS DEL DIALOG-->
+
+                            <!-- TABLA DE DIALOG 1-->
+                            <p:dataTable id="dt-detalle" widgetVar="dtdetail" 
+                                         var="detalle" value="#{facturaMB.detalleFactura}"
+                                         editable="true" class="p-mt-3">
+                                <f:facet name="header">
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold">DETALLE</span>
+
+
+                                        <p:commandButton icon="pi pi-plus"  process="@this"
+                                                         style=""
+                                                         action="#{facturaMB.onAddNew()}" 
+                                                         oncomplete="PF('dtdetail').addRow();"/>
+                                    </div>
+                                </f:facet>
+
+                                <p:ajax event="rowEdit" listener="#{facturaMB.onRowEdit}" update=":form:messages"/>
+                                <p:ajax event="rowEditCancel" listener="#{facturaMB.onRowCancel}" update=":form:messages"/>
+
+                                <p:column headerText="Detalle">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{detalle.detalle}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:selectOneMenu id="group1" value="#{facturaMB.datoDetalle}"
+                                                             filter="true" filterMatchMode="startsWith">
+                                                <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                                <f:selectItems value="#{facturaMB.listaCuentas}"/>
+                                            </p:selectOneMenu>
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column headerText="Importe">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{detalle.importeD}"/></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{facturaMB.datoImporte}" style="width:100%"
+                                                                           label="Importe"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+
+                                <p:column style="width:6rem">
+                                    <p:rowEditor/>
+                                </p:column>
+
+                                <p:column style="width: 50px">
+                                    <p:commandButton styleClass="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                     actionListener="#{facturaMB.deleteRow(detalle)}" update="form:importe">
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+
+                            <!-- DIALOG BUSCAR PROVEEDOR -->
+                            <p:overlayPanel for="proveedor" dynamic="true" style="width:600px" widgetVar="moviePicker">
+                                <p:dataTable var="proveedor" value="#{BuscarMB.listaProveedor}" 
+                                             rows="3" paginator="true" selectionMode="single"
+                                             paginatorPosition="bottom"
+                                             selection="#{BuscarMB.proveedor}" 
+                                             rowKey="#{proveedor.nombre}">
+                                    <p:ajax event="rowSelect" listener="#{BuscarMB.onRowSelect}" 
+                                            onsuccess="PF('moviePicker').hide()" update=":form:outputnuevo"/>
+
+                                    <p:column headerText="Proveedor">
+                                        <h:outputText value="#{proveedor.codigo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Nombre">
+                                        <h:outputText value="#{proveedor.nombre}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Ruc">
+                                        <h:outputText value="#{proveedor.ruc}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Días">
+                                        <h:outputText value="#{proveedor.vence}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:overlayPanel>
+                        </p:outputPanel>
+                    </p:outputPanel>      
+                    <div class="p-formgrid p-grid">
+
+                        <div class="p-field p-col">
+                            <p:commandButton value="Guardar" styleClass="ui-button-success"
+                                             actionListener="#{facturaMB.insertarfactura}"
+                                             process="outputnuevo @this" update=":form:messages"/>
+                            </div>
+                            <div class="p-field p-col">
+                            <p:commandButton value="Cancelar" 
+                                             styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                             onclick="PF('newFactura').hide()"
+                                             actionListener="#{facturaMB.reset('outputnuevo')}" 
+                                             process="@this"/>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
