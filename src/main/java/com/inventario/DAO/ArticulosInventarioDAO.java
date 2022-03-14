@@ -48,6 +48,42 @@ public class ArticulosInventarioDAO {
         this.listasubCuentas = listasubCuentas;
     }
 
+    
+    public List<ArticulosInventario> getArticulos(int idProveedor,String numeroComprobante) {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("select distinct "
+                + "articulos.id,articulos.id_categoria,articulos.nombre,articulos.id_tipo,articulos.descripcion,articulos.id_bodega,articulos.cantidad,articulos.costo,articulos.iva,articulos.ice,articulos.max_stock "
+                + "from articulos\n" +
+"inner join entrada_detalle on cod_articulo = articulos.id\n" +
+"inner join entrada on entrada.cod = entrada_detalle.id_entrada\n" +
+"where entrada.num_comprobante = '"+numeroComprobante+"' and entrada.id_proveedor = "+idProveedor+"");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ArticulosInventario articulo = new ArticulosInventario();
+                articulo.setId(resultSet.getInt("id"));
+                articulo.setId_categoria(resultSet.getInt("id_categoria"));
+                articulo.setNombre(resultSet.getString("nombre"));
+                articulo.setId_tipo(resultSet.getInt("id_tipo"));
+                articulo.setDescripcion(resultSet.getString("descripcion"));
+                articulo.setId_bodega(resultSet.getInt("id_bodega"));
+                articulo.setCantidad(resultSet.getInt("cantidad"));
+                articulo.setCosto(resultSet.getInt("costo"));
+                articulo.setIva(resultSet.getInt("iva"));
+                articulo.setIce(resultSet.getInt("ice"));
+                articulo.setMax_stock(resultSet.getInt("max_stock"));
+                ListaInv.add(articulo);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaInv;
+    }
+    
     public List<ArticulosInventario> getArticulos() {
         List<ArticulosInventario> ListaInv = new ArrayList<>();
         String sql = String.format("Select * FROM articulos");
@@ -234,6 +270,8 @@ public class ArticulosInventarioDAO {
         }
     }
 
+    
+    
     public List<ProductoReport> getArticulosReport() {
         List<ProductoReport> ListaInv = new ArrayList<>();
         String sql = String.format("select entradas.cod, ar.nombre, cantidad, ar.costo, (cantidad * ar.costo) as total from(\n"
