@@ -18,47 +18,52 @@
 
                     <p:panel id="outclientes" header="Clientes">
                         <h:panelGrid columns="7" width="80%">
-                                <p:outputLabel value="Identificación: "/>
-                                <p:inputText id="IdNumCliente" value="#{VentaMB.clienteIdNum}" />
+                            <p:outputLabel value="Identificación: "/>
+                            <p:inputText id="IdNumCliente" value="#{VentaMB.cliente.identificacion}" disabled="true"/>
 
-                                <p:outputLabel value="Nombre: "/>
-                                <p:inputText id="NombreCliente" value="#{VentaMB.clienteNombre}" disabled="true" />
+                            <p:outputLabel value="Nombre: "/>
+                            <p:inputText id="NombreCliente" value="#{VentaMB.cliente.nombre}" disabled="true" />
 
-                                <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
+                            <p:commandButton value="Lista de Clientes" type="button" icon="pi pi-search" onclick="PF('BuscarCliente').show()" />
 
-                                <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" 
-                                                 value="Buscar" update=":ventaForm:outclientes" 
-                                                 style="visibility: hidden"/>
-                                <p:inputText value="#{VentaMB.descuento}" style="visibility: hidden"/>
+                            <p:commandButton actionListener="#{VentaMB.BuscarClienteVenta}" 
+                                             value="Buscar" update=":ventaForm:outclientes" 
+                                             style="visibility: hidden"/>
+
+                            <p:inputText value="#{VentaMB.descuentoActual}" style="visibility: hidden"/>
                         </h:panelGrid>
                     </p:panel>
 
+                    <!--Panel de buscar productos-->
                     <p:panel id="busquedaProductoPanel" header="Buscar producto" style="margin-top: 10px;" visible="#{VentaMB.visible}">
                         <h:panelGrid columns="4" width="50%" >
                             <p:outputLabel value="Codigo: "/>
-                            <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProducto}" type="number" />
+                            <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProdBuscar}" type="number" />
                             <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky" style="position: center"/>
                             <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" style="position: center"/>
                         </h:panelGrid>
                     </p:panel>
 
+                    <!--Panel donde se muestra el producto actual-->
                     <p:panel id="detalleProducto" header="Detalle producto" style="margin-top: 20px" visible="#{VentaMB.visible}">
                         <h:panelGrid columns="9" width="90%" >
                             <p:outputLabel value="Producto: "/>
-                            <p:inputText id="NombreProducto" value="#{VentaMB.nombreProducto}" disabled="true" />
+                            <p:inputText id="NombreProducto" value="#{VentaMB.productoActual.nombre}" disabled="true" />
                             <p:outputLabel value="Precio: "/>
-                            <p:inputNumber id="priceTextBox" value="#{VentaMB.precioProducto}" modifyValueOnWheel="false" disabled="true" />
+                            <p:inputNumber id="priceTextBox" value="#{VentaMB.productoActual.precioUnitario}" modifyValueOnWheel="false" disabled="true" />
                             <p:outputLabel value="Cantidad: "/>
                             <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
                             <p:outputLabel value="Descuento: "/>
                             <p:inputNumber value="#{VentaMB.descuento}" minValue="0" decimalPlaces="0" disabled="true"/>
-                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable busquedaProductoPanel FactData Pagos growl" />
+                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
                         </h:panelGrid>
                     </p:panel>
+
+                    <!--Tabla de productos ingresados-->
                     <p:dataTable var="ListaItems" id="itemsTable" 
                                  value="#{VentaMB.listaDetalle}" 
                                  selection="#{VentaMB.productoSeleccionado}" 
-                                 rowKey="#{ListaItems.producto.codigoAux}" 
+                                 rowKey="#{ListaItems.producto.codigo}" 
                                  selectionMode="single" 
                                  paginator="true" 
                                  resizableColumns="true" 
@@ -76,7 +81,7 @@
                         </p:column>
 
                         <p:column headerText="Cod">
-                            <h:outputText value="#{ListaItems.producto.codigoAux}" />
+                            <h:outputText value="#{ListaItems.producto.codigo}" />
                         </p:column>
 
                         <p:column headerText="Producto" >
@@ -110,41 +115,120 @@
                         <p:columnGroup type="footer" id="colgrp">
                             <p:row id="rowfoot">
                                 <p:column colspan="6" style="text-align:right" footerText="Total:"/>
-                                <p:column style="text-align:left" footerText="#{VentaMB.subTotalVenta}" id="subtotalVenta" />
+                                <p:column id="subtotalVenta">
+                                    <f:facet name="footer">
+                                        <h:outputText value="#{VentaMB.subTotalVenta}">
+                                            <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                        </h:outputText>
+                                    </f:facet>
+                                </p:column>
                             </p:row>
                         </p:columnGroup>
                     </p:dataTable>
                     <p:panel style=" width: 100%" visible="#{VentaMB.visible}">
                         <h:panelGrid columns="1" >
                             <p:button  value="Generar Factura" 
-                                       onclick="PF('NewSale').show()" 
+                                       onclick="PF('NewSale').show()"
                                        style="float: center;
                                        margin: 20px 0px; align-content: center" />
                         </h:panelGrid>
                     </p:panel>
-
-
                 </h:form>
 
+                <!--Busqueda de clientes-->
+                <p:dialog header="Busqueda de cliente" widgetVar="BuscarCliente" id="busquedaCliente"
+                          minHeight="600" width="70%" showEffect="fade" modal="true">
+                    <h:form>
+                        <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{VentaMB.listaClientes}" 
+                                     selection="#{VentaMB.cliente}" rowKey="#{ListaClientes.idCliente}" 
+                                     scrollable="true" scrollHeight="250">
+
+                            <f:facet name="header">
+                                Clientes Registrados
+                            </f:facet>
+
+                            <p:column headerText="Seleccionar" >
+                                <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                 actionListener="#{VentaMB.SeleccionarCliente(ListaClientes)}" update="ventaForm" oncomplete="PF('BuscarCliente').hide();"/>
+                            </p:column>
+
+                            <p:column headerText="Cod">
+                                <h:outputText value="#{ListaClientes.idCliente}" />
+                            </p:column>
+
+                            <p:column headerText="Cliente" >
+                                <h:outputText value="#{ListaClientes.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Identificacion">
+                                <h:outputText value="#{ListaClientes.identificacion}" >
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
+
+                <!--Dialogo de busqueda de productos-->
+                <p:dialog header="Busqueda de productos" widgetVar="BuscarProductos" id="busquedaProducto"
+                          minHeight="600" width="70%" showEffect="fade" modal="true">
+                    <h:form>
+                        <p:dataTable var="ListaProductos" id="listaProductos" selectionMode="single" value="#{VentaMB.listaProductos}" 
+                                     selection="#{VentaMB.productoActual}" rowKey="#{ListaProductos.codigo}" scrollable="true" scrollHeight="250" >
+
+                            <f:facet name="header">
+                                Catalogo de productos
+                            </f:facet>
+
+                            <p:column headerText="Seleccionar" >
+                                <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                 actionListener="#{VentaMB.SeleccionarProducto(ListaProductos)}"  update="ventaForm" oncomplete="PF('BuscarProductos').hide();"/>
+                            </p:column>
+
+                            <p:column headerText="Cod">
+                                <h:outputText value="#{ListaProductos.codigo}" />
+                            </p:column>
+
+                            <p:column headerText="Producto" >
+                                <h:outputText value="#{ListaProductos.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Precio unitario">
+                                <h:outputText value="#{ListaProductos.precioUnitario}" >
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Stock">
+                                <h:outputText value="#{ListaProductos.stock}" >
+                                </h:outputText>
+                            </p:column>
+
+
+                            <p:column headerText="Unidad">
+                                <h:outputText value="#{ListaProductos.unidadMedida}" >
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
 
                 <!--Datos de facturacion-->
                 <p:dialog id="FactData" header="Datos de facturacion" widgetVar="NewSale"
-                          height="100%" width="70%" showEffect="fade">
+                          height="100%" width="70%" showEffect="fade" modal="true" >
                     <h:form>
                         <p:panel header="Valor de venta" style="text-align: left; width: 100%; float: right">
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Subtotal 12%"/>
-                                <p:inputText value="#{VentaMB.subtotal12}" disabled="true" />
+                                <p:inputNumber value="#{VentaMB.subtotal12}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="Subtotal 0%"/>
-                                <p:inputText value="#{VentaMB.subtotal0}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.subtotal0}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="DESCUENTO"/>
-                                <p:inputText value="#{VentaMB.temporal}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.descuentoAcumulado}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="ICE"/>
-                                <p:inputText value="#{VentaMB.ice}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.ice}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="IVA 12%"/>
-                                <p:inputText value="#{VentaMB.iva}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.iva}" disabled="true" decimalPlaces="2"/>
                                 <p:outputLabel value="TOTAL"/>
-                                <p:inputText value="#{VentaMB.total}" disabled="true"/>
+                                <p:inputNumber value="#{VentaMB.total}" disabled="true" decimalPlaces="2"/>
                                 <div/>
                                 <p:commandButton value="Efectuar Pago" update="Pagos" type="button" onclick="PF('RealizarPago').show()"/>
                             </h:panelGrid>
@@ -154,7 +238,7 @@
 
 
                 <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
-                          minHeight="600" width="70%" showEffect="fade" id="Pagos">
+                          minHeight="600" width="70%" showEffect="fade" id="Pagos" modal="true">
                     <h:form>
                         <p:panel class="card">
                             <h:panelGrid columns="2">
@@ -200,78 +284,6 @@
                     </h:form>
                 </p:dialog>
 
-                <p:dialog header="Busqueda de cliente" widgetVar="BuscarCliente" id="busquedaCliente"
-                          minHeight="600" width="70%" showEffect="fade">
-                    <h:form>
-                        <p:dataTable var="ListaClientes" id="listaClientes" selectionMode="single" value="#{VentaMB.listaClientes}" 
-                                     selection="#{VentaMB.clienteSeleccionado}" rowKey="#{ListaClientes.idCliente}" 
-                                     scrollable="true" scrollHeight="250">
-
-                            <f:facet name="header">
-                                Clientes Registrados
-                            </f:facet>
-
-                            <p:column headerText="Seleccionar" >
-                                <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                 actionListener="#{VentaMB.SeleccionarCliente(ListaClientes)}" update="ventaForm" oncomplete="PF('BuscarCliente').hide();"/>
-                            </p:column>
-
-                            <p:column headerText="Cod">
-                                <h:outputText value="#{ListaClientes.idCliente}" />
-                            </p:column>
-
-                            <p:column headerText="Cliente" >
-                                <h:outputText value="#{ListaClientes.nombre}" />
-                            </p:column>
-
-                            <p:column headerText="Identificacion">
-                                <h:outputText value="#{ListaClientes.identificacion}" >
-                                </h:outputText>
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>
-                </p:dialog>
-
-                <p:dialog header="Busqueda de productos" widgetVar="BuscarProductos" id="busquedaProducto"
-                          minHeight="600" width="70%" showEffect="fade">
-                    <h:form>
-                        <p:dataTable var="ListaProductos" id="listaProductos" selectionMode="single" value="#{VentaMB.listaProductos}" 
-                                     selection="#{VentaMB.productoSeleccionado}" rowKey="#{ListaProductos.codigo}" >
-
-                            <f:facet name="header">
-                                Catalogo de productos
-                            </f:facet>
-
-                            <p:column headerText="Seleccionar" >
-                                <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                 actionListener="#{VentaMB.SeleccionarProducto(ListaProductos)}"  update="ventaForm" oncomplete="PF('BuscarProductos').hide();"/>
-                            </p:column>
-
-                            <p:column headerText="Cod">
-                                <h:outputText value="#{ListaProductos.codigoAux}" />
-                            </p:column>
-
-                            <p:column headerText="Producto" >
-                                <h:outputText value="#{ListaProductos.descripcion}" />
-                            </p:column>
-
-                            <p:column headerText="Detalle">
-                                <h:outputText value="#{ListaProductos.detalleAdicional}" >
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column headerText="Precio unitario">
-                                <h:outputText value="#{ListaProductos.precioUnitario}" >
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column headerText="Stock">
-                                <h:outputText value="#{ListaProductos.stock}" >
-                                </h:outputText>
-                            </p:column>
-                        </p:dataTable>
-                    </h:form>
-                </p:dialog>
 
             </ui:define>
 

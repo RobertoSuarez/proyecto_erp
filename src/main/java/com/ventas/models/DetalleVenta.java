@@ -14,11 +14,11 @@ import java.io.Serializable;
 public class DetalleVenta implements Serializable {
     private int iddetalleventa;
     private int idventa;
-    private int codprincipal;
+    private int codigo;
     private double cantidad;
     private double descuento;
     private double precio;
-    private Producto producto;
+    private ProductoVenta producto;
     private double subTotal;
     private String nombreProducto;
 
@@ -26,10 +26,10 @@ public class DetalleVenta implements Serializable {
         
     }
 
-    public DetalleVenta(int iddetalleventa, int idventa, int codprincipal, double cantidad, double descuento, double precio, Producto prod) {
+    public DetalleVenta(int iddetalleventa, int idventa, int codprincipal, double cantidad, double descuento, double precio, ProductoVenta prod) {
         this.iddetalleventa = iddetalleventa;
         this.idventa = idventa;
-        this.codprincipal = codprincipal;
+        this.codigo = codprincipal;
         this.cantidad = cantidad;
         this.descuento = descuento;
         this.precio = precio;
@@ -52,12 +52,12 @@ public class DetalleVenta implements Serializable {
         this.idventa = idventa;
     }
 
-    public int getCodprincipal() {
-        return codprincipal;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setCodprincipal(int codprincipal) {
-        this.codprincipal = codprincipal;
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public double getCantidad() {
@@ -84,11 +84,11 @@ public class DetalleVenta implements Serializable {
         this.precio = precio;
     }
 
-    public Producto getProducto() {
+    public ProductoVenta getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(ProductoVenta producto) {
         this.producto = producto;
     }
 

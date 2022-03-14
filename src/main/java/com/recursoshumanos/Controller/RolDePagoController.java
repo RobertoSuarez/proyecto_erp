@@ -465,7 +465,11 @@ public class RolDePagoController implements Serializable {
     }
 
     public String darFormato(Date fecha) {
-        return fecha != null ? new SimpleDateFormat("dd/MM/yyyy").format(fecha) : "";
+        return darFormato(fecha, "dd/MM/yyyy");
+    }
+
+    public String darFormato(Date fecha, String formato) {
+        return fecha != null ? new SimpleDateFormat(formato).format(fecha) : "";
     }
 
     public Multa getMulta() {
@@ -505,6 +509,15 @@ public class RolDePagoController implements Serializable {
         decimoTercero = Precision.round(rolPagosDAO.obtenerDecicmoTercero(), 2);
         decimoCuarto = Precision.round(rolPagosDAO.obtenerDecicmoCuarto(), 2);
         calcularTotal();
+    }
+    
+    public void CargarNomina(){
+        pagos = rolPagosDAO.ListarNomina(darFormato(fechaPago, "yyyy-MM-dd"));
+        total = 0;
+        for(int c = 0; c < pagos.size(); c++){
+            total += pagos.get(c).getValor();
+        }
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-roles");
     }
 
     /**

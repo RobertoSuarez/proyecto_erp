@@ -6,7 +6,7 @@
 package com.ventas.dao;
 
 import com.global.config.Conexion;
-import com.ventas.models.Producto;
+import com.ventas.models.ProductoVenta;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,31 +18,31 @@ import javax.enterprise.context.RequestScoped;
 
 @ManagedBean
 @RequestScoped
-public class ProductoDAO {
+public class ProductoVentaDAO {
 
-    private Producto product;
+    private ProductoVenta product;
     Conexion con;
 
-    public ProductoDAO(Producto product) throws SQLException {
+    public ProductoVentaDAO(ProductoVenta product) throws SQLException {
         con.conectar();
         this.product = product;
     }
 
-    public ProductoDAO() {
+    public ProductoVentaDAO() {
         this.con = new Conexion();
     }
 
-    public Producto getProduct() {
+    public ProductoVenta getProduct() {
         return product;
     }
 
-    public void setProduct(Producto product) {
+    public void setProduct(ProductoVenta product) {
         this.product = product;
     }
 
-    public Producto ObtenerProducto(int id) {
+    public ProductoVenta ObtenerProducto(int id) {
         ResultSet rs;
-        Producto temp = new Producto();
+        ProductoVenta temp = new ProductoVenta();
         
         try {
             String code = String.valueOf(id);
@@ -66,9 +66,9 @@ public class ProductoDAO {
                     temp.setIva(rs.getFloat("iva"));
                     temp.setIce(rs.getFloat("ice"));
                     temp.setIdSubcuenta(rs.getInt("id_subcuenta"));
-                    temp.setUnidadMedida(rs.getString("id"));
-                    temp.setPrecioUnitario(rs.getFloat("id"));
-                    temp.setSubsidio(rs.getFloat("id"));
+                    temp.setUnidadMedida(rs.getString("unidadmedida"));
+                    temp.setPrecioUnitario(rs.getFloat("precio_venta"));
+                    temp.setSubsidio(rs.getFloat("subsidio"));
                 }
             }
             con.desconectar();
@@ -86,9 +86,9 @@ public class ProductoDAO {
         return null;
     }
     
-    public List<Producto> ListarProductos(){
-        List<Producto> listaventa = new ArrayList<>();
-        Producto temp;
+    public List<ProductoVenta> ListarProductos(){
+        List<ProductoVenta> listaventa = new ArrayList<>();
+        ProductoVenta temp;
         ResultSet rs;
         try{
             con.conectar();
@@ -99,7 +99,7 @@ public class ProductoDAO {
                 System.out.println("Existen registros");
                 
                 while (rs.next()) {
-                    temp = new Producto();
+                    temp = new ProductoVenta();
                     temp.setCodigo(rs.getInt("id"));
                     temp.setNombre(rs.getString("nombre"));
                     temp.setIdCategoria(rs.getInt("id_categoria"));
@@ -110,9 +110,9 @@ public class ProductoDAO {
                     temp.setIva(rs.getFloat("iva"));
                     temp.setIce(rs.getFloat("ice"));
                     temp.setIdSubcuenta(rs.getInt("id_subcuenta"));
-                    temp.setUnidadMedida(rs.getString("id"));
-                    temp.setPrecioUnitario(rs.getFloat("id"));
-                    temp.setSubsidio(rs.getFloat("id"));
+                    temp.setUnidadMedida(rs.getString("unidadmedida"));
+                    temp.setPrecioUnitario(rs.getFloat("precio_venta"));
+                    temp.setSubsidio(rs.getFloat("subsidio"));
                     listaventa.add(temp);
                 }
                 con.desconectar();

@@ -59,9 +59,16 @@
                         outcome="/View/recursoshumanos/diaSemana.xhtml" 
                         icon="pi pi-align-center"/>
         </p:submenu>
-        <p:menuitem value="Roles de Pago"
-                    style="display: flex; align-items: center; text-decoration: none;"
-                    outcome="/View/recursoshumanos/roles.xhtml" 
-                    icon="pi pi-money-bill"/>
+        <p:submenu label="Pagos RRHH">
+            <p:menuitem value="Roles de Pago"
+                        style="display: flex; align-items: center; text-decoration: none;"
+                        outcome="/View/recursoshumanos/roles.xhtml" 
+                        icon="pi pi-money-bill"/>
+            
+            <p:menuitem value="Nómina pagos"
+                        style="display: flex; align-items: center; text-decoration: none;"
+                        outcome="/View/recursoshumanos/nomina.xhtml" 
+                        icon="pi pi-list"/>
+        </p:submenu>
     </p:menubar>
 </ui:composition>

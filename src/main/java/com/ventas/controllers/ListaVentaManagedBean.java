@@ -5,6 +5,7 @@
  */
 package com.ventas.controllers;
 
+import com.empresa.global.EmpresaMatrizDAO;
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.VentaDAO;
@@ -19,7 +20,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -64,6 +67,10 @@ public class ListaVentaManagedBean implements Serializable {
         ObtenerTodasVentas();
     }
 
+    /**
+     * Obtiene la lista de las ventas realizadas.
+     * @throws SQLException 
+     */
     public void ObtenerTodasVentas() throws SQLException {
         try {
             VentaDAO vd = new VentaDAO();
@@ -73,6 +80,11 @@ public class ListaVentaManagedBean implements Serializable {
         }
     }
 
+    /**
+     * Carga una venta, recibida como parámetro, es cargada en pantalla con todos su items y detalles.
+     * @param ventaSeleccionada
+     * @throws SQLException 
+     */
     public void CargarVenta(Venta ventaSeleccionada) throws SQLException {
         this.listaDetalle = new ArrayList<>();
         this.ventaActual = ventaSeleccionada;
@@ -89,7 +101,7 @@ public class ListaVentaManagedBean implements Serializable {
         }
 
     }
-
+    
     public List<Venta> getListaVentas() {
         return listaVentas;
     }

@@ -12,55 +12,72 @@ import com.seguridad.models.Modulo;
 import com.seguridad.dao.ModuleDAO;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 /**
  *
  * @author Crisito
  */
-@Named(value = "ModuleMB") 
+@Named(value = "ModuleMB")
 @ViewScoped
 public class ModuleController implements Serializable {
+
     private Modulo moduleOject;
     private List<Modulo> lstModuleObject;
     private ModuleDAO moduleDao;
     private Modulo moduleNew;
     private Modulo moduleEditable;
-    String nameModule="";
-    String descriptionModule="";
+    private String nameModule;
+    private String descriptionModule;
 
     public ModuleController() {
         this.moduleNew = new Modulo();
-        this.moduleEditable= new Modulo();
+        this.moduleEditable = new Modulo();
         this.moduleOject = new Modulo();
-        this.lstModuleObject= new ArrayList<>();
-        this.moduleDao= new ModuleDAO();
+        this.lstModuleObject = new ArrayList<>();
+        this.moduleDao = new ModuleDAO();
         this.lstModuleObject = this.moduleDao.invokeAllModules();
+        this.nameModule = "";
+        this.descriptionModule = "";
     }
 
-    public ModuleController(Modulo moduleOject, List<Modulo> lstModuleObject, ModuleDAO moduleDao) {
-        this.moduleOject = moduleOject;
-        this.lstModuleObject = lstModuleObject;
-        this.moduleDao = moduleDao;
-        this.lstModuleObject = this.moduleDao.invokeAllModules();
+    public void prepareInsertModuleData() {
+        nameModule = "";
+        descriptionModule = "";
     }
-    
-    public void insertModuleData(){
-        System.out.println(this.moduleNew.getNameModule()+this.moduleNew.getDescriptionModule());
-        this.moduleDao.insertModule(this.moduleNew);
+
+    @PostConstruct
+    public void Init() {
+        this.moduleNew = new Modulo();
     }
-    
-    public void prepareEditModuleData(Modulo mod){
-        this.moduleEditable= mod;
+
+    public void insertModuleData() {
+        if (this.moduleNew.getNameModule() == null || this.moduleNew.getNameModule() == " ") {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Ingreso Fallido", "Error no se puede cargar el modulo");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            this.moduleDao.insertModule(moduleNew);
+            this.lstModuleObject = new ArrayList<>();
+            this.lstModuleObject = this.moduleDao.invokeAllModules();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ingreso Exitoso", "Modulo registrado en la base de datos");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
-    
-    public void editModuleData(){
+
+    public void prepareEditModuleData(Modulo mod) {
+        this.moduleEditable = mod;
+    }
+
+    public void editModuleData() {
         this.moduleDao.editModule(this.moduleEditable);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Edicion exitoso", "La edicion se realizo de manera exitosa");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public void deleteModuleData(Modulo mod){
-        this.moduleDao.deleteModule(mod);
-    }
-    
+
     public Modulo getModuleOject() {
         return moduleOject;
     }
@@ -116,5 +133,5 @@ public class ModuleController implements Serializable {
     public void setDescriptionModule(String descriptionModule) {
         this.descriptionModule = descriptionModule;
     }
-    
+
 }

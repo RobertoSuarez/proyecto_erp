@@ -21,10 +21,10 @@
                     </p:toolbar>
                     <f:facet name="header">
                         <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                         actionListener="#{ModuleMB.prepareInsertModuleData()}"
                                          class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
                                          process="@this"
-                                         onclick="PF('ModuleData').show()"
-                                         update="ModuleDATA">
+                                         onclick="PF('ModuleData').show()">
                         </p:commandButton>
                     </f:facet>
                     <br/>
@@ -56,40 +56,49 @@
                                              update="ModuleDATAedit"
                                              actionListener="#{ModuleMB.prepareEditModuleData(ListaModulos)}">
                             </p:commandButton>
-                            <p:commandButton icon="pi pi-trash"                                                         
-                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                             process="@this"
-                                             update="ModuloGeneral"
-                                             actionListener="#{ModuleMB.deleteModuleData(ListaModulos)}">
-                            </p:commandButton>
                         </p:column>
                     </p:dataTable>
                 </p:panel>
             </div>
+
+            <p:dialog id="ModuloNuevo" header="Informacion del modulo" widgetVar="ModuleData"
+                      height="70%" width="30%" showEffect="fade">
+                <p:outputPanel id="form-modulo" class="ui-fluid">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <p:outputLabel value="Nombre del modulo:"/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:inputText value="#{ModuleMB.moduleNew.nameModule}"/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:outputLabel value="Detalle del modulo: "/>
+                        </div>
+                        <div class="p-col-12">
+                            <p:inputTextarea value="#{ModuleMB.moduleNew.descriptionModule}"/>
+                        </div>
+                        <div class="p-col-6">
+                            <p:commandButton icon="pi pi-plus"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process="form-modulo @this"
+                                             onclick="PF('ModuleData').hide()"
+                                             update="ModuloGeneral form-modulo"
+                                             value="Agregar Modulo"
+                                             actionListener="#{ModuleMB.insertModuleData}">
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+
         </h:form>
-        <p:dialog id="ModuloNuevo" header="Informacion del modulo" widgetVar="ModuleData"
-                  height="70%" width="30%" showEffect="fade">
-            <h:form id="ModuleDATA">
-                <p:panelGrid columns="1" style="width: 100%">
-                    <p:outputLabel value="Nombre del modulo"/>
-                    <p:inputText required="true" value="#{ModuleMB.moduleNew.nameModule}"/>
-                    <p:outputLabel value="Detalle del modulo"/>
-                    <p:inputTextarea required="true" value="#{ModuleMB.moduleNew.descriptionModule}"/>
-                </p:panelGrid>
-                <p:commandButton icon="pi pi-plus"                                                         
-                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                 process="@this"
-                                 onclick="PF('ModuleData').hide()"
-                                 update="ModuloGeneral"
-                                 value="Agregar Modulo"
-                                 actionListener="#{ModuleMB.insertModuleData()}">
-                </p:commandButton>
-            </h:form>
-        </p:dialog>
+
+
+
         <p:dialog id="EdicionModulo" header="Editar datos del modulo" widgetVar="ModuleDataEdit"
                   height="70%" width="30%" showEffect="fade">
             <h:form id="ModuleDATAedit">
-                <p:panel header="Modulos" style="text-align: left; width: 100%; float: left">
+                <p:panel id="Edit-Panel" header="Modulos" style="text-align: left; width: 100%; float: left">
                     <p:panelGrid columns="1" style="width: 100%">
                         <p:outputLabel value="Codigo del modulo"/>
                         <p:inputText required="true" value="#{ModuleMB.moduleEditable.idModule}" disabled="true"/>
@@ -101,7 +110,7 @@
                 </p:panel>
                 <p:commandButton icon="pi pi-pencil"                                                         
                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                 process="@this"
+                                 process="Edit-Panel @this"
                                  value="Editar"
                                  actionListener="#{ModuleMB.editModuleData()}"
                                  onclick="PF('ModuleDataEdit').hide()"

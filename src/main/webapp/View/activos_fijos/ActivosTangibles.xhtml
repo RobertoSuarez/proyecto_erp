@@ -5,21 +5,17 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-
     <h:body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
                 <f:event type="preRenderView" 
                          listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-
                 <p:menubar 
                     autoDisplay="false"
                     style="position: fixed; z-index: 3; width: 100%">
                     <p:menuitem value="Tangibles" url="#"/>
                     <p:menuitem value="Intangibles"
                                 url="./ActivosIntangibles.xhtml"/>
-
                 </p:menubar>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
@@ -95,11 +91,8 @@
                                                 <p:column 
                                                     headerText="% de Depreciación">
                                                     <h:outputText 
-                                                        value="#{depreciable.porcentaje_depreciacion}"
-                                                        style="font-weight: 700">
-                                                        <f:convertNumber
-                                                            currencySymbol="%" 
-                                                            type="currency"/>
+                                                        value="#{depreciable.porcentaje_depreciacion} %">
+                                                     
                                                     </h:outputText>
                                                 </p:column>
 
@@ -139,7 +132,7 @@
                                                         value="#{depreciable.proveedor}"/>
                                                 </p:column>
 
-                                                <p:column 
+                                                <p:column  width="14%"
                                                     headerText="Acciones" 
                                                     rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                                     <p:commandButton  
@@ -150,33 +143,54 @@
                                                         oncomplete="PF('EditarDepreciable').show()">  
                                                     </p:commandButton>
 
+                                                    <!-- Permite registrar una depreciación -->
+                                                    <p:commandButton 
+                                                        update="siguienteDepreciacion" rendered="#{activosFijosMB.ActivarBotonDepreciaciones(depreciable)}"
+                                                        styleClass="rounded-button ui-button-secundary p-mr-2 p-mb-2"
+                                                        actionListener="#{activosFijosMB.ObtenerSiguienteDepreciacion(depreciable)}"
+                                                        icon="pi pi-chart-bar"
+                                                        oncomplete="PF('depreciacionActivoFijo').show()">  
+                                                    </p:commandButton>
+
+                                                    <!-- Permite ver las depreciaciones realizadas -->
+                                                    <p:commandButton 
+                                                        update="ListaDepreciaciones" rendered="#{depreciable.subCuenta.id > 0}"
+                                                        styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"
+                                                        actionListener="#{activosFijosMB.ObtenerDepreciaciones(depreciable)}"
+                                                        icon="pi pi-book"
+                                                        oncomplete="PF('depreciacionesActivosFijos').show()">  
+                                                    </p:commandButton>
+
                                                     <!-- Ojo para ver la Depresiacion por Mes -->
                                                     <p:commandButton 
                                                         update="ListaMesesDepreciables,:ListaMesesDepreciables:tablaD"
                                                         styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"
                                                         actionListener="#{activosFijosMB.ListarMesesDepreciables(depreciable)}"
-                                                        icon="pi pi-eye"
+                                                        icon="pi pi-desktop"
                                                         oncomplete="PF('listaDepreciableMes').show()">  
                                                     </p:commandButton>
 
                                                 </p:column>
                                             </p:dataTable>
                                         </h:form>
-
+                                        <!-- Parte de Depreciables Deshabilitados -->
                                     </div>    
                                     <h:form id="formverdeshabilitadodepreciable" >
                                         <p:dialog
                                             header="Activo  Depreciables Deshabilitados"
-                                            minHeight="40" 
-                                            height="auto" 
+                                            minHeight="100" 
+                                            height="80%" 
                                             width="60%"
                                             showEffect="fade"
                                             modal="true" 
                                             widgetVar="deshabilitadosdepreciables"
                                             id="dialogoingresarNodepreciable">
                                             <div style="display: flex;justify-content: center">
+                                                <!-- Tabla de Depreciables Deshabilitados -->
                                                 <p:dataTable
                                                     id="verListaDepreciable"
+                                                    scrollable="true"
+                                                    scrollHeight="250"
                                                     reflow="true"
                                                     value="#{activosFijosMB.tangibleDAO.listaradepreciablesdeshabilitados()}" 
                                                     var="depreciable" 
@@ -298,8 +312,18 @@
                                                                 <p:inputText   
                                                                     value="#{activosFijosMB.activosFijos.numero_factura}" />
                                                             </div>
-
-
+                                                            <div class="p-col-6">
+                                                                <h:outputLabel for="subCuentalist" value="Cuenta de activo depreciable: "/>
+                                                                <p:selectOneMenu id="subCuentalist" value="#{activosFijosMB.activodepreciable.subCuenta.id}"
+                                                                                 required="true" requiredMessage="Debe seleccionar una cuenta de activo depreciable" label="Cuenta"
+                                                                                 filter="true" filterMatchMode="startsWith">
+                                                                    <f:selectItem itemLabel="Seleccione una cuenta de activo depreciable" 
+                                                                                  itemValue="#{0}" noSelectionOption="true"/>
+                                                                    <f:selectItems value="#{activosFijosMB.subCuentaList}" var="subCuenta"
+                                                                                   itemLabel="#{subCuenta.nombre}" 
+                                                                                   itemValue="#{subCuenta.id}"/>
+                                                                </p:selectOneMenu>
+                                                            </div>
                                                             <div class="p-col-6">
                                                                 <p:outputLabel 
                                                                     for="proveedor" 
@@ -550,12 +574,29 @@
                                                                     value="#{activosFijosMB.listadepreciable.numero_factura}" />
                                                             </div>
                                                         </div>
-                                                        <p:outputLabel 
-                                                            for="@next" 
-                                                            value="Descripción: "/>
-                                                        <p:inputText  
-                                                            value="#{activosFijosMB.listadepreciable.detalle_de_activo}"
-                                                            />
+
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col-5">
+                                                                <h:outputLabel for="subCuentalistEdit" value="Cuenta de activo depreciable: "/>
+                                                                <p:selectOneMenu id="subCuentalistEdit" value="#{activosFijosMB.listadepreciable.subCuenta.id}"
+                                                                                 required="true" requiredMessage="Debe seleccionar una cuenta de activo depreciable" label="Cuenta"
+                                                                                 filter="true" filterMatchMode="startsWith">
+                                                                    <f:selectItem itemLabel="Seleccione una cuenta" 
+                                                                                  itemValue="#{0}" noSelectionOption="true"/>
+                                                                    <f:selectItems value="#{activosFijosMB.subCuentaList}" var="subCuenta"
+                                                                                   itemLabel="#{subCuenta.nombre}" 
+                                                                                   itemValue="#{subCuenta.id}"/>
+                                                                </p:selectOneMenu>
+                                                            </div>
+                                                            <div class="p-field p-col-7">
+                                                                <p:outputLabel 
+                                                                    for="@next" 
+                                                                    value="Descripción: "/>
+                                                                <p:inputText  
+                                                                    value="#{activosFijosMB.listadepreciable.detalle_de_activo}"
+                                                                    />
+                                                            </div>
+                                                        </div>
                                                     </p:outputPanel>
                                                 </p:outputPanel>
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
@@ -589,10 +630,9 @@
                                     </h:form>
 
                                     <!-- LISTAR DEPRECIABLES X MES -->
-                                    <h:form id="ListaMesesDepreciables">
+                                    <h:form id="ListaMesesDepreciables" >
                                         <p:dialog 
                                             header="Lista de Depreciación por cada Mes"
-                                            rendered="#{seguridadActvFijo.renderSoloGerente()}"
                                             minHeight="40" 
                                             height="auto"
                                             width="40%" 
@@ -601,37 +641,46 @@
                                             widgetVar="listaDepreciableMes">
                                             <div  style="display: flex;justify-content: center">
 
-                                                <p:outputPanel class="ui-fluid">
+                                                <p:outputPanel class="ui-fluid" >
                                                     <div class="p-field p-col-4">
-
-                                                        <p:outputLabel 
-                                                            for="@next" 
-                                                            value="Descripción: "/>
-                                                        <p:inputText  
-                                                            value="#{activosFijosMB.listadepreciable.detalle_de_activo}" />
 
                                                     </div>
                                                     <p:dataTable id="tablaD"
-                                                        var="TablaMesesD" 
-                                                        scrollable="true"
-                                                        scrollHeight="250"
+                                                                 var="TablaMesesD" 
+                                                                 scrollable="true"
+                                                                 scrollHeight="250"
                                                                  value="#{activosFijosMB.listamesesD}">
                                                         <p:column headerText="Mes">
                                                             <h:outputText value="#{TablaMesesD.depreciacion_meses}" />
                                                         </p:column>
 
-                                                        <p:column headerText="Depresiación">
-                                                            <h:outputText value="#{TablaMesesD.porcentaje_depreciacion}" />
+                                                        <p:column headerText="Depreciación">
+
+                                                            <h:outputText 
+                                                                value="#{TablaMesesD.porcentaje_depreciacion}"
+                                                                style="font-weight: 700">
+                                                                <f:convertNumber 
+                                                                    currencySymbol="$"
+                                                                    type="currency"/>
+                                                            </h:outputText>
+
+
                                                         </p:column>
 
                                                         <p:column headerText="Saldo">
-                                                            <h:outputText value="#{TablaMesesD.saldo_depresiacion}" />
+                                                            <h:outputText 
+                                                                value="#{TablaMesesD.saldo_depresiacion}" 
+                                                                style="font-weight: 700">
+                                                                <f:convertNumber 
+                                                                    currencySymbol="$"
+                                                                    type="currency"/>
+                                                            </h:outputText>
                                                         </p:column>
 
                                                     </p:dataTable>
 
                                                 </p:outputPanel>
-                                                
+
                                                 <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
                                                 <div > 
                                                     <f:facet name="footer">
@@ -647,8 +696,133 @@
                                             </div>
                                         </p:dialog> 
                                     </h:form>
+                                    
+                                    <!-- INICIA EL EDITAR DEPRECIABLE -->
+                                    <h:form id="siguienteDepreciacion">
+                                        <p:dialog 
+                                            header="Registrar depreciación" 
+                                            rendered="#{seguridadActvFijo.renderSoloGerente()}"
+                                            minHeight="40" 
+                                            height="auto"
+                                            width="40%" 
+                                            showEffect="fade"
+                                            modal="true"
+                                            widgetVar="depreciacionActivoFijo"
+                                            id="dialogeditardepreciable">
+                                            <div>
+                                                <p:outputPanel class="ui-fluid">
+                                                    <div class="p-formgrid p-grid">
+                                                        <div class="p-field p-col-4">
+                                                            <p:outputLabel value="Fecha depreciación:" />
+                                                            <p:datePicker value="#{activosFijosMB.depreciacionActivosFijos.fecha}" showIcon="true"/>
+                                                        </div>
+                                                    </div>
+                                                </p:outputPanel>
+                                                <p:panel>
+                                                    <h:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-5,ui-grid-col-4"
+                                                                 styleClass="ui-panelgrid-blank ui-fluid"
+                                                        style="border:0px none; background-color:transparent; width: 100%;">
+                                                        <h:outputText value="Mes: " style="font-weight: bold;" />
+                                                        <h:outputText value="Couta: " style="font-weight: bold;" />
+                                                        <h:outputText value="Depreciación acumulada: " style="font-weight: bold;" />
+                                                        <h:outputText value="Valor neto en libros: " style="font-weight: bold;" />
+                                                        
+                                                        <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.mes}"/>
+                                                        <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.listaDepreciable.cuota_depresiacion}">
+                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        </h:outputText>
+                                                        <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.depreciacion}">
+                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        </h:outputText>
+                                                        <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.saldo}">
+                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        </h:outputText>
+                                                    </h:panelGrid>
+                                                </p:panel>
+                                                <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
+                                                <div > 
+                                                    <f:facet name="footer">
+                                                        <p:commandButton 
+                                                            value="Guardar" icon="pi pi-check" 
+                                                            action="#{activosFijosMB.GuardarDepreciacion}"
+                                                            update="siguienteDepreciacion :msgs"
+                                                            />
+                                                        <p:commandButton
+                                                            value="Cancelar"
+                                                            icon="pi pi-times" 
+                                                            onclick="PF('EditarDepreciable').hide()"
+                                                            oncomplete="location.reload()"
+                                                            class="ui-button-danger"/>
+                                                        <p:commandButton 
+                                                            value="Deshabilitar"
+                                                            icon="pi pi-times"                                            
+                                                            styleClass="ui-button-secondary"  
+                                                            update="siguienteDepreciacion :msgs"
+                                                            onclick="PF('EditarDepreciable').hide()"
+                                                            />
+                                                    </f:facet>    
+                                                </div>
+                                            </div>
+                                        </p:dialog> 
+                                    </h:form>
+                                    
+                                    <!-- LISTAR DEPRECIACIONES -->
+                                    <h:form id="ListaDepreciaciones" >
+                                        <p:dialog 
+                                            header="Depreciaciones realizadas"
+                                            minHeight="40" 
+                                            height="auto"
+                                            width="60%" 
+                                            showEffect="fade"
+                                            modal="true"
+                                            widgetVar="depreciacionesActivosFijos">
+                                            <div  style="display: flex;justify-content: center">
+                                                <p:outputPanel class="ui-fluid" >
+                                                    <p:dataTable id="dt-demostraciones"
+                                                                 var="depreciacionActivoFijo" 
+                                                                 scrollable="true"
+                                                                 scrollHeight="250"
+                                                                 value="#{activosFijosMB.depreciacionesActivosFijos}">
+                                                        <p:column headerText="Mes">
+                                                            <h:outputText value="#{depreciacionActivoFijo.mes}" />
+                                                        </p:column>
+                                                        <p:column headerText="Couta">
+                                                            <h:outputText value="#{depreciacionActivoFijo.listaDepreciable.cuota_depresiacion}">
+                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                            </h:outputText>
+                                                        </p:column>
+                                                        <p:column headerText="Depreciación acumulada">
+                                                            <h:outputText style="font-weight: 700"
+                                                                value="#{depreciacionActivoFijo.depreciacion}">
+                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                            </h:outputText>
+                                                        </p:column>
+                                                        <p:column headerText="Valor neto en libros">
+                                                            <h:outputText style="font-weight: 700"
+                                                                value="#{depreciacionActivoFijo.saldo}">
+                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                            </h:outputText>
+                                                        </p:column>
+                                                        <p:column headerText="Fecha">
+                                                            <h:outputText value="#{activosFijosMB.darFormato(depreciacionActivoFijo.fecha)}" />
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </p:outputPanel>
+                                                <!-- BOTONES GUAARDAR CANCELAR Y DESHABILITAR DE EDITAR DEPRECIABLE -->
+                                                <div > 
+                                                    <f:facet name="footer">
+                                                        <p:commandButton
+                                                            value="Cancelar"
+                                                            icon="pi pi-times" 
+                                                            onclick="PF('EditarDepreciable').hide()"
+                                                            oncomplete="location.reload()"
+                                                            class="ui-button-danger"/>
 
-
+                                                    </f:facet>    
+                                                </div>
+                                            </div>
+                                        </p:dialog> 
+                                    </h:form>
                                 </p:panel>
                             </p:tab>
 

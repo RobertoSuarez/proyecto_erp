@@ -59,14 +59,17 @@
                             </p:column>
 
                             <p:column headerText="Acción" filterStyle="display : none">
-                                <p:commandButton value="Ver Factura" icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" 
+                                <p:commandButton value="Descargar Factura" icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2" 
                                                  actionListener="#{EntradaMB.imprimirPDF(ListaEntradas.cod)}" update="entradaForm" 
                                                  onclick="PF('msgs').hide();"/>
-                                <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-pencil"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
-                                <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-trash" styleClass="rounded-button ui-button-danger"/>
+                                
+                                <p:commandButton disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" oncomplete="PF('eyeEntrada').show()" icon="pi pi-trash" styleClass="rounded-button ui-button-danger"/>
                             </p:column>
 
                         </p:dataTable>
+                        
+                        
+
                     </div>
                 </h:form>
             </ui:define>
