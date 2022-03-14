@@ -13,8 +13,7 @@ import java.time.LocalDate;
  * @author desta
  */
 public class ListaDepreciable {
-
-    private int id_activo_fijo;
+    private int id_activo_fijo, idDepreciable;
     private String detalle_de_activo;
     private int valor_adquisicion;
     private LocalDate fecha_adquisicion = LocalDate.now();
@@ -28,6 +27,7 @@ public class ListaDepreciable {
     private String numero_factura ;
     private double saldo_depresiacion;
     private SubCuenta subCuenta;
+    private boolean faltanDepreciacion;
     
     public ListaDepreciable(int id_activo_fijo, String detalle_de_activo, int valor_adquisicion, int id_empresa,
                             int depreciacion_meses, double cuota_depresiacion, double porcentaje_depreciacion,
@@ -50,6 +50,14 @@ public class ListaDepreciable {
         this.porcentaje_depreciacion = porcentaje_depreciacion;
         this.saldo_depresiacion = saldo_depresiacion;
         this.subCuenta = new SubCuenta();
+    }
+
+    public int getIdDepreciable() {
+        return idDepreciable;
+    }
+
+    public void setIdDepreciable(int idDepreciable) {
+        this.idDepreciable = idDepreciable;
     }
 
     public double getSaldo_depresiacion() {
@@ -166,5 +174,13 @@ public class ListaDepreciable {
 
     public void setSubCuenta(SubCuenta subCuenta) {
         this.subCuenta = subCuenta;
+    }
+
+    public boolean isFaltanDepreciacion() {
+        return faltanDepreciacion;
+    }
+
+    public void setFaltanDepreciacion(boolean faltanDepreciacion) {
+        this.faltanDepreciacion = faltanDepreciacion;
     }
 }

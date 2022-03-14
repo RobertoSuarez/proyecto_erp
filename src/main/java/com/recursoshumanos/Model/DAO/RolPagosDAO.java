@@ -415,7 +415,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public void insertarAsiento(RolPagos rolPagos) {
         try {
             String sentencia1, sentencia;
-                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("Modulo cuentas por pagar").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
+                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("DIA-CPP-01").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
                         + ",\"documento\": \"ROL-" + rolPagos.getCodigo().split("-")[0] + "\",\"detalle\": \"Rol de pago: "
                         + rolPagos.getEmpleado().nombreCompleto() + "\",\"fechaCreacion\": \""
                         + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy") + "\",\"fechaCierre\":\""
@@ -435,7 +435,7 @@ public class RolPagosDAO implements IDAO<RolPagos> {
     public void deshabilitarAsiento(RolPagos rolPagos) {
         try {
             String sentencia1, sentencia;
-                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("Modulo cuentas por pagar").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
+                sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("DIA-CPP-01").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
                         + ",\"documento\": \"ROL-" + rolPagos.getCodigo().split("-")[0] + " R\",\"detalle\": \"Rol de pago: :"
                         + rolPagos.getEmpleado().nombreCompleto() + " R\",\"fechaCreacion\": \""
                         + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy")  + "\",\"fechaCierre\":\""

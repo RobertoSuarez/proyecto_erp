@@ -135,8 +135,10 @@ public class TangibleDAO {
             // Ejecución
             ResultSet rs = st.executeQuery();
             SubCuentaDAO subCuentaDAO = new SubCuentaDAO();
+            DepreciacionActivosFijosDAO depreciacionActivosFijosDAO = new DepreciacionActivosFijosDAO();
             while (rs.next()) {
                 ListaDepreciable listadepreciablevacia = new ListaDepreciable();
+                listadepreciablevacia.setIdDepreciable(rs.getInt("id_depreciable"));
                 listadepreciablevacia.setId_activo_fijo(rs.getInt("id_activo_fijo"));
                 listadepreciablevacia.setDetalle_de_activo(rs.getString("detalle_de_activo"));
                 listadepreciablevacia.setValor_adquisicion(rs.getInt("valor_adquisicion"));
@@ -150,6 +152,7 @@ public class TangibleDAO {
                 listadepreciablevacia.setProveedor(rs.getString("nombre"));
                 listadepreciablevacia.setNumero_factura(rs.getString("numero_factura"));
                 listadepreciablevacia.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("id_subcuenta")));
+                listadepreciablevacia.setFaltanDepreciacion(depreciacionActivosFijosDAO.FaltaDepreciacion(listadepreciablevacia.getIdDepreciable(), listadepreciablevacia.getDepreciacion_meses()));
                 lista.add(listadepreciablevacia);
             }
 
@@ -159,6 +162,48 @@ public class TangibleDAO {
             conexion.desconectar();
         }
         return lista;
+    }
+
+    public ListaDepreciable ObtenerdepreciablePorId(int idFijoTangibleDepreciable) {
+        ListaDepreciable listaDepreciable = new ListaDepreciable();
+        Conexion conexion = new Conexion();
+        System.out.println("Conectado a la db");
+        try {
+            conexion.conectar();
+            // Consulta.
+            PreparedStatement st = conexion.connection.prepareStatement(
+                    "select *from activos_fijos, fijo_tangible_depreciable, proveedor\n"
+                    + "where fijo_tangible_depreciable.id_activo_fijo = activos_fijos.id_activo_fijo\n"
+                    + "and activos_fijos.idproveedor=proveedor.idproveedor\n"
+                    + "and activos_fijos.estado='habilitado'\n"
+                    + "and fijo_tangible_depreciable.id_depreciable = " + idFijoTangibleDepreciable + ";");
+            // Ejecución
+            ResultSet rs = st.executeQuery();
+            SubCuentaDAO subCuentaDAO = new SubCuentaDAO();
+            while (rs.next()) {
+                listaDepreciable = new ListaDepreciable();
+                listaDepreciable.setIdDepreciable(rs.getInt("id_depreciable"));
+                listaDepreciable.setId_activo_fijo(rs.getInt("id_activo_fijo"));
+                listaDepreciable.setDetalle_de_activo(rs.getString("detalle_de_activo"));
+                listaDepreciable.setValor_adquisicion(rs.getInt("valor_adquisicion"));
+                listaDepreciable.setFecha_adquisicion(rs.getObject("fecha_adquisicion", LocalDate.class));
+                listaDepreciable.setId_empresa(rs.getInt("id_empresa"));
+                listaDepreciable.setDepreciacion_meses(rs.getInt("depreciacion_meses"));
+                listaDepreciable.setCuota_depresiacion(rs.getDouble("cuota_depresiacion"));
+                listaDepreciable.setPorcentaje_depreciacion(rs.getDouble("porcentaje_depreciacion"));
+                listaDepreciable.setValor_neto_libros(rs.getDouble("valor_neto_libros"));
+                listaDepreciable.setIdproveedor(rs.getInt("idproveedor"));
+                listaDepreciable.setProveedor(rs.getString("nombre"));
+                listaDepreciable.setNumero_factura(rs.getString("numero_factura"));
+                listaDepreciable.setSubCuenta(subCuentaDAO.getSubCuenta(rs.getInt("id_subcuenta")));
+            }
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return listaDepreciable;
     }
 // deshabilitamos un activo depreciable
 
