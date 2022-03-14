@@ -236,7 +236,6 @@ public class FacturaDAO {
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
                 //JSON un solo movimiento
-
                 if(op == 1){
                     sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
                         + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
