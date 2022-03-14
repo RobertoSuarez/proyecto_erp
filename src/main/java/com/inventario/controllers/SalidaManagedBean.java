@@ -488,10 +488,15 @@ public class SalidaManagedBean implements Serializable {
 
     
     public void SeleccionarProveedor(Proveedor prov) {
+        if(numeroComprobante.isEmpty()){
+             addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Es necesario escribir el comprobante que afecta");
+             return;
+        }
         this.idProveedor = prov.getIdProveedor();
         this.proveedorNombre = prov.getNombre();
         this.proveedordINum = prov.getRazonSocial();
         this.proveedor = prov;
+        this.listaProductos = productoDao.getArticulos(prov.getIdProveedor(), numeroComprobante);
 
     }
 

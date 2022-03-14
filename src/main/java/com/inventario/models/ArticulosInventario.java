@@ -15,20 +15,24 @@ public class ArticulosInventario implements Serializable {
     private int id;
     private int cat_cod;
     private String nombre;
+    private Bodega bodega;
     private int id_categoria;
     private int id_tipo;
     private int cod;
     private String descripcion;
     private int id_bodega;
+    private String nomBodega;
     private int min_stock;
     private int max_stock;
     private int cantidad;
     private int costo;
+    private float coast;
     private int iva;
     private String UnidadMedida;
     private float precioventa;
     private float iceproducto;
     private SubCuenta subCuenta;
+    private int idSubCuenta;
     private int ice ;
     private List<FormulaMateriales> formulaMateriales;
 
@@ -61,6 +65,17 @@ public class ArticulosInventario implements Serializable {
         this.ice = ice;
         this.max_stock = max_stock;
     }
+
+    public ArticulosInventario(int id, String nombre, String nomBodega, int cantidad, float coast, String UnidadMedida) {
+        this.id = id;
+        this.nombre = nombre;
+        this.nomBodega = nomBodega;
+        this.cantidad = cantidad;
+        this.coast = coast;
+        this.UnidadMedida = UnidadMedida;
+    }
+    
+    
 
     
     public ArticulosInventario(int id, int cat_cod, String nombre, 
@@ -103,6 +118,16 @@ public class ArticulosInventario implements Serializable {
         return formulaMateriales;
     }
 
+    public float getCoast() {
+        return coast;
+    }
+
+    public void setCoast(float coast) {
+        this.coast = coast;
+    }
+    
+    
+
     public void setFormulaMateriales(List<FormulaMateriales> formulaMateriales) {
         this.formulaMateriales = formulaMateriales;
     }
@@ -140,6 +165,32 @@ public class ArticulosInventario implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getIdSubCuenta() {
+        return idSubCuenta;
+    }
+
+    public void setIdSubCuenta(int idSubCuenta) {
+        this.idSubCuenta = idSubCuenta;
+    }
+    
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public String getNomBodega() {
+        return nomBodega;
+    }
+
+    public void setNomBodega(String nomBodega) {
+        this.nomBodega = nomBodega;
+    }
+    
 
     public int getCat_cod() {
         return cat_cod;
