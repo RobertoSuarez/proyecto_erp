@@ -16,7 +16,7 @@
 
             <p:toolbarGroup>
                 <p:commandButton id="new" value="Nuevo" icon="pi pi-plus" 
-                                 actionListener="#{preciosMB.abrir}"
+                                 actionListener="#{PreciosMB.abrir()}"
                                  update=":form:outputnuevo" process="@this"
                                  onclick="PF('newLista').show()" 
                                  style="margin-right: .5rem"
@@ -27,29 +27,34 @@
             </p:toolbarGroup>
 
             <p:dataTable  id="dt-precio" widgetVar="dtPrecio" var="precio"
-                          value="#{preciosMB.listaPrecios}"
+                          value="#{PreciosMB.listaPrecios}"
                           reflow="true" paginator="true" rows="5"
                           resizableColumns="true" class="p-mt-3" 
                           paginatorPosition="bottom"
                           style="font-size:12px">
                 <p:column headerText="Tipo de Cliente" 
-                          filterStyle="display: none" sortBy="#{precio.tipo}">
-                    <h:outputText value="#{precio.tipo}" />
+                          filterStyle="display: none" sortBy="#{precio.tipoCliente}">
+                    <h:outputText value="#{precio.tipoCliente}" />
                 </p:column>
 
-                <p:column headerText="Descripción" sortBy="#{precio.descripcion}"
+                <p:column headerText="Descripción" sortBy="#{precio.descripcionTipoCliente}"
                           >
-                    <h:outputText value="#{precio.descripcion}"/>
+                    <h:outputText value="#{precio.descripcionTipoCliente}"/>
                 </p:column>
 
                 <p:column headerText="Descuento" sortBy="#{precio.descuento}">
-                    <h:outputText value="#{precio.descuento}"/>
+                    <h:outputText value="#{precio.descuento} %"/>
                 </p:column>
+                
+                <p:column headerText="Aplica a" sortBy="#{precio.producto.nombre}">
+                    <h:outputText value="#{precio.idproducto > 0 ? precio.producto.nombre : 'TODOS'}"/>
+                </p:column>
+                
                 <p:column exportable="false" >
 
                     <p:commandButton icon="pi pi-pencil" update=":form:outputnuevo"
                                      oncomplete="PF('newLista').show()" 
-                                     actionListener="#{preciosMB.cargardatos(precio)}"
+                                     actionListener="#{PreciosMB.cargardatos(precio)}"
                                      process="@this"
                                      class="ui-button rounded-button"
                                      rendered="#{rolventMB.rendered()}"
@@ -60,52 +65,52 @@
                                      oncomplete="PF('DHFactura').show()"
                                      action="{facturaMB.cargarEditar(factura)}"/>-->
 
-
                 </p:column>
             </p:dataTable>
+            
             <p:dialog  header="Precios" showEffect="fade" modal="true"
                        widgetVar="newLista" maximizable="true" height="250" 
                        closable="false" width="50%">
                 <p:outputPanel id="outputnuevo" class="ui-fluid">
-                    <p:outputPanel rendered="#{not empty preciosMB.precios}">
+                    <p:outputPanel rendered="#{not empty PreciosMB.precios}">
                         <!-- CAMPOS DEL DIALOG-->
                         <div class="p-formgrid p-grid">
                             <div class="p-field p-col">
                                 <p:outputLabel for="Opciones">Tipo de Cliente:</p:outputLabel>
-                                <p:selectOneMenu var="Tipo" id="Opciones" value="#{preciosMB.precios.idtipocliente}">
+                                <p:selectOneMenu var="Tipo" id="Opciones" value="#{PreciosMB.precios.idtipocliente}">
                                     <f:selectItem itemLabel="Select One" itemValue=""/>
-                                    <f:selectItems value="#{preciosMB.tiposClientes}"/>
+                                    <f:selectItems value="#{PreciosMB.tiposClientes}"/>
                                 </p:selectOneMenu>
                             </div>
                             <div class="p-field p-col">
                                 <p:outputLabel for="descuento">Descuento:</p:outputLabel>
-                                <p:inputText id="descuento" value="#{preciosMB.precios.descuento}" 
+                                <p:inputText id="descuento" value="#{PreciosMB.precios.descuento}" 
                                              maxlength="15" />                                                      
                             </div>
                         </div>
                         <div class="p-formgrid p-grid">
                             <div class="p-field p-col">
                                 <p:outputLabel for="Aplicar">Aplicar:</p:outputLabel>
-                                <p:selectOneRadio id="Aplicar" value="#{preciosMB.opciones}" 
-                                                  unselectable="true" >
-                                    <f:selectItem itemLabel="Todos los productos" itemValue="Option1"/>
-                                    <f:selectItem itemLabel="Producto" itemValue="Option2"/>
+                                <p:selectOneRadio id="Aplicar" value="#{PreciosMB.aplicaTodos}" 
+                                                  unselectable="false" >
+                                    <f:selectItem itemLabel="Todos los productos" itemValue="true"/>
+                                    <f:selectItem itemLabel="Producto" itemValue="false"/>
                                     <p:ajax update=":form:dt-productos,:form:movieBtn"/>
                                 </p:selectOneRadio>                                                     
                             </div>
                             <div class="p-field p-col">
-                                <p:inputText id="idlista" value="#{preciosMB.precios.idprecio}" 
+                                <p:inputText id="idlista" value="#{PreciosMB.precios.idprecio}" 
                                              maxlength="5" style="visibility: hidden"/>
                                 <p:commandButton value="Lista de Productos" id="movieBtn"
                                                  type="button" icon="pi pi-search"
                                                  onclick="PF('moviePicker').show()"
-                                                 style="visibility: #{preciosMB.visible()}"/>
+                                                 style="visibility: #{PreciosMB.visible()}"/>
                             </div>
                         </div>
 
                         <!-- Tabla de productos seleccionados -->
-                        <p:dataTable id="dt-productos" var="productos" value="#{preciosMB.listaProductos}"
-                                     style="visibility: #{preciosMB.visible()}"
+                        <p:dataTable id="dt-productos" var="productos" value="#{PreciosMB.listaProductos}"
+                                     style="visibility: #{PreciosMB.visible()}"
                                      scrollable="true" scrollHeight="250">
                             <p:column headerText="Codigo">
                                 <h:outputText value="#{productos.codigo}"/>
@@ -119,9 +124,9 @@
                         <p:dialog header="Productos" widgetVar="moviePicker" minHeight="70" width="600" showEffect="fade">
                             <p:dataTable var="select" value="#{VentaMB.listaProductos}" 
                                          id="checkboxDT" scrollable="true" scrollHeight="250"
-                                         selection="#{preciosMB.producto}" selectionMode="single"
+                                         selection="#{PreciosMB.producto}" selectionMode="single"
                                          rowKey="#{select.codigo}">
-                                <p:ajax event="rowSelect" listener="#{preciosMB.onRowSelect}"/>
+                                <p:ajax event="rowSelect" listener="#{PreciosMB.onRowSelect}"/>
 
                                 <p:column headerText="Codigo">
                                     <h:outputText value="#{select.codigo}" />
@@ -136,12 +141,12 @@
                 </p:outputPanel>
                 <f:facet name="footer">                            
                     <p:commandButton value="Guardar" styleClass="ui-button-success"
-                                     actionListener="#{preciosMB.guardar}"
+                                     actionListener="#{PreciosMB.guardar}"
                                      process="outputnuevo @this" update=":form:messages"/>
                     <p:commandButton value="Cancelar" 
                                      styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                      onclick="PF('newLista').hide()"
-                                     actionListener="#{preciosMB.reset()}" 
+                                     actionListener="#{PreciosMB.reset()}" 
                                      process="@this"/>
                 </f:facet>
             </p:dialog>

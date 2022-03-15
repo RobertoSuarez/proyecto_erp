@@ -15,6 +15,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
@@ -22,8 +24,8 @@ import org.primefaces.event.SelectEvent;
  *
  * @author ninat
  */
-@ManagedBean(value="preciosMB")
-@SessionScoped
+@Named(value = "PreciosMB")
+@ViewScoped
 public class PreciosController implements Serializable {
 
     private Precios precios;
@@ -34,7 +36,7 @@ public class PreciosController implements Serializable {
     private List<ProductoVenta> aux;
     private PreciosDAO preciosDAO;
     private String tipos;
-    private String opciones;
+    private String aplicaTodos;
     private int codigoProducto;
     private String nombreProducto;
 
@@ -45,6 +47,7 @@ public class PreciosController implements Serializable {
         listaPrecios = new ArrayList<>();
         tiposClientes = new ArrayList<>();
         listaPrecios = preciosDAO.mostrarPrecios();
+        aplicaTodos = "true";
     }
 
     public void abrir() {
@@ -83,27 +86,24 @@ public class PreciosController implements Serializable {
         precios.setDescuento(p.getDescuento());
         precios.setIdprecio(1);
         if (preciosDAO.opciones(p.getIdtipocliente())) {
-            opciones = "Option1";
+            aplicaTodos = "true";
         } else {
-            opciones = "Option2";
+            aplicaTodos = "false";
             listaProduc.clear();
             listaProduc = preciosDAO.llenarProducto(p.getIdtipocliente());
         }
     }
 
-    public String render() {
-        System.out.println("ERNDER");
-        if ("Option2".equals(opciones)) {
-            return "true";
-        }
-        return "false";
-    }
-
     public String visible() {
-        if ("Option2".equals(opciones)) {
+        if ("false".equals(aplicaTodos)) {
             return "visible";
         }
         return "hidden";
+    }
+
+    public String render() {
+        System.out.println("RERNDER");
+        return aplicaTodos;
     }
 
     public Precios getPrecios() {
@@ -170,12 +170,12 @@ public class PreciosController implements Serializable {
         this.tipos = tipos;
     }
 
-    public String getOpciones() {
-        return opciones;
+    public String getAplicaTodos() {
+        return aplicaTodos;
     }
 
-    public void setOpciones(String opciones) {
-        this.opciones = opciones;
+    public void setAplicaTodos(String aplicaTodos) {
+        this.aplicaTodos = aplicaTodos;
     }
 
     public PreciosDAO getPreciosDAO() {
@@ -195,32 +195,29 @@ public class PreciosController implements Serializable {
     }
 
     public void insertar() {
-        if (validarSelect(precios) && validarRadio()) {
-            if (valorAplicar()) {
-                if (preciosDAO.insert(precios, valorAplicar()) == 0) {
+        if (validarSelect(precios)) {
+            if (aplicaTodos.equals("true")) {
+                if (preciosDAO.insertarGeneral(precios) == 0) {
                     Exito();
                 }
             } else if (listaProduc.isEmpty()) {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
             } else {
-                if (preciosDAO.insert(precios, valorAplicar()) == 0) {
-                    if (preciosDAO.insertProduct(precios.getIdtipocliente(), this.listaProduc) == 0) {
-                        Exito();
-                    } else {
-                        preciosDAO.deleteInsert(precios.getIdtipocliente());
-                        Error();
-                    }
+                if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
+                    Exito();
+                } else {
+                    Error();
                 }
             }
         }
     }
 
     public void editar() {
-        if (validarSelect(precios) && validarRadio()) {
-            if (valorAplicar()) {
+        if (validarSelect(precios)) {
+            if (aplicaTodos.equals("true")) {
                 if (preciosDAO.deleteProduct(precios.getIdtipocliente()) > 0) {
-                    if (preciosDAO.update(precios, valorAplicar()) == 0) {
+                    if (preciosDAO.update(precios, aplicaTodos.equals("true")) == 0) {
                         Exito();
                     }
                 }
@@ -229,8 +226,8 @@ public class PreciosController implements Serializable {
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
             } else {
                 if (preciosDAO.deleteProduct(precios.getIdtipocliente()) > 0) {
-                    if (preciosDAO.update(precios, valorAplicar()) == 0) {
-                        if (preciosDAO.insertProduct(precios.getIdtipocliente(), this.listaProduc) == 0) {
+                    if (preciosDAO.update(precios, aplicaTodos.equals("true")) == 0) {
+                        if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
                             Exito();
                         } else {
                             Error();
@@ -254,7 +251,7 @@ public class PreciosController implements Serializable {
     }
 
     public boolean validarRadio() {
-        if (!"Option1".equals(opciones) || !"Option2".equals(opciones)) {
+        if (true) {
         } else {
             FacesContext.getCurrentInstance().
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -262,10 +259,6 @@ public class PreciosController implements Serializable {
             return false;
         }
         return true;
-    }
-
-    public boolean valorAplicar() {
-        return "Option1".equals(opciones);
     }
 
     public void reset() {

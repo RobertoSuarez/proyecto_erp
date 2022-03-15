@@ -62,7 +62,6 @@
 
                 <p:dialog widgetVar="DetalleItem" header="Detalle de factura" width="70%" height="80%" closeOnEscape="true" modal="true">
                     <h:form id="datosFactura">
-                        <p:commandButton value="Ver PDF" icon="pi pi-file-pdf" actionListener="#{ListaVentaMB.exportpdf()}" style="visibility: hiddenSS" />
                         <h2>Factura: <p:outputLabel value="#{ListaVentaMB.ventaActual.factura}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
                             <h:panelGrid columns="2">
