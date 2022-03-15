@@ -25,7 +25,7 @@
                             </p:toolbarGroup>
                             <div class="">
                                 <p:toolbarGroup
-                                 >
+                                    >
                                     <p:outputLabel
                                         for="button" 
                                         value="Fecha desde: "/>
@@ -180,7 +180,9 @@
                                                         <p:column headerText="Debe">
                                                             <p:cellEditor>
                                                                 <f:facet name="output">
-                                                                    <h:outputText value="#{movimiento.debe}"></h:outputText>
+                                                                    <h:outputText value="#{movimiento.debe}">
+                                                                        <f:convertNumber pattern="#0.00" />
+                                                                    </h:outputText>
                                                                 </f:facet>
                                                                 <f:facet name="input"> 
                                                                     <p:inputNumber decimalPlaces="2" minValue="0" value="#{movimiento.debe}">
@@ -193,7 +195,9 @@
                                                         <p:column headerText="Haber">
                                                             <p:cellEditor>
                                                                 <f:facet name="output">
-                                                                    <h:outputText value="#{movimiento.haber}"></h:outputText>
+                                                                    <h:outputText value="#{movimiento.haber}">
+                                                                        <f:convertNumber pattern="#0.00" />
+                                                                    </h:outputText>
                                                                 </f:facet>
                                                                 <f:facet name="input"> 
                                                                     <p:inputNumber decimalPlaces="2" minValue="0" value="#{movimiento.haber}">                                                                       

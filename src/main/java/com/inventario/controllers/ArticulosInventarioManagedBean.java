@@ -15,7 +15,9 @@ import com.inventario.models.Bodega;
 import com.inventario.models.Categoria;
 import com.inventario.models.Tipo;
 import static com.primefaces.Messages.showWarn;
+import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,16 +25,17 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
-@ManagedBean(name = "articulosMB")
-
+//(name = "articulosMB")
+@Named(value = "articulosMB")
 @ViewScoped
 
 public class ArticulosInventarioManagedBean implements Serializable {
 
     private int preparando;
-    private ArticulosInventario articulosInventario = new ArticulosInventario();
+    private ArticulosInventario articulosInventario;
     private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
     private List<ArticulosInventario> listaArticulos = new ArrayList<>();
     private Categoria categoria = new Categoria();
@@ -147,6 +150,7 @@ public class ArticulosInventarioManagedBean implements Serializable {
     }
 
     public ArticulosInventarioManagedBean() {
+        articulosInventario = new ArticulosInventario();
         this.preparando = 0;
         System.out.println("PostConstruct");
         listaArticulos = articulosInventarioDAO.getArticulos();
@@ -215,6 +219,12 @@ public class ArticulosInventarioManagedBean implements Serializable {
         this.articulosInventario = articulosInventario;
     }
 
+    public void limpiarProductos() {
+        articulosInventario = new ArticulosInventario();
+        listaArticulos = articulosInventarioDAO.getArticulos();
+
+    }
+
     public Categoria getCategoria() {
         return categoria;
     }
@@ -280,9 +290,45 @@ public class ArticulosInventarioManagedBean implements Serializable {
     }
 
     public void insertarArticulos() {
-                articulosInventarioDAO.insertArticulos(articulosInventario);
+
+        if (isIva) {
+            try {
+                if (articulosInventario.getIdSubCuenta() < 1) {
+                    showWarn("Seleccione una subcuenta");
+                } else if ("".equals(articulosInventario.getNombre())) {
+                    showWarn("Ingrese el nombre del producto");
+                } else if (articulosInventario.getCat_cod() < 1) {
+                    showWarn("Seleccione una Categoria");
+                } else if (articulosInventario.getId_tipo() < 1) {
+                    showWarn("Seleccione un tipo de producto");
+                } else if ("".equals(articulosInventario.getDescripcion())) {
+                    showWarn("Ingrese descripcion del producto");
+                } else if (articulosInventario.getId_bodega() < 1) {
+                    showWarn("Seleccione una bodega");
+                } else if ("".equals(articulosInventario.getUnidadMedida())) {
+                    showWarn("Seleccione una Unidad de medida");
+                } else if (articulosInventario.getCantidad() == 0) {
+                    showWarn("Ingrese la cantidad del producto");
+                } else if (articulosInventario.getCoast() == 0.00) {
+                    showWarn("Ingrese el costo del producto");
+                } else {
+                    this.articulosInventarioDAO.insertArticulosconIva(articulosInventario, true);
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+                    limpiarProductos();
+                }
+            } catch (Exception e) {
                 FacesContext.getCurrentInstance().
-                 addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                                "Error al guardar"));
+            }
+        } else {
+
+            this.articulosInventarioDAO.insertArticulosSinIva(articulosInventario);
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+            limpiarProductos();
+        }
     }
 
 }
