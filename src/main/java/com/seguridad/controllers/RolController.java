@@ -38,8 +38,8 @@ public class RolController implements Serializable {
     List<Roles> listaRoles = (List<Roles>) context.getExternalContext().getSessionMap().get("usuario_rol");
     private List<Rol> lstOfRoles;
     private Rol rolSeleccionado;
-    private int[] modulesActives;
-    private List lstModulesItem;
+    private List<Modulo> modulesActives;
+    private List<SelectItem> lstModulesItem;
     private List<SelectItem> lstModulesSelected;
     private List<Permisos> lstPermisos;
     private int CodigoModule;
@@ -54,6 +54,7 @@ public class RolController implements Serializable {
         lstModulesItem = new ArrayList<>();
         lstModulesSelected = new ArrayList<>();
         lstPermisos= new ArrayList<>();
+        modulesActives = new ArrayList<>();
         CodigoModule =0;
         nameRol="";
         descriptionRol="";
@@ -74,19 +75,25 @@ public class RolController implements Serializable {
     }
     
     public void chargeDataModulesAndRol(){
-        System.out.println(this.modulesActives.length);
+        System.out.println(this.modulesActives.size());
+        System.out.println(this.lstModulesItem.size());
     }
     
     public void chargeRolesSelected(){
-        System.out.println(this.modulesActives.length);
+        System.out.println(this.modulesActives.size());
+        System.out.println(this.lstModulesSelected.size());
         this.lstModulesSelected = new ArrayList<>();
-        this.lstModulesSelected= rolDao.GetRolsSelected(this.modulesActives);
+//        this.lstModulesSelected= rolDao.GetRolsSelected(this.modulesActives);
     }
     
     public void chargePermisosSelected(){
         System.out.println(CodigoModule);
         System.out.println(this.rolSeleccionado.getId());
         this.lstPermisos = rolDao.GetPermissionsRoles(this.rolSeleccionado.getId(), CodigoModule);
+    }
+    
+    public void selection(){
+        
     }
 
     public List<Rol> getListOfRoles() {
@@ -153,11 +160,20 @@ public class RolController implements Serializable {
         this.lstPermisos = lstPermisos;
     }
 
-    public int[] getModulesActives() {
+    public List<Modulo> getModulesActives() {
         return modulesActives;
     }
 
-    public void setModulesActives(int[] modulesActives) {
+    public void setModulesActives(List<Modulo> modulesActives) {
         this.modulesActives = modulesActives;
     }
+
+    public Modulo getMod() {
+        return mod;
+    }
+
+    public void setMod(Modulo mod) {
+        this.mod = mod;
+    }
+    
 }

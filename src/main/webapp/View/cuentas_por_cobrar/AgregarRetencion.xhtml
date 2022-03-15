@@ -7,48 +7,20 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-       
-                <!--  Anclaje a la plantilla en uso del proyecto -->
+
+        <!--  Anclaje a la plantilla en uso del proyecto -->
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
 
             <ui:define name="content">
-                 <!-- Inicio Creación del Menú de opciones a usar -->
-                 
-                <p:menubar autoDisplay="false" 
-                           style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Mantenimiento de Clientes" icon="pi pi-briefcase" 
-                                outcome="/View/cuentas_por_cobrar/MantenimientoCliente.xhtml"/>
-                    <p:submenu label="Cobranzas" icon="pi pi-dollar">
-                        <p:menuitem value="Nuevo Cobro" 
-                                    outcome="/View/cuentas_por_cobrar/NuevoRegistroCobro.xhtml"/>
-                        <p:menuitem value="Listado Cobro" 
-                                    outcome="/View/cuentas_por_cobrar/ListadoCobros.xhtml"/>
-                    </p:submenu>
-                    <p:submenu label="Retenciones" icon="pi pi-file">
-                        <p:menuitem value="Aplicar Retención" 
-                                    outcome="/View/cuentas_por_cobrar/AgregarRetencion.xhtml"/>
-                    </p:submenu>
-                    <p:submenu label="Reportes" icon="pi pi-book">
-                        <p:menuitem value="Listado de Clientes con/sin deuda" 
-                                    outcome="/View/cuentas_por_cobrar/ListaClienteConSinDeuda.xhtml"/>
-                        <p:menuitem value="Estado de Cuenta" 
-                                    outcome="/View/cuentas_por_cobrar/EstadoDeCuenta.xhtml"/>
-                        <p:menuitem value="Facturas Pendientes" 
-                                    outcome="/View/cuentas_por_cobrar/FacturasPendientes.xhtml"/>
-                        <p:menuitem value="Cartera x Edades de Vencimiento" 
-                                    outcome="/View/cuentas_por_cobrar/CarteraxEdadesDeVencimiento.xhtml"/>
-                    </p:submenu>
-                </p:menubar>
-                 
-       <!-- Fin del Menú de Opciones -->
-        
-        <!-- Separadores BR para organizar zona -->
+                <!-- Inclusion del menu del modulo -->
+                <ui:include src="./MenuCuentasPorCobrar.xhtml"/>
+                <!-- Separadores BR para organizar zona -->
                 <br></br>
                 <br></br>
                 <br></br>
-           <!-- Inicio Panel que contiene los elementos de pantalla,
-        organizando todo en un área adecuada -->
-        
+                <!-- Inicio Panel que contiene los elementos de pantalla,
+             organizando todo en un área adecuada -->
+
                 <p:panel style="margin-top: 4%;">
                     <p:growl id="growl" widgetVar="growl" 
                              showDetail="true" life="1500"/> 

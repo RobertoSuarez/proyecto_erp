@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../WEB-INF/InicioTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <ui:include src="./MenuCuentasPorCobrar.xhtml"/>
+        <br></br>
+        <br></br>
+        <br></br>
+        <div class="titleView">
+            <h1 style="text-align: center;">REGISTRO NUEVO COBRO</h1>
+        </div>
+        <p:panel>
+            <div class="card">
+                <p:growl id="growl" widgetVar="growl" showDetail="true" life="1500"/> 
+                <h:form id="form">
+                    <div class="ui-grid-row" style="height: 135px;">
+                        <div>
+                            <div style="float: left; padding-left: 10px;">
+                                <p:outputLabel for="identificacionCliente"
+                                               value="Identificación: "
+                                               style="font-weight:bold;"/>
+                                <br/> <br/>
+                                <p:commandButton value="Buscar"  id="buscar"/>
+                                <p:inputText id="identificacionCliente" 
+                                             placeholder="CI/PA/RUC"
+                                             value="#{abonoController.identificacion}"
+                                             maxlength="13"
+                                             style="width: 150px; margin-left: 2px;" />
+                                &nbsp;&nbsp;&nbsp;
+                                <div style="float: right;">
+                                    <p:commandButton id="btnconsulta" icon="pi pi-replay" 
+                                                     styleClass="rounded-button ui-button-secondary"
+                                                     update=":growl nombreCliente fechaVencida fechaEmision"
+                                                     actionListener="#{abonoController.cargarFacturas()}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="float: left; padding-left: 10px">
+                                <p:outputLabel value="Nombre Cliente: " 
+                                               for="nombreCliente" 
+                                               style="font-weight:bold;"/>
+                                <br/><br/>
+                                <p:inputText id="nombreCliente" 
+                                             disabled="true" 
+                                             placeholder="Razón Social/Nombres y Apellidos"
+                                             value="#{abonoController.persona.razonNombre}"
+                                             style="width: 300px;"/> 
+                            </div>
+                        </div>
+                        <div style="float: left; padding-left: 10px;">
+                            <p:outputLabel value="Fecha Crédito: " 
+                                           for="fechaEmision" 
+                                           style="font-weight:bold;"/>
+                            <br/> <br/> 
+                            <p:inputText id="fechaEmision" 
+                                         disabled="true" 
+                                         placeholder="aaaa/mm/dd"
+                                         value="#{abonoController.fechasPlan[0]}"/> 
+                        </div>
+                        <div style="float: left; padding-left: 10px;">
+                            <p:outputLabel value="Fecha Vencida: " 
+                                           for="fechaVencida" 
+                                           style="font-weight:bold;"/>
+                            <br/> <br/> 
+                            <p:inputText id="fechaVencida" 
+                                         disabled="true" 
+                                         placeholder="aaaa/mm/dd"
+                                         value="#{abonoController.fechasPlan[1]}"/> 
+                        </div>
+                        <div style="float: left; padding-top: 18px; padding-left: 5px;">
+                            <p:commandButton value="Cargar Facturas pendientes"
+                                             id="btnDeuda"
+                                             icon="pi pi-replay" 
+                                             actionListener="#{abonoController.cargarFacturasPendientesPorCliente()}"
+                                             update="tblFacturasPendientesCliente"
+                                             styleClass="ui-button-secondary"/>
+                        </div>
+                    </div>
+                    <p:dataTable id="tblFacturasPendientesCliente" var="tblFactPending"
+                                 emptyMessage="No existen Registros." 
+                                 scrollable="true" paginator="true" 
+                                 value="#{abonoController.lstFacturasPendientes}"
+                                 rows="5" rowSelectMode="add"
+                                 paginatorPosition="bottom" 
+                                 style="font-size: 14px;">
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Documento">
+                            <h:outputText value="FACTURA" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="N° Fact">
+                            <h:outputText value="#{tblFactPending.numFactura}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Fecha de Credito">
+                            <h:outputText value="#{tblFactPending.fechaFacturacion}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Forma de Pago">
+                            <h:outputText value="#{tblFactPending.fechaVencimiento}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Total Factura">
+                            <h:outputText value="#{tblFactPending.valorTotalFactura}" >
+                                <f:convertNumber type="currency" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Total Pendiente">
+                            <h:outputText value="#{tblFactPending.valorPendiente}" >
+                                <f:convertNumber type="currency" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                    <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
+                                    widgetVar="selecionCliente">
+                        <p:dataTable var="cliente" id="tbcliente" 
+                                     widgetVar="dtcliente"
+                                     value="#{personaController.listaCliente}" 
+                                     selectionMode="single" 
+                                     rows="3" paginator="true"
+                                     rowSelectMode="add"
+                                     paginatorPosition="bottom"
+                                     rowKey="#{cliente.idCliente}">
+
+                            <p:ajax event="rowSelect" 
+                                    listener="#{abonoController.onRowSelect}" 
+                                    onsuccess="PF('selecionCliente').hide()" 
+                                    update=":form"/>
+
+                            <f:facet name="header">
+                                <div style="float: right;">
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" 
+                                                     onkeyup="PF('dtcliente').filter()" 
+                                                     placeholder="Buscar"/>
+                                    </span>
+                                </div>
+                                <br/><br/>
+                            </f:facet>
+
+                            <p:column headerText="Cliente" 
+                                      filterBy="#{cliente.razonNombre}"
+                                      filterStyle="display : none">
+                                <h:outputText value="#{cliente.razonNombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Identificacion"
+                                      filterBy="#{cliente.identificacion}"
+                                      filterStyle="display : none">
+                                <h:outputText value="#{cliente.identificacion}"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:overlayPanel>
+                </h:form>
+            </div>
+        </p:panel>
+    </ui:define>
+</ui:composition>

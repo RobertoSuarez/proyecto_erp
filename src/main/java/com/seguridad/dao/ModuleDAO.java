@@ -78,6 +78,7 @@ public class ModuleDAO {
     public List<SelectItem> invokeAllModulesForRol() {
         List<SelectItem> lstModules = new ArrayList<>();
         SelectItem ItemModule;
+        Modulo moduleAux;
         String query = "SELECT * FROM security.\"Modulo\" \n"
                 + "ORDER BY \"idModulo\" ASC ";
         ResultSet rs;
@@ -86,8 +87,13 @@ public class ModuleDAO {
             rs = this.conexion.ejecutarSql(query);
             while (rs.next()) {
                 ItemModule = new SelectItem();
+                moduleAux = new Modulo();
+                moduleAux.setIdModule(rs.getInt(1));
+                moduleAux.setNameModule(rs.getString(2));
+                moduleAux.setDescriptionModule(rs.getString(3));
+                moduleAux.setEnabled(rs.getBoolean(4));
                 ItemModule.setLabel(rs.getString(2));
-                ItemModule.setValue(rs.getInt(1));
+                ItemModule.setValue(moduleAux);
                 lstModules.add(ItemModule);
             }
             rs.close();

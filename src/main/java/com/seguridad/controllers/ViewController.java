@@ -30,22 +30,27 @@ import javax.faces.model.SelectItem;
 public class ViewController implements Serializable {
 
     List<Vista> lstViews;
+    List<SelectItem> lstModulesForFilter;
     Vista views;
     VistaDAO viewsDAO;
     List<SelectItem> lstModulesItems;
     List<Modulo> lstModules;
     ModuleDAO moduleDAO;
+    int CodigoModulo = 0;
 
     public ViewController() {
         lstViews = new ArrayList<>();
         lstModules = new ArrayList<>();
+        lstModulesForFilter = new ArrayList<>();
         lstModulesItems = new ArrayList<>();
         views = new Vista();
         viewsDAO = new VistaDAO();
         lstViews = viewsDAO.GetAllViews();
+        lstModulesForFilter = viewsDAO.GetFilterViews();
         moduleDAO = new ModuleDAO();
         lstModules = moduleDAO.invokeAllModules();
         lstModulesItems = moduleDAO.invokeAllModulesForViews();
+
     }
 
     public void insertViews() {
@@ -69,6 +74,17 @@ public class ViewController implements Serializable {
         viewsDAO.updateViews(views);
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro Modificado", "La vista se edito correctamente");
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void filtrado() {
+        System.out.println(CodigoModulo);
+        if (CodigoModulo <= 0) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Seleccione un modulo", "Por favor seleccione un modulo antes de filtrar");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            lstViews = new ArrayList<>();
+            lstViews = viewsDAO.GetAllViewsFiltered(CodigoModulo);
+        }
     }
 
     public List<Vista> getLstViews() {
@@ -109,6 +125,22 @@ public class ViewController implements Serializable {
 
     public void setLstModules(List<Modulo> lstModules) {
         this.lstModules = lstModules;
+    }
+
+    public List<SelectItem> getLstModulesForFilter() {
+        return lstModulesForFilter;
+    }
+
+    public void setLstModulesForFilter(List<SelectItem> lstModulesForFilter) {
+        this.lstModulesForFilter = lstModulesForFilter;
+    }
+
+    public int getCodigoModulo() {
+        return CodigoModulo;
+    }
+
+    public void setCodigoModulo(int CodigoModulo) {
+        this.CodigoModulo = CodigoModulo;
     }
 
 }

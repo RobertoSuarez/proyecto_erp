@@ -12,6 +12,7 @@ import java.util.List;
 
 public class AsientoDAO {
 
+
     private Conexion conexion = new Conexion();
     private ResultSet resultSet;
 
@@ -19,8 +20,8 @@ public class AsientoDAO {
 
     //Funcion encargada de retornar toda la lista de los asientos contables de la
     //base de datos.
-    public List<Asiento> getAsientosContables() {
-        String sql = String.format("select * from getAsientosContables();");
+    public List<Asiento> getAsientosContables(String fecha, String fecha2) {
+        String sql = String.format("select * from getAsientosContables('" + fecha + "', '" + fecha2 + "');");
         asientos = new ArrayList<>();
         try {
             conexion.conectar();

@@ -48,6 +48,37 @@ public class ArticulosInventarioDAO {
         this.listasubCuentas = listasubCuentas;
     }
 
+        public List<ArticulosInventario> getArticulosEntradas() {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("Select * FROM articulos");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaInv.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getInt("cat_cod"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("id_categoria"),
+                        resultSet.getInt("id_tipo"),
+                        resultSet.getInt("cod"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getInt("id_bodega"),
+                        resultSet.getInt("min_stock"),
+                        resultSet.getInt("max_stock"),
+                        resultSet.getInt("cantidad"),
+                        resultSet.getInt("costo"),
+                        resultSet.getInt("iva"),
+                        resultSet.getInt("ice") ));
+             }
+            
+             
+         } catch (Exception e) {
+             System.out.println(e.getMessage());
+         }finally{
+            conexion.desconectar();
+        }
+        return ListaInv;
+         }
     
     public List<ArticulosInventario> getArticulos(int idProveedor,String numeroComprobante) {
         List<ArticulosInventario> ListaInv = new ArrayList<>();

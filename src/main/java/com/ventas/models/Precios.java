@@ -13,10 +13,13 @@ public class Precios {
     private int idprecio;
     private int idtipocliente;
     private double descuento;
-    private String tipo;
-    private String descripcion;
+    private String tipoCliente;
+    private String descripcionTipoCliente;
+    private int idproducto = -1;
+    private ProductoVenta producto;
 
     public Precios() {
+        
     }
 
     public int getIdprecio() {
@@ -43,33 +46,51 @@ public class Precios {
         this.descuento = descuento;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipoCliente() {
+        return tipoCliente;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipoCliente(String tipoCliente) {
+        this.tipoCliente = tipoCliente;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescripcionTipoCliente() {
+        return descripcionTipoCliente;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescripcionTipoCliente(String descripcionTipoCliente) {
+        this.descripcionTipoCliente = descripcionTipoCliente;
     }
-
+    
     public Precios(int idtipocliente, String tipo) {
         this.idtipocliente = idtipocliente;
-        this.tipo = tipo;
+        this.tipoCliente = tipo;
+    }
+    
+
+    public int getIdproducto() {
+        return idproducto;
     }
 
-    public Precios(int idprecio, int idtipocliente, String tipo, String descripcion, double descuento) {
+    public void setIdproducto(int idproducto) {
+        this.idproducto = idproducto;
+    }
+
+    public ProductoVenta getProducto() {
+        return producto;
+    }
+
+    public void setProducto(ProductoVenta producto) {
+        this.producto = producto;
+    }
+
+    public Precios(int idprecio, int idtipocliente, String tipo, String descripcion, double descuento, ProductoVenta prod) {
         this.idprecio = idprecio;
         this.idtipocliente = idtipocliente;
-        this.tipo = tipo;
-        this.descripcion = descripcion;
+        this.tipoCliente = tipo;
+        this.descripcionTipoCliente = descripcion;
         this.descuento = descuento;
+        this.producto = prod;
     }
     
     public Precios(int idprecio, int idtipocliente, double descuento) {
