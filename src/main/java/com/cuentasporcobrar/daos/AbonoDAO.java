@@ -1,7 +1,10 @@
 package com.cuentasporcobrar.daos;
 
 import com.cuentasporcobrar.models.Abono;
+import com.cuentasporcobrar.models.Facturas_Pendientes;
 import com.cuentasporpagar.models.Factura;
+import com.cuentasporcobrar.daos.PersonaDAO;
+import com.cuentasporcobrar.models.Persona;
 import com.global.config.Conexion;
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -380,5 +383,40 @@ public class AbonoDAO implements Serializable {
         }
 
         return fechasPlanPago;
+    }
+    
+    public List<Facturas_Pendientes> getPendingInvoices(String identificacion){
+        List<Facturas_Pendientes> facturas = new ArrayList<>();
+        Facturas_Pendientes fact;
+        Persona persona = new Persona();
+        PersonaDAO personaDAO = new PersonaDAO();
+        persona = personaDAO.obtenerNombreClienteXIdentificacion(identificacion);
+        String query ="select * from public.obtener_facturas_pendientes_por_cliente() where id_cliente="+String.valueOf(persona.getIdCliente()) +" and valorpendiente_r>0";
+        ResultSet rs;
+        try{
+            conexion.conectar();
+            rs=conexion.ejecutarSql(query);
+            while(rs.next()){
+                fact= new Facturas_Pendientes();
+                fact.setFechaFacturacion(rs.getDate(1).toLocalDate());
+                fact.setDiasCredito(rs.getInt(2));
+                fact.setFechaVencimiento(rs.getDate(3).toLocalDate());
+                fact.setNombreDelCliente(String.valueOf(rs.getInt(4)));
+                fact.setIdFactura(rs.getInt(5));
+                fact.setValorTotalFactura(rs.getDouble(6));
+                fact.setValorPendiente(rs.getDouble(7));
+                fact.setFechaUltimoPago(rs.getDate(8).toLocalDate());
+                fact.setEstadoFactura(rs.getString(9));
+                fact.setDiasMora(rs.getInt(10));
+                fact.setNumFactura(obtenerConcatenacionFactura(rs.getInt(11), rs.getInt(12), rs.getInt(13)));
+                facturas.add(fact);
+            }
+        }catch(SQLException e){
+            e.toString();
+        }
+        finally{
+            conexion.desconectar();
+        }
+        return facturas;
     }
 }
