@@ -172,7 +172,7 @@ public class EntradaManagedBean implements Serializable {
         this.detalleDAO = new EntradaDetalleDAO();
         this.listaProveedores = new ArrayList<>();
         this.listaProveedores = proveedorDAO.ListarProveedor();
-        this.listaProductos = productoDao.getArticulos();
+        this.listaProductos = productoDao.getArticulosEntradas();
 
         this.SiICE = false;
         this.SiIVA = false;
