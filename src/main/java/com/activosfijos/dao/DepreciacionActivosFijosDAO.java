@@ -205,9 +205,9 @@ public class DepreciacionActivosFijosDAO implements IDAO<DepreciacionActivosFijo
                 String sentencia1, sentencia;
                 sentencia = "{\"idDiario\": \"" + this.idDiario + "\",\"total\": " + entity.getListaDepreciable().getCuota_depresiacion()
                             + ",\"documento\": \"" + entity.getCodigo() + "\",\"detalle\": \"Depreciación: " + entity.getListaDepreciable().getSubCuenta().getNombre() + " - "
-                            + DateFormatUtils.format(entity.getFecha(), "dd-MM-yyyy") + "\",\"fechaCreacion\": \""
-                            + DateFormatUtils.format(entity.getFecha(), "dd-MM-yyyy") + "\",\"fechaCierre\":\""
-                            + DateFormatUtils.format(entity.getFecha(), "dd-MM-yyyy") + "\"}";
+                            + DateFormatUtils.format(entity.getFecha(), "yyyy-mm-dd") + "\",\"fechaCreacion\": \""
+                            + DateFormatUtils.format(entity.getFecha(), "yyyy-mm-dd") + "\",\"fechaCierre\":\""
+                            + DateFormatUtils.format(entity.getFecha(), "yyyy-mm-dd") + "\"}";
 
                 sentencia1 = "[{\"idSubcuenta\":\"" +entity.getListaDepreciable().getSubCuenta().getId() + "\",\"debe\":\""
                             + entity.getListaDepreciable().getCuota_depresiacion() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Depreciación\"},"
