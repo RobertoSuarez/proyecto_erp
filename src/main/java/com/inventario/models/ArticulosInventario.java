@@ -5,6 +5,7 @@
  */
 package com.inventario.models;
 
+import com.contabilidad.models.SubCuenta;
 import com.produccion.models.FormulaMateriales;
 import java.io.Serializable;
 import java.util.List;
@@ -14,16 +15,24 @@ public class ArticulosInventario implements Serializable {
     private int id;
     private int cat_cod;
     private String nombre;
+    private Bodega bodega;
     private int id_categoria;
     private int id_tipo;
     private int cod;
     private String descripcion;
     private int id_bodega;
+    private String nomBodega;
     private int min_stock;
     private int max_stock;
     private int cantidad;
     private int costo;
+    private float coast;
     private int iva;
+    private String UnidadMedida;
+    private float precioventa;
+    private float iceproducto;
+    private SubCuenta subCuenta;
+    private int idSubCuenta;
     private int ice ;
     private List<FormulaMateriales> formulaMateriales;
 
@@ -57,6 +66,17 @@ public class ArticulosInventario implements Serializable {
         this.max_stock = max_stock;
     }
 
+    public ArticulosInventario(int id, String nombre, String nomBodega, int cantidad, float coast, String UnidadMedida) {
+        this.id = id;
+        this.nombre = nombre;
+        this.nomBodega = nomBodega;
+        this.cantidad = cantidad;
+        this.coast = coast;
+        this.UnidadMedida = UnidadMedida;
+    }
+    
+    
+
     
     public ArticulosInventario(int id, int cat_cod, String nombre, 
             int id_categoria, int id_tipo, int cod, String descripcion, 
@@ -78,22 +98,99 @@ public class ArticulosInventario implements Serializable {
         this.ice = ice;
     }
 
+    public ArticulosInventario(String nombre, int id_categoria, int id_tipo, String descripcion, int id_bodega, int max_stock, int cantidad, int costo, int iva, float iceproducto,float precioventa) {
+        this.nombre = nombre;
+        this.id_categoria = id_categoria;
+        this.id_tipo = id_tipo;
+        this.descripcion = descripcion;
+        this.id_bodega = id_bodega;
+        this.max_stock = max_stock;
+        this.cantidad = cantidad;
+        this.costo = costo;
+        this.iva = iva;
+        this.iceproducto = ice;
+        this.precioventa=precioventa;
+    }
+    
+    
+
     public List<FormulaMateriales> getFormulaMateriales() {
         return formulaMateriales;
     }
 
+    public float getCoast() {
+        return coast;
+    }
+
+    public void setCoast(float coast) {
+        this.coast = coast;
+    }
+    
+    
+
     public void setFormulaMateriales(List<FormulaMateriales> formulaMateriales) {
         this.formulaMateriales = formulaMateriales;
+    }
+
+    public float getPrecioventa() {
+        return precioventa;
+    }
+
+    public void setPrecioventa(float precioventa) {
+        this.precioventa = precioventa;
+    }
+
+    public float getIceproducto() {
+        return iceproducto;
+    }
+
+    public void setIceproducto(float iceproducto) {
+        this.iceproducto = iceproducto;
+    }
+
+    public SubCuenta getSubCuenta() {
+        return subCuenta;
+    }
+
+    public void setSubCuenta(SubCuenta subCuenta) {
+        this.subCuenta = subCuenta;
     }
     
 
     public int getId() {
         return id;
     }
+    
 
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getIdSubCuenta() {
+        return idSubCuenta;
+    }
+
+    public void setIdSubCuenta(int idSubCuenta) {
+        this.idSubCuenta = idSubCuenta;
+    }
+    
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public String getNomBodega() {
+        return nomBodega;
+    }
+
+    public void setNomBodega(String nomBodega) {
+        this.nomBodega = nomBodega;
+    }
+    
 
     public int getCat_cod() {
         return cat_cod;
@@ -101,6 +198,14 @@ public class ArticulosInventario implements Serializable {
 
     public void setCat_cod(int cat_cod) {
         this.cat_cod = cat_cod;
+    }
+
+    public String getUnidadMedida() {
+        return UnidadMedida;
+    }
+
+    public void setUnidadMedida(String UnidadMedida) {
+        this.UnidadMedida = UnidadMedida;
     }
 
     public String getNombre() {

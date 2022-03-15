@@ -173,6 +173,7 @@ public class FormulaElaboracionMB implements Serializable {
     //metodos
     public void llenarListaSubproceso() {
         listSubProceso = formulaProduccionDAO.getSubProceso(formulaProduccion.getCodigo_proceso());
+        formulaProduccion.setRendimiento(formulaProduccionDAO.rendimiento(formulaProduccion.getCodigo_proceso()));
         costosProduccion();
     }
 

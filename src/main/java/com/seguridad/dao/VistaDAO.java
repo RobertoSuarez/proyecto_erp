@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -44,6 +45,56 @@ public class VistaDAO {
                 views.setDescription_Vista(rs.getString(4));
                 views.setName_Modulo(this.moduleDAO.invokeModuleName(rs.getInt(2)));
                 lstViews.add(views);
+            }
+            rs.close();
+        } catch (SQLException E) {
+            E.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return lstViews;
+    }
+    
+    public List<Vista> GetAllViewsFiltered(int modulo) {
+        List<Vista> lstViews = new ArrayList<>();
+        Vista views;
+        String query = "SELECT * FROM security.vista where \"idModulo\"="+String.valueOf(modulo)  +" order by \"idVista\";";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                views = new Vista();
+                views.setId_Vista(rs.getInt(1));
+                views.setId_Modulo(rs.getInt(2));
+                views.setName_Vista(rs.getString(3));
+                views.setDescription_Vista(rs.getString(4));
+                views.setName_Modulo(this.moduleDAO.invokeModuleName(rs.getInt(2)));
+                lstViews.add(views);
+            }
+            rs.close();
+        } catch (SQLException E) {
+            E.toString();
+        } finally {
+            this.conexion.desconectar();
+        }
+        return lstViews;
+    }
+    
+    public List<SelectItem> GetFilterViews() {
+        List<SelectItem> lstViews = new ArrayList<>();
+        SelectItem items;
+        String query = "SELECT * FROM security.\"Modulo\" \n"
+                + "ORDER BY \"idModulo\" ASC ";
+        ResultSet rs;
+        try {
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                items = new SelectItem();
+                items.setLabel(this.moduleDAO.invokeModuleName(rs.getInt(1)));
+                items.setValue(rs.getInt(1));
+                lstViews.add(items);
             }
             rs.close();
         } catch (SQLException E) {

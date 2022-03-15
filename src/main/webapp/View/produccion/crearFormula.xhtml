@@ -63,7 +63,7 @@ and open the template in the editor.
 
                                     <div class="p-col-6">
                                         <p:outputLabel value="Rendimiento :"></p:outputLabel>
-                                        <p:inputNumber value="#{formulaMBeans.formulaProduccion.rendimiento}" maxlength="25"
+                                        <p:inputNumber id="rendimiento" value="#{formulaMBeans.formulaProduccion.rendimiento}" maxlength="25"
                                                        placeholder="Ingrese numero" >
                                             <p:ajax event="blur" update="mod,cif" listener="#{formulaMBeans.costosProduccion()}"/>
                                         </p:inputNumber>
@@ -84,7 +84,7 @@ and open the template in the editor.
                                             editable="false">
 
                                             <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
-                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}" update=":form-princFormula:MaterialesProducto,mod,cif"/>
+                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}" update=":form-princFormula:MaterialesProducto,mod,cif,rendimiento"/>
                                             <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
                                                            itemLabel="#{proceso.nombre}"
                                                            itemValue="#{proceso.codigo_proceso}"/>

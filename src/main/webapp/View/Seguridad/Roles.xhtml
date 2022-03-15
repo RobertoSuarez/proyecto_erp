@@ -73,13 +73,16 @@
                                       value="#{RolMB.modulesActives}"
                                       showCheckbox="true" 
                                       styleClass="manymenu-advanced">
-                        <f:selectItems value="#{RolMB.lstModulesItem}"/>
+                        <f:selectItems value="#{RolMB.lstModulesItem}"
+                                       var="modul"
+                                       itemLabel="#{modul.label}"
+                                       itemValue="#{modul.value}"/>
                     </p:selectManyMenu>
                     <p:commandButton icon="pi pi-plus"                                                         
                                      class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                     process="RolDATA @this form-rol chbRoles"
+                                     process=":form-rol"
                                      value="Agregar modulos"
-                                     update="somModulos"
+                                     update=":somModulos"
                                      actionListener="#{RolMB.chargeRolesSelected()}">
                     </p:commandButton>
                 </p:panel>

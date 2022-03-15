@@ -136,16 +136,16 @@ public class RolDAO {
         return roles;
     }
     
-    public List<SelectItem> GetRolsSelected(int[] lstCodigos) {
+    public List<SelectItem> GetRolsSelected(List<Modulo> lstCodigos) {
         List<SelectItem> roles = new ArrayList<>();
         SelectItem rolAux;
         ModuleDAO modDao = new ModuleDAO();
         try {
-            if(lstCodigos.length>0){
-                for(int i=0;i<lstCodigos.length;i++){
+            if(lstCodigos.size()>0){
+                for(int i=0;i<lstCodigos.size();i++){
                     rolAux = new SelectItem();
-                    rolAux.setValue(lstCodigos[i]);
-                    rolAux.setLabel(modDao.invokeModuleName(lstCodigos[i]));
+                    rolAux.setValue(lstCodigos.get(i));
+                    rolAux.setLabel(lstCodigos.get(i).getNameModule());
                     roles.add(rolAux);
                 }
             }

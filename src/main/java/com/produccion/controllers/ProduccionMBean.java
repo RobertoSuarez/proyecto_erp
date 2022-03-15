@@ -27,6 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -299,8 +300,8 @@ public class ProduccionMBean implements Serializable {
             costosI += costoP.getCIFUnidad();
             ordenTrabajo.setTiempo(costoP.getTiempoUnidad());
         }
-        ordenTrabajo.setTotalMOD(costosD);
-        ordenTrabajo.setTotalCIF(costosI);
+        ordenTrabajo.setTotalMOD(Precision.round(costosD,2));
+        ordenTrabajo.setTotalCIF(Precision.round(costosI,2));
         ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
         ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
     }
@@ -340,7 +341,7 @@ public class ProduccionMBean implements Serializable {
                                 Double materiales = 0.0, indirectos = 0.0, directos = 0.0;
                                 listaAdicionales = ordenDao.getArticuloAdicionales(ordenTrabajo.getCodigo_orden());
                                 ordenAsiento = ordenDao.calculaProduccion(ordenTrabajo.getCodigo_orden());
-                                ordenAsiento = ordenDao.movimientosProduccion(ordenTrabajo.getCodigo_orden());
+//                                ordenAsiento = ordenDao.movimientosProduccion(ordenTrabajo.getCodigo_orden());
                                 listaCostoProduccion = ordenDao.listaCostoProduccion(ordenTrabajo.getCodigo_orden());
                                 listaCformula = ordenDao.listaMaterialesFormula(ordenTrabajo.getCodigo_orden());
                                 listaCostosDirectos = new ArrayList<>();
