@@ -31,11 +31,13 @@
                                              maxlength="13"
                                              style="width: 150px; margin-left: 2px;" />
                                 &nbsp;&nbsp;&nbsp;
-                                <div style="float: right;">
-                                    <p:commandButton id="btnconsulta" icon="pi pi-replay" 
-                                                     styleClass="rounded-button ui-button-secondary"
-                                                     update=":growl nombreCliente fechaVencida fechaEmision"
-                                                     actionListener="#{abonoController.cargarFacturas()}"/>
+                                <div style="float: right; padding-top: 18px; padding-left: 5px;">
+                                    <p:commandButton value="Cargar Facturas pendientes"
+                                                     id="btnDeuda"
+                                                     icon="pi pi-replay" 
+                                                     actionListener="#{abonoController.cargarFacturasPendientesPorCliente()}"
+                                                     update=":growl nombreCliente tblFacturasPendientesCliente"
+                                                     styleClass="ui-button-secondary"/>
                                 </div>
                             </div>
                         </div>
@@ -51,34 +53,6 @@
                                              value="#{abonoController.persona.razonNombre}"
                                              style="width: 300px;"/> 
                             </div>
-                        </div>
-                        <div style="float: left; padding-left: 10px;">
-                            <p:outputLabel value="Fecha Crédito: " 
-                                           for="fechaEmision" 
-                                           style="font-weight:bold;"/>
-                            <br/> <br/> 
-                            <p:inputText id="fechaEmision" 
-                                         disabled="true" 
-                                         placeholder="aaaa/mm/dd"
-                                         value="#{abonoController.fechasPlan[0]}"/> 
-                        </div>
-                        <div style="float: left; padding-left: 10px;">
-                            <p:outputLabel value="Fecha Vencida: " 
-                                           for="fechaVencida" 
-                                           style="font-weight:bold;"/>
-                            <br/> <br/> 
-                            <p:inputText id="fechaVencida" 
-                                         disabled="true" 
-                                         placeholder="aaaa/mm/dd"
-                                         value="#{abonoController.fechasPlan[1]}"/> 
-                        </div>
-                        <div style="float: left; padding-top: 18px; padding-left: 5px;">
-                            <p:commandButton value="Cargar Facturas pendientes"
-                                             id="btnDeuda"
-                                             icon="pi pi-replay" 
-                                             actionListener="#{abonoController.cargarFacturasPendientesPorCliente()}"
-                                             update="tblFacturasPendientesCliente"
-                                             styleClass="ui-button-secondary"/>
                         </div>
                     </div>
                     <p:dataTable id="tblFacturasPendientesCliente" var="tblFactPending"
@@ -123,6 +97,68 @@
                                 <f:convertNumber type="currency" 
                                                  currencySymbol="$"/>
                             </h:outputText>
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Pagar">
+                            <p:commandButton id="btnAgregar"
+                                             icon="pi pi-plus" 
+                                             actionListener="#{abonoController.AgregarFacturaPagar(tblFactPending)}"
+                                             update=":growl form"
+                                             styleClass="ui-button-secondary"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dataTable id="tblFacturasAPagar" var="tblBillsToPay"
+                                 emptyMessage="No existen Registros." 
+                                 scrollable="true" paginator="true" 
+                                 value="#{abonoController.lstFacturasAPagar}"
+                                 rows="5" rowSelectMode="add"
+                                 paginatorPosition="bottom" 
+                                 style="font-size: 14px;">
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Documento">
+                            <h:outputText value="FACTURA" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="N° Fact">
+                            <h:outputText value="#{tblBillsToPay.numFactura}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Fecha de Credito">
+                            <h:outputText value="#{tblBillsToPay.fechaFacturacion}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Forma de Pago">
+                            <h:outputText value="#{tblBillsToPay.fechaVencimiento}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Total Factura">
+                            <h:outputText value="#{tblBillsToPay.valorTotalFactura}" >
+                                <f:convertNumber type="currency" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Total Pendiente">
+                            <h:outputText value="#{tblBillsToPay.valorPendiente}" >
+                                <f:convertNumber type="currency" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Pagar">
+                            <p:commandButton id="btnBorrar"
+                                             icon="pi pi-trash" 
+                                             actionListener="#{abonoController.QuitarFacturaPagar(tblBillsToPay)}"
+                                             update=":growl form"
+                                             styleClass="ui-button-secondary"/>
                         </p:column>
                     </p:dataTable>
                     <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 

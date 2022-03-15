@@ -44,7 +44,7 @@ public class AbonoController implements Serializable {
     int idPlanDePago = 0;
     int idFactura = 0;
     int idCliente = 0;
-    
+
     //Objeto para traer funciones de primefaces
     PrimeFaces current = PrimeFaces.current();
 
@@ -61,6 +61,7 @@ public class AbonoController implements Serializable {
     //Declaro mi lista de los abonos de una determinada factura
     List<Abono> list_Abonos;
     List<Facturas_Pendientes> lstFacturasPendientes;
+    List<Facturas_Pendientes> lstFacturasAPagar;
 
     //Variables para cargar el total de abonos y total pendiente
     double totalAbonos = 0;
@@ -85,6 +86,7 @@ public class AbonoController implements Serializable {
         abono = new Abono();
         abonoDAO = new AbonoDAO();
         lstFacturasPendientes = new ArrayList<>();
+        lstFacturasAPagar=new ArrayList<>();
     }
 
     //Getter y Setter de las variables, clases y listas declaradas.
@@ -183,10 +185,17 @@ public class AbonoController implements Serializable {
     public void setLstFacturasPendientes(List<Facturas_Pendientes> lstFacturasPendientes) {
         this.lstFacturasPendientes = lstFacturasPendientes;
     }
-    
-    
-    //Fin
 
+    public List<Facturas_Pendientes> getLstFacturasAPagar() {
+        return lstFacturasAPagar;
+    }
+
+    public void setLstFacturasAPagar(List<Facturas_Pendientes> lstFacturasAPagar) {
+        this.lstFacturasAPagar = lstFacturasAPagar;
+    }
+    
+
+    //Fin
     /**
      * Método para cargar las facturas de un determinado cliente en un SelectOne
      */
@@ -220,7 +229,7 @@ public class AbonoController implements Serializable {
                     this.listaVenta.add(ventasItem);
 
                 }
-                
+
                 current.ajax().update(":form:tblRegistroCobro");
                 list_Abonos = new ArrayList();
                 LocalDate[] fechas = {null, null};
@@ -300,7 +309,7 @@ public class AbonoController implements Serializable {
             //@return valor Retorna el valor mensual a pagar del plan de pago.
             double valorMensual = ((totalPendiente + totalAbonos) / (diasDeCredito / 30));
             valorMensual = Double.valueOf(df.format(valorMensual).replace(',', '.'));
-            
+
             //Si el totalPendiente es menor al valor mensual
             //Retorno el valor pendiente, caso contrario se devuelve el valor Mensual
             if (totalPendiente <= valorMensual) {
@@ -455,8 +464,22 @@ public class AbonoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void cargarFacturasPendientesPorCliente(){
+    public void cargarFacturasPendientesPorCliente() {
         lstFacturasPendientes = new ArrayList<>();
+        personaDAO = new PersonaDAO();
+        persona = new Persona();
+        //Cargamos el nombre del cliente en el input
+        persona = personaDAO.obtenerNombreClienteXIdentificacion(identificacion);
         lstFacturasPendientes = abonoDAO.getPendingInvoices(identificacion);
+    }
+    
+    public void AgregarFacturaPagar(Facturas_Pendientes fact){
+        lstFacturasAPagar.add(fact);
+        lstFacturasPendientes.remove(fact);
+    }
+    
+    public void QuitarFacturaPagar(Facturas_Pendientes fact){
+        lstFacturasAPagar.remove(fact);
+        lstFacturasPendientes.add(fact);
     }
 }

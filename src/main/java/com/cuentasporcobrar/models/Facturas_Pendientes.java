@@ -22,6 +22,7 @@ public class Facturas_Pendientes implements Serializable {
     private String estadoFactura;
     private int diasMora;
     private String numFactura;
+    private double valor_Abono;
 
     //Constructor Vacío
     public Facturas_Pendientes() {
@@ -151,5 +152,15 @@ public class Facturas_Pendientes implements Serializable {
     public void setNumFactura(String numFactura) {
         this.numFactura = numFactura;
     }
+
+    public double getValor_Abono() {
+        return valor_Abono;
+    }
+
+    public void setValor_Abono(double valor_Abono) {
+        this.valor_Abono = valor_Abono;
+    }
+    
+    
 }
 
