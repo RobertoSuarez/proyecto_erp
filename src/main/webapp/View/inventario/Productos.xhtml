@@ -14,12 +14,12 @@
                     <p:growl id="msgs" showDetail="true"/>
                     <div class="card">
                         <p:toolbar>
-                            <p:toolbarGroup id="solicitudOrden">
+                            <p:toolbarGroup id="nuewp">
                                 <p:outputPanel id="nuevoproducto" class="ui-fluid">
-                                    <div class="card ui-nuevaproductofluid ">
+                                    <div class="card ui-nuevoproductofluid ">
                                         <div class="p-formgrid p-grid ">
                                             <div class="p-col-3">
-                                                <p:outputLabel value="Subcuenta" for="@next"/>
+                                                <p:outputLabel value="Subcuenta" for="subcuenta"/>
                                                 <p:selectOneMenu id="subcuenta" value="#{articulosMB.articulosInventario.idSubCuenta}" editable="false" 
                                                                  disabled="#">
                                                     <f:selectItem itemLabel="Seleccione una subcuenta" itemValue="" noSelectionOption="true"/>
@@ -30,8 +30,9 @@
                                             </div>
 
                                             <div class="p-col-3">
-                                                <p:outputLabel value="Nombre del producto" for="@next"/>
-                                                <p:inputText value="#{articulosMB.articulosInventario.nombre}"/>
+                                                <p:outputLabel  for="nombre" value="Nombre del producto"/>
+                                                <p:inputText id="nombre"
+                                                             value="#{articulosMB.articulosInventario.nombre}"/>
                                             </div>
                                             <div class="p-col-3">
                                                 <p:outputLabel value="Categoria" for="@next"/>
@@ -79,18 +80,18 @@
                                             </div>
                                             <div class="p-col-1">
                                                 <p:outputLabel value="Cantidad" for="@next"/>
-                                                <p:inputText value="#{articulosMB.articulosInventario.cantidad}"/>
+                                                <p:inputNumber value="#{articulosMB.articulosInventario.cantidad}"/>
                                             </div>
                                             <div class="p-col-1">
                                                 <p:outputLabel value="Costo" for="@next"/>
-                                                <p:inputText value="#{articulosMB.articulosInventario.coast}"/>
+                                                <p:inputMask value="#{articulosMB.articulosInventario.coast}"/>
                                             </div>
                                             <br></br>
                                             <div class="p-col-1">
                                                 <br></br>
                                                 <p:outputLabel value="IVA " for="@next"  style="font-size: 150%" />
                                                 <p:selectBooleanCheckbox id="slcbtn" style="font-size: 100%"  
-                                                                         value=""
+                                                                         value="#{articulosMB.isIva}"
                                                                          styleClass="ui-button-help p-mr-2 p-mb-2">                                    
                                                 </p:selectBooleanCheckbox> 
                                             </div>
@@ -102,17 +103,17 @@
                                             <div class="p-col-1">
                                                 <br></br>
                                                 <p:commandButton  value="Guardar" actionListener="#{articulosMB.insertarArticulos()}"
-                                                                  process="nuevoproducto @this"
-                                                                  icon="pi pi-check" 
-                                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                                 
+                                                                  process=":articulos:nuevoproducto @this"
                                                                   update=":articulos:msgs ,:articulos:nuevoproducto , :articulos:listaProductos"
-                                                                  />
+                                                                  icon="pi pi-check" 
+                                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
                                             </div>
+
 
                                         </div>
                                     </div>
                                 </p:outputPanel>
+
                                 <p:dataTable id="listaProductos" editable="true"
                                              reflow="true" rows="4" paginator="true"
                                              resizableColumns="true" paginatorPosition="bottom"
@@ -124,12 +125,11 @@
 
                                         </div>
                                     </f:facet>
-                                    <p:column headerText="Código">
-                                        <h:outputText value="#{productos.id}" />
-                                    </p:column>
-
                                     <p:column headerText="Nombre" >
                                         <h:outputText value="#{productos.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Descripción" >
+                                        <h:outputText value="#{productos.descripcion}" />
                                     </p:column>
                                     <p:column headerText="Bodega" >
                                         <h:outputText value="#{productos.nomBodega}" />

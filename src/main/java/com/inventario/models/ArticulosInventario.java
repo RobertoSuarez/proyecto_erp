@@ -29,6 +29,7 @@ public class ArticulosInventario implements Serializable {
     private float coast;
     private int iva;
     private String UnidadMedida;
+    private Boolean isIva;
     private float precioventa;
     private float iceproducto;
     private SubCuenta subCuenta;
@@ -66,9 +67,10 @@ public class ArticulosInventario implements Serializable {
         this.max_stock = max_stock;
     }
 
-    public ArticulosInventario(int id, String nombre, String nomBodega, int cantidad, float coast, String UnidadMedida) {
+    public ArticulosInventario(int id, String nombre,String descripcion, String nomBodega, int cantidad, float coast, String UnidadMedida) {
         this.id = id;
         this.nombre = nombre;
+        this.descripcion=descripcion;
         this.nomBodega = nomBodega;
         this.cantidad = cantidad;
         this.coast = coast;
@@ -143,7 +145,7 @@ public class ArticulosInventario implements Serializable {
     public float getIceproducto() {
         return iceproducto;
     }
-
+    
     public void setIceproducto(float iceproducto) {
         this.iceproducto = iceproducto;
     }
@@ -223,6 +225,15 @@ public class ArticulosInventario implements Serializable {
     public void setId_categoria(int id_categoria) {
         this.id_categoria = id_categoria;
     }
+
+    public Boolean getIsIva() {
+        return isIva;
+    }
+
+    public void setIsIva(Boolean isIva) {
+        this.isIva = isIva;
+    }
+    
 
     public int getId_tipo() {
         return id_tipo;

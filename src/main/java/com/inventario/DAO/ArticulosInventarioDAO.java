@@ -86,7 +86,7 @@ public class ArticulosInventarioDAO {
     
     public List<ArticulosInventario> getArticulos() {
         List<ArticulosInventario> ListaInv = new ArrayList<>();
-        String sql = String.format("select a.id, a.nombre,b.nombre_bodega,a.unidadmedida, a.cantidad, a.costo\n"
+        String sql = String.format("select a.id, a.nombre,a.descripcion,b.nombre_bodega,a.unidadmedida, a.cantidad, a.costo\n"
                 + "from articulos a inner join bodega b on a.id_bodega=b.cod order by a.id");
         try {
             resultSet = conexion.ejecutarSql(sql);
@@ -95,6 +95,7 @@ public class ArticulosInventarioDAO {
                 ArticulosInventario articulo = new ArticulosInventario();
                 articulo.setId(resultSet.getInt("id"));
                 articulo.setNombre(resultSet.getString("nombre"));
+                articulo.setDescripcion(resultSet.getString("descripcion"));
                 articulo.setNomBodega(resultSet.getString("nombre_bodega"));
                 articulo.setUnidadMedida(resultSet.getString("unidadmedida"));
                 articulo.setCantidad(resultSet.getInt("cantidad"));
@@ -295,7 +296,7 @@ public class ArticulosInventarioDAO {
         return ListaInv;
     }
 
-    public int insertArticulos(ArticulosInventario a) {
+    public void insertArticulosconIva(ArticulosInventario a, boolean iva) {
         try {
 
             this.conexion.conectar();
@@ -303,11 +304,27 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
-                    + "," + a.getCantidad() + ",'" + a.getCosto() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCosto() + "')";
-            return conexion.insertar(sentencia);
+                    + "," + a.getCantidad() + ",'" + a.getCoast()+ "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCosto() + "')";
+           conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
-            return -1;
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+    public void insertArticulosSinIva(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
+                    + "," + a.getCantidad() + ",'" + a.getCoast()+ "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCosto() + "')";
+           conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
         } finally {
             this.conexion.desconectar();
         }
