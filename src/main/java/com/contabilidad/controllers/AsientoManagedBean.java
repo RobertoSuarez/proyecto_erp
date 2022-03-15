@@ -35,7 +35,9 @@ public class AsientoManagedBean implements Serializable {
     private AsientoDAO asientoDAO;
     private MovimientoDAO movimientoDAO;
     private DiarioDAO diarioAccess;
-
+    private SimpleDateFormat dateFormat;
+    private Date fecha;
+    private Date fecha2;
     private Date fechaCreacion;
     private Date fechaCierre;
     private List<SubCuenta> subCuentas = new ArrayList<>();
@@ -50,6 +52,9 @@ public class AsientoManagedBean implements Serializable {
 
     @PostConstruct
     public void main() {
+        fecha = new Date();
+        fecha2 = new Date();
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         asientoDAO = new AsientoDAO();
         movimientoDAO = new MovimientoDAO();
         diarioAccess = new DiarioDAO();
@@ -65,7 +70,7 @@ public class AsientoManagedBean implements Serializable {
             try {
                 ec.redirect("/proyecto_erp");
             } catch (Exception ex) {
-                
+
             }
             System.out.println("########## Error al traer los datos");
         }
@@ -73,7 +78,16 @@ public class AsientoManagedBean implements Serializable {
 
     @Asynchronous
     public void loadElements() {
-        asientos = asientoDAO.getAsientosContables();
+        asientos = asientoDAO.getAsientosContables(dateFormat.format(fecha),
+                dateFormat.format(fecha2));
+        List<Movimiento> movimientos = movimientoDAO.getAllMovimientos();
+        asientos.forEach(a -> orderMovimientoByAsiento(a, movimientos));
+    }
+
+    public void recibiendoFecha() {
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        asientos = asientoDAO.getAsientosContables(dateFormat.format(fecha),
+                dateFormat.format(fecha2));
         List<Movimiento> movimientos = movimientoDAO.getAllMovimientos();
         asientos.forEach(a -> orderMovimientoByAsiento(a, movimientos));
     }
@@ -357,4 +371,21 @@ public class AsientoManagedBean implements Serializable {
     public void setDiarios(List<Diario> diarios) {
         this.diarios = diarios;
     }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Date getFecha2() {
+        return fecha2;
+    }
+
+    public void setFecha2(Date fecha2) {
+        this.fecha2 = fecha2;
+    }
+
 }

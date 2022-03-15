@@ -23,6 +23,46 @@
                                     <p:resetInput target=":form:manage-asiento"/>
                                 </p:commandButton>
                             </p:toolbarGroup>
+                            <div class="">
+                                <p:toolbarGroup
+                                 >
+                                    <p:outputLabel
+                                        for="button" 
+                                        value="Fecha desde: "/>
+                                    <p:datePicker
+                                        style="margin-top: 1%" 
+                                        locale="es"
+                                        id="button"
+                                        value="#{asientoManagedBean.fecha}"
+                                        showIcon="true"/>
+                                </p:toolbarGroup> 
+                            </div>
+                            <div class="">
+                                <p:toolbarGroup >
+
+                                    <p:outputLabel
+                                        for="button2" 
+                                        value="Fecha hasta: "/>
+                                    <p:datePicker 
+                                        style="margin-top: 1%"  
+                                        id="button2" 
+                                        locale="es"
+                                        value="#{asientoManagedBean.fecha2}"
+                                        showIcon="true"/>
+
+
+                                </p:toolbarGroup>
+                            </div>
+
+                            <p:toolbarGroup >
+                                <p:commandButton 
+                                    value="Aceptar" 
+                                    style=" margin-top: 1%"
+                                    action="#{asientoManagedBean.recibiendoFecha()}"
+                                    update="dtAsientos"
+                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    />                            
+                            </p:toolbarGroup>
                         </p:toolbar>
                         <p:dialog header="Asiento Contable" showEffect="fade" modal="true"
                                   widgetVar="detalleAsiento" responsive="true" width="80%"
