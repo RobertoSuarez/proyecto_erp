@@ -45,29 +45,23 @@
                 <p:column headerText="Descuento" sortBy="#{precio.descuento}">
                     <h:outputText value="#{precio.descuento} %"/>
                 </p:column>
-                
+
                 <p:column headerText="Aplica a" sortBy="#{precio.producto.nombre}">
                     <h:outputText value="#{precio.idproducto > 0 ? precio.producto.nombre : 'TODOS'}"/>
                 </p:column>
-                
+
                 <p:column exportable="false" >
-
-                    <p:commandButton icon="pi pi-pencil" update=":form:outputnuevo"
-                                     oncomplete="PF('newLista').show()" 
-                                     actionListener="#{PreciosMB.cargardatos(precio)}"
-                                     process="@this"
-                                     class="ui-button rounded-button"
-                                     rendered="#{rolventMB.rendered()}"
-                                     />
-<!--                    <p:commandButton class="ui-button-danger rounded-button"
-                                     icon="pi pi-trash" process="@this"
-                                     update=":form:confirmDHab"
-                                     oncomplete="PF('DHFactura').show()"
-                                     action="{facturaMB.cargarEditar(factura)}"/>-->
-
+                    <p:commandButton action="#{PreciosMB.eliminar(precio)}" styleClass="p-mr-2 ui-button-danger" icon="pi pi-trash" update="dt-precio :form:messages">
+                        <p:confirm header="Eliminar regla" message="¿Segurod esea eliminar esta condición de precio?" icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
-            
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-danger"/>
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes ui-button-success" />
+            </p:confirmDialog>
+
             <p:dialog  header="Precios" showEffect="fade" modal="true"
                        widgetVar="newLista" maximizable="true" height="250" 
                        closable="false" width="50%">
@@ -153,18 +147,18 @@
 
 
 
-<!--            <p:confirmDialog id="confirmDHab" widgetVar="DHFactura" showEffect="fade" width="700"
-                             header="Confirmar" severity="warn">
-                <f:facet name="message">
-                    <h:outputText value="Desea eliminar la lista de {preciosMB.precios.tipo}?"/><br/><br/>
-                </f:facet>
-                <p:inputText value="{preciosMB.precios.tipo}" type="hidden"/>
-
-                <p:commandButton value="Si" update=":form:outputrev" styleClass="ui-button-success"
-                                 process="confirmDHab @this" oncomplete="PF('revFactura').show()" onsuccess="PF('DHFactura').hide()"/>
-                <p:commandButton value="No" type="button" styleClass="ui-button-danger"
-                                 onclick="PF('DHFactura').hide()" actionListener="{preciosMB.reset()}"/>
-            </p:confirmDialog> -->
+            <!--            <p:confirmDialog id="confirmDHab" widgetVar="DHFactura" showEffect="fade" width="700"
+                                         header="Confirmar" severity="warn">
+                            <f:facet name="message">
+                                <h:outputText value="Desea eliminar la lista de {preciosMB.precios.tipo}?"/><br/><br/>
+                            </f:facet>
+                            <p:inputText value="{preciosMB.precios.tipo}" type="hidden"/>
+            
+                            <p:commandButton value="Si" update=":form:outputrev" styleClass="ui-button-success"
+                                             process="confirmDHab @this" oncomplete="PF('revFactura').show()" onsuccess="PF('DHFactura').hide()"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-button-danger"
+                                             onclick="PF('DHFactura').hide()" actionListener="{preciosMB.reset()}"/>
+                        </p:confirmDialog> -->
 
         </h:form>
 

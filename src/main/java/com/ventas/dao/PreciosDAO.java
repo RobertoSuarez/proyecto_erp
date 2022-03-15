@@ -84,6 +84,22 @@ public class PreciosDAO {
         }
         return listatipos;
     }
+    
+    public int eliminarPrecio(Precios p){
+        int rs = -1;
+        try {
+            String Sentencia = "SELECT * from eliminarprecio(" + p.getIdprecio() + ");";
+            result = conexion.ejecutarSql(Sentencia);
+            while(result.next()){
+                rs = result.getInt("eliminarprecio");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage() + " error en conectarse");
+        } finally {
+            conexion.desconectar();
+        }
+        return rs;
+    }
 
     public List<ProductoVenta> llenarProducto(int id) {
         try {

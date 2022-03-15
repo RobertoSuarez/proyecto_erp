@@ -189,54 +189,38 @@ public class PreciosController implements Serializable {
     public void guardar() {
         if (precios.getIdprecio() == 0) {
             insertar();
-        } else {
-            editar();
         }
     }
 
     public void insertar() {
         if (validarSelect(precios)) {
-            if (aplicaTodos.equals("true")) {
-                if (preciosDAO.insertarGeneral(precios) == 0) {
-                    Exito();
-                }
-            } else if (listaProduc.isEmpty()) {
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
+            if (precios.getDescuento() == 0) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "No puede ingresar un descuento de 0%"));
             } else {
-                if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
-                    Exito();
-                } else {
-                    Error();
-                }
-            }
-        }
-    }
-
-    public void editar() {
-        if (validarSelect(precios)) {
-            if (aplicaTodos.equals("true")) {
-                if (preciosDAO.deleteProduct(precios.getIdtipocliente()) > 0) {
-                    if (preciosDAO.update(precios, aplicaTodos.equals("true")) == 0) {
+                if (aplicaTodos.equals("true")) {
+                    if (preciosDAO.insertarGeneral(precios) == 0) {
                         Exito();
                     }
-                }
-            } else if (listaProduc.isEmpty()) {
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
-            } else {
-                if (preciosDAO.deleteProduct(precios.getIdtipocliente()) > 0) {
-                    if (preciosDAO.update(precios, aplicaTodos.equals("true")) == 0) {
-                        if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
-                            Exito();
-                        } else {
-                            Error();
-                        }
+                } else if (listaProduc.isEmpty()) {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
+                } else {
+                    if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
+                        Exito();
                     } else {
                         Error();
                     }
                 }
             }
+        }
+    }
+
+    public void eliminar(Precios pr) {
+        if (preciosDAO.eliminarPrecio(pr) == 1) {
+            this.listaPrecios.remove(pr);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Precio eliminado exitosamente"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al intentar eliminar el precio"));
         }
     }
 
@@ -248,17 +232,6 @@ public class PreciosController implements Serializable {
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor seleccione un tipo de cliente"));
             return false;
         }
-    }
-
-    public boolean validarRadio() {
-        if (true) {
-        } else {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Advertenica", "Por favor seleccione la opción a aplicar"));
-            return false;
-        }
-        return true;
     }
 
     public void reset() {
