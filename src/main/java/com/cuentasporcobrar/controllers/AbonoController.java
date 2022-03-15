@@ -6,6 +6,7 @@ import com.cuentasporcobrar.daos.RetencionDAO;
 import com.cuentasporcobrar.models.Abono;
 import com.cuentasporcobrar.models.Persona;
 import com.cuentasporcobrar.models.Retencion;
+import com.cuentasporcobrar.models.Facturas_Pendientes;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -59,6 +60,7 @@ public class AbonoController implements Serializable {
 
     //Declaro mi lista de los abonos de una determinada factura
     List<Abono> list_Abonos;
+    List<Facturas_Pendientes> lstFacturasPendientes;
 
     //Variables para cargar el total de abonos y total pendiente
     double totalAbonos = 0;
@@ -82,6 +84,7 @@ public class AbonoController implements Serializable {
     public AbonoController() {
         abono = new Abono();
         abonoDAO = new AbonoDAO();
+        lstFacturasPendientes = new ArrayList<>();
     }
 
     //Getter y Setter de las variables, clases y listas declaradas.
@@ -172,6 +175,16 @@ public class AbonoController implements Serializable {
     public void setAbono(Abono abono) {
         this.abono = abono;
     }
+
+    public List<Facturas_Pendientes> getLstFacturasPendientes() {
+        return lstFacturasPendientes;
+    }
+
+    public void setLstFacturasPendientes(List<Facturas_Pendientes> lstFacturasPendientes) {
+        this.lstFacturasPendientes = lstFacturasPendientes;
+    }
+    
+    
     //Fin
 
     /**
@@ -442,4 +455,8 @@ public class AbonoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    public void cargarFacturasPendientesPorCliente(){
+        lstFacturasPendientes = new ArrayList<>();
+        lstFacturasPendientes = abonoDAO.getPendingInvoices(identificacion);
+    }
 }
