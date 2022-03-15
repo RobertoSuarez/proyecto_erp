@@ -78,7 +78,7 @@ public class DepreciacionActivosFijosDAO implements IDAO<DepreciacionActivosFijo
                     + depreciacionActivosFijos.getMes()+ ","
                     + depreciacionActivosFijos.getDepreciacion() + ","
                     + depreciacionActivosFijos.getSaldo() + ",'"
-                    + DateFormatUtils.format(depreciacionActivosFijos.getFecha(), "dd-MM-yyyy") + "',"
+                    + DateFormatUtils.format(depreciacionActivosFijos.getFecha(), "yyyy-mm-dd") + "',"
                     + depreciacionActivosFijos.getListaDepreciable().getIdDepreciable());
         }
         return -1;
@@ -94,7 +94,7 @@ public class DepreciacionActivosFijosDAO implements IDAO<DepreciacionActivosFijo
     public int actualizar() {
         if (conexion.isEstado()) {
             return conexion.modificar("depreciacion_activos_fijos",
-                    "fecha = '" + DateFormatUtils.format(depreciacionActivosFijos.getFecha(), "dd-MM-yyyy") +"'",
+                    "fecha = '" + DateFormatUtils.format(depreciacionActivosFijos.getFecha(), "yyyy-mm-dd") +"'",
                     "codigo = '" + depreciacionActivosFijos.getCodigo() + "'");
         }
         return -1;
@@ -230,9 +230,9 @@ public class DepreciacionActivosFijosDAO implements IDAO<DepreciacionActivosFijo
                 String sentencia1, sentencia;
                 sentencia = "{\"idDiario\": \"" + this.idDiario + "\",\"total\": " + entity.getListaDepreciable().getCuota_depresiacion()
                         + ",\"documento\": \"" +  entity.getCodigo() + " R\",\"detalle\": \"Depreciación:" + entity.getListaDepreciable().getSubCuenta().getNombre() + " - "
-                        + DateFormatUtils.format(entity.getFecha(), "dd-MM-yyyy")  + " R\",\"fechaCreacion\": \""
-                        + DateFormatUtils.format(entity.getFecha(), "dd-MM-yyyy")  + "\",\"fechaCierre\":\""
-                        + DateFormatUtils.format(entity.getFecha(), "dd-MM-yyyy") + "\"}";
+                        + DateFormatUtils.format(entity.getFecha(), "yyyy-mm-dd")  + " R\",\"fechaCreacion\": \""
+                        + DateFormatUtils.format(entity.getFecha(), "yyyy-mm-dd")  + "\",\"fechaCierre\":\""
+                        + DateFormatUtils.format(entity.getFecha(), "yyyy-mm-dd") + "\"}";
 
                 sentencia1 = "[{\"idSubcuenta\":\"" + entity.getListaDepreciable().getSubCuenta().getId() + "\",\"debe\":\"0\",\"haber\":\""
                         + entity.getListaDepreciable().getCuota_depresiacion() + "\",\"tipoMovimiento\":\"Depreciación\"},"
