@@ -419,4 +419,85 @@ public class AbonoDAO implements Serializable {
         }
         return facturas;
     }
+    public int insertarNuevoCobro(Abono abon, int idCliente, int idPlanPago) {
+
+        try {
+            /*Se ubica en el siguiente orden: 
+        (ID cliente, id plan de pago, forma de pago, valor abonado, fecha)*/
+            String sentenciaSQL = "select ingresar_abono(" + idCliente + "," + idPlanPago + ","
+                    + abon.getIdFormaDePago() + "," + abon.getValorAbonado() + ",'"
+                    + abon.getFechaAbono() + "')";
+
+            //Verificamos la conexion
+            if (conexion.isEstado()) {
+                /*Una vez se asegura que la conexion este correcta.
+            Se ejecuta la sentencia ingresada.*/
+                return conexion.ejecutarProcedimiento(sentenciaSQL);
+            }
+            
+            
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return -1;
+    }
+    
+    //asiento contable
+    public void insertAccountingSeat(int id,Abono abon) {
+        if (conexion.isEstado())
+        {
+            try
+            {
+                int iddiario = 0;
+                String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por cobrar'";
+                result = conexion.ejecutarSql(cadena);
+                while (result.next())
+                {
+                    iddiario = result.getInt("iddiario");
+                }
+                //JSON asiento contable
+                String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + abon.getValorAbonado()
+                        + ",\"documento\": \"CPC-ABN-" + id + "\",\"detalle\": "
+                        + "\"Cuentas por cobrar cliente\",\"fechaCreacion\": \""
+                        + abon.getFechaAbono().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
+                        + abon.getFechaAbono().plusDays(30).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
+                System.out.println(sentencia);
+                //JSON un solo movimiento
+
+                int formaPago;
+                String tipomovimiento;
+                switch (abon.getIdFormaDePago()) {
+                    case 2:
+                        formaPago=1;
+                        tipomovimiento = "Caja";
+                        break;
+                    case 3:
+                        formaPago=3;
+                        tipomovimiento = "Banco";
+                        break;
+                    default:
+                        formaPago=77;
+                        tipomovimiento = "Ventas con tarifa 12%";
+                        break;
+                }
+                    
+                    sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\"0\",\"haber\":\""
+                            + abon.getValorAbonado() + "\",\"tipoMovimiento\":\"Factura de venta\"},"
+                            + "{\"idSubcuenta\":\""+formaPago+"\",\"debe\":\""+ abon.getValorAbonado() 
+                            +"\",\"haber\":\"0\",\"tipoMovimiento\":\""+tipomovimiento+"\"}]";
+                    System.out.println(sentencia1);
+                    
+                intJson(sentencia, sentencia1);
+            } catch (SQLException ex)
+            {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally
+            {
+                conexion.desconectar();
+            }
+        }
+    }
 }
