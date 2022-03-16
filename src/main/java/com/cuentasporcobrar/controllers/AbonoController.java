@@ -529,53 +529,73 @@ public class AbonoController implements Serializable {
         dblValorPago = dblValorPendiente;
     }
 
+    public void CargarPago() {
+        
+    }
+
     /**
      * Metodo donde se ingresan los valores descritos en el table
      */
     public void IngresarPago() {
-        Abono abon;
-        int revision;
-        if (dblValorPago == dblValorPendiente) {
-            for (Facturas_Pendientes fact:lstFacturasAPagar) {
-                abon = new Abono();
-                revision=0;
-                abon.setIdVenta(fact.getIdFactura());
-                abon.setIdPlanDePago(abonoDAO.obtenerIdPlanPago(fact.getIdFactura()));
-                abon.setIdFormaDePago(intTipoPago);
-                abon.setValorAbonado(fact.getValorPendiente());
-                abon.setFechaAbono(ldtFechaPago);
-                revision = abonoDAO.insertarNuevoCobro(abon, persona.getIdCliente(), abon.getIdPlanDePago());
-                if (revision < 0) {
-                    mostrarMensajeInformacion("El pago completo se realizo satisfactoriamente");
-                    abonoDAO.insertAccountingSeat(fact.getIdFactura(), abon);
+        if (dblValorPago > 0) {
+            Abono abon;
+            int revision;
+            if (dblValorPago == dblValorPendiente) {
+                for (Facturas_Pendientes fact : lstFacturasAPagar) {
+                    abon = new Abono();
+                    revision = 0;
+                    abon.setIdVenta(fact.getIdFactura());
+                    if (abon.getIdVenta() == 0) {
+                        mostrarMensajeError("El abono no se puede realizar a esta factura");
+                        System.out.println(abon.getIdVenta());
+                    } else {
+                        abon.setIdPlanDePago(abonoDAO.obtenerIdPlanPago(fact.getIdFactura()));
+                        if (abon.getIdPlanDePago() == 0) {
+                            mostrarMensajeError("Una factura no cuenta con plan de pago");
+                            System.out.println(abon.getIdPlanDePago());
+                        } else {
+                            abon.setIdFormaDePago(intTipoPago);
+                            abon.setValorAbonado(fact.getValorPendiente());
+                            abon.setFechaAbono(ldtFechaPago);
+                            revision = abonoDAO.insertarNuevoCobro(abon, persona.getIdCliente(), abon.getIdPlanDePago());
+                            System.out.println("Se inserto un nuevo abono");
+                            if (revision < 0) {
+                                mostrarMensajeInformacion("El pago completo se realizo satisfactoriamente");
+                                abonoDAO.insertAccountingSeat(fact.getIdFactura(), abon);
+                                System.out.println("Se inserto el asiento contable");
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (Facturas_Pendientes fact : lstFacturasAPagar) {
+                    abon = new Abono();
+                    revision = 0;
+                    abon.setIdVenta(fact.getIdFactura());
+                    abon.setIdPlanDePago(abonoDAO.obtenerIdPlanPago(fact.getIdFactura()));
+                    abon.setIdFormaDePago(intTipoPago);
+                    if (fact.getValorPendiente() > dblValorPago) {
+                        abon.setValorAbonado(dblValorPago);
+                        dblValorPago = 0;
+                    } else {
+                        abon.setValorAbonado(fact.getValorPendiente());
+                        dblValorPago = dblValorPago - fact.getValorPendiente();
+                    }
+                    abon.setFechaAbono(ldtFechaPago);
+                    revision = abonoDAO.insertarNuevoCobro(abon, persona.getIdCliente(), abon.getIdPlanDePago());
+                    if (revision < 0) {
+                        mostrarMensajeInformacion("El pago completo se realizo satisfactoriamente");
+                        abonoDAO.insertAccountingSeat(fact.getIdFactura(), abon);
+                    }
                 }
             }
+            lstFacturasAPagar.clear();
+            lstFacturasPendientes = abonoDAO.getPendingInvoices(identificacion);
+            dblValorPendiente = 0;
+            dblValorPago = 0;
+            PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
         } else {
-            for (Facturas_Pendientes fact:lstFacturasAPagar){
-                abon = new Abono();
-                revision=0;
-                abon.setIdVenta(fact.getIdFactura());
-                abon.setIdPlanDePago(abonoDAO.obtenerIdPlanPago(fact.getIdFactura()));
-                abon.setIdFormaDePago(intTipoPago);
-                if (fact.getValorPendiente() > dblValorPago) {
-                    abon.setValorAbonado(dblValorPago);
-                    dblValorPago=0;
-                } else {
-                    abon.setValorAbonado(fact.getValorPendiente());
-                    dblValorPago = dblValorPago - fact.getValorPendiente();
-                }
-                abon.setFechaAbono(ldtFechaPago);
-                revision = abonoDAO.insertarNuevoCobro(abon, persona.getIdCliente(), abon.getIdPlanDePago());
-                if (revision < 0) {
-                    mostrarMensajeInformacion("El pago completo se realizo satisfactoriamente");
-                    abonoDAO.insertAccountingSeat(fact.getIdFactura(), abon);
-                }
-            }
+            mostrarMensajeInformacion("Debe seleccionar un valor a cancelar");
         }
-        lstFacturasAPagar.clear();
-        lstFacturasPendientes = abonoDAO.getPendingInvoices(identificacion);
-        dblValorPendiente = 0;
-        dblValorPago = 0;
-        PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
     }
 }

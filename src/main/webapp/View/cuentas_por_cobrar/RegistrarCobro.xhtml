@@ -199,6 +199,7 @@
                     <p:commandButton value="Pagar"
                                      onclick="PF('nuevoPago').show()"
                                      styleClass="ui-button-secondary"
+                                     immediate="true"
                                      process="tblFacturasAPagar"/>
                     <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
                                     widgetVar="selecionCliente">
@@ -292,6 +293,7 @@
                                 icon="pi pi-save" ajax="true"
                                 value="Guardar Cobro"
                                 actionListener="#{abonoController.IngresarPago}"
+                                process=":form"
                                 update=":growl, :form"
                                 styleClass="ui-button-success"/> 
                         </div>
