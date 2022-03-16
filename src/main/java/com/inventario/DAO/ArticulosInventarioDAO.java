@@ -68,7 +68,7 @@ public class ArticulosInventarioDAO {
                         resultSet.getInt("cantidad"),
                         resultSet.getInt("costo"),
                         resultSet.getInt("iva"),
-                        resultSet.getInt("ice") ));
+                        resultSet.getFloat("ice") ));
              }
             
              
@@ -102,7 +102,7 @@ public class ArticulosInventarioDAO {
                 articulo.setCantidad(resultSet.getInt("cant"));
                 articulo.setCosto(resultSet.getInt("costo"));
                 articulo.setIva(resultSet.getInt("iva"));
-                articulo.setIce(resultSet.getInt("ice"));
+                articulo.setIceproducto(resultSet.getFloat("ice"));
                 articulo.setMax_stock(resultSet.getInt("cantidad"));
                 
                 ListaInv.add(articulo);
