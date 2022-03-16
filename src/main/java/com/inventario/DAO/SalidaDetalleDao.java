@@ -128,7 +128,7 @@ public class SalidaDetalleDao {
             }
 
             //insertar detalle venta
-            query = "insert into public.entrada_detalle(id_salida_detalle, id_entrada, cod_articulo, cant, costo, iva, ice) values(" + idDetalle + "," + idVenta + ","
+            query = "insert into public.salida_detalle(id_salida_detalle, id_salida, cod_articulo, cant, costo, iva, ice) values(" + idDetalle + "," + idVenta + ","
                     + idProducto + "," + cantidad + "," + precio +", " + iva + ", " + ice + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
@@ -140,7 +140,7 @@ public class SalidaDetalleDao {
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
-            query = "update public.articulos set cantidad = " + (cantidadActual + (int) cantidad) + " where id = " + idProducto + ";";
+            query = "update public.articulos set cantidad = " + (cantidadActual - (int) cantidad) + " where id = " + idProducto + ";";
             this.conexion.ejecutarSql(query);
 
             this.conexion.desconectar();
