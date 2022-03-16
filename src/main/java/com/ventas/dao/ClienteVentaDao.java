@@ -71,6 +71,7 @@ public class ClienteVentaDao implements Serializable {
                 this.clienteVenta.setIdCliente(rs.getInt(1));
                 this.clienteVenta.setNombre(rs.getString(5));
                 this.clienteVenta.setIdentificacion(rs.getString(6));
+                this.clienteVenta.setIdTipoCliente(new PreciosDAO().idtipocliente(clienteVenta.getIdentificacion()));
                 clientes.add(this.clienteVenta);
             }
         } catch (Exception e) {

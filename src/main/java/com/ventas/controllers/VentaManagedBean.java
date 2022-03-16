@@ -131,13 +131,16 @@ public class VentaManagedBean implements Serializable {
      *
      * @param cliente
      */
-    public void SeleccionarCliente(ClienteVenta cliente) {
-        this.cliente = cliente;
+    public void SeleccionarCliente(ClienteVenta clienteSelect) {
+        int tipoAnterior = cliente.getIdTipoCliente();
+        this.cliente = clienteSelect;
 
-        int idcliente = preciosDAO.idtipocliente(cliente.getIdentificacion());
-        
-        this.descuentoGeneral = preciosDAO.getGeneralDiscount(idcliente);
+        this.descuentoGeneral = preciosDAO.getGeneralDiscount(cliente.getIdTipoCliente());
         this.visible = "true";
+
+        if (!listaDetalle.isEmpty() && cliente.getIdTipoCliente() != tipoAnterior) {
+            recalcularDescuentos();
+        }
 
         descuento = descuentoGeneral + descuentoActual;
     }
@@ -150,7 +153,7 @@ public class VentaManagedBean implements Serializable {
      */
     public void SeleccionarProducto(ProductoVenta producto) {
         this.productoActual = producto;
-        this.descuentoActual = preciosDAO.getDiscountByProduct(preciosDAO.idtipocliente(cliente.getIdentificacion()), producto.getCodigo());
+        this.descuentoActual = preciosDAO.getDiscountByProduct(cliente.getIdTipoCliente(), producto.getCodigo());
         descuento = descuentoGeneral + descuentoActual;
         this.visible = "true";
     }
@@ -196,7 +199,7 @@ public class VentaManagedBean implements Serializable {
                         detalle.setPrecio(convertTwoDecimal(this.productoActual.getPrecioUnitario()));
                         detalle.setDescuento(convertTwoDecimal(detalle.getPrecio() * ((this.descuentoGeneral + this.descuentoActual) / 100)));
                         detalle.setSubTotal(convertTwoDecimal((detalle.getPrecio() - detalle.getDescuento()) * detalle.getCantidad()));
-                        
+
                         //Cálculo de los valores
                         this.subTotalVenta += detalle.getSubTotal();
                         this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
@@ -214,7 +217,7 @@ public class VentaManagedBean implements Serializable {
 
                         this.descuentoActual = 0;
                         descuento = descuentoGeneral + descuentoActual;
-                        
+
                         this.productoActual = new ProductoVenta();
                         this.cantidad = 1;
                     }
@@ -251,7 +254,7 @@ public class VentaManagedBean implements Serializable {
             detalle.getProducto().setStock((int) (detalle.getCantidad() + detalle.getProducto().getStock()));
             this.listaDetalle.remove(detalle);
             this.listaProductos.add(detalle.getProducto());
-            
+
             PrimeFaces.current().ajax().update("ventaForm");
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
@@ -379,6 +382,40 @@ public class VentaManagedBean implements Serializable {
         venta.setTotalFactura(this.total);
         venta.setDiasCredito(this.diasPago);
         return venta;
+    }
+
+    private void recalcularDescuentos() {
+        try {
+            this.iva = convertTwoDecimal(0);
+            this.ice = convertTwoDecimal(0);
+            this.subTotalVenta = convertTwoDecimal(0);
+            this.total = convertTwoDecimal(0);
+            this.subtotal0 = convertTwoDecimal(0);
+            this.subtotal12 = convertTwoDecimal(0);
+            
+            for (DetalleVenta detalle : listaDetalle) {
+                
+                detalle.setDescuento(convertTwoDecimal(detalle.getPrecio() * ((this.descuentoGeneral + preciosDAO.getDiscountByProduct(cliente.getIdTipoCliente(), detalle.getProducto().getCodigo())) / 100)));
+                detalle.setSubTotal(convertTwoDecimal((detalle.getPrecio() - detalle.getDescuento()) * detalle.getCantidad()));
+
+                //Cálculo de los valores
+                this.subTotalVenta += detalle.getSubTotal();
+                this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
+
+                if (detalle.getProducto().getIva() != 0) {
+                    this.subtotal12 += convertTwoDecimal(detalle.getSubTotal());
+                } else {
+                    this.subtotal0 += convertTwoDecimal(detalle.getSubTotal());
+                }
+
+                this.iva += convertTwoDecimal(detalle.getProducto().getIva() / 100 * detalle.getSubTotal());
+                this.ice += convertTwoDecimal(detalle.getProducto().getIce() * detalle.getCantidad());
+                this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
+            }
+            addMessage(FacesMessage.SEVERITY_INFO, "Actualizado", "Se han actualizado los valores de acuerdo con el tipo de cliente");
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+        }
     }
 
     //--------------------Getter y Setter-------------------//
