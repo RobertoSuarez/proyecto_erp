@@ -75,8 +75,6 @@ public class VentaManagedBean implements Serializable {
     private List<ProductoVenta> listaProductos;
     private List<DetalleVenta> listaDetalle;
 
-    //------------------------NO SE PLANEA USAR------------------------//
-    private boolean tipo;
     private String visible;
 
     /**
@@ -115,12 +113,9 @@ public class VentaManagedBean implements Serializable {
         this.listaClientes = clienteDAO.ListarClientes();
         this.listaProductos = productoDao.ListarProductos();
 
-        //Se podrian quitar
         this.venta = new Venta();
         this.ventaDao = new VentaDAO();
-
-        this.efectivo = 0;
-        this.cambio = 0;
+        
         this.diasPago = 0;
     }
 
@@ -577,6 +572,7 @@ public class VentaManagedBean implements Serializable {
 
     public void setDescuentoActual(double descuentoActual) {
         this.descuentoActual = descuentoActual;
-    }
+    }  
+    
 
 }

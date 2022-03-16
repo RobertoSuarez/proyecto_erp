@@ -68,7 +68,8 @@ public class ProductoVentaDAO {
                     temp.setIdSubcuenta(rs.getInt("id_subcuenta"));
                     temp.setUnidadMedida(rs.getString("unidadmedida"));
                     temp.setPrecioUnitario(rs.getFloat("precio_venta"));
-                    temp.setSubsidio(rs.getFloat("subsidio"));
+                    temp.setEsServicio(rs.getBoolean("es_servicio"));
+                    temp.setStockeable(rs.getBoolean("stockeable"));
                 }
             }
             con.desconectar();
@@ -112,7 +113,8 @@ public class ProductoVentaDAO {
                     temp.setIdSubcuenta(rs.getInt("id_subcuenta"));
                     temp.setUnidadMedida(rs.getString("unidadmedida"));
                     temp.setPrecioUnitario(rs.getFloat("precio_venta"));
-                    temp.setSubsidio(rs.getFloat("subsidio"));
+                    temp.setEsServicio(rs.getBoolean("es_servicio"));
+                    temp.setStockeable(rs.getBoolean("stockeable"));
                     listaventa.add(temp);
                 }
                 con.desconectar();

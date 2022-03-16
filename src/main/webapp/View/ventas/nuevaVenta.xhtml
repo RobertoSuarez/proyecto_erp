@@ -52,7 +52,7 @@
                             <p:outputLabel value="Precio: "/>
                             <p:inputNumber id="priceTextBox" value="#{VentaMB.productoActual.precioUnitario}" modifyValueOnWheel="false" disabled="true" />
                             <p:outputLabel value="Cantidad: "/>
-                            <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
+                            <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" disabled="#{!VentaMB.permiteCantidad}"/>
                             <p:outputLabel value="Descuento: "/>
                             <p:inputNumber value="#{VentaMB.descuento}" symbol=" %" symbolPosition="s" minValue="0" decimalPlaces="0" disabled="true"/>
                             <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
@@ -187,8 +187,12 @@
                             <p:column headerText="Cod">
                                 <h:outputText value="#{ListaProductos.codigo}" />
                             </p:column>
+                            
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{ListaProductos.esServicio ? 'Servicio' : 'Bien'}" />
+                            </p:column>
 
-                            <p:column headerText="Producto" >
+                            <p:column headerText="Item" >
                                 <h:outputText value="#{ListaProductos.nombre}" />
                             </p:column>
 
