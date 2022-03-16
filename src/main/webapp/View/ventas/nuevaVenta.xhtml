@@ -54,7 +54,7 @@
                             <p:outputLabel value="Cantidad: "/>
                             <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
                             <p:outputLabel value="Descuento: "/>
-                            <p:inputNumber value="#{VentaMB.descuento}" minValue="0" decimalPlaces="0" disabled="true"/>
+                            <p:inputNumber value="#{VentaMB.descuento}" symbol=" %" symbolPosition="s" minValue="0" decimalPlaces="0" disabled="true"/>
                             <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
                         </h:panelGrid>
                     </p:panel>
