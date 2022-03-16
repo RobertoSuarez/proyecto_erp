@@ -106,6 +106,88 @@ public class PreciosController implements Serializable {
         return aplicaTodos;
     }
 
+    public void guardar() {
+        if (precios.getIdprecio() == 0) {
+            insertar();
+        }
+    }
+
+    public void insertar() {
+        if (validarSelect(precios)) {
+            if (precios.getDescuento() == 0) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "No puede ingresar un descuento de 0%"));
+            } else {
+                if (aplicaTodos.equals("true")) {
+                    if (preciosDAO.insertarGeneral(precios) == 0) {
+                        Exito();
+                    }
+                } else if (listaProduc.isEmpty()) {
+                    FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
+                } else {
+                    if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
+                        listaProduc.clear();
+                        listaProduc = new ArrayList<>();
+                        aplicaTodos = "true";
+                        Exito();
+                    } else {
+                        Error();
+                    }
+                }
+            }
+        }
+    }
+
+    public void eliminar(Precios pr) {
+        if (preciosDAO.eliminarPrecio(pr) == 1) {
+            this.listaPrecios.remove(pr);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Precio eliminado exitosamente"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al intentar eliminar el precio"));
+        }
+    }
+
+    public boolean validarSelect(Precios precios) {
+        if (precios.getIdtipocliente() >= 1) {
+            return true;
+        } else {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor seleccione un tipo de cliente"));
+            return false;
+        }
+    }
+
+    public void reset() {
+        PrimeFaces.current().resetInputs("form:outputnuevo");
+        removeSessionScopedBean("preciosMB");
+    }
+
+    public void Exito() {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se ha ingresado correctamente"));
+        listaPrecios.clear();
+        listaPrecios = preciosDAO.mostrarPrecios();
+        PrimeFaces.current().executeScript("PF('newLista').hide()");
+        PrimeFaces.current().ajax().update(":form:dt-precio");
+    }
+
+    public void Error() {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Advertenica", "Ha ocurrido un error intente nuevamente"));
+        PrimeFaces.current().executeScript("PF('newLista').hide()");
+        reset();
+    }
+
+    public static void removeSessionScopedBean(String beanName) {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
+    }
+
+    public void onRowSelect(SelectEvent<ProductoVenta> event) {
+        setCodigoProducto(event.getObject().getCodigo());
+        setNombreProducto(event.getObject().getDescripcion());
+        productos();
+    }
+    
     public Precios getPrecios() {
         return precios;
     }
@@ -184,84 +266,5 @@ public class PreciosController implements Serializable {
 
     public void setPreciosDAO(PreciosDAO preciosDAO) {
         this.preciosDAO = preciosDAO;
-    }
-
-    public void guardar() {
-        if (precios.getIdprecio() == 0) {
-            insertar();
-        }
-    }
-
-    public void insertar() {
-        if (validarSelect(precios)) {
-            if (precios.getDescuento() == 0) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "No puede ingresar un descuento de 0%"));
-            } else {
-                if (aplicaTodos.equals("true")) {
-                    if (preciosDAO.insertarGeneral(precios) == 0) {
-                        Exito();
-                    }
-                } else if (listaProduc.isEmpty()) {
-                    FacesContext.getCurrentInstance().
-                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor ingrese productos a la tabla"));
-                } else {
-                    if (preciosDAO.insertProduct(precios, this.listaProduc) == 0) {
-                        Exito();
-                    } else {
-                        Error();
-                    }
-                }
-            }
-        }
-    }
-
-    public void eliminar(Precios pr) {
-        if (preciosDAO.eliminarPrecio(pr) == 1) {
-            this.listaPrecios.remove(pr);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Aviso", "Precio eliminado exitosamente"));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al intentar eliminar el precio"));
-        }
-    }
-
-    public boolean validarSelect(Precios precios) {
-        if (precios.getIdtipocliente() >= 1) {
-            return true;
-        } else {
-            FacesContext.getCurrentInstance().
-                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertenica", "Por favor seleccione un tipo de cliente"));
-            return false;
-        }
-    }
-
-    public void reset() {
-        PrimeFaces.current().resetInputs("form:outputnuevo");
-        removeSessionScopedBean("preciosMB");
-    }
-
-    public void Exito() {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se ha ingresado correctamente"));
-        listaPrecios.clear();
-        listaPrecios = preciosDAO.mostrarPrecios();
-        PrimeFaces.current().executeScript("PF('newLista').hide()");
-        PrimeFaces.current().ajax().update(":form:dt-precio");
-    }
-
-    public void Error() {
-        FacesContext.getCurrentInstance().
-                addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Advertenica", "Ha ocurrido un error intente nuevamente"));
-        PrimeFaces.current().executeScript("PF('newLista').hide()");
-        reset();
-    }
-
-    public static void removeSessionScopedBean(String beanName) {
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(beanName);
-    }
-
-    public void onRowSelect(SelectEvent<ProductoVenta> event) {
-        setCodigoProducto(event.getObject().getCodigo());
-        setNombreProducto(event.getObject().getDescripcion());
-        productos();
     }
 }

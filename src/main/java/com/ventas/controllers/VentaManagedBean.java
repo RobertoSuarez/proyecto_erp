@@ -73,8 +73,7 @@ public class VentaManagedBean implements Serializable {
     //Listas que se usan en la venta
     private List<ClienteVenta> listaClientes;
     private List<ProductoVenta> listaProductos;
-    private List<DetalleVenta> listaDetalle; //Por definir que es
-    private List<ProductoVenta> listadescuento;
+    private List<DetalleVenta> listaDetalle;
 
     //------------------------NO SE PLANEA USAR------------------------//
     private boolean tipo;
@@ -113,7 +112,6 @@ public class VentaManagedBean implements Serializable {
         this.clienteDAO = new ClienteVentaDao();
         this.detalleDAO = new DetalleVentaDAO();
         this.listaClientes = new ArrayList<>();
-        this.listadescuento = new ArrayList<>();
         this.listaClientes = clienteDAO.ListarClientes();
         this.listaProductos = productoDao.ListarProductos();
 
@@ -137,11 +135,8 @@ public class VentaManagedBean implements Serializable {
         this.cliente = cliente;
 
         int idcliente = preciosDAO.idtipocliente(cliente.getIdentificacion());
-        this.tipo = preciosDAO.opciones(idcliente);
-        this.descuentoGeneral = preciosDAO.descuento(idcliente);
-        this.listadescuento.clear();
-        this.listadescuento = preciosDAO.llenarProducto(idcliente);
-        System.out.println(this.descuentoActual);
+        
+        this.descuentoGeneral = preciosDAO.getGeneralDiscount(idcliente);
         this.visible = "true";
 
         descuento = descuentoGeneral + descuentoActual;
@@ -155,6 +150,8 @@ public class VentaManagedBean implements Serializable {
      */
     public void SeleccionarProducto(ProductoVenta producto) {
         this.productoActual = producto;
+        this.descuentoActual = preciosDAO.getDiscountByProduct(preciosDAO.idtipocliente(cliente.getIdentificacion()), producto.getCodigo());
+        descuento = descuentoGeneral + descuentoActual;
         this.visible = "true";
     }
 
@@ -215,6 +212,9 @@ public class VentaManagedBean implements Serializable {
                         this.ice += convertTwoDecimal(this.productoActual.getIce() * detalle.getCantidad());
                         this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
 
+                        this.descuentoActual = 0;
+                        descuento = descuentoGeneral + descuentoActual;
+                        
                         this.productoActual = new ProductoVenta();
                         this.cantidad = 1;
                     }
