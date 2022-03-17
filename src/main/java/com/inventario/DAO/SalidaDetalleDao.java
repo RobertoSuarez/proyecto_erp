@@ -56,7 +56,7 @@ public class SalidaDetalleDao {
             while (resultSet.next()) {
                 SalidaDetalleInventario detalle = new SalidaDetalleInventario();
                 detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
-                detalle.setIdEntrada(resultSet.getInt("id_entrada"));
+                detalle.setIdEntrada(resultSet.getInt("id_salida"));
                 detalle.setCant(resultSet.getInt("cant"));
                 detalle.setCosto(resultSet.getDouble("costo"));
                 detalle.setIva(resultSet.getDouble("iva"));
@@ -120,7 +120,7 @@ public class SalidaDetalleDao {
             this.conexion.conectar();
 
             //Recibir siguiente código de detalle venta
-            String query = "select id_salida_detalle from public.entrada_detalle order by id_salida_detalle desc limit 1;";
+            String query = "select id_salida_detalle from public.salida_detalle order by id_salida_detalle desc limit 1;";
             rs = this.conexion.ejecutarSql(query);
 
             while (rs.next()) {

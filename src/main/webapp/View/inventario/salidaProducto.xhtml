@@ -292,15 +292,15 @@
                         <p:dialog header="Busqueda de Entradas" widgetVar="BuscarEntrada" id="busquedaEntrada"
                                   minHeight="600" width="70%" showEffect="fade">
                             <h:form id="busqueda-entradas-form">
-                                <p:dataTable widgetVar="TablaBuscarEntrada" var="ListaEntradas" id="listaEntradas" value="#{SalidaMB.listaEntradas}" 
-                                             selection="#{SalidaMB.entradaSeleccionada}" rowKey="#{ListaEntradas.cod}"   reflow="true" 
+                                <p:dataTable widgetVar="TablaBuscarEntrada" var="listaEntradasPermitidas" id="listaEntradasPermitidas" value="#{SalidaMB.listaEntradasPermitidas}" 
+                                             selection="#{SalidaMB.entradaSeleccionada}" rowKey="#{listaEntradasPermitidas.cod}"   reflow="true" 
                                              paginator="true" rows="4" 
                                              rowSelectMode="add" paginatorPosition="bottom" 
                                              editInitEvent="dblclick" editMode="cell"
                                              scrollable="true" scrollHeight="250">
                                     <f:facet name="header">
                                         <div class="p-d-flex p-jc-between p-ai-center">
-                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Entradas Registradas</span>
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Entradas Registradas a reportar</span>
                                             <span class="filter-container ui-input-icon-left">
                                                 <i class="pi pi-search"></i>
                                                 <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarEntrada').filter()" placeholder="Buscar"/>
@@ -312,23 +312,23 @@
 
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
-                                                         actionListener="#{SalidaMB.SeleccionarEntrada(ListaEntradas)}" 
+                                                         actionListener="#{SalidaMB.SeleccionarEntrada(listaEntradasPermitidas)}" 
                                                          update="salidaForm"
                                                          oncomplete="PF('BuscarProducto').hide();"/>
                                     </p:column>
 
-                                    <p:column headerText="Comprobante" filterStyle="display : none" filterBy="#{ListaEntradas.numComprobante}">
-                                        <h:outputText value="#{ListaEntradas.numComprobante}" />
+                                    <p:column headerText="Comprobante" filterStyle="display : none" filterBy="#{listaEntradasPermitidas.numComprobante}">
+                                        <h:outputText value="#{listaEntradasPermitidas.numComprobante}" />
                                     </p:column>
 
                                     <p:column headerText="Proveedor"  filterStyle="display : none"                                                             
-                                              filterBy="#{ListaEntradas.nombreProveedor}" >
-                                        <h:outputText  value="#{ListaEntradas.nombreProveedor}" />
+                                              filterBy="#{listaEntradasPermitidas.nombreProveedor}" >
+                                        <h:outputText  value="#{listaEntradasPermitidas.nombreProveedor}" />
                                     </p:column>
 
                                     <p:column headerText="Fecha" filterStyle="display : none"                                                             
-                                              filterBy="#{ListaEntradas.fecha}" >
-                                        <h:outputText value="#{ListaEntradas.fecha}" >
+                                              filterBy="#{listaEntradasPermitidas.fecha}" >
+                                        <h:outputText value="#{listaEntradasPermitidas.fecha}" >
                                         </h:outputText>
                                     </p:column>
                                 </p:dataTable>
