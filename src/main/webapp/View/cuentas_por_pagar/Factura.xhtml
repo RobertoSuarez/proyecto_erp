@@ -96,7 +96,7 @@
 
 
                     <!-- DIALOG 1 NUEVA FACTURA-->
-                    <p:dialog  header="Nueva Factura" showEffect="fade" modal="true"
+                    <p:dialog  header="Nueva Factura" showEffect="fade" modal="true" responsive="true"
                                widgetVar="newFactura" maximizable="true" height="350" 
                                closable="false" width="70%" rendered="#{seguridadCtasPagar.renderForGerente()}">
                         <p:outputPanel id="outputnuevo" class="ui-fluid">
@@ -110,27 +110,67 @@
                                         <p:inputText type="button" id="proveedor"
                                                      value="#{BuscarMB.nom}" />
                                     </div>
-
                                     <div class="p-field p-col">
-                                        <p:outputLabel for="nfactura">No. Factura:</p:outputLabel>
-                                        <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" 
-                                                     maxlength="15">                                                      
+                                        <p:outputLabel for="auto">Autorización:</p:outputLabel>
+                                        <p:inputText id="auto" value="#{facturaMB.factura.autorizacion}" 
+                                                     maxlength="49" type="number">                                                      
                                         </p:inputText>
                                     </div>
 
                                     <div class="p-field p-col">
-                                        <p:outputLabel for="importe">Importe:</p:outputLabel>
-                                        <p:inputText type="number" id="importe" value="#{facturaMB.factura.importe}" 
-                                                     disabled="true"/>
+                                        <p:outputLabel for="caducidad">Caducidad:</p:outputLabel>
+                                        <p:datePicker id="caducidad" value="#{facturaMB.factura.caducidad}"/>
                                     </div>
-
                                     <div class="p-field p-col">
                                         <p:outputLabel for="saldofavor">Anticipos favorables:</p:outputLabel>
                                         <p:inputText type="number" id="saldofavor" value="#{BuscarMB.totalAnticipo}" 
                                                      required="true" disabled="true"/>
                                     </div>
+
+                                </div>
+                                <div class="p-formgrid p-grid">
+
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="serie">No. Serie:</p:outputLabel>
+                                        <p:inputText id="serie" value="#{facturaMB.factura.serie}" 
+                                                     maxlength="7">                                                      
+                                        </p:inputText>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="nfactura">No. Factura:</p:outputLabel>
+                                        <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" 
+                                                     maxlength="9" type="number">                                                      
+                                        </p:inputText>
+                                    </div>
+                                    <div class="p-field p-col-align-end" style="margin-left: 60px">
+                                        <p:selectBooleanCheckbox id="checkRet" itemLabel="Retención" value="#{facturaMB.ret}">
+                                            <p:ajax update="form:messages" listener="#{facturaMB.hola()}"/>
+                                        </p:selectBooleanCheckbox>
+                                    </div>
                                 </div>
 
+                                <div class="p-formgrid p-grid">
+
+
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="sub">Subtotal:</p:outputLabel>
+                                        <p:inputText type="number" id="sub" value="#{facturaMB.factura.subtotal}" 
+                                                     disabled="true" placeholder="0.0"/>
+                                    </div>
+
+
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="iva">IVA:</p:outputLabel>
+                                        <p:inputText type="number" id="iva" value="#{facturaMB.factura.iva}" 
+                                                     required="true" disabled="true" placeholder="0.0"/>
+                                    </div>
+
+                                    <div class="p-field p-col">
+                                        <p:outputLabel for="importe">Importe:</p:outputLabel>
+                                        <p:inputText type="number" id="importe" value="#{facturaMB.factura.importe}" 
+                                                     disabled="true" placeholder="0.0"/>
+                                    </div>
+                                </div>
 
                                 <div class="p-formgrid p-grid">
                                     <div class="p-field p-col">
@@ -138,7 +178,7 @@
                                         <p:inputText id="descripcion" value="#{facturaMB.factura.descripcion}"/>
                                     </div>
                                 </div>
-                                
+
                                 <div class="p-formgrid p-grid">
                                     <div class="p-field p-col">
                                         <p:outputLabel for="Op">Tipo de Documento:</p:outputLabel>
@@ -185,10 +225,22 @@
                                         <p:outputLabel for="Aplicar">Tipo: </p:outputLabel>
                                         <p:selectOneRadio id="Aplicar" value="#{facturaMB.opciones}" 
                                                           unselectable="true" >
-                                            <f:selectItem itemLabel="Productos" itemValue="1"/>
+                                            <f:selectItem itemLabel="Bienes" itemValue="1"/>
                                             <f:selectItem itemLabel="Servicios" itemValue="2"/>
                                             <p:ajax update=":form:dt-detalle"/>
                                         </p:selectOneRadio>                                                     
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <br/>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <br/>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <br/>
+                                        <p:commandButton id="btnRet" value="Retención"
+                                                         actionListener="#{facturaMB.retenciones}"
+                                                         process="@this" update=":form:messages"/>
                                     </div>
                                 </div>
 
@@ -226,6 +278,27 @@
                                         </p:cellEditor>
                                     </p:column>
 
+                                    <p:column headerText="IVA">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{detalle.ivaDetalle}"/></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectOneMenu value="#{facturaMB.datoIva}">
+                                                    <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                                    <f:selectItem itemLabel="IVA 0%" itemValue="0"/>
+                                                    <f:selectItem itemLabel="IVA 12%" itemValue="0.12"/>
+                                                </p:selectOneMenu>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
+                                    <p:column headerText="Cantidad">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><h:outputText value="#{detalle.cantidad}"/></f:facet>
+                                            <f:facet name="input"><p:inputText value="#{facturaMB.datoCantidad}" style="width:100%"
+                                                                               label="Importe"/></f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+
                                     <p:column headerText="Importe">
                                         <p:cellEditor>
                                             <f:facet name="output"><h:outputText value="#{detalle.importeD}"/></f:facet>
@@ -244,6 +317,60 @@
                                         </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
+
+                                <p:dialog header="Retenciones" widgetVar="dlgRet" height="200" width="550" showEffect="fade">
+                                    <p:outputPanel id="outRet">
+                                        <div class="p-formgrid p-grid">
+                                            <div class="p-field p-col">
+                                                <p:outputLabel for="subRet">Subtotal:</p:outputLabel>
+                                                <p:inputText type="number" id="subRet" value="#{facturaMB.factura.subtotal}" 
+                                                             disabled="true" placeholder="0.0"/>
+                                            </div>
+
+                                            <div class="p-field p-col">
+                                                <p:outputLabel >Retención:</p:outputLabel>
+                                                <p:selectOneMenu value="#{facturaMB.factura.id_impuestoR}" style="width: 300px" autoWidth="false">
+                                                    <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                    <f:selectItems value="#{facturaMB.listaRenta}" var="renta"/>
+                                                    <p:ajax listener="#{facturaMB.renta()}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+
+                                            <div class="p-field p-col">
+                                                <p:outputLabel for="valRet">Valor retenido:</p:outputLabel>
+                                                <p:inputText type="number" id="valRet" value="#{facturaMB.factura.valorRenta}" 
+                                                             disabled="true" placeholder="0.0"/>
+                                            </div>
+
+                                        </div>
+                                        <div class="p-formgrid p-grid">
+                                            <div class="p-field p-col">
+                                                <p:outputLabel for="ivaRet">IVA:</p:outputLabel>
+                                                <p:inputText type="number" id="ivaRet" value="#{facturaMB.factura.iva}" 
+                                                             required="true" disabled="true" placeholder="0.0"/>
+                                            </div>
+                                            <div class="p-field p-col">
+                                                <p:outputLabel >Retención:</p:outputLabel>
+                                                <p:selectOneMenu value="#{facturaMB.factura.id_impuestoI}" var="c" style="width: 300px" autoWidth="false">
+                                                    <f:selectItem itemLabel="Seleccionar" itemValue=""/>
+                                                    <f:selectItems value="#{facturaMB.listaIva}"/>
+                                                    <p:ajax listener="#{facturaMB.iva()}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+
+                                            <div class="p-field p-col">
+                                                <p:outputLabel for="valRetIva">Valor retenido:</p:outputLabel>
+                                                <p:inputText type="number" id="valRetIva" value="#{facturaMB.factura.valorIva}" 
+                                                             disabled="true" placeholder="0.0"/>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+                                    <f:facet name="footer">
+                                        <p:commandButton type="button" value="No" styleClass="ui-button-flat p-mr-2" style="width: 6rem" 
+                                                         onclick="PF('dlgRet').hide()"/>
+                                        <p:commandButton type="button" value="Yes" style="width: 5rem" onclick="PF('dlgRet').hide()"/>
+                                    </f:facet>
+                                </p:dialog>
 
                                 <!-- DIALOG BUSCAR PROVEEDOR -->
                                 <p:overlayPanel for="proveedor" dynamic="true" style="width:600px" widgetVar="moviePicker">

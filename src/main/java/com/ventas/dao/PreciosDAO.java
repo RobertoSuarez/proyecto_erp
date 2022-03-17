@@ -280,4 +280,37 @@ public class PreciosDAO {
         }
         return idtipo;
     }
+    
+    public double getGeneralDiscount(int idTipoCliente){
+        double dsc = 0;
+        try{
+            String Sentencia = "select * from public.getdescuentogeneral(" + idTipoCliente + ");";
+            result = conexion.ejecutarSql(Sentencia);
+            while(result.next()){
+                dsc = result.getDouble("getdescuentogeneral");
+            }
+        }catch(Exception e){
+            System.out.println("Error" + e.getMessage());
+        }finally{
+            conexion.desconectar();            
+        }
+        return dsc;
+    }
+    
+    public double getDiscountByProduct(int idTipoCliente, int idProducto){
+        double dsc = 0;
+        try{
+            String Sentencia = "select * from public.getdescuentoproducto(" + idTipoCliente + ", " + idProducto + ");";
+            System.out.println("Sentencia: " + Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
+            while(result.next()){
+                dsc = result.getDouble("getdescuentoproducto");
+            }
+        }catch(Exception e){
+            System.out.println("Error" + e.getMessage());
+        }finally{
+            conexion.desconectar();            
+        }
+        return dsc;
+    }
 }

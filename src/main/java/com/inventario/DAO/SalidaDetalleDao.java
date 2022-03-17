@@ -56,7 +56,7 @@ public class SalidaDetalleDao {
             while (resultSet.next()) {
                 SalidaDetalleInventario detalle = new SalidaDetalleInventario();
                 detalle.setIdArticulo(resultSet.getInt("cod_articulo"));
-                detalle.setIdEntrada(resultSet.getInt("id_entrada"));
+                detalle.setIdEntrada(resultSet.getInt("id_salida"));
                 detalle.setCant(resultSet.getInt("cant"));
                 detalle.setCosto(resultSet.getDouble("costo"));
                 detalle.setIva(resultSet.getDouble("iva"));
@@ -120,7 +120,7 @@ public class SalidaDetalleDao {
             this.conexion.conectar();
 
             //Recibir siguiente código de detalle venta
-            String query = "select id_entrada_detalle from public.entrada_detalle order by id_entrada_detalle desc limit 1;";
+            String query = "select id_salida_detalle from public.salida_detalle order by id_salida_detalle desc limit 1;";
             rs = this.conexion.ejecutarSql(query);
 
             while (rs.next()) {
@@ -128,7 +128,7 @@ public class SalidaDetalleDao {
             }
 
             //insertar detalle venta
-            query = "insert into public.entrada_detalle(id_salida_detalle, id_entrada, cod_articulo, cant, costo, iva, ice) values(" + idDetalle + "," + idVenta + ","
+            query = "insert into public.salida_detalle(id_salida_detalle, id_salida, cod_articulo, cant, costo, iva, ice) values(" + idDetalle + "," + idVenta + ","
                     + idProducto + "," + cantidad + "," + precio +", " + iva + ", " + ice + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
@@ -140,7 +140,7 @@ public class SalidaDetalleDao {
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
-            query = "update public.articulos set cantidad = " + (cantidadActual + (int) cantidad) + " where id = " + idProducto + ";";
+            query = "update public.articulos set cantidad = " + (cantidadActual - (int) cantidad) + " where id = " + idProducto + ";";
             this.conexion.ejecutarSql(query);
 
             this.conexion.desconectar();

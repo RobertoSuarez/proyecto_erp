@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.event.ActionEvent;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -44,7 +45,7 @@ public class AbonoController implements Serializable {
     int idPlanDePago = 0;
     int idFactura = 0;
     int idCliente = 0;
-    
+
     //Objeto para traer funciones de primefaces
     PrimeFaces current = PrimeFaces.current();
 
@@ -61,16 +62,23 @@ public class AbonoController implements Serializable {
     //Declaro mi lista de los abonos de una determinada factura
     List<Abono> list_Abonos;
     List<Facturas_Pendientes> lstFacturasPendientes;
+    List<Facturas_Pendientes> lstFacturasAPagar;
 
     //Variables para cargar el total de abonos y total pendiente
     double totalAbonos = 0;
     double totalPendiente = 0;
+    double dblValorPago = 0;
+    double dblValorPendiente = 0;
 
     //Variables para cargar la fecha de credito y fecha de vencimiento:
     LocalDate[] fechasPlan = {null, null};
 
     //Variable con la identificacion;
     String identificacion = "";
+
+    //Variable de almacenamiento de tipo de pago y fechas
+    int intTipoPago;
+    LocalDate ldtFechaPago = LocalDate.now();
 
     //Declaramos una lista que tendra la lista de facturas de un cliente.
     List<SelectItem> listaVenta;
@@ -85,6 +93,7 @@ public class AbonoController implements Serializable {
         abono = new Abono();
         abonoDAO = new AbonoDAO();
         lstFacturasPendientes = new ArrayList<>();
+        lstFacturasAPagar = new ArrayList<>();
     }
 
     //Getter y Setter de las variables, clases y listas declaradas.
@@ -183,10 +192,48 @@ public class AbonoController implements Serializable {
     public void setLstFacturasPendientes(List<Facturas_Pendientes> lstFacturasPendientes) {
         this.lstFacturasPendientes = lstFacturasPendientes;
     }
-    
-    
-    //Fin
 
+    public List<Facturas_Pendientes> getLstFacturasAPagar() {
+        return lstFacturasAPagar;
+    }
+
+    public void setLstFacturasAPagar(List<Facturas_Pendientes> lstFacturasAPagar) {
+        this.lstFacturasAPagar = lstFacturasAPagar;
+    }
+
+    public double getDblValorPago() {
+        return dblValorPago;
+    }
+
+    public void setDblValorPago(double dblValorPago) {
+        this.dblValorPago = dblValorPago;
+    }
+
+    public double getDblValorPendiente() {
+        return dblValorPendiente;
+    }
+
+    public void setDblValorPendiente(double dblValorPendiente) {
+        this.dblValorPendiente = dblValorPendiente;
+    }
+
+    public int getIntTipoPago() {
+        return intTipoPago;
+    }
+
+    public void setIntTipoPago(int intTipoPago) {
+        this.intTipoPago = intTipoPago;
+    }
+
+    public LocalDate getLdtFechaPago() {
+        return ldtFechaPago;
+    }
+
+    public void setLdtFechaPago(LocalDate ldtFechaPago) {
+        this.ldtFechaPago = ldtFechaPago;
+    }
+
+    //Fin
     /**
      * Método para cargar las facturas de un determinado cliente en un SelectOne
      */
@@ -220,7 +267,7 @@ public class AbonoController implements Serializable {
                     this.listaVenta.add(ventasItem);
 
                 }
-                
+
                 current.ajax().update(":form:tblRegistroCobro");
                 list_Abonos = new ArrayList();
                 LocalDate[] fechas = {null, null};
@@ -300,7 +347,7 @@ public class AbonoController implements Serializable {
             //@return valor Retorna el valor mensual a pagar del plan de pago.
             double valorMensual = ((totalPendiente + totalAbonos) / (diasDeCredito / 30));
             valorMensual = Double.valueOf(df.format(valorMensual).replace(',', '.'));
-            
+
             //Si el totalPendiente es menor al valor mensual
             //Retorno el valor pendiente, caso contrario se devuelve el valor Mensual
             if (totalPendiente <= valorMensual) {
@@ -455,8 +502,100 @@ public class AbonoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void cargarFacturasPendientesPorCliente(){
+    public void cargarFacturasPendientesPorCliente() {
         lstFacturasPendientes = new ArrayList<>();
+        personaDAO = new PersonaDAO();
+        persona = new Persona();
+        //Cargamos el nombre del cliente en el input
+        persona = personaDAO.obtenerNombreClienteXIdentificacion(identificacion);
         lstFacturasPendientes = abonoDAO.getPendingInvoices(identificacion);
+    }
+
+    public void AgregarFacturaPagar(Facturas_Pendientes fact) {
+        lstFacturasAPagar.add(fact);
+        dblValorPendiente = dblValorPendiente + fact.getValorPendiente();
+        lstFacturasPendientes.remove(fact);
+        PagarTodo();
+    }
+
+    public void QuitarFacturaPagar(Facturas_Pendientes fact) {
+        lstFacturasAPagar.remove(fact);
+        lstFacturasPendientes.add(fact);
+        dblValorPendiente = dblValorPendiente - fact.getValorPendiente();
+        PagarTodo();
+    }
+
+    public void PagarTodo() {
+        dblValorPago = dblValorPendiente;
+    }
+
+    public void CargarPago() {
+        
+    }
+
+    /**
+     * Metodo donde se ingresan los valores descritos en el table
+     */
+    public void IngresarPago() {
+        if (dblValorPago > 0) {
+            Abono abon;
+            int revision;
+            if (dblValorPago == dblValorPendiente) {
+                for (Facturas_Pendientes fact : lstFacturasAPagar) {
+                    abon = new Abono();
+                    revision = 0;
+                    abon.setIdVenta(fact.getIdFactura());
+                    if (abon.getIdVenta() == 0) {
+                        mostrarMensajeError("El abono no se puede realizar a esta factura");
+                        System.out.println(abon.getIdVenta());
+                    } else {
+                        abon.setIdPlanDePago(abonoDAO.obtenerIdPlanPago(fact.getIdFactura()));
+                        if (abon.getIdPlanDePago() == 0) {
+                            mostrarMensajeError("Una factura no cuenta con plan de pago");
+                            System.out.println(abon.getIdPlanDePago());
+                        } else {
+                            abon.setIdFormaDePago(intTipoPago);
+                            abon.setValorAbonado(fact.getValorPendiente());
+                            abon.setFechaAbono(ldtFechaPago);
+                            revision = abonoDAO.insertarNuevoCobro(abon, persona.getIdCliente(), abon.getIdPlanDePago());
+                            System.out.println("Se inserto un nuevo abono");
+                            if (revision < 0) {
+                                mostrarMensajeInformacion("El pago completo se realizo satisfactoriamente");
+                                abonoDAO.insertAccountingSeat(fact.getIdFactura(), abon);
+                                System.out.println("Se inserto el asiento contable");
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (Facturas_Pendientes fact : lstFacturasAPagar) {
+                    abon = new Abono();
+                    revision = 0;
+                    abon.setIdVenta(fact.getIdFactura());
+                    abon.setIdPlanDePago(abonoDAO.obtenerIdPlanPago(fact.getIdFactura()));
+                    abon.setIdFormaDePago(intTipoPago);
+                    if (fact.getValorPendiente() > dblValorPago) {
+                        abon.setValorAbonado(dblValorPago);
+                        dblValorPago = 0;
+                    } else {
+                        abon.setValorAbonado(fact.getValorPendiente());
+                        dblValorPago = dblValorPago - fact.getValorPendiente();
+                    }
+                    abon.setFechaAbono(ldtFechaPago);
+                    revision = abonoDAO.insertarNuevoCobro(abon, persona.getIdCliente(), abon.getIdPlanDePago());
+                    if (revision < 0) {
+                        mostrarMensajeInformacion("El pago completo se realizo satisfactoriamente");
+                        abonoDAO.insertAccountingSeat(fact.getIdFactura(), abon);
+                    }
+                }
+            }
+            lstFacturasAPagar.clear();
+            lstFacturasPendientes = abonoDAO.getPendingInvoices(identificacion);
+            dblValorPendiente = 0;
+            dblValorPago = 0;
+            PrimeFaces.current().executeScript("PF('nuevoCobro').hide()");
+        } else {
+            mostrarMensajeInformacion("Debe seleccionar un valor a cancelar");
+        }
     }
 }

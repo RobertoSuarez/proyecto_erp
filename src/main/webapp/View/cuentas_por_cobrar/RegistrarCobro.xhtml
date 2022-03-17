@@ -31,11 +31,13 @@
                                              maxlength="13"
                                              style="width: 150px; margin-left: 2px;" />
                                 &nbsp;&nbsp;&nbsp;
-                                <div style="float: right;">
-                                    <p:commandButton id="btnconsulta" icon="pi pi-replay" 
-                                                     styleClass="rounded-button ui-button-secondary"
-                                                     update=":growl nombreCliente fechaVencida fechaEmision"
-                                                     actionListener="#{abonoController.cargarFacturas()}"/>
+                                <div style="float: right; padding-top: 18px; padding-left: 5px;">
+                                    <p:commandButton value="Cargar Facturas pendientes"
+                                                     id="btnDeuda"
+                                                     icon="pi pi-replay" 
+                                                     actionListener="#{abonoController.cargarFacturasPendientesPorCliente()}"
+                                                     update=":growl nombreCliente tblFacturasPendientesCliente"
+                                                     styleClass="ui-button-secondary"/>
                                 </div>
                             </div>
                         </div>
@@ -51,34 +53,6 @@
                                              value="#{abonoController.persona.razonNombre}"
                                              style="width: 300px;"/> 
                             </div>
-                        </div>
-                        <div style="float: left; padding-left: 10px;">
-                            <p:outputLabel value="Fecha Crédito: " 
-                                           for="fechaEmision" 
-                                           style="font-weight:bold;"/>
-                            <br/> <br/> 
-                            <p:inputText id="fechaEmision" 
-                                         disabled="true" 
-                                         placeholder="aaaa/mm/dd"
-                                         value="#{abonoController.fechasPlan[0]}"/> 
-                        </div>
-                        <div style="float: left; padding-left: 10px;">
-                            <p:outputLabel value="Fecha Vencida: " 
-                                           for="fechaVencida" 
-                                           style="font-weight:bold;"/>
-                            <br/> <br/> 
-                            <p:inputText id="fechaVencida" 
-                                         disabled="true" 
-                                         placeholder="aaaa/mm/dd"
-                                         value="#{abonoController.fechasPlan[1]}"/> 
-                        </div>
-                        <div style="float: left; padding-top: 18px; padding-left: 5px;">
-                            <p:commandButton value="Cargar Facturas pendientes"
-                                             id="btnDeuda"
-                                             icon="pi pi-replay" 
-                                             actionListener="#{abonoController.cargarFacturasPendientesPorCliente()}"
-                                             update="tblFacturasPendientesCliente"
-                                             styleClass="ui-button-secondary"/>
                         </div>
                     </div>
                     <p:dataTable id="tblFacturasPendientesCliente" var="tblFactPending"
@@ -124,7 +98,109 @@
                                                  currencySymbol="$"/>
                             </h:outputText>
                         </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Pagar">
+                            <p:commandButton id="btnAgregar"
+                                             icon="pi pi-plus" 
+                                             actionListener="#{abonoController.AgregarFacturaPagar(tblFactPending)}"
+                                             update=":growl form"
+                                             styleClass="ui-button-secondary"/>
+                        </p:column>
                     </p:dataTable>
+                    <p:dataTable id="tblFacturasAPagar" var="tblBillsToPay"
+                                 emptyMessage="No existen Registros." 
+                                 scrollable="true" paginator="true" 
+                                 value="#{abonoController.lstFacturasAPagar}"
+                                 rows="5" rowSelectMode="add"
+                                 paginatorPosition="bottom" 
+                                 style="font-size: 14px;">
+                        <f:facet name="header">
+                            <div>
+                                <span style="float: right;">
+                                    <p:outputLabel value="Valor a abonar: " 
+                                                   for="totalAbono" 
+                                                   style="font-weight:bold;"/>
+                                    &nbsp;&nbsp;
+                                    <p:inputNumber id="totalAbono"
+                                                   value="#{abonoController.dblValorPago}"
+                                                   style="width: 100px; text-align: right;"
+                                                   symbol="$ "
+                                                   symbolPosition="p"
+                                                   decimalSeparator=","
+                                                   thousandSeparator="."
+                                                   maxValue="#{abonoController.dblValorPendiente}"
+                                                   minValue="0">
+                                    </p:inputNumber>
+                                </span>
+                                <span style="float: right; padding-right: 20px;">
+                                    <p:outputLabel value="Valor Pendiente: " 
+                                                   for="valorPendiente" 
+                                                   style="font-weight:bold;"/>
+                                    &nbsp;&nbsp;
+                                    <p:inputText id="valorPendiente" 
+                                                 disabled="true" 
+                                                 type="text"
+                                                 value="#{abonoController.dblValorPendiente}"
+                                                 style="width: 100px; 
+                                                 text-align: right;">
+                                        <f:convertNumber currencySymbol="$" 
+                                                         type="currency"/>
+                                    </p:inputText>
+                                </span>
+                                <br/><br/>
+                            </div>
+                        </f:facet>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Documento">
+                            <h:outputText value="FACTURA" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="N° Fact">
+                            <h:outputText value="#{tblBillsToPay.numFactura}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Fecha de Credito">
+                            <h:outputText value="#{tblBillsToPay.fechaFacturacion}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Forma de Pago">
+                            <h:outputText value="#{tblBillsToPay.fechaVencimiento}" />
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Total Factura">
+                            <h:outputText value="#{tblBillsToPay.valorTotalFactura}" >
+                                <f:convertNumber type="currency" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Total Pendiente">
+                            <h:outputText value="#{tblBillsToPay.valorPendiente}" >
+                                <f:convertNumber type="currency" 
+                                                 currencySymbol="$"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column class="tamanoInput" 
+                                  style="text-align: center;"
+                                  headerText="Pagar">
+                            <p:commandButton id="btnBorrar"
+                                             icon="pi pi-trash" 
+                                             actionListener="#{abonoController.QuitarFacturaPagar(tblBillsToPay)}"
+                                             update=":growl form"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton value="Pagar"
+                                     onclick="PF('nuevoPago').show()"
+                                     styleClass="ui-button-secondary"
+                                     immediate="true"
+                                     process="tblFacturasAPagar"/>
                     <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
                                     widgetVar="selecionCliente">
                         <p:dataTable var="cliente" id="tbcliente" 
@@ -164,9 +240,64 @@
                                       filterStyle="display : none">
                                 <h:outputText value="#{cliente.identificacion}"/>
                             </p:column>
-
                         </p:dataTable>
                     </p:overlayPanel>
+                    <p:dialog header="Registrar Nuevo Cobro"
+                              height="80%" width="90p%" showEffect="fade" 
+                              widgetVar="nuevoPago"
+                              id="dialogAddCobro">
+                        <p:panelGrid columns="4" layout="grid" id="pgNC">
+                            <p:outputLabel for="abono" 
+                                           style="font-weight: bold;"
+                                           value="Saldo Abonar:">
+                            </p:outputLabel>
+                            <p:inputText id="abono"  
+                                         disabled="true"
+                                         value="#{abonoController.dblValorPago}"
+                                         style="width: 100px !important;">
+                                <p:keyFilter mask="num" />
+                            </p:inputText>
+
+                            <p:outputLabel for="formaPago" 
+                                           style="font-weight: bold;"
+                                           value="Forma de Pago:">
+                            </p:outputLabel>
+                            <p:selectOneMenu id="formaPago" 
+                                             style="width: 170px !important;"
+                                             value="#{abonoController.intTipoPago}"
+                                             required="true">                            
+                                <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
+                                <f:selectItem itemLabel="Efectivo" itemValue="2"/>
+                                <f:selectItem itemLabel="Cheque" itemValue="3"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="fechaAbono" 
+                                           style="font-weight: bold;"
+                                           value="Fecha Abono:">
+                            </p:outputLabel>
+                            <p:datePicker monthNavigator="true" yearNavigator="true"
+                                          id="fechaAbono"
+                                          yearRange="2000:2050"
+                                          required="true"
+                                          value="#{abonoController.ldtFechaPago}"
+                                          placeholder="aaaa-mm-dd"/>
+                        </p:panelGrid>
+                        <br/>
+                        <div style="float: right;">
+                            <p:commandButton icon="pi pi-times" value="Cancelar"
+                                             immediate="true"
+                                             onclick="PF('nuevoCobro').hide()"
+                                             styleClass=" ui-button-danger"/> 
+                            &nbsp;
+                            <p:commandButton 
+                                icon="pi pi-save" ajax="true"
+                                value="Guardar Cobro"
+                                actionListener="#{abonoController.IngresarPago}"
+                                process=":form"
+                                update=":growl, :form"
+                                styleClass="ui-button-success"/> 
+                        </div>
+                    </p:dialog>
                 </h:form>
             </div>
         </p:panel>
