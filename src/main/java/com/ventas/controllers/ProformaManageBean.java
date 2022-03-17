@@ -76,7 +76,7 @@ public class ProformaManageBean implements Serializable {
     private double ice;
     private double iva;
     private double total;
-    
+
     //Listas que se usan en la venta
     private List<ClienteVenta> listaClientes;
     private List<ProductoVenta> listaProductos;
@@ -162,45 +162,45 @@ public class ProformaManageBean implements Serializable {
     public void AgregarProductoLista() {
         try {
             if (this.productoActual.getCodigo() > 0) {
-                if (this.productoActual.isStockeable() && this.productoActual.getStock() < this.cantidad) {
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.productoActual.getStock() + ")");
+                if (this.cantidad <= 0) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
                 } else {
-                    if (this.cantidad <= 0) {
-                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
-                    } else {
-                        DetalleProforma detalle = new DetalleProforma();
-
-                        this.listaProductos.remove(productoActual);
-
-                        //Ingreso de valores al detalle
-                        detalle.setProducto(this.productoActual);
-                        detalle.setCodigoProducto(this.productoActual.getCodigo());
-                        detalle.setCantidad(this.cantidad);
-                        detalle.setPrice(convertTwoDecimal(this.productoActual.getPrecioUnitario()));
-                        detalle.setDescuento(convertTwoDecimal(detalle.getPrice()* ((this.descuentoGeneral + this.descuentoActual) / 100)));
-                        detalle.setSubtotal(convertTwoDecimal((detalle.getPrice() - detalle.getDescuento()) * detalle.getCantidad()));
-
-                        //Cálculo de los valores
-                        this.subTotalProforma += detalle.getSubtotal();
-                        this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
-                        this.listaDetalle.add(detalle);
-
-                        if (this.productoActual.getIva() != 0) {
-                            this.subtotal12 += convertTwoDecimal(detalle.getSubtotal());
-                        } else {
-                            this.subtotal0 += convertTwoDecimal(detalle.getSubtotal());
-                        }
-
-                        this.iva += convertTwoDecimal(this.productoActual.getIva() / 100 * detalle.getSubtotal());
-                        this.ice += convertTwoDecimal(this.productoActual.getIce() * detalle.getCantidad());
-                        this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
-
-                        this.descuentoActual = 0;
-                        descuento = descuentoGeneral + descuentoActual;
-
-                        this.productoActual = new ProductoVenta();
-                        this.cantidad = 1;
+                    if (this.productoActual.isStockeable() && this.productoActual.getStock() < this.cantidad) {
+                        addMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Podría haber menor unidades disponiblesd e las que desea al momento de facturar. Consulte antes de generar una factura.");
                     }
+
+                    DetalleProforma detalle = new DetalleProforma();
+
+                    this.listaProductos.remove(productoActual);
+
+                    //Ingreso de valores al detalle
+                    detalle.setProducto(this.productoActual);
+                    detalle.setCodigoProducto(this.productoActual.getCodigo());
+                    detalle.setCantidad(this.cantidad);
+                    detalle.setPrice(convertTwoDecimal(this.productoActual.getPrecioUnitario()));
+                    detalle.setDescuento(convertTwoDecimal(detalle.getPrice() * ((this.descuentoGeneral + this.descuentoActual) / 100)));
+                    detalle.setSubtotal(convertTwoDecimal((detalle.getPrice() - detalle.getDescuento()) * detalle.getCantidad()));
+
+                    //Cálculo de los valores
+                    this.subTotalProforma += detalle.getSubtotal();
+                    this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
+                    this.listaDetalle.add(detalle);
+
+                    if (this.productoActual.getIva() != 0) {
+                        this.subtotal12 += convertTwoDecimal(detalle.getSubtotal());
+                    } else {
+                        this.subtotal0 += convertTwoDecimal(detalle.getSubtotal());
+                    }
+
+                    this.iva += convertTwoDecimal(this.productoActual.getIva() / 100 * detalle.getSubtotal());
+                    this.ice += convertTwoDecimal(this.productoActual.getIce() * detalle.getCantidad());
+                    this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
+
+                    this.descuentoActual = 0;
+                    descuento = descuentoGeneral + descuentoActual;
+
+                    this.productoActual = new ProductoVenta();
+                    this.cantidad = 1;
                 }
             } else {
                 System.out.println("No hay producto seleccionado");
@@ -266,7 +266,6 @@ public class ProformaManageBean implements Serializable {
         return temp < 0 ? 0 : temp;
     }
 
-    @Asynchronous
     public String RegistrarProforma() throws IOException, SQLException {
         try {
             int listSize = 0;
@@ -304,11 +303,11 @@ public class ProformaManageBean implements Serializable {
                     listSize += 1;
                 }
             }
+
             FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada satisfactoriamente"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada exitosamente"));
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?faces-redirect=true");
-            return "listaProforma.xhtml?faces-redirect=true";
+            return "listaProforma.xhtmlfaces-redirect=true";
         } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
         }
@@ -369,7 +368,6 @@ public class ProformaManageBean implements Serializable {
     }
 
     //--------------------Getter y Setter-------------------//
-
     public ClienteVenta getCliente() {
         return cliente;
     }
@@ -537,6 +535,5 @@ public class ProformaManageBean implements Serializable {
     public void setDescuentoActual(double descuentoActual) {
         this.descuentoActual = descuentoActual;
     }
-    
-    
+
 }

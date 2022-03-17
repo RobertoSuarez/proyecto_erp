@@ -33,6 +33,8 @@ public class ProformaDAO {
     VentaDAO ventaDao = new VentaDAO();
     Venta venta = new Venta();
 
+    ProductoVentaDAO productoDao = new ProductoVentaDAO();
+
     public ProformaDAO() {
         con = new Conexion();
     }
@@ -91,6 +93,23 @@ public class ProformaDAO {
         } finally {
             con.desconectar();
         }
+    }
+
+    public List<DetalleProforma> getDetalleProforma(int idProforma) {
+        List<DetalleProforma> lista = new ArrayList<>();
+        try {
+            ResultSet rs = con.ejecutarSql("select * from public.detalleproforma where idproforma = " + idProforma + ";");
+            while (rs.next()) {
+                lista.add(new DetalleProforma(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getDouble(4), rs.getDouble(5),
+                        rs.getDouble(6), productoDao.ObtenerProducto(rs.getInt("idproforma")), rs.getDouble(7)));
+            }
+            return lista;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            con.desconectar();
+        }
+        return null;
     }
 
     public int codigoproforma() {
@@ -153,42 +172,24 @@ public class ProformaDAO {
                     Proforma prof = new Proforma();
                     this.cliente = new ClienteVenta();
                     this.clienteDao = new ClienteVentaDao();
-                    prof.setId_proforma(rs.getInt(1));
-                    prof.setId_cliente(rs.getInt(2));
+                    prof.setId_proforma(rs.getInt("idproforma"));
+                    prof.setId_cliente(rs.getInt("idcliente"));
                     this.cliente = this.clienteDao.BuscarClientePorId(prof.getId_cliente());
                     prof.setNombreCliente(this.cliente.getNombre());
-                    prof.setId_empleado(rs.getInt(3));
-                    prof.setFecha_creacion(rs.getString(4));
-                    prof.setFecha_actualizacion(rs.getString(5));
-                    prof.setFecha_expiracion(rs.getString(6));
+                    prof.setId_empleado(rs.getInt("id_empleado"));
+                    prof.setFecha_creacion(rs.getString("fechacreacion"));
+                    prof.setFecha_actualizacion(rs.getString("fechaactualizacion"));
+                    prof.setFecha_expiracion(rs.getString("fechaexpiracion"));
                     prof.setProforma_terminada(rs.getBoolean(7));
                     prof.setAceptacion_cliente(rs.getBoolean(8));
-                    estado = "P";
-                    if (rs.getString(9).trim().equals(estado)) {
-                        estado = "Pendiente";
-                        prof.setEstado(estado);
-                    } else {
-                        estado = "A";
-                        if (rs.getString(9).trim().equals(estado)) {
-                            estado = "Aceptada";
-                            prof.setEstado(estado);
-                        } else {
-                            estado = "R";
-                            if (rs.getString(9).trim().equals(estado)) {
-                                estado = "Rechazado";
-                                prof.setEstado(estado);
-                            } else {
-                                prof.setEstado(rs.getString(9));
-                            }
-                        }
-                    }
-                    prof.setFecha_autorizacion(rs.getString(10));
-                    prof.setBase12(rs.getFloat(11));
-                    prof.setBase0(rs.getFloat(12));
-                    prof.setBase_excento_iva(rs.getFloat(13));
-                    prof.setIva12(rs.getFloat(14));
-                    prof.setIce(rs.getFloat(15));
-                    prof.setTotalproforma(rs.getFloat(16));
+                    prof.setEstado(rs.getString("estado"));
+                    prof.setFecha_autorizacion(rs.getString("fechaautorizacion"));
+                    prof.setBase12(rs.getFloat("base12"));
+                    prof.setBase0(rs.getFloat("base0"));
+                    prof.setBase_excento_iva(rs.getFloat("baseexcentoiva"));
+                    prof.setIva12(rs.getFloat("iva12"));
+                    prof.setIce(rs.getFloat("ice"));
+                    prof.setTotalproforma(rs.getFloat("totalproforma"));
                     listadocs.add(prof);
                 }
             }
@@ -202,6 +203,41 @@ public class ProformaDAO {
             con.desconectar();
         }
         return listadocs;
+    }
+
+    public Proforma getProformaById(int idProforma) {
+        try {
+            ResultSet rs = con.ejecutarSql("select * from public.proforma where idproforma = " + idProforma + ";");
+            Proforma prof = new Proforma();
+            while (rs.next()) {
+                this.cliente = new ClienteVenta();
+                this.clienteDao = new ClienteVentaDao();
+                prof.setId_proforma(rs.getInt("idproforma"));
+                prof.setId_cliente(rs.getInt("idcliente"));
+                this.cliente = this.clienteDao.BuscarClientePorId(prof.getId_cliente());
+                prof.setNombreCliente(this.cliente.getNombre());
+                prof.setId_empleado(rs.getInt("id_empleado"));
+                prof.setFecha_creacion(rs.getString("fechacreacion"));
+                prof.setFecha_actualizacion(rs.getString("fechaactualizacion"));
+                prof.setFecha_expiracion(rs.getString("fechaexpiracion"));
+                prof.setProforma_terminada(rs.getBoolean(7));
+                prof.setAceptacion_cliente(rs.getBoolean(8));
+                prof.setEstado(rs.getString("estado"));
+                prof.setFecha_autorizacion(rs.getString("fechaautorizacion"));
+                prof.setBase12(rs.getFloat("base12"));
+                prof.setBase0(rs.getFloat("base0"));
+                prof.setBase_excento_iva(rs.getFloat("baseexcentoiva"));
+                prof.setIva12(rs.getFloat("iva12"));
+                prof.setIce(rs.getFloat("ice"));
+                prof.setTotalproforma(rs.getFloat("totalproforma"));
+            }
+            return prof;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            con.desconectar();
+        }
+        return null;
     }
 
     public List<DetalleProforma> listaDetalleProforma(int id) throws SQLException {
@@ -259,7 +295,7 @@ public class ProformaDAO {
 
     public int aceptarProforma(String estado, Proforma pr, String fecha) throws SQLException {
         List<DetalleProforma> detalle = new ArrayList<>();
-        int codigoventa=0;
+        int codigoventa = 0;
         this.venta = new Venta();
         String consulta;
         con.desconectar();

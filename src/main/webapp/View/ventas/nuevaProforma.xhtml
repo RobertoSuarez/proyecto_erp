@@ -210,13 +210,13 @@
                                 <h:outputText value="#{ListaProductos.codigo}" />
                             </p:column>
 
-                            <p:column headerText="Producto" >
-                                <h:outputText value="#{ListaProductos.nombre}" />
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{ListaProductos.esServicio ? 'Servicio' : 'Bien'}" >
+                                </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Detalle">
-                                <h:outputText value="#{ListaProductos.descripcion}" >
-                                </h:outputText>
+                            <p:column headerText="Producto" >
+                                <h:outputText value="#{ListaProductos.nombre}" />
                             </p:column>
 
                             <p:column headerText="Precio unitario">

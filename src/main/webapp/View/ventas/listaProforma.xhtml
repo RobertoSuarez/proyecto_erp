@@ -14,16 +14,12 @@
 
                 <ui:include src="menuVentas.xhtml"/>
                 
-                <f:metadata>
-                    <f:viewParam name="new" value="#{ProformaMB.isNewProforma}"/>
-                </f:metadata>
-
 
                 <h:form id="listaDeProforma" >
                     <br/><br/><br/><br/>
                     <p:dataTable var="Lista" 
                                  id="itemsTable" 
-                                 value="#{ProformaMB.listaProformas}"
+                                 value="#{ListaProformaMB.listaProformas}"
                                  paginator="true" 
                                  resizableColumns="true" 
                                  class="p-mt-3"
@@ -32,14 +28,11 @@
                         <p:column headerText="Codigo proforma" width="5%">
                             <h:outputText value="#{Lista.id_proforma}" />
                         </p:column>
-                        <p:column headerText="Cliente" width="5%">
-                            <h:outputText value="#{Lista.id_cliente}"  />
-                        </p:column>
                         <p:column headerText="Cliente" width="15%">
                             <h:outputText value="#{Lista.nombreCliente}"  />
                         </p:column>
                         <p:column headerText="Estado" width="10%">
-                            <h:outputText value="#{Lista.estado}" />
+                            <h:outputText value="#{Lista.estado == 'P' ? 'Pendiente' : Lista.estado == 'A' ? 'Aprobada' : 'Rechazada'}" />
                         </p:column>
                         <p:column headerText="Fecha creacion" width="10%" >
                             <h:outputText value="#{Lista.fecha_creacion}"/>
@@ -48,59 +41,68 @@
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
-                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" 
-                                             actionListener="#{ProformaMB.aceptarProforma(Lista)}" update="listaDeProforma"
-                                             rendered="#{rolventMB.rendered()}"/>
-                            <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger" 
-                                             actionListener="#{ProformaMB.rechazarProforma(Lista)}" update="listaDeProforma"
-                                             rendered="#{rolventMB.rendered()}"/>
-                            <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this"
-                                             onclick="PF('DetalleProforma').show()" actionListener="#{ProformaMB.detalleProforma(Lista)}" update="datosFactura" />
+                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" update="listaDeProforma"
+                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'hidden' : 'true'"/>
+                            <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"
+                                             update="listaDeProforma"
+                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'hidden' : 'true'"/>
+                            <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
+                                             onclick="PF('DetalleProforma').show()" update="datosFactura" />
                         </p:column>
                     </p:dataTable>
                 </h:form>
 
+                
                 <p:dialog widgetVar="DetalleProforma" width="70%" height="80%" >
                     <h:form id="datosFactura">
-                        <h2>Detalle proforma: <p:outputLabel value="#{ProformaMB.proformaActual.id_proforma}" /></h2>
+                        <h2>Detalle proforma: <p:outputLabel value="#{ListaProformaMB.proformaActual.id_proforma}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Nombre:" />
-                                <p:outputLabel value="#{ProformaMB.nombrecliente}" />
+                                <p:outputLabel value="#{ListaProformaMB.proformaActual.nombreCliente}" />
                             </h:panelGrid>
                         </p:panel>
 
-                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ProformaMB.listaDetallesPorProforma}">
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ListaProformaMB.listaDetalle}">
                             <p:column headerText="Codigo" width="10%">
                                 <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
                             </p:column>
-                            <p:column headerText="Cantidad" width="50%" >
+                            <p:column headerText="Item" width="40%">
+                                <h:outputText value="#{FacturaDetailTB.producto.nombre}" />
+                            </p:column>
+                            <p:column headerText="Cantidad" width="10%" >
                                 <h:outputText value="#{FacturaDetailTB.cantidad}" />
                             </p:column>
-                            <p:column headerText="Precio unitario" width="20%">
+                            <p:column headerText="Precio unitario" width="10%">
                                 <h:outputText value="#{FacturaDetailTB.price}" />
+                            </p:column>
+                            <p:column headerText="Descuento" width="10%" >
+                                <h:outputText value="#{FacturaDetailTB.descuento}" />
+                            </p:column>
+                            <p:column headerText="SubTotal" width="20%" >
+                                <h:outputText value="#{FacturaDetailTB.subtotal}" />
                             </p:column>
 
                             <p:columnGroup type="footer" id="colgrp">
                                 <p:row id="Base12">
-                                    <p:column colspan="3" style="text-align:right" footerText="Base 12%"/>
-                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.base12}" />
+                                    <p:column colspan="5" style="text-align:right" footerText="Base 12%"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.base12}" />
                                 </p:row>
                                 <p:row id="Base0">
-                                    <p:column colspan="3" style="text-align:right" footerText="Base 0%"/>
-                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.base0}" />
+                                    <p:column colspan="5" style="text-align:right" footerText="Base 0%"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.base0}" />
                                 </p:row>
                                 <p:row id="Iva">
-                                    <p:column colspan="3" style="text-align:right" footerText="Iva"/>
-                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.iva12}"  />
+                                    <p:column colspan="5" style="text-align:right" footerText="Iva"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.iva12}"  />
                                 </p:row>
                                 <p:row id="Ice">
-                                    <p:column colspan="3" style="text-align:right" footerText="Ice"/>
-                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.ice}" />
+                                    <p:column colspan="5" style="text-align:right" footerText="Ice"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.ice}" />
                                 </p:row>
                                 <p:row id="Total">
-                                    <p:column colspan="3" style="text-align:right" footerText="Total:"/>
-                                    <p:column style="text-align:left" footerText="${ProformaMB.proformaActual.totalproforma}" id="subtotalVenta" />
+                                    <p:column colspan="5" style="text-align:right" footerText="Total:"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.totalproforma}" id="subtotalVenta" />
                                 </p:row>
                             </p:columnGroup>
 

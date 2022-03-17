@@ -266,7 +266,7 @@ public class VentaManagedBean implements Serializable {
      * @param summary
      * @param detail
      */
-    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+    private void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
