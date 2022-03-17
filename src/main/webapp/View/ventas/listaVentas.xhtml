@@ -47,7 +47,7 @@
 
                             <p:column headerText="Total">
                                 <h:outputText value="#{ListaVentas.totalFactura}" >
-                                    <f:convertNumber pattern="#0.00" />
+                                    <f:convertNumber pattern="#0.00"/>
                                 </h:outputText>
                             </p:column>
 
@@ -74,19 +74,29 @@
 
                         <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ListaVentaMB.listaDetalle}">
                             <p:column headerText="Cantidad" width="10%">
-                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
+                                <h:outputText value="#{FacturaDetailTB.cantidad}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Nombre" width="50%" >
-                                <h:outputText value="#{FacturaDetailTB.nombreProducto}" />
+                                <h:outputText value="#{FacturaDetailTB.nombreProducto}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Precio unitario" width="20%">
-                                <h:outputText value="#{FacturaDetailTB.precio}" />
+                                <h:outputText value="#{FacturaDetailTB.precio}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Descuento" width="20%">
-                                <h:outputText value="#{FacturaDetailTB.descuento}" />
+                                <h:outputText value="#{FacturaDetailTB.descuento}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Subtotal" width="20%"  >
-                                <h:outputText value="#{FacturaDetailTB.subTotal}" />
+                                <h:outputText value="#{FacturaDetailTB.subTotal}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:columnGroup type="footer" id="colgrp">

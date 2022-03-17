@@ -115,7 +115,7 @@ public class VentaManagedBean implements Serializable {
 
         this.venta = new Venta();
         this.ventaDao = new VentaDAO();
-        
+
         this.diasPago = 0;
     }
 
@@ -178,14 +178,17 @@ public class VentaManagedBean implements Serializable {
      */
     public void AgregarProductoLista() {
         try {
+            generarAutorizacion();
             if (this.productoActual.getCodigo() > 0) {
-                if (this.productoActual.getStock() < this.cantidad) {
+                if (this.productoActual.isStockeable() && this.productoActual.getStock() < this.cantidad) {
                     addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.productoActual.getStock() + ")");
                 } else {
                     if (this.cantidad <= 0) {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
                     } else {
                         DetalleVenta detalle = new DetalleVenta();
+                        
+                        this.listaProductos.remove(productoActual);
 
                         //Ingreso de valores al detalle
                         detalle.setProducto(this.productoActual);
@@ -233,7 +236,7 @@ public class VentaManagedBean implements Serializable {
      * @param detalle
      */
     public void EliminarProducto(DetalleVenta detalle) {
-        try {
+        try {            
             if (detalle.getProducto().getIva() != 0) {
                 this.subtotal12 -= convertTwoDecimal(detalle.getSubTotal());
             } else {
@@ -342,7 +345,11 @@ public class VentaManagedBean implements Serializable {
             double dsc = convertTwoDecimal(this.listaDetalle.get(listSize).getDescuento());
             double price = convertTwoDecimal(this.listaDetalle.get(listSize).getPrecio());
             DetalleVentaDAO daoDetail = new DetalleVentaDAO();
-            daoDetail.RegistrarProductos(codVenta, codProd, qty, dsc, price);
+            if (listaDetalle.get(listSize).getProducto().isStockeable()) {
+                daoDetail.RegistrarProductos(codVenta, codProd, qty, dsc, price);
+            }else{
+                daoDetail.RegistrarProductosNoStockeable(codVenta, codProd, qty, dsc, price);
+            }
             listSize += 1;
         }
     }
@@ -367,7 +374,7 @@ public class VentaManagedBean implements Serializable {
         venta.setFechaVenta(currentDate);
         venta.setPuntoEmision(1);
         venta.setSecuencia(0);
-        venta.setAutorizacion("849730964");
+        venta.setAutorizacion(generarAutorizacion());
         venta.setFechaEmision(currentDate);
         venta.setFechaAutorizacion(currentDate);
         venta.setBase12(this.subtotal12);
@@ -387,9 +394,9 @@ public class VentaManagedBean implements Serializable {
             this.total = convertTwoDecimal(0);
             this.subtotal0 = convertTwoDecimal(0);
             this.subtotal12 = convertTwoDecimal(0);
-            
+
             for (DetalleVenta detalle : listaDetalle) {
-                
+
                 detalle.setDescuento(convertTwoDecimal(detalle.getPrecio() * ((this.descuentoGeneral + preciosDAO.getDiscountByProduct(cliente.getIdTipoCliente(), detalle.getProducto().getCodigo())) / 100)));
                 detalle.setSubTotal(convertTwoDecimal((detalle.getPrecio() - detalle.getDescuento()) * detalle.getCantidad()));
 
@@ -411,6 +418,43 @@ public class VentaManagedBean implements Serializable {
         } catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         }
+    }
+
+    private String generarAutorizacion() {
+        try {
+            String autorizacion = "";
+            DateFormat df = new SimpleDateFormat("ddMMyyyy"); //Fecha
+            autorizacion += df.format(new Date()) + "01"; //Tipo comprobante (factura)
+            if (cliente.getIdentificacion().length() < 13) { //Ruc o identificaicon
+                autorizacion += cliente.getIdentificacion() + "001";
+            } else {
+                autorizacion += cliente.getIdentificacion();
+            }
+            autorizacion += "1001001"; //ambiente y serie
+            String secuencia = String.valueOf(ventaDao.getSiguienteIdVenta()); //Obtiene la secuencia de factura
+            for (int i = secuencia.length(); i < 10; i++) {
+                autorizacion += "0";
+            }
+            autorizacion += secuencia; //Secuencia de factura
+            String numerico = String.valueOf((int) ((Math.random() * (999999999 - 111111111)) + 111111111)); //Genera un numerico
+            autorizacion += numerico;
+            autorizacion += "1"; //Tipo de emision (normal)
+            autorizacion += modulo11(numerico); //Digito verificador
+
+            return autorizacion;
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+        }
+        return null;
+    }
+
+    public String modulo11(String numerico) {
+        int base = 0;
+        for (int i = numerico.length(); i < 9; i++) {
+            base += Integer.valueOf(numerico.substring(i, i));
+        }
+        base = 11 - (base % 11);
+        return String.valueOf(base);
     }
 
     //--------------------Getter y Setter-------------------//
@@ -572,7 +616,6 @@ public class VentaManagedBean implements Serializable {
 
     public void setDescuentoActual(double descuentoActual) {
         this.descuentoActual = descuentoActual;
-    }  
-    
+    }
 
 }

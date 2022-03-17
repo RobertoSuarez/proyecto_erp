@@ -51,12 +51,12 @@ public class DetalleVentaDAO {
             
             //Reducir stock
             int cantidadActual = 0;
-            query = "select cantidad from public.productos where codprincipal = " + idProducto + ";";
+            query = "select cantidad from public.articulos where id = " + idProducto + ";";
             rs = this.con.ejecutarSql(query);
             while (rs.next()) {
                 cantidadActual = rs.getInt(1);
             }
-            query = "update public.productos set cantidad = " + (cantidadActual - cantidad) + " where codprincipal = " + idProducto + ";";
+            query = "update public.articulos set cantidad = " + (cantidadActual - cantidad) + " where id = " + idProducto + ";";
             this.con.ejecutarSql(query);
             
 
@@ -70,6 +70,39 @@ public class DetalleVentaDAO {
             this.con.desconectar();
         }
     }
+    
+    public void RegistrarProductosNoStockeable(int idVenta, int idProducto, double cantidad, double descuento, double precio) {
+        try {
+            int idDetalle = 1;
+            ResultSet rs = null;
+            this.con.conectar();
+            
+            //Recibir siguiente código de detalle venta
+            String query = "select iddetalleventa from public.detalleventa order by iddetalleventa desc limit 1;";
+            rs = this.con.ejecutarSql(query);
+
+            while (rs.next()) {
+                idDetalle = rs.getInt(1) + 1;
+            }
+
+            //insertar detalle venta
+            query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
+                    + idProducto + "," + cantidad + "," + descuento + "," + precio + ")";
+            System.out.println(query);
+            this.con.ejecutarSql(query);
+            
+
+            this.con.desconectar();
+        } catch (Exception e) {
+            if (con.isEstado()) {
+                con.desconectar();
+            }
+            System.out.println(e.getMessage().toString());
+        } finally {
+            this.con.desconectar();
+        }
+    }
+    
     
     public List<DetalleVenta> ObtenerDetalleVentas(int idVenta){
         try{
