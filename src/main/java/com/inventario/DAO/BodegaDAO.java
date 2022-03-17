@@ -49,7 +49,7 @@ public class BodegaDAO {
     public List<Bodega> getBodega() {
         List<Bodega> ListaBodega = new ArrayList<>();
         String sql = String.format("select cod, nombre_bodega,cod_ciudad, c.nombre, direccion, telefono\n"
-                + "from bodega b inner join ciudad c on b.cod_ciudad=c.id_ciudad");
+                + "from bodega b inner join ciudad c on b.cod_ciudad=c.id_ciudad where cod !=4");
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
