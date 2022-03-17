@@ -9,15 +9,16 @@ import javax.annotation.ManagedBean;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import com.ventas.dao.ClienteVentaDao;
-import com.ventas.dao.DetalleVentaDAO;
 import com.ventas.dao.PreciosDAO;
 import com.ventas.dao.ProductoVentaDAO;
 import com.ventas.dao.ProformaDAO;
+import com.ventas.dao.VentaDAO;
 import com.ventas.models.ClienteVenta;
 import com.ventas.models.DetalleProforma;
-import com.ventas.models.DetalleVenta;
+import com.ventas.models.DetalleProforma;
 import com.ventas.models.ProductoVenta;
 import com.ventas.models.Proforma;
+import com.ventas.models.Venta;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -46,185 +47,160 @@ import org.primefaces.event.SelectEvent;
 
 public class ProformaManageBean implements Serializable {
 
+    //Objetos que se usan en la venta
     private ClienteVenta cliente;
-    ClienteVenta client;
-    private ClienteVentaDao clienteDAO;
-    private String clienteIdNum;
-    private String clienteNombre;
-    String Identificacion;
-    String nombrecliente;
-
+    private ProductoVenta productoActual;
     private DetalleProforma productoSeleccionado;
-    private ClienteVenta clienteSeleccionado;
-    private Proforma proformaSeleccionada;
+    private Proforma proforma;
 
+    //Objetos para acceder a datos
+    private ClienteVentaDao clienteDAO;
     private ProductoVentaDAO productoDao;
-    private ProductoVenta producto;
-    private int codigoProducto;
-    private String nombreProducto;
-    private float precioProducto;
+    private ProformaDAO proformaDao;
+    private PreciosDAO preciosDAO;
+
+    //Variables para manejar el descuento
+    private double descuentoGeneral;
+    private double descuentoActual;
+    private double descuentoAcumulado;
+
+    //Variables para controlar valores
+    private int codigoProdBuscar;
+    private double cantidad;
     private double subTotalProforma;
 
-    private Proforma proformas;
-    Proforma proformaActual;
-    private ProformaDAO profDao;
-    private DetalleProforma detalleProforma;
-    private DetalleVentaDAO detalleDAO;
-    private List<DetalleProforma> listaDetalle;
-    private List<Proforma> listaProformas;
-    private List<DetalleProforma> listaDetallesPorProforma;
-
-    private double cantidad;
-    
-    private double descuento;
-
+    //Variables acumulativas para información
     private double subtotal12;
     private double subtotal0;
-    private double totalDescuento;
+    private double descuento;
     private double ice;
     private double iva;
     private double total;
 
+    //Listas que se usan en la venta
     private List<ClienteVenta> listaClientes;
     private List<ProductoVenta> listaProductos;
-    private List<ProductoVenta> listadescuento;
+    private List<DetalleProforma> listaDetalle;
 
-    private boolean tipo;
     private String visible;
-    private PreciosDAO preciosDAO;
-    
     private boolean isNewProforma;
 
     //Constructor
     @PostConstruct
     public void ProformaManagedBean() {
         this.cliente = new ClienteVenta();
+        this.productoActual = new ProductoVenta();
+
         this.clienteDAO = new ClienteVentaDao();
-        this.client = new ClienteVenta();
-
-        this.producto = new ProductoVenta();
-        this.productoDao = new ProductoVentaDAO();
-        this.proformas = new Proforma();
-
-        this.codigoProducto = 0;
-        this.nombreProducto = "XXXXXX";
-        this.subTotalProforma = 0;
-        this.nombrecliente = "";
-        this.Identificacion = "";
-
-        this.descuento = 0;
-        
-        this.subtotal12 = 0;
-        this.subtotal0 = 0;
-        this.totalDescuento = 0;
-        this.ice = 0;
-        this.iva = 0;
-        this.total = 0;
-
-        this.listaDetalle = new ArrayList<>();
-        this.listaProformas = new ArrayList<>();
-        this.cantidad = 1;
         this.preciosDAO = new PreciosDAO();
 
+        this.productoDao = new ProductoVentaDAO();
+        this.subTotalProforma = 0;
         this.visible = "false";
 
-        this.productoSeleccionado = null;
-        this.clienteSeleccionado = null;
-        this.proformaSeleccionada = null;
+        this.descuentoGeneral = 0;
+        this.descuentoActual = 0;
+        this.descuentoAcumulado = 0;
+
+        this.subtotal12 = convertTwoDecimal(0);
+        this.subtotal0 = convertTwoDecimal(0);
+        this.descuento = convertTwoDecimal(0);
+        this.ice = convertTwoDecimal(0);
+        this.iva = convertTwoDecimal(0);
+        this.total = convertTwoDecimal(0);
+
+        this.listaDetalle = new ArrayList<>();
+        this.cantidad = 1;
+
+        this.clienteDAO = new ClienteVentaDao();
         this.listaClientes = new ArrayList<>();
         this.listaClientes = clienteDAO.ListarClientes();
         this.listaProductos = productoDao.ListarProductos();
-        this.listaDetallesPorProforma = new ArrayList<>();
-        this.listadescuento = new ArrayList<>();
-        this.detalleProforma = new DetalleProforma();
-        listarProformas();
-        
-        Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-	this.isNewProforma = Boolean.valueOf(params.get("new"));
-        showAlert();
+
+        this.proforma = new Proforma();
+        this.proformaDao = new ProformaDAO();
     }
 
-    //Buscar cliente
-    @Asynchronous
-    public void BuscarClienteVenta() {
-        this.cliente = clienteDAO.BuscarCliente(this.clienteIdNum);
-        if (this.cliente != null) {
-            this.clienteNombre = this.cliente.getNombre();
-        } else {
-            System.out.print("No hay cliente");
+    /**
+     * Recibe un cliente de venta como parámetro y carga sus datos en la clase
+     * controlador, en el objeto cienteSeleccionado y muestra datos en la
+     * interfaz de usuario.
+     *
+     * @param cliente
+     */
+    public void SeleccionarCliente(ClienteVenta clienteSelect) {
+        int tipoAnterior = cliente.getIdTipoCliente();
+        this.cliente = clienteSelect;
+
+        this.descuentoGeneral = preciosDAO.getGeneralDiscount(cliente.getIdTipoCliente());
+        this.visible = "true";
+
+        if (!listaDetalle.isEmpty() && cliente.getIdTipoCliente() != tipoAnterior) {
+            recalcularDescuentos();
         }
 
-        if (this.cliente.getNombre() != null) {
-            System.out.print("Cliente: " + clienteNombre);
-        } else {
-            System.out.print("Sin cliente");
-        }
+        descuento = descuentoGeneral + descuentoActual;
     }
 
-    //Buscar Producto
-    @Asynchronous
-    public void BuscarProducto() {
-        this.producto = null;
-        this.nombreProducto = "XXXXXX";
-        this.cantidad = 1;
-        this.precioProducto = 0;
-
-        this.producto = this.productoDao.ObtenerProducto(this.codigoProducto);
-
-        if (this.producto.getDescripcion() == null || this.producto.getDescripcion() == "") {
-            addMessage(FacesMessage.SEVERITY_ERROR, "El producto no existe", "Message Content");
-        } else {
-            this.nombreProducto = this.producto.getDescripcion();
-            this.precioProducto = new BigDecimal(this.producto.getPrecioUnitario()).setScale(2, RoundingMode.UP).floatValue();
-        }
+    /**
+     * Recibe un producto que es guardado en la clase controladora como el
+     * producto actual que podrá ser agregado a la venta
+     *
+     * @param producto
+     */
+    public void SeleccionarProducto(ProductoVenta producto) {
+        this.productoActual = producto;
+        this.descuentoActual = preciosDAO.getDiscountByProduct(cliente.getIdTipoCliente(), producto.getCodigo());
+        descuento = descuentoGeneral + descuentoActual;
+        this.visible = "true";
     }
 
-    //Agregar producto a la lista de detalle
-    @Asynchronous
+    /**
+     * Agrega un producto a la lista. El producto que hayamos buscado
+     * previamente en la interfaz será el que se añada.
+     */
     public void AgregarProductoLista() {
-        double valorreferencia = 0;
-        valorreferencia = this.producto.getPrecioUnitario() * 0.75;
         try {
-            if (this.producto.getCodigo() > 0) {
-                if (this.producto.getStock() < this.cantidad) {
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.producto.getStock() + ")");
+            if (this.productoActual.getCodigo() > 0) {
+                if (this.cantidad <= 0) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
                 } else {
-                    if (this.cantidad <= 0) {
-                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
-                    } else {
-                        DetalleProforma detalle = new DetalleProforma();
-                        detalle.setCodigoProducto(this.producto.getCodigo());
-                        detalle.setCantidad(this.cantidad);
-                        detalle.setPrice(this.producto.getPrecioUnitario());
-                        detalle.setDescuento((this.descuento / 100) * detalle.getPrice());
-                        System.out.println("Subtotal: " + String.valueOf(this.cantidad * (detalle.getPrice() - detalle.getDescuento())));
-                        detalle.setProducto(this.producto);
-                        detalle.setSubtotal(this.cantidad * (detalle.getPrice() - detalle.getDescuento()));
-
-                        this.subTotalProforma += detalle.getSubtotal();
-
-                        if (this.producto.getIva() != 0) {
-                            this.subtotal12 += (detalle.getSubtotal());
-                            this.iva +=  this.subtotal12 * 0.12;
-                        }else{
-                            this.subtotal0 += (detalle.getSubtotal());
-                        }
-                        
-                        if(this.producto.getIce() != 0){
-                            this.ice += this.cantidad * this.producto.getIce();
-                        }
-                        
-                        this.totalDescuento += detalle.getDescuento() * this.cantidad;
-                        this.total += this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-
-                        this.listaDetalle.add(detalle);
-                        this.producto = null;
-
-                        this.codigoProducto = 0;
-                        this.nombreProducto = "";
-                        this.cantidad = 0;
-                        this.precioProducto = 0;
+                    if (this.productoActual.isStockeable() && this.productoActual.getStock() < this.cantidad) {
+                        addMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Podría haber menor unidades disponiblesd e las que desea al momento de facturar. Consulte antes de generar una factura.");
                     }
+
+                    DetalleProforma detalle = new DetalleProforma();
+
+                    this.listaProductos.remove(productoActual);
+
+                    //Ingreso de valores al detalle
+                    detalle.setProducto(this.productoActual);
+                    detalle.setCodigoProducto(this.productoActual.getCodigo());
+                    detalle.setCantidad(this.cantidad);
+                    detalle.setPrice(convertTwoDecimal(this.productoActual.getPrecioUnitario()));
+                    detalle.setDescuento(convertTwoDecimal(detalle.getPrice() * ((this.descuentoGeneral + this.descuentoActual) / 100)));
+                    detalle.setSubtotal(convertTwoDecimal((detalle.getPrice() - detalle.getDescuento()) * detalle.getCantidad()));
+
+                    //Cálculo de los valores
+                    this.subTotalProforma += detalle.getSubtotal();
+                    this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
+                    this.listaDetalle.add(detalle);
+
+                    if (this.productoActual.getIva() != 0) {
+                        this.subtotal12 += convertTwoDecimal(detalle.getSubtotal());
+                    } else {
+                        this.subtotal0 += convertTwoDecimal(detalle.getSubtotal());
+                    }
+
+                    this.iva += convertTwoDecimal(this.productoActual.getIva() / 100 * detalle.getSubtotal());
+                    this.ice += convertTwoDecimal(this.productoActual.getIce() * detalle.getCantidad());
+                    this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
+
+                    this.descuentoActual = 0;
+                    descuento = descuentoGeneral + descuentoActual;
+
+                    this.productoActual = new ProductoVenta();
+                    this.cantidad = 1;
                 }
             } else {
                 System.out.println("No hay producto seleccionado");
@@ -235,40 +211,61 @@ public class ProformaManageBean implements Serializable {
 
     }
 
-    //Eliminar un producto de la lista
-    @Asynchronous
-    public void EliminarProducto(DetalleVenta detalle) {
+    /**
+     * Elimina uno de los items que se hayan agregado a la lista de venta.
+     * Recibe dicho item como parámetro
+     *
+     * @param detalle
+     */
+    public void EliminarProducto(DetalleProforma detalle) {
         try {
-            double subtemp = new BigDecimal(detalle.getProducto().getPrecioUnitario() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
             if (detalle.getProducto().getIva() != 0) {
-                this.subtotal12 -= subtemp;
+                this.subtotal12 -= convertTwoDecimal(detalle.getSubtotal());
             } else {
-                this.subtotal0 -= subtemp;
+                this.subtotal0 -= convertTwoDecimal(detalle.getSubtotal());
             }
 
-            this.iva -= new BigDecimal(detalle.getProducto().getIva() * detalle.getCantidad() * detalle.getPrecio()).setScale(2, RoundingMode.UP).doubleValue();
-            this.ice -= new BigDecimal(detalle.getProducto().getIce() * detalle.getCantidad()).setScale(2, RoundingMode.UP).doubleValue();
+            this.iva -= convertTwoDecimal(detalle.getProducto().getIva() / 100 * detalle.getSubtotal());
+            this.ice -= convertTwoDecimal(detalle.getProducto().getIce() * detalle.getCantidad());
+            this.descuentoAcumulado -= convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
+            this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
+            this.subTotalProforma -= convertTwoDecimal(detalle.getSubtotal());
 
-            this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-            this.subTotalProforma -= detalle.getSubTotal();
-
+            detalle.getProducto().setStock((int) (detalle.getCantidad() + detalle.getProducto().getStock()));
             this.listaDetalle.remove(detalle);
+            this.listaProductos.add(detalle.getProducto());
 
             PrimeFaces.current().ajax().update("ventaForm");
-            addMessage(FacesMessage.SEVERITY_ERROR, "Producto eliminado de la lista", "Message Content");
         } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage().toString(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
     }
 
-    //Mostrar algun mensaje
-    @Asynchronous
+    /**
+     * Muestra un mensaje en pantalla. Recibe como parámetros la sveridad que
+     * determina el color, un título y un detalle.
+     *
+     * @param severity
+     * @param summary
+     * @param detail
+     */
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    @Asynchronous
+    /**
+     * Recible un valor de tipo double y lo transforma para que tenga únicamente
+     * 2 decimales
+     *
+     * @param doubleNumero
+     * @return double decimalConvertido
+     */
+    public double convertTwoDecimal(double doubleNumero) {
+        double temp = new BigDecimal(doubleNumero).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return temp < 0 ? 0 : temp;
+    }
+
     public String RegistrarProforma() throws IOException, SQLException {
         try {
             int listSize = 0;
@@ -306,28 +303,48 @@ public class ProformaManageBean implements Serializable {
                     listSize += 1;
                 }
             }
+
             FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada satisfactoriamente"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada exitosamente"));
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?faces-redirect=true");
-            return "listaProforma.xhtml?faces-redirect=true";
+            return "listaProforma.xhtmlfaces-redirect=true";
         } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
         }
         return null;
     }
 
-    @Asynchronous
-    public void listarProformas() {
-        profDao = new ProformaDAO();
-        this.listaProformas = new ArrayList<>();
+    private void recalcularDescuentos() {
         try {
-            this.listaProformas = this.profDao.retornarProformas();
-            if (listaProformas.isEmpty()) {
-                addMessage(FacesMessage.SEVERITY_ERROR, "No existe proformas en la Base de Datos", "Message Content");
+            this.iva = convertTwoDecimal(0);
+            this.ice = convertTwoDecimal(0);
+            this.subTotalProforma = convertTwoDecimal(0);
+            this.total = convertTwoDecimal(0);
+            this.subtotal0 = convertTwoDecimal(0);
+            this.subtotal12 = convertTwoDecimal(0);
+
+            for (DetalleProforma detalle : listaDetalle) {
+
+                detalle.setDescuento(convertTwoDecimal(detalle.getPrice() * ((this.descuentoGeneral + preciosDAO.getDiscountByProduct(cliente.getIdTipoCliente(), detalle.getProducto().getCodigo())) / 100)));
+                detalle.setSubtotal(convertTwoDecimal((detalle.getPrice() - detalle.getDescuento()) * detalle.getCantidad()));
+
+                //Cálculo de los valores
+                this.subTotalProforma += detalle.getSubtotal();
+                this.descuentoAcumulado += convertTwoDecimal(detalle.getDescuento() * detalle.getCantidad());
+
+                if (detalle.getProducto().getIva() != 0) {
+                    this.subtotal12 += convertTwoDecimal(detalle.getSubtotal());
+                } else {
+                    this.subtotal0 += convertTwoDecimal(detalle.getSubtotal());
+                }
+
+                this.iva += convertTwoDecimal(detalle.getProducto().getIva() / 100 * detalle.getSubtotal());
+                this.ice += convertTwoDecimal(detalle.getProducto().getIce() * detalle.getCantidad());
+                this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
             }
-        } catch (SQLException e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
+            addMessage(FacesMessage.SEVERITY_INFO, "Actualizado", "Se han actualizado los valores de acuerdo con el tipo de cliente");
+        } catch (Exception e) {
+            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         }
     }
 
@@ -350,61 +367,6 @@ public class ProformaManageBean implements Serializable {
         return fecha;
     }
 
-    public void SeleccionarCliente(ClienteVenta cl) {
-        this.clienteNombre = cl.getNombre();
-        this.clienteIdNum = cl.getIdentificacion();
-        this.cliente = cl;
-
-        int idcliente = preciosDAO.idtipocliente(cl.getIdentificacion());
-        this.tipo = preciosDAO.opciones(idcliente);
-        this.descuento = preciosDAO.descuento(idcliente);
-        this.listadescuento.clear();
-        this.listadescuento = preciosDAO.llenarProducto(idcliente);
-        System.out.println(this.descuento);
-        setVisible("true");
-    }
-
-    public void SeleccionarProducto(ProductoVenta pr) {
-        this.codigoProducto = pr.getCodigo();
-        this.nombreProducto = pr.getDescripcion();
-        this.precioProducto = pr.getPrecioUnitario();
-        this.producto = pr;
-    }
-
-    @Asynchronous
-    public void detalleProforma(Proforma profor) throws SQLException {
-        this.client = new ClienteVenta();
-        this.listaDetallesPorProforma = new ArrayList<>();
-        this.proformaActual = profor;
-        this.listaDetallesPorProforma = this.profDao.listaDetalleProforma(profor.id_proforma);
-        this.nombrecliente = profor.getNombreCliente();
-    }
-    
-    @Asynchronous
-    public void rechazarProforma(Proforma profor) throws SQLException {
-        if (profor.estado == "Pendiente") {
-            String rechazar = "R";
-            this.profDao.cambiarEstadoProforma(rechazar, profor.id_proforma);
-            listarProformas();
-            addMessage(FacesMessage.SEVERITY_ERROR, "Proforma rechazada", "Message Content");
-        } else {
-            addMessage(FacesMessage.SEVERITY_INFO, "Proforma rechazada o aceptada con anterioridad", "Message Content");
-        }
-    }
-
-    @Asynchronous
-    public void aceptarProforma(Proforma profor) throws SQLException {
-        if (profor.estado == "Pendiente") {
-            String rechazar = "A";
-            int factura;
-            factura = this.profDao.aceptarProforma(rechazar, profor, ObtenerFecha());
-            listarProformas();
-            addMessage(FacesMessage.SEVERITY_ERROR, "Proforma aceptada con factura: " + factura, "Message Content");
-        } else {
-            addMessage(FacesMessage.SEVERITY_INFO, "Proforma rechazada o aceptada con anterioridad", "Message Content");
-        }
-    }
-
     //--------------------Getter y Setter-------------------//
     public ClienteVenta getCliente() {
         return cliente;
@@ -414,96 +376,52 @@ public class ProformaManageBean implements Serializable {
         this.cliente = cliente;
     }
 
-    public ClienteVentaDao getClienteDAO() {
-        return clienteDAO;
+    public ProductoVenta getProductoActual() {
+        return productoActual;
     }
 
-    public String getClienteIdNum() {
-        return clienteIdNum;
+    public void setProductoActual(ProductoVenta productoActual) {
+        this.productoActual = productoActual;
     }
 
-    public void setClienteIdNum(String clienteIdNum) {
-        this.clienteIdNum = clienteIdNum;
+    public DetalleProforma getProductoSeleccionado() {
+        return productoSeleccionado;
     }
 
-    public String getClienteNombre() {
-        return clienteNombre;
+    public void setProductoSeleccionado(DetalleProforma productoSeleccionado) {
+        this.productoSeleccionado = productoSeleccionado;
     }
 
-    public void setClienteNombre(String clienteNombre) {
-        this.clienteNombre = clienteNombre;
+    public Proforma getProforma() {
+        return proforma;
     }
 
-    public ProductoVentaDAO getProductoDao() {
-        return productoDao;
+    public void setProforma(Proforma proforma) {
+        this.proforma = proforma;
     }
 
-    public void setProductoDao(ProductoVentaDAO productoDao) {
-        this.productoDao = productoDao;
+    public PreciosDAO getPreciosDAO() {
+        return preciosDAO;
     }
 
-    public ProductoVenta getProducto() {
-        return producto;
+    public void setPreciosDAO(PreciosDAO preciosDAO) {
+        this.preciosDAO = preciosDAO;
     }
 
-    public void setProducto(ProductoVenta producto) {
-        this.producto = producto;
+    public double getDescuentoAcumulado() {
+        return descuentoAcumulado;
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
+    public void setDescuentoAcumulado(double descuentoAcumulado) {
+        this.descuentoAcumulado = descuentoAcumulado;
     }
 
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
+    public int getCodigoProdBuscar() {
+        return codigoProdBuscar;
     }
 
-    public float getPrecioProducto() {
-        return precioProducto;
-    }
-
-    public void setPrecioProducto(float precioProducto) {
-        this.precioProducto = precioProducto;
-    }
-
-    public int getCodigoProducto() {
-        return codigoProducto;
-    }
-
-    public void setCodigoProducto(int codigoProducto) {
-        this.codigoProducto = codigoProducto;
-    }
-
-    public DetalleVentaDAO getDetalleDAO() {
-        return detalleDAO;
-    }
-
-    public void setDetalleDAO(DetalleVentaDAO detalleDAO) {
-        this.detalleDAO = detalleDAO;
-    }
-
-    public List<DetalleProforma> getListaDetalle() {
-        return listaDetalle;
-    }
-
-    public Proforma getProformas() {
-        return proformas;
-    }
-
-    public void setProformas(Proforma proformas) {
-        this.proformas = proformas;
-    }
-
-    public List<Proforma> getListaProformas() {
-        return listaProformas;
-    }
-
-    public void setListaProformas(List<Proforma> listaProformas) {
-        this.listaProformas = listaProformas;
-    }
-
-    public void setListaDetalle(List<DetalleProforma> listaDetalle) {
-        this.listaDetalle = listaDetalle;
+    public void setCodigoProdBuscar(int codigoProdBuscar) {
+        this.codigoProdBuscar = codigoProdBuscar;
     }
 
     public double getCantidad() {
@@ -570,36 +488,12 @@ public class ProformaManageBean implements Serializable {
         this.total = total;
     }
 
-    public DetalleProforma getProductoSeleccionado() {
-        return productoSeleccionado;
-    }
-
-    public void setProductoSeleccionado(DetalleProforma productoSeleccionado) {
-        this.productoSeleccionado = productoSeleccionado;
-    }
-
-    public ProformaDAO getProfDao() {
-        return profDao;
-    }
-
-    public void setProfDao(ProformaDAO profDao) {
-        this.profDao = profDao;
-    }
-
     public List<ClienteVenta> getListaClientes() {
         return listaClientes;
     }
 
     public void setListaClientes(List<ClienteVenta> listaClientes) {
         this.listaClientes = listaClientes;
-    }
-
-    public ClienteVenta getClienteSeleccionado() {
-        return clienteSeleccionado;
-    }
-
-    public void setClienteSeleccionado(ClienteVenta clienteSeleccionado) {
-        this.clienteSeleccionado = clienteSeleccionado;
     }
 
     public List<ProductoVenta> getListaProductos() {
@@ -610,72 +504,12 @@ public class ProformaManageBean implements Serializable {
         this.listaProductos = listaProductos;
     }
 
-    public Proforma getProformaSeleccionada() {
-        return proformaSeleccionada;
+    public List<DetalleProforma> getListaDetalle() {
+        return listaDetalle;
     }
 
-    public void setProformaSeleccionada(Proforma proformaSeleccionada) {
-        this.proformaSeleccionada = proformaSeleccionada;
-    }
-
-    public void setClienteDAO(ClienteVentaDao clienteDAO) {
-        this.clienteDAO = clienteDAO;
-    }
-
-    public String getIdentificacion() {
-        return Identificacion;
-    }
-
-    public void setIdentificacion(String Identificacion) {
-        this.Identificacion = Identificacion;
-    }
-
-    public String getNombrecliente() {
-        return nombrecliente;
-    }
-
-    public void setNombrecliente(String nombrecliente) {
-        this.nombrecliente = nombrecliente;
-    }
-
-    public Proforma getProformaActual() {
-        return proformaActual;
-    }
-
-    public void setProformaActual(Proforma proformaActual) {
-        this.proformaActual = proformaActual;
-    }
-
-    public List<DetalleProforma> getListaDetallesPorProforma() {
-        return listaDetallesPorProforma;
-    }
-
-    public void setListaDetallesPorProforma(List<DetalleProforma> listaDetallesPorProforma) {
-        this.listaDetallesPorProforma = listaDetallesPorProforma;
-    }
-
-    public ClienteVenta getClient() {
-        return client;
-    }
-
-    public void setClient(ClienteVenta client) {
-        this.client = client;
-    }
-
-    public List<ProductoVenta> getListadescuento() {
-        return listadescuento;
-    }
-
-    public void setListadescuento(List<ProductoVenta> listadescuento) {
-        this.listadescuento = listadescuento;
-    }
-
-    public boolean isTipo() {
-        return tipo;
-    }
-
-    public void setTipo(boolean tipo) {
-        this.tipo = tipo;
+    public void setListaDetalle(List<DetalleProforma> listaDetalle) {
+        this.listaDetalle = listaDetalle;
     }
 
     public String getVisible() {
@@ -686,73 +520,20 @@ public class ProformaManageBean implements Serializable {
         this.visible = visible;
     }
 
-    public double getTotalDescuento() {
-        return totalDescuento;
+    public double getDescuentoGeneral() {
+        return descuentoGeneral;
     }
 
-    public void setTotalDescuento(double totalDescuento) {
-        this.totalDescuento = totalDescuento;
+    public void setDescuentoGeneral(double descuentoGeneral) {
+        this.descuentoGeneral = descuentoGeneral;
     }
 
-    public DetalleProforma getDetalleProforma() {
-        return detalleProforma;
+    public double getDescuentoActual() {
+        return descuentoActual;
     }
 
-    public void setDetalleProforma(DetalleProforma detalleProforma) {
-        this.detalleProforma = detalleProforma;
-    }
-
-    public boolean isIsNewProforma() {
-        return isNewProforma;
-    }
-
-    public void setIsNewProforma(boolean isNewProforma) {
-        this.isNewProforma = isNewProforma;
-    }
-
-    
-    public void showAlert(){
-        if(this.isNewProforma){
-            addMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se ha agregado una nueva proforma");
-        }
-    }
-    
-    //Agregar producto a la lista de detalle
-    public void AgregarProductoLista2() {
-        if (this.producto.getCodigo() > 0) {
-            DetalleProforma detalle = new DetalleProforma();
-            detalle.setCodigoProducto(this.producto.getCodigo());
-            detalle.setCantidad(this.cantidad);
-            //detalle.setDescuento(this.producto.getDescuento());
-            detalle.setDescuento(0);
-            detalle.setPrice(this.precioProducto);
-            detalle.setProducto(this.producto);
-
-            BigDecimal controldecimal = new BigDecimal((this.cantidad * this.precioProducto)).setScale(2, RoundingMode.UP);
-            detalle.setSubtotal(controldecimal.doubleValue());
-            this.subTotalProforma = this.subTotalProforma + controldecimal.doubleValue();
-
-            this.listaDetalle.add(detalle);
-            this.cantidad = 1;
-            this.codigoProducto = 0;
-            this.nombreProducto = "XXXXXX";
-
-            if (this.producto.getIva() != 0) {
-                this.subtotal12 += this.precioProducto * detalle.getCantidad();
-            } else {
-                this.subtotal0 += this.precioProducto * detalle.getCantidad();
-            }
-            this.subtotal12 = Math.round(this.subtotal12 * 100.0) / 100.0;
-            this.subtotal0 = Math.round(this.subtotal0 * 100.0) / 100.0;
-            this.iva = Math.round(((this.iva + this.producto.getIva()) * detalle.getCantidad()) * 100.0) / 100.0;
-            this.ice = Math.round(((this.ice + this.producto.getIce()) * detalle.getCantidad()) * 100.0) / 100.0;
-
-            this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-            this.precioProducto = 0;
-            this.producto = null;
-        } else {
-            System.out.println("No hay producto seleccionado");
-        }
+    public void setDescuentoActual(double descuentoActual) {
+        this.descuentoActual = descuentoActual;
     }
 
 }

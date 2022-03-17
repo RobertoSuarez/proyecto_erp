@@ -12,7 +12,7 @@ import java.util.Date;
  * @author angul
  */
 public class SalidaInventario {
-    
+
     private static final long serialVersionUID = 1L;
 
     private int cod;
@@ -24,14 +24,15 @@ public class SalidaInventario {
     private int idBodega;
 
     private int idProveedor;
-    
+
     private Proveedor proveedor;
-    
+
     private String nombreProveedor;
-    
+
     private String nombreBodega;
 
-    
+    private String observacion;
+
     public SalidaInventario() {
     }
 
@@ -45,9 +46,9 @@ public class SalidaInventario {
         this.fecha = fecha;
         this.idBodega = idBodega;
         this.idProveedor = idProveedor;
-       }
-    
-        public SalidaInventario(int cod, String numComprobante, Date fecha, int idBodega, int idProveedor, String nombreProveedor, String nombreBodega  ) {
+    }
+
+    public SalidaInventario(int cod, String numComprobante, Date fecha, int idBodega, int idProveedor, String nombreProveedor, String nombreBodega) {
         this.cod = cod;
         this.numComprobante = numComprobante;
         this.fecha = fecha;
@@ -55,8 +56,18 @@ public class SalidaInventario {
         this.idProveedor = idProveedor;
         this.nombreProveedor = nombreProveedor;
         this.nombreBodega = nombreBodega;
-       }
+    }
 
+    public SalidaInventario(int cod, String numComprobante, Date fecha, int idBodega, int idProveedor, String nombreProveedor, String nombreBodega, String observacion) {
+        this.cod = cod;
+        this.numComprobante = numComprobante;
+        this.fecha = fecha;
+        this.idBodega = idBodega;
+        this.idProveedor = idProveedor;
+        this.nombreProveedor = nombreProveedor;
+        this.nombreBodega = nombreBodega;
+        this.observacion = observacion;
+    }
 
     public int getCod() {
         return cod;
@@ -120,6 +131,14 @@ public class SalidaInventario {
 
     public void setNombreBodega(String nombreBodega) {
         this.nombreBodega = nombreBodega;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
     }
 
 }

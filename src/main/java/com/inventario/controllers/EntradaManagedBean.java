@@ -48,6 +48,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.math3.util.Precision;
 
 /**
  *
@@ -172,7 +173,7 @@ public class EntradaManagedBean implements Serializable {
         this.detalleDAO = new EntradaDetalleDAO();
         this.listaProveedores = new ArrayList<>();
         this.listaProveedores = proveedorDAO.ListarProveedor();
-        this.listaProductos = productoDao.getArticulos();
+        this.listaProductos = productoDao.getArticulosEntradas();
 
         this.SiICE = false;
         this.SiIVA = false;
@@ -336,6 +337,7 @@ public class EntradaManagedBean implements Serializable {
         }
     }
 
+    
     //Agregar producto a la lista de detalle
     @Asynchronous
     public void AgregarProductoLista() {
@@ -354,12 +356,17 @@ public class EntradaManagedBean implements Serializable {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
                     } else {
 
+                        
+                        double iceProducto, ivaProducto;
+                        iceProducto = this.producto.getCosto() *  this.cantidad * ( (double) this.producto.getIceproducto()/ 100);
+                        ivaProducto = this.producto.getCosto()*0.12 * this.cantidad;
                         //Ingreso de valores al detalle de entrada
                         EntradaDetalleInventario detalle = new EntradaDetalleInventario();
                         detalle.setIdArticulo(this.producto.getId());
                         detalle.setCant(this.cantidad);
-                        detalle.setIva(this.producto.getCosto()*0.12);
-                        detalle.setIce(this.producto.getIce());
+                        detalle.setIva(Precision.round(ivaProducto, 2) );
+                       
+                        detalle.setIce(Precision.round(iceProducto, 2) );
                         detalle.setCosto(this.producto.getCosto());
                         detalle.setSubtotal(this.producto.getCosto() * this.cantidad);
                         detalle.setNombreProducto(nombreProducto);
@@ -471,7 +478,7 @@ public class EntradaManagedBean implements Serializable {
 
                             
                             double price = this.listaDetalle.get(listSize).getCosto();
-                            double iva = this.listaDetalle.get(listSize).getIva() * this.listaDetalle.get(listSize).getCant();
+                            double iva = this.listaDetalle.get(listSize).getIva();
                             double ice = this.listaDetalle.get(listSize).getIce();
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
@@ -888,6 +895,6 @@ public class EntradaManagedBean implements Serializable {
          public void aleatorioCod() {
           String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
           String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
-          this.numeroComprobante = ("AF" + uuid + uuid2).toUpperCase();
+          this.numeroComprobante = ("ENT-" + uuid + uuid2 ).toUpperCase();
      }
 }

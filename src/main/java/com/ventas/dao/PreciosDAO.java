@@ -39,16 +39,27 @@ public class PreciosDAO {
 
     public List<Precios> mostrarPrecios() {
         try {
-            String Sentencia = "select p.idlistaprecios,p.idtipocliente,"
-                    + "t.tipocliente,t.descripcion,p.descuento from listaprecios "
-                    + "p inner join tipocliente t on p.idtipocliente = t.idtipocliente";
+            String Sentencia = "select p.idlistaprecios, p.idtipocliente, t.tipocliente, t.descripcion, p.descuento, \n" +
+                                "CASE WHEN p.idarticulo is null then -1 else p.idarticulo end as idarticulo \n" +
+                                "from listaprecios p inner join tipocliente t on p.idtipocliente = t.idtipocliente \n" +
+                                "left join articulos a on a.id = p.idarticulo;";
             result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
-                listaprecios.add(new Precios(result.getInt("idlistaprecios"),
-                        result.getInt("idtipocliente"),
-                        result.getString("tipocliente"),
-                        result.getString("descripcion"),
-                        result.getDouble("descuento")));
+                Precios nuevoPrecio = new Precios();
+                nuevoPrecio.setIdprecio(result.getInt("idlistaprecios"));
+                nuevoPrecio.setIdtipocliente(result.getInt("idtipocliente"));
+                nuevoPrecio.setTipoCliente(result.getString("tipocliente"));
+                nuevoPrecio.setDescripcionTipoCliente(result.getString("descripcion"));
+                nuevoPrecio.setDescuento(result.getDouble("descuento"));
+                
+                int idProdAux = result.getInt("idarticulo");
+                if(idProdAux > 0){
+                    ProductoVenta producto = new ProductoVentaDAO().ObtenerProducto(idProdAux);
+                    nuevoPrecio.setIdproducto(idProdAux);
+                    nuevoPrecio.setProducto(producto);
+                }
+                
+                listaprecios.add(nuevoPrecio);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage() + " error en conectarse");
@@ -72,6 +83,22 @@ public class PreciosDAO {
             conexion.desconectar();
         }
         return listatipos;
+    }
+    
+    public int eliminarPrecio(Precios p){
+        int rs = -1;
+        try {
+            String Sentencia = "SELECT * from eliminarprecio(" + p.getIdprecio() + ");";
+            result = conexion.ejecutarSql(Sentencia);
+            while(result.next()){
+                rs = result.getInt("eliminarprecio");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage() + " error en conectarse");
+        } finally {
+            conexion.desconectar();
+        }
+        return rs;
     }
 
     public List<ProductoVenta> llenarProducto(int id) {
@@ -127,12 +154,12 @@ public class PreciosDAO {
         return dato;
     }
 
-    public int insert(Precios precios, boolean radio) {
+    public int insertarGeneral(Precios precios) {
         int existe = 1;
         try {
 
             String Sentencia = "select public.insertar_listaprecios('"
-                    + precios.getIdtipocliente() + "','" + precios.getDescuento() + "'," + radio + ")";
+                    + precios.getIdtipocliente() + "','" + precios.getDescuento() + "', true)";
             result = conexion.ejecutarSql(Sentencia);
             while (result.next()) {
                 existe = result.getInt("insertar_listaprecios");
@@ -145,15 +172,15 @@ public class PreciosDAO {
         return existe;
     }
 
-    public int insertProduct(int idtc, List<ProductoVenta> listaproduc) {
+    public int insertProduct(Precios precio, List<ProductoVenta> listaproduc) {
         int existe = 1;
         try {
             for (int i = 0; i < listaproduc.size(); i++) {
-                String Sentencia = "select public.insertar_descuento('"
-                        + idtc + "'," + listaproduc.get(i).getCodigo() + ")";
+                String Sentencia = "select public.insertar_listaprecios_productos("
+                        + precio.getIdtipocliente() + "," + precio.getDescuento() + ", false, " + listaproduc.get(i).getCodigo() + ")";
                 result = conexion.ejecutarSql(Sentencia);
                 while (result.next()) {
-                    existe = result.getInt("insertar_descuento");
+                    existe = result.getInt("insertar_listaprecios_productos");
                 }
             }
         } catch (SQLException e) {
@@ -252,5 +279,38 @@ public class PreciosDAO {
             conexion.desconectar();
         }
         return idtipo;
+    }
+    
+    public double getGeneralDiscount(int idTipoCliente){
+        double dsc = 0;
+        try{
+            String Sentencia = "select * from public.getdescuentogeneral(" + idTipoCliente + ");";
+            result = conexion.ejecutarSql(Sentencia);
+            while(result.next()){
+                dsc = result.getDouble("getdescuentogeneral");
+            }
+        }catch(Exception e){
+            System.out.println("Error" + e.getMessage());
+        }finally{
+            conexion.desconectar();            
+        }
+        return dsc;
+    }
+    
+    public double getDiscountByProduct(int idTipoCliente, int idProducto){
+        double dsc = 0;
+        try{
+            String Sentencia = "select * from public.getdescuentoproducto(" + idTipoCliente + ", " + idProducto + ");";
+            System.out.println("Sentencia: " + Sentencia);
+            result = conexion.ejecutarSql(Sentencia);
+            while(result.next()){
+                dsc = result.getDouble("getdescuentoproducto");
+            }
+        }catch(Exception e){
+            System.out.println("Error" + e.getMessage());
+        }finally{
+            conexion.desconectar();            
+        }
+        return dsc;
     }
 }

@@ -10,223 +10,332 @@
     <body>
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
-                <h:form id="form">
+                <h:form id="salidaForm">
                     <ui:include src="./subheaderinventario.xhtml"/>
                     <p:growl id="msgs" showDetail="true"/>
                     <div class="card">
                         <p:toolbar>
                             <p:toolbarGroup style="margin-top: 4%">
 
-                                <p:commandButton value="Nuevo" action="/View/inventario/entradaProducto"
-                                                 disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}"
-                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                 icon="pi pi-plus" 
-                                                 oncomplete="PF('salidaproducto').show()">
-                                </p:commandButton>
+
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:dialog header="Salida de producto" showEffect="fade" modal="true"
-                                  widgetVar="salidaproducto" responsive="true" width="80%"
-                                  draggable="false" height="550"> 
-                            <p:outputPanel id="manage-asiento" class="ui-fluid">
-                                <p:outputPanel >
-                                    <div class="p-grid p-justify-around">
-                                        <div class="p-col-6 p-md-12 p-lg-5">
-                                            <div class="p-grid">
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Nro de comprobante:"></p:outputLabel>
-                                                    <p:inputText value="" 
-                                                                 placeholder="Nro de Comprobante" readonly="true"></p:inputText>
-                                                </div>
 
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Bodega: *"></p:outputLabel>
-                                                    <h:form>
-                                                        <div class="ui-inputgroup">
-                                                            <p:commandButton icon="pi pi-search"/> 
-                                                            <p:inputText placeholder="bodega" />        
-                                                        </div>
-                                                    </h:form>
-                                                </div>
+
+                        <p:outputPanel id="manage-asiento" class="ui-fluid">
+                            <p:outputPanel >
+                                <div class="p-grid p-justify-around">
+                                    <div class="p-col-6 p-md-12 p-lg-5">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Nro de comprobante afectado:"></p:outputLabel>
+                                                <h:form id="vista-comprobante">
+
+                                                    <div class="ui-inputgroup">
+                                                        <p:commandButton icon="pi pi-search"
+                                                                         oncomplete="PF('BuscarEntrada').show()"
+                                                                         /> 
+                                                        <p:inputText value="#{SalidaMB.numeroComprobante}"
+                                                                     placeholder="Nro de comprobante afectado"></p:inputText>
+                                                    </div>
+                                                </h:form>
+
                                             </div>
+
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Proveedor: *"></p:outputLabel>
+                                                <h:form id="buscar-proveedor-vista">
+                                                    <div class="ui-inputgroup">
+
+                                                        <p:inputText disabled="true" placeholder="Proveedor" id="NombreProveedor" value="#{SalidaMB.proveedorNombre}" />        
+                                                    </div>
+                                                </h:form>
+                                            </div>
+
+
                                         </div>
-                                        <div class="p-col-6 p-md-12 p-lg-5">
-                                            <div class="p-grid">
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Fecha: *"></p:outputLabel>
-                                                    <p:calendar value="" 
-                                                                disabled="">
-                                                    </p:calendar>
-                                                </div>
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Observación: *"></p:outputLabel>
-                                                    <p:inputTextarea disabled=""
-                                                                     maxlength="250"
-                                                                     placeholder=" Observación apropiada para describir este proceso de salida."
-                                                                     value="" 
-                                                                     rows="5" cols="33" autoResize="false"/>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="p-col-11">
-                                            <div class="p-grid">
-                                                <div class="p-col-2">
-                                                    <p:outputLabel value="Categoría: *"></p:outputLabel>
-                                                    <p:selectOneMenu id="categoria" value="" editable="false" 
-                                                                     disabled="">
-                                                        <f:selectItem itemLabel="Primero" itemValue=""/>
-                                                        <f:selectItem itemLabel="Segundo" itemValue=""/>
-                                                        <f:selectItem itemLabel="Tercero" itemValue=""/>
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:outputLabel value="Tipo de Producto: *"></p:outputLabel>
-                                                    <p:selectOneMenu id="tipo" value="" editable="false" 
-                                                                     disabled="">
-                                                        <f:selectItem itemLabel="Tipo 1" itemValue=""/>
-                                                        <f:selectItem itemLabel="Tipo 2" itemValue=""/>
-                                                        <f:selectItem itemLabel="Tipo 3" itemValue=""/>
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="p-col-3">
-                                                    <p:outputLabel value="Producto: *"></p:outputLabel>
-                                                    <h:form>
-                                                        <div class="ui-inputgroup">
-                                                            <p:commandButton icon="pi pi-search"/> 
-                                                            <p:inputText placeholder="Producto" />        
-                                                        </div>
-                                                    </h:form>
-                                                </div>
-                                                <div class="p-col-1">
-                                                    <p:outputLabel value="Cant:"></p:outputLabel>
-                                                    <p:inputText value=""></p:inputText>
-                                                </div>
-
-                                                <div class="p-col-1">
-                                                    <br/>
-                                                    <p:commandButton id="btnconsulta" icon="pi pi-replay" 
-                                                                     styleClass="rounded-button ui-button-secondary"/>
-                                                </div>
-
-
-                                                <div class="p-col-2">
-                                                    <p:outputLabel value="Costo:"></p:outputLabel>
-                                                    <p:inputText value=""></p:inputText>
-                                                </div>
-
-                                                <div class="p-col-1">
-                                                    <h6>IVA</h6>
-                                                    <p:inputSwitch />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-col-11">
-                                            <div class="p-grid">
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Agregar" process="@this"
-                                                                     disabled=""
-                                                                     oncomplete=""
-                                                                     icon="pi pi-plus"/>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Otro Producto" process="@this"
-                                                                     disabled=""
-                                                                     oncomplete=""
-                                                                     icon="pi pi-plus" 
-                                                                     styleClass="ui-button-success p-mr-2 p-mb-2"/>
-                                                </div>
-                                                <div class="p-col-12">
-                                                    <p:dataTable >
-
-                                                        <p:column headerText="Producto" width="12%" >
-                                                            <h:outputText value=""/>
-                                                        </p:column>
-                                                        <p:column headerText="Categoría"  width="12%">
-                                                            <h:outputText value=""/>
-                                                        </p:column>
-                                                        <p:column headerText="Tipo" width="12%">
-                                                            <h:outputText value=""/>
-                                                        </p:column>
-                                                        <p:column headerText="Cantidad" width="12%">
-                                                            <h:outputText value=""/>
-                                                        </p:column>
-                                                        <p:column headerText="Costo" width="12%">
-                                                            <h:outputText value=""/>
-                                                        </p:column>
-                                                        <p:column headerText="IVA" width="4%">
-                                                            <h:outputText value=""/>
-                                                        </p:column>
-
-                                                        <p:column exportable="false" width="9%">
-                                                            <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                                             icon="pi pi-pencil" 
-                                                                             process="@this">
-                                                            </p:commandButton>
-                                                            <p:commandButton class="ui-button-danger rounded-button"
-                                                                             icon="pi pi-pi pi-trash">
-                                                            </p:commandButton>
-                                                        </p:column>
-                                                    </p:dataTable>
-
-
-                                                </div>
-                                            </div>
-                                            <div class="p-grid p-justify-end">
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"
-                                                                     disabled=""
-                                                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
-                                                                     styleClass="ui-button-danger" process="@this"
-                                                                     oncomplete="PF('salidaproducto').hide()"/>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
+                                    <div class="p-col-6 p-md-12 p-lg-5">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Fecha: *"></p:outputLabel>
+                                                <p:calendar value="#{SalidaMB.fechaComprobante}" pattern="yyyy/MM/dd"
 
-                                </p:outputPanel>
-                            </p:outputPanel>
-                        </p:dialog>
-                        <p:dataTable editable="true" reflow="true"
-                                     editInitEvent="dblclick" editMode="cell"
-                                     value="">
-                            <f:facet name="header">
-                                <div class="p-d-flex p-jc-between p-ai-center">
-                                    <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Salidas de Productos</span>
-                                    <span class="filter-container ui-input-icon-left">
-                                        <i class="pi pi-search"></i>
-                                        <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
-                                    </span>
+                                                            disabled="">
+                                                </p:calendar>
+                                            </div>
+
+ 
+
+
+                                        </div>
+                                    </div>
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Producto: *"></p:outputLabel>
+                                                <h:form id="buscar-producto-vista">
+                                                    <div class="ui-inputgroup">
+                                                        <p:commandButton icon="pi pi-search" 
+
+                                                                         oncomplete="PF('BuscarProducto').show()"                                                                    
+                                                                         /> 
+                                                        <p:inputText placeholder="Producto" id="NombreProducto" value="#{SalidaMB.nombreProducto}" />    
+                                                    </div>
+                                                </h:form>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="Codigo Producto *"></p:outputLabel>
+                                                <p:inputText id="codigoProductoSelect" disabled="true" value="#{SalidaMB.codigoProducto}"></p:inputText>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Cantidad Facturada:"></p:outputLabel>
+                                                <p:inputNumber id="cantidadFacturadaProductoSelect" disabled="true" value="#{SalidaMB.cantidadFacturada}"></p:inputNumber>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Cantidad a reportar:"></p:outputLabel>
+                                                <p:inputNumber id="cantidadProductoSelect" value="#{SalidaMB.cantidadReportada}"></p:inputNumber>
+                                            </div>
+
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Stock en inventario:"></p:outputLabel>
+                                                <p:inputText id="stockProductoSelect" disabled="true" value="#{SalidaMB.producto.max_stock}"></p:inputText>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Costo:"></p:outputLabel>
+                                                <p:inputText id="costoProductoSelect" disabled="true" value="#{SalidaMB.precioProducto}"></p:inputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-2">
+
+                                                <p:commandButton value="Agregar" process="@this"
+                                                                 action ="#{SalidaMB.AgregarProductoLista()}"
+                                                                 oncomplete="salidaForm:itemsEntradaDetalle salidaForm:buscar-producto-vista salidaForm:buscar-producto-vista:NombreProducto salidaForm:codigoProductoSelect salidaForm:cantidadProductoSelect salidaForm:stockProductoSelect salidaForm:costoProductoSelect"
+                                                                 update="" 
+                                                                 icon="pi pi-plus"/>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:commandButton value="Limpiar" process="@this"
+                                                                 action ="#{SalidaMB.LimpiarProducto()}"
+                                                                 oncomplete=""
+                                                                 update="" 
+                                                                 icon="pi pi-plus" 
+                                                                 styleClass="ui-button-success p-mr-2 p-mb-2"/>
+                                            </div>
+                                            <div class="p-col-12">
+                                                <p:dataTable  var="ListaItems" 
+                                                              value="#{SalidaMB.listaDetalle}" 
+                                                              selection="#{SalidaMB.productoSeleccionado}" 
+                                                              rowKey="#{ListaItems.articuloInventario.id}" 
+                                                              
+                                                              paginator="true" 
+                                                              
+                                                              id="itemsEntradaDetalle"
+                                                              >
+
+                                                    <p:column headerText="Producto" width="12%" >
+                                                        <h:outputText value="#{ListaItems.nombreProducto}"/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Cantidad a reportar" width="12%">
+                                                        <h:outputText converter="javax.faces.Integer" value="#{ListaItems.cant}"/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Costo" width="12%">
+                                                        <h:outputText value="#{ListaItems.costo}"/>
+                                                    </p:column>
+                                                    <p:column headerText="IVA" width="4%">
+                                                        <h:outputText value="#{ListaItems.iva}"/>
+                                                    </p:column>
+                                                    <p:column headerText="ICE" width="4%">
+                                                        <h:outputText value="#{ListaItems.ice}"/>
+                                                    </p:column>
+                                                    <p:column headerText="SubTotal" width="4%">
+                                                        <h:outputText value="#{ListaItems.subtotal}"/>
+                                                    </p:column>
+
+                                                    <p:column exportable="false" width="9%">
+
+                                                        <p:commandButton class="ui-button-danger rounded-button"
+                                                                         actionListener="#{SalidaMB.EliminarProducto(ListaItems)}" 
+                                                                         icon="pi pi-pi pi-trash">
+                                                        </p:commandButton>
+                                                    </p:column>
+                                                </p:dataTable>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="p-grid p-justify-end">
+                                            <div class="p-col-2">
+                                                <p:commandButton  value="Guardar" 
+                                                                  icon="pi pi-check" 
+                                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                                  process="@this" 
+                                                                  action="#{SalidaMB.RegistrarSalida()}"
+                                                                  update="salidaForm" 
+                                                                  oncomplete=""/>
+
+
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                 styleClass="ui-button-danger" process="@this"
+
+                                                                 oncomplete="PF('entradaproducto').hide()"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </f:facet>
-                            <p:column headerText="Nº de Comprobante" >
-                                <h:outputText value="----" />
-                            </p:column>
+                            </p:outputPanel>
+                        </p:outputPanel>
 
-                            <p:column headerText="Fecha" >
-                                <h:outputText value="----" />
-                            </p:column>
 
-                            <p:column headerText="Bodega" >
-                                <h:outputText value="----" />
-                            </p:column>
-                            <p:column headerText="Observación" >
-                                <h:outputText value="----" />
-                            </p:column>
-                            
-                            <p:column headerText="Acción" filterStyle="display : none">
-                                <p:button icon="pi pi-eye" styleClass="rounded-button ui-button-success p-mr-2 p-mb-2"/>
-                                <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-pencil"  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
-                                <p:button disabled="#{!usuarioMB.rolesDAO.rolExist('Encargado de inventario')}" icon="pi pi-trash" styleClass="rounded-button ui-button-danger"/>
-                            </p:column>
-                            
-                        </p:dataTable>
+
+                        <!-- Dialogo de buscar proveedor parte 2 -->
+                        <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaProveedorDialog"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form id="busqueda-proveedores-form">
+                                <p:dataTable widgetVar="TablaBuscarProveedor" var="ListaProveedores" id="listaProveedores"  value="#{SalidaMB.listaProveedores}" 
+                                             selection="#{SalidaMB.proveedorSeleccionado}" rowKey="#{ListaProveedores.idProveedor}" 
+                                             scrollable="true" scrollHeight="250"
+                                             >
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Proveedores Registrados</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProveedor').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet>
+
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{SalidaMB.SeleccionarProveedor(ListaProveedores)}" 
+                                                         update="salidaForm:buscar-proveedor-vista:NombreProveedor"
+                                                         oncomplete="PF('BuscarProveedor').hide();"/>
+
+                                    </p:column>
+
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{ListaProveedores.idProveedor}" />
+                                    </p:column>
+
+                                    <p:column headerText="Proveedor" filterStyle="display : none"  sortBy="#{ListaProveedores.nombre}"
+                                              filterBy="#{ListaProveedores.nombre}">
+                                        <h:outputText value="#{ListaProveedores.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Razon social">
+                                        <h:outputText value="#{ListaProveedores.razonSocial}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+
+                        <!-- Dialogo para articulos de buscar -->
+
+                        <p:dialog header="Busqueda de Producto" widgetVar="BuscarProducto" id="busquedaProducto"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form id="busqueda-productos-form">
+                                <p:dataTable widgetVar="TablaBuscarProducto" var="ListaProductos" id="listaProductos"  value="#{SalidaMB.listaProductos}" 
+                                             selection="#{SalidaMB.productoSeleccionado}" rowKey="#{ListaProductos.id}"   reflow="true" 
+                                             paginator="true" rows="4" 
+                                             rowSelectMode="add" paginatorPosition="bottom" 
+                                             editInitEvent="dblclick" editMode="cell"
+                                             scrollable="true" scrollHeight="250">
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Productos Registrados</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProducto').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet> 
+
+
+
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{SalidaMB.SeleccionarProducto(ListaProductos)}" 
+                                                         update="salidaForm"
+                                                         oncomplete="PF('BuscarProducto').hide();"/>
+                                    </p:column>
+
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{ListaProductos.id}" />
+                                    </p:column>
+
+                                    <p:column headerText="Producto"  filterStyle="display : none"                                                             
+                                              filterBy="#{ListaProductos.nombre}" >
+                                        <h:outputText  value="#{ListaProductos.nombre}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripcion" filterStyle="display : none"                                                             
+                                              filterBy="#{ListaProductos.descripcion}" >
+                                        <h:outputText value="#{ListaProductos.descripcion}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+                        <!-- Dialogo para la busqueda de Entradas -->
+
+                        <p:dialog header="Busqueda de Entradas" widgetVar="BuscarEntrada" id="busquedaEntrada"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form id="busqueda-entradas-form">
+                                <p:dataTable widgetVar="TablaBuscarEntrada" var="listaEntradasPermitidas" id="listaEntradasPermitidas" value="#{SalidaMB.listaEntradasPermitidas}" 
+                                             selection="#{SalidaMB.entradaSeleccionada}" rowKey="#{listaEntradasPermitidas.cod}"   reflow="true" 
+                                             paginator="true" rows="4" 
+                                             rowSelectMode="add" paginatorPosition="bottom" 
+                                             editInitEvent="dblclick" editMode="cell"
+                                             scrollable="true" scrollHeight="250">
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Entradas Registradas a reportar</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarEntrada').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet> 
+
+
+
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{SalidaMB.SeleccionarEntrada(listaEntradasPermitidas)}" 
+                                                         update="salidaForm"
+                                                         oncomplete="PF('BuscarProducto').hide();"/>
+                                    </p:column>
+
+                                    <p:column headerText="Comprobante" filterStyle="display : none" filterBy="#{listaEntradasPermitidas.numComprobante}">
+                                        <h:outputText value="#{listaEntradasPermitidas.numComprobante}" />
+                                    </p:column>
+
+                                    <p:column headerText="Proveedor"  filterStyle="display : none"                                                             
+                                              filterBy="#{listaEntradasPermitidas.nombreProveedor}" >
+                                        <h:outputText  value="#{listaEntradasPermitidas.nombreProveedor}" />
+                                    </p:column>
+
+                                    <p:column headerText="Fecha" filterStyle="display : none"                                                             
+                                              filterBy="#{listaEntradasPermitidas.fecha}" >
+                                        <h:outputText value="#{listaEntradasPermitidas.fecha}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+
+
                     </div>
                 </h:form>
             </ui:define>

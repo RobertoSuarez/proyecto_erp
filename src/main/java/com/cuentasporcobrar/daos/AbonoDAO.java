@@ -1,7 +1,10 @@
 package com.cuentasporcobrar.daos;
 
 import com.cuentasporcobrar.models.Abono;
+import com.cuentasporcobrar.models.Facturas_Pendientes;
 import com.cuentasporpagar.models.Factura;
+import com.cuentasporcobrar.daos.PersonaDAO;
+import com.cuentasporcobrar.models.Persona;
 import com.global.config.Conexion;
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -12,9 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades
- * para todo lo que tenga que ver con Abonos y Planes de pago, Esta clase 
- * tiene muchas funciones que son reutilizables.
+ * Clase tipo DAO que se encargará de proporcionar ciertas funcionalidades para
+ * todo lo que tenga que ver con Abonos y Planes de pago, Esta clase tiene
+ * muchas funciones que son reutilizables.
+ *
  * @author Andy Ninasunta, Alexander Vega
  */
 public class AbonoDAO implements Serializable {
@@ -33,7 +37,8 @@ public class AbonoDAO implements Serializable {
 
     /**
      * Constructor que recibe el objeto Abono e inicia una nueva conexion.
-     * @param abono  Objeto con información de un abono.
+     *
+     * @param abono Objeto con información de un abono.
      */
     public AbonoDAO(Abono abono) {
         conexion = new Conexion();
@@ -41,7 +46,9 @@ public class AbonoDAO implements Serializable {
     }
 
     /**
-     * Método para enlistar todos los abonos de una determinada venta/plan de pago
+     * Método para enlistar todos los abonos de una determinada venta/plan de
+     * pago
+     *
      * @param idVenta Identificación única de una venta.
      * @return List Abono Lista con los abonos de una determinada venta
      */
@@ -94,6 +101,7 @@ public class AbonoDAO implements Serializable {
 
     /**
      * Método que devuelve un String con la concatenacion de la factura
+     *
      * @param sucursal Sucursal donde se emitio una factura
      * @param pntEmision Punto de Emision donde se realizó la factura.
      * @param secuencia Secuencia única de una factura
@@ -120,12 +128,14 @@ public class AbonoDAO implements Serializable {
     }
 
     /**
-     * Método para insertar un nuevo abono.
-     * Nota:Al momento de insertar un nuevo abonos, automaticamente el valor
-     * pendiente de el plan de pago se actualiza en el procedimiento de PostGre
+     * Método para insertar un nuevo abono. Nota:Al momento de insertar un nuevo
+     * abonos, automaticamente el valor pendiente de el plan de pago se
+     * actualiza en el procedimiento de PostGre
+     *
      * @param idCliente ID único de un cliente.
      * @param idPlanPago ID único de un plan de pago.
-     * @return int Retorna un entero, el cual sirve para saber si se insertó correctamente.
+     * @return int Retorna un entero, el cual sirve para saber si se insertó
+     * correctamente.
      */
     public int insertarNuevoAbono(int idCliente, int idPlanPago) {
 
@@ -142,8 +152,7 @@ public class AbonoDAO implements Serializable {
             Se ejecuta la sentencia ingresada.*/
                 return conexion.ejecutarProcedimiento(sentenciaSQL);
             }
-            
-            
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
@@ -151,18 +160,15 @@ public class AbonoDAO implements Serializable {
         }
         return -1;
     }
-    
+
     //asiento contable
     public void insertasiento(int id) {
-        if (conexion.isEstado())
-        {
-            try
-            {
+        if (conexion.isEstado()) {
+            try {
                 int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por cobrar'";
                 result = conexion.ejecutarSql(cadena);
-                while (result.next())
-                {
+                while (result.next()) {
                     iddiario = result.getInt("iddiario");
                 }
                 //JSON asiento contable
@@ -179,60 +185,55 @@ public class AbonoDAO implements Serializable {
                 String tipomovimiento;
                 switch (abono.getIdFormaDePago()) {
                     case 2:
-                        formaPago=1;
+                        formaPago = 1;
                         tipomovimiento = "Caja";
                         break;
                     case 3:
-                        formaPago=3;
+                        formaPago = 3;
                         tipomovimiento = "Banco";
                         break;
                     default:
-                        formaPago=77;
+                        formaPago = 77;
                         tipomovimiento = "Ventas con tarifa 12%";
                         break;
                 }
-                    
-                    sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\"0\",\"haber\":\""
-                            + abono.getValorAbonado() + "\",\"tipoMovimiento\":\"Factura de venta\"},"
-                            + "{\"idSubcuenta\":\""+formaPago+"\",\"debe\":\""+ abono.getValorAbonado() 
-                            +"\",\"haber\":\"0\",\"tipoMovimiento\":\""+tipomovimiento+"\"}]";
-                    System.out.println(sentencia1);
-                    
+
+                sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\"0\",\"haber\":\""
+                        + abono.getValorAbonado() + "\",\"tipoMovimiento\":\"Factura de venta\"},"
+                        + "{\"idSubcuenta\":\"" + formaPago + "\",\"debe\":\"" + abono.getValorAbonado()
+                        + "\",\"haber\":\"0\",\"tipoMovimiento\":\"" + tipomovimiento + "\"}]";
+                System.out.println(sentencia1);
+
                 intJson(sentencia, sentencia1);
-            } catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
-            } finally
-            {
+            } finally {
                 conexion.desconectar();
             }
         }
     }
-    
-     public void intJson(String a, String b) {
-        if (conexion.isEstado())
-        {
-            try
-            {
+
+    public void intJson(String a, String b) {
+        if (conexion.isEstado()) {
+            try {
                 String cadena = "SELECT public.generateasientocotableexternal('"
                         + a + "','" + b + "')";
                 System.out.println(cadena);
                 result = conexion.ejecutarSql(cadena);
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
-            } finally
-            {
+            } finally {
                 conexion.desconectar();
             }
         }
     }
 
-
     /**
-     * Método para devolver el valor pendiente de cobro de un determinado plan/venta.
+     * Método para devolver el valor pendiente de cobro de un determinado
+     * plan/venta.
+     *
      * @param idVenta Identificación única de una venta.
-     * @return double Double con el valor pendiente de una venta.  
+     * @return double Double con el valor pendiente de una venta.
      */
     public double obtenerValorPendiente(int idVenta) {
         double valorPendiente = 0;
@@ -268,6 +269,7 @@ public class AbonoDAO implements Serializable {
 
     /**
      * Método para devolver la suma de todos los abonos de una venta.
+     *
      * @param idVenta Identificación única de una venta.
      * @return double Suma de todos los abonos de una venta.
      */
@@ -305,6 +307,7 @@ public class AbonoDAO implements Serializable {
 
     /**
      * Método para devolver el id del plan de pago y poder validar.
+     *
      * @param idVenta Identificación única de una venta.
      * @return int Retorna el ID del plan de pago.
      */
@@ -341,11 +344,12 @@ public class AbonoDAO implements Serializable {
     }
 
     /**
-     * Funcion para obtener la fecha de credito y vencimiento de un plan de pago.
-     * Donde [0] es la fecha de credito y [1] la fecha de vencimiento.
+     * Funcion para obtener la fecha de credito y vencimiento de un plan de
+     * pago. Donde [0] es la fecha de credito y [1] la fecha de vencimiento.
+     *
      * @param idVenta Identificación única de una venta.
-     * @return LocalDate[] Arreglo de tipo LocalDate con la fecha de credito y fecha
-     * de vencimiento.
+     * @return LocalDate[] Arreglo de tipo LocalDate con la fecha de credito y
+     * fecha de vencimiento.
      */
     public LocalDate[] obtenerFechaCreditoVencimiento(int idVenta) {
 
@@ -380,5 +384,112 @@ public class AbonoDAO implements Serializable {
         }
 
         return fechasPlanPago;
+    }
+
+    public List<Facturas_Pendientes> getPendingInvoices(String identificacion) {
+        List<Facturas_Pendientes> facturas = new ArrayList<>();
+        Facturas_Pendientes fact;
+        Persona persona = new Persona();
+        PersonaDAO personaDAO = new PersonaDAO();
+        persona = personaDAO.obtenerNombreClienteXIdentificacion(identificacion);
+        String query = "select * from public.obtener_facturas_pendientes_por_cliente() where id_cliente=" + String.valueOf(persona.getIdCliente()) + " and valorpendiente_r>0";
+        ResultSet rs;
+        try {
+            conexion.conectar();
+            rs = conexion.ejecutarSql(query);
+            while (rs.next()) {
+                fact = new Facturas_Pendientes();
+                fact.setFechaFacturacion(rs.getDate(1).toLocalDate());
+                fact.setDiasCredito(rs.getInt(2));
+                fact.setFechaVencimiento(rs.getDate(3).toLocalDate());
+                fact.setNombreDelCliente(String.valueOf(rs.getInt(4)));
+                fact.setIdFactura(rs.getInt(5));
+                fact.setValorTotalFactura(rs.getDouble(6));
+                fact.setValorPendiente(rs.getDouble(7));
+                fact.setFechaUltimoPago(rs.getDate(8).toLocalDate());
+                fact.setEstadoFactura(rs.getString(9));
+                fact.setDiasMora(rs.getInt(10));
+                fact.setNumFactura(obtenerConcatenacionFactura(rs.getInt(11), rs.getInt(12), rs.getInt(13)));
+                facturas.add(fact);
+            }
+        } catch (SQLException e) {
+            e.toString();
+        } finally {
+            conexion.desconectar();
+        }
+        return facturas;
+    }
+
+    public int insertarNuevoCobro(Abono abon, int idCliente, int idPlanPago) {
+
+        try {
+            /*Se ubica en el siguiente orden: 
+        (ID cliente, id plan de pago, forma de pago, valor abonado, fecha)*/
+            String sentenciaSQL = "select ingresar_cobro(" + abon.getIdVenta() + "," + idPlanPago + ","
+                    + abon.getIdFormaDePago() + "," + abon.getValorAbonado() + ",'"
+                    + abon.getFechaAbono() + "')";
+            ResultSet rs;
+            conexion.conectar();
+            rs = conexion.ejecutarSql(sentenciaSQL);
+            System.out.println("Procedimiento ejecutado");
+            System.out.println(sentenciaSQL);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return -1;
+    }
+
+    //asiento contable
+    public void insertAccountingSeat(int id, Abono abon) {
+        if (conexion.isEstado()) {
+            try {
+                int iddiario = 0;
+                String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por cobrar'";
+                result = conexion.ejecutarSql(cadena);
+                while (result.next()) {
+                    iddiario = result.getInt("iddiario");
+                }
+                //JSON asiento contable
+                String sentencia1, sentencia;
+                sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + abon.getValorAbonado()
+                        + ",\"documento\": \"CPC-ABN-" + id + "\",\"detalle\": "
+                        + "\"Cuentas por cobrar cliente\",\"fechaCreacion\": \""
+                        + abon.getFechaAbono().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
+                        + abon.getFechaAbono().plusDays(30).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
+                System.out.println(sentencia);
+                //JSON un solo movimiento
+
+                int formaPago;
+                String tipomovimiento;
+                switch (abon.getIdFormaDePago()) {
+                    case 2:
+                        formaPago = 1;
+                        tipomovimiento = "Caja";
+                        break;
+                    case 3:
+                        formaPago = 3;
+                        tipomovimiento = "Banco";
+                        break;
+                    default:
+                        formaPago = 77;
+                        tipomovimiento = "Ventas con tarifa 12%";
+                        break;
+                }
+
+                sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\"0\",\"haber\":\""
+                        + abon.getValorAbonado() + "\",\"tipoMovimiento\":\"Factura de venta\"},"
+                        + "{\"idSubcuenta\":\"" + formaPago + "\",\"debe\":\"" + abon.getValorAbonado()
+                        + "\",\"haber\":\"0\",\"tipoMovimiento\":\"" + tipomovimiento + "\"}]";
+                System.out.println(sentencia1);
+
+                intJson(sentencia, sentencia1);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
     }
 }

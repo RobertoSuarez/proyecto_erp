@@ -7,15 +7,18 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
+
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
             <ui:define name="content">
 
                 <ui:include src="menuVentas.xhtml"/>
-                <br/><br/><br/><br/>
+
                 <h:form id="ventaForm"  style="padding-left: 30px; padding-right: 30px">
                     <p:growl id="growl" showDetail="true" />
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
+                    <br/><br/><br/><br/>
                     <p:panel id="outclientes" header="Clientes">
                         <h:panelGrid columns="7" width="80%">
                             <p:outputLabel value="Identificación: "/>
@@ -38,8 +41,8 @@
                     <p:panel id="busquedaProductoPanel" header="Buscar producto" style="margin-top: 10px;" visible="#{VentaMB.visible}">
                         <h:panelGrid columns="4" width="50%" >
                             <p:outputLabel value="Codigo: "/>
-                            <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProdBuscar}" type="number" />
-                            <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky" style="position: center"/>
+                            <p:inputText id="ItemCodigo" value="#{VentaMB.codigoProdBuscar}" type="number" disabled="true" />
+                            <p:commandButton value="Buscar" actionListener="#{VentaMB.BuscarProducto}" update="detalleProducto growl growl-sticky" style="position: center" rendered="false"/>
                             <p:commandButton value="Lista de Productos" type="button" icon="pi pi-search" onclick="PF('BuscarProductos').show()" style="position: center"/>
                         </h:panelGrid>
                     </p:panel>
@@ -52,10 +55,10 @@
                             <p:outputLabel value="Precio: "/>
                             <p:inputNumber id="priceTextBox" value="#{VentaMB.productoActual.precioUnitario}" modifyValueOnWheel="false" disabled="true" />
                             <p:outputLabel value="Cantidad: "/>
-                            <p:inputNumber value="#{VentaMB.cantidad}" minValue="0" decimalPlaces="0" />
+                            <p:inputNumber value="#{VentaMB.cantidad}" minValue="0"/>
                             <p:outputLabel value="Descuento: "/>
-                            <p:inputNumber value="#{VentaMB.descuento}" minValue="0" decimalPlaces="0" disabled="true"/>
-                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update="itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
+                            <p:inputNumber value="#{VentaMB.descuento}" symbol=" %" symbolPosition="s" minValue="0" decimalPlaces="0" disabled="true"/>
+                            <p:commandButton value="Agregar" actionListener="#{VentaMB.AgregarProductoLista}" update=":ventaForm busquedaProducto itemsTable detalleProducto busquedaProductoPanel FactData Pagos growl" />
                         </h:panelGrid>
                     </p:panel>
 
@@ -68,7 +71,7 @@
                                  paginator="true" 
                                  resizableColumns="true" 
                                  class="p-mt-3"
-                                 rows="5" 
+                                 rows="5"  sortBy="#{ListaItems.codigo}"
                                  paginatorPosition="bottom" style="visibility: #{VentaMB.visible}">
 
                         <f:facet name="header">
@@ -77,7 +80,7 @@
 
                         <p:column headerText="Eliminar" >
                             <p:commandButton icon="pi pi-trash" styleClass="ui-button-danger" process="@this" actionListener="#{VentaMB.EliminarProducto(ListaItems)}" 
-                                             update="subtotalVenta FactData Pagos" />
+                                             update="subtotalVenta busquedaProducto FactData Pagos" />
                         </p:column>
 
                         <p:column headerText="Cod">
@@ -188,7 +191,11 @@
                                 <h:outputText value="#{ListaProductos.codigo}" />
                             </p:column>
 
-                            <p:column headerText="Producto" >
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{ListaProductos.esServicio ? 'Servicio' : 'Bien'}" />
+                            </p:column>
+
+                            <p:column headerText="Item" >
                                 <h:outputText value="#{ListaProductos.nombre}" />
                             </p:column>
 
@@ -198,7 +205,7 @@
                             </p:column>
 
                             <p:column headerText="Stock">
-                                <h:outputText value="#{ListaProductos.stock}" >
+                                <h:outputText value="#{ListaProductos.stockeable ? ListaProductos.stock : '-'}" >
                                 </h:outputText>
                             </p:column>
 

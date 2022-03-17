@@ -5,11 +5,13 @@
  */
 package com.inventario.DAO;
 
+import com.contabilidad.models.SubCuenta;
 import com.global.config.Conexion;
 import com.inventario.models.ArticulosInventario;
 import com.inventario.models.Categoria;
 import com.inventario.report.ProductoReport;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +19,20 @@ public class ArticulosInventarioDAO {
 
     Conexion conexion = new Conexion();
     private ArticulosInventario articulosInventario;
+    private SubCuenta subCuenta;
     private ResultSet resultSet;
     private String sentenciaSql;
     private List<ArticulosInventario> listaArticulos;
+    private List<ArticulosInventario> listaArticulos2;
+    private List<SubCuenta> listasubCuentas;
     private List auxlista = new ArrayList<>();
 
     public ArticulosInventarioDAO() {
         articulosInventario = new ArticulosInventario();
         conexion = new Conexion();
         listaArticulos = new ArrayList<>();
+        listaArticulos2 = new ArrayList<>();
+        listasubCuentas = new ArrayList<>();
     }
 
     public ArticulosInventarioDAO(ArticulosInventario articulosInventario) {
@@ -33,9 +40,63 @@ public class ArticulosInventarioDAO {
         this.articulosInventario = articulosInventario;
     }
 
-    public List<ArticulosInventario> getArticulos() {
+    public ArticulosInventarioDAO(SubCuenta subCuenta) {
+        conexion = new Conexion();
+        this.subCuenta = subCuenta;
+    }
+
+    public List<ArticulosInventario> getListaArticulos2() {
+        return listaArticulos2;
+    }
+
+    public void setListaArticulos2(List<ArticulosInventario> listaArticulos2) {
+        this.listaArticulos2 = listaArticulos2;
+    }
+
+    public ArticulosInventarioDAO(SubCuenta subCuenta, List<SubCuenta> listasubCuentas) {
+        this.subCuenta = subCuenta;
+        this.listasubCuentas = listasubCuentas;
+    }
+
+    public List<ArticulosInventario> getArticulosEntradas() {
         List<ArticulosInventario> ListaInv = new ArrayList<>();
         String sql = String.format("Select * FROM articulos");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaInv.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getInt("cat_cod"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("id_categoria"),
+                        resultSet.getInt("id_tipo"),
+                        resultSet.getInt("cod"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getInt("id_bodega"),
+                        resultSet.getInt("min_stock"),
+                        resultSet.getInt("max_stock"),
+                        resultSet.getInt("cantidad"),
+                        resultSet.getInt("costo"),
+                        resultSet.getInt("iva"),
+                        resultSet.getInt("ice")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaInv;
+    }
+
+    public List<ArticulosInventario> getArticulos(int idProveedor, String numeroComprobante) {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("select distinct "
+                + "articulos.id,articulos.id_categoria,articulos.nombre,articulos.id_tipo,articulos.descripcion,articulos.id_bodega,articulos.cantidad,articulos.costo,articulos.iva,articulos.ice,articulos.max_stock "
+                + "from articulos\n"
+                + "inner join entrada_detalle on cod_articulo = articulos.id\n"
+                + "inner join entrada on entrada.cod = entrada_detalle.id_entrada\n"
+                + "where entrada.num_comprobante = '" + numeroComprobante + "' and entrada.id_proveedor = " + idProveedor + "");
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
@@ -61,6 +122,83 @@ public class ArticulosInventarioDAO {
             conexion.desconectar();
         }
         return ListaInv;
+    }
+
+    public List<ArticulosInventario> getArticulos() {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("select a.id, a.nombre,a.descripcion,b.nombre_bodega,a.unidadmedida, a.cantidad, a.costo\n"
+                + "from articulos a inner join bodega b on a.id_bodega=b.cod order by a.id");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ArticulosInventario articulo = new ArticulosInventario();
+                articulo.setId(resultSet.getInt("id"));
+                articulo.setNombre(resultSet.getString("nombre"));
+                articulo.setDescripcion(resultSet.getString("descripcion"));
+                articulo.setNomBodega(resultSet.getString("nombre_bodega"));
+                articulo.setUnidadMedida(resultSet.getString("unidadmedida"));
+                articulo.setCantidad(resultSet.getInt("cantidad"));
+                articulo.setCoast(resultSet.getFloat("costo"));
+                ListaInv.add(articulo);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaInv;
+    }
+
+    //Listar los servicios
+    public List<ArticulosInventario> getServices() {
+        List<ArticulosInventario> ListaServicios = new ArrayList<>();
+        String sql = String.format("select a.id, a.nombre,a.descripcion, a.cantidad, a.costo,trunc(((a.costo*a.iva)/100),2)as iva\n"
+                + "from articulos a inner join bodega b on a.id_bodega=b.cod\n"
+                + "where a.es_servicio=true\n"
+                + " order by a.id ");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ArticulosInventario articulo = new ArticulosInventario();
+                articulo.setId(resultSet.getInt("id"));
+                articulo.setNombre(resultSet.getString("nombre"));
+                articulo.setDescripcion(resultSet.getString("descripcion"));
+                articulo.setCantidad(resultSet.getInt("cantidad"));
+                articulo.setCoast(resultSet.getFloat("costo"));
+                articulo.setImpuestoIVA(resultSet.getFloat("iva"));
+                ListaServicios.add(articulo);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaServicios;
+    }
+
+    //listar subcuenta
+    public List<SubCuenta> LlenarSubcuentas() {
+        if (conexion.isEstado()) {
+            try {
+                String consulta = "select idsubcuenta, nombre from subcuenta order by idsubcuenta desc";
+                resultSet = conexion.ejecutarSql(consulta);
+                while (resultSet.next()) {
+                    listasubCuentas.add(new SubCuenta(resultSet.getInt("idsubcuenta"),
+                            resultSet.getString("nombre")));
+                }
+                System.out.println(consulta);
+                resultSet.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
+        return listasubCuentas;
     }
 
     public Categoria getCategoria(int id) {
@@ -171,7 +309,7 @@ public class ArticulosInventarioDAO {
             int cod = 1;
             int tipo = 1;
             int bodegaid = 1;
-            int categoriaid =1;
+            int categoriaid = 1;
             while (rs.next()) {
                 cod = rs.getInt(1) + 1;
             }
@@ -213,7 +351,7 @@ public class ArticulosInventarioDAO {
                 articulo.setCosto(resultSet.getInt("cantidad"));
                 articulo.setCantidad(resultSet.getInt("costo"));
                 articulo.setTotal(resultSet.getInt("total"));
-  
+
                 ListaInv.add(articulo);
             }
 
@@ -223,6 +361,141 @@ public class ArticulosInventarioDAO {
             conexion.desconectar();
         }
         return ListaInv;
+    }
+
+    public void insertArticulosconIva(ArticulosInventario a, boolean iva) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "',"+false+","+false+")";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+
+    public void insertArticulosSinIva(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "',"+false+","+false+")";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+    
+    
+    //insertar un servicio
+    public void insertServicioStockeableIva(ArticulosInventario a,boolean iva) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+true+")";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+    public void insertServicioStockeablesinIva(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+true+")";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+    public void insertServicioNoStockeablesIva(ArticulosInventario a,boolean iva) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
+                    + "," + 1 + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+false+")";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+    
+    public void insertServicioNoStockeablesinIva(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
+                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
+                    + "values\n"
+                    + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
+                    + "," + 1 + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+false+")";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+    
+
+    public List<ArticulosInventario> obtenerDatos(int id) {
+        List<ArticulosInventario> listDatosArticulos = new ArrayList<>();
+        if (conexion.isEstado()) {
+            try {
+                String consulta = "select a.id, s.nombre, a.nombre,a.descripcion,c.nom_categoria,t.tipo,b.nombre_bodega,a.unidadmedida,\n"
+                        + "a.cantidad,a.costo,a.iva,a.ice\n"
+                        + "from articulos a inner join categoria c on a.id_categoria=c.cod\n"
+                        + "inner join tipo t on a.id_tipo=t.cod inner join bodega b on a.id_bodega=b.cod\n"
+                        + "inner join subcuenta s on a.id_subcuenta=s.idsubcuenta where a.id=" + id;
+                resultSet = conexion.ejecutarSql(consulta);
+                while (resultSet.next()) {
+                    listDatosArticulos.add(new ArticulosInventario(resultSet.getInt("id"), resultSet.getString("nombre"),
+                            resultSet.getString("descripcion"), resultSet.getString("nombre_bodega"),
+                            resultSet.getInt("cantidad"), resultSet.getFloat("costo"), resultSet.getInt("iva"),
+                            resultSet.getString("unidadmedida"), resultSet.getString("tipo"), resultSet.getString("nom_categoria"),
+                            resultSet.getString("nombre"), resultSet.getFloat("ice")));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
+        return listDatosArticulos;
     }
 
 }

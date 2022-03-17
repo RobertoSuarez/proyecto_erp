@@ -56,7 +56,7 @@ public class RolDAO {
         Rol rolAux;
         String query = "select r.* \n"
                 + "from public.\"rolUsuario\" ru inner join rol r on ru.\"idRol\" = r.\"idRol\" \n"
-                + "where ru.\"idUsuario\" <> "+ String.valueOf(idUsuario) +"\n"
+                + "where ru.\"idUsuario\" <> " + String.valueOf(idUsuario) + "\n"
                 + "group by r.\"idRol\"";
         ResultSet rs;
         try {
@@ -78,38 +78,36 @@ public class RolDAO {
         }
         return roles;
     }
-    
-    public void addRolUser(int idRol, int idUser){
-        String query = "INSERT INTO public.\"rolUsuario\"(\n" +
-"	 \"idRolUsuario\", \"idUsuario\", \"idRol\")\n" +
-"	VALUES ((Select \"idRolUsuario\"\n" +
-"	from public.\"rolUsuario\"\n" +
-"	order by \"idRolUsuario\" desc\n" +
-"	Limit 1)+1,"+ String.valueOf(idUser) +", "+ String.valueOf(idRol) +");";
-        try{
+
+    public void addRolUser(int idRol, int idUser) {
+        String query = "INSERT INTO public.\"rolUsuario\"(\n"
+                + "	 \"idRolUsuario\", \"idUsuario\", \"idRol\")\n"
+                + "	VALUES ((Select \"idRolUsuario\"\n"
+                + "	from public.\"rolUsuario\"\n"
+                + "	order by \"idRolUsuario\" desc\n"
+                + "	Limit 1)+1," + String.valueOf(idUser) + ", " + String.valueOf(idRol) + ");";
+        try {
             System.out.println("Entro al metodo");
             this.conexion.conectar();
             this.conexion.ejecutarSql(query);
             this.conexion.desconectar();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.toString();
         }
     }
-    
-    public void deleteRolUser(int idRol, int idUser){
-        String query = "DELETE FROM public.\"rolUsuario\"\n" +
-"	WHERE \"idUsuario\"= "+String.valueOf(idUser) +" and \"idRol\" = "+ String.valueOf(idRol) +";";
-        try{
+
+    public void deleteRolUser(int idRol, int idUser) {
+        String query = "DELETE FROM public.\"rolUsuario\"\n"
+                + "	WHERE \"idUsuario\"= " + String.valueOf(idUser) + " and \"idRol\" = " + String.valueOf(idRol) + ";";
+        try {
             this.conexion.conectar();
             this.conexion.ejecutarSql(query);
             this.conexion.desconectar();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.toString();
         }
     }
-    
+
     public List<Rol> GetRols() {
         List<Rol> roles = new ArrayList<>();
         Rol rolAux;
@@ -135,32 +133,26 @@ public class RolDAO {
         }
         return roles;
     }
-    
-    public List<SelectItem> GetRolsSelected(int[] lstCodigos) {
-        List<SelectItem> roles = new ArrayList<>();
-        SelectItem rolAux;
+
+    public SelectItem GetRolsSelected(Modulo lstCodigos) {
+        SelectItem rolAux = new SelectItem();
         ModuleDAO modDao = new ModuleDAO();
         try {
-            if(lstCodigos.length>0){
-                for(int i=0;i<lstCodigos.length;i++){
-                    rolAux = new SelectItem();
-                    rolAux.setValue(lstCodigos[i]);
-                    rolAux.setLabel(modDao.invokeModuleName(lstCodigos[i]));
-                    roles.add(rolAux);
-                }
-            }
+            rolAux.setValue(lstCodigos.getIdModule());
+            System.out.println(rolAux.getValue());
+            rolAux.setLabel(lstCodigos.getNameModule());
         } catch (Exception e) {
             e.toString();
         } finally {
             conexion.desconectar();
         }
-        return roles;
+        return rolAux;
     }
-    
+
     public List<Permisos> GetPermissionsRoles(int idRol, int idModule) {
         List<Permisos> permisos = new ArrayList<>();
         Permisos permisAux;
-        String query = "SELECT * from security.obtener_vistas("+String.valueOf(idRol)+", "+String.valueOf(idModule)+")";
+        String query = "SELECT * from security.obtener_vistas(" + String.valueOf(idRol) + ", " + String.valueOf(idModule) + ")";
         ResultSet rs;
         try {
             this.conexion.conectar();

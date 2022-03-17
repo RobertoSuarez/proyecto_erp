@@ -20,18 +20,30 @@
                             </div>
                         </p:toolbarGroup>
                     </p:toolbar>
-                    <f:facet name="header">
+                    <f:facet name="header" id="PanelVistas">
                         <p:commandButton value="Nuevo" icon="pi pi-plus"
                                          class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr- p-mb-" 
                                          process="@this"
                                          onclick="PF('VistaData').show()">
+                        </p:commandButton>
+                        <p:selectOneMenu value="#{ViewsMB.codigoModulo}" style="margin-left: 60%">
+                            <f:selectItem itemLabel="All" itemValue="-1" noSelectionOption="true" />
+                            <f:selectItems value="#{ViewsMB.lstModulesForFilter}" />
+                        </p:selectOneMenu>
+                        <p:commandButton icon="pi pi-spinner"
+                                         class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+                                         process="VistaGeneral"
+                                         update="dt_views"
+                                         actionListener="#{ViewsMB.filtrado()}"
+                                         style="margin-left: 5%">
                         </p:commandButton>
                     </f:facet>
                     <br/>
                     <p:dataTable id="dt_views" value="#{ViewsMB.lstViews}" var="ListaVistas"
                                  size="small" liveResize="true" rowKey="#{ListaVistas.id_Vista}"
                                  selectionMode="single"
-                                 reflow="true">
+                                 reflow="true"
+                                 widgetVar="TableVistas" >
                         <p:column headerText="Codigo" width="5%" style="font-size: 17px">
                             <h:outputText value="#{ListaVistas.id_Vista}"/>
                         </p:column>
@@ -44,11 +56,11 @@
                             <h:outputText value="#{ListaVistas.description_Vista}"/>
                         </p:column>
 
-                        <p:column headerText="Modulo perteneciente" style="font-size: 17px" width="10%">
+                        <p:column headerText="Modulo perteneciente" style="font-size: 17px" width="20%">
                             <h:outputText value="#{ListaVistas.name_Modulo}"/>
                         </p:column>
 
-                        <p:column exportable="false" width="4%">
+                        <p:column exportable="false" width="5%">
                             <p:commandButton icon="pi pi-pencil"                                                         
                                              class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                              process="@this"

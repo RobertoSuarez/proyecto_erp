@@ -34,7 +34,6 @@
                     <br/>
                     <p:dataTable id="dt_rols" value="#{RolMB.listOfRoles}" var="ListaRoles"
                                  size="small" liveResize="true" rowKey="#{ListaRoles.id}"
-                                 selection="#{RolMB.rolSeleccionado}"
                                  selectionMode="single"
                                  reflow="true">
                         <p:column headerText="Codigo" width="5%" style="font-size: 17px">
@@ -69,33 +68,43 @@
                 </p:panel>
                 <p:panel header="Modulos activos" id="form-rol"
                          style="width: 50%; text-align: left; float: left; height: 15%;">
-                    <p:selectManyMenu id="chbRoles"
-                                      value="#{RolMB.modulesActives}"
-                                      showCheckbox="true" 
-                                      styleClass="manymenu-advanced">
-                        <f:selectItems value="#{RolMB.lstModulesItem}"/>
-                    </p:selectManyMenu>
-                    <p:commandButton icon="pi pi-plus"                                                         
-                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                     process="RolDATA @this form-rol chbRoles"
-                                     value="Agregar modulos"
-                                     update="somModulos"
-                                     actionListener="#{RolMB.chargeRolesSelected()}">
-                    </p:commandButton>
+                    <p:dataTable id="ModulosActivosList"
+                                 value="#{RolMB.lstModulesItem}"
+                                 var="ListaModulos"
+                                 size="small"
+                                 style="width: 100%"
+                                 paginator="true"
+                                 rows="3"
+                                 paginatorPosition="bottom">
+                        <p:column headerText="Modulos" width="70%">
+                            <h:outputText value="#{ListaModulos.nameModule}" />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton icon="pi pi-plus"                                                         
+                                             class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                             process=":form-rol"
+                                             update=":form :somModulos :ModulosActivosList"
+                                             actionListener="#{RolMB.chargeRolesSelected(ListaModulos)}">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
                 </p:panel>
                 <p:divider/>
-                <p:selectOneMenu id="somModulos" value="#{RolMB.codigoModule}">
-                    <f:selectItem itemValue="-1" itemLabel="Seleccione..."/>
-                    <f:selectItems value="#{RolMB.lstModulesSelected}"/>
-                </p:selectOneMenu>
-                <p:commandButton icon="pi pi-spinner"                                                         
-                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                 process="somModulos @this"
-                                 update="dt_permisos"
-                                 value="Cargar vistas"
-                                 style="margin-left: 5%"
-                                 actionListener="#{RolMB.chargePermisosSelected()}">
-                </p:commandButton>
+                <p:outputPanel id="cmdPermisosSeleccionados">
+                    <p:selectOneMenu id="somModulos" value="#{RolMB.module.idModule}" var="IdentificadorModulo"
+                                     style="height: 35px; width: 185px !important;">
+                        <f:selectItem itemValue="-1" itemLabel="Seleccione..."/>
+                        <f:selectItems value="#{RolMB.lstModulesSelected}"/>
+                        <p:ajax event="change" process="@this"/>
+                    </p:selectOneMenu>
+                    <p:commandButton icon="pi pi-spinner"                                                         
+                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+                                     process="@this RolDATA"
+                                     update="dt_permisos"
+                                     style="margin-left: 5%"
+                                     actionListener="#{RolMB.chargePermisosSelected()}">
+                    </p:commandButton>
+                </p:outputPanel>
                 <p:dataTable id="dt_permisos" value="#{RolMB.lstPermisos}" var="ListaPermisos"
                              size="small" liveResize="true" rowKey="#{ListaPermisos.id_vista}" 
                              style="width: 100%"
