@@ -65,7 +65,7 @@ and open the template in the editor.
                                         <p:outputLabel value="Rendimiento :"></p:outputLabel>
                                         <p:inputNumber id="rendimiento" value="#{formulaMBeans.formulaProduccion.rendimiento}" maxlength="25"
                                                        placeholder="Ingrese numero" >
-                                            <p:ajax event="blur" update="mod,cif" listener="#{formulaMBeans.costosProduccion()}"/>
+                                            <p:ajax event="blur" listener="#{formulaMBeans.recalculaRendimiento()}" update=":form-princFormula:tiempoCentro"/>
                                         </p:inputNumber>
                                     </div>
 
@@ -84,7 +84,7 @@ and open the template in the editor.
                                             editable="false">
 
                                             <f:selectItem itemLabel="Seleccionar Proceso" itemValue=""/>
-                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}" update=":form-princFormula:MaterialesProducto,mod,cif,rendimiento"/>
+                                            <p:ajax listener="#{formulaMBeans.llenarListaSubproceso()}" update=":form-princFormula:MaterialesProducto,mod,cif,rendimiento,:form-princFormula:tiempoCentro,:form-princFormula:adicionalCentro"/>
                                             <f:selectItems value="#{formulaMB.listProceso}" var="proceso"
                                                            itemLabel="#{proceso.nombre}"
                                                            itemValue="#{proceso.codigo_proceso}"/>
@@ -98,7 +98,9 @@ and open the template in the editor.
                                     </div>
 
 
-
+                                    <div class="p-col-2">
+                                        <p:commandButton value="Tiempo centro de trabajo" icon="pi pi-plus" oncomplete="PF('tiempoCentro').show()"/>
+                                    </div>
                                     <div class="p-col-2">
                                         <p:commandButton value="Materia Prima" icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
                                     </div>
@@ -250,6 +252,91 @@ and open the template in the editor.
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>
+                    </p:dialog>
+
+                    <p:dialog header="Tiempo Centro de trabajo" showEffect="fade" modal="true"
+                              widgetVar="tiempoCentro" responsive="true" width="90%"
+                              draggable="false" height="500">
+
+                        <div class="p-grid p-justify-around">
+                            <div class="p-col-11">
+                                <div class="p-col-4">
+                                    <p:outputLabel value="Centro de trabajo" for="@next"/>
+                                    <p:selectOneMenu id="adicionalCentro" value="#{formulaMBeans.centro.codigo_subproceso}" editable="false" 
+                                                     disabled="#">
+                                        <f:selectItem itemLabel="Agregar un nuevo Centro de trabajo" itemValue="" noSelectionOption="true"/>
+                                        <p:ajax listener="#{formulaMBeans.addCentro()}" update=":form-princFormula:tiempoCentro,:form-princFormula:growl"/>
+                                        <f:selectItems value="#{formulaMBeans.listSubProcesoAdicional}" var="centro" 
+                                                       itemLabel="#{centro.nombre}" 
+                                                       itemValue="#{centro.codigo_subproceso}"></f:selectItems>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12">
+                                        <p:dataTable id="tiempoCentro" editable="true" reflow="true" var="centroTrabajo"
+                                                     editInitEvent="dblclick" editMode="cell"
+                                                     value="#{formulaMBeans.listSubProceso}">
+                                            <p:column headerText="Horas de trabajo">
+                                                <p:cellEditor>
+                                                    <f:facet name="output">
+                                                        <h:outputText value="#{centroTrabajo.hora}"/>
+                                                    </f:facet>
+                                                    <f:facet name="input">
+                                                        <p:inputMask value="#{centroTrabajo.hora}"
+                                                                     mask="99:99:99">
+                                                            <p:ajax event="blur" listener="#{formulaMBeans.calculoValorHora(centroTrabajo)}" process="@this" update="importeDirecto,importeIndirecto,:form-princFormula:growl"/>
+                                                        </p:inputMask>
+                                                    </f:facet>
+                                                </p:cellEditor>
+                                            </p:column>
+                                            <p:column headerText="Importe Directo" >
+                                                <h:outputText id="importeDirecto" value="#{centroTrabajo.importe_directo}" />
+                                            </p:column>
+                                            <p:column headerText="Importe Indirecto" >
+                                                <h:outputText id="importeIndirecto" value="#{centroTrabajo.importe_indirecto}" />
+                                            </p:column>
+                                            <p:column headerText="Centro de trabajo" >
+                                                <h:outputText value="#{centroTrabajo.nombre}" />
+                                            </p:column>
+                                            <p:column headerText="Costo Directo" >
+                                                <h:outputText value="#{centroTrabajo.minuto_directo}" />
+                                            </p:column>
+                                            <p:column headerText="Costo Indirecto" >
+                                                <h:outputText value="#{centroTrabajo.minuto_intirecto}" />
+                                            </p:column>
+                                            <p:column headerText="Acciones">
+                                                <p:column headerText="Acciones">
+                                                    <p:commandButton icon="pi pi-trash" actionListener="#{formulaMBeans.deleteFila(centroTrabajo)}"
+                                                                     styleClass="edit-button rounded-button ui-button-danger"
+                                                                     update=":form-princFormula:tiempoCentro"
+                                                                     process="@this">
+
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones Guardar/Cerrar -->
+                        <div class="p-grid p-justify-end">
+                            <div class="p-col-2">
+                                <p:commandButton value="Confirmar"  
+                                                 icon="pi pi-check"
+                                                 styleClass="ui-button-primary"
+                                                 actionListener="#{formulaMBeans.costoCalculo()}"
+                                                 update=":form-princFormula:mod,:form-princFormula:cif,growl"
+                                                 oncomplete="PF('tiempoCentro').hide()"/>
+                            </div>
+                            <div class="p-col-2">
+                                <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                 styleClass="ui-button-danger" process="@this"
+                                                 oncomplete="PF('tiempoCentro').hide()"/>
+                            </div>
+                        </div>
+
                     </p:dialog>
 
 

@@ -73,7 +73,7 @@ public class SubProcesoDAO {
             String sentenciaSql = "INSERT INTO public.detalle_subproceso(\n"
                     + "	codigo_subproceso, costo_mano_obra, costo_indirecto,idsubcuenta, cmdunitario, cifunitario, \"tiempoUnidad\")\n"
                     + "	VALUES (" + subproceso.getCodigo_subproceso() + ", " + subproceso.getCosto_mano_obra() + ", " + subproceso.getCosto_indirecto() + ", "
-                    + subproceso.getCodigo_costos() +", " + subproceso.getModunitario()+", " + subproceso.getCifunitario()+", " + subproceso.getHora_costo()+ ");";
+                    + subproceso.getCodigo_costos() + ", " + subproceso.getModunitario() + ", " + subproceso.getCifunitario() + ", " + subproceso.getHora_costo() + ");";
             //enviamos la sentencia
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
@@ -83,12 +83,15 @@ public class SubProcesoDAO {
         }
     }
 
-    public int insertarSubproceso(SubProceso proceso) {
+    public int insertarSubproceso(SubProceso proceso, float costo_directo, float costo_indirecto) {
         try {
             String sentenciaSql = "INSERT INTO public.subproceso(\n"
                     + " nombre, descripcion)\n"
                     + "	VALUES ('"
                     + proceso.getNombre() + "', '" + proceso.getDescripcion() + "');";
+            sentenciaSql = "INSERT INTO public.subproceso(nombre, descripcion, costo_directo, costo_indirecto)\n"
+                    + "	VALUES ('"
+                    + proceso.getNombre() + "', '" + proceso.getDescripcion() + "'," + costo_directo + "," + costo_indirecto + ");";
             //enviamos la sentencia
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
@@ -185,5 +188,20 @@ public class SubProcesoDAO {
         } finally {
             conexion.desconectar();
         }
+    }
+
+    public int updateSubProceso(int subProceso, float tiempoTotal, float tiempoHora) {
+        try {
+            String sentenciaSql = "UPDATE public.subproceso\n"
+                    + "	SET hora_trabajo="+tiempoTotal+", hora_estimada="+tiempoHora+"\n"
+                    + "	WHERE codigo_subproceso="+subProceso+";";
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+
+        }
+
     }
 }

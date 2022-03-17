@@ -33,6 +33,8 @@ public class ProcesosManagedBean implements Serializable {
     private ProcesoProduccionDAO procesoProduccionDAO;
     private ProcesoProduccion procesoProduccion;
     private List<SubProceso> listaSubProcesos;
+    private List<SubProceso> listaSubConfirmadaProcesos;
+    private List<SubProceso> listaConfirmadaProcesos;
     private ProcesoProduccion selectProceso;
     private TreeNode singleSelectedTreeNode;
     private TreeNode root;
@@ -47,6 +49,9 @@ public class ProcesosManagedBean implements Serializable {
         listaProcesos = new ArrayList<>();
         listaSubProcesos = new ArrayList<>();
         root = new DefaultTreeNode("Root Node", null);
+        listaSubConfirmadaProcesos = new ArrayList<>();
+        sProceso = new SubProceso();
+        listaConfirmadaProcesos = new ArrayList<>();
     }
 
     public void cargarLista() {
@@ -64,6 +69,7 @@ public class ProcesosManagedBean implements Serializable {
     @PostConstruct
     public void init() {
         cargarLista();
+        listaSubProcesos = procesoProduccionDAO.getListaSubProcesos();
         this.selectProceso = new ProcesoProduccion();
         aleatorioIdenti();
     }
@@ -181,6 +187,83 @@ public class ProcesosManagedBean implements Serializable {
 
     public void setDocuments(TreeNode documents) {
         this.documents = documents;
+    }
+
+    public List<SubProceso> getListaSubProcesos() {
+        return listaSubProcesos;
+    }
+
+    public void setListaSubProcesos(List<SubProceso> listaSubProcesos) {
+        this.listaSubProcesos = listaSubProcesos;
+    }
+
+    public List<SubProceso> getListaSubConfirmadaProcesos() {
+        return listaSubConfirmadaProcesos;
+    }
+
+    public void setListaSubConfirmadaProcesos(List<SubProceso> listaSubConfirmadaProcesos) {
+        this.listaSubConfirmadaProcesos = listaSubConfirmadaProcesos;
+    }
+
+    public List<SubProceso> getListaConfirmadaProcesos() {
+        return listaConfirmadaProcesos;
+    }
+
+    public void setListaConfirmadaProcesos(List<SubProceso> listaConfirmadaProcesos) {
+        this.listaConfirmadaProcesos = listaConfirmadaProcesos;
+    }
+    
+
+    public void addMateriales(SubProceso producto) {
+        if (producto.isVerifica() == true) {
+            listaSubConfirmadaProcesos.add(new SubProceso(producto.getCodigo_subproceso(),
+                    producto.getNombre(),
+                    producto.getDescripcion()));
+
+        } else {
+            for (SubProceso lista : listaSubConfirmadaProcesos) {
+                if (lista.getCodigo_subproceso() == producto.getCodigo_subproceso()) {
+                    listaSubConfirmadaProcesos.remove(lista);
+                }
+            }
+        }
+    }
+
+    public void llenaProductoConfirmado() {
+        for (SubProceso lista : listaSubConfirmadaProcesos) {
+            if (duplicidadDatos(lista)) {
+                showWarn("El producto ya se encuentra agregado");
+            } else {
+                listaConfirmadaProcesos.add(lista);
+            }
+
+        }
+    }
+    public boolean duplicidadDatos(SubProceso producto) {
+        boolean confirmacion = false;
+        for (SubProceso lista : listaSubConfirmadaProcesos) {
+            if (lista.getCodigo_subproceso()== producto.getCodigo_subproceso()) {
+                confirmacion = true;
+            }
+        }
+        return confirmacion;
+    }
+
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+
+    public void showInfo(String message) {
+        addMessage(FacesMessage.SEVERITY_INFO, "Exito", message);
+    }
+
+    public void showWarn(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
+    }
+
+    public void showError(String message) {
+        addMessage(FacesMessage.SEVERITY_WARN, "Error", message);
     }
 
 }
