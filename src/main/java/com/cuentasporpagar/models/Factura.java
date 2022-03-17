@@ -4,19 +4,20 @@
  * and open the template in the editor.
  */
 package com.cuentasporpagar.models;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
 
 /**
  *
  * @author ninat
  */
+public class Factura {
 
-public class Factura{
     private int id;
     private String nfactura;
     private String descripcion;
     private float importe;
+    private double subtotal;
     private float pagado;
     private LocalDate fecha;
     private LocalDate vencimiento;
@@ -30,6 +31,11 @@ public class Factura{
     private float pendiente;
     private int habilitar;
     private float por_pagar;
+    private String autorizacion;
+    private LocalDate caducidad;
+    private double iva;
+    private String serie;
+
     // detalle de factura
     private String id_detalle;
     private Float importeD;
@@ -38,11 +44,23 @@ public class Factura{
     private String cuenta;
     private int aux;
     private String producto;
-    
+    private double cantidad;
+    private double ivaDetalle;
+
+    //Retenciones
+    private double valorRenta;
+    private double valorIva;
+    private String tipo;
+    private int id_impuesto;
+    private int id_impuestoR;
+    private int id_impuestoI;
+    private String des_impuesto;
+    private double porcentaje;
+
     public Factura() {
     }
-    
-    public Factura(String cuentadetalle){
+
+    public Factura(String cuentadetalle) {
         this.cuentadetalle = cuentadetalle;
     }
 
@@ -67,7 +85,7 @@ public class Factura{
         this.nombre = nombre;
         this.habilitar = habilitar;
     }
-    
+
     //Diana Constructor para Buscar proveedor e insertar 
     public Factura(int id, String nfactura, String descripcion, float importe, float pendiente, LocalDate fecha, LocalDate vencimiento, int estado, String ruc, String nombre) {
         this.id = id;
@@ -81,7 +99,7 @@ public class Factura{
         this.ruc = ruc;
         this.nombre = nombre;
     }
-    
+
     //Diana: Constructor para mostrar
     public Factura(int id, String nfactura, String descripcion, float importe, float pagado, float pendiente, LocalDate fecha, LocalDate vencimiento, int estado, String nombre, int habilitar) {
         this.id = id;
@@ -108,13 +126,21 @@ public class Factura{
     }
 
     //detalle factura
-    public Factura(float importeD, String detalle, String cuenta, String id_detalle) {
+    public Factura(float importeD, String detalle, double iva, String id_detalle, double cant) {
         this.id_detalle = id_detalle;
-        this.cuenta = cuenta;
+        this.ivaDetalle = iva;
         this.importeD = importeD;
         this.detalle = detalle;
+        this.cantidad = cant;
     }
-    
+
+    //Retenciones
+    public Factura(int id_impuesto, String des_impuesto, double porcentaje) {
+        this.id_impuesto = id_impuesto;
+        this.des_impuesto = des_impuesto;
+        this.porcentaje = porcentaje;
+    }
+
     public int getId() {
         return id;
     }
@@ -210,7 +236,6 @@ public class Factura{
     public void setEstado_string(String estado_string) {
         this.estado_string = estado_string;
     }
-    
 
     public String getNombre() {
         return nombre;
@@ -299,9 +324,126 @@ public class Factura{
     public void setCuentadetalle(String cuentadetalle) {
         this.cuentadetalle = cuentadetalle;
     }
-    
-    
-    
+
+    public String getAutorizacion() {
+        return autorizacion;
+    }
+
+    public void setAutorizacion(String autorizacion) {
+        this.autorizacion = autorizacion;
+    }
+
+    public LocalDate getCaducidad() {
+        return caducidad;
+    }
+
+    public void setCaducidad(LocalDate caducidad) {
+        this.caducidad = caducidad;
+    }
+
+    public double getIva() {
+        return iva;
+    }
+
+    public void setIva(double iva) {
+        this.iva = iva;
+    }
+
+    public double getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double getIvaDetalle() {
+        return ivaDetalle;
+    }
+
+    public void setIvaDetalle(double ivaDetalle) {
+        this.ivaDetalle = ivaDetalle;
+    }
+
+    public String getSerie() {
+        return serie;
+    }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
+    }
+
+    public double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public double getValorRenta() {
+        return valorRenta;
+    }
+
+    public void setValorRenta(double valorRenta) {
+        this.valorRenta = valorRenta;
+    }
+
+    public double getValorIva() {
+        return valorIva;
+    }
+
+    public void setValorIva(double valorIva) {
+        this.valorIva = valorIva;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getId_impuesto() {
+        return id_impuesto;
+    }
+
+    public void setId_impuesto(int id_impuesto) {
+        this.id_impuesto = id_impuesto;
+    }
+
+    public String getDes_impuesto() {
+        return des_impuesto;
+    }
+
+    public void setDes_impuesto(String des_impuesto) {
+        this.des_impuesto = des_impuesto;
+    }
+
+    public double getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(double porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    public int getId_impuestoR() {
+        return id_impuestoR;
+    }
+
+    public void setId_impuestoR(int id_impuestoR) {
+        this.id_impuestoR = id_impuestoR;
+    }
+
+    public int getId_impuestoI() {
+        return id_impuestoI;
+    }
+
+    public void setId_impuestoI(int id_impuestoI) {
+        this.id_impuestoI = id_impuestoI;
+    }
     
 
     public float getPor_pagar() {
@@ -311,7 +453,6 @@ public class Factura{
     public void setPor_pagar(float por_pagar) {
         this.por_pagar = por_pagar;
     }
-    
 
     public Factura GetdbProveedor() {
         this.setProveedor(Proveedor.getOneProveedor(this.idproveedor));

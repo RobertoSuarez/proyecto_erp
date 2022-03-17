@@ -139,6 +139,30 @@ public class FacturaDAO {
         System.err.println("LLENAR PRODUCTO: " + listaFacturas.size());
         return listaFacturas;
     }
+    
+    public List<Factura> llenarRetenciones(String tipo) {
+
+        System.err.println("LLENAR Retem");
+        listaFacturas.clear();
+        if (conexion.isEstado()) {
+            try {
+                String sentencia = "select*from porcentaje_impuesto where tipo = '"+tipo+"';";
+                result = conexion.ejecutarSql(sentencia);
+                while (result.next()) {
+                    listaFacturas.add(new Factura(
+                            result.getInt("id_impuesto"),
+                            result.getString("descripcion"),
+                            result.getDouble("porcentaje")));
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
+        System.err.println("LLENAR CUENTA: " + listaFacturas.size());
+        return listaFacturas;
+    }
 
     public List<Factura> llenarDetalle(String n) {
         listaFacturas.clear();
@@ -148,7 +172,8 @@ public class FacturaDAO {
                 result = conexion.ejecutarSql(sentencia);
                 while (result.next()) {
                     listaFacturas.add(new Factura(result.getFloat("importe"),
-                            result.getString("detalle"), result.getString("subcuenta"), result.getString("iddetallecompra")));
+                            result.getString("detalle"), result.getDouble("iva"), result.getString("iddetallecompra"),
+                            result.getDouble("cantidad")));
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
@@ -161,13 +186,15 @@ public class FacturaDAO {
 
     public int Insertar(Factura factura) {
         int existe = 0;
+        String nfact=factura.getSerie()+"-"+factura.getNfactura();
         if (conexion.isEstado()) {
             try {
-                String cadena = "select registrarfactura('" + factura.getNfactura() + "','"
+                String cadena = "select registrarfactura('" + nfact + "','"
                         + factura.getDescripcion() + "'," + factura.getImporte() + ","
                         + 0 + ",'" + factura.getFecha() + "','"
                         + factura.getVencimiento() + "',(Select idproveedor from proveedor p "
-                        + " where p.ruc = '" + factura.getRuc() + "'))";
+                        + " where p.ruc = '" + factura.getRuc() + "'),'"+factura.getIva()+"','"
+                        +factura.getAutorizacion()+"','"+factura.getCaducidad()+"')";
                 result = conexion.ejecutarSql(cadena);
                 while (result.next()) {
                     existe = result.getInt("registrarfactura");
@@ -191,7 +218,9 @@ public class FacturaDAO {
                             + factura.getNfactura() + "',"
                             + selectedFactura.get(i).getImporteD() + ", '"
                             + selectedFactura.get(i).getDetalle()
-                            + "','Inventario de Suministro y Materiales')";
+                            + "','Inventario de Suministro y Materiales','"+
+                            selectedFactura.get(i).getIva()+"','"+
+                            selectedFactura.get(i).getCantidad()+"')";
                     conexion.Ejecutar2(cadena);
                     System.out.println(cadena);
                 }
@@ -201,7 +230,9 @@ public class FacturaDAO {
                             + factura.getNfactura() + "',"
                             + selectedFactura.get(i).getImporteD() + ", '"
                             + selectedFactura.get(i).getDetalle() + "','"
-                            + selectedFactura.get(i).getDetalle() + "')";
+                            + selectedFactura.get(i).getDetalle() + "','"+
+                            selectedFactura.get(i).getIva()+"','"+
+                            selectedFactura.get(i).getCantidad()+"')";
                     conexion.Ejecutar2(cadena);
                     System.out.println(cadena);
                 }
@@ -211,6 +242,41 @@ public class FacturaDAO {
                 conexion.desconectar();
             }
         }
+    }
+    
+    public int InsertarRetencion(Factura factura,int op) {
+        int existe = 0;
+        String tipo="Bienes";
+        if(op==2)
+            tipo="Servicios";
+        String nfact=factura.getSerie()+"-"+factura.getNfactura();
+        if (conexion.isEstado()) {
+            try {
+                if(factura.getValorRenta()>0 && factura.getValorIva()>0){
+                String cadena = "insert into retencion (idfactura,tipo,ncomprobante,id_impuesto,valor_retenido)"
+                        + " values (select idfactura from factura where nfactura='"+nfact+"','"+tipo+"','001-002-"+
+                        factura.getNfactura()+"',"+factura.getId_impuestoR()+","+factura.getValorRenta()+"),"
+                        + "values (select idfactura from factura where nfactura='"+nfact+"','"+tipo+"','001-002-"+
+                        factura.getNfactura()+"',"+factura.getId_impuestoI()+","+factura.getValorIva()+")"; 
+                result = conexion.ejecutarSql(cadena);}
+                else if(factura.getValorRenta()>0){
+                String cadena = "insert into retencion (idfactura,tipo,ncomprobante,id_impuesto,valor_retenido)"
+                        + " values (select idfactura from factura where nfactura='"+nfact+"','"+tipo+"','001-002-"+
+                        factura.getNfactura()+"',"+factura.getId_impuestoR()+","+factura.getValorRenta()+")"; 
+                result = conexion.ejecutarSql(cadena);}
+                else if (factura.getValorIva()>0){
+                    String cadena = "insert into retencion (idfactura,tipo,ncomprobante,id_impuesto,valor_retenido)"
+                        + " values (select idfactura from factura where nfactura='"+nfact+"','"+tipo+"','001-002-"+
+                        factura.getNfactura()+"',"+factura.getId_impuestoI()+","+factura.getValorIva()+")"; 
+                result = conexion.ejecutarSql(cadena);
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
+        return existe;
     }
 
     //asiento contable
@@ -230,36 +296,41 @@ public class FacturaDAO {
                 //JSON asiento contable
                 String sentencia1, sentencia;
                 sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + factura.getImporte()
-                        + ",\"documento\": \"FAC-" + factura.getNfactura().substring(10) + "\",\"detalle\": \""
+                        + ",\"documento\": \"FAC-" + factura.getNfactura() + "\",\"detalle\": \""
                         + factura.getDescripcion() + "\",\"fechaCreacion\": \""
                         + factura.getFecha().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + factura.getVencimiento().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
                 //JSON un solo movimiento
-                if(op == 1){
-                    sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
-                        + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
-                        + "Inventario de Suministro y Materiales\"},"
-                        + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
-                        + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
-                System.out.println(sentencia1);
-                }
-                else if (selectedFactura.size() == 1)
+//                if(op == 1){
+//                    sentencia1 = "[{\"idSubcuenta\":\"17\",\"debe\":\""
+//                        + factura.getImporte() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+//                        + "Inventario de Suministro y Materiales\"},"
+//                        + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
+//                        + factura.getImporte() + "\",\"tipoMovimiento\":\"Factura de compra\"}]";
+//                System.out.println(sentencia1);
+//                }
+                if (selectedFactura.size() == 1 && factura.getIva()<1)
                 {
                     sentencia1 = "[{\"idSubcuenta\":\""
                             + Listaids(selectedFactura.get(0).getDetalle()) + "\",\"debe\":\""
-                            + selectedFactura.get(0).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                            + factura.getImporte()+ "\",\"haber\":\"0\",\"tipoMovimiento\":\""
                             + selectedFactura.get(0).getDetalle() + "\"},"
                             + "{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
-                            + factura.getImporte() + "\",\"tipoMovimiento\":\""+dato+"\"}]";
+                            + factura.getImporte()+ "\",\"tipoMovimiento\":\""+dato+"\"}]";
                     System.out.println(sentencia1);
-                } else
+                } 
+//                else if(selectedFactura.size() == 1 && factura.getIva()>1){
+//                
+//                }
+                else
                 {
                     sentencia1 = "[";
                     for (int i = 0; i < selectedFactura.size(); i++)
                     {
                         sentencia1 += "{\"idSubcuenta\":\"" + Listaids(selectedFactura.get(i).getDetalle()) + "\",\"debe\":\""
-                                + selectedFactura.get(i).getImporteD() + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
+                                + (selectedFactura.get(i).getImporteD()*selectedFactura.get(i).getCantidad())*selectedFactura.get(i).getIvaDetalle()
+                                + "\",\"haber\":\"0\",\"tipoMovimiento\":\""
                                 + selectedFactura.get(i).getDetalle() + "\"},";
                         System.out.println(sentencia1);
                     }
@@ -267,7 +338,6 @@ public class FacturaDAO {
                             + factura.getImporte() + "\",\"tipoMovimiento\":\""+dato+"\"}]";
                 }
                 intJson(sentencia, sentencia1);
-                updateAsiento(factura.getNfactura());
             } catch (SQLException ex)
             {
                 System.out.println(ex.getMessage() + " error en conectarse");
@@ -584,5 +654,24 @@ public class FacturaDAO {
         }
 
         return lista;
+    }
+    //Porcentaje retención 
+    public double porcentaje(int n) {
+        double por = 0;
+        if (conexion.isEstado()) {
+            try {
+                String sentencia = "select porcentaje from porcentaje_impuesto where id_impuesto= "
+                        + n;
+                result = conexion.ejecutarSql(sentencia);
+                while (result.next()) {
+                    por = result.getDouble("porcentaje");
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage() + " error en conectarse");
+            } finally {
+                conexion.desconectar();
+            }
+        }
+        return por;
     }
 }
