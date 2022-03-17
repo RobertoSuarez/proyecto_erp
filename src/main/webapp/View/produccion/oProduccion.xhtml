@@ -64,7 +64,7 @@
                                                                    itemValue="#{produto.codigo_producto}">
                                                     </f:selectItems>
                                                     <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls,:form:cantidad,:form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,
-                                                            :form:produccionDetallada,:form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima"/>
+                                                            :form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima"/>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
@@ -72,7 +72,7 @@
                                                 <p:selectOneMenu id="formuls" value="#{produccionMBean.ordenTrabajo.codigo_formula}" editable="false">
                                                     <f:selectItem itemLabel="Seleccione una formula" itemValue="" noSelectionOption="true"/>
                                                     <p:ajax listener="#{produccionMBean.llenarProceso()}" update=":form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,
-                                                            :form:produccionDetallada,:form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima"/>
+                                                            :form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima,centroTiempo"/>
                                                     <f:selectItems value="#{produccionMBean.listaFormula}"
                                                                    var="listaformula"
                                                                    itemLabel="#{listaformula.nombre_formula}" 
@@ -459,67 +459,48 @@
                             </p:outputPanel>
                         </p:dialog>
                         <!-- Tabla de datos -->
-                        <ui:fragment id="produccionDetallada" rendered="#{produccionMBean.ordenTrabajo.state=false}">
-                            <p:dataTable reflow="true" paginator="true" rows="5" 
-                                         rowSelectMode="add" paginatorPosition="bottom">
+                        <ui:fragment>
+                            <p:dataTable id="centroTiempo" reflow="true" paginator="true" rows="5" 
+                                         rowSelectMode="add" paginatorPosition="bottom"
+                                         editInitEvent="dblclick" editMode="cell"
+                                         editable="true"
+                                         value="#{produccionMBean.listaCentroTiempo}"
+                                         var="centroTrabajo">
                                 <!-- Buscador -->
-                                <f:facet name="header">
-                                    <div class="p-d-flex p-jc-between p-ai-center">
-                                        <span style="font-weight: bold; margin-right: 6px;">Procesos de producción</span>
-                                    </div>
-                                    <div class="card ui-fluid ">
-                                        <div class="p-formgrid p-grid">
-
-                                            <div class="p-field p-col-12 p-md-6">
-                                                <p:outputLabel value="Hora de Inicio proceso" for="@next"/>
-                                                <p:inputMask value="" readonly="true" mask="99:99:99"></p:inputMask>
-                                            </div>
-                                            <div class="p-field p-col-12 p-md-6">
-                                                <p:outputLabel value="Hora de Fin proceso" for="@next"/>
-                                                <p:inputMask value="" readonly="true" mask="99:99:99"></p:inputMask>
-                                            </div>
-                                            <div class="p-field p-col-6 p-md-2">
-                                                <p:commandButton value="Empezar" 
-                                                                 styleClass="ui-button-secondary">
-                                                </p:commandButton>
-                                            </div>
-                                            <div class="p-field p-col-6 p-md-2">
-                                                <p:commandButton value="Avanzar" 
-                                                                 styleClass="ui-button-secondary">
-                                                </p:commandButton>
-                                            </div>
-                                            <div class="p-field p-col-6 p-md-2">
-                                                <p:commandButton value="Terminar" 
-                                                                 styleClass="ui-button-secondary">
-                                                </p:commandButton>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </f:facet>
-                                <p:column headerText="Proceso" filterStyle="display : none">
-
+                                <div class="p-d-flex p-jc-between p-ai-center">
+                                    <span style="font-weight: bold; margin-right: 6px;">Procesos de producción</span>
+                                </div>
+                                <p:column headerText="Hora Inicio">
+                                    <p:inputMask value="#{centroTrabajo.horaInicio}" style="width: 15px"
+                                                 mask="99:99:99">
+                                        <p:ajax event="select" listener="#{produccionMBean.asignaHoraInicio(centroTrabajo)}" update=":form:centroTiempo"/>
+                                    </p:inputMask>
                                 </p:column>
-                                <p:column headerText="Hora Inicio" filterStyle="display : none">
-
-                                </p:column>
-
-                                <p:column headerText="Hora Fin" >
-                                    <h:outputText value="#" />
+                                <p:column headerText="Hora Fin">
+                                    <p:inputMask value="#{centroTrabajo.horaFin}"
+                                                 mask="99:99:99">
+                                        <p:ajax event="select" listener="#{produccionMBean.asignaHoraFin(centroTrabajo)}" update=":form:centroTiempo"/>
+                                    </p:inputMask>
                                 </p:column>
 
                                 <p:column headerText="Tiempo" >
-                                    <h:outputText value="#" />
+                                    <h:outputText value="#{centroTrabajo.tiempoMinutos}" />
                                 </p:column>
 
                                 <p:column headerText="Total de costos Directo" >
-                                    <h:outputText value="#" />
+                                    <h:outputText value="#{centroTrabajo.totalDirecto}" />
                                 </p:column>
                                 <p:column headerText="Total de costos Indirecto" >
-                                    <h:outputText value="#" />
+                                    <h:outputText value="#{centroTrabajo.totalIndirecto}" />
                                 </p:column>
-                                <p:column headerText="Total" >
-                                    <h:outputText value="#" />
+                                <p:column headerText="Centro trabajao" >
+                                    <h:outputText value="#{centroTrabajo.nombreSubproceso}" />
+                                </p:column>
+                                <p:column headerText="Costo Directo" >
+                                    <h:outputText value="#{centroTrabajo.costoDirecto}" />
+                                </p:column>
+                                <p:column headerText="Costo Indirecto" >
+                                    <h:outputText value="#{centroTrabajo.costoIndirecto}" />
                                 </p:column>
                             </p:dataTable>
                         </ui:fragment>

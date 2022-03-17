@@ -51,6 +51,8 @@ public class SubProcesoMB implements Serializable {
 
     float totalDirecto;
     float totalIndirecto;
+    float totalxHoraIndirecto;
+    float totalxHoraDirecto;
 
     public SubProcesoMB() {
         sproceso = new SubProceso();
@@ -168,51 +170,55 @@ public class SubProcesoMB implements Serializable {
         this.listaPersonal = listaPersonal;
     }
 
+    public float getTotalxHoraIndirecto() {
+        return totalxHoraIndirecto;
+    }
+
+    public void setTotalxHoraIndirecto(float totalxHoraIndirecto) {
+        this.totalxHoraIndirecto = totalxHoraIndirecto;
+    }
+
+    public float getTotalxHoraDirecto() {
+        return totalxHoraDirecto;
+    }
+
+    public void setTotalxHoraDirecto(float totalxHoraDirecto) {
+        this.totalxHoraDirecto = totalxHoraDirecto;
+    }
+
     public void insertarSubProceso() {
 
         if ("".equals(sproceso.getNombre())) {
             showWarn("Ingrese un Nombre al Subproceso.");
         } else if ("".equals(sproceso.getDescripcion())) {
             showWarn("La descripción no puede estar vacia.");
-        } else if (sproceso.getRendimiento() <= 0) {
-            showWarn("El rendimiento no pude ser cero.");
         } else if ("".equals(sproceso.getHora())) {
             showWarn("Debe ingresar las horas de trabajo.");
-        } else if (sproceso.getId_codigo_proceso() == 0) {
-            showWarn("Debe escojer un proceso.");
         } else if (!verificaListas(NuevolistaCostoDirecto)) {
             showWarn("Ingrese valor en los Costos Directos");
         } else if (!verificaListas(NuevolistaCostoIndirecto)) {
             showWarn("Ingrese valor en los Costos Indirectos");
         } else {
-            if (subProcesoDAO.insertarSubproceso(sproceso) > 0) {
+            if (subProcesoDAO.insertarSubproceso(sproceso,totalxHoraDirecto,totalxHoraIndirecto) > 0) {
                 sproceso.setCodigo_subproceso(subProcesoDAO.idSubproceso());
-                subProcesoDAO.insertardSubproceso(sproceso);
+//                subProcesoDAO.insertardSubproceso(sproceso);
                 llenarDetalleDirecto();
-                float minutos = 0;
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-                Date date = null;
-                try {
-                    date = sdf.parse(sproceso.getHora());
-                } catch (ParseException e) {
-                }
-                minutos += date.getSeconds() / 60;
-                minutos += date.getHours() * 60;
-                minutos += date.getMinutes();
+                float minutos = convertMinutos(sproceso.getHora());
                 for (dSubproceso subproceso : listaDsubprocesoDirecta) {
                     //insertamos costo directo
-                    subproceso.setHora_costo(minutos / sproceso.getRendimiento());
-                    subproceso.setModunitario(subproceso.getCosto_mano_obra() / sproceso.getRendimiento());
+                    subproceso.setHora_costo(minutos /1);
+                    subproceso.setModunitario(subproceso.getCosto_mano_obra() /1);
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
                 llenarDetalleInirecto();
                 for (dSubproceso subproceso : listaDsubprocesoInirecta) {
                     //insertamos costo indirecto
-                    subproceso.setHora_costo(minutos / sproceso.getRendimiento());
-                    subproceso.setCifunitario(subproceso.getCosto_indirecto() / sproceso.getRendimiento());
+                    subproceso.setHora_costo(minutos /1);
+                    subproceso.setCifunitario(subproceso.getCosto_indirecto() /1);
                     subProcesoDAO.insertarDetalleSubproceso(subproceso);
                 }
-                subProcesoDAO.actualizaProceso(sproceso);
+                subProcesoDAO.updateSubProceso(sproceso.getCodigo_subproceso(),minutos,60);
+//                subProcesoDAO.actualizaProceso(sproceso);
                 showInfo("Subproceso registrado con exito");
                 limpiarCampos();
             }
@@ -258,6 +264,8 @@ public class SubProcesoMB implements Serializable {
 
         totalDirecto = 0;
         totalIndirecto = 0;
+        totalxHoraIndirecto = 0;
+        totalxHoraDirecto = 0;
     }
 
     public void llenarDetalleDirecto() {
@@ -284,8 +292,8 @@ public class SubProcesoMB implements Serializable {
         float minutos;
         if (!"".equals(sproceso.getHora())) {
             minutos = convertMinutos(sproceso.getHora());
-        }else{
-            minutos=0;
+        } else {
+            minutos = 0;
             showWarn("Ingrese las Horas de trabajo.");
         }
         float horasTrabajo = 8;
@@ -394,19 +402,23 @@ public class SubProcesoMB implements Serializable {
     }
 
     public void sumarIndirectos() {
-        float totalI = 0;
+        float totalI = 0, totalHora = convertMinutos(sproceso.getHora()), costoxminuto;
         for (Costo indirecto : NuevolistaCostoIndirecto) {
             totalI += indirecto.getCosto();
         }
-        totalIndirecto = totalI;
+        costoxminuto = totalI / 60;
+        totalxHoraIndirecto = costoxminuto * 60;
+        totalIndirecto = costoxminuto * totalHora;
     }
 
     public void sumarDirectos() {
-        float tD = 0;
+        float tD = 0, totalHora = convertMinutos(sproceso.getHora()), costoxminuto;
         for (Costo directo : NuevolistaCostoDirecto) {
             tD += directo.getCosto();
         }
-        totalDirecto = tD;
+        costoxminuto = tD / 60;
+        totalxHoraDirecto = costoxminuto * 60;
+        totalDirecto = costoxminuto * totalHora;
     }
 
     public void deleteFila(Costo directo) {

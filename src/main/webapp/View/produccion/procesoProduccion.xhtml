@@ -18,24 +18,25 @@
                             <!-- Botones del submenu Principal -->
                             <p:toolbarGroup>
                                 <div class="p-d-flex p-jc-between p-ai-center">
-                                    <!-- Boton Nuevo Proceso -->
-                                    <p:commandButton 
-                                        value="Nuevo Proceso" 
-                                        styleClass="ui-button-primary"
-                                        icon="pi pi-plus" 
-                                        oncomplete="PF('nuevoProcesoPrincDialog').show()"
-                                        style=" margin-right: .6rem">
-                                    </p:commandButton>
+
                                     <!-- Boton Nuevo Subproceso -->
                                     <p:button  
-                                        value="Nuevo Subproceso"
+                                        value="Nuevo Centro de trabajo"
                                         styleClass="ui-button-primary"
                                         icon="pi pi-plus" 
                                         style="margin-right: 6px;"
                                         outcome="CrearSubProceso">
                                     </p:button>
+                                    <!-- Boton Nuevo Proceso -->
+                                    <p:button 
+                                        value="Nuevo Ruta de Producción" 
+                                        styleClass="ui-button-primary"
+                                        icon="pi pi-plus" 
+                                        outcome="rutaProduccion"
+                                        style=" margin-right: .6rem">
+                                    </p:button>
                                     <!-- Boton Agregar Costo -->
-                                                                   
+
                                     <!-- Boton Agregar Centro de Costo -->
                                     <p:commandButton 
                                         value=" Agregar Centro de Costos" 
@@ -58,7 +59,7 @@
                                   modal="true"
                                   widgetVar="nuevoProcesoPrincDialog" 
                                   responsive="true" 
-                                  width="35%"
+                                  width="65%"
                                   draggable="false" 
                                   height="370" >
                             <p:outputPanel 
@@ -95,8 +96,34 @@
                                             rows="5" 
                                             autoResize="false"/>
                                     </div>
+                                    <div class="p-field">
+                                        <p:outputLabel value="Centro de Trabajo"/>
+                                        <p:commandButton value="Agregar Centro de trabajo" 
+                                                         styleClass="ui-button-secondary"
+                                                         icon="pi pi-search" oncomplete="PF('centro').show()">
+                                        </p:commandButton>
+                                    </div>
+
                                 </p:outputPanel>
                             </p:outputPanel>
+                            <!-- Tabla-->
+                            <p:dataTable id="centroTrabajo" editable="true" reflow="true" paginator="true" 
+                                         rows="4" 
+                                         paginatorPosition="bottom"
+                                         value="#{procesoMB.listaConfirmadaProcesos}" var="centroTrabajo">
+                                <p:column headerText="Codigo" >
+                                    <h:outputText value="#{centroTrabajo.codigo_subproceso}" />
+                                </p:column>
+                                <p:column headerText="Nombre" filterStyle="display : none">
+                                    <h:outputText value="#{centroTrabajo.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Nombre" filterStyle="display : none">
+                                    <h:outputText value="#{centroTrabajo.descripcion}"/>
+                                </p:column>
+                            </p:dataTable>
+
+
+
                             <!-- Botones Guardar/Cancelar-->
                             <f:facet name="footer">
                                 <p:commandButton 
@@ -114,7 +141,7 @@
                                     styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
-                        
+
                         <!-- Dialogo editar Centro Costo-->
                         <p:dialog header="Proceso Principal" 
                                   showEffect="fade" 
@@ -174,9 +201,78 @@
                             </f:facet>
                         </p:dialog>
 
-                        <!-- Dialogo editar Costo-->
-                        
-                           
+                        <!-- Dialogo centro trabajo-->
+                        <p:dialog header="Seleccione un producto" showEffect="fade" modal="true"
+                                  widgetVar="centro" responsive="true" width="80%"
+                                  draggable="false" height="550">
+                            <p:outputPanel class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="p-grid p-justify-around">
+
+                                        <div class="p-col-11">
+                                            <div class="p-grid">
+                                                <div class="p-col-12">
+                                                    <p:dataTable id="dtCentroTrabajo" reflow="true"
+                                                                 editInitEvent="dblclick" editMode="cell"
+                                                                 value="#{procesoMB.listaSubProcesos}" 
+                                                                 var="centroT" paginatorPosition="bottom" rows="4">
+                                                        <f:facet name="header">
+                                                            <div class="p-grid">
+                                                                <div class="p-col-4">
+                                                                    <p:outputLabel value="Nombre Producto:"></p:outputLabel>
+                                                                    <p:inputText id="globalFilter"
+                                                                                 onkeyup=""
+                                                                                 placeholder="Buscar"></p:inputText>
+                                                                </div>
+                                                            </div>
+                                                        </f:facet>
+
+                                                        <p:column headerText="Acciones">
+                                                            <p:selectBooleanCheckbox value="#{centroT.verifica}">
+                                                                <p:ajax listener="#{procesoMB.addMateriales(centroT)}"/>
+                                                            </p:selectBooleanCheckbox>
+                                                        </p:column>
+
+                                                        <p:column headerText="Código" filterStyle="display : none">
+                                                            <h:outputText value="#{centroT.codigo_subproceso}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                                            <h:outputText value="#{centroT.nombre}" />
+                                                        </p:column>
+
+                                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                                            <h:outputText value="#{centroT.descripcion}" />
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </div>
+                                            </div>
+                                            <!-- Botones Guardar/Cerrar -->
+                                            <div class="p-grid p-justify-end">
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Confirmar"  
+                                                                     icon="pi pi-check"
+                                                                     styleClass="ui-button-primary"
+                                                                     actionListener="#{procesoMB.llenaProductoConfirmado()}"
+                                                                     update="centroTrabajo"
+                                                                     process=":form-princ:dtCentroTrabajo @this"
+                                                                     oncomplete="PF('centro').hide()"
+                                                                     />
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                     styleClass="ui-button-danger" process="@this"
+                                                                     oncomplete="PF('centro').hide()"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+
+                        </p:dialog>
+
+
                         <!-- Dialogo editar Proceso Principal -->
                         <p:dialog header="Proceso Principal" 
                                   showEffect="fade" 
@@ -240,8 +336,8 @@
                         </p:dialog>
 
                         <!-- Dialogo Agregar Costos -->
-                        
-                              
+
+
 
                         <!-- Dialogo Agregar Centros de Costo -->
                         <p:dialog header="Agregar Centro de Costos" 
@@ -261,7 +357,7 @@
                                             value="#{centroMB.centroCosto.identificador}" 
                                             placeholder="Siglas del identificador" 
                                             style="background: #90A4AE;
-                                                   color:#000000"></p:inputText>
+                                            color:#000000"></p:inputText>
                                     </div>
                                     <div class="p-field">
                                         <p:outputLabel for="nameCentro">Nombre: *</p:outputLabel>
@@ -363,9 +459,9 @@
                         </p:dialog>
 
                         <!-- Dialogo Eliminar Costo -->
-                        
-                            
-                               
+
+
+
 
                         <!-- Dialogo Eliminar Proceso Principal -->
                         <p:confirmDialog id="manage-eliminarProceso-form" 

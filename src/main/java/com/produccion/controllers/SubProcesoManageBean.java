@@ -100,7 +100,7 @@ public class SubProcesoManageBean implements Serializable {
     public void insertSubproceso() {
         subProceso.setCodigo_subproceso(idSubproceso);
         System.out.println(" " + subProceso.getNombre() + subProceso.getDescripcion());
-        subProcesoDAO.insertarSubproceso(subProceso);
+//        subProcesoDAO.insertarSubproceso(subProceso);
 
     }
 

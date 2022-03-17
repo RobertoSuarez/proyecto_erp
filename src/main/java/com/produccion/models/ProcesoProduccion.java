@@ -1,4 +1,3 @@
-
 package com.produccion.models;
 
 /**
@@ -7,6 +6,7 @@ package com.produccion.models;
  */
 public class ProcesoProduccion {
 
+    private int codigo_subProceso;
     private int codigo_proceso;
     private String nombre;
     private String descripcion;
@@ -14,25 +14,17 @@ public class ProcesoProduccion {
 
     public ProcesoProduccion() {
     }
-    /**
-     * Constructor en donde inicializaremos nuestra variables
-     */
+
     public ProcesoProduccion(int codigo_proceso) {
         this.codigo_proceso = codigo_proceso;
     }
-    /**
-     * Constructor con diferentes parametros en donde inicializaremos 
-     * nuestra variables
-     */
+
     public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion) {
         this.codigo_proceso = codigo_proceso;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-    /**
-     * Constructor con diferentes parametros en donde inicializaremos 
-     * nuestra variables
-     */
+
     public ProcesoProduccion(int codigo_proceso, String nombre, String descripcion,
             String identificador) {
         this.codigo_proceso = codigo_proceso;
@@ -40,9 +32,7 @@ public class ProcesoProduccion {
         this.descripcion = descripcion;
         this.identificador = identificador;
     }
-    /**
-     * getters y setters de todas las variables
-     */
+
     public int getCodigo_proceso() {
         return codigo_proceso;
     }
@@ -75,6 +65,14 @@ public class ProcesoProduccion {
         this.identificador = identificador;
     }
 
+    public int getCodigo_subProceso() {
+        return codigo_subProceso;
+    }
+
+    public void setCodigo_subProceso(int codigo_subProceso) {
+        this.codigo_subProceso = codigo_subProceso;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -100,5 +98,4 @@ public class ProcesoProduccion {
         return true;
     }
 
-    
 }

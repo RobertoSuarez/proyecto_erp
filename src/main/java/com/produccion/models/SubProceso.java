@@ -13,6 +13,7 @@ import java.sql.Time;
  */
 public class SubProceso {
 
+    private boolean verifica;
     private int codigo_subproceso;
     private int id_codigo_proceso;
     private String nombre;
@@ -24,7 +25,11 @@ public class SubProceso {
     private float minuto_directo;
     private float minuto_intirecto;
     private float minuto_pieza;
-
+    private float importe_directo;
+    private float importe_indirecto;
+    private float pieza_minuto;
+    private float costo_minuto_directo;
+    private float costo_minuto_indirecto;
     public SubProceso() {
     }
 
@@ -55,6 +60,13 @@ public class SubProceso {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.hora = hora;
+    }
+
+    public SubProceso(int codigo_subproceso, String nombre, float minuto_directo, float minuto_intirecto) {
+        this.codigo_subproceso = codigo_subproceso;
+        this.nombre = nombre;
+        this.minuto_directo = minuto_directo;
+        this.minuto_intirecto = minuto_intirecto;
     }
 
     public float getMinuto_pieza() {
@@ -145,6 +157,54 @@ public class SubProceso {
 
     public void setId_codigo_proceso(int id_codigo_proceso) {
         this.id_codigo_proceso = id_codigo_proceso;
+    }
+
+    public boolean isVerifica() {
+        return verifica;
+    }
+
+    public void setVerifica(boolean verifica) {
+        this.verifica = verifica;
+    }
+
+    public float getImporte_directo() {
+        return importe_directo;
+    }
+
+    public void setImporte_directo(float importe_directo) {
+        this.importe_directo = importe_directo;
+    }
+
+    public float getImporte_indirecto() {
+        return importe_indirecto;
+    }
+
+    public void setImporte_indirecto(float importe_indirecto) {
+        this.importe_indirecto = importe_indirecto;
+    }
+
+    public float getPieza_minuto() {
+        return pieza_minuto;
+    }
+
+    public void setPieza_minuto(float pieza_minuto) {
+        this.pieza_minuto = pieza_minuto;
+    }
+
+    public float getCosto_minuto_directo() {
+        return costo_minuto_directo;
+    }
+
+    public void setCosto_minuto_directo(float costo_minuto_directo) {
+        this.costo_minuto_directo = costo_minuto_directo;
+    }
+
+    public float getCosto_minuto_indirecto() {
+        return costo_minuto_indirecto;
+    }
+
+    public void setCosto_minuto_indirecto(float costo_minuto_indirecto) {
+        this.costo_minuto_indirecto = costo_minuto_indirecto;
     }
 
 }

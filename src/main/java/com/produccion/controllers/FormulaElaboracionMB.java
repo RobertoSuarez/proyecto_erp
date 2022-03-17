@@ -16,11 +16,15 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.apache.commons.math3.util.Precision;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -38,10 +42,12 @@ public class FormulaElaboracionMB implements Serializable {
     private boolean verificar;//eliminar si no sale
     FormulaMaterialesDAO formulaMaterialesDAO;
     private String render;
+    SubProceso centro;
 
     private List<FormulaProduccion> listaFormula;
     private List<ProcesoProduccion> listProceso;
     private List<SubProceso> listSubProceso;
+    private List<SubProceso> listSubProcesoAdicional;
     private List<FormulaMateriales> listaMateriales;
     private List<FormulaMateriales> listaMaterialesConfirmados;
     private List<FormulaProduccion> productoTerminado;
@@ -61,8 +67,9 @@ public class FormulaElaboracionMB implements Serializable {
         listaMaterialesConfirmados = new ArrayList<>();
         productoSM = new ArrayList<>();
         listaEditar = new ArrayList<>();
-
+        listSubProcesoAdicional = new ArrayList<>();
         formulaMaterialesDAO = new FormulaMaterialesDAO();
+        centro = new SubProceso();
     }
 
     @PostConstruct
@@ -170,11 +177,20 @@ public class FormulaElaboracionMB implements Serializable {
         this.listaEditar = listaEditar;
     }
 
+    public List<SubProceso> getListSubProcesoAdicional() {
+        return listSubProcesoAdicional;
+    }
+
+    public void setListSubProcesoAdicional(List<SubProceso> listSubProcesoAdicional) {
+        this.listSubProcesoAdicional = listSubProcesoAdicional;
+    }
+
     //metodos
     public void llenarListaSubproceso() {
-        listSubProceso = formulaProduccionDAO.getSubProceso(formulaProduccion.getCodigo_proceso());
-        formulaProduccion.setRendimiento(formulaProduccionDAO.rendimiento(formulaProduccion.getCodigo_proceso()));
-        costosProduccion();
+        listSubProceso = formulaProduccionDAO.getListaSubProceso(formulaProduccion.getCodigo_proceso());
+        listSubProcesoAdicional = formulaProduccionDAO.getListaSubProcesoAdicional();
+        //formulaProduccion.setRendimiento(formulaProduccionDAO.rendimiento(formulaProduccion.getCodigo_proceso()));
+        //costosProduccion();
     }
 
     public void insertarDatos() {
@@ -185,27 +201,32 @@ public class FormulaElaboracionMB implements Serializable {
                 showWarn("Ingrese un Nombre en la formula");
             } else if ("".equals(formulaProduccion.getDescripcion())) {
                 showWarn("Ingrese una Descripción");
-            } else if ("".equals(formulaProduccion.getRendimiento())) {
+            } else if ("".equals(formulaProduccion.getRendimiento()) && formulaProduccion.getRendimiento() > 0) {
                 showWarn("Ingrese el rendimiento");
             } else if ("".equals(formulaProduccion.getCodigo_producto())) {
                 showWarn("Escoja un producto");
             } else if (formulaProduccion.getCodigo_proceso() == 0) {
                 showWarn("Seleccione un proceso");
-            } else if (!validaMateriales()) {
-                showWarn("Ingrese valores Unidad de Medida, Cantidades y seleccione un Subproceso");
+            } else if (listaMaterialesConfirmados.size() < 1) {
+                showWarn("Escoja los materiales para la formulación");
+            } else if (listSubProceso.size() < 1) {
+                showWarn("Escoja una ruta de producción");
+            } else if (!verificaCantidad()) {
+                showWarn("Ingrese Cantidades de los productos que requiere para la formulación.");
+            } else if (!verificaHora()) {
+                showWarn("Ingrese Las horas en los centros de trabajo.");
             } else {
 
                 if (formulaProduccionDAO.insertarFormula(formulaProduccion) > 0) {
                     formulaProduccion.setCodigo_formula(formulaProduccionDAO.idFormula());
                     for (FormulaMateriales lista : listaMaterialesConfirmados) {
-                        if (lista.getCantidad() != 0 && !"".equals(lista.getUnidadMedida())) {
-                            lista.setCantidadUnidad(lista.getCantidad() / formulaProduccion.getRendimiento());
-                            formulaProduccionDAO.InsertarMateriales(lista, formulaProduccion.getCodigo_formula());
-                        } else {
-                            showWarn("Ingrese valores Unidad de Medida y Cantidades");
-                        }
+                        lista.setCantidadUnidad(lista.getCantidad() / formulaProduccion.getRendimiento());
+                        formulaProduccionDAO.InsertarMateriales(lista, formulaProduccion.getCodigo_formula());
                     }
-                    showInfo("Formula Agregada");
+                    for (SubProceso lista : listSubProceso) {
+                        formulaProduccionDAO.InsertarDetalleFormula(lista, formulaProduccion.getCodigo_formula());
+                    }
+                    showInfo("Formula Registrada");
                     limpiarFormulario();
                 } else {
                     showError("Error al guardar");
@@ -218,6 +239,17 @@ public class FormulaElaboracionMB implements Serializable {
                     addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             "Error al guardar"));
         }
+    }
+
+    public boolean verificaCantidad() {
+        boolean verifica = true;
+        for (FormulaMateriales lista : listaMaterialesConfirmados) {
+            if (lista.getCantidad() < 1 || lista.getCodigoSuproceso() < 1) {
+                verifica = false;
+                break;
+            }
+        }
+        return verifica;
     }
 
     public boolean validaMateriales() {
@@ -233,6 +265,14 @@ public class FormulaElaboracionMB implements Serializable {
 
         }
         return verifica;
+    }
+
+    public void recalculaRendimiento() {
+        if (formulaProduccion.getCodigo_proceso() != 0) {
+            for (SubProceso lista : listSubProceso) {
+                lista.setPieza_minuto(convertMinutos(lista.getHora()) / formulaProduccion.getRendimiento());
+            }
+        }
     }
 
     public void llenaArticulo(FormulaProduccion inventario) {
@@ -347,8 +387,8 @@ public class FormulaElaboracionMB implements Serializable {
         formulaMaterialesDAO = new FormulaMaterialesDAO();
         listaFormula = formulaProduccionDAO.getFormula();
         listProceso = procesoProduccionDAO.getProcesosProduccion();
-        productoTerminado = formulaProduccionDAO.getArticulosT("Producto Terminado");
-        productoSM = formulaProduccionDAO.getArticulosT("Materia Prima");
+        productoTerminado = formulaProduccionDAO.getArticulosT("Materia Prima");
+        productoSM = formulaProduccionDAO.getArticulosT("Producto Terminado");
     }
 
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
@@ -374,6 +414,14 @@ public class FormulaElaboracionMB implements Serializable {
 
     public void deleteFila(FormulaMateriales producto) {
         listaMaterialesConfirmados.remove(producto);
+    }
+
+    public SubProceso getCentro() {
+        return centro;
+    }
+
+    public void setCentro(SubProceso centro) {
+        this.centro = centro;
     }
 
     //Todo lo nuevo de editar
@@ -420,6 +468,104 @@ public class FormulaElaboracionMB implements Serializable {
 
     public void deleteEdit(FormulaProduccion producto) {
         listaEditar.remove(producto);
+    }
+
+    public void calculoValorHora(SubProceso subproceso) {
+        if (formulaProduccion.getRendimiento() == 0) {
+            showWarn("Ingrese un rendimiento");
+        } else {
+            float costoMinutoDirecto = subproceso.getMinuto_directo() / 60;
+            float costoMinutoIndirecto = subproceso.getMinuto_intirecto() / 60;
+            float tiempoMinuto = convertMinutos(subproceso.getHora());
+            subproceso.setImporte_directo(Precision.round(costoMinutoDirecto * tiempoMinuto, 2));
+            subproceso.setImporte_indirecto(Precision.round(costoMinutoIndirecto * tiempoMinuto, 2));
+            subproceso.setPieza_minuto(convertMinutos(subproceso.getHora()) / formulaProduccion.getRendimiento());
+            subproceso.setCosto_minuto_directo(subproceso.getImporte_directo() / convertMinutos(subproceso.getHora()));
+            subproceso.setCosto_minuto_indirecto(subproceso.getImporte_indirecto() / convertMinutos(subproceso.getHora()));
+        }
+
+    }
+
+    public float convertMinutos(String hora) {
+        float minutos = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(hora);
+        } catch (ParseException e) {
+            System.out.println("" + e);
+        }
+        minutos += date.getSeconds() / 60;
+        minutos += date.getHours() * 60;
+        minutos += date.getMinutes();
+        return minutos;
+    }
+
+    public void deleteFila(SubProceso centro) {
+        listSubProceso.remove(centro);
+    }
+
+    public void costoCalculo() {
+        if (formulaProduccion.getRendimiento() == 0) {
+            showWarn("Ingrese un rendimiento");
+        } else {
+            if (verificaHora()) {
+                float directo = 0, indirecto = 0;
+                for (SubProceso lista : listSubProceso) {
+                    directo += lista.getImporte_directo();
+                    indirecto += lista.getImporte_indirecto();
+                }
+                formulaProduccion.setMOD(directo);
+                formulaProduccion.setCIF(indirecto);
+            } else {
+                showWarn("Ingrese los tiempos de trabajo por cada centro.");
+            }
+        }
+
+    }
+
+    public boolean verificaHora() {
+        boolean verifica = true;
+        for (SubProceso lista : listSubProceso) {
+            if (lista.getHora() == null) {
+                verifica = false;
+            }
+        }
+        return verifica;
+    }
+
+    public void addCentro() {
+
+        SubProceso centroTrabajo = centroT();
+        if (!verificaCentro(centroTrabajo)) {
+            listSubProceso.add(centroTrabajo);
+            centro = new SubProceso();
+        } else {
+            showWarn("Ya ha agregado este Costo Indirecto");
+        }
+
+    }
+
+    public SubProceso centroT() {
+        for (SubProceso subproceso : listSubProcesoAdicional) {
+            if (subproceso.getCodigo_subproceso() == centro.getCodigo_subproceso()) {
+                centro.setNombre(subproceso.getNombre());
+                centro.setMinuto_directo(subproceso.getMinuto_directo());
+                centro.setMinuto_intirecto(subproceso.getMinuto_intirecto());
+            }
+        }
+        return centro;
+    }
+
+    public boolean verificaCentro(SubProceso costoIndirecto) {
+        boolean verifica = false;
+        for (SubProceso centroT : listSubProceso) {
+            if (costoIndirecto.getCodigo_subproceso() == centroT.getCodigo_subproceso()) {
+                verifica = true;
+                break;
+            }
+        }
+        return verifica;
     }
 
 }
