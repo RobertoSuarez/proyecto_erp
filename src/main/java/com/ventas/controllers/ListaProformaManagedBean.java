@@ -7,11 +7,13 @@ package com.ventas.controllers;
 
 import com.ventas.dao.ClienteVentaDao;
 import com.ventas.dao.DetalleVentaDAO;
+import com.ventas.dao.ProductoVentaDAO;
 import com.ventas.dao.ProformaDAO;
 import com.ventas.dao.VentaDAO;
 import com.ventas.models.ClienteVenta;
 import com.ventas.models.DetalleProforma;
 import com.ventas.models.DetalleVenta;
+import com.ventas.models.ProductoVenta;
 import com.ventas.models.Proforma;
 import com.ventas.models.Venta;
 import java.io.Serializable;
@@ -23,6 +25,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -37,6 +40,9 @@ public class ListaProformaManagedBean implements Serializable {
     private List<DetalleProforma> listaDetalle;
     private ClienteVenta cliente;
     private ClienteVentaDao clienteDao;
+    private ProductoVentaDAO productoDao;
+    private boolean productosCompletos;
+    private List<DetalleProforma> listaProductosFaltantes;
 
     public ListaProformaManagedBean() {
         this.proformaDao = new ProformaDAO();
@@ -44,6 +50,11 @@ public class ListaProformaManagedBean implements Serializable {
         
         this.listaDetalle = new ArrayList<>();
         this.listaProformas = new ArrayList<>();
+        
+        this.productoDao = new ProductoVentaDAO();
+        this.listaProductosFaltantes = new ArrayList<>();
+        productosCompletos = true;
+        
         cargarProformas();
     }
     
@@ -59,6 +70,22 @@ public class ListaProformaManagedBean implements Serializable {
         this.proformaActual = proformaDao.getProformaById(prf.getId_proforma());
         System.out.println(prf.getId_proforma());
         this.listaDetalle = proformaDao.getDetalleProforma(proformaActual.getId_proforma());
+    }
+    
+    public void revisarProforma(Proforma prf){
+        for(DetalleProforma det: listaDetalle){
+            ProductoVenta aux = productoDao.ObtenerProducto(det.getCodigoProducto());
+            if(det.getCantidad() < aux.getStock()){
+                this.listaProductosFaltantes.add(det);
+                this.productosCompletos = false;
+            }
+        }
+        
+        if(this.productosCompletos){
+            PrimeFaces.current().executeScript("PF('').show();");
+        }else{
+            PrimeFaces.current().executeScript("PF('').show();");
+        }
     }
     
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
@@ -101,6 +128,14 @@ public class ListaProformaManagedBean implements Serializable {
 
     public void setCliente(ClienteVenta cliente) {
         this.cliente = cliente;
+    }
+
+    public List<DetalleProforma> getListaProductosFaltantes() {
+        return listaProductosFaltantes;
+    }
+
+    public void setListaProductosFaltantes(List<DetalleProforma> listaProductosFaltantes) {
+        this.listaProductosFaltantes = listaProductosFaltantes;
     }
     
     

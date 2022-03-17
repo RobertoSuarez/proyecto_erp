@@ -41,11 +41,11 @@
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
-                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" update="listaDeProforma"
-                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'hidden' : 'true'"/>
+                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" update="listaDeProforma" actionListener="#{ListaProformaMB.revisarProforma(Lista)}"
+                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'false' : 'true'"/>
                             <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"
-                                             update="listaDeProforma"
-                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'hidden' : 'true'"/>
+                                             update="listaDeProforma" disabled="#{Lista.estado} == 'R' ? 'true' : 'false'"
+                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'false' : 'true'"/>
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
                                              onclick="PF('DetalleProforma').show()" update="datosFactura" />
                         </p:column>
@@ -107,6 +107,30 @@
                             </p:columnGroup>
 
                         </p:dataTable>
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog id="aceptarProformaFaltante" widgetVar="proformaFaltaProd">
+                    <h:form>
+                        <h2>Algunos items en esta proforma tienen un stock menor al solicitado. Elija una opción</h2>
+                        <p:dataTable value="#{ListaProformaMB.listaProductosFaltantes}" var="itemsFaltantes">
+                            <p:column headerText="Item">
+                                <h:outputText value="#{itemsFaltantes.producto.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad solicitada">
+                                <h:outputText value="#{itemsFaltantes.cantidad}"/>
+                            </p:column>
+                            <p:column headerText="Stock disponible">
+                                <h:outputText value="#{itemsFaltantes.producto.stock}"/>
+                            </p:column>
+                        </p:dataTable>
+                        
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog id="aceptarProformaCompleta" widgetVar="proformaCompleta">
+                    <h:form>
+                        
                     </h:form>
                 </p:dialog>
 

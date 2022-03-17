@@ -296,18 +296,16 @@ public class ProformaManageBean implements Serializable {
                 profor.setTotalproforma((float) this.total);
                 profordao.IngresarProforma(profor);
                 ProductoVenta produc;
-                while (listSize < this.listaDetalle.size()) {
-                    produc = new ProductoVenta();
-                    produc = this.listaDetalle.get(listSize).getProducto();
-                    profordao.ingresarDetalleProforma(produc, profor);
-                    listSize += 1;
+                for(DetalleProforma det: listaDetalle){
+                    profordao.ingresarDetalleProforma(det, profor);
                 }
             }
 
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada exitosamente"));
             context.getExternalContext().getFlash().setKeepMessages(true);
-            return "listaProforma.xhtmlfaces-redirect=true";
+            context.getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?faces-redirect=true");
+            return "listaProforma.xhtml?faces-redirect=true";
         } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");
         }
