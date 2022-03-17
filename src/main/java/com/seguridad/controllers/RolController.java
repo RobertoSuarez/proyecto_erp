@@ -15,6 +15,7 @@ import com.seguridad.models.Permisos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -25,11 +26,11 @@ import javax.inject.Named;
  *
  * @author Andres Mora
  */
-@Named(value = "RolMB") 
+@Named(value = "RolMB")
 @ViewScoped
 public class RolController implements Serializable {
 
-    private RolDAO rolDao; 
+    private RolDAO rolDao;
     private ModuleDAO moduleDAO;
     private Modulo module;
     FacesContext context = FacesContext.getCurrentInstance();
@@ -44,7 +45,8 @@ public class RolController implements Serializable {
     private int CodigoModule;
     String nameRol;
     String descriptionRol;
-    
+    String idModulo;
+
     public RolController() {
         rolSeleccionado = new Rol();
         rolDao = new RolDAO();
@@ -52,12 +54,13 @@ public class RolController implements Serializable {
         this.lstOfRoles = new ArrayList<>();
         lstModulesItem = new ArrayList<>();
         lstModulesSelected = new ArrayList<>();
-        lstPermisos= new ArrayList<>();
+        lstPermisos = new ArrayList<>();
         modulesActives = new ArrayList<>();
-        module=new Modulo();
-        CodigoModule =0;
-        nameRol="";
-        descriptionRol="";
+        module = new Modulo();
+        CodigoModule = 0;
+        nameRol = "";
+        descriptionRol = "";
+        idModulo="";
         this.lstOfRoles = rolDao.GetRols();
         this.lstModulesItem = moduleDAO.invokeAllModulesForRol();
     }
@@ -69,25 +72,33 @@ public class RolController implements Serializable {
             return "false";
         }
     }
-    
-    public void chargeDataModulesAndRol(){
+
+    public void chargeDataModulesAndRol() {
         System.out.println(this.module.getIdModule());
         System.out.println(this.lstModulesItem.size());
     }
-    
-    public void chargeRolesSelected(Modulo mod){
+
+    public void chargeRolesSelected(Modulo mod) {
         this.lstModulesSelected.add(rolDao.GetRolsSelected(mod));
         lstModulesItem.remove(mod);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Modulo añadido", "El modulo se cargo correctamente");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public void chargePermisosSelected(){
+
+    public void chargePermisosSelected() {
         System.out.println(module.getIdModule());
-        System.out.println(this.rolSeleccionado.getId());
-//        this.lstPermisos = rolDao.GetPermissionsRoles(this.rolSeleccionado.getId(), CodigoModule);
+        if (module.getIdModule()<=0) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Seleccion invalida", "El modulo seleccionado no es valido");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } else {
+            System.out.println(module.getIdModule());
+//            System.out.println(this.rolSeleccionado.getId());
+//            this.lstPermisos = rolDao.GetPermissionsRoles(this.rolSeleccionado.getId(), CodigoModule);
+        }
     }
-    
-    public void selection(){
-        
+
+    public void selection() {
+
     }
 
     public List<Rol> getListOfRoles() {
@@ -169,5 +180,13 @@ public class RolController implements Serializable {
     public void setLstModulesItem(List<Modulo> lstModulesItem) {
         this.lstModulesItem = lstModulesItem;
     }
-    
+
+    public String getIdModulo() {
+        return idModulo;
+    }
+
+    public void setIdModulo(String idModulo) {
+        this.idModulo = idModulo;
+    }
+
 }

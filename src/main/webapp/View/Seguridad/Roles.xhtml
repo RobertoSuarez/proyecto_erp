@@ -83,28 +83,28 @@
                             <p:commandButton icon="pi pi-plus"                                                         
                                              class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
                                              process=":form-rol"
-                                             update=":somModulos ModulosActivosList"
+                                             update=":form :somModulos :ModulosActivosList"
                                              actionListener="#{RolMB.chargeRolesSelected(ListaModulos)}">
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
                 </p:panel>
                 <p:divider/>
-                <p:panel id="cmdPermisosSeleccionados">
-                    <p:selectOneMenu id="somModulos" value="#{RolMB.module.idModule}"
+                <p:outputPanel id="cmdPermisosSeleccionados">
+                    <p:selectOneMenu id="somModulos" value="#{RolMB.module.idModule}" var="IdentificadorModulo"
                                      style="height: 35px; width: 185px !important;">
                         <f:selectItem itemValue="-1" itemLabel="Seleccione..."/>
                         <f:selectItems value="#{RolMB.lstModulesSelected}"/>
+                        <p:ajax event="change" process="@this"/>
                     </p:selectOneMenu>
                     <p:commandButton icon="pi pi-spinner"                                                         
-                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                     process=":cmdPermisosSeleccionados"
+                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+                                     process="@this RolDATA"
                                      update="dt_permisos"
-                                     value="Cargar vistas"
                                      style="margin-left: 5%"
                                      actionListener="#{RolMB.chargePermisosSelected()}">
                     </p:commandButton>
-                </p:panel>
+                </p:outputPanel>
                 <p:dataTable id="dt_permisos" value="#{RolMB.lstPermisos}" var="ListaPermisos"
                              size="small" liveResize="true" rowKey="#{ListaPermisos.id_vista}" 
                              style="width: 100%"
