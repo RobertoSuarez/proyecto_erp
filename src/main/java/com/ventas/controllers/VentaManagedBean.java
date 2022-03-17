@@ -344,11 +344,12 @@ public class VentaManagedBean implements Serializable {
             double qty = convertTwoDecimal(this.listaDetalle.get(listSize).getCantidad());
             double dsc = convertTwoDecimal(this.listaDetalle.get(listSize).getDescuento());
             double price = convertTwoDecimal(this.listaDetalle.get(listSize).getPrecio());
+            double sbttl = convertTwoDecimal(this.listaDetalle.get(listSize).getSubTotal());
             DetalleVentaDAO daoDetail = new DetalleVentaDAO();
             if (listaDetalle.get(listSize).getProducto().isStockeable()) {
-                daoDetail.RegistrarProductos(codVenta, codProd, qty, dsc, price);
+                daoDetail.RegistrarProductos(codVenta, codProd, qty, dsc, price, sbttl);
             }else{
-                daoDetail.RegistrarProductosNoStockeable(codVenta, codProd, qty, dsc, price);
+                daoDetail.RegistrarProductosNoStockeable(codVenta, codProd, qty, dsc, price, sbttl);
             }
             listSize += 1;
         }

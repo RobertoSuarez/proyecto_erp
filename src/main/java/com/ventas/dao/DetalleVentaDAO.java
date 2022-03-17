@@ -28,7 +28,7 @@ public class DetalleVentaDAO {
         this.con = new Conexion();
     }
 
-    public void RegistrarProductos(int idVenta, int idProducto, double cantidad, double descuento, double precio) {
+    public void RegistrarProductos(int idVenta, int idProducto, double cantidad, double descuento, double precio, double subtotal) {
         try {
             int idDetalle = 1;
             ResultSet rs = null;
@@ -43,8 +43,8 @@ public class DetalleVentaDAO {
             }
 
             //insertar detalle venta
-            query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
-                    + idProducto + "," + cantidad + "," + descuento + "," + precio + ")";
+            query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio, subtotal) values(" + idDetalle + "," + idVenta + ","
+                    + idProducto + "," + cantidad + "," + descuento + "," + precio + "," + subtotal + ")";
             System.out.println(query);
             this.con.ejecutarSql(query);
 
@@ -71,7 +71,7 @@ public class DetalleVentaDAO {
         }
     }
     
-    public void RegistrarProductosNoStockeable(int idVenta, int idProducto, double cantidad, double descuento, double precio) {
+    public void RegistrarProductosNoStockeable(int idVenta, int idProducto, double cantidad, double descuento, double precio, double subtotal) {
         try {
             int idDetalle = 1;
             ResultSet rs = null;
@@ -86,8 +86,8 @@ public class DetalleVentaDAO {
             }
 
             //insertar detalle venta
-            query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio) values(" + idDetalle + "," + idVenta + ","
-                    + idProducto + "," + cantidad + "," + descuento + "," + precio + ")";
+            query = "insert into public.detalleventa(iddetalleventa, idventa, codprincipal, cantidad, descuento, precio, subtotal) values(" + idDetalle + "," + idVenta + ","
+                    + idProducto + "," + cantidad + "," + descuento + "," + precio + "," + subtotal + ")";
             System.out.println(query);
             this.con.ejecutarSql(query);
             
@@ -109,7 +109,7 @@ public class DetalleVentaDAO {
             this.con.conectar();
             DetalleVenta detail = new DetalleVenta();
             List<DetalleVenta> lista = new ArrayList<>();
-            String query = "select d.iddetalleventa, d.cantidad, ar.nombre, d.precio, CAST((d.cantidad * d.precio) - d.descuento as DOUBLE PRECISION) as Subtotal, d.descuento "
+            String query = "select d.iddetalleventa, d.cantidad, ar.nombre, d.precio, CAST((d.precio - d.descuento) * d.cantidad as DOUBLE PRECISION) as Subtotal, d.descuento "
                     + "from public.detalleventa d inner join public.articulos ar on d.codprincipal = ar.id where idventa = " + idVenta + ";";
             System.out.println(query);
             ResultSet rs = this.con.ejecutarSql(query);
