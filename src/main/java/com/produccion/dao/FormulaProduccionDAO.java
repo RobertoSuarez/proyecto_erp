@@ -7,7 +7,10 @@ import com.produccion.models.FormulaProduccion;
 import com.produccion.models.SubProceso;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FormulaProduccionDAO {
@@ -342,7 +345,7 @@ public class FormulaProduccionDAO {
         try {
             int rendimiento = 0;
             String sentencia = "select cantidad_estimada from proceso_produccion\n"
-                    + "where codigo_proceso="+idProceso+"";
+                    + "where codigo_proceso=" + idProceso + "";
             resultSet = conexion.ejecutarSql(sentencia);
             while (resultSet.next()) {
                 rendimiento = resultSet.getInt("cantidad_estimada");
@@ -353,6 +356,81 @@ public class FormulaProduccionDAO {
         } finally {
             conexion.desconectar();
         }
+    }
+
+    public List<SubProceso> getListaSubProceso(int id) {
+        List<SubProceso> subProceso = new ArrayList<>();
+        String sql = String.format("select sp.codigo_subproceso,sp.nombre,sp.costo_directo,sp.costo_indirecto \n"
+                + "		from proceso_produccion as pp \n"
+                + "		inner join detalle_proceso_p as dpp on pp.codigo_proceso=dpp.codigo_proceso\n"
+                + "		inner join subproceso as sp on sp.codigo_subproceso=dpp.codigo_subproceso\n"
+                + "		where pp.codigo_proceso=" + id);
+        try {
+
+            resultSet = conexion.ejecutarSql(sql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                subProceso.add(new SubProceso(resultSet.getInt("codigo_subproceso"),
+                        resultSet.getString("nombre"), resultSet.getFloat("costo_directo"), resultSet.getFloat("costo_indirecto")
+                ));
+
+            }
+
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return subProceso;
+    }
+    public List<SubProceso> getListaSubProcesoAdicional() {
+        List<SubProceso> subProceso = new ArrayList<>();
+        String sql = String.format("select * from subproceso");
+        try {
+
+            resultSet = conexion.ejecutarSql(sql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                subProceso.add(new SubProceso(resultSet.getInt("codigo_subproceso"),
+                        resultSet.getString("nombre"), resultSet.getFloat("costo_directo"), resultSet.getFloat("costo_indirecto")
+                ));
+
+            }
+
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return subProceso;
+    }
+
+    public int InsertarDetalleFormula(SubProceso detalle, int idFormula) {
+        try {
+            String consulta = "INSERT INTO public.detalle_formula_subproceso(\n"
+                    + "	codigo_formula, codigo_subproceso, hora_trabajo, minuto_trabajo, importe_directo, importe_indirecto, minutos_pieza, costo_minuto_directo, costo_minuto_indirecto)\n"
+                    + "	VALUES (" + idFormula + ", " + detalle.getCodigo_subproceso() + ",'" + detalle.getHora() + "'," + convertMinutos(detalle.getHora())
+                    + " , " + detalle.getImporte_directo()+ ", " + detalle.getImporte_indirecto()+", " + detalle.getPieza_minuto()+", " + detalle.getCosto_minuto_directo()+", " + detalle.getCosto_minuto_indirecto()+ ");";
+            return conexion.insertar(consulta);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
+    public float convertMinutos(String hora) {
+        float minutos = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(hora);
+        } catch (ParseException e) {
+            System.out.println("" + e);
+        }
+        minutos += date.getSeconds() / 60;
+        minutos += date.getHours() * 60;
+        minutos += date.getMinutes();
+        return minutos;
     }
 
 }

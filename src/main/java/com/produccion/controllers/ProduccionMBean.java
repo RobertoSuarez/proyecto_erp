@@ -8,6 +8,7 @@ package com.produccion.controllers;
 import com.produccion.dao.OrdenProduccionDAO;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
+import com.produccion.models.CentroTrabajo;
 import com.produccion.models.FormulaMateriales;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenTrabajo;
@@ -16,7 +17,11 @@ import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -60,6 +65,7 @@ public class ProduccionMBean implements Serializable {
     private List<FormulaProduccion> materiaPrima;
     private List<FormulaMateriales> listaMateriaPrimaAdicional;
     private List<FormulaMateriales> listaMaterialesConfirmados;
+    private List<CentroTrabajo> listaCentroTiempo;
     List<ArticuloFormula> listaAdicionales;
     private FormulaMateriales materialesFormula;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -85,6 +91,7 @@ public class ProduccionMBean implements Serializable {
         listaMateriaPrimaAdicional = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
         listaAdicionales = new ArrayList<>();
+        listaCentroTiempo = new ArrayList<>();
     }
 
     @PostConstruct
@@ -179,6 +186,14 @@ public class ProduccionMBean implements Serializable {
 
     public void setListaCostos(List<FormulaProduccion> listaCostos) {
         this.listaCostos = listaCostos;
+    }
+
+    public List<CentroTrabajo> getListaCentroTiempo() {
+        return listaCentroTiempo;
+    }
+
+    public void setListaCentroTiempo(List<CentroTrabajo> listaCentroTiempo) {
+        this.listaCentroTiempo = listaCentroTiempo;
     }
 
     public void llenarFormula() {
@@ -279,6 +294,7 @@ public class ProduccionMBean implements Serializable {
         listaMateriaPrima = ordenDao.getListaConsumoMateriales(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad());
         materiaPrima = ordenDao.getArticulos();
         costoMateriaPrima();
+        listaCentroTiempo = ordenDao.getListaCentro(ordenTrabajo.getCodigo_formula());
     }
 
     public void costoMateriaPrima() {
@@ -300,8 +316,8 @@ public class ProduccionMBean implements Serializable {
             costosI += costoP.getCIFUnidad();
             ordenTrabajo.setTiempo(costoP.getTiempoUnidad());
         }
-        ordenTrabajo.setTotalMOD(Precision.round(costosD,2));
-        ordenTrabajo.setTotalCIF(Precision.round(costosI,2));
+        ordenTrabajo.setTotalMOD(Precision.round(costosD, 2));
+        ordenTrabajo.setTotalCIF(Precision.round(costosI, 2));
         ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
         ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
     }
@@ -598,6 +614,56 @@ public class ProduccionMBean implements Serializable {
             }
         }
         return verifica;
+    }
+
+    public void asignaHoraInicio(CentroTrabajo centro) {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date();
+        centro.setHoraInicio(dateFormat.format(date));
+    }
+
+    public void asignaHoraFin(CentroTrabajo centro) {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date();
+        centro.setHoraFin(dateFormat.format(date));
+        float costoMinutoDirecto = centro.getCostoDirecto() / 60;
+        float costoMinutoIndirecto = centro.getCostoIndirecto() / 60;
+        float tiempoMinuto = convertMinutos(centro.getTiempoMinutos());
+        try {
+            Date dataInicio = dateFormat.parse(centro.getHoraInicio());
+            Date dataFin = dateFormat.parse(centro.getHoraFin());
+            int diferencia = (int) ((dataFin.getTime() - dataInicio.getTime()) / 1000);
+            int horas = 0;
+            int minutos = 0;
+            if (diferencia > 3600) {
+                horas = (int) Math.floor(diferencia / 3600);
+                diferencia = diferencia - (horas * 3600);
+            }
+            if (diferencia > 60) {
+                minutos = (int) Math.floor(diferencia / 60);
+                diferencia = diferencia - (minutos * 60);
+            }
+            centro.setTiempoMinutos(horas + ":" + minutos + ":" + diferencia);
+            centro.setTotalDirecto(Precision.round(costoMinutoDirecto * tiempoMinuto, 2));
+            centro.setTotalIndirecto(Precision.round(costoMinutoIndirecto * tiempoMinuto, 2));
+        } catch (ParseException ex) {
+            Logger.getLogger(ProduccionMBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public float convertMinutos(String hora) {
+        float minutos = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(hora);
+        } catch (ParseException e) {
+            System.out.println("" + e);
+        }
+        minutos += date.getSeconds() / 60;
+        minutos += date.getHours() * 60;
+        minutos += date.getMinutes();
+        return minutos;
     }
 
 }

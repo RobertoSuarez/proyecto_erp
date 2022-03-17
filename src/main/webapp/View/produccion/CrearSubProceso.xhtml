@@ -25,7 +25,7 @@
                             <p:toolbarGroup>
                                 <p:outputPanel id="subProceso" class="ui-fluid">
                                     <div class="p-grid p-justify-center">
-                                        <div class=" p-lg-4">
+                                        <div class=" p-lg-6">
                                             <p:outputLabel value="Nombre:"></p:outputLabel>
                                             <p:inputText value="#{SubProcesoMB.sproceso.nombre}"/>
                                             <p:outputLabel value="Descripcion:"></p:outputLabel>
@@ -35,24 +35,13 @@
                                                               rows="7" 
                                                               autoResize="false"/>
                                         </div>
-                                        <div class="  p-lg-4">
-                                            <p:outputLabel value="Proceso Principal:"/>
-                                            <p:selectOneMenu id="proceso" value="#{SubProcesoMB.sproceso.id_codigo_proceso}" 
-                                                             alwaysDisplayLabel="true">
-                                                <f:selectItem itemLabel="Seleccione un Proceso" itemValue="" noSelectionOption="true"/>
-                                                <f:selectItems value="#{SubProcesoMB.listaProceso}" var="proceso"
-                                                               itemLabel="#{proceso.nombre}" itemValue="#{proceso.codigo_proceso}"/>
-                                            </p:selectOneMenu>
+                                        <div class="  p-lg-6">
                                             <p:outputLabel value="Horas de trabajo:"></p:outputLabel>
                                             <p:inputMask value="#{SubProcesoMB.sproceso.hora}"
                                                          mask="99:99:99">
                                                 <p:ajax event="blur" process="@this"/>
                                             </p:inputMask>
-                                            <p:outputLabel value="Rendimiento:"></p:outputLabel>
-                                            <p:inputNumber value="#{SubProcesoMB.sproceso.rendimiento}"/>
                                             <p:outputLabel value="." style="color: white"/>
-
-
                                             <p:commandButton style="margin-right: 6px;" value="Personal" 
                                                              styleClass="ui-button-secondary" icon="pi pi-search" oncomplete="PF('empleado').show()">
                                             </p:commandButton>
@@ -95,7 +84,7 @@
                                     </f:facet>
 
                                     <p:column headerText="Nombre" filterStyle="display : none">
-                                        <h:outputText value="#{nDirecto.nombre_subcuenta}" id="codigo"/>
+                                        <h:outputText value="#{nDirecto.nombre_subcuenta}"/>
                                     </p:column>
 
                                     <p:column headerText="Descripción" >
@@ -129,6 +118,11 @@
                                         <div class=" p-lg-4">
                                             <p:outputLabel value="Total : "></p:outputLabel>
                                             <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalDirecto}" readonly="true"></p:inputNumber>  
+                                        </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total x hora : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalxHoraDirecto}" readonly="true"></p:inputNumber>
+
                                         </div>
                                     </div>
                                 </p:outputPanel>
@@ -184,6 +178,11 @@
                                             <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalIndirecto}" readonly="true"></p:inputNumber>
 
                                         </div>
+                                        <div class=" p-lg-4">
+                                            <p:outputLabel value="Total x hora : "></p:outputLabel>
+                                            <p:inputNumber disabled="#"  value="#{SubProcesoMB.totalxHoraIndirecto}" readonly="true"></p:inputNumber>
+
+                                        </div>
                                     </div>
                                 </p:outputPanel>
                             </div>
@@ -208,8 +207,7 @@
 
                     <p:dialog header="Seleccionar empleados" showEffect="fade" modal="true"
                               widgetVar="empleado" responsive="true" width="60%"
-                              draggable="false" height="500">
-
+                              draggable="false" height="400">
                         <p:outputPanel class="ui-fluid">
                             <p:outputPanel>
                                 <div class="p-grid p-justify-around">

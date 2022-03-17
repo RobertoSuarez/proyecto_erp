@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="title">Rutas de producción</ui:define>
+            <ui:define name="content">
+                <ui:include src="subheaderProduccion.xhtml"/>
+                <h:form id="rutaProduccion" style="margin-top: 4%;">
+                    <p:growl id="growl" showDetail="true" />
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <div class="p-d-flex p-jc-between p-ai-center" style="font-size: 2em">
+                                    <span style="font-weight: bold; margin-right:0.5em;  font-size: 1em">Nuevo Ruta de Producción</span>
+                                </div>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:outputPanel id="ruta" class="ui-fluid">
+                                    <div class="p-grid p-justify-center">
+                                        <div class=" p-lg-6">
+                                            <p:outputLabel 
+                                                for="codProceso">Código: </p:outputLabel>
+                                            <p:inputText 
+                                                id="codProceso" 
+                                                value="#{rutaProduccion.procesoProduccion.identificador}" 
+                                                placeholder="Siglas del identificador" 
+                                                style="background: #90A4AE;
+                                                color:#000000" readonly="true"></p:inputText>
+                                            <p:outputLabel for="descrProceso">Descripción:</p:outputLabel>
+                                            <p:inputTextarea 
+                                                maxlength="50" 
+                                                id="descrProceso"
+                                                placeholder="Descripcion maximo 50 caracteres"
+                                                value="#{rutaProduccion.procesoProduccion.descripcion}"
+                                                rows="5" 
+                                                autoResize="false"/>
+                                        </div>
+                                        <div class=" p-lg-6">
+                                            <p:outputLabel 
+                                                for="nameProceso">Nombre: </p:outputLabel>
+                                            <p:inputText 
+                                                id="nameProceso" 
+                                                value="#{rutaProduccion.procesoProduccion.nombre}" 
+                                                maxlength="25"
+                                                placeholder="Maximo 25 caracteres" 
+                                                required="true"></p:inputText>
+                                            <p:outputLabel value="Centro de Trabajo"/>
+                                            <p:commandButton value="Agregar Centro de trabajo" 
+                                                             styleClass="ui-button-secondary"
+                                                             icon="pi pi-search" oncomplete="PF('centro').show()">
+                                            </p:commandButton>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <p:dataTable id="centroTrabajo" editable="true" reflow="true" paginator="true" 
+                                                 rows="4" 
+                                                 paginatorPosition="bottom"
+                                                 value="#{rutaProduccion.listaConfirmadaProcesos}" var="centroTrabajo">
+                                        <p:column headerText="Codigo" >
+                                            <h:outputText value="#{centroTrabajo.codigo_subproceso}" />
+                                        </p:column>
+                                        <p:column headerText="Nombre" filterStyle="display : none">
+                                            <h:outputText value="#{centroTrabajo.nombre}"/>
+                                        </p:column>
+                                        <p:column headerText="Descripción" filterStyle="display : none">
+                                            <h:outputText value="#{centroTrabajo.descripcion}"/>
+                                        </p:column>
+                                        <p:column headerText="Acciones">
+                                            <p:column headerText="Acciones">
+                                                <p:commandButton icon="pi pi-trash" actionListener="#{rutaProduccion.deleteFila(centroTrabajo)}"
+                                                                 styleClass="edit-button rounded-button ui-button-danger"
+                                                                 update=":rutaProduccion:centroTrabajo"
+                                                                 process="@this">
+
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <div class="p-col-12">
+                                        <div class="p-grid p-justify-end">
+                                            <div class="p-col-1">
+
+                                                <p:commandButton value="Guardar " actionListener="#{rutaProduccion.insertarProceso()}"
+                                                                 process=""
+                                                                 update="growl,ruta,:rutaProduccion:dtCentroTrabajo"
+                                                                 icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:button  value="Cancelar" icon="pi pi-times"
+                                                           class="ui-button-danger p-mr-2 p-mb-2"
+                                                           outcome="procesoProduccion.xhtml">
+                                                </p:button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </div>
+                    <p:dialog header="Seleccione los centro de trabajos" showEffect="fade" modal="true"
+                              widgetVar="centro" responsive="true" width="80%"
+                              draggable="false" height="550">
+                        <p:outputPanel class="ui-fluid">
+                            <p:outputPanel>
+                                <div class="p-grid p-justify-around">
+
+                                    <div class="p-col-11">
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <p:dataTable id="dtCentroTrabajo" reflow="true"
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="#{rutaProduccion.listaSubProcesos}" 
+                                                             var="centroT" paginatorPosition="bottom" rows="5"
+                                                             paginator="true">
+                                                    <f:facet name="header">
+                                                        <div class="p-grid">
+                                                            <div class="p-col-4">
+                                                                <p:outputLabel value="Nombre Producto:"></p:outputLabel>
+                                                                <p:inputText id="globalFilter"
+                                                                             onkeyup=""
+                                                                             placeholder="Buscar"></p:inputText>
+                                                            </div>
+                                                        </div>
+                                                    </f:facet>
+
+                                                    <p:column headerText="Acciones">
+                                                        <p:selectBooleanCheckbox value="#{centroT.verifica}">
+                                                            <p:ajax listener="#{rutaProduccion.addMateriales(centroT)}"/>
+                                                        </p:selectBooleanCheckbox>
+                                                    </p:column>
+
+                                                    <p:column headerText="Código" filterStyle="display : none">
+                                                        <h:outputText value="#{centroT.codigo_subproceso}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#{centroT.nombre}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Descripción" filterStyle="display : none">
+                                                        <h:outputText value="#{centroT.descripcion}" />
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+                                        </div>
+                                        <!-- Botones Guardar/Cerrar -->
+                                        <div class="p-grid p-justify-end">
+                                            <div class="p-col-2">
+                                                <p:commandButton value="Confirmar"  
+                                                                 icon="pi pi-check"
+                                                                 styleClass="ui-button-primary"
+                                                                 actionListener="#{rutaProduccion.llenaProductoConfirmado()}"
+                                                                 update="centroTrabajo ,growl"
+                                                                 process=":rutaProduccion:dtCentroTrabajo @this"
+                                                                 oncomplete="PF('centro').hide()"
+                                                                 />
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:commandButton value="Cerrar" icon="pi pi-times"
+                                                                 styleClass="ui-button-danger" process="@this"
+                                                                 oncomplete="PF('centro').hide()"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

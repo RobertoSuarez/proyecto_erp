@@ -3,6 +3,7 @@ package com.produccion.dao;
 import com.global.config.Conexion;
 import com.produccion.models.ArticuloFormula;
 import com.produccion.models.CentroCosto;
+import com.produccion.models.CentroTrabajo;
 import com.produccion.models.FormulaMateriales;
 import com.produccion.models.FormulaProduccion;
 import com.produccion.models.OrdenProduccion;
@@ -174,7 +175,7 @@ public class OrdenProduccionDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 costos.add(new FormulaProduccion(resultSet.getString("nombre_formula"), resultSet.getFloat("tiempo"),
-                        Precision.round(resultSet.getFloat("mo"),2), Precision.round(resultSet.getFloat("cif"),2)));
+                        Precision.round(resultSet.getFloat("mo"), 2), Precision.round(resultSet.getFloat("cif"), 2)));
             }
         } catch (SQLException e) {
         } finally {
@@ -765,6 +766,26 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
         return ordenProductoInventario;
+    }
+
+    public List<CentroTrabajo> getListaCentro(int codigoFormula) {
+        List<CentroTrabajo> centro = new ArrayList<>();
+        sentenciaSql = String.format("select sp.codigo_subproceso,sp.nombre,sp.costo_directo,sp.costo_indirecto from formula as f \n"
+                + "inner join detalle_formula_subproceso as dfs on f.codigo_formula=dfs.codigo_formula\n"
+                + "inner join subproceso as sp on sp.codigo_subproceso=dfs.codigo_subproceso\n"
+                + "where f.codigo_formula="+codigoFormula+";");
+        try {
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                centro.add(new CentroTrabajo(resultSet.getInt("codigo_subproceso"), resultSet.getString("nombre"),
+                        resultSet.getFloat("costo_directo"), resultSet.getFloat("costo_indirecto")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return centro;
     }
 
 }
