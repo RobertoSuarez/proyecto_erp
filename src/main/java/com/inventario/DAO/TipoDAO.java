@@ -30,7 +30,7 @@ public class TipoDAO {
     }
     public List<Tipo> getTipoArticulo() {
         List<Tipo> ListaTipo= new ArrayList<>();
-        String sql = String.format("select *from tipo where cod !=4");
+        String sql = String.format("select *from tipo");
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos

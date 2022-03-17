@@ -11,13 +11,11 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ArticulosInventario implements Serializable {
-
+    
     private int id;
     private int cat_cod;
     private String nombre;
     private Bodega bodega;
-    private Categoria categoria;
-    private Tipo tipo;
     private int id_categoria;
     private int id_tipo;
     private int cod;
@@ -31,25 +29,18 @@ public class ArticulosInventario implements Serializable {
     private float coast;
     private int iva;
     private String UnidadMedida;
-    private String tipoP;
-    private String nom_categoria;
     private Boolean isIva;
     private float precioventa;
     private float iceproducto;
     private SubCuenta subCuenta;
     private int idSubCuenta;
-    private String nom_subcuenta;
-    private int ice;
-    private float impuestoIVA;
-    private boolean is_Servicio;
-    private boolean stockeable;
-
+    private int ice ;
     private List<FormulaMateriales> formulaMateriales;
 
     public ArticulosInventario() {
     }
 
-    public ArticulosInventario(int id, int cat_cod, String nombre, int id_tipo, String descripcion, int id_bodega, int cantidad, int costo, int iva, int ice) {
+        public ArticulosInventario(int id, int cat_cod, String nombre, int id_tipo, String descripcion, int id_bodega, int cantidad, int costo, int iva, int ice) {
         this.id = id;
         this.cat_cod = cat_cod;
         this.nombre = nombre;
@@ -61,7 +52,7 @@ public class ArticulosInventario implements Serializable {
         this.iva = iva;
         this.ice = ice;
     }
-
+        
     public ArticulosInventario(int id, int cat_cod, String nombre, int id_tipo, String descripcion, int id_bodega, int cantidad, int costo, int iva, int ice, int max_stock) {
         this.id = id;
         this.cat_cod = cat_cod;
@@ -76,34 +67,22 @@ public class ArticulosInventario implements Serializable {
         this.max_stock = max_stock;
     }
 
-    public ArticulosInventario(int id, String nombre, String descripcion, String nomBodega, int cantidad, float coast, String UnidadMedida) {
+    public ArticulosInventario(int id, String nombre,String descripcion, String nomBodega, int cantidad, float coast, String UnidadMedida) {
         this.id = id;
         this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.descripcion=descripcion;
         this.nomBodega = nomBodega;
         this.cantidad = cantidad;
         this.coast = coast;
         this.UnidadMedida = UnidadMedida;
     }
+    
+    
 
-    public ArticulosInventario(int id, String nombre, String descripcion, String nomBodega, int cantidad, float coast, int iva, String UnidadMedida, String tipoP, String nom_categoria, String nom_subcuenta, float iceproducto) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.nomBodega = nomBodega;
-        this.cantidad = cantidad;
-        this.coast = coast;
-        this.iva = iva;
-        this.UnidadMedida = UnidadMedida;
-        this.tipoP = tipoP;
-        this.nom_categoria = nom_categoria;
-        this.nom_subcuenta = nom_subcuenta;
-        this.iceproducto = iceproducto;
-    }
-
-    public ArticulosInventario(int id, int cat_cod, String nombre,
-            int id_categoria, int id_tipo, int cod, String descripcion,
-            int id_bodega, int min_stock, int max_stock, int cantidad,
+    
+    public ArticulosInventario(int id, int cat_cod, String nombre, 
+            int id_categoria, int id_tipo, int cod, String descripcion, 
+            int id_bodega, int min_stock, int max_stock, int cantidad, 
             int costo, int iva, int ice) {
         this.id = id;
         this.cat_cod = cat_cod;
@@ -147,7 +126,7 @@ public class ArticulosInventario implements Serializable {
     
     
 
-    public ArticulosInventario(String nombre, int id_categoria, int id_tipo, String descripcion, int id_bodega, int max_stock, int cantidad, int costo, int iva, float iceproducto, float precioventa) {
+    public ArticulosInventario(String nombre, int id_categoria, int id_tipo, String descripcion, int id_bodega, int max_stock, int cantidad, int costo, int iva, float iceproducto,float precioventa) {
         this.nombre = nombre;
         this.id_categoria = id_categoria;
         this.id_tipo = id_tipo;
@@ -158,8 +137,10 @@ public class ArticulosInventario implements Serializable {
         this.costo = costo;
         this.iva = iva;
         this.iceproducto = ice;
-        this.precioventa = precioventa;
+        this.precioventa=precioventa;
     }
+    
+    
 
     public List<FormulaMateriales> getFormulaMateriales() {
         return formulaMateriales;
@@ -172,14 +153,8 @@ public class ArticulosInventario implements Serializable {
     public void setCoast(float coast) {
         this.coast = coast;
     }
-
-    public String getNom_categoria() {
-        return nom_categoria;
-    }
-
-    public void setNom_categoria(String nom_categoria) {
-        this.nom_categoria = nom_categoria;
-    }
+    
+    
 
     public void setFormulaMateriales(List<FormulaMateriales> formulaMateriales) {
         this.formulaMateriales = formulaMateriales;
@@ -196,56 +171,7 @@ public class ArticulosInventario implements Serializable {
     public float getIceproducto() {
         return iceproducto;
     }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public boolean isIs_Servicio() {
-        return is_Servicio;
-    }
-
-    public void setIs_Servicio(boolean is_Servicio) {
-        this.is_Servicio = is_Servicio;
-    }
-
-    public boolean isStockeable() {
-        return stockeable;
-    }
-
-    public void setStockeable(boolean stockeable) {
-        this.stockeable = stockeable;
-    }
     
-
-    public float getImpuestoIVA() {
-        return impuestoIVA;
-    }
-
-    public void setImpuestoIVA(float impuestoIVA) {
-        this.impuestoIVA = impuestoIVA;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public Tipo getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(Tipo tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getTipoP() {
-        return tipoP;
-    }
-
-    public void setTipoP(String tipoP) {
-        this.tipoP = tipoP;
-    }
-
     public void setIceproducto(float iceproducto) {
         this.iceproducto = iceproducto;
     }
@@ -257,10 +183,12 @@ public class ArticulosInventario implements Serializable {
     public void setSubCuenta(SubCuenta subCuenta) {
         this.subCuenta = subCuenta;
     }
+    
 
     public int getId() {
         return id;
     }
+    
 
     public void setId(int id) {
         this.id = id;
@@ -273,6 +201,7 @@ public class ArticulosInventario implements Serializable {
     public void setIdSubCuenta(int idSubCuenta) {
         this.idSubCuenta = idSubCuenta;
     }
+    
 
     public Bodega getBodega() {
         return bodega;
@@ -289,14 +218,7 @@ public class ArticulosInventario implements Serializable {
     public void setNomBodega(String nomBodega) {
         this.nomBodega = nomBodega;
     }
-
-    public String getNom_subcuenta() {
-        return nom_subcuenta;
-    }
-
-    public void setNom_subcuenta(String nom_subcuenta) {
-        this.nom_subcuenta = nom_subcuenta;
-    }
+    
 
     public int getCat_cod() {
         return cat_cod;
@@ -337,6 +259,7 @@ public class ArticulosInventario implements Serializable {
     public void setIsIva(Boolean isIva) {
         this.isIva = isIva;
     }
+    
 
     public int getId_tipo() {
         return id_tipo;
@@ -418,4 +341,13 @@ public class ArticulosInventario implements Serializable {
         this.ice = ice;
     }
 
+   
+    
+    
+    
+    
+    
+    
+    
+    
 }

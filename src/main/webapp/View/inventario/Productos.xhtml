@@ -16,121 +16,103 @@
                         <p:toolbar>
                             <p:toolbarGroup id="nuewp">
                                 <p:outputPanel id="nuevoproducto" class="ui-fluid">
-                                            <p:commandButton value="Nuevo" icon="pi pi-plus"
-                                                             oncomplete="PF('newProduct').show()"   
-                                                             styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                             style="margin-right: .3rem"/> 
-                                </p:outputPanel>
-                                <p:dialog header="Nuevo producto" showEffect="fade" 
-                                          modal="true" widgetVar="newProduct" 
-                                          responsive="true" 
-                                          height="300" width="70%">
-                                    <p:outputPanel id="productosnew" 
-                                                   class="ui-fluid">
-                                        <p:outputPanel> 
-                                            <div class="p-grid"> 
-                                                <div class="p-col-5">                                                  
-                                                    <p:outputLabel value="Subcuenta" for="subcuenta"/>
-                                                    <p:selectOneMenu id="subcuenta" value="#{articulosMB.articulosInventario.idSubCuenta}" editable="false" 
-                                                                     disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una subcuenta" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItems value="#{articulosMB.listaSubcuenta}" var="subcuenta" 
-                                                                       itemLabel="#{subcuenta.nombre}" 
-                                                                       itemValue="#{subcuenta.id}"></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </div>
-
-                                                <div class="p-col-4">
-                                                    <p:outputLabel  for="nombre" value="Nombre del producto"/>
-                                                    <p:inputText id="nombre"
-                                                                 value="#{articulosMB.articulosInventario.nombre}"/>
-                                                </div>
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Descripcion" for="@next"/>
-                                                    <p:inputText value="#{articulosMB.articulosInventario.descripcion}"/>
-                                                </div>
-                                                <div class="p-col-3">
-                                                    <p:outputLabel value="Categoria" for="@next"/>
-                                                    <p:selectOneMenu id="categoria" value="#{articulosMB.articulosInventario.cat_cod}" editable="false" 
-                                                                     disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una Categoría" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItems value="#{articulosMB.listaCategoria}" var="categoria" 
-                                                                       itemLabel="#{categoria.nom_categoria}" 
-                                                                       itemValue="#{categoria.idCat}"></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="p-col-3">
-                                                    <p:outputLabel value="Tipo" for="@next"/>
-                                                    <p:selectOneMenu id="tipo" value="#{articulosMB.articulosInventario.id_tipo}" editable="false" 
-                                                                     disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione un tipo producto" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItems value="#{articulosMB.listaTipos}" var="tipo" 
-                                                                       itemLabel="#{tipo.tipo}" 
-                                                                       itemValue="#{tipo.id}"></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="p-col-3">
-                                                    <p:outputLabel value="Bodega" for="@next"/>
-                                                    <p:selectOneMenu id="bodega" value="#{articulosMB.articulosInventario.id_bodega}" editable="false" 
-                                                                     disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una Bodega" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItems value="#{articulosMB.listaBodega}" var="bodega" 
-                                                                       itemLabel="#{bodega.nomBodega}" 
-                                                                       itemValue="#{bodega.cod}"></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </div>
-
-                                                <div class="p-col-3">
-                                                    <p:outputLabel value="Unidad de Medida" for="@next"/>
-                                                    <p:selectOneMenu id="medida" value="#{articulosMB.articulosInventario.unidadMedida}" editable="false" 
-                                                                     disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una unidad" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Libras" itemValue="Libras" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Litros" itemValue="Litros" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Unidades" itemValue="Unidades" noSelectionOption="true"/>
-                                                    </p:selectOneMenu>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:outputLabel value="Cantidad" for="@next"/>
-                                                    <p:inputNumber value="#{articulosMB.articulosInventario.cantidad}"/>
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:outputLabel value="Costo" for="@next"/>
-                                                    <p:inputText value="#{articulosMB.articulosInventario.coast}"/>
-                                                </div>
-                                                <br></br>
-                                                <div class="p-col-1">
-                                                    <br></br>
-                                                    <p:outputLabel value="IVA " for="@next"  style="font-size: 150%" />
-                                                    <p:selectBooleanCheckbox id="slcbtn" style="font-size: 100%"  
-                                                                             value="#{articulosMB.isIva}"
-                                                                             styleClass="ui-button-help p-mr-2 p-mb-2">                                    
-                                                    </p:selectBooleanCheckbox> 
-                                                </div>
-
-                                                <div class="p-col-1">
-                                                    <p:outputLabel value="ICE" for="@next"/>
-                                                    <p:inputText value="#{articulosMB.articulosInventario.ice}"/>
-                                                </div>
-
+                                    <div class="card ui-nuevoproductofluid ">
+                                        <div class="p-formgrid p-grid ">
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Subcuenta" for="subcuenta"/>
+                                                <p:selectOneMenu id="subcuenta" value="#{articulosMB.articulosInventario.idSubCuenta}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una subcuenta" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaSubcuenta}" var="subcuenta" 
+                                                                   itemLabel="#{subcuenta.nombre}" 
+                                                                   itemValue="#{subcuenta.id}"></f:selectItems>
+                                                </p:selectOneMenu>
                                             </div>
 
-                                        </p:outputPanel>
-                                    </p:outputPanel>
-                                    <f:facet name="footer">
-                                        <p:commandButton  value="Guardar" actionListener="#{articulosMB.insertarArticulos()}"
-                                                          process="productosnew @this"
-                                                          update=":articulos:msgs, :articulos:productosnew, :articulos:listaProductos"
-                                                          icon="pi pi-check" 
-                                                          class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                          />
-                                        <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{articulosMB.limpiarProductos()}"
-                                                         styleClass="ui-button-danger" oncomplete="PF('newProduct').hide()"
-                                                          update=":articulos:msgs, :articulos:productosnew, :articulos:listaProductos"
-                                                         />
-                                    </f:facet>
-                                </p:dialog>
-                                
+                                            <div class="p-col-3">
+                                                <p:outputLabel  for="nombre" value="Nombre del producto"/>
+                                                <p:inputText id="nombre"
+                                                             value="#{articulosMB.articulosInventario.nombre}"/>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Categoria" for="@next"/>
+                                                <p:selectOneMenu id="categoria" value="#{articulosMB.articulosInventario.cat_cod}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una Categoría" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaCategoria}" var="categoria" 
+                                                                   itemLabel="#{categoria.nom_categoria}" 
+                                                                   itemValue="#{categoria.idCat}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Tipo" for="@next"/>
+                                                <p:selectOneMenu id="tipo" value="#{articulosMB.articulosInventario.id_tipo}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione un tipo de producto" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaTipos}" var="tipo" 
+                                                                   itemLabel="#{tipo.tipo}" 
+                                                                   itemValue="#{tipo.id}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-3">
+                                                <p:outputLabel value="Descripcion" for="@next"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.descripcion}"/>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Bodega" for="@next"/>
+                                                <p:selectOneMenu id="bodega" value="#{articulosMB.articulosInventario.id_bodega}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una Bodega" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItems value="#{articulosMB.listaBodega}" var="bodega" 
+                                                                   itemLabel="#{bodega.nomBodega}" 
+                                                                   itemValue="#{bodega.cod}"></f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-2">
+                                                <p:outputLabel value="Unidad de Medida" for="@next"/>
+                                                <p:selectOneMenu id="medida" value="#{articulosMB.articulosInventario.unidadMedida}" editable="false" 
+                                                                 disabled="#">
+                                                    <f:selectItem itemLabel="Seleccione una unidad" itemValue="" noSelectionOption="true"/>
+                                                    <f:selectItem itemLabel="Libras" itemValue="Libras" noSelectionOption="true"/>
+                                                    <f:selectItem itemLabel="Litros" itemValue="Litros" noSelectionOption="true"/>
+                                                    <f:selectItem itemLabel="Unidades" itemValue="Unidades" noSelectionOption="true"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="Cantidad" for="@next"/>
+                                                <p:inputNumber value="#{articulosMB.articulosInventario.cantidad}"/>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="Costo" for="@next"/>
+                                                <p:inputMask value="#{articulosMB.articulosInventario.coast}"/>
+                                            </div>
+                                            <br></br>
+                                            <div class="p-col-1">
+                                                <br></br>
+                                                <p:outputLabel value="IVA " for="@next"  style="font-size: 150%" />
+                                                <p:selectBooleanCheckbox id="slcbtn" style="font-size: 100%"  
+                                                                         value="#{articulosMB.isIva}"
+                                                                         styleClass="ui-button-help p-mr-2 p-mb-2">                                    
+                                                </p:selectBooleanCheckbox> 
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="ICE" for="@next"/>
+                                                <p:inputText value="#{articulosMB.articulosInventario.ice}"/>
+                                            </div>
+
+                                            <div class="p-col-1">
+                                                <br></br>
+                                                <p:commandButton  value="Guardar" actionListener="#{articulosMB.insertarArticulos()}"
+                                                                  process=":articulos:nuevoproducto @this"
+                                                                  update=":articulos:msgs ,:articulos:nuevoproducto , :articulos:listaProductos"
+                                                                  icon="pi pi-check" 
+                                                                  class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"/>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
 
                                 <p:dataTable id="listaProductos" editable="true"
                                              reflow="true" rows="4" paginator="true"
@@ -149,7 +131,6 @@
                                     <p:column headerText="Descripción" >
                                         <h:outputText value="#{productos.descripcion}" />
                                     </p:column>
-                                    
                                     <p:column headerText="Bodega" >
                                         <h:outputText value="#{productos.nomBodega}" />
                                     </p:column>

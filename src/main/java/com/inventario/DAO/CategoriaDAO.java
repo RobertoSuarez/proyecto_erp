@@ -35,7 +35,7 @@ public class CategoriaDAO {
 
     public List<Categoria> getCategoria() {
         List<Categoria> ListaCate= new ArrayList<>();
-        String sql = String.format("select *from categoria where cod !=4");
+        String sql = String.format("select *from categoria");
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
