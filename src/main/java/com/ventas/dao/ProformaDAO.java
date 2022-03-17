@@ -295,10 +295,11 @@ public class ProformaDAO {
                     double qty = detalle.get(listSize).getCantidad();
                     double dsc = detalle.get(listSize).getDescuento();
                     double price = detalle.get(listSize).getPrice();
+                    double sbttl = detalle.get(listSize).getSubtotal();
 
                     System.out.println(detalle.get(listSize).getCodigoProducto());
                     System.out.println(codigoventa + "-" + codProd + "-" + qty + "-" + dsc + "-" + price);
-                    daoDetail.RegistrarProductos(codigoventa, codProd, qty, dsc, price);
+                    daoDetail.RegistrarProductos(codigoventa, codProd, qty, dsc, price, sbttl);
                     listSize += 1;
                 }
             }

@@ -7,15 +7,18 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
+
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
             <ui:define name="content">
 
                 <ui:include src="menuVentas.xhtml"/>
-                <br/><br/><br/><br/>
+
                 <h:form id="ventaForm"  style="padding-left: 30px; padding-right: 30px">
                     <p:growl id="growl" showDetail="true" />
                     <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
 
+                    <br/><br/><br/><br/>
                     <p:panel id="outclientes" header="Clientes">
                         <h:panelGrid columns="7" width="80%">
                             <p:outputLabel value="Identificación: "/>
@@ -187,7 +190,7 @@
                             <p:column headerText="Cod">
                                 <h:outputText value="#{ListaProductos.codigo}" />
                             </p:column>
-                            
+
                             <p:column headerText="Tipo">
                                 <h:outputText value="#{ListaProductos.esServicio ? 'Servicio' : 'Bien'}" />
                             </p:column>

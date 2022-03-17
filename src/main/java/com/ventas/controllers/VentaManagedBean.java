@@ -178,7 +178,6 @@ public class VentaManagedBean implements Serializable {
      */
     public void AgregarProductoLista() {
         try {
-            generarAutorizacion();
             if (this.productoActual.getCodigo() > 0) {
                 if (this.productoActual.isStockeable() && this.productoActual.getStock() < this.cantidad) {
                     addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede agregar más unidades de las existentes (" + this.productoActual.getStock() + ")");
