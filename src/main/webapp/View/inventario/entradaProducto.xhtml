@@ -122,7 +122,7 @@
                                                               value="#{EntradaMB.listaDetalle}" 
                                                               selection="#{EntradaMB.productoSeleccionado}" 
                                                               rowKey="#{ListaItems.articuloInventario.id}" 
-                                                              selectionMode="single" 
+
                                                               paginator="true" 
                                                               id="itemsEntradaDetalle"
                                                               >
@@ -142,12 +142,11 @@
                                                     <p:column headerText="ICE" width="4%">
                                                         <h:outputText value="#{ListaItems.ice}"/>
                                                     </p:column>
+                                                    <p:column headerText="SubTotal" width="4%">
+                                                        <h:outputText value="#{ListaItems.subtotal}"/>
+                                                    </p:column>
 
                                                     <p:column exportable="false" width="9%">
-                                                        <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                                                         icon="pi pi-pencil" 
-                                                                         process="@this">
-                                                        </p:commandButton>
                                                         <p:commandButton class="ui-button-danger rounded-button"
                                                                          actionListener="#{EntradaMB.EliminarProducto(ListaItems)}" 
                                                                          icon="pi pi-pi pi-trash">
@@ -195,19 +194,19 @@
                         <p:dialog header="Busqueda de Proveedor" widgetVar="BuscarProveedor" id="busquedaProveedorDialog"
                                   minHeight="600" width="70%" showEffect="fade">
                             <h:form id="busqueda-proveedores-form">
-                                <p:dataTable widgetVar="TablaBuscarProveedor" var="ListaProveedores" id="listaProveedores" selectionMode="single" value="#{EntradaMB.listaProveedores}" 
+                                <p:dataTable widgetVar="TablaBuscarProveedor" var="ListaProveedores" id="listaProveedores"  value="#{EntradaMB.listaProveedores}" 
                                              selection="#{EntradaMB.proveedorSeleccionado}" rowKey="#{ListaProveedores.idProveedor}" 
                                              scrollable="true" scrollHeight="250"
                                              >
-                                <f:facet name="header">
-                                    <div class="p-d-flex p-jc-between p-ai-center">
-                                        <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Proveedores Registrados</span>
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProveedor').filter()" placeholder="Buscar"/>
-                                        </span>
-                                    </div>
-                                </f:facet>
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Proveedores Registrados</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProveedor').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet>
 
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
@@ -240,21 +239,21 @@
                         <p:dialog header="Busqueda de Producto" widgetVar="BuscarProducto" id="busquedaProducto"
                                   minHeight="600" width="70%" showEffect="fade">
                             <h:form id="busqueda-productos-form">
-                                <p:dataTable widgetVar="TablaBuscarProducto" var="ListaProductos" id="listaProductos" selectionMode="single" value="#{EntradaMB.listaProductos}" 
+                                <p:dataTable widgetVar="TablaBuscarProducto" var="ListaProductos" id="listaProductos"  value="#{EntradaMB.listaProductos}" 
                                              selection="#{EntradaMB.productoSeleccionado}" rowKey="#{ListaProductos.id}"   reflow="true" 
                                              paginator="true" rows="4" 
                                              rowSelectMode="add" paginatorPosition="bottom" 
                                              editInitEvent="dblclick" editMode="cell"
                                              scrollable="true" scrollHeight="250">
-                                <f:facet name="header">
-                                    <div class="p-d-flex p-jc-between p-ai-center">
-                                        <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Productos Registrados</span>
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProducto').filter()" placeholder="Buscar"/>
-                                        </span>
-                                    </div>
-                                </f:facet> 
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Productos Registrados</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarProducto').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet> 
 
 
 
@@ -270,7 +269,7 @@
                                     </p:column>
 
                                     <p:column headerText="Producto"  filterStyle="display : none"                                                             
-                                                              filterBy="#{ListaProductos.nombre}" >
+                                              filterBy="#{ListaProductos.nombre}" >
                                         <h:outputText  value="#{ListaProductos.nombre}" />
                                     </p:column>
 
@@ -287,19 +286,19 @@
                         <p:dialog header="Busqueda de Bodegas" widgetVar="BuscarBodega" id="busquedaBodega"
                                   minHeight="600" width="70%" showEffect="fade">
                             <h:form>
-                                <p:dataTable widgetVar="TablaBuscarBodega" var="ListaBodegas" id="listaBodegas" selectionMode="single" value="#{EntradaMB.listaBodegas}" 
+                                <p:dataTable widgetVar="TablaBuscarBodega" var="ListaBodegas" id="listaBodegas"  value="#{EntradaMB.listaBodegas}" 
                                              selection="#{EntradaMB.bodegaSeleccionada}" rowKey="#{ListaBodegas.cod}" 
                                              scrollable="true" scrollHeight="250">
 
-                                <f:facet name="header">
-                                    <div class="p-d-flex p-jc-between p-ai-center">
-                                        <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Bodegas Registradas</span>
-                                        <span class="filter-container ui-input-icon-left">
-                                            <i class="pi pi-search"></i>
-                                            <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarBodega').filter()" placeholder="Buscar"/>
-                                        </span>
-                                    </div>
-                                </f:facet>
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Bodegas Registradas</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarBodega').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet>
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
                                                          actionListener="#{EntradaMB.SeleccionarBodega(ListaBodegas)}" 

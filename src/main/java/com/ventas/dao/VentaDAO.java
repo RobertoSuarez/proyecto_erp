@@ -220,6 +220,22 @@ public class VentaDAO {
 
         return ventas;
     }
+    
+    public int getSiguienteIdVenta(){
+        try {
+            int id = 0;
+            this.result = con.ejecutarSql("select MAX(idventa) + 1 as id from public.venta;");
+            while(result.next()){
+                id = result.getInt("id");
+            }
+            return id;
+        } catch (Exception e) {
+            System.out.println(e.getMessage().toString());
+        } finally {
+            this.con.desconectar();
+        }
+        return 0;
+    }
 
 }
 //

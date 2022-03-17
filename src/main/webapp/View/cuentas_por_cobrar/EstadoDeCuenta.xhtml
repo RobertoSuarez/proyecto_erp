@@ -20,6 +20,43 @@
                 </div>
                 <p:panel>
                     <h:form id="formEstadoCuenta">
+                        <div class="ui-grid-row" style="height: 135px;">
+                            <div>
+                                <div style="float: left; padding-left: 10px;">
+                                    <p:outputLabel for="identificacionCliente"
+                                                   value="Identificación: "
+                                                   style="font-weight:bold;"/>
+                                    <br/> <br/>
+                                    <p:commandButton value="Buscar"  id="buscar"/>
+                                    <p:inputText id="identificacionCliente" 
+                                                 placeholder="CI/PA/RUC"
+                                                 value="#{estado_De_CuentaController.identificacion}"
+                                                 maxlength="13"
+                                                 style="width: 150px; margin-left: 2px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div style="float: left; padding-left: 10px">
+                                    <p:outputLabel value="Nombre Cliente: " 
+                                                   for="nombreCliente" 
+                                                   style="font-weight:bold;"/>
+                                    <br/><br/>
+                                    <p:inputText id="nombreCliente" 
+                                                 disabled="true" 
+                                                 placeholder="Razón Social/Nombres y Apellidos"
+                                                 value="#{estado_De_CuentaController.persona.razonNombre}"
+                                                 style="width: 300px;"/> 
+                                </div>
+                            </div>
+                            <div style="float: right; padding-top: 18px; padding-left: 5px;">
+                                <p:commandButton value="Cargar Facturas de un cliente"
+                                                 id="btnDeuda"
+                                                 icon="pi pi-replay" 
+                                                 actionListener="#{estado_De_CuentaController.CargarValoresPorCliente}"
+                                                 update="nombreCliente tblEstadoDeCuenta"
+                                                 styleClass="ui-button-secondary"/>
+                            </div>
+                        </div>
                         <p:dataTable id="tblEstadoDeCuenta" var="varEstadoDeCuenta"
                                      emptyMessage="No existen Registros." 
                                      value="#{estado_De_CuentaController.lista_Estado_De_Cuenta}"
@@ -73,6 +110,47 @@
                                 </h:outputText>
                             </p:column>
                         </p:dataTable>
+                        <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
+                                        widgetVar="selecionCliente">
+                            <p:dataTable var="cliente" id="tbcliente" 
+                                         widgetVar="dtcliente"
+                                         value="#{personaController.listaCliente}" 
+                                         selectionMode="single" 
+                                         rows="3" paginator="true"
+                                         rowSelectMode="add"
+                                         paginatorPosition="bottom"
+                                         rowKey="#{cliente.idCliente}">
+
+                                <p:ajax event="rowSelect" 
+                                        listener="#{estado_De_CuentaController.onRowSelect}" 
+                                        onsuccess="PF('selecionCliente').hide()" 
+                                        update=":formEstadoCuenta"/>
+
+                                <f:facet name="header">
+                                    <div style="float: right;">
+                                        <span class="filter-container ui-input-icon-left">
+                                            <i class="pi pi-search"></i>
+                                            <p:inputText id="globalFilter" 
+                                                         onkeyup="PF('dtcliente').filter()" 
+                                                         placeholder="Buscar"/>
+                                        </span>
+                                    </div>
+                                    <br/><br/>
+                                </f:facet>
+
+                                <p:column headerText="Cliente" 
+                                          filterBy="#{cliente.razonNombre}"
+                                          filterStyle="display : none">
+                                    <h:outputText value="#{cliente.razonNombre}"/>
+                                </p:column>
+
+                                <p:column headerText="Identificacion"
+                                          filterBy="#{cliente.identificacion}"
+                                          filterStyle="display : none">
+                                    <h:outputText value="#{cliente.identificacion}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:overlayPanel>
                     </h:form>
                 </p:panel>
             </ui:define>

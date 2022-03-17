@@ -3,6 +3,7 @@ package com.cuentasporcobrar.controllers;
 
 import com.cuentasporcobrar.daos.Estado_De_CuentaDAO;
 import com.cuentasporcobrar.models.Estado_De_Cuenta;
+import com.cuentasporcobrar.models.Persona;
 import com.empresa.global.EmpresaMatrizDAO;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.primefaces.event.SelectEvent;
 
 @Named(value = "estado_De_CuentaController")
 @ViewScoped
@@ -33,9 +35,13 @@ public class Estado_De_CuentaController implements Serializable {
     //Se Declaran las clases Estado_De_Cuenta y Estado_De_CuentaDAO
     Estado_De_Cuenta estado_De_Cuenta;
     Estado_De_CuentaDAO estado_De_CuentaDAO;
+    Persona persona;
     
     //Declaro una variable para guardar el nombre de la empresa.
     private String empresa; 
+    
+    //Variable con la identificacion;
+    String identificacion = "";
 
     //Declaro mi lista con el estado de cuenta general 
     //que van hacer cargadas en el datatable
@@ -55,11 +61,16 @@ public class Estado_De_CuentaController implements Serializable {
         //Para que se carguen en el data table el estado de cuenta general 
         estado_De_CuentaDAO =new Estado_De_CuentaDAO();
         lista_Estado_De_Cuenta=new ArrayList<>();
+        persona = new Persona();
         empresa = EmpresaMatrizDAO.getEmpresa().getNombre();
         lista_Estado_De_Cuenta=estado_De_CuentaDAO.obtenerTodosLosEstadosCuenta();
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }        
+    }
+    
+    public void CargarValoresPorCliente(){
+        lista_Estado_De_Cuenta=estado_De_CuentaDAO.obtenerEstadosCuentaDeCliente(persona.getIdCliente());
     }
     
     /**
@@ -112,6 +123,18 @@ public class Estado_De_CuentaController implements Serializable {
             System.out.println("fin proccess");
         }
     }
+    
+    public void onRowSelect(SelectEvent<Persona> event) {
+        try {
+            this.identificacion = event.getObject().getIdentificacion();
+            persona.setIdCliente(event.getObject().getIdCliente());
+            persona=event.getObject();
+            System.out.println(this.identificacion);
+            System.out.println(persona.getIdCliente());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
     //Getters y Setters de las Listas
     //Inicio
@@ -132,4 +155,21 @@ public class Estado_De_CuentaController implements Serializable {
     }
     
     //Fin
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+    
 }

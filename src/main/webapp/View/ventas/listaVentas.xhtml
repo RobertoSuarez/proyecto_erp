@@ -47,7 +47,7 @@
 
                             <p:column headerText="Total">
                                 <h:outputText value="#{ListaVentas.totalFactura}" >
-                                    <f:convertNumber pattern="#0.00" />
+                                    <f:convertNumber pattern="#0.00"/>
                                 </h:outputText>
                             </p:column>
 
@@ -72,43 +72,84 @@
                             </h:panelGrid>
                         </p:panel>
 
-                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ListaVentaMB.listaDetalle}">
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ListaVentaMB.listaDetalle}" scrollable="true" scrollHeight="250">
                             <p:column headerText="Cantidad" width="10%">
-                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
+                                <h:outputText value="#{FacturaDetailTB.cantidad}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Nombre" width="50%" >
-                                <h:outputText value="#{FacturaDetailTB.nombreProducto}" />
+                                <h:outputText value="#{FacturaDetailTB.nombreProducto}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Precio unitario" width="20%">
-                                <h:outputText value="#{FacturaDetailTB.precio}" />
+                                <h:outputText value="#{FacturaDetailTB.precio}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Descuento" width="20%">
-                                <h:outputText value="#{FacturaDetailTB.descuento}" />
+                                <h:outputText value="#{FacturaDetailTB.descuento}">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Subtotal" width="20%"  >
-                                <h:outputText value="#{FacturaDetailTB.subTotal}" />
+                                <h:outputText value="#{FacturaDetailTB.subTotal}" style="float: right; margin-right: 20%;">
+                                    <f:convertNumber pattern="#0.00"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:columnGroup type="footer" id="colgrp">
                                 <p:row id="Base12">
                                     <p:column colspan="4" style="text-align:right" footerText="Base 12%"/>
-                                    <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.base12}" />
+                                    <p:column id="base12Venta" colspan="5"> 
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{ListaVentaMB.ventaActual.base12}" style="float: right; margin-right: 20%;">
+                                                <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
                                 </p:row>
                                 <p:row id="Base0">
                                     <p:column colspan="4" style="text-align:right" footerText="Base 0%"/>
-                                    <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.base0}" />
-                               </p:row>
+                                    <p:column id="base0Venta" colspan="5">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{ListaVentaMB.ventaActual.base0}" style="float: right; margin-right: 20%;">
+                                                <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+                                </p:row>
                                 <p:row id="Iva">
                                     <p:column colspan="4" style="text-align:right" footerText="Iva"/>
-                                    <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.iva}"  />
+                                    <p:column id="ivaVenta" colspan="5">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{ListaVentaMB.ventaActual.iva}" style="float: right; margin-right: 20%;">
+                                                <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+
                                 </p:row>
                                 <p:row id="Ice">
                                     <p:column colspan="4" style="text-align:right" footerText="Ice"/>
-                                    <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.ice}" />
+                                    <p:column id="iceVenta" colspan="5">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{ListaVentaMB.ventaActual.ice}" style="float: right; margin-right: 20%;">
+                                                <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
                                 </p:row>
                                 <p:row id="Total">
-                                    <p:column colspan="4" style="text-align:right" footerText="Total:"/>
-                                    <p:column style="text-align:left" footerText="${ListaVentaMB.ventaActual.totalFactura}" id="subtotalVenta" />
+                                    <p:column colspan="4" style="text-align:right" footerText="Total:"/>                                    
+                                    <p:column id="totalVenta" colspan="5">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{ListaVentaMB.ventaActual.totalFactura}" style="float: right; margin-right: 20%;">
+                                                <f:convertNumber type="number" maxFractionDigits="2" pattern="#0.00"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
                                 </p:row>
                             </p:columnGroup>
 

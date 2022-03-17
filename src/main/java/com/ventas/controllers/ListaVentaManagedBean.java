@@ -89,7 +89,7 @@ public class ListaVentaManagedBean implements Serializable {
         this.listaDetalle = new ArrayList<>();
         this.ventaActual = ventaSeleccionada;
         this.listaDetalle = detalleDao.ObtenerDetalleVentas(ventaSeleccionada.getIdVenta());
-        this.ventaActual.setTotalFactura(new BigDecimal(ventaSeleccionada.getTotalFactura()).setScale(2, RoundingMode.UP).doubleValue());
+        this.ventaActual.setTotalFactura(convertTwoDecimal(ventaSeleccionada.getTotalFactura()));
 
         this.cliente = clienteDao.BuscarClientePorId(ventaSeleccionada.getIdCliente());
 
@@ -99,7 +99,11 @@ public class ListaVentaManagedBean implements Serializable {
             this.identCliente = this.cliente.getIdentificacion();
             this.nombreCliente = this.cliente.getNombre();
         }
-
+    }
+    
+    public double convertTwoDecimal(double doubleNumero) {
+        double temp = new BigDecimal(doubleNumero).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return temp < 0 ? 0 : temp;
     }
     
     public List<Venta> getListaVentas() {

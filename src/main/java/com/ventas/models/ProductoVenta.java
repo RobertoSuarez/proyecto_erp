@@ -20,7 +20,8 @@ public class ProductoVenta implements Serializable {
     private int idSubcuenta;
     private String unidadMedida;
     private float precioUnitario;
-    private float subsidio;
+    private boolean esServicio;
+    private boolean stockeable;
 
     public ProductoVenta() {
         this.precioUnitario = 0;
@@ -123,12 +124,21 @@ public class ProductoVenta implements Serializable {
         this.precioUnitario = precioUnitario;
     }
 
-    public float getSubsidio() {
-        return subsidio;
+    public boolean isEsServicio() {
+        return esServicio;
     }
 
-    public void setSubsidio(float subsidio) {
-        this.subsidio = subsidio;
+    public void setEsServicio(boolean esServicio) {
+        this.esServicio = esServicio;
     }
+
+    public boolean isStockeable() {
+        return stockeable;
+    }
+
+    public void setStockeable(boolean stockeable) {
+        this.stockeable = stockeable;
+    }
+    
     
 }
