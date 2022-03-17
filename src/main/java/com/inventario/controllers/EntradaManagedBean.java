@@ -895,6 +895,6 @@ public class EntradaManagedBean implements Serializable {
          public void aleatorioCod() {
           String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
           String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
-          this.numeroComprobante = ("AF" + uuid + uuid2).toUpperCase();
+          this.numeroComprobante = ("ENT-" + uuid + uuid2 ).toUpperCase();
      }
 }

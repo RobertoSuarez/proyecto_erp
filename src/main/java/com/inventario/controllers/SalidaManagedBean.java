@@ -122,6 +122,7 @@ public class SalidaManagedBean implements Serializable {
     private List<SalidaInventario> listaSalidas;
 
     private List<EntradaInventario> listaEntradas;
+    private List<EntradaInventario> listaEntradasPermitidas;
 
     private String nombreCategoria;
 
@@ -163,6 +164,7 @@ public class SalidaManagedBean implements Serializable {
         this.entrada = new EntradaInventario();
         this.entradaDAO = new EntradaDao();
         this.listaEntradas = entradaDAO.getEntradas();
+        this.listaEntradasPermitidas = entradaDAO.getEntradasPermitidas();
 
         this.productoSeleccionado = null;
         this.proveedorSeleccionado = null;
@@ -268,6 +270,8 @@ public class SalidaManagedBean implements Serializable {
                 }
             }
 
+            BodegaDAO bodegaDAO = new BodegaDAO();
+            Bodega bod = bodegaDAO.obtenerBodega(salida.getIdBodega());
             Proveedor pro = proveedorDAO.BuscarProveedor(salida.getIdProveedor());
             FacesContext fc = FacesContext.getCurrentInstance();
             ExternalContext ec = fc.getExternalContext();
@@ -288,6 +292,7 @@ public class SalidaManagedBean implements Serializable {
             parametros.put("FECHA", dateFormat.format(salida.getFecha()));
             parametros.put("COMPROBANTE", salida.getNumComprobante());
             /*parametros.put("NOMBREBODEGA",  );*/
+            parametros.put("NOMBREBODEGA", bod.getNomBodega());
             parametros.put("RUCPROVEEDOR", pro.getRuc());
             parametros.put("NOMBREPROVEEDOR", pro.getNombre());
 
@@ -536,7 +541,7 @@ public class SalidaManagedBean implements Serializable {
                             double qty = this.listaDetalle.get(listSize).getCant();
 
                             double price = this.listaDetalle.get(listSize).getCosto();
-                            double iva = this.listaDetalle.get(listSize).getIva() * this.listaDetalle.get(listSize).getCant();
+                            double iva = this.listaDetalle.get(listSize).getIva();
                             double ice = this.listaDetalle.get(listSize).getIce();
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
@@ -936,5 +941,15 @@ public class SalidaManagedBean implements Serializable {
     public void setCantidadReportada(int cantidadReportada) {
         this.cantidadReportada = cantidadReportada;
     }
+
+    public List<EntradaInventario> getListaEntradasPermitidas() {
+        return listaEntradasPermitidas;
+    }
+
+    public void setListaEntradasPermitidas(List<EntradaInventario> listaEntradasPermitidas) {
+        this.listaEntradasPermitidas = listaEntradasPermitidas;
+    }
+    
+    
 
 }

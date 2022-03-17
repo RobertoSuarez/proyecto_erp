@@ -72,8 +72,52 @@ public class EntradaDao {
         return ListEntrada;
     }
 
+    public List<EntradaInventario> getEntradasPermitidas(int idEntrada) {
+        List<EntradaInventario> ListEntrada = new ArrayList<>();
+        String sql = "";
+        if (idEntrada > 0) {
+            sql = "Select entrada.cod, entrada.num_comprobante, entrada.fecha, entrada.id_proveedor, entrada.id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+                    + "FROM entrada\n"
+                    + "inner join proveedor on id_proveedor = idproveedor \n"
+                    + "inner join bodega on id_bodega = bodega.cod\n"
+                    + "left join salida on salida.num_comprobante = entrada.num_comprobante\n"
+                    + "where salida.num_comprobante is null and entrada.cod =" + idEntrada;
+        } else {
+            sql = "Select entrada.cod, entrada.num_comprobante, entrada.fecha, entrada.id_proveedor, entrada.id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+                    + "FROM entrada\n"
+                    + "inner join proveedor on id_proveedor = idproveedor \n"
+                    + "inner join bodega on id_bodega = bodega.cod\n"
+                    + "left join salida on salida.num_comprobante = entrada.num_comprobante\n"
+                    + "where salida.num_comprobante is null";
+        }
+
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListEntrada.add(new EntradaInventario(resultSet.getInt("cod"),
+                        resultSet.getString("num_comprobante"),
+                        resultSet.getDate("fecha"),
+                        resultSet.getInt("id_bodega"),
+                        resultSet.getInt("id_proveedor"),
+                        resultSet.getString("proveedor"),
+                        resultSet.getString("nombre_bodega")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListEntrada;
+    }
+
     public List<EntradaInventario> getEntradas() {
         return getEntradas(0);
+    }
+
+    public List<EntradaInventario> getEntradasPermitidas() {
+        return getEntradasPermitidas(0);
     }
 
     public int GuardarEntrada(EntradaInventario entradaInventario) {
@@ -94,7 +138,7 @@ public class EntradaDao {
             //Insertar nueva venta
             String query = "INSERT INTO public.entrada("
                     + "num_comprobante, fecha, id_proveedor, id_bodega)"
-                    + "VALUES('" +  entradaInventario.getNumComprobante() + "', '" + entradaInventario.getFecha() + "', " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
+                    + "VALUES('" + entradaInventario.getNumComprobante() + "-" + codigo + "', '" + entradaInventario.getFecha() + "', " + entradaInventario.getIdProveedor() + ", " + entradaInventario.getIdBodega() + ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 

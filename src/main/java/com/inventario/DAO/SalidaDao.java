@@ -37,13 +37,13 @@ public class SalidaDao {
             List<SalidaInventario> ListSalida = new ArrayList<>();
         String sql = "";
         if (idSalida > 0) {
-            sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+            sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega, observacion\n"
                     + "FROM salida\n"
                     + "inner join proveedor on id_proveedor = idproveedor \n"
                     + "inner join bodega on id_bodega = bodega.cod"
                     + " WHERE salida.cod=" + idSalida;
         } else {
-            sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+            sql = "Select salida.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega, observacion\n"
                     + "FROM salida\n"
                     + "inner join proveedor on id_proveedor = idproveedor \n"
                     + "inner join bodega on id_bodega = bodega.cod";
@@ -59,7 +59,8 @@ public class SalidaDao {
                         resultSet.getInt("id_bodega"),
                         resultSet.getInt("id_proveedor"),
                         resultSet.getString("proveedor"),
-                        resultSet.getString("nombre_bodega")));
+                        resultSet.getString("nombre_bodega"),
+                        resultSet.getString("observacion")));
             }
 
         } catch (SQLException e) {
