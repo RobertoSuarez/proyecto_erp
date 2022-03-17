@@ -376,7 +376,7 @@ public class SalidaManagedBean implements Serializable {
                             if (productoid == 0) {
                                 productoid = 0;
                                 double iceProducto, ivaProducto;
-                                iceProducto = this.producto.getCosto() * this.cantidadReportada * ((double) this.producto.getIce() / 100);
+                                iceProducto = this.producto.getCosto() * this.cantidadReportada * ((double) this.producto.getIceproducto()/ 100);
                                 ivaProducto = this.producto.getCosto() * 0.12 * this.cantidadReportada;
                                 //Ingreso de valores al detalle de entrada
                                 SalidaDetalleInventario detalle = new SalidaDetalleInventario();
@@ -417,7 +417,7 @@ public class SalidaManagedBean implements Serializable {
                         } else {
 
                             double iceProducto, ivaProducto;
-                            iceProducto = this.producto.getCosto() * this.cantidadReportada * ((double) this.producto.getIce() / 100);
+                            iceProducto = this.producto.getCosto() * this.cantidadReportada * ((double) this.producto.getIceproducto() / 100);
                             ivaProducto = this.producto.getCosto() * 0.12 * this.cantidadReportada;
                             //Ingreso de valores al detalle de entrada
                             SalidaDetalleInventario detalle = new SalidaDetalleInventario();

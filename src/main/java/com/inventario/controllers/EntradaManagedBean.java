@@ -358,7 +358,7 @@ public class EntradaManagedBean implements Serializable {
 
                         
                         double iceProducto, ivaProducto;
-                        iceProducto = this.producto.getCosto() *  this.cantidad * ( (double) this.producto.getIce() / 100);
+                        iceProducto = this.producto.getCosto() *  this.cantidad * ( (double) this.producto.getIceproducto()/ 100);
                         ivaProducto = this.producto.getCosto()*0.12 * this.cantidad;
                         //Ingreso de valores al detalle de entrada
                         EntradaDetalleInventario detalle = new EntradaDetalleInventario();
@@ -478,7 +478,7 @@ public class EntradaManagedBean implements Serializable {
 
                             
                             double price = this.listaDetalle.get(listSize).getCosto();
-                            double iva = this.listaDetalle.get(listSize).getIva() * this.listaDetalle.get(listSize).getCant();
+                            double iva = this.listaDetalle.get(listSize).getIva();
                             double ice = this.listaDetalle.get(listSize).getIce();
 
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());

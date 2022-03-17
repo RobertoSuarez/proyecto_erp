@@ -120,7 +120,7 @@ public class SalidaDetalleDao {
             this.conexion.conectar();
 
             //Recibir siguiente código de detalle venta
-            String query = "select id_entrada_detalle from public.entrada_detalle order by id_entrada_detalle desc limit 1;";
+            String query = "select id_salida_detalle from public.entrada_detalle order by id_salida_detalle desc limit 1;";
             rs = this.conexion.ejecutarSql(query);
 
             while (rs.next()) {
