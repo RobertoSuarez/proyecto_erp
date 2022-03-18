@@ -28,6 +28,7 @@ public class RetencionController implements Serializable {
     int idRetencion = 0;
     int idFactura = 0;
     int idCliente = 0;
+    boolean statusFact=true;
 
     //Objeto para traer funciones de primefaces
     PrimeFaces current = PrimeFaces.current();
@@ -96,6 +97,15 @@ public class RetencionController implements Serializable {
     public List<SelectItem> getListaVentas() {
         return listaVenta;
     }
+
+    public boolean isStatusFact() {
+        return statusFact;
+    }
+
+    public void setStatusFact(boolean statusFact) {
+        this.statusFact = statusFact;
+    }
+    
     //Fin
 
     /**
@@ -174,6 +184,16 @@ public class RetencionController implements Serializable {
      */
     public void CargarDatos(Retencion ret) {
         this.retencion = ret;
+    }
+    
+    public void renderizarBoton(){
+        if(this.idFactura>0){
+            this.statusFact=false;
+        }
+        else{
+            this.statusFact=true;
+            mostrarMensajeAdvertencia("Por favor elija una opcion valida");
+        }
     }
 
     /**

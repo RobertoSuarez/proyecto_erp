@@ -57,7 +57,9 @@
                                                      value="#{retencionController.idFactura}"
                                                      style="height: 35px; width: 185px !important; 
                                                      padding-left: 10px;"
-                                                     filter="true" filterMatchMode="startsWith">                            
+                                                     filter="true" filterMatchMode="startsWith">
+                                        <p:ajax event="change" listener="#{retencionController.renderizarBoton()}"
+                                                update=":growl frmprincipal" />
                                         <f:selectItem itemLabel="Seleccione..." itemValue=""/>
                                         <f:selectItems value="#{retencionController.listaVentas}"/>
                                     </p:selectOneMenu>
@@ -94,7 +96,8 @@
                                                      update=":growl dialogAddRetencion"
                                                      oncomplete="PF('RetencionNew').show();"
                                                      style="margin:.1rem;"
-                                                     rendered="#{seguridadCtsXCbr.renderForGerente()}"/>
+                                                     rendered="#{seguridadCtsXCbr.renderForGerente()}"
+                                                     disabled="#{retencionController.statusFact}"/>
                                 </div>
                             </p:toolbarGroup>
                         </div>
