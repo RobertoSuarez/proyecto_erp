@@ -89,7 +89,9 @@
                                                      style="margin:.1rem;"/>
                                     &nbsp;&nbsp;
                                     <p:commandButton icon="pi pi-plus " 
+                                                     actionListener="#{retencionController.cargarBaseImponible()}"
                                                      value="Añadir Nueva Retención" 
+                                                     update=":growl dialogAddRetencion"
                                                      oncomplete="PF('RetencionNew').show();"
                                                      style="margin:.1rem;"
                                                      rendered="#{seguridadCtsXCbr.renderForGerente()}"/>
@@ -201,7 +203,9 @@
                                              type="text" 
                                              style="width: 80px;"
                                              required="true"
-                                             value="#{retencionController.retencion.baseImponible}">
+                                             value="#{retencionController.retencion.baseImponible}"
+                                             disabled="true">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
                                 </p:inputText>
 
                                 <p:outputLabel for="descrImpuestoAdd" 
@@ -254,7 +258,8 @@
                                              type="text" 
                                              style="width: 80px;"
                                              required="true"
-                                             value="#{retencionController.retencion.baseImponible}">
+                                             value="#{retencionController.retencion.baseImponible}"
+                                             disabled="true">
                                     <f:convertNumber type="currency" currencySymbol="$"/>
                                 </p:inputText>
 

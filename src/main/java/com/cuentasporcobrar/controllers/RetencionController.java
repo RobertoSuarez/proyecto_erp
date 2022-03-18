@@ -139,7 +139,7 @@ public class RetencionController implements Serializable {
 
                 current.ajax().update(":frmprincipal:tblRetenciones");
                 this.listaRetenciones = new ArrayList();
-                
+
                 //Este if valida si el cliente tiene o no cobros.
                 if (listaVenta.isEmpty()) {
                     mostrarMensajeAdvertencia("Ese cliente no tiene facturas");
@@ -249,6 +249,15 @@ public class RetencionController implements Serializable {
             }
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    public void cargarBaseImponible() {
+        if (idFactura > 0) {
+            retencion.setBaseImponible(retencionDAO.obtainTaxBase(idFactura));
+        }
+        else{
+            mostrarMensajeAdvertencia("Seleccione una factura");
         }
     }
 
