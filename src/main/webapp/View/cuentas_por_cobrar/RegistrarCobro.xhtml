@@ -200,7 +200,8 @@
                                      onclick="PF('nuevoPago').show()"
                                      styleClass="ui-button-secondary"
                                      immediate="true"
-                                     process="tblFacturasAPagar"/>
+                                     process="tblFacturasAPagar"
+                                     update="pgNC"/>
                     <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
                                     widgetVar="selecionCliente">
                         <p:dataTable var="cliente" id="tbcliente" 
@@ -266,7 +267,8 @@
                                              style="width: 170px !important;"
                                              value="#{abonoController.intTipoPago}"
                                              required="true">  
-                                <p:ajax event="change" listener="#{abonoController.selectTipoPago()}" update="dialogAddCobro" />
+                                <p:ajax event="change" listener="#{abonoController.selectTipoPago()}" 
+                                        update="pgNC" />
                                 <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
                                 <f:selectItem itemLabel="Efectivo" itemValue="2"/>
                                 <f:selectItem itemLabel="Cheque" itemValue="3"/>
