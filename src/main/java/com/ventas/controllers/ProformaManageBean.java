@@ -25,8 +25,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +71,8 @@ public class ProformaManageBean implements Serializable {
     private int codigoProdBuscar;
     private double cantidad;
     private double subTotalProforma;
+    private Date fechaVencimiento;
+    private Date fechaActual;
 
     //Variables acumulativas para información
     private double subtotal12;
@@ -83,7 +88,7 @@ public class ProformaManageBean implements Serializable {
     private List<DetalleProforma> listaDetalle;
 
     private String visible;
-    private boolean isNewProforma;
+    private SimpleDateFormat dateFormat;
 
     //Constructor
     @PostConstruct
@@ -97,7 +102,10 @@ public class ProformaManageBean implements Serializable {
         this.productoDao = new ProductoVentaDAO();
         this.subTotalProforma = 0;
         this.visible = "false";
-
+        this.fechaVencimiento = new Date(System.currentTimeMillis());
+        this.fechaActual = new Date(System.currentTimeMillis());
+        dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                
         this.descuentoGeneral = 0;
         this.descuentoActual = 0;
         this.descuentoAcumulado = 0;
@@ -288,6 +296,7 @@ public class ProformaManageBean implements Serializable {
                 profor.setProforma_terminada(estado);
                 profor.setAceptacion_cliente(estado);
                 profor.setEstado("P");
+                profor.setFecha_expiracion(dateFormat.format(fechaVencimiento));
                 profor.setBase12((float) this.subtotal12);
                 profor.setBase0((float) this.subtotal0);
                 profor.setBase_excento_iva(0);
@@ -534,4 +543,19 @@ public class ProformaManageBean implements Serializable {
         this.descuentoActual = descuentoActual;
     }
 
+    public Date getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(Date fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
+
+    public Date getFechaActual() {
+        return fechaActual;
+    }
+
+    public void setFechaActual(Date fechaActual) {
+        this.fechaActual = fechaActual;
+    }
 }

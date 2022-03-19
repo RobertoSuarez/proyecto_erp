@@ -164,7 +164,7 @@ public class ProformaDAO {
         con.desconectar();
         List<Proforma> listadocs = new ArrayList<>();
         try {
-            consulta = "SELECT * FROM public.proforma where estado = 'P' order by fechacreacion desc, idproforma desc";
+            consulta = "SELECT * FROM public.proforma where estado = 'P' and fechaexpiracion >= CURRENT_DATE order by fechacreacion desc, idproforma desc";
             rs = con.ejecutarSql(consulta);
             con.connection.close();
             if (rs == null) {
@@ -241,7 +241,7 @@ public class ProformaDAO {
         con.desconectar();
         List<Proforma> listadocs = new ArrayList<>();
         try {
-            consulta = "SELECT * FROM public.proforma where estado = 'A' order by fechacreacion desc, idproforma desc";
+            consulta = "SELECT * FROM public.proforma where estado = 'A' and fechaexpiracion >= CURRENT_DATE order by fechacreacion desc, idproforma desc";
             rs = con.ejecutarSql(consulta);
             con.connection.close();
             if (rs == null) {
