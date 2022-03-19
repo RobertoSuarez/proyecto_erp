@@ -108,7 +108,7 @@
                                     <div class="p-field p-col">
                                         <p:outputLabel for="proveedor">Proveedor: *</p:outputLabel>
                                         <p:inputText type="button" id="proveedor"
-                                                     value="#{BuscarMB.nom}" />
+                                                     value="#{BuscarMB.factura.nombre}" />
                                     </div>
                                     <div class="p-field p-col">
                                         <p:outputLabel for="auto">Autorización:</p:outputLabel>
@@ -141,6 +141,10 @@
                                         <p:inputText id="nfactura" value="#{facturaMB.factura.nfactura}" 
                                                      maxlength="9" type="number">                                                      
                                         </p:inputText>
+                                    </div>
+                                    <div class="p-field p-col">
+                                        <p:outputLabel value="#{facturaMB.factura.nombre=BuscarMB.nom}" 
+                                                       style="visibility: hidden"/>
                                     </div>
                                     <div class="p-field p-col-align-end" style="margin-left: 60px">
                                         <p:selectBooleanCheckbox id="checkRet" itemLabel="Retención" value="#{facturaMB.ret}">
@@ -321,6 +325,21 @@
                                 <p:dialog header="Retenciones" widgetVar="dlgRet" height="200" width="550" showEffect="fade">
                                     <p:outputPanel id="outRet">
                                         <div class="p-formgrid p-grid">
+
+                                            <div class="p-field p-col">
+                                                <p:outputLabel for="serieRet">No. Serie:</p:outputLabel>
+                                                <p:inputText id="serieRet" value="#{facturaMB.factura.nserie}" 
+                                                             maxlength="7">                                                      
+                                                </p:inputText>
+                                            </div>
+                                            <div class="p-field p-col">
+                                                <p:outputLabel for="ncompr">No. Comprobante:</p:outputLabel>
+                                                <p:inputText id="ncompr" value="#{facturaMB.factura.ncomprobante}" 
+                                                             maxlength="9" type="number">                                                      
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="p-formgrid p-grid">
                                             <div class="p-field p-col">
                                                 <p:outputLabel for="subRet">Subtotal:</p:outputLabel>
                                                 <p:inputText type="number" id="subRet" value="#{facturaMB.factura.subtotal}" 
@@ -402,7 +421,11 @@
                                 </p:overlayPanel>
                             </p:outputPanel>
                         </p:outputPanel>
-                        <f:facet name="footer">                            
+                        <f:facet name="footer">
+                        <p:commandButton value="Imprimir" styleClass="ui-button-success"
+                                         actionListener="#{facturaMB.exportpdf()}"
+                                             process="outputnuevo @this" update=":form:messages"
+                                             ajax="false" class="p-col-align-start"/>                            
                             <p:commandButton value="Guardar" styleClass="ui-button-success"
                                              actionListener="#{facturaMB.insertarfactura}"
                                              process="outputnuevo @this" update=":form:messages"/>
@@ -575,7 +598,7 @@
                         <f:facet name="footer">                            
                             <p:commandButton value="Guardar" styleClass="ui-button-success"
                                              actionListener="#{facturaMB.editarfactura}"
-                                             process="outputedit @this"/>
+                                             process="outputedit @this" ajax="false"/>
                             <p:commandButton value="Cancelar" styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
                                              onclick="PF('editFactura').hide()"
                                              action="#{facturaMB.reset('outputedit')}" 
@@ -723,6 +746,19 @@
                         <p:commandButton value="No" type="button" styleClass="ui-button-danger"
                                          onclick="PF('DHFactura').hide()" actionListener="#{facturaMB.reset('outputrev')}"/>
                     </p:confirmDialog> 
+
+                    <p:confirmDialog id="dialogprint" widgetVar="print"
+                                     showEffect="fade" hideEffect="fade" 
+                                     responsive="true" width="350" header="Confirmar">
+                        <f:facet name="message">
+                            <h:outputText value="Imprimir comprobante de retención"/><br/>
+                        </f:facet>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"
+                                         onclick="PF('print').hide()"/>
+                        <p:commandButton value="Si" type="button" styleClass="ui-button-success" 
+                                         process="dialogprint @this" 
+                                         actionListener="#{facturaMB.prueba()}" ajax="false"/>
+                    </p:confirmDialog>
 
                 </h:form>
             </ui:define>

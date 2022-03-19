@@ -304,7 +304,7 @@ public class ProformaManageBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Guardado", "Proforma Guardada exitosamente"));
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.getExternalContext().redirect("/proyecto_erp/View/ventas/listaProforma.xhtml?faces-redirect=true");
+            context.getExternalContext().redirect("/proyecto_erp/View/ventas/listaProformaPendiente.xhtml?faces-redirect=true");
             return "listaProforma.xhtml?faces-redirect=true";
         } catch (SQLException e) {
             addMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), "Message Content");

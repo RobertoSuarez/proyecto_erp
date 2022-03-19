@@ -36,7 +36,8 @@ import org.primefaces.PrimeFaces;
 public class ListaProformaManagedBean implements Serializable {
     private ProformaDAO proformaDao;
     private Proforma proformaActual;
-    private List<Proforma> listaProformas;
+    private List<Proforma> listaProformasPendientes;
+    private List<Proforma> listaProformasAprobadas;
     private List<DetalleProforma> listaDetalle;
     private ClienteVenta cliente;
     private ClienteVentaDao clienteDao;
@@ -49,7 +50,8 @@ public class ListaProformaManagedBean implements Serializable {
         this.proformaDao = new ProformaDAO();
         
         this.listaDetalle = new ArrayList<>();
-        this.listaProformas = new ArrayList<>();
+        this.listaProformasPendientes = new ArrayList<>();
+        this.listaProformasAprobadas = new ArrayList<>();
         
         this.productoDao = new ProductoVentaDAO();
         this.listaProductosFaltantes = new ArrayList<>();
@@ -60,7 +62,8 @@ public class ListaProformaManagedBean implements Serializable {
     
     private void cargarProformas(){
         try{
-            this.listaProformas = proformaDao.retornarProformas();
+            this.listaProformasPendientes = proformaDao.retornarProformasPendientes();
+            this.listaProformasAprobadas = proformaDao.retornarProformasAprobadas();
         }catch(Exception e){
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         }
@@ -72,7 +75,7 @@ public class ListaProformaManagedBean implements Serializable {
         this.listaDetalle = proformaDao.getDetalleProforma(proformaActual.getId_proforma());
     }
     
-    public void revisarProforma(Proforma prf){
+    public void facturarProforma(Proforma prf){
         for(DetalleProforma det: listaDetalle){
             ProductoVenta aux = productoDao.ObtenerProducto(det.getCodigoProducto());
             if(det.getCantidad() < aux.getStock()){
@@ -87,6 +90,27 @@ public class ListaProformaManagedBean implements Serializable {
             PrimeFaces.current().executeScript("PF('').show();");
         }
     }
+    
+    public void aceptarProforma(Proforma prf){
+        this.listaProformasAprobadas.clear();
+        this.listaProformasPendientes.clear();
+        this.listaProformasPendientes = new ArrayList<>();
+        this.listaProformasAprobadas = new ArrayList<>();
+        proformaDao.aceptarProforma(prf.getId_proforma());
+        this.listaProformasAprobadas = proformaDao.retornarProformasAprobadas();
+        this.listaProformasPendientes = proformaDao.retornarProformasPendientes();
+    }
+    
+    public void rechazarProforma(Proforma prf){
+        this.listaProformasAprobadas.clear();
+        this.listaProformasPendientes.clear();
+        this.listaProformasPendientes = new ArrayList<>();
+        this.listaProformasAprobadas = new ArrayList<>();
+        proformaDao.rechazarProforma(prf.getId_proforma());
+        this.listaProformasAprobadas = proformaDao.retornarProformasAprobadas();
+        this.listaProformasPendientes = proformaDao.retornarProformasPendientes();
+    }   
+    
     
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
@@ -106,12 +130,12 @@ public class ListaProformaManagedBean implements Serializable {
         this.proformaActual = proformaActual;
     }
 
-    public List<Proforma> getListaProformas() {
-        return listaProformas;
+    public List<Proforma> getListaProformasPendientes() {
+        return listaProformasPendientes;
     }
 
-    public void setListaProformas(List<Proforma> listaProformas) {
-        this.listaProformas = listaProformas;
+    public void setListaProformasPendientes(List<Proforma> listaProformasPendientes) {
+        this.listaProformasPendientes = listaProformasPendientes;
     }
 
     public List<DetalleProforma> getListaDetalle() {
@@ -136,6 +160,14 @@ public class ListaProformaManagedBean implements Serializable {
 
     public void setListaProductosFaltantes(List<DetalleProforma> listaProductosFaltantes) {
         this.listaProductosFaltantes = listaProductosFaltantes;
+    }
+
+    public List<Proforma> getListaProformasAprobadas() {
+        return listaProformasAprobadas;
+    }
+
+    public void setListaProformasAprobadas(List<Proforma> listaProformasAprobadas) {
+        this.listaProformasAprobadas = listaProformasAprobadas;
     }
     
     

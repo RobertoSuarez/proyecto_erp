@@ -1,11 +1,11 @@
-<ui:composition 
+<ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
 
-    <p:menubar autoDisplay="false" style="position: fixed; width: 100%; padding-top: 10px">
+    <p:menubar autoDisplay="false" style="position: fixed; width: 100%; padding-top: 10px; z-index: 9999;">
         <p:menuitem value="Nueva venta"
                     outcome="/View/ventas/nuevaVenta.xhtml" 
                     icon="pi pi-shopping-cart" />
@@ -15,9 +15,10 @@
         <p:menuitem value="Nueva proforma"
                     outcome="/View/ventas/nuevaProforma.xhtml" 
                     icon="pi pi-plus-circle" />
-        <p:menuitem value="Lista proforma"
-                    outcome="/View/ventas/listaProforma.xhtml" 
-                    icon="pi pi-book" />
+        <p:submenu label="Proformas" icon="pi pi-fw pi-book">
+            <p:menuitem value="Proformas aprobadas" icon="pi pi-check" outcome="/View/ventas/listaProformaAprobada.xhtml"/>
+            <p:menuitem value="Proformas pendientes" icon="pi pi-times" outcome="/View/ventas/listaProformaPendiente.xhtml"/>
+        </p:submenu>
         <p:menuitem value="Lista precios"
                     outcome="/View/ventas/listaPrecios.xhtml" 
                     icon="pi pi-book" />
