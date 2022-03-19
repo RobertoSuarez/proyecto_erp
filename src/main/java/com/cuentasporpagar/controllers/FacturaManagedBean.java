@@ -11,6 +11,8 @@ import com.cuentasporpagar.models.Factura;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -454,7 +456,7 @@ public class FacturaManagedBean {
             }
         }
         this.factura.setSubtotal(importe);
-        this.factura.setIva(Math.round(iva));
+        this.factura.setIva(convertTwoDecimal(iva));
         this.factura.setImporte(importe + iva);
         PrimeFaces.current().ajax().update("form:importe");
         PrimeFaces.current().ajax().update("form:iva");
@@ -589,8 +591,8 @@ public class FacturaManagedBean {
         double sub = this.factura.getSubtotal();
         porcentaje = facturaDAO.porcentaje(this.factura.getId_impuestoR());
         setImpuestoR(porcentaje);
-        this.factura.setValorRenta(Math.round( this.factura.getSubtotal() * porcentaje));
-        this.factura.setImporte((float) Math.round(((sub - this.factura.getValorRenta()) + (this.factura.getIva() - this.factura.getValorIva()))));
+        this.factura.setValorRenta(convertTwoDecimal(this.factura.getSubtotal() * porcentaje));
+        this.factura.setImporte((float) convertTwoDecimal(((sub - this.factura.getValorRenta()) + (this.factura.getIva() - this.factura.getValorIva()))));
         PrimeFaces.current().ajax().update("form:importe");
         PrimeFaces.current().ajax().update("form:valRet");
     }
@@ -600,8 +602,8 @@ public class FacturaManagedBean {
         double importe = this.factura.getSubtotal() + this.factura.getIva();
         porcentaje = facturaDAO.porcentaje(this.factura.getId_impuestoI());
         setImpuestoI(porcentaje);
-        this.factura.setValorIva(Math.round((this.factura.getIva() * porcentaje)));
-        this.factura.setImporte((float) Math.round(((importe - this.factura.getValorIva()) - this.factura.getValorRenta())));
+        this.factura.setValorIva(convertTwoDecimal((this.factura.getIva() * porcentaje)));
+        this.factura.setImporte((float) convertTwoDecimal(((importe - this.factura.getValorIva()) - this.factura.getValorRenta())));
         PrimeFaces.current().ajax().update("form:importe");
         PrimeFaces.current().ajax().update("form:valRetIva");
     }
@@ -647,7 +649,7 @@ public class FacturaManagedBean {
             parametros.put("ruc", this.factura.getRuc());
             parametros.put("direccion", "Quevedo");
             parametros.put("tipocomp", tipoDocumento);
-            parametros.put("nfactura", this.factura.getSerie()+"-"+this.factura.getNfactura());
+            parametros.put("nfactura", this.factura.getSerie()+"-000456789");
             parametros.put("totalvalor", String.valueOf(this.factura.getValorRenta() + this.factura.getValorIva()));
             System.out.println(String.valueOf(this.factura.getValorRenta() + this.factura.getValorIva()));
 
@@ -675,5 +677,9 @@ public class FacturaManagedBean {
             fc.responseComplete();
         }
 
+    }
+    public double convertTwoDecimal(double doubleNumero) {
+        double temp = new BigDecimal(doubleNumero).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return temp < 0 ? 0 : temp;
     }
 }
