@@ -237,7 +237,7 @@
                                 <p:outputLabel value="TOTAL"/>
                                 <p:inputNumber value="#{VentaMB.total}" disabled="true" decimalPlaces="2"/>
                                 <div/>
-                                <p:commandButton value="Efectuar Pago" update="Pagos" type="button" onclick="PF('RealizarPago').show()"/>
+                                <p:commandButton value="Elegir modo de pago" update="Pagos" type="button" onclick="PF('RealizarPago').show()"/>
                             </h:panelGrid>
                         </p:panel>
                     </h:form >
@@ -254,23 +254,15 @@
                             </h:panelGrid>
                         </p:panel>
                         <p:accordionPanel>
-                            <p:tab title="Efectivo">
+                            <p:tab title="Pago Inmediato">
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="Efectivo: "/>
+                                    <p:outputLabel value="Monto a pagar: "/>
                                     <p:inputText value="#{VentaMB.total}" disabled="true" /> 
-                                    <p:commandButton value="Pagar" action="#{VentaMB.RegistrarVenta(2)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Facturar" action="#{VentaMB.RegistrarVenta(2)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:outputLabel value="Una vez facturada la compra, deberá realizar sus pagos en cuentas por cobrar"/>
                                 </h:panelGrid>
                             </p:tab>
-                            <p:tab title="Tarjeta">
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel value="Banco: "/>
-                                    <p:inputText value="XXXXXXXXXXXXXXXX"/>
-                                    <p:outputLabel value="Propietario: "/>
-                                    <p:inputText value="#{VentaMB.cliente.nombre}"/>
-                                    <p:commandButton value="Pagar" action="#{VentaMB.RegistrarVenta(3)}" style="margin-top: 20px" ajax="false"/>
-                                </h:panelGrid>
-                            </p:tab>
-                            <p:tab title="Crédito" >
+                            <p:tab title="Pago a Crédito" >
                                 <h:panelGrid columns="5">
                                     <p:outputLabel value="Cliente: "/>
                                     <p:inputText value="#{VentaMB.cliente.nombre}" disabled="true"/>
@@ -284,7 +276,7 @@
                                         <f:selectItem itemLabel="270 Días" itemValue="270" />
                                         <f:selectItem itemLabel="360 Días" itemValue="360" />
                                     </p:selectOneMenu>
-                                    <p:commandButton value="Pagar" action="#{VentaMB.RegistrarVenta(1)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Facturar" action="#{VentaMB.RegistrarVenta(1)}" style="margin-top: 20px" ajax="false"/>
                                 </h:panelGrid>
                             </p:tab>
                         </p:accordionPanel>
