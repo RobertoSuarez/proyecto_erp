@@ -43,6 +43,7 @@ public class ArticulosInventario implements Serializable {
     private float impuestoIVA;
     private boolean is_Servicio;
     private boolean stockeable;
+    private int cantidadFacturada;
 
     private List<FormulaMateriales> formulaMateriales;
 
@@ -138,10 +139,27 @@ public class ArticulosInventario implements Serializable {
         this.iceproducto = ice;
     }
     
+            public ArticulosInventario(int id, String nombre, 
+            int id_categoria, int id_tipo, String descripcion, 
+            int min_stock, int max_stock, int cantidad, int cantidadFacturada,
+            float costo, float ice) {
+        this.id = id;
+        this.nombre = nombre;
+        this.id_categoria = id_categoria;
+        this.id_tipo = id_tipo;
+        this.descripcion = descripcion;
+        this.min_stock = min_stock;
+        this.max_stock = max_stock;
+        this.cantidad = cantidad;
+        this.cantidadFacturada = cantidadFacturada;
+        this.coast = costo;
+        this.iceproducto = ice;
+    }   
+     
     
     
     
-    
+    //para salidas
 
     public ArticulosInventario(String nombre, int id_categoria, int id_tipo, String descripcion, int id_bodega, int max_stock, int cantidad, int costo, int iva, float iceproducto, float precioventa) {
         this.nombre = nombre;
@@ -413,5 +431,15 @@ public class ArticulosInventario implements Serializable {
     public void setIce(int ice) {
         this.ice = ice;
     }
+
+    public int getCantidadFacturada() {
+        return cantidadFacturada;
+    }
+
+    public void setCantidadFacturada(int cantidadFacturada) {
+        this.cantidadFacturada = cantidadFacturada;
+    }
+    
+    
 
 }
