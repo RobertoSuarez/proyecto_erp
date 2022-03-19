@@ -122,23 +122,19 @@ public class ArticulosInventario implements Serializable {
     }
     
     // Utilizado para el ice del producto
-        public ArticulosInventario(int id, int cat_cod, String nombre, 
-            int id_categoria, int id_tipo, int cod, String descripcion, 
-            int id_bodega, int min_stock, int max_stock, int cantidad, 
-            int costo, int iva, float ice) {
+        public ArticulosInventario(int id, String nombre, 
+            int id_categoria, int id_tipo, String descripcion, 
+            int min_stock, int max_stock, int cantidad, 
+            float costo, float ice) {
         this.id = id;
-        this.cat_cod = cat_cod;
         this.nombre = nombre;
         this.id_categoria = id_categoria;
         this.id_tipo = id_tipo;
-        this.cod = cod;
         this.descripcion = descripcion;
-        this.id_bodega = id_bodega;
         this.min_stock = min_stock;
         this.max_stock = max_stock;
         this.cantidad = cantidad;
-        this.costo = costo;
-        this.iva = iva;
+        this.coast = costo;
         this.iceproducto = ice;
     }
     

@@ -291,11 +291,13 @@ public class SalidaManagedBean implements Serializable {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("FECHA", dateFormat.format(salida.getFecha()));
             parametros.put("COMPROBANTE", salida.getNumComprobante());
+            parametros.put("OBSERVACION", salida.getObservacion());
             /*parametros.put("NOMBREBODEGA",  );*/
             parametros.put("NOMBREBODEGA", bod.getNomBodega());
             parametros.put("RUCPROVEEDOR", pro.getRuc());
             parametros.put("NOMBREPROVEEDOR", pro.getNombre());
-
+            
+            
             parametros.put("SUBTOTAL", String.format("%.2f", subtotal));
             parametros.put("DESCUENTO", String.format("%.2f", descuento));
             parametros.put("IVA", String.format("%.2f", iva));
@@ -306,7 +308,7 @@ public class SalidaManagedBean implements Serializable {
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("PlantillasReportes/entradas.jasper"));
+                    .getRealPath("PlantillasReportes/reportesalidas.jasper"));
 
             // llenamos la plantilla con los datos.
             /*JasperPrint jasperPrint = JasperFillManager.fillReport(
@@ -341,7 +343,7 @@ public class SalidaManagedBean implements Serializable {
             HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
                     .getExternalContext().getResponse();
             httpServletResponse.addHeader("Content-disposition",
-                    "attachment; filename=" + "facturaEntradas" + ".pdf");
+                    "attachment; filename=" + "reporteSalidas" + ".pdf");
             try ( ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
                 JasperExportManager.exportReportToPdfStream(verSalida(idSalida), servletOutputStream);
                 servletOutputStream.flush();
@@ -519,6 +521,7 @@ public class SalidaManagedBean implements Serializable {
                     salidaActual.setIdProveedor(this.entrada.getIdProveedor());
                     salidaActual.setIdBodega(this.entrada.getIdBodega());
                     salidaActual.setNumComprobante(this.numeroComprobante);
+                    salidaActual.setObservacion(this.salida.getObservacion()) ;
                     salidaActual.setFecha(currentDate2);
 
                     //Verificación en consola

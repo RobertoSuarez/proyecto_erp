@@ -545,6 +545,7 @@ public class EntradaManagedBean implements Serializable {
         this.ciudadBodega = bod.getNomCiudad();
         this.direccionBodega = bod.getDireccion();
         this.bodega = bod;
+        this.listaProductos = productoDao.getArticulosEntradas(codBodega);
     }
 
     public String getNombreBodega() {

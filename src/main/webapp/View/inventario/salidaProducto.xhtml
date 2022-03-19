@@ -65,8 +65,10 @@
                                                 </p:calendar>
                                             </div>
 
- 
-
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Observacion: *"></p:outputLabel>
+                                                <p:inputText placeholder="Informacion del motivo para la transación" id="observacionSalida" value="#{SalidaMB.salida.observacion}" /> 
+                                            </div>
 
                                         </div>
                                     </div>
@@ -99,7 +101,7 @@
 
                                             <div class="p-col-2">
                                                 <p:outputLabel value="Stock en inventario:"></p:outputLabel>
-                                                <p:inputText id="stockProductoSelect" disabled="true" value="#{SalidaMB.producto.max_stock}"></p:inputText>
+                                                <p:inputText id="stockProductoSelect" disabled="true" value="#{SalidaMB.producto.cantidad}"></p:inputText>
                                             </div>
                                             <div class="p-col-2">
                                                 <p:outputLabel value="Costo:"></p:outputLabel>
@@ -130,9 +132,9 @@
                                                               value="#{SalidaMB.listaDetalle}" 
                                                               selection="#{SalidaMB.productoSeleccionado}" 
                                                               rowKey="#{ListaItems.articuloInventario.id}" 
-                                                              
+
                                                               paginator="true" 
-                                                              
+
                                                               id="itemsEntradaDetalle"
                                                               >
 
@@ -265,7 +267,7 @@
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
                                                          actionListener="#{SalidaMB.SeleccionarProducto(ListaProductos)}" 
-                                                         update="salidaForm"
+                                                         update="salidaForm:buscar-producto-vista salidaForm:buscar-producto-vista:NombreProducto salidaForm:codigoProductoSelect salidaForm:cantidadFacturadaProductoSelect salidaForm:cantidadProductoSelect salidaForm:stockProductoSelect salidaForm:costoProductoSelect"
                                                          oncomplete="PF('BuscarProducto').hide();"/>
                                     </p:column>
 
