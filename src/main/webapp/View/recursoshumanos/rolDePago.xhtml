@@ -108,11 +108,11 @@
                                             <h:outputText value="Fondos de Reserva: " style="font-weight: bold;" />
                                             <h:outputText value="$ #{rolDePagoView.fondosReserva}" />
 
-                                            <h:outputText rendered="#{rolDePagoView.decimoTercero > 0 ? true: false}" value="Decimo Tercer Sueldo: " style="font-weight: bold;" />
-                                            <h:outputText rendered="#{rolDePagoView.decimoTercero > 0 ? true: false}" value="$ #{rolDePagoView.decimoTercero}" />
+                                            <h:outputText  value="Decimo Tercer Sueldo: " style="font-weight: bold;" />
+                                            <h:outputText  value="$ #{rolDePagoView.decimoTercero}" />
 
-                                            <h:outputText rendered="#{rolDePagoView.decimoCuarto > 0 ? true: false}" value="Decimo Cuarto Sueldo: " style="font-weight: bold;" />
-                                            <h:outputText rendered="#{rolDePagoView.decimoCuarto > 0 ? true: false}" value="$ #{rolDePagoView.decimoCuarto}" />
+                                            <h:outputText  value="Decimo Cuarto Sueldo: " style="font-weight: bold;" />
+                                            <h:outputText  value="$ #{rolDePagoView.decimoCuarto}" />
 
                                         </h:panelGrid>
                                     </p:panel>
@@ -133,14 +133,14 @@
                                                           style="font-weight: bold;" />
                                             <h:outputText value="$ #{rolDePagoView.aportesIESS}" />
 
-                                            <h:outputText rendered="#{rolDePagoView.suspencion.id > 0 ? true: false}" value="Suspención: " style="font-weight: bold;" />
-                                            <h:outputText rendered="#{rolDePagoView.suspencion.id > 0 ? true: false}" value="$ #{rolDePagoView.suspencion.valor}" />
+                                            <h:outputText  value="Suspención: " style="font-weight: bold;" />
+                                            <h:outputText  value="$ #{rolDePagoView.suspencion.valor}" />
 
-                                            <h:outputText rendered="#{rolDePagoView.amonestacion.id > 0 ? true: false}" value="Amonestación: " style="font-weight: bold;" />
-                                            <h:outputText rendered="#{rolDePagoView.amonestacion.id > 0 ? true: false}" value="$ #{rolDePagoView.amonestacion.valor}" />
+                                            <h:outputText rendered="#{false}" value="Amonestación: " style="font-weight: bold;" />
+                                            <h:outputText rendered="#{false}" value="$ #{rolDePagoView.amonestacion.valor}" />
 
-                                            <h:outputText rendered="#{rolDePagoView.multa.id > 0 ? true: false}" value="Multa: " style="font-weight: bold;" />
-                                            <h:outputText rendered="#{rolDePagoView.multa.id > 0 ? true: false}" value="$ #{rolDePagoView.multa.valor}" />
+                                            <h:outputText value="Multa: " style="font-weight: bold;" />
+                                            <h:outputText value="$ #{rolDePagoView.multa.valor}" />
 
                                         </h:panelGrid>
                                     </p:panel>
