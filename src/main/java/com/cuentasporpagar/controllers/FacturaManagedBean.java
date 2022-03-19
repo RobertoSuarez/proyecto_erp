@@ -8,14 +8,27 @@ package com.cuentasporpagar.controllers;
 import com.cuentasporpagar.daos.FacturaDAO;
 import com.cuentasporpagar.models.Anticipo;
 import com.cuentasporpagar.models.Factura;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 
@@ -35,11 +48,14 @@ public class FacturaManagedBean {
     private List<SelectItem> listaProductos;
     private List<SelectItem> listaRenta;
     private List<SelectItem> listaIva;
+    private List<Factura> retenciones;
     private float datoImporte;
     private String datoDetalle;
     private String datoCuenta;
     private double datoIva;
     private double datoCantidad;
+    private double impuestoR;
+    private double impuestoI;
     private String tipoDocumento;
     private int opciones;
     private boolean ret;
@@ -52,6 +68,7 @@ public class FacturaManagedBean {
         listaCuentas = new ArrayList<>();
         detalleFactura = new ArrayList<>();
         listaProductos = new ArrayList<>();
+        retenciones = new ArrayList<>();
         listaRenta = new ArrayList<>();
         listaIva = new ArrayList<>();
         this.listaFactura.clear();
@@ -188,11 +205,29 @@ public class FacturaManagedBean {
         this.ret = ret;
     }
 
+    public double getImpuestoR() {
+        return impuestoR;
+    }
+
+    public void setImpuestoR(double impuestoR) {
+        this.impuestoR = impuestoR;
+    }
+
+    public double getImpuestoI() {
+        return impuestoI;
+    }
+
+    public void setImpuestoI(double impuestoI) {
+        this.impuestoI = impuestoI;
+    }
+
     /**
      * Método para insertar una factura
      *
+     * @throws java.io.IOException
+     * @throws net.sf.jasperreports.engine.JRException
      */
-    public void insertarfactura() {
+    public void insertarfactura() throws IOException, JRException {
         if (tipoDocumento == "0" || detalleFactura.isEmpty()) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
         } else {
@@ -200,17 +235,15 @@ public class FacturaManagedBean {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "El número de factura debe tener 9 digitos"));
                 PrimeFaces.current().ajax().update("form:messages");
             } else {
-                try {
-                    if ("".equals(factura.getRuc())) {
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al guardar"));
-                    } else {
-                        if (facturaDAO.Insertar(factura) == 0) {
-                            System.out.println("YA INSERTE, AHORA EL DETALLE");
-                            facturaDAO.insertdetalle(detalleFactura, factura, opciones);
-                            if (ret) {
-                                facturaDAO.InsertarRetencion(factura, opciones);
-                            }
-                            facturaDAO.insertasiento(detalleFactura, factura, opciones, tipoDocumento);
+                if ("".equals(factura.getRuc())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al guardar"));
+                } else {
+                    if (facturaDAO.Insertar(factura) == 0) {
+                        System.out.println("YA INSERTE, AHORA EL DETALLE");
+                        facturaDAO.insertdetalle(detalleFactura, factura, opciones);
+                        if (ret) {
+                            facturaDAO.InsertarRetencion(factura, opciones);
+                            facturaDAO.asientoRetención(detalleFactura, factura, opciones, tipoDocumento);
                             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
                             PrimeFaces.current().executeScript("PF('newFactura').hide()");
                             listaFactura.clear();
@@ -218,12 +251,17 @@ public class FacturaManagedBean {
                             listaFactura = facturaDAO.llenarP("1");
                             PrimeFaces.current().ajax().update("form:dt-factura", "form:messages");
                         } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Factura ya existe"));
+                            facturaDAO.insertasiento(detalleFactura, factura, opciones, tipoDocumento);
                         }
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Factura Guardada"));
+                        PrimeFaces.current().executeScript("PF('newFactura').hide()");
+                        listaFactura.clear();
+                        detalleFactura.clear();
+                        listaFactura = facturaDAO.llenarP("1");
+                        PrimeFaces.current().ajax().update("form:dt-factura", "form:messages");
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Factura ya existe"));
                     }
-                } catch (Exception e) {
-                    System.out.println("ERROR DAO: " + e);
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "ERROR AL GUARDAR"));
                 }
             }
         }
@@ -418,7 +456,7 @@ public class FacturaManagedBean {
             }
         }
         this.factura.setSubtotal(importe);
-        this.factura.setIva(iva);
+        this.factura.setIva(convertTwoDecimal(iva));
         this.factura.setImporte(importe + iva);
         PrimeFaces.current().ajax().update("form:importe");
         PrimeFaces.current().ajax().update("form:iva");
@@ -528,7 +566,11 @@ public class FacturaManagedBean {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Por favor Ingrese datos a la tabla"));
         } else {
             llenarRentenciones();
+            this.factura.setNserie("001-001");
+            this.factura.setNcomprobante("000000020");
             PrimeFaces.current().executeScript("PF('dlgRet').show()");
+            PrimeFaces.current().ajax().update("form:ncompr");
+            PrimeFaces.current().ajax().update("form:serieRet");
             PrimeFaces.current().ajax().update("form:outRet");
         }
     }
@@ -548,18 +590,96 @@ public class FacturaManagedBean {
         double porcentaje;
         double sub = this.factura.getSubtotal();
         porcentaje = facturaDAO.porcentaje(this.factura.getId_impuestoR());
-        this.factura.setValorRenta((float) this.factura.getSubtotal() * porcentaje);
-        this.factura.setImporte((float) ((sub-this.factura.getValorRenta())+this.factura.getIva()));
+        setImpuestoR(porcentaje);
+        this.factura.setValorRenta(convertTwoDecimal(this.factura.getSubtotal() * porcentaje));
+        this.factura.setImporte((float) convertTwoDecimal(((sub - this.factura.getValorRenta()) + (this.factura.getIva() - this.factura.getValorIva()))));
         PrimeFaces.current().ajax().update("form:importe");
         PrimeFaces.current().ajax().update("form:valRet");
     }
+
     public void iva() {
         double porcentaje;
-        double importe = this.factura.getSubtotal()+ this.factura.getIva();
+        double importe = this.factura.getSubtotal() + this.factura.getIva();
         porcentaje = facturaDAO.porcentaje(this.factura.getId_impuestoI());
-        this.factura.setValorIva(this.factura.getIva() * porcentaje);
-        this.factura.setImporte((float)(this.factura.getImporte()-this.factura.getValorIva()));
+        setImpuestoI(porcentaje);
+        this.factura.setValorIva(convertTwoDecimal((this.factura.getIva() * porcentaje)));
+        this.factura.setImporte((float) convertTwoDecimal(((importe - this.factura.getValorIva()) - this.factura.getValorRenta())));
         PrimeFaces.current().ajax().update("form:importe");
         PrimeFaces.current().ajax().update("form:valRetIva");
+    }
+
+    public void exportpdf() throws IOException, JRException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        System.out.println("LISTA RETENCIONES");
+        this.retenciones.clear();
+        Factura f = new Factura();
+        if (this.factura.getValorRenta() > 0) {
+            f.setEjercicio("2022");
+            f.setSubtotal(this.factura.getSubtotal());
+            f.setTipo("Renta");
+            f.setPorcentajeR(getImpuestoR());
+            f.setValorRenta(this.factura.getValorRenta());
+            this.retenciones.add(f);
+        }
+        Factura g = new Factura();
+        if (this.factura.getValorIva() > 0) {
+            g.setEjercicio("2022");
+            g.setSubtotal(this.factura.getIva());
+            g.setTipo("IVA");
+            g.setPorcentajeR(getImpuestoI());
+            g.setValorRenta(this.factura.getValorIva());
+            this.retenciones.add(g);
+        }
+        System.out.println("LISTA RETENCIONES " + retenciones.size() + "hola ");
+
+        // Cabecera de la respuesta.
+        ec.responseReset();
+        ec.setResponseContentType("application/pdf");
+        ec.setResponseHeader("Content-disposition", String.format("attachment; filename=Retencion_compra.pdf"));
+
+        // tomamos el stream para llenarlo con el pdf.
+        try (OutputStream stream = ec.getResponseOutputStream()) {
+
+            // Parametros para el reporte.
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("ncomprobante", this.factura.getNserie()+"-"+this.factura.getNcomprobante());
+            parametros.put("proveedor", factura.getNombre());
+            parametros.put("fecha", (this.factura.getFecha()).toString());
+            parametros.put("ruc", this.factura.getRuc());
+            parametros.put("direccion", "Quevedo");
+            parametros.put("tipocomp", tipoDocumento);
+            parametros.put("nfactura", this.factura.getSerie()+"-000456789");
+            parametros.put("totalvalor", String.valueOf(this.factura.getValorRenta() + this.factura.getValorIva()));
+            System.out.println(String.valueOf(this.factura.getValorRenta() + this.factura.getValorIva()));
+
+            // leemos la plantilla para el reporte.
+            File filetext = new File(FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .getRealPath("/PlantillasReportes/Retencion_compras.jasper"));
+
+            // llenamos la plantilla con los datos.
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    filetext.getPath(),
+                    parametros,
+                    new JRBeanCollectionDataSource(this.retenciones));
+            // exportamos a pdf.
+            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
+
+            stream.flush();
+            stream.close();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            // enviamos la respuesta.
+            fc.responseComplete();
+        }
+
+    }
+    public double convertTwoDecimal(double doubleNumero) {
+        double temp = new BigDecimal(doubleNumero).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        return temp < 0 ? 0 : temp;
     }
 }

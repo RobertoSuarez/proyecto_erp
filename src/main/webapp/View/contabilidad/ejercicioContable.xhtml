@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <ui:include src="./subheadercontabilidad.xhtml"/>
+                    <p:growl id="messages" showDetail="true"/>
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup style="margin-top: 4%">
+                                <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                 actionListener="#{ejercicioContableMB.abrirNuevo}" disabled="#{rolMB.rol()}"
+                                                 update=":form:manage-periodo-fiscal-content" 
+                                                 oncomplete="PF('managePeriodoFiscalDialog').show()" >
+                                    <p:resetInput target=":form:manage-periodo-fiscal-content"/>
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:dialog header="Periodo Fiscal" modal="true" id="manage-periodo-fiscal-content"
+                                  widgetVar="managePeriodoFiscalDialog" responsive="true" showEffect="fade" 
+                                  width="30%" closeOnEscape="true" draggable="false" >
+                            <p:staticMessage rendered="#{empty ejercicioContableMB.ejercicioContableModel}"
+                                             severity="warn" summary="Atención" 
+                                             detail="Una vez registrado un periodo solo se puede desactivar" 
+                                             style="width: 100%; margin-bottom: 3%;"/>
+                            <div class="ui-fluid">
+                                <div>
+                                    <p:outputLabel
+                                        for="button" 
+                                        value="Fecha desde: "/>
+                                    <p:datePicker
+                                        style="margin-top: 1%" 
+                                        locale="es"
+                                        id="button"
+                                        value="#{ejercicioContableMB.ejercicioContableModel.fechaInicio}"
+                                        showIcon="true"/>
+                                </div>
+
+                                <div>
+                                    <p:outputLabel
+                                        for="button2" 
+                                        value="Fecha hasta: "/>
+                                    <p:datePicker 
+                                        style="margin-top: 1%"  
+                                        id="button2" 
+                                        locale="es"
+                                        value="#{ejercicioContableMB.ejercicioContableModel.fechaFin}"
+                                        showIcon="true"/>
+
+                                </div>
+
+
+                                <div class="p-field">
+                                    <p:outputLabel for="periodo" 
+                                                   style="font-weight: bold">Periodo</p:outputLabel>
+                                    <p:inputText id="periodo" 
+                                                 value="#{ejercicioContableMB.ejercicioContableModel.nombrePeriodo}"                                                 
+                                                 required="true" 
+                                                 requiredMessage="Debe ingresar el año del periodo fiscal"/>
+                                </div>
+                            </div>
+                            <f:facet name="footer">
+                                <p:commandButton value="Guardar" icon="pi pi-check" 
+                                                 actionListener="#{ejercicioContableMB.insertarEjercicioContable()}"
+                                                 update=":form:messages,:form:manage-periodo-fiscal-content,:form:dt-periodos-fiscales"
+                                                 process="messages manage-periodo-fiscal-content @this"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                 onclick="PF('managePeriodoFiscalDialog').hide()"
+                                                 class="ui-button-danger"/>
+                            </f:facet>
+                        </p:dialog>
+                        <p:confirmDialog global="true" showEffect="fade" width="300">
+                            <p:commandButton value="Yes" type="button" 
+                                             styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                            <p:commandButton value="No" type="button" 
+                                             styleClass="ui-confirmdialog-no ui-button-secondary"
+                                             icon="pi pi-times"/>
+                        </p:confirmDialog>
+
+                        <p:dataTable id="dt-periodos-fiscales"
+                                     widgetVar="dtPeriodosFiscales"                                      
+                                     var="periodoFiscal" 
+                                     value="#{ejercicioContableMB.ejercicioContable}"
+                                     reflow="true"
+                                     paginator="true"
+                                     rows="7"
+                                     rowSelectMode="add"
+                                     rowKey="#{periodoFiscal.idPeriodo}"
+
+                                     paginatorPosition="bottom">
+                            <p:column headerText="Periodo Fiscal" style="font-size: 15px">
+                                <h:outputText value="#{periodoFiscal.nombrePeriodo}"/>
+                            </p:column>
+                            <p:column headerText="Inicio" style="font-size: 15px">
+                                <h:outputText value="#{periodoFiscal.fechaInicio}"/>
+                            </p:column>
+                            <p:column headerText="Fin" style="font-size: 15px">
+                                <h:outputText value="#{periodoFiscal.fechaFin}"/>
+                            </p:column>
+                            <p:column headerText="Activo" style="font-size: 15px">
+                                <h:outputText value="#{periodoFiscal.estadoString}" style="background-color: limegreen;border-radius: 15%;border-bottom-color: gray;color: #000;font-weight: bold;padding: 1%;"/>
+                            </p:column>
+                            <p:column exportable="false" width="10%">
+                                <p:commandButton rendered="#{periodoFiscal.estado}" class="ui-button-danger rounded-button"
+                                                 icon="pi pi-pi pi-calendar-times" 
+                                                 update="dt-periodos-fiscales" 
+                                                 process="dt-periodos-fiscales @this">
+                                    <p:confirm header="CONFIRMACIÓN" 
+                                               message="¿Estás seguro que deseas cerrar el periodo?"
+                                               icon="pi pi-exclamation-triangle"/>                                    
+                                </p:commandButton>
+                                <p:commandButton 
+                                    icon="pi pi-pencil" 
+                                    action="#{ejercicioContableMB.cargarEditar(periodoFiscal)}"
+                                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                    oncomplete="PF('periodoContable').show()"
+                                    update=":form:panelPeriodoContable" 
+                                    process="dt-periodos-fiscales @this">
+
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dialog 
+
+                            showEffect="fade"
+                            modal="true"
+                            widgetVar="periodoContable"
+                            responsive="true"
+                            width="50%"
+                            draggable="false"
+                            height="auto">
+                            <p:outputPanel 
+                                id="panelPeriodoContable"
+                                class="ui-fluid">
+                                <h2 >
+                                    Ejercicio contable - #{ejercicioContableMB.ejercicioContableModel.nombrePeriodo}
+                                </h2>
+                                <div class="p-formgrid p-grid">
+                                    <div class="p-field p-col-12 p-md-12 p-lg-6">
+                                        <p:outputLabel value="Fecha inicio: " />
+                                        <p:inputText disabled="true" value="#{periodoFiscal.estado}" />
+
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-12 p-lg-6">
+                                        <p:outputLabel value="Fecha fin: " />
+                                        <p:inputText disabled="true" value="#{ejercicioContableMB}" />
+
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-12 p-lg-6">
+                                        <p:outputLabel for="btnDate" value="Fecha fin2: " />
+                                        <p:datePicker
+                                            disabled="true"
+                                            locale="es"
+                                            id="btnDate"
+                                            value="#{ejercicioContableMB.ejercicioContableModel.fechaInicio}"
+                                            />
+                                    </div>
+
+                                </div>
+
+                            </p:outputPanel>
+                        </p:dialog>
+
+
+                    </div>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

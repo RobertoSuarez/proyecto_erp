@@ -79,7 +79,7 @@
                         </p:column>
                         <p:column class="tamanoInput" 
                                   style="text-align: center;"
-                                  headerText="Forma de Pago">
+                                  headerText="Fecha de vencimiento">
                             <h:outputText value="#{tblFactPending.fechaVencimiento}" />
                         </p:column>
                         <p:column class="tamanoInput" 
@@ -92,7 +92,7 @@
                         </p:column>
                         <p:column class="tamanoInput" 
                                   style="text-align: center;"
-                                  headerText="Total Pendiente">
+                                  headerText="Saldo Pendiente">
                             <h:outputText value="#{tblFactPending.valorPendiente}" >
                                 <f:convertNumber type="currency" 
                                                  currencySymbol="$"/>
@@ -168,7 +168,7 @@
                         </p:column>
                         <p:column class="tamanoInput" 
                                   style="text-align: center;"
-                                  headerText="Forma de Pago">
+                                  headerText="Fecha Vencimiento">
                             <h:outputText value="#{tblBillsToPay.fechaVencimiento}" />
                         </p:column>
                         <p:column class="tamanoInput" 
@@ -181,7 +181,7 @@
                         </p:column>
                         <p:column class="tamanoInput" 
                                   style="text-align: center;"
-                                  headerText="Total Pendiente">
+                                  headerText="Saldo Pendiente">
                             <h:outputText value="#{tblBillsToPay.valorPendiente}" >
                                 <f:convertNumber type="currency" 
                                                  currencySymbol="$"/>
@@ -200,7 +200,8 @@
                                      onclick="PF('nuevoPago').show()"
                                      styleClass="ui-button-secondary"
                                      immediate="true"
-                                     process="tblFacturasAPagar"/>
+                                     process="tblFacturasAPagar"
+                                     update="pgNC"/>
                     <p:overlayPanel for="buscar" dynamic="true" style="width:600px" 
                                     widgetVar="selecionCliente">
                         <p:dataTable var="cliente" id="tbcliente" 
@@ -246,7 +247,7 @@
                               height="80%" width="90p%" showEffect="fade" 
                               widgetVar="nuevoPago"
                               id="dialogAddCobro">
-                        <p:panelGrid columns="4" layout="grid" id="pgNC">
+                        <p:panelGrid columns="2" layout="grid" id="pgNC">
                             <p:outputLabel for="abono" 
                                            style="font-weight: bold;"
                                            value="Saldo Abonar:">
@@ -265,7 +266,9 @@
                             <p:selectOneMenu id="formaPago" 
                                              style="width: 170px !important;"
                                              value="#{abonoController.intTipoPago}"
-                                             required="true">                            
+                                             required="true">  
+                                <p:ajax event="change" listener="#{abonoController.selectTipoPago()}" 
+                                        update="pgNC" />
                                 <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
                                 <f:selectItem itemLabel="Efectivo" itemValue="2"/>
                                 <f:selectItem itemLabel="Cheque" itemValue="3"/>
@@ -281,6 +284,30 @@
                                           required="true"
                                           value="#{abonoController.ldtFechaPago}"
                                           placeholder="aaaa-mm-dd"/>
+                            <p:outputLabel for="entidadBancaria"
+                                           value="Entidad Bancaria" rendered="#{abonoController.tipocobro}">
+                            </p:outputLabel>
+                            <p:selectOneMenu id="entidadBancaria" 
+                                             style="width: 170px !important;"
+                                             value="#{abonoController.chequecobro.codBanco}"
+                                             required="true"
+                                             rendered="#{abonoController.tipocobro}">
+                                <f:selectItem itemLabel="Seleccione..." itemValue="Ninguno"/>
+                                <f:selectItem itemLabel="Banco de Guayaquil" itemValue="GUAYECEG105"/>
+                                <f:selectItem itemLabel="Banco Pichincha" itemValue="PICHECEQ400"/>
+                                <f:selectItem itemLabel="Produbanco" itemValue="PRODECEQ100"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="nombreTitular"
+                                           value="Titular"
+                                           rendered="#{abonoController.tipocobro}">
+                            </p:outputLabel>
+                            <p:inputText rendered="#{abonoController.tipocobro}" id="nombreTitular" value="#{abonoController.chequecobro.nombreCliente}"/>
+                            <p:outputLabel for="cuentaTitular"
+                                           value="Numero de cuenta"
+                                           rendered="#{abonoController.tipocobro}">
+                            </p:outputLabel>
+                            <p:inputText rendered="#{abonoController.tipocobro}" id="cuentaTitular" value="#{abonoController.chequecobro.numeroDeCuenta}"/>
+
                         </p:panelGrid>
                         <br/>
                         <div style="float: right;">
@@ -293,7 +320,7 @@
                                 icon="pi pi-save" ajax="true"
                                 value="Guardar Cobro"
                                 actionListener="#{abonoController.IngresarPago}"
-                                process=":form"
+                                process=":form dialogAddCobro"
                                 update=":growl, :form"
                                 styleClass="ui-button-success"/> 
                         </div>

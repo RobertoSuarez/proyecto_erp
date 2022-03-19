@@ -13,13 +13,12 @@
             <ui:define name="content">
 
                 <ui:include src="menuVentas.xhtml"/>
-                
 
                 <h:form id="listaDeProforma" >
                     <br/><br/><br/><br/>
                     <p:dataTable var="Lista" 
                                  id="itemsTable" 
-                                 value="#{ListaProformaMB.listaProformas}"
+                                 value="#{ListaProformaMB.listaProformasAprobadas}"
                                  paginator="true" 
                                  resizableColumns="true" 
                                  class="p-mt-3"
@@ -37,23 +36,28 @@
                         <p:column headerText="Fecha creacion" width="10%" >
                             <h:outputText value="#{Lista.fecha_creacion}"/>
                         </p:column>
+                        <p:column headerText="Vencimiento" width="10%" >
+                            <h:outputText value="#{Lista.fecha_expiracion}"/>
+                        </p:column>
                         <p:column headerText="Total" width="7%" >
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
-                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" update="listaDeProforma"
-                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'hidden' : 'true'"/>
-                            <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"
-                                             update="listaDeProforma"
-                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'hidden' : 'true'"/>
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
-                                             onclick="PF('DetalleProforma').show()" update="datosFactura" />
+                                             style="margin-left: 20px;" update="datosFactura listaDeProforma" onclick="PF('DetalleProforma').show()" />
+                            <p:commandButton icon="pi pi-book" value="Facturar" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
+                                             style="margin-left: 20px;" update="datosFactura listaDeProforma pagosForm" onclick="PF('RealizarPago').show();" />
                         </p:column>
                     </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-danger"/>
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes ui-button-success" />
+                    </p:confirmDialog>
                 </h:form>
 
-                
-                <p:dialog widgetVar="DetalleProforma" width="70%" height="80%" >
+
+                <p:dialog widgetVar="DetalleProforma" width="70%" height="50%" modal="true" >
                     <h:form id="datosFactura">
                         <h2>Detalle proforma: <p:outputLabel value="#{ListaProformaMB.proformaActual.id_proforma}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
@@ -107,6 +111,45 @@
                             </p:columnGroup>
 
                         </p:dataTable>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
+                          minHeight="600" width="70%" showEffect="fade" id="Pagos" modal="true">
+                    <h:form id="pagosForm">
+                        <p:panel class="card">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Total a pagar: "/>
+                                <p:inputText value="#{ListaProformaMB.proformaActual.totalproforma}" disabled="true"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:accordionPanel>
+                            <p:tab title="Pago Inmediato">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Monto a pagar: "/>
+                                    <p:inputText value="#{ListaProformaMB.proformaActual.totalproforma}" disabled="true" /> 
+                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(1)}" style="margin-top: 20px" ajax="false" update="detalleTB"/>
+                                    <p:outputLabel value="Una vez facturada la compra, deberá realizar sus pagos en cuentas por cobrar"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Pago a Crédito" >
+                                <h:panelGrid columns="5">
+                                    <p:outputLabel value="Cliente: "/>
+                                    <p:inputText value="#{ListaProformaMB.cliente.nombre}" disabled="true"/>
+                                    <p:outputLabel value="Días plazo" />
+                                    <p:selectOneMenu id="diasPago" value="#{ListaProformaMB.diasPago}" >
+                                        <f:selectItem itemLabel="15 Días" itemValue="15" />
+                                        <f:selectItem itemLabel="30 Días" itemValue="30" />
+                                        <f:selectItem itemLabel="60 Días" itemValue="60" />
+                                        <f:selectItem itemLabel="90 Días" itemValue="90" />
+                                        <f:selectItem itemLabel="180 Días" itemValue="180" />
+                                        <f:selectItem itemLabel="270 Días" itemValue="270" />
+                                        <f:selectItem itemLabel="360 Días" itemValue="360" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(2)}" style="margin-top: 20px" ajax="false" update="detalleTB"/>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
                     </h:form>
                 </p:dialog>
 

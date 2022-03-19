@@ -20,7 +20,7 @@
 
                     <br/><br/><br/><br/>
                     <p:panel id="outclientes" header="Clientes">
-                        <h:panelGrid columns="7" width="80%">
+                        <h:panelGrid columns="8" width="80%">
                             <p:outputLabel value="Identificación: "/>
                             <p:inputText id="IdNumCliente" value="#{ProformaMB.cliente.identificacion}" disabled="true"/>
 
@@ -32,8 +32,8 @@
                             <p:commandButton actionListener="#{ProformaMB.BuscarClienteVenta}" 
                                              value="Buscar" update=":ventaForm:outclientes" 
                                              style="visibility: hidden"/>
-
-                            <p:inputText value="#{ProformaMB.descuentoActual}" style="visibility: hidden"/>
+                            <p:outputLabel value="Válido hasta"/>
+                            <p:datePicker id="fechavence" value="#{ProformaMB.fechaVencimiento}" mindate="#{ProformaMB.fechaActual}"/>
                         </h:panelGrid>
                     </p:panel>
 

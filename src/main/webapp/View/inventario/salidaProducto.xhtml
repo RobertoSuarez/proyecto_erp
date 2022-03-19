@@ -27,7 +27,7 @@
                                 <div class="p-grid p-justify-around">
                                     <div class="p-col-6 p-md-12 p-lg-5">
                                         <div class="p-grid">
-                                            <div class="p-col-12">
+                                            <div class="p-col-6">
                                                 <p:outputLabel value="Nro de comprobante afectado:"></p:outputLabel>
                                                 <h:form id="vista-comprobante">
 
@@ -65,8 +65,10 @@
                                                 </p:calendar>
                                             </div>
 
- 
-
+                                            <div class="p-col-12">
+                                                <p:outputLabel value="Observacion: *"></p:outputLabel>
+                                                <p:inputText placeholder="Informacion del motivo para la transación" id="observacionSalida" value="#{SalidaMB.salida.observacion}" /> 
+                                            </div>
 
                                         </div>
                                     </div>
@@ -99,7 +101,7 @@
 
                                             <div class="p-col-2">
                                                 <p:outputLabel value="Stock en inventario:"></p:outputLabel>
-                                                <p:inputText id="stockProductoSelect" disabled="true" value="#{SalidaMB.producto.max_stock}"></p:inputText>
+                                                <p:inputText id="stockProductoSelect" disabled="true" value="#{SalidaMB.producto.cantidad}"></p:inputText>
                                             </div>
                                             <div class="p-col-2">
                                                 <p:outputLabel value="Costo:"></p:outputLabel>
@@ -130,9 +132,9 @@
                                                               value="#{SalidaMB.listaDetalle}" 
                                                               selection="#{SalidaMB.productoSeleccionado}" 
                                                               rowKey="#{ListaItems.articuloInventario.id}" 
-                                                              
+
                                                               paginator="true" 
-                                                              
+
                                                               id="itemsEntradaDetalle"
                                                               >
 
@@ -265,7 +267,7 @@
                                     <p:column headerText="Seleccionar" >
                                         <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
                                                          actionListener="#{SalidaMB.SeleccionarProducto(ListaProductos)}" 
-                                                         update="salidaForm"
+                                                         update="salidaForm:buscar-producto-vista salidaForm:buscar-producto-vista:NombreProducto salidaForm:codigoProductoSelect salidaForm:cantidadFacturadaProductoSelect salidaForm:cantidadProductoSelect salidaForm:stockProductoSelect salidaForm:costoProductoSelect"
                                                          oncomplete="PF('BuscarProducto').hide();"/>
                                     </p:column>
 
@@ -329,6 +331,49 @@
                                     <p:column headerText="Fecha" filterStyle="display : none"                                                             
                                               filterBy="#{listaEntradasPermitidas.fecha}" >
                                         <h:outputText value="#{listaEntradasPermitidas.fecha}" >
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:dialog>
+                        
+                        
+                                                <!-- Dialogo para la busqueda de bodegas -->
+                        <p:dialog header="Busqueda de Bodegas" widgetVar="BuscarBodega" id="busquedaBodega"
+                                  minHeight="600" width="70%" showEffect="fade">
+                            <h:form>
+                                <p:dataTable widgetVar="TablaBuscarBodega" var="ListaBodegas" id="listaBodegas"  value="#{EntradaMB.listaBodegas}" 
+                                             selection="#{EntradaMB.bodegaSeleccionada}" rowKey="#{ListaBodegas.cod}" 
+                                             scrollable="true" scrollHeight="250">
+
+                                    <f:facet name="header">
+                                        <div class="p-d-flex p-jc-between p-ai-center">
+                                            <span style="font-weight: bold; margin-right: 6px; font-size: 18px">Bodegas Registradas</span>
+                                            <span class="filter-container ui-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <p:inputText id="globalFilter" onkeyup="PF('TablaBuscarBodega').filter()" placeholder="Buscar"/>
+                                            </span>
+                                        </div>
+                                    </f:facet>
+                                    <p:column headerText="Seleccionar" >
+                                        <p:commandButton icon="pi pi-check" styleClass="rounded-button"  process="@this" 
+                                                         actionListener="#{EntradaMB.SeleccionarBodega(ListaBodegas)}" 
+                                                         update="salidaForm"
+                                                         oncomplete="PF('BuscarBodega').hide();" />
+
+                                    </p:column>
+
+                                    <p:column headerText="Cod">
+                                        <h:outputText value="#{ListaBodegas.cod}" />
+                                    </p:column>
+
+                                    <p:column headerText="Nombre de Bodega" filterStyle="display : none"                                                             
+                                              filterBy="#{ListaBodegas.nomBodega}" >
+                                        <h:outputText value="#{ListaBodegas.nomBodega}" />
+                                    </p:column>
+
+                                    <p:column headerText="Descripcion">
+                                        <h:outputText value="#{ListaBodegas.direccion}" >
                                         </h:outputText>
                                     </p:column>
                                 </p:dataTable>

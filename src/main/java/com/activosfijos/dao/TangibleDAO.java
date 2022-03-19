@@ -56,19 +56,17 @@ public class TangibleDAO {
         Conexion conexion = new Conexion();
         try{
         String consulta = String.format("UPDATE public.activos_fijos\n"
-                + "	SET detalle_de_activo='%s', valor_adquisicion='%s', fecha_adquisicion='%s', idproveedor='%s', numero_factura='%s'\n"
-                + "	WHERE id_activo_fijo='%s';", li.getDetalle_de_activo(), li.getValor_adquisicion(),
+                + "	SET detalle_de_activo='%s', valor_adquisicion= %s, fecha_adquisicion='%s', idproveedor= %s, numero_factura='%s' \n"
+                + "	WHERE id_activo_fijo= %s;", li.getDetalle_de_activo(), li.getValor_adquisicion(),
                 li.getFecha_adquisicion(), li.getIdproveedor(), li.getNumero_factura(), li.getId_activo_fijo());
         //String idactivofijo = conexion.obtenerValor(consulta, 1);
         conexion.ejecutarSql(consulta);
         String consulta2 = String.format("UPDATE public.fijo_tangible_depreciable\n"
-                + "	SET  depreciacion_meses='%s',  porcentaje_depreciacion='%s',  id_subcuenta='%s' \n"
-                + "	WHERE id_activo_fijo='%s';", li.getDepreciacion_meses(),
-                li.getPorcentaje_depreciacion(), li.getSubCuenta().getId(), li.getId_activo_fijo());
+                + "	SET  depreciacion_meses= %s,  porcentaje_depreciacion= %s,  id_subcuenta= %s,  cuota_depresiacion= %s \n"
+                + "	WHERE id_activo_fijo=%s;", li.getDepreciacion_meses(),
+                li.getPorcentaje_depreciacion(), li.getSubCuenta().getId(), li.getCuota_depresiacion(), li.getId_activo_fijo());
         conexion.ejecutarSql(consulta2);
-        String consulta3 = String.format("select *from listardepreciables();");
-        conexion.ejecutarSql(consulta3);
-        System.out.println("update 1: " + consulta + "\n update 2: " + consulta2 + "\n funcion : " + consulta3);
+        //System.out.println("update 1: " + consulta + "\n update 2: " + consulta2 + "\n funcion : " + consulta3);
         return true;
         } catch (Exception e) {
             return false;

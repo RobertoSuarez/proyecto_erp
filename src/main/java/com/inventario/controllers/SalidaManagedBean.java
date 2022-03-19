@@ -9,6 +9,7 @@ import com.cuentasporpagar.models.Proveedor;
 import com.inventario.DAO.ArticulosInventarioDAO;
 import com.inventario.DAO.BodegaDAO;
 import com.inventario.DAO.EntradaDao;
+import com.inventario.DAO.EntradaDetalleDAO;
 
 import com.inventario.DAO.SalidaDao;
 import com.inventario.DAO.SalidaDetalleDao;
@@ -76,11 +77,19 @@ public class SalidaManagedBean implements Serializable {
     private Boolean SiICE;
     private Boolean SiIVA;
 
+    private Bodega bodega;
+    private BodegaDAO bodegaDAO;
+    private int codBodega;
+
     private String numeroComprobante;
     private Date fechaComprobante;
 
+    private EntradaDetalleInventario detalleEntrada;
+    private EntradaDetalleDAO entradaDetalleDAO;
+    
     private EntradaDetalleInventario productoSeleccionado;
     private Proveedor proveedorSeleccionado;
+    private Bodega bodegaSeleccionada;
 
     private EntradaInventario entradaSeleccionada;
 
@@ -140,6 +149,9 @@ public class SalidaManagedBean implements Serializable {
 
         this.fechaComprobante = new Date();
 
+        this.bodega = new Bodega();
+        this.bodegaDAO = new BodegaDAO();
+
         this.producto = new ArticulosInventario();
         this.productoDao = new ArticulosInventarioDAO();
         this.codigoProducto = 0;
@@ -166,8 +178,13 @@ public class SalidaManagedBean implements Serializable {
         this.listaEntradas = entradaDAO.getEntradas();
         this.listaEntradasPermitidas = entradaDAO.getEntradasPermitidas();
 
+        this.detalleEntrada = new EntradaDetalleInventario();
+        this.entradaDetalleDAO = new EntradaDetalleDAO();
+        
         this.productoSeleccionado = null;
         this.proveedorSeleccionado = null;
+        
+        this.bodegaSeleccionada = null;
 
         this.entradaSeleccionada = null;
 
@@ -291,6 +308,7 @@ public class SalidaManagedBean implements Serializable {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("FECHA", dateFormat.format(salida.getFecha()));
             parametros.put("COMPROBANTE", salida.getNumComprobante());
+            parametros.put("OBSERVACION", salida.getObservacion());
             /*parametros.put("NOMBREBODEGA",  );*/
             parametros.put("NOMBREBODEGA", bod.getNomBodega());
             parametros.put("RUCPROVEEDOR", pro.getRuc());
@@ -306,7 +324,7 @@ public class SalidaManagedBean implements Serializable {
             File filetext = new File(FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .getRealPath("PlantillasReportes/entradas.jasper"));
+                    .getRealPath("PlantillasReportes/reportesalidas.jasper"));
 
             // llenamos la plantilla con los datos.
             /*JasperPrint jasperPrint = JasperFillManager.fillReport(
@@ -341,7 +359,7 @@ public class SalidaManagedBean implements Serializable {
             HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
                     .getExternalContext().getResponse();
             httpServletResponse.addHeader("Content-disposition",
-                    "attachment; filename=" + "facturaEntradas" + ".pdf");
+                    "attachment; filename=" + "reporteSalidas" + ".pdf");
             try ( ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
                 JasperExportManager.exportReportToPdfStream(verSalida(idSalida), servletOutputStream);
                 servletOutputStream.flush();
@@ -359,7 +377,7 @@ public class SalidaManagedBean implements Serializable {
 
         try {
 
-            if (this.producto.getId() > 0) {
+             if (this.producto.getId() > 0) {
                 int cantidadFacturada = this.cantidadFacturada;
                 int _cantidad = this.cantidadReportada;
                 if (cantidadFacturada < _cantidad) {
@@ -381,14 +399,14 @@ public class SalidaManagedBean implements Serializable {
                             if (productoid == 0) {
                                 productoid = 0;
                                 double iceProducto, ivaProducto;
-                                iceProducto = this.producto.getCosto() * this.cantidadReportada * ((double) this.producto.getIceproducto()/ 100);
+                                iceProducto = this.producto.getCosto() * this.cantidadReportada * ((double) this.producto.getIceproducto() / 100);
                                 ivaProducto = this.producto.getCosto() * 0.12 * this.cantidadReportada;
                                 //Ingreso de valores al detalle de entrada
                                 SalidaDetalleInventario detalle = new SalidaDetalleInventario();
                                 detalle.setIdArticulo(this.producto.getId());
                                 detalle.setCant(this.cantidadReportada);
-                                detalle.setIva(Precision.round(ivaProducto, 2) );
-                                detalle.setIce(Precision.round(iceProducto, 2) );
+                                detalle.setIva(Precision.round(ivaProducto, 2));
+                                detalle.setIce(Precision.round(iceProducto, 2));
                                 detalle.setCosto(this.producto.getCosto());
                                 detalle.setSubtotal(this.producto.getCosto() * this.cantidadReportada);
                                 detalle.setNombreProducto(nombreProducto);
@@ -428,8 +446,8 @@ public class SalidaManagedBean implements Serializable {
                             SalidaDetalleInventario detalle = new SalidaDetalleInventario();
                             detalle.setIdArticulo(this.producto.getId());
                             detalle.setCant(this.cantidadReportada);
-                            detalle.setIva(Precision.round(ivaProducto, 2) );
-                            detalle.setIce(Precision.round(iceProducto, 2) );
+                            detalle.setIva(Precision.round(ivaProducto, 2));
+                            detalle.setIce(Precision.round(iceProducto, 2));
                             detalle.setCosto(this.producto.getCosto());
                             detalle.setSubtotal(this.producto.getCosto() * this.cantidadReportada);
                             detalle.setNombreProducto(nombreProducto);
@@ -519,6 +537,7 @@ public class SalidaManagedBean implements Serializable {
                     salidaActual.setIdProveedor(this.entrada.getIdProveedor());
                     salidaActual.setIdBodega(this.entrada.getIdBodega());
                     salidaActual.setNumComprobante(this.numeroComprobante);
+                    salidaActual.setObservacion(this.salida.getObservacion());
                     salidaActual.setFecha(currentDate2);
 
                     //Verificación en consola
@@ -547,7 +566,7 @@ public class SalidaManagedBean implements Serializable {
                             System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
                             System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
                             //          daoDetail.GuardarEntrada(this.listaDetalle);
-                            daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice);
+                            daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice, this.entrada.getIdBodega());
                             listSize += 1;
                         }
 
@@ -568,7 +587,7 @@ public class SalidaManagedBean implements Serializable {
         this.numeroComprobante = entrada.getNumComprobante();
         this.proveedorNombre = entrada.getNombreProveedor();
 
-        this.listaProductos = productoDao.getArticulos(entrada.getIdProveedor(), numeroComprobante);
+        this.listaProductos = productoDao.getArticulos(entrada.getIdProveedor(), numeroComprobante, entrada.getIdBodega());
         this.entrada = entrada;
 
     }
@@ -592,11 +611,10 @@ public class SalidaManagedBean implements Serializable {
             this.codigoProducto = pr.getId();
             this.nombreProducto = pr.getDescripcion();
             this.precioProducto = pr.getCosto();
-            this.cantidadFacturada = pr.getCantidad();
-            if (this.SiICE) {
-                this.ice = (int) (pr.getCosto() * 15 / 100);
-            }
-            this.iva = (int) (pr.getCosto() * 12 / 100);
+            this.cantidadFacturada = pr.getCantidadFacturada();
+            
+            
+
 
             this.producto = pr;
         } catch (Exception ex) {
@@ -949,7 +967,5 @@ public class SalidaManagedBean implements Serializable {
     public void setListaEntradasPermitidas(List<EntradaInventario> listaEntradasPermitidas) {
         this.listaEntradasPermitidas = listaEntradasPermitidas;
     }
-    
-    
 
 }

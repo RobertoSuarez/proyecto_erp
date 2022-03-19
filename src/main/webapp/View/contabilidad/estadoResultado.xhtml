@@ -118,7 +118,9 @@
                                       responsivePriority="1">
                                 <h:outputText
                                     value="#{pYg.saldo}"
-                                    rendered="#{balanceGeneralMB.getBoldEX(pYg.nombre)}" />
+                                    rendered="#{balanceGeneralMB.getBoldEX(pYg.nombre)}" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -128,7 +130,9 @@
                                     value="#{pYg.saldo}"
                                     rendered="#{balanceGeneralMB.getBoldE
                                                 (pYg.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -138,7 +142,9 @@
                                     value="#{pYg.saldo}"
                                     rendered="#{balanceGeneralMB.getBoldSub
                                                 (pYg.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -148,7 +154,9 @@
                                     value="#{pYg.saldo}"
                                     rendered="#{balanceGeneralMB.getBold
                                                 (pYg.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
@@ -158,7 +166,9 @@
                                         <p><h:outputText 
                                                 id="sumaPP"
                                                 value=
-                                                "#{estadoResultadolMB.ingresos}"/>
+                                                "#{estadoResultadolMB.ingresos}">
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
                                         </p>
                                     </div>
                                 </div>
@@ -194,7 +204,9 @@
                                       responsivePriority="1">
                                 <h:outputText
                                     value="#{egresos.saldo}"
-                                    rendered="#{balanceGeneralMB.getBoldEX(egresos.nombre)}" />
+                                    rendered="#{balanceGeneralMB.getBoldEX(egresos.nombre)}" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -204,7 +216,9 @@
                                     value="#{egresos.saldo}"
                                     rendered="#{balanceGeneralMB.getBoldE
                                                 (egresos.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -214,7 +228,9 @@
                                     value="#{egresos.saldo}"
                                     rendered="#{balanceGeneralMB.getBoldSub
                                                 (egresos.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -224,7 +240,9 @@
                                     value="#{egresos.saldo}"
                                     rendered="#{balanceGeneralMB.getBold
                                                 (egresos.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
 
 
@@ -236,7 +254,9 @@
                                         <p><h:outputText 
                                                 id="sumaPP" 
                                                 value=
-                                                "#{estadoResultadolMB.egresos}"/>
+                                                "#{estadoResultadolMB.egresos}">
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
                                         </p>
                                     </div>
                                 </div>
@@ -270,7 +290,9 @@
                                       responsivePriority="1">
                                 <h:outputText
                                     value="#{compra.saldo}"
-                                    rendered="#{balanceGeneralMB.getBoldEX(compra.nombre)}" />
+                                    rendered="#{balanceGeneralMB.getBoldEX(compra.nombre)}" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText>
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -280,7 +302,9 @@
                                     value="#{compra.saldo}"
                                     rendered="#{balanceGeneralMB.getBoldE
                                                 (compra.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -290,7 +314,9 @@
                                     value="#{compra.saldo}"
                                     rendered="#{balanceGeneralMB.getBoldSub
                                                 (compra.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <p:column
                                 colspan="2"
@@ -300,7 +326,9 @@
                                     value="#{compra.saldo}"
                                     rendered="#{balanceGeneralMB.getBold
                                                 (compra.nombre)}" 
-                                    style="font-weight: bold" /> 
+                                    style="font-weight: bold" >
+                                    <f:convertNumber pattern="#0.00" />
+                                </h:outputText> 
                             </p:column>
                             <f:facet name="footer">
                                 <div class="p-grid">
@@ -310,7 +338,9 @@
                                         <p><h:outputText
                                                 id="sumaPP" 
                                                 value=
-                                                "#{estadoResultadolMB.ventas}"/>
+                                                "#{estadoResultadolMB.ventas}">
+                                                <f:convertNumber pattern="#0.00" />
+                                            </h:outputText>
                                         </p>
                                     </div>
                                 </div>
@@ -323,7 +353,9 @@
                             <div class="p-col-3" style="text-align: left">
                                 <p><h:outputText 
                                         id="sumaPP"
-                                        value="#{estadoResultadolMB.total}" style="font-weight: bold"/>
+                                        value="#{estadoResultadolMB.total}" style="font-weight: bold">
+                                        <f:convertNumber pattern="#0.00" />
+                                    </h:outputText>
                                 </p>
                             </div>
                         </div>

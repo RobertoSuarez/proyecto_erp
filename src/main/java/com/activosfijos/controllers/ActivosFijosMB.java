@@ -7,6 +7,7 @@ package com.activosfijos.controllers;
 
 import com.activosfijos.dao.DepreciacionActivosFijosDAO;
 import com.activosfijos.dao.NoDepreciableDAO;
+import com.activosfijos.dao.ParametroActivoDepreciableDAO;
 import com.activosfijos.dao.TangibleDAO;
 import java.io.Serializable;
 import com.activosfijos.model.ActivosFijos;
@@ -15,11 +16,13 @@ import com.activosfijos.model.ActivoNoDepreciable;
 import com.activosfijos.model.DepreciacionActivosFijos;
 import com.activosfijos.model.ListaDepreciable;
 import com.activosfijos.model.ListaNoDepreciable;
+import com.activosfijos.model.ParametroActivoDepreciable;
 import com.contabilidad.dao.SubCuentaDAO;
 import com.contabilidad.models.SubCuenta;
 import com.cuentasporpagar.models.Proveedor;
 import java.sql.Array;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,11 +49,13 @@ public class ActivosFijosMB implements Serializable {
     TangibleDAO tangibleDAO = new TangibleDAO();
     private SubCuentaDAO subCuentaDAO;
     private DepreciacionActivosFijosDAO depreciacionActivosFijosDAO;
+    private ParametroActivoDepreciableDAO parametroActivoDepreciableDAO;
     NoDepreciableDAO nodepreciabledao = new NoDepreciableDAO();
     ListaDepreciable listadepreciable = new ListaDepreciable();
     ListaNoDepreciable listanodepreciable = new ListaNoDepreciable();
     private DepreciacionActivosFijos depreciacionActivosFijos;
     private List<ListaDepreciable> listamesesD;
+    private List<ListaDepreciable> listaDepreciable;
     private List<DepreciacionActivosFijos> depreciacionesActivosFijos;
     List<SubCuenta> subCuentaList;
     int idactivofijo;
@@ -60,12 +65,19 @@ public class ActivosFijosMB implements Serializable {
     String infMsj = "Exito";
 
     public ActivosFijosMB() {
+        this.parametroActivoDepreciableDAO = new ParametroActivoDepreciableDAO();
         this.listamesesD = new ArrayList<>();
         this.depreciacionesActivosFijos = new ArrayList<>();
         this.subCuentaDAO = new SubCuentaDAO();
         this.depreciacionActivosFijosDAO = new DepreciacionActivosFijosDAO();
         this.depreciacionActivosFijos = new DepreciacionActivosFijos();
         this.subCuentaList = subCuentaDAO.getSubCuentas("Activos fijos tangibles depreciables");
+        try {
+            this.listaDepreciable = tangibleDAO.Listardepreciable();
+        } catch (Exception e) {
+            this.listaDepreciable = new ArrayList<>();
+            System.out.println(e.getMessage());
+        }
     }
 
     public List<ListaDepreciable> getListamesesD() {
@@ -74,6 +86,14 @@ public class ActivosFijosMB implements Serializable {
 
     public void setListamesesD(List<ListaDepreciable> listamesesD) {
         this.listamesesD = listamesesD;
+    }
+
+    public List<ListaDepreciable> getListaDepreciable() {
+        return listaDepreciable;
+    }
+
+    public void setListaDepreciable(List<ListaDepreciable> listaDepreciable) {
+        this.listaDepreciable = listaDepreciable;
     }
 
     public String getNombre() {
@@ -177,6 +197,10 @@ public class ActivosFijosMB implements Serializable {
 //Registrar un tangible depreciable
     public void setRegistrarTangible() {
         String data = "";
+        ParametroActivoDepreciable parametro = this.parametroActivoDepreciableDAO.buscarPorCuenta(activodepreciable.getSubCuenta().getId());
+        activodepreciable.setPorcentaje_depreciacion(RedondearDosDecimales(parametro.getPorcentajeAnual() / 12));
+        activodepreciable.setCuota_depresiacion(activosFijos.getValor_adquisicion() * activodepreciable.getPorcentaje_depreciacion() / 100);
+        activodepreciable.setDepreciacion_meses(parametro.getAnios() * 12);
         TangibleDAO tangibledao = new TangibleDAO();
         try {
             if ("".equals(activosFijos.getIdproveedor())) {
@@ -210,12 +234,15 @@ public class ActivosFijosMB implements Serializable {
                 activodepreciable.setDepreciacion_meses(0);
                 activodepreciable.setPorcentaje_depreciacion(0.0);
                 activodepreciable.setCuota_depresiacion(0);
+                this.listaDepreciable = tangibleDAO.Listardepreciable();
                 setNombre("");
                 PrimeFaces.current().ajax().update(":formnuevoDepreciable:panelnuevodepreciable");
 
             }
 
         } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
         System.out.println(data);
@@ -225,6 +252,10 @@ public class ActivosFijosMB implements Serializable {
 
     public void setEditarTangibles() {
         String data = "";
+        ParametroActivoDepreciable parametro = this.parametroActivoDepreciableDAO.buscarPorCuenta(listadepreciable.getSubCuenta().getId());
+        listadepreciable.setPorcentaje_depreciacion(RedondearDosDecimales(parametro.getPorcentajeAnual() / 12));
+        listadepreciable.setCuota_depresiacion(listadepreciable.getValor_adquisicion() * listadepreciable.getPorcentaje_depreciacion() / 100);
+        listadepreciable.setDepreciacion_meses(parametro.getAnios() * 12);
         TangibleDAO tangibledao = new TangibleDAO();
 
         try {
@@ -257,6 +288,7 @@ public class ActivosFijosMB implements Serializable {
                 activodepreciable.setDepreciacion_meses(0);
                 activodepreciable.setPorcentaje_depreciacion(0.0);
                 listadepreciable.setProveedor("");
+                this.listaDepreciable = tangibleDAO.Listardepreciable();
                 setNombre("");
                 PrimeFaces.current().ajax().update(":editarDepreciable:paneleditarpreciableeditar");
 
@@ -502,7 +534,7 @@ public class ActivosFijosMB implements Serializable {
         listamesesD = new ArrayList<>();
         double cuota = MesesDepre.getCuota_depresiacion();
         double valorDepresiacion = MesesDepre.getValor_adquisicion();
-        
+
         int meses_depre = MesesDepre.getDepreciacion_meses();
         for (int x = 0; x <= meses_depre; x++) {
             if (x == 0) {
@@ -512,29 +544,29 @@ public class ActivosFijosMB implements Serializable {
             }
 
         }
-     
+
     }
-    
-    public boolean ActivarBotonDepreciaciones(ListaDepreciable depreciable){
+
+    public boolean ActivarBotonDepreciaciones(ListaDepreciable depreciable) {
         return (depreciable.getSubCuenta().getId() > 0) && (depreciable.isFaltanDepreciacion());
     }
-    
-    public void ObtenerDepreciaciones(ListaDepreciable listaDepreciable){
+
+    public void ObtenerDepreciaciones(ListaDepreciable listaDepreciable) {
         this.listadepreciable = listaDepreciable;
         this.depreciacionesActivosFijos = this.depreciacionActivosFijosDAO.Listar(listaDepreciable);
     }
-    
-    public void ObtenerSiguienteDepreciacion(ListaDepreciable listaDepreciable){
+
+    public void ObtenerSiguienteDepreciacion(ListaDepreciable listaDepreciable) {
         this.depreciacionActivosFijos = this.depreciacionActivosFijosDAO.ObtenerSiguienteDepreciacion(listaDepreciable);
     }
-    
-    public void GuardarDepreciacion(){
+
+    public void GuardarDepreciacion() {
         try {
             int resultado = this.depreciacionActivosFijosDAO.insertar(this.depreciacionActivosFijos);
-            if(resultado > 0){
+            if (resultado > 0) {
                 mostrarMensajeInformacion("Se registro la depreciación correctamente");
                 resultado = this.depreciacionActivosFijosDAO.insertarAsiento(this.depreciacionActivosFijos);
-                if(resultado > 0){
+                if (resultado > 0) {
                     mostrarMensajeInformacion("Se registro el asiento contable correctamente");
                 } else {
                     mostrarMensajeError("No fue posible registrar asiento contable");
@@ -547,12 +579,13 @@ public class ActivosFijosMB implements Serializable {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
+
     /**
-     * Evento que muestra el mensaje de informaciòn en la interfaz
-     * de que ha sido Éxitoso el mensaje 
-     * @param mensaje Objeto que almacena la información
-     * ha ser mostrada en la interfaz.
+     * Evento que muestra el mensaje de informaciòn en la interfaz de que ha
+     * sido Éxitoso el mensaje
+     *
+     * @param mensaje Objeto que almacena la información ha ser mostrada en la
+     * interfaz.
      */
     public void mostrarMensajeInformacion(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", mensaje);
@@ -560,10 +593,11 @@ public class ActivosFijosMB implements Serializable {
     }
 
     /**
-     * Evento que muestra el mensaje de informaciòn en la interfaz
-     * de que ha sido con Error el mensaje 
-     * @param mensaje Objeto que almacena la información
-     * ha ser mostrada en la interfaz.
+     * Evento que muestra el mensaje de informaciòn en la interfaz de que ha
+     * sido con Error el mensaje
+     *
+     * @param mensaje Objeto que almacena la información ha ser mostrada en la
+     * interfaz.
      */
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
@@ -576,5 +610,9 @@ public class ActivosFijosMB implements Serializable {
 
     public String darFormato(Date fecha, String formato) {
         return fecha != null ? new SimpleDateFormat(formato).format(fecha) : "";
+    }
+    
+    private double RedondearDosDecimales(double valor){
+        return Math.round(valor*100.0)/100.0;
     }
 }

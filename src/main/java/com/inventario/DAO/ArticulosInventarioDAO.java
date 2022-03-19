@@ -89,6 +89,37 @@ public class ArticulosInventarioDAO {
         return ListaInv;
     }
 
+    public List<ArticulosInventario> getArticulosEntradas(int idBodega) {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("select a.id, a.nombre, a.id_categoria, a.id_tipo, a.descripcion, a.min_stock, a.max_stock, ab.cant, a.costo, a.ice  \n"
+                + " from articulos a inner join articulo_bodega ab on a.id = ab.id_articulo\n"
+                + "inner join bodega b on b.cod = ab.id_bodega \n"
+                + "where b.cod =  " + idBodega + "\n"
+                + "order by a.id");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaInv.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("id_categoria"),
+                        resultSet.getInt("id_tipo"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getInt("min_stock"),
+                        resultSet.getInt("max_stock"),
+                        resultSet.getInt("cant"),
+                        resultSet.getFloat("costo"),
+                        resultSet.getFloat("ice")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaInv;
+    }
+
     public List<ArticulosInventario> getArticulos(int idProveedor, String numeroComprobante) {
         List<ArticulosInventario> ListaInv = new ArrayList<>();
         String sql = String.format("select distinct "
@@ -109,6 +140,7 @@ public class ArticulosInventarioDAO {
                 articulo.setDescripcion(resultSet.getString("descripcion"));
                 articulo.setId_bodega(resultSet.getInt("id_bodega"));
                 articulo.setCantidad(resultSet.getInt("cantidad"));
+      
                 articulo.setCosto(resultSet.getInt("costo"));
                 articulo.setIva(resultSet.getInt("iva"));
                 articulo.setIce(resultSet.getInt("ice"));
@@ -124,10 +156,50 @@ public class ArticulosInventarioDAO {
         return ListaInv;
     }
 
+    public List<ArticulosInventario> getArticulos(int idProveedor, String numeroComprobante, int idBodega) {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("select  a.id, a.id_categoria,a.nombre, a.id_tipo, a.descripcion,ab.id_bodega,ab.cant, entrada_detalle.cant as cantidadF, a.costo, a.ice, a.max_stock \n"
+                + "from articulos a\n"
+                + "inner join articulo_bodega ab on a.id = ab.id_articulo\n"
+                + "inner join bodega b on b.cod = ab.id_bodega\n"
+                + "inner join entrada_detalle on cod_articulo = a.id\n"
+                + "inner join entrada on entrada.cod = entrada_detalle.id_entrada\n"
+                + "where entrada.num_comprobante = '" + numeroComprobante + "' and entrada.id_proveedor = " + idProveedor + " and ab.id_bodega =" + idBodega + ";");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ArticulosInventario articulo = new ArticulosInventario();
+                articulo.setId(resultSet.getInt("id"));
+                articulo.setId_categoria(resultSet.getInt("id_categoria"));
+                articulo.setNombre(resultSet.getString("nombre"));
+                articulo.setId_tipo(resultSet.getInt("id_tipo"));
+                articulo.setDescripcion(resultSet.getString("descripcion"));
+                articulo.setId_bodega(resultSet.getInt("id_bodega"));
+                articulo.setCantidad(resultSet.getInt("cant"));
+                articulo.setCantidadFacturada(resultSet.getInt("cantidadF"));
+                articulo.setCosto(resultSet.getInt("costo"));
+                articulo.setIceproducto(resultSet.getInt("ice"));
+                articulo.setMax_stock(resultSet.getInt("max_stock"));
+                ListaInv.add(articulo);
+                
+                
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaInv;
+    }
+
     public List<ArticulosInventario> getArticulos() {
         List<ArticulosInventario> ListaInv = new ArrayList<>();
-        String sql = String.format("select a.id, a.nombre,a.descripcion,b.nombre_bodega,a.unidadmedida, a.cantidad, a.costo\n"
-                + "from articulos a inner join bodega b on a.id_bodega=b.cod order by a.id");
+        String sql = String.format("select a.id, a.nombre,a.descripcion,b.nombre_bodega,a.id_unidadmedida, ab.cant, a.costo\n"
+                + "                from articulos a inner join articulo_bodega ab on a.id = ab.id_articulo\n"
+                + "				\n"
+                + "				inner join bodega b on b.cod = ab.id_bodega order by a.id");
         try {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
@@ -137,8 +209,7 @@ public class ArticulosInventarioDAO {
                 articulo.setNombre(resultSet.getString("nombre"));
                 articulo.setDescripcion(resultSet.getString("descripcion"));
                 articulo.setNomBodega(resultSet.getString("nombre_bodega"));
-                articulo.setUnidadMedida(resultSet.getString("unidadmedida"));
-                articulo.setCantidad(resultSet.getInt("cantidad"));
+                articulo.setCantidad(resultSet.getInt("cant"));
                 articulo.setCoast(resultSet.getFloat("costo"));
                 ListaInv.add(articulo);
             }
@@ -371,7 +442,7 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
-                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "',"+false+","+false+")";
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "'," + false + "," + false + ")";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -389,7 +460,7 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
-                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "',"+false+","+false+")";
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "'," + false + "," + false + ")";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -398,10 +469,9 @@ public class ArticulosInventarioDAO {
         }
 
     }
-    
-    
+
     //insertar un servicio
-    public void insertServicioStockeableIva(ArticulosInventario a,boolean iva) {
+    public void insertServicioStockeableIva(ArticulosInventario a, boolean iva) {
         try {
 
             this.conexion.conectar();
@@ -409,7 +479,7 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
-                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+true+")";
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "'," + true + "," + true + ")";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -418,6 +488,7 @@ public class ArticulosInventarioDAO {
         }
 
     }
+
     public void insertServicioStockeablesinIva(ArticulosInventario a) {
         try {
 
@@ -426,7 +497,7 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
-                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+true+")";
+                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "'," + true + "," + true + ")";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -435,7 +506,8 @@ public class ArticulosInventarioDAO {
         }
 
     }
-    public void insertServicioNoStockeablesIva(ArticulosInventario a,boolean iva) {
+
+    public void insertServicioNoStockeablesIva(ArticulosInventario a, boolean iva) {
         try {
 
             this.conexion.conectar();
@@ -443,7 +515,7 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
-                    + "," + 1 + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+false+")";
+                    + "," + 1 + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "'," + true + "," + false + ")";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -452,7 +524,7 @@ public class ArticulosInventarioDAO {
         }
 
     }
-    
+
     public void insertServicioNoStockeablesinIva(ArticulosInventario a) {
         try {
 
@@ -461,7 +533,7 @@ public class ArticulosInventarioDAO {
                     + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
                     + "values\n"
                     + "('" + a.getNombre() + "'," + 4 + "," + 4 + " ,'" + a.getDescripcion() + "'," + 4 + ""
-                    + "," + 1 + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "',"+true+","+false+")";
+                    + "," + 1 + ",'" + a.getCoast() + "',0,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'Unidades','" + a.getCoast() + "'," + true + "," + false + ")";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -470,7 +542,6 @@ public class ArticulosInventarioDAO {
         }
 
     }
-    
 
     public List<ArticulosInventario> obtenerDatos(int id) {
         List<ArticulosInventario> listDatosArticulos = new ArrayList<>();

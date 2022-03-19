@@ -4,6 +4,7 @@ import com.cuentasporcobrar.models.Abono;
 import com.cuentasporcobrar.models.Facturas_Pendientes;
 import com.cuentasporpagar.models.Factura;
 import com.cuentasporcobrar.daos.PersonaDAO;
+import com.cuentasporcobrar.models.Cheque;
 import com.cuentasporcobrar.models.Persona;
 import com.global.config.Conexion;
 import java.io.Serializable;
@@ -418,6 +419,21 @@ public class AbonoDAO implements Serializable {
             conexion.desconectar();
         }
         return facturas;
+    }
+    
+    public void ingresarCheque(Cheque cheq, double valor){
+        String sentenciaSql="SELECT * from public.registrar_cheque('"+String.valueOf(cheq.getCodBanco()) 
+                +"',"+String.valueOf(cheq.getIdVenta())+",'"+String.valueOf(cheq.getFecha())
+                +"','"+String.valueOf(cheq.getNumeroDeCuenta())+"','Pendiente',"+String.valueOf(valor)+")";
+        try{
+            this.conexion.conectar();
+            this.conexion.ejecutarSql(sentenciaSql);
+            System.out.println(sentenciaSql);
+        }catch(Exception e){
+            e.toString();
+        }finally{
+            this.conexion.desconectar();
+        }
     }
 
     public int insertarNuevoCobro(Abono abon, int idCliente, int idPlanPago) {

@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+
+            <ui:define name="content">
+
+                <ui:include src="menuVentas.xhtml"/>
+
+                <h:form id="listaDeProforma" >
+                    <br/><br/><br/><br/>
+                    <p:dataTable var="Lista" 
+                                 id="itemsTable" 
+                                 value="#{ListaProformaMB.listaProformasPendientes}"
+                                 paginator="true" 
+                                 resizableColumns="true" 
+                                 class="p-mt-3"
+                                 rows="5" 
+                                 paginatorPosition="bottom">
+                        <p:column headerText="Codigo proforma" width="5%">
+                            <h:outputText value="#{Lista.id_proforma}" />
+                        </p:column>
+                        <p:column headerText="Cliente" width="15%">
+                            <h:outputText value="#{Lista.nombreCliente}"  />
+                        </p:column>
+                        <p:column headerText="Estado" width="10%">
+                            <h:outputText value="#{Lista.estado == 'P' ? 'Pendiente' : Lista.estado == 'A' ? 'Aprobada' : 'Rechazada'}" />
+                        </p:column>
+                        <p:column headerText="Fecha creacion" width="10%" >
+                            <h:outputText value="#{Lista.fecha_creacion}"/>
+                        </p:column>
+                        <p:column headerText="Vencimiento" width="10%" >
+                            <h:outputText value="#{Lista.fecha_expiracion}"/>
+                        </p:column>
+                        <p:column headerText="Total" width="7%" >
+                            <h:outputText value="#{Lista.totalproforma}" />
+                        </p:column>
+                        <p:column headerText="Acciones" width="35%">
+                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" update=":listaDeProforma itemsTable" 
+                                             actionListener="#{ListaProformaMB.aceptarProforma(Lista)}" rendered="#{rolventMB.rendered()}" process="@this">
+                                <p:confirm header="Eliminar regla" message="¿Desea aceptar esta proforma?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"
+                                             update=":listaDeProforma itemsTable" actionListener="#{ListaProformaMB.rechazarProforma(Lista)}"
+                                             rendered="#{rolventMB.rendered()}" style="margin-left: 20px;" process="@this">
+                                <p:confirm header="Eliminar regla" message="¿Desea rechazar esta proforma?" icon="pi pi-exclamation-triangle"/>
+                            </p:commandButton>
+                            <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
+                                             onclick="PF('DetalleProforma').show()" style="margin-left: 20px;" update="datosFactura" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-danger"/>
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes ui-button-success" />
+                    </p:confirmDialog>
+
+                </h:form>
+
+
+                <p:dialog widgetVar="DetalleProforma" width="70%" height="80%" >
+                    <h:form id="datosFactura">
+                        <h2>Detalle proforma: <p:outputLabel value="#{ListaProformaMB.proformaActual.id_proforma}" /></h2>
+                        <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Nombre:" />
+                                <p:outputLabel value="#{ListaProformaMB.proformaActual.nombreCliente}" />
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:dataTable var="FacturaDetailTB" id="detalleTB" value="#{ListaProformaMB.listaDetalle}">
+                            <p:column headerText="Codigo" width="10%">
+                                <h:outputText value="#{FacturaDetailTB.codigoProducto}" />
+                            </p:column>
+                            <p:column headerText="Item" width="40%">
+                                <h:outputText value="#{FacturaDetailTB.producto.nombre}" />
+                            </p:column>
+                            <p:column headerText="Cantidad" width="10%" >
+                                <h:outputText value="#{FacturaDetailTB.cantidad}" />
+                            </p:column>
+                            <p:column headerText="Precio unitario" width="10%">
+                                <h:outputText value="#{FacturaDetailTB.price}" />
+                            </p:column>
+                            <p:column headerText="Descuento" width="10%" >
+                                <h:outputText value="#{FacturaDetailTB.descuento}" />
+                            </p:column>
+                            <p:column headerText="SubTotal" width="20%" >
+                                <h:outputText value="#{FacturaDetailTB.subtotal}" />
+                            </p:column>
+
+                            <p:columnGroup type="footer" id="colgrp">
+                                <p:row id="Base12">
+                                    <p:column colspan="5" style="text-align:right" footerText="Base 12%"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.base12}" />
+                                </p:row>
+                                <p:row id="Base0">
+                                    <p:column colspan="5" style="text-align:right" footerText="Base 0%"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.base0}" />
+                                </p:row>
+                                <p:row id="Iva">
+                                    <p:column colspan="5" style="text-align:right" footerText="Iva"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.iva12}"  />
+                                </p:row>
+                                <p:row id="Ice">
+                                    <p:column colspan="5" style="text-align:right" footerText="Ice"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.ice}" />
+                                </p:row>
+                                <p:row id="Total">
+                                    <p:column colspan="5" style="text-align:right" footerText="Total:"/>
+                                    <p:column style="text-align:left" footerText="${ListaProformaMB.proformaActual.totalproforma}" id="subtotalVenta" />
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="aceptarProformaFaltante" widgetVar="proformaFaltaProd">
+                    <h:form>
+                        <h2>Algunos items en esta proforma tienen un stock menor al solicitado. Elija una opción</h2>
+                        <p:dataTable value="#{ListaProformaMB.listaProductosFaltantes}" var="itemsFaltantes">
+                            <p:column headerText="Item">
+                                <h:outputText value="#{itemsFaltantes.producto.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Cantidad solicitada">
+                                <h:outputText value="#{itemsFaltantes.cantidad}"/>
+                            </p:column>
+                            <p:column headerText="Stock disponible">
+                                <h:outputText value="#{itemsFaltantes.producto.stock}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog id="aceptarProformaCompleta" widgetVar="proformaCompleta">
+                    <h:form>
+
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
