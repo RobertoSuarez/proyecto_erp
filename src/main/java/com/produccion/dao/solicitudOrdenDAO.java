@@ -7,6 +7,7 @@ package com.produccion.dao;
 
 import com.global.config.Conexion;
 import com.inventario.models.Bodega;
+import com.produccion.models.OrdenTrabajo;
 import com.produccion.models.SolicitudOrden;
 import com.produccion.models.productosOrden;
 import java.sql.ResultSet;
@@ -31,9 +32,9 @@ public class solicitudOrdenDAO {
     public int insertarDetalleSolicitud(productosOrden producto) {
         try {
             sentenciaSql = "INSERT INTO public.registro_orden_produccion(\n"
-                    + "	codigo_orden, cantidad, unidad_medida, estado, \"Codigo_producto\")\n"
+                    + "	codigo_orden, cantidad, unidad_medida, estado, \"Codigo_producto\", codigo_formula)\n"
                     + "	VALUES (" + producto.getCodigoOrden() + "," + producto.getCantidad() + ",'" + producto.getUnidadMedida() + "','"
-                    + producto.getEstado() + "', " + producto.getCodigoProducto() + ");";
+                    + producto.getEstado() + "', " + producto.getCodigoProducto() +", " + producto.getCodigoFormula()+ ");";
             return conexion.insertar(sentenciaSql);
         } catch (Exception e) {
             return -1;
@@ -57,17 +58,20 @@ public class solicitudOrdenDAO {
 
     public List<productosOrden> getAticulosOrden() {
         List<productosOrden> ordenProducto = new ArrayList<>();
-        sentenciaSql = String.format("select distinct a.id,a.nombre,a.descripcion,a.cantidad,a.costo,t.tipo,a.unidadmedida from articulos as a\n"
-                + "	inner join tipo as t on a.id_tipo=t.cod\n"
-                + "	inner join formula as f on a.id=f.codigo_producto\n"
-                + "	where tipo='Producto Terminado'or tipo='Producto SemiElaborado'");
+        sentenciaSql = String.format("select distinct a.id,a.nombre,a.descripcion,ab.cant,a.costo,t.tipo,um.unidad_medida\n"
+                + "		 from articulos as a \n"
+                + "		 inner join articulo_bodega as ab on ab.id_articulo=a.id\n"
+                + "		 inner join tipo as t on a.id_tipo=t.cod\n"
+                + "		 inner join unidades_medidas as um on a.id_unidadmedida=um.id\n"
+                + "		 inner join formula as f on a.id=f.codigo_producto\n"
+                + "		 where tipo='Producto Terminado'or tipo='Producto SemiElaborado'");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
                 ordenProducto.add(new productosOrden(resultSet.getInt("id"),
                         resultSet.getString("nombre"), resultSet.getString("descripcion"),
-                        resultSet.getFloat("cantidad"), resultSet.getFloat("costo"), resultSet.getString("tipo"), resultSet.getString("unidadmedida")));
+                        resultSet.getFloat("cant"), resultSet.getFloat("costo"), resultSet.getString("tipo"), resultSet.getString("unidad_medida")));
 
             }
         } catch (SQLException e) {
@@ -110,5 +114,24 @@ public class solicitudOrdenDAO {
             conexion.desconectar();
         }
         return bodega;
+    }
+    public List<OrdenTrabajo> getListaFormula(int codigo_producto) {
+        List<OrdenTrabajo> ordenProducto = new ArrayList<>();
+        sentenciaSql = String.format("select f.codigo_formula,f.nombre_formula from formula as f \n"
+                + "	inner join articulos as a on f.codigo_producto=a.id\n"
+                + "	where f.codigo_producto=" + codigo_producto + ";");
+        try {
+            //enviamos la sentencia
+            resultSet = conexion.ejecutarSql(sentenciaSql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                ordenProducto.add(new OrdenTrabajo(resultSet.getInt("codigo_formula"),
+                        resultSet.getString("nombre_formula")));
+            }
+        } catch (SQLException e) {
+        } finally {
+            conexion.desconectar();
+        }
+        return ordenProducto;
     }
 }

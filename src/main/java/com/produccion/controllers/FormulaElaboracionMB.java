@@ -75,7 +75,7 @@ public class FormulaElaboracionMB implements Serializable {
     @PostConstruct
     public void init() {
         listaFormula = formulaProduccionDAO.getFormula();
-        listProceso = procesoProduccionDAO.getProcesosProduccion();
+//        listProceso = procesoProduccionDAO.getProcesosProduccion();
         productoTerminado = formulaProduccionDAO.getArticulosT("Materia Prima");
         productoSM = formulaProduccionDAO.getArticulosT("Producto Terminado");
     }
@@ -205,8 +205,6 @@ public class FormulaElaboracionMB implements Serializable {
                 showWarn("Ingrese el rendimiento");
             } else if ("".equals(formulaProduccion.getCodigo_producto())) {
                 showWarn("Escoja un producto");
-            } else if (formulaProduccion.getCodigo_proceso() == 0) {
-                showWarn("Seleccione un proceso");
             } else if (listaMaterialesConfirmados.size() < 1) {
                 showWarn("Escoja los materiales para la formulación");
             } else if (listSubProceso.size() < 1) {

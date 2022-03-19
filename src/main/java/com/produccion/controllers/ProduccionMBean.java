@@ -56,6 +56,7 @@ public class ProduccionMBean implements Serializable {
     private List<CentroCosto> listaCentro;
     private List<ArticuloFormula> listaMateriaPrima;
     private List<ArticuloFormula> detalleListaMateriaPrima;
+    private List<ArticuloFormula> detalleListaMateriaPrimaEstimada;
     private List<FormulaProduccion> listaCostos;
     private List<FormulaProduccion> listaCostosDirectos;
     private List<FormulaProduccion> listaCostosIndirectos;
@@ -68,6 +69,7 @@ public class ProduccionMBean implements Serializable {
     private List<CentroTrabajo> listaCentroTiempo;
     List<ArticuloFormula> listaAdicionales;
     private FormulaMateriales materialesFormula;
+    float costoTotal = 0;
     ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
     public ProduccionMBean() {
@@ -82,6 +84,7 @@ public class ProduccionMBean implements Serializable {
         listaCentro = new ArrayList<>();
         listaMateriaPrima = new ArrayList<>();
         detalleListaMateriaPrima = new ArrayList<>();
+        detalleListaMateriaPrimaEstimada = new ArrayList<>();
         listaCostosDirectos = new ArrayList<>();
         listaCostosIndirectos = new ArrayList<>();
         listaMovimientos = new ArrayList<>();
@@ -196,17 +199,26 @@ public class ProduccionMBean implements Serializable {
         this.listaCentroTiempo = listaCentroTiempo;
     }
 
+    public List<ArticuloFormula> getDetalleListaMateriaPrimaEstimada() {
+        return detalleListaMateriaPrimaEstimada;
+    }
+
+    public void setDetalleListaMateriaPrimaEstimada(List<ArticuloFormula> detalleListaMateriaPrimaEstimada) {
+        this.detalleListaMateriaPrimaEstimada = detalleListaMateriaPrimaEstimada;
+    }
+
     public void llenarFormula() {
         if (ordenTrabajo.getCodigo_producto() == 0) {
             vaciar();
         } else {
-            listaFormula = ordenDao.getListaFormula(ordenTrabajo.getCodigo_producto());
             setRegistro();
+            listaFormula = ordenDao.getListaFormula(ordenTrabajo.getCodigo_registro());
             llenarCantidad();
             if (ordenDao.registroExistencia(ordenTrabajo.getCodigo_registro()) > 0) {
                 ordenDao.cancelarOrden(ordenTrabajo.getCodigo_registro());
             }
         }
+        ordenTrabajo.setCantidad(ordenTrabajo.getCantidadEstimado());
     }
 
     public List<FormulaProduccion> getListaCostosDirectos() {
@@ -280,7 +292,7 @@ public class ProduccionMBean implements Serializable {
                 cantidad = producto.getCantidad();
             }
         }
-        ordenTrabajo.setCantidad(cantidad);
+        ordenTrabajo.setCantidadEstimado(cantidad);
 
     }
 
@@ -300,26 +312,28 @@ public class ProduccionMBean implements Serializable {
     public void costoMateriaPrima() {
 
         detalleListaMateriaPrima = new ArrayList<>();
+        detalleListaMateriaPrimaEstimada = new ArrayList<>();
         for (ArticuloFormula materiales : listaMateriaPrima) {
             materiales.setTotal(materiales.getCantidad() * materiales.getCosto());
             detalleListaMateriaPrima.add(materiales);
+            detalleListaMateriaPrimaEstimada.add(materiales);
             materiaPrimaCosto += materiales.getTotal();
         }
 
-        ordenTrabajo.setTotalMateria(materiaPrimaCosto);
+        ordenTrabajo.setTotalMateriaEstimado(materiaPrimaCosto);
         listaCostosDirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCodigo_registro(), ordenTrabajo.getCantidad(), "cmdunitario");
         listaCostosIndirectos = ordenDao.getListaCostos(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCodigo_registro(), ordenTrabajo.getCantidad(), "cifunitario");
-        listaCostos = ordenDao.getListaCosto(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidad());
+        listaCostos = ordenDao.getListaCosto(ordenTrabajo.getCodigo_formula(), ordenTrabajo.getCantidadEstimado());
 
         for (FormulaProduccion costoP : listaCostos) {
             costosD += costoP.getMODUnidad();
             costosI += costoP.getCIFUnidad();
             ordenTrabajo.setTiempo(costoP.getTiempoUnidad());
         }
-        ordenTrabajo.setTotalMOD(Precision.round(costosD, 2));
-        ordenTrabajo.setTotalCIF(Precision.round(costosI, 2));
-        ordenTrabajo.setCostoTotal(ordenTrabajo.getTotalMateria() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalCIF());
-        ordenTrabajo.setCostoUnitario(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad());
+        ordenTrabajo.setTotalMODEstimado(Precision.round(costosD, 2));
+        ordenTrabajo.setTotalCIFEstimado(Precision.round(costosI, 2));
+        ordenTrabajo.setCostoTotalEstimado(ordenTrabajo.getTotalMateriaEstimado() + ordenTrabajo.getTotalMODEstimado() + ordenTrabajo.getTotalCIFEstimado());
+        ordenTrabajo.setCostoUnitarioEstimado(ordenTrabajo.getCostoTotalEstimado() / ordenTrabajo.getCantidadEstimado());
     }
 
     public void setRegistro() {
@@ -426,6 +440,45 @@ public class ProduccionMBean implements Serializable {
         }
     }
 
+    public void registrarOrdenReal() {
+        if (ordenTrabajo.getFecha_inicio() == null) {
+            showWarn("Ingrese una fecha de inicio");
+        } else if (ordenTrabajo.getFecha_fin() == null) {
+            showWarn("Ingrese una de fin de producción");
+        } else if (ordenTrabajo.getCodigo_producto() < 1) {
+            showWarn("Seleccione un producto");
+        } else if (ordenTrabajo.getCodigo_formula() < 1) {
+            showWarn("Seleccione una formula");
+        } else if (ordenTrabajo.getCodigo_centro_trabajo() < 1) {
+            showWarn("Seleccione un centro de costo");
+        } else if ("".equals(ordenTrabajo.getDescripcion())) {
+            showWarn("Ingrese una descripción");
+        } else if (verificaCampos()) {
+            showWarn("Debe de ingresar valores en la materia prima que agrego.");
+        } else if (!verificarMateriales()) {
+            showWarn("No se puede inivciar la producción por falta de materiales en el inventario.");
+        } else {
+            try {
+                if (ordenDao.registrarProduccion(ordenTrabajo) > 0) {
+                    for (ArticuloFormula articuloFormula : detalleListaMateriaPrima) {
+                        ordenDao.registrarDetalleProduccion(articuloFormula.getCosto(), articuloFormula.getCantidad(),
+                                ordenTrabajo.getCodigo_producto(), ordenTrabajo.getCodigo_registro());
+                    }
+                    for (CentroTrabajo centro : listaCentroTiempo) {
+                        ordenDao.registrarDetalleCentro(centro, ordenTrabajo.getCodigo_registro());
+                    }
+                    ordenDao.actualizarOrden(ordenTrabajo.getCodigo_registro());
+                    ordenDao.actualizaEstado(ordenTrabajo.getCodigo_orden());
+                    ordenDao.updateCantidad(ordenTrabajo.getCantidad(),ordenTrabajo.getCodigo_registro());
+                    showInfo("Orden de producción registrada");
+                    vaciar();
+
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
+
     public void vaciar() {
         int orden = ordenTrabajo.getCodigo_orden();
         ordenTrabajo = new OrdenTrabajo();
@@ -447,6 +500,8 @@ public class ProduccionMBean implements Serializable {
         listaMateriaPrimaAdicional = new ArrayList<>();
         listaMaterialesConfirmados = new ArrayList<>();
         listaAdicionales = new ArrayList<>();
+        detalleListaMateriaPrimaEstimada = new ArrayList<>();
+         listaCentroTiempo = new ArrayList<>();
         materiaPrimaCosto = 0;
         costosD = 0;
         costosI = 0;
@@ -559,9 +614,9 @@ public class ProduccionMBean implements Serializable {
                         valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), listaMaterialesConfirmados.get(i).getCodigoProducto());
                         if (valor > 0) {
                             valor += listaMaterialesConfirmados.get(i).getCantidad();
-                            ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), listaMaterialesConfirmados.get(i).getCodigoProducto());
+//                            ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), listaMaterialesConfirmados.get(i).getCodigoProducto());
                         } else {
-                            ordenDao.registrarDetalleProduccion(listaMaterialesConfirmados.get(i), ordenTrabajo.getCodigo_registro());
+//                            ordenDao.registrarDetalleProduccion(listaMaterialesConfirmados.get(i), ordenTrabajo.getCodigo_registro());
                         }
                         listaMaterialesConfirmados.remove(listaMaterialesConfirmados.get(i));
                     }
@@ -579,9 +634,9 @@ public class ProduccionMBean implements Serializable {
                     valor = ordenDao.verificaProducto(ordenTrabajo.getCodigo_registro(), materiaA.getCodigoProducto());
                     if (valor > 0) {
                         valor += materiaA.getCantidad();
-                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaA.getCodigoProducto());
+//                        ordenDao.actualizaAdicionales(valor, ordenTrabajo.getCodigo_registro(), materiaA.getCodigoProducto());
                     } else {
-                        ordenDao.registrarDetalleProduccion(materiaA, ordenTrabajo.getCodigo_registro());
+//                        ordenDao.registrarDetalleProduccion(materiaA, ordenTrabajo.getCodigo_registro());
                     }
                 }
             }
@@ -622,33 +677,40 @@ public class ProduccionMBean implements Serializable {
         centro.setHoraInicio(dateFormat.format(date));
     }
 
-    public void asignaHoraFin(CentroTrabajo centro) {
+    public void asignaHoraFin(CentroTrabajo centro) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         Date date = new Date();
-        centro.setHoraFin(dateFormat.format(date));
+//        centro.setHoraFin(dateFormat.format(date));
         float costoMinutoDirecto = centro.getCostoDirecto() / 60;
         float costoMinutoIndirecto = centro.getCostoIndirecto() / 60;
-        float tiempoMinuto = convertMinutos(centro.getTiempoMinutos());
-        try {
-            Date dataInicio = dateFormat.parse(centro.getHoraInicio());
-            Date dataFin = dateFormat.parse(centro.getHoraFin());
-            int diferencia = (int) ((dataFin.getTime() - dataInicio.getTime()) / 1000);
-            int horas = 0;
-            int minutos = 0;
-            if (diferencia > 3600) {
-                horas = (int) Math.floor(diferencia / 3600);
-                diferencia = diferencia - (horas * 3600);
-            }
-            if (diferencia > 60) {
-                minutos = (int) Math.floor(diferencia / 60);
-                diferencia = diferencia - (minutos * 60);
-            }
-            centro.setTiempoMinutos(horas + ":" + minutos + ":" + diferencia);
-            centro.setTotalDirecto(Precision.round(costoMinutoDirecto * tiempoMinuto, 2));
-            centro.setTotalIndirecto(Precision.round(costoMinutoIndirecto * tiempoMinuto, 2));
-        } catch (ParseException ex) {
-            Logger.getLogger(ProduccionMBean.class.getName()).log(Level.SEVERE, null, ex);
+
+        Date dataInicio = dateFormat.parse(centro.getHoraInicio());
+        Date dataFin = dateFormat.parse(centro.getHoraFin());
+        System.out.println("" + dataFin);
+        int diferencia = (int) ((dataFin.getTime() - dataInicio.getTime()) / 1000);
+        int horas = 0;
+        int minutos = 0;
+        if (diferencia > 3600) {
+            horas = (int) Math.floor(diferencia / 3600);
+            diferencia = diferencia - (horas * 3600);
         }
+        if (diferencia > 60) {
+            minutos = (int) Math.floor(diferencia / 60);
+            diferencia = diferencia - (minutos * 60);
+        }
+        centro.setTiempoMinutos(horas + ":" + minutos + ":" + diferencia);
+        float tiempoMinuto = convertMinutos(centro.getTiempoMinutos());
+        centro.setTotalDirecto(Precision.round(costoMinutoDirecto * tiempoMinuto, 2));
+        centro.setTotalIndirecto(Precision.round(costoMinutoIndirecto * tiempoMinuto, 2));
+        float totalDirecto = 0;
+        float totalIndirecto = 0;
+        for (CentroTrabajo lista : listaCentroTiempo) {
+            totalDirecto += lista.getTotalDirecto();
+            totalIndirecto += lista.getTotalIndirecto();
+        }
+        ordenTrabajo.setTotalCIF(Precision.round(totalIndirecto, 2));
+        ordenTrabajo.setTotalMOD(Precision.round(totalDirecto, 2));
+
     }
 
     public float convertMinutos(String hora) {
@@ -664,6 +726,23 @@ public class ProduccionMBean implements Serializable {
         minutos += date.getHours() * 60;
         minutos += date.getMinutes();
         return minutos;
+    }
+
+    public void calculaTotal(ArticuloFormula articulos) {
+        articulos.setTotal(articulos.getCantidad() * articulos.getCosto());
+        float totalMateriales = 0;
+        for (ArticuloFormula product : detalleListaMateriaPrima) {
+            totalMateriales += product.getTotal();
+        }
+//        ordenTrabajo.setCantidad(ordenTrabajo.getCantidadEstimado());
+        ordenTrabajo.setTotalMateria(Precision.round(totalMateriales, 2));
+        costoTotal = (ordenTrabajo.getTotalCIF() + ordenTrabajo.getTotalMOD() + ordenTrabajo.getTotalMateria());
+        ordenTrabajo.setCostoTotal(Precision.round(costoTotal, 2));
+        ordenTrabajo.setCostoUnitario(Precision.round(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad(), 2));
+    }
+
+    public void updateCantidad() {
+        ordenTrabajo.setCostoUnitario(Precision.round(ordenTrabajo.getCostoTotal() / ordenTrabajo.getCantidad(), 2));
     }
 
 }

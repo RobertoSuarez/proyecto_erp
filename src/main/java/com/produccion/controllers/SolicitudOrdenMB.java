@@ -7,6 +7,7 @@ package com.produccion.controllers;
 
 import com.inventario.models.Bodega;
 import com.produccion.dao.solicitudOrdenDAO;
+import com.produccion.models.OrdenTrabajo;
 import com.produccion.models.SolicitudOrden;
 import com.produccion.models.productosOrden;
 import javax.inject.Named;
@@ -34,6 +35,7 @@ public class SolicitudOrdenMB implements Serializable {
     private List<productosOrden> listaOrden;
     private List<productosOrden> listaOrdenConfirmados;
     private List<Bodega> bodega;
+    private List<OrdenTrabajo> listaFormula;
 
     public SolicitudOrdenMB() {
         solicitudOrden = new SolicitudOrden();
@@ -43,6 +45,7 @@ public class SolicitudOrdenMB implements Serializable {
         solicitudDAO = new solicitudOrdenDAO();
         ordenSolicitud = new productosOrden();
         bodega = new ArrayList<>();
+        listaFormula = new ArrayList<>();
     }
 
     @PostConstruct
@@ -99,6 +102,14 @@ public class SolicitudOrdenMB implements Serializable {
 
     public void setBodega(List<Bodega> bodega) {
         this.bodega = bodega;
+    }
+
+    public List<OrdenTrabajo> getListaFormula() {
+        return listaFormula;
+    }
+
+    public void setListaFormula(List<OrdenTrabajo> listaFormula) {
+        this.listaFormula = listaFormula;
     }
 
     public void insertarSolicitud() {
@@ -180,6 +191,10 @@ public class SolicitudOrdenMB implements Serializable {
             }
 
         }
+    }
+
+    public void llenarFormula(int idProducto) {
+        listaFormula = solicitudDAO.getListaFormula(idProducto);
     }
 
     public void aleatorioIdenti() {

@@ -129,11 +129,14 @@ public class FormulaProduccionDAO {
 
     public List<FormulaProduccion> getArticulosT(String nombre) {
         List<FormulaProduccion> Materiales = new ArrayList<>();
-        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,\n"
-                + "	a.costo,a.cantidad,a.max_stock,a.unidadmedida\n"
-                + "	from articulos as a	inner join categoria as c on a.id_categoria=c.cod\n"
-                + "	inner join tipo as t on t.cod=a.id_tipo\n"
-                + "	where c.nom_categoria!='" + nombre + "'";
+        String sqlSentencia = "select a.id,a.nombre,c.nom_categoria,a.descripcion,t.tipo,a.costo\n"
+                + ",ab.cant,a.max_stock,um.unidad_medida\n"
+                + "from articulo_bodega as ab \n"
+                + "inner join articulos as a on ab.id_articulo=a.id\n"
+                + "inner join categoria as c on a.id_categoria=c.cod\n"
+                + "inner join tipo as t on t.cod=a.id_tipo\n"
+                + "inner join unidades_medidas as um on a.id_unidadmedida=um.id\n"
+                + "where c.nom_categoria!='" + nombre + "' and c.nom_categoria!='Servicio'";
 
         try {
 
@@ -141,7 +144,7 @@ public class FormulaProduccionDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 Materiales.add(new FormulaProduccion(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("nom_categoria"),
-                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cantidad"), resultSet.getFloat("max_stock"), resultSet.getString("unidadmedida")));
+                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cant"), resultSet.getFloat("max_stock"), resultSet.getString("unidad_medida")));
 
             }
 
@@ -180,8 +183,8 @@ public class FormulaProduccionDAO {
     public int insertarFormula(FormulaProduccion f) {
         try {
             String cadena = "INSERT INTO public.formula(\n"
-                    + "	 codigo_proceso, nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\",tiempo_formula, tiempo_unidad, modunidad, cifunidad)\n"
-                    + "	VALUES ( " + f.getCodigo_proceso() + ", '" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento()
+                    + " nombre_formula, descripcion, rendimiento, estado,codigo_producto,\"MOD\", \"CIF\",tiempo_formula, tiempo_unidad, modunidad, cifunidad)\n"
+                    + "	VALUES ('" + f.getNombre_formula() + "', '" + f.getDescripcion() + "', " + f.getRendimiento()
                     + ", '" + f.getEstado() + "', " + f.getCodigo_producto() + ", " + f.getMOD() + ", " + f.getCIF() + ", " + f.getTiempoFormula() + ", " + f.getTiempoUnidad() + ", " + f.getMODUnidad() + ", " + f.getCIFUnidad() + ");";
             return conexion.insertar(cadena);
         } catch (Exception e) {
@@ -287,8 +290,7 @@ public class FormulaProduccionDAO {
     public List<FormulaProduccion> traemeFormula(int id) {
         List<FormulaProduccion> editFormula = new ArrayList<>();
         String sqlSentencia = "select f.codigo_formula, a.nombre,f.nombre_formula,f.descripcion,\n"
-                + "	f.rendimiento,t.tipo,c.nom_categoria,pp.nombre as nombreproceso\n"
-                + "	from formula as f \n"
+                + "f.rendimiento,t.tipo,c.nom_categoria  from formula as f \n"
                 + "	inner join proceso_produccion as pp on pp.codigo_proceso=f.codigo_proceso\n"
                 + "	inner join articulos as a \n"
                 + "	inner join tipo as t  on t.cod=a.id_tipo\n"
@@ -300,7 +302,7 @@ public class FormulaProduccionDAO {
             resultSet = conexion.ejecutarSql(sqlSentencia);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                editFormula.add(new FormulaProduccion(resultSet.getInt("codigo_formula"), resultSet.getString("nombre_formula"), resultSet.getString("nombre"), resultSet.getString("descripcion"), resultSet.getInt("rendimiento"), resultSet.getString("nombreproceso"),
+                editFormula.add(new FormulaProduccion(resultSet.getInt("codigo_formula"), resultSet.getString("nombre_formula"), resultSet.getString("nombre"), resultSet.getString("descripcion"), resultSet.getInt("rendimiento"),
                         resultSet.getString("nom_categoria"), resultSet.getString("tipo")));
 
             }
@@ -315,12 +317,13 @@ public class FormulaProduccionDAO {
 
     public List<FormulaProduccion> listaMateriales(int id) {
         List<FormulaProduccion> editFormula = new ArrayList<>();
-        String sqlSentencia = "select df.codigo_formula,a.id, a.nombre as nombre_producto,a.descripcion,a.unidadmedida,df.cantidad_unitaria,\n"
-                + "a.costo,sp.codigo_subproceso,sp.nombre \n"
-                + "from detalle_formula as df \n"
-                + "inner join articulos as a on df.codigo_producto=a.id\n"
-                + "inner join subproceso as sp on sp.codigo_subproceso=df.codigo_subproceso\n"
-                + "where df.codigo_formula=" + id + "";
+        String sqlSentencia = "select df.codigo_formula,a.id, a.nombre as nombre_producto,a.descripcion,um.unidad_medida,df.cantidad_unitaria,\n"
+                + "		 a.costo,sp.codigo_subproceso,sp.nombre \n"
+                + "		 from detalle_formula as df \n"
+                + "		 inner join articulos as a on df.codigo_producto=a.id\n"
+                + "		 inner join unidades_medidas as um on a.id_unidadmedida=um.id\n"
+                + "		 inner join subproceso as sp on sp.codigo_subproceso=df.codigo_subproceso\n"
+                + "		 where df.codigo_formula="+id+"";
         try {
 
             resultSet = conexion.ejecutarSql(sqlSentencia);
@@ -329,7 +332,7 @@ public class FormulaProduccionDAO {
                 editFormula.add(new FormulaProduccion(resultSet.getInt("codigo_formula"),
                         resultSet.getInt("codigo_subproceso"), resultSet.getInt("id"), resultSet.getString("nombre_producto"),
                         resultSet.getString("descripcion"), resultSet.getString("nombre"), resultSet.getFloat("costo"),
-                        resultSet.getFloat("cantidad_unitaria"), resultSet.getString("unidadmedida")));
+                        resultSet.getFloat("cantidad_unitaria"), resultSet.getString("unidad_medida")));
 
             }
 
@@ -382,6 +385,7 @@ public class FormulaProduccionDAO {
         }
         return subProceso;
     }
+
     public List<SubProceso> getListaSubProcesoAdicional() {
         List<SubProceso> subProceso = new ArrayList<>();
         String sql = String.format("select * from subproceso");
@@ -408,7 +412,7 @@ public class FormulaProduccionDAO {
             String consulta = "INSERT INTO public.detalle_formula_subproceso(\n"
                     + "	codigo_formula, codigo_subproceso, hora_trabajo, minuto_trabajo, importe_directo, importe_indirecto, minutos_pieza, costo_minuto_directo, costo_minuto_indirecto)\n"
                     + "	VALUES (" + idFormula + ", " + detalle.getCodigo_subproceso() + ",'" + detalle.getHora() + "'," + convertMinutos(detalle.getHora())
-                    + " , " + detalle.getImporte_directo()+ ", " + detalle.getImporte_indirecto()+", " + detalle.getPieza_minuto()+", " + detalle.getCosto_minuto_directo()+", " + detalle.getCosto_minuto_indirecto()+ ");";
+                    + " , " + detalle.getImporte_directo() + ", " + detalle.getImporte_indirecto() + ", " + detalle.getPieza_minuto() + ", " + detalle.getCosto_minuto_directo() + ", " + detalle.getCosto_minuto_indirecto() + ");";
             return conexion.insertar(consulta);
         } catch (Exception e) {
             return -1;
