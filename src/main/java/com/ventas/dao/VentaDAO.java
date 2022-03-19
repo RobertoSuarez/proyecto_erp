@@ -164,7 +164,7 @@ public class VentaDAO {
         List<Venta> ventas = new ArrayList<>();
 
         this.con.conectar();
-        ResultSet rs = this.con.ejecutarSql("select * from public.venta order by fechaventa desc;");
+        ResultSet rs = this.con.ejecutarSql("select * from public.venta order by fechaventa desc, idventa desc;");
 
         Venta venta = new Venta();
 

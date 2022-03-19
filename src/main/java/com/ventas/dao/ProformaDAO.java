@@ -158,13 +158,90 @@ public class ProformaDAO {
         }
     }
 
-    public List<Proforma> retornarProformas() throws SQLException {
+    public List<Proforma> retornarProformasPendientes() {
         ResultSet rs;
         String consulta, estado;
         con.desconectar();
         List<Proforma> listadocs = new ArrayList<>();
         try {
-            consulta = "SELECT * FROM public.proforma ORDER BY idproforma ASC ";
+            consulta = "SELECT * FROM public.proforma where estado = 'P' order by fechacreacion desc, idproforma desc";
+            rs = con.ejecutarSql(consulta);
+            con.connection.close();
+            if (rs == null) {
+                System.out.println("No existen registros");
+            } else {
+                while (rs.next()) {
+                    Proforma prof = new Proforma();
+                    this.cliente = new ClienteVenta();
+                    this.clienteDao = new ClienteVentaDao();
+                    prof.setId_proforma(rs.getInt("idproforma"));
+                    prof.setId_cliente(rs.getInt("idcliente"));
+                    this.cliente = this.clienteDao.BuscarClientePorId(prof.getId_cliente());
+                    prof.setNombreCliente(this.cliente.getNombre());
+                    prof.setId_empleado(rs.getInt("id_empleado"));
+                    prof.setFecha_creacion(rs.getString("fechacreacion"));
+                    prof.setFecha_actualizacion(rs.getString("fechaactualizacion"));
+                    prof.setFecha_expiracion(rs.getString("fechaexpiracion"));
+                    prof.setProforma_terminada(rs.getBoolean(7));
+                    prof.setAceptacion_cliente(rs.getBoolean(8));
+                    prof.setEstado(rs.getString("estado"));
+                    prof.setFecha_autorizacion(rs.getString("fechaautorizacion"));
+                    prof.setBase12(rs.getFloat("base12"));
+                    prof.setBase0(rs.getFloat("base0"));
+                    prof.setBase_excento_iva(rs.getFloat("baseexcentoiva"));
+                    prof.setIva12(rs.getFloat("iva12"));
+                    prof.setIce(rs.getFloat("ice"));
+                    prof.setTotalproforma(rs.getFloat("totalproforma"));
+                    listadocs.add(prof);
+                }
+            }
+            con.desconectar();
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            if (con.isEstado()) {
+                con.desconectar();
+            }
+        } finally {
+            con.desconectar();
+        }
+        return listadocs;
+    }
+    
+    public void aceptarProforma(int idProforma){
+        ResultSet rs;
+        String consulta, estado;
+        List<Proforma> listadocs = new ArrayList<>();
+        try {
+            consulta = "update public.proforma set estado = 'A' where idproforma = '" + idProforma + "';";
+            rs = con.ejecutarSql(consulta);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        } finally {
+            con.desconectar();
+        }
+    }
+    
+    public void rechazarProforma(int idProforma){
+        ResultSet rs;
+        String consulta, estado;
+        List<Proforma> listadocs = new ArrayList<>();
+        try {
+            consulta = "update public.proforma set estado = 'R' where idproforma = '" + idProforma + "';";
+            rs = con.ejecutarSql(consulta);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        } finally {
+            con.desconectar();
+        }
+    }
+    
+    public List<Proforma> retornarProformasAprobadas() {
+        ResultSet rs;
+        String consulta, estado;
+        con.desconectar();
+        List<Proforma> listadocs = new ArrayList<>();
+        try {
+            consulta = "SELECT * FROM public.proforma where estado = 'A' order by fechacreacion desc, idproforma desc";
             rs = con.ejecutarSql(consulta);
             con.connection.close();
             if (rs == null) {

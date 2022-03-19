@@ -13,13 +13,12 @@
             <ui:define name="content">
 
                 <ui:include src="menuVentas.xhtml"/>
-                
 
                 <h:form id="listaDeProforma" >
                     <br/><br/><br/><br/>
                     <p:dataTable var="Lista" 
                                  id="itemsTable" 
-                                 value="#{ListaProformaMB.listaProformas}"
+                                 value="#{ListaProformaMB.listaProformasAprobadas}"
                                  paginator="true" 
                                  resizableColumns="true" 
                                  class="p-mt-3"
@@ -41,19 +40,21 @@
                             <h:outputText value="#{Lista.totalproforma}" />
                         </p:column>
                         <p:column headerText="Acciones" width="35%">
-                            <p:commandButton icon="pi pi-check" value="Aceptar" styleClass="rounded-button" update="listaDeProforma" actionListener="#{ListaProformaMB.revisarProforma(Lista)}"
-                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'false' : 'true'"/>
-                            <p:commandButton icon="pi pi-times" value="Rechazar" styleClass="rounded-button ui-button-danger"
-                                             update="listaDeProforma" disabled="#{Lista.estado} == 'R' ? 'true' : 'false'"
-                                             rendered="#{rolventMB.rendered()}" style="visibility: #{Lista.estado} == 'R' ? 'false' : 'true'"/>
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
-                                             onclick="PF('DetalleProforma').show()" update="datosFactura" />
+                                             style="margin-left: 20px;" update="datosFactura listaDeProforma" onclick="PF('DetalleProforma').show()" />
+                            <p:commandButton icon="pi pi-book" value="Facturar" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
+                                             style="margin-left: 20px;" update="datosFactura listaDeProforma" />
                         </p:column>
                     </p:dataTable>
+
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-danger"/>
+                        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes ui-button-success" />
+                    </p:confirmDialog>
                 </h:form>
 
-                
-                <p:dialog widgetVar="DetalleProforma" width="70%" height="80%" >
+
+                <p:dialog widgetVar="DetalleProforma" width="70%" height="50%" modal="true" >
                     <h:form id="datosFactura">
                         <h2>Detalle proforma: <p:outputLabel value="#{ListaProformaMB.proformaActual.id_proforma}" /></h2>
                         <p:panel header="Cliente" style="width: 50%;" id="DetalleCliente">
@@ -109,7 +110,7 @@
                         </p:dataTable>
                     </h:form>
                 </p:dialog>
-                
+
                 <p:dialog id="aceptarProformaFaltante" widgetVar="proformaFaltaProd">
                     <h:form>
                         <h2>Algunos items en esta proforma tienen un stock menor al solicitado. Elija una opción</h2>
@@ -124,13 +125,13 @@
                                 <h:outputText value="#{itemsFaltantes.producto.stock}"/>
                             </p:column>
                         </p:dataTable>
-                        
+
                     </h:form>
                 </p:dialog>
-                
+
                 <p:dialog id="aceptarProformaCompleta" widgetVar="proformaCompleta">
                     <h:form>
-                        
+
                     </h:form>
                 </p:dialog>
 
