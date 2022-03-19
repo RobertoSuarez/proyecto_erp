@@ -564,7 +564,7 @@ public class RolDePagoController implements Serializable {
                                 result = false;
                             }
                         }
-                        if (checkdDecimoCuarto && result) {
+                        if (checkdDecimoCuarto && result || checkdDecimoCuarto && !checkdDecimoTercero) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, new TipoRubro(6, 1, ""), 1));
                             result = true;
                             if (detalleRolPagoDAO.insertar() < 1) {
@@ -572,7 +572,7 @@ public class RolDePagoController implements Serializable {
                                 result = false;
                             }
                         }
-                        if (checkedAmonestacion && result) {
+                        if (checkedAmonestacion && result || checkedAmonestacion && !checkdDecimoCuarto) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, amonestacion.getTipoRubro(), amonestacion.getId()));
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
@@ -586,7 +586,7 @@ public class RolDePagoController implements Serializable {
                                 result = false;
                             }
                         }
-                        if (checkedMulta && result && multa.getId() > 0) {
+                        if (checkedMulta && result && multa.getId() > 0 || checkedMulta && !checkedAmonestacion && multa.getId() > 0) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, multa.getTipoRubro(), multa.getId()));
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
@@ -600,7 +600,7 @@ public class RolDePagoController implements Serializable {
                                 result = false;
                             }
                         }
-                        if (checkedSuspencion && result) {
+                        if (checkedSuspencion && result || checkedSuspencion && !checkedMulta) {
                             detalleRolPagoDAO.setDetalleRolPago(new DetalleRolPago(rolPagos, suspencion.getTipoRubro(), suspencion.getId()));
                             result = true;
                             if (detalleRolPagoDAO.insertar() > 0) {
@@ -664,5 +664,9 @@ public class RolDePagoController implements Serializable {
     public void mostrarMensajeError(String mensaje) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", mensaje);
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public double obtenerTotal(){
+        return Math.round(this.total * 100) / 100;
     }
 }
