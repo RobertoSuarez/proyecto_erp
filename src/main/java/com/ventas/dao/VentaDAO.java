@@ -65,6 +65,10 @@ public class VentaDAO {
                         + ventaActual.getTotalFactura() + ", 0.1)";
                 System.out.println(query);
                 this.con.ejecutarSql(query);
+            }else{
+                query = "select ingresar_plan_de_pago_inmediato(" + ventaActual.getIdVenta() + ", " + String.valueOf(0) + ", '" + ventaActual.getFechaVenta() + "', "
+                        + ventaActual.getTotalFactura() + ")";
+                this.con.ejecutarSql(query);
             }
 
             this.con.desconectar();
