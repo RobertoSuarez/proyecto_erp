@@ -15,7 +15,7 @@ public class ParametroActivoDepreciable implements Serializable {
     private int idParametro;
     private SubCuenta activoDepreciable;
     private int anios;
-    private float porcentajeAnual;
+    private double porcentajeAnual;
 
     public ParametroActivoDepreciable() {
         this.idParametro = 0;
@@ -24,7 +24,7 @@ public class ParametroActivoDepreciable implements Serializable {
         this.porcentajeAnual = 0;
     }
 
-    public ParametroActivoDepreciable(int idParametro, SubCuenta activoDepreciable, int anios, float porcentajeAnual) {
+    public ParametroActivoDepreciable(int idParametro, SubCuenta activoDepreciable, int anios, double porcentajeAnual) {
         this.idParametro = idParametro;
         this.activoDepreciable = activoDepreciable;
         this.anios = anios;
@@ -55,11 +55,11 @@ public class ParametroActivoDepreciable implements Serializable {
         this.anios = anios;
     }
 
-    public float getPorcentajeAnual() {
+    public double getPorcentajeAnual() {
         return porcentajeAnual;
     }
 
-    public void setPorcentajeAnual(float porcentajeAnual) {
+    public void setPorcentajeAnual(double porcentajeAnual) {
         this.porcentajeAnual = porcentajeAnual;
     }
 }

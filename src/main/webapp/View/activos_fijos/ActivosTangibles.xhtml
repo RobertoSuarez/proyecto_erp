@@ -56,7 +56,7 @@
                                             <p:dataTable
                                                 id="verListaDepreciable"
                                                 reflow="true"
-                                                value="#{activosFijosMB.tangibleDAO.Listardepreciable()}"
+                                                value="#{activosFijosMB.listaDepreciable}"
                                                 var="depreciable" 
                                                 rowKey="#{depreciable.id_activo_fijo}" 
                                                 editable="true">
@@ -89,27 +89,6 @@
 
                                                     </h:outputText>
                                                 </p:column>
-
-                                                <p:column
-                                                    headerText="Depreciación Acumulada">
-                                                    <h:outputText 
-                                                        value="#{depreciable.cuota_depresiacion}" 
-                                                        style="font-weight: 700">
-                                                        <f:convertNumber 
-                                                            currencySymbol="$"
-                                                            type="currency"/>
-                                                    </h:outputText>
-                                                </p:column>  
-                                                <p:column
-                                                    headerText="Valor Neto en Libros">
-                                                    <h:outputText 
-                                                        value="#{depreciable.valor_neto_libros}" 
-                                                        style="font-weight: 700">
-                                                        <f:convertNumber 
-                                                            currencySymbol="$"
-                                                            type="currency"/>
-                                                    </h:outputText>
-                                                </p:column>  
                                                 <p:column 
                                                     headerText="Fecha de Adquisición">
                                                     <h:outputText
@@ -357,34 +336,6 @@
                                                                 </p:inputText>
                                                             </div>
 
-                                                            <div class="p-col-6">
-                                                                <p:outputLabel 
-                                                                    for="@next"
-                                                                    value="Porcentaje de Depreciación: %" />
-                                                                <p:inputText
-                                                                    type="number"
-                                                                    value="#{activosFijosMB.activodepreciable.porcentaje_depreciacion}" 
-                                                                    >
-                                                                    <p:keyFilter 
-                                                                        regEx="/[0-9,]/i" />
-                                                                </p:inputText>
-                                                            </div>
-
-
-                                                            <div class="p-col-6">
-                                                                <p:outputLabel 
-
-                                                                    for="@next" 
-                                                                    value="Tiempo de depreciación en Meses:" />
-                                                                <p:inputText 
-                                                                    type="number" 
-                                                                    value="#{activosFijosMB.activodepreciable.depreciacion_meses}"
-                                                                    >
-                                                                    <p:keyFilter regEx="/[0-9]/i"/>
-                                                                </p:inputText> 
-
-                                                            </div>
-
 
 
                                                         </div>
@@ -536,41 +487,12 @@
 
                                                         <div class="p-formgrid p-grid">
                                                             <div class="p-field p-col">
-                                                                <p:outputLabel
-                                                                    for="@next"
-                                                                    value="Tiempo de depreciación en Meses: "/>
-                                                                <p:inputText 
-                                                                    type="number" 
-                                                                    value="#{activosFijosMB.listadepreciable.depreciacion_meses}" 
-                                                                    >
-                                                                    <p:keyFilter 
-                                                                        regEx="/[0-9]/i"/>
-                                                                </p:inputText>
-
-
-                                                            </div>
-                                                            <div class="p-field p-col">
-                                                                <p:outputLabel 
-                                                                    for="@next"
-                                                                    value="Porcentaje de Depreciación: %"/>
-                                                                <p:inputText
-                                                                    type="number" 
-                                                                    value="#{activosFijosMB.listadepreciable.porcentaje_depreciacion}" 
-                                                                    >
-                                                                    <p:keyFilter 
-                                                                        regEx="/[0-9,]/i"/>
-                                                                </p:inputText>
-                                                            </div>
-                                                            <div class="p-field p-col">
                                                                 <p:outputLabel 
                                                                     value="Número de Factura: "/>
                                                                 <p:inputText  
                                                                     value="#{activosFijosMB.listadepreciable.numero_factura}" />
                                                             </div>
-                                                        </div>
-
-                                                        <div class="p-formgrid p-grid">
-                                                            <div class="p-field p-col-5">
+                                                            <div class="p-field p-col">
                                                                 <h:outputLabel for="subCuentalistEdit" value="Cuenta de activo depreciable: "/>
                                                                 <p:selectOneMenu id="subCuentalistEdit" value="#{activosFijosMB.listadepreciable.subCuenta.id}"
                                                                                  required="true" requiredMessage="Debe seleccionar una cuenta de activo depreciable" label="Cuenta"
@@ -582,7 +504,10 @@
                                                                                    itemValue="#{subCuenta.id}"/>
                                                                 </p:selectOneMenu>
                                                             </div>
-                                                            <div class="p-field p-col-7">
+                                                        </div>
+
+                                                        <div class="p-formgrid p-grid">
+                                                            <div class="p-field p-col">
                                                                 <p:outputLabel 
                                                                     for="@next" 
                                                                     value="Descripción: "/>

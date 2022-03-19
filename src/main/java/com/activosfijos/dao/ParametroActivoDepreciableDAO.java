@@ -99,6 +99,14 @@ public class ParametroActivoDepreciableDAO implements IDAO<ParametroActivoDeprec
         }
         return null;
     }
+    
+    public ParametroActivoDepreciable buscarPorCuenta(int id) {
+        List<ParametroActivoDepreciable> lista = buscar("activo_deprecianle = " + id, null);
+        if (lista != null && !lista.isEmpty()) {
+            return lista.get(0);
+        }
+        return null;
+    }
 
     @Override
     public List<ParametroActivoDepreciable> Listar() {
@@ -119,7 +127,7 @@ public class ParametroActivoDepreciableDAO implements IDAO<ParametroActivoDeprec
                             result.getInt("idprametro"),
                             scDAO.getSubCuenta(result.getInt("activo_deprecianle")),
                             result.getInt("anios"),
-                            result.getFloat("porcentaje")
+                            result.getDouble("porcentaje")
                     ));
                 }
                 result.close();
