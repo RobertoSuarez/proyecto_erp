@@ -150,7 +150,7 @@ public class EntradaDetalleInventario implements Serializable {
         return subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
 
