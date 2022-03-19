@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -74,8 +75,9 @@ public class ListaProformaManagedBean implements Serializable {
         }
     }
 
-    public void cargarDatosProforma(Proforma prf) {
+    public void cargarDatosProforma(Proforma prf) throws SQLException {
         this.proformaActual = proformaDao.getProformaById(prf.getId_proforma());
+        this.cliente = new ClienteVentaDao().BuscarClientePorId(proformaActual.getId_cliente());
         System.out.println(prf.getId_proforma());
         this.listaDetalle = proformaDao.getDetalleProforma(proformaActual.getId_proforma());
     }
@@ -87,6 +89,7 @@ public class ListaProformaManagedBean implements Serializable {
 
         if (idVenta != 0) {
             for (DetalleProforma det : listaDetalle) {
+                proformaDao.setProformaFacturada(proformaActual.getId_proforma());
                 int codProd = det.getProducto().getCodigo();
                 double qty = convertTwoDecimal(det.getCantidad());
                 double dsc = convertTwoDecimal(det.getDescuento());

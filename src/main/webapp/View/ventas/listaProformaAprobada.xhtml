@@ -46,7 +46,7 @@
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
                                              style="margin-left: 20px;" update="datosFactura listaDeProforma" onclick="PF('DetalleProforma').show()" />
                             <p:commandButton icon="pi pi-book" value="Facturar" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
-                                             style="margin-left: 20px;" update="datosFactura listaDeProforma" />
+                                             style="margin-left: 20px;" update="datosFactura listaDeProforma pagosForm" onclick="PF('RealizarPago').show();" />
                         </p:column>
                     </p:dataTable>
 
@@ -116,11 +116,11 @@
 
                 <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
                           minHeight="600" width="70%" showEffect="fade" id="Pagos" modal="true">
-                    <h:form>
+                    <h:form id="pagosForm">
                         <p:panel class="card">
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Total a pagar: "/>
-                                <p:inputText value="#{VentaMB.total}" disabled="true"/>
+                                <p:inputText value="#{ListaProformaMB.proformaActual.totalproforma}" disabled="true"/>
                             </h:panelGrid>
                         </p:panel>
                         <p:accordionPanel>
@@ -128,7 +128,7 @@
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Monto a pagar: "/>
                                     <p:inputText value="#{ListaProformaMB.proformaActual.totalproforma}" disabled="true" /> 
-                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(1)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(1)}" style="margin-top: 20px" ajax="false" update="detalleTB"/>
                                     <p:outputLabel value="Una vez facturada la compra, deberá realizar sus pagos en cuentas por cobrar"/>
                                 </h:panelGrid>
                             </p:tab>
@@ -146,7 +146,7 @@
                                         <f:selectItem itemLabel="270 Días" itemValue="270" />
                                         <f:selectItem itemLabel="360 Días" itemValue="360" />
                                     </p:selectOneMenu>
-                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(2)}" style="margin-top: 20px" ajax="false"/>
+                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(2)}" style="margin-top: 20px" ajax="false" update="detalleTB"/>
                                 </h:panelGrid>
                             </p:tab>
                         </p:accordionPanel>
