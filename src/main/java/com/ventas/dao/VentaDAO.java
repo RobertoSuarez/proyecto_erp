@@ -222,10 +222,44 @@ public class VentaDAO {
                         break;
                 }
 
-                sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\"" + venta.getTotalFactura()
-                        + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de venta\"},"
-                        + "{\"idSubcuenta\":\"" + formaPago + "\",\"debe\":\"0\",\"haber\":\"" + venta.getTotalFactura()
-                        + "\",\"tipoMovimiento\":\"" + tipomovimiento + "\"}]";
+                sentencia1 = "[{\"idSubcuenta\":\"160\",\n" +
+                                "\"debe\":\"" + venta.getTotalFactura() + "\",\n" +
+                                "\"haber\":\"0\",\n" +
+                                "\"tipoMovimiento\":\"Factura de venta\"},\n";
+                        
+                if(venta.getIva() != 0){
+                    sentencia1 += "{\"idSubcuenta\":\"162\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getIva() + "\",\n" +
+                                "\"tipoMovimiento\":\"Iva en ventas\"},\n";
+                }
+                if(venta.getIce() != 0){
+                    sentencia1 += "{\n" +
+                                "\"idSubcuenta\":\"164\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getIce() + "\",\n" +
+                                "\"tipoMovimiento\":\"ICE en ventas\"},\n";
+                }
+                if(venta.getBase12() != 0){
+                    sentencia1 += "{\"idSubcuenta\":\"77\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getBase12() + "\",\n" +
+                                "\"tipoMovimiento\":\"Ingreso de venta base 12%\"},\n";
+                }
+                if(venta.getBase0() != 0){
+                    sentencia1 += "{\"idSubcuenta\":\"78\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getBase0() + "\",\n" +
+                                "\"tipoMovimiento\":\"Ingreso de venta base 0%\"},\n";
+                }
+                sentencia1 +=   "{\"idSubcuenta\":\"17\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getCosto() + "\",\n" +
+                                "\"tipoMovimiento\":\"Reducción en inventario\"},\n" +
+                                "{\"idSubcuenta\":\"151\",\n" +
+                                "\"debe\":\"" + venta.getCosto() + "\",\n" +
+                                "\"haber\":\"0\",\n" +
+                                "\"tipoMovimiento\":\"Costo de venta\"}]";
                 System.out.println(sentencia1);
 
                 intJson(sentencia, sentencia1);
