@@ -23,7 +23,7 @@
                                     </p:commandButton>
 
 
-                                    <p:commandButton style="margin-right: 6px;" value="Detalle Producción" 
+                                    <p:commandButton style="margin-right: 6px;" value="Detalle Producción Estimada" 
                                                      styleClass="ui-button-secondary"
                                                      icon="pi pi-book" oncomplete="PF('detalleProduccion').show()">
                                     </p:commandButton>
@@ -63,16 +63,16 @@
                                                                    itemLabel="#{produto.nombre_producto}"
                                                                    itemValue="#{produto.codigo_producto}">
                                                     </f:selectItems>
-                                                    <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls,:form:cantidad,:form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,
-                                                            :form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima"/>
+                                                    <p:ajax listener="#{produccionMBean.llenarFormula()}" update=":form:formuls,:form:cantidad,:form:materiaPrimaOrden,:form:costoMateriaPrima,
+                                                            :form:costosProduccion,:form:valoresTotales,:form:nuevaMateriaPrima"/>
                                                 </p:selectOneMenu>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Formula" for="@next"/>
                                                 <p:selectOneMenu id="formuls" value="#{produccionMBean.ordenTrabajo.codigo_formula}" editable="false">
                                                     <f:selectItem itemLabel="Seleccione una formula" itemValue="" noSelectionOption="true"/>
-                                                    <p:ajax listener="#{produccionMBean.llenarProceso()}" update=":form:procesoProducciom,:form:materiaPrimaOrden,:form:costoMateriaPrima,
-                                                            :form:costosProduccion,:form:valoresTotales,:form:costosProduccionDirectos,:form:costosProduccionIndirectos,:form:nuevaMateriaPrima,centroTiempo"/>
+                                                    <p:ajax listener="#{produccionMBean.llenarProceso()}" update=":form:materiaPrimaOrden,:form:costoMateriaPrima,
+                                                            :form:costosProduccion,:form:valoresTotales,:form:nuevaMateriaPrima,centroTiempo,:form:DcostoMateriaprimaReal"/>
                                                     <f:selectItems value="#{produccionMBean.listaFormula}"
                                                                    var="listaformula"
                                                                    itemLabel="#{listaformula.nombre_formula}" 
@@ -93,10 +93,6 @@
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Descripción" for="@next"/>
                                                 <p:inputText value="#{produccionMBean.ordenTrabajo.descripcion}"></p:inputText>
-                                            </div>
-                                            <div class="p-field p-col-12 p-md-4">
-                                                <p:outputLabel value="Proceso" for="@next"/>
-                                                <p:inputText id="procesoProducciom" value="#{produccionMBean.ordenTrabajo.nombre_proceso}" readonly="true"></p:inputText>
                                             </div>
                                             <div class="p-field p-col-12 p-md-4">
                                                 <p:outputLabel value="Cantidad" for="@next"/>
@@ -126,7 +122,7 @@
                                             <div class="p-grid p-justify-around">
                                                 <p:dataTable id="costoMateriaPrima" editable="true" reflow="true"
                                                              editInitEvent="dblclick" editMode="cell"
-                                                             value="#{produccionMBean.detalleListaMateriaPrima}" var="costoProduccion">
+                                                             value="#{produccionMBean.detalleListaMateriaPrimaEstimada}" var="costoProduccion">
                                                     <p:column headerText="Nombre" filterStyle="display : none">
                                                         <h:outputText value="#{costoProduccion.nombre}" />
                                                     </p:column>
@@ -153,69 +149,25 @@
                                 </p:toolbarGroup>
                             </p:toolbar>
 
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Costos directos e indirectos</span>
 
+                            </div>
                             <p:toolbar style="margin-top: 2em">
                                 <p:toolbarGroup>
-                                    <div class="p-d-flex p-jc-between p-ai-center">
-                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Costos directos e indirectos</span>
-
-                                    </div>
-
-
                                     <p:outputPanel id="CostosProduccionDI" class="ui-fluid">
 
                                         <p:outputPanel>
                                             <div class="p-grid p-justify-around">
-                                                <p:dataTable id="costosProduccionDirectos" editable="true" reflow="true"
-                                                             editInitEvent="dblclick" editMode="cell"
-                                                             value="#{produccionMBean.listaCostosDirectos}" var="costos">
-                                                    <p:column headerText="Subcuenta" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.codigoSubcuenta}" />
-                                                    </p:column>
-
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.nombreCuenta}" />
-                                                    </p:column>
-                                                    <p:column headerText="Descripción" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.nombre}" />
-                                                    </p:column>
-                                                    <p:column headerText="Costo Directo" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.costo}" />
-                                                    </p:column>
-
-                                                </p:dataTable>
-                                            </div>
-                                            <div class="p-grid p-justify-around">
-                                                <p:dataTable id="costosProduccionIndirectos" editable="true" reflow="true"
-                                                             editInitEvent="dblclick" editMode="cell"
-                                                             value="#{produccionMBean.listaCostosIndirectos}" var="costos">
-                                                    <p:column headerText="Subcuenta" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.codigoSubcuenta}" />
-                                                    </p:column>
-
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.nombreCuenta}" />
-                                                    </p:column>
-                                                    <p:column headerText="Descripción" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.nombre}" />
-                                                    </p:column>
-                                                    <p:column headerText="Costo Indirecto" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.costo}" />
-                                                    </p:column>
-
-                                                </p:dataTable>
-                                            </div>
-
-                                            <div class="p-grid p-justify-around">
                                                 <p:dataTable id="costosProduccion" editable="true" reflow="true"
                                                              editInitEvent="dblclick" editMode="cell"
                                                              value="#{produccionMBean.listaCostos}" var="costos">
-                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                    <p:column headerText="Centro de trabajo" filterStyle="display : none">
                                                         <h:outputText value="#{costos.nombre_formula}" />
                                                     </p:column>
 
                                                     <p:column headerText="Tiempo" filterStyle="display : none">
-                                                        <h:outputText value="#{costos.tiempoUnidad}" />
+                                                        <h:outputText value="#{costos.unidadMedida}" />
                                                     </p:column>
                                                     <p:column headerText="Costo Directo" filterStyle="display : none">
                                                         <h:outputText value="#{costos.MODUnidad}" />
@@ -244,30 +196,30 @@
                                             <div class="p-grid">
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Materia Prima" for="@next"/>
-                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalMateria}" readonly="true"/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalMateriaEstimado}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo directo" for="@next"/>
-                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalMOD}" readonly="true"/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalMODEstimado}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo Indirecto" for="@next"/>
-                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalCIF}" readonly="true"/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.totalCIFEstimado}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo Total" for="@next"/>
-                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.costoTotal}" readonly="true"/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.costoTotalEstimado}" readonly="true"/>
                                                 </div>
 
                                             </div>
                                             <div class="p-grid">
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Cantidad Producida" for="@next"/>
-                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.cantidad}" readonly="true"/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.cantidadEstimado}" readonly="true"/>
                                                 </div>
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Costo Unitario" for="@next"/>
-                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.costoUnitario}" readonly="true"/>
+                                                    <p:inputText value="#{produccionMBean.ordenTrabajo.costoUnitarioEstimado}" readonly="true"/>
                                                 </div>
 
                                             </div>
@@ -443,7 +395,7 @@
                                                                      icon="pi pi-check" 
                                                                      actionListener="#{produccionMBean.llenaMaterialiesConfirmados()}" 
                                                                      styleClass="ui-button-primary"
-                                                                     update=":form:MaterialesProducto,:form:growl,:form:materiaPrimaAdicional,nuevaMateriaPrima"
+                                                                     update=":form:MaterialesProducto,:form:growl,:form:materiaPrimaAdicional,nuevaMateriaPrima,DcostoMateriaprimaReal"
                                                                      process=" @this"
                                                                      oncomplete="PF('aggproducto').hide()"/>
                                                 </div>
@@ -460,6 +412,14 @@
                         </p:dialog>
                         <!-- Tabla de datos -->
                         <ui:fragment>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6em; font-size: 2em">Centros de trabajos</span>
+
+                                    </div>
+                                </p:toolbarGroup>
+                            </p:toolbar>
                             <p:dataTable id="centroTiempo" reflow="true" paginator="true" rows="5" 
                                          rowSelectMode="add" paginatorPosition="bottom"
                                          editInitEvent="dblclick" editMode="cell"
@@ -471,7 +431,7 @@
                                     <span style="font-weight: bold; margin-right: 6px;">Procesos de producción</span>
                                 </div>
                                 <p:column headerText="Hora Inicio">
-                                    <p:inputMask value="#{centroTrabajo.horaInicio}" style="width: 15px"
+                                    <p:inputMask value="#{centroTrabajo.horaInicio}"
                                                  mask="99:99:99">
                                         <p:ajax event="select" listener="#{produccionMBean.asignaHoraInicio(centroTrabajo)}" update=":form:centroTiempo"/>
                                     </p:inputMask>
@@ -479,7 +439,7 @@
                                 <p:column headerText="Hora Fin">
                                     <p:inputMask value="#{centroTrabajo.horaFin}"
                                                  mask="99:99:99">
-                                        <p:ajax event="select" listener="#{produccionMBean.asignaHoraFin(centroTrabajo)}" update=":form:centroTiempo"/>
+                                        <p:ajax event="blur" listener="#{produccionMBean.asignaHoraFin(centroTrabajo)}" update=":form:centroTiempo,:form:valoresReales"/>
                                     </p:inputMask>
                                 </p:column>
 
@@ -496,17 +456,119 @@
                                 <p:column headerText="Centro trabajao" >
                                     <h:outputText value="#{centroTrabajo.nombreSubproceso}" />
                                 </p:column>
+                                <!-- comment 
                                 <p:column headerText="Costo Directo" >
                                     <h:outputText value="#{centroTrabajo.costoDirecto}" />
                                 </p:column>
                                 <p:column headerText="Costo Indirecto" >
                                     <h:outputText value="#{centroTrabajo.costoIndirecto}" />
-                                </p:column>
+                                </p:column>-->
                             </p:dataTable>
+                            <p:toolbar>
+
+                                <p:toolbarGroup>
+
+                                    <div class="p-d-flex p-jc-between p-ai-center">
+                                        <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Materia Prima</span>
+
+                                    </div>
+                                    <p:outputPanel id="DcostoMateriaprimaReal" class="ui-fluid">
+
+                                        <p:outputPanel>
+
+                                            <div class="p-grid p-justify-around">
+                                                <p:dataTable id="costoMateriaPrimaReal" editable="true" reflow="true"
+                                                             editInitEvent="dblclick" editMode="cell"
+                                                             value="#{produccionMBean.detalleListaMateriaPrima}" var="costoProduccion">
+                                                    <p:column headerText="Nombre" filterStyle="display : none">
+                                                        <h:outputText value="#{costoProduccion.nombre}" />
+                                                    </p:column>
+                                                    <p:column headerText="Descripcion" filterStyle="display : none">
+                                                        <h:outputText value="#{costoProduccion.descripcion}" />
+                                                    </p:column>
+
+                                                    <p:column headerText="Precio" filterStyle="display : none">
+                                                        <h:outputText value="#{costoProduccion.costo}" />
+                                                    </p:column>
+                                                    <p:column headerText="Cantidad" >
+                                                        <p:cellEditor>
+                                                            <f:facet name="output">
+                                                                <h:outputText value="#{costoProduccion.cantidad}"/>
+                                                            </f:facet>
+                                                            <f:facet name="input">
+                                                                <p:inputNumber value="#{costoProduccion.cantidad}" 
+                                                                               style="width:100%">
+                                                                    <p:ajax event="blur" listener="#{produccionMBean.calculaTotal(costoProduccion)}" update=":form:DcostoMateriaprimaReal,:form:valoresReales"/>
+                                                                </p:inputNumber>
+                                                            </f:facet>
+                                                        </p:cellEditor>
+                                                    </p:column>
+                                                    <p:column id="totalMateriales" headerText="Total" filterStyle="display : none">
+                                                        <h:outputText value="#{costoProduccion.total}" />
+                                                    </p:column>
+
+                                                </p:dataTable>
+                                            </div>
+
+
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span style="font-weight: bold; margin-right: 6px; font-size: 24px">Costos Totales de Producción</span>
+
+                            </div>
+                            <p:toolbar>
+
+                                <p:toolbarGroup>
+
+                                    <p:outputPanel id="valoresReales">
+                                        <div class="p-grid p-justify-around">
+                                            <div class="p-col-6 p-md-12 p-lg-12">
+                                                <div class="p-grid">
+                                                    <div class="p-col-3">
+                                                        <p:outputLabel value="Materia Prima" for="@next"/>
+                                                        <p:inputText value="#{produccionMBean.ordenTrabajo.totalMateria}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-3">
+                                                        <p:outputLabel value="Costo directo" for="@next"/>
+                                                        <p:inputText value="#{produccionMBean.ordenTrabajo.totalMOD}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-3">
+                                                        <p:outputLabel value="Costo Indirecto" for="@next"/>
+                                                        <p:inputText value="#{produccionMBean.ordenTrabajo.totalCIF}" readonly="true"/>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="p-grid">
+                                                    <div class="p-col-3">
+                                                        <p:outputLabel value="Cantidad Producida" for="@next"/>
+                                                        <p:inputText value="#{produccionMBean.ordenTrabajo.cantidad}">
+                                                            <p:ajax event="blur" listener="#{produccionMBean.updateCantidad()}" update="valoresReales"/>
+
+                                                        </p:inputText>
+                                                    </div>
+                                                    <div class="p-col-3">
+                                                        <p:outputLabel value="Costo Unitario" for="@next"/>
+                                                        <p:inputText value="#{produccionMBean.ordenTrabajo.costoUnitario}" readonly="true"/>
+                                                    </div>
+                                                    <div class="p-col-3">
+                                                        <p:outputLabel value="Costo Total" for="@next"/>
+                                                        <p:inputText value="#{produccionMBean.ordenTrabajo.costoTotal}" readonly="true"/>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+                                </p:toolbarGroup>
+                            </p:toolbar>
                         </ui:fragment>
                         <div class="p-grid p-justify-end">
                             <div class="p-col-1">
-                                <p:commandButton style="margin-right: 6px;margin-top: 15px;" value="Guardar " actionListener="#{produccionMBean.registrarOrden()}"
+                                <p:commandButton style="margin-right: 6px;margin-top: 15px;" value="Guardar " actionListener="#{produccionMBean.registrarOrdenReal()}"
                                                  process="ordenProduccion @this"
                                                  update="@form"
                                                  icon="pi pi-check" styleClass="ui-button-primary"></p:commandButton>

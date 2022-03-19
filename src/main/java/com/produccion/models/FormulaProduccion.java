@@ -53,21 +53,20 @@ public class FormulaProduccion {
         this.nombreCuenta = nombreCuenta;
     }
 
-    public FormulaProduccion(String nombre_formula, float tiempoUnidad, float MODUnidad, float CIFUnidad) {
+    public FormulaProduccion(String nombre_formula, String tiempoUnidad, float MODUnidad, float CIFUnidad) {
         this.nombre_formula = nombre_formula;
-        this.tiempoUnidad = tiempoUnidad;
+        this.unidadMedida = tiempoUnidad;
         this.MODUnidad = MODUnidad;
         this.CIFUnidad = CIFUnidad;
     }
 
     public FormulaProduccion(int codigo_formula, String nombre_formula, String nombre_producto,
-            String descripcion, int rendimiento, String nombre_proceso, String categoria, String tipo) {
+            String descripcion, int rendimiento, String categoria, String tipo) {
         this.codigo_formula = codigo_formula;
         this.nombre_formula = nombre_formula;
         this.nombre_producto = nombre_producto;
         this.descripcion = descripcion;
         this.rendimiento = rendimiento;
-        this.nombre = nombre_proceso;
         this.categoria = categoria;
         this.tipo = tipo;
     }

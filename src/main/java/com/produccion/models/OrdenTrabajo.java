@@ -17,6 +17,7 @@ public class OrdenTrabajo {
     private int codigo_proceso;
     private String Descripcion;
     private float cantidad;
+    private float cantidadEstimado;
     private Date fecha_inicio;
     private Date fecha_fin;
     private String nombre_formula;
@@ -29,6 +30,11 @@ public class OrdenTrabajo {
     private float totalCIF;
     private float costoTotal;
     private float costoUnitario;
+    private float totalMateriaEstimado;
+    private float totalMODEstimado;
+    private float totalCIFEstimado;
+    private float costoTotalEstimado;
+    private float costoUnitarioEstimado;
     private float tiempo;
     private String estado;
 
@@ -284,6 +290,54 @@ public class OrdenTrabajo {
 
     public void setCodigo_bodega(int codigo_bodega) {
         this.codigo_bodega = codigo_bodega;
+    }
+
+    public float getCantidadEstimado() {
+        return cantidadEstimado;
+    }
+
+    public void setCantidadEstimado(float cantidadEstimado) {
+        this.cantidadEstimado = cantidadEstimado;
+    }
+
+    public float getTotalMateriaEstimado() {
+        return totalMateriaEstimado;
+    }
+
+    public void setTotalMateriaEstimado(float totalMateriaEstimado) {
+        this.totalMateriaEstimado = totalMateriaEstimado;
+    }
+
+    public float getTotalMODEstimado() {
+        return totalMODEstimado;
+    }
+
+    public void setTotalMODEstimado(float totalMODEstimado) {
+        this.totalMODEstimado = totalMODEstimado;
+    }
+
+    public float getTotalCIFEstimado() {
+        return totalCIFEstimado;
+    }
+
+    public void setTotalCIFEstimado(float totalCIFEstimado) {
+        this.totalCIFEstimado = totalCIFEstimado;
+    }
+
+    public float getCostoTotalEstimado() {
+        return costoTotalEstimado;
+    }
+
+    public void setCostoTotalEstimado(float costoTotalEstimado) {
+        this.costoTotalEstimado = costoTotalEstimado;
+    }
+
+    public float getCostoUnitarioEstimado() {
+        return costoUnitarioEstimado;
+    }
+
+    public void setCostoUnitarioEstimado(float costoUnitarioEstimado) {
+        this.costoUnitarioEstimado = costoUnitarioEstimado;
     }
 
 }
