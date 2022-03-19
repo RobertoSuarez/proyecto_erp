@@ -1,32 +1,21 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
 
-    <body>
-        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
-            <ui:define name="content">
-                
-                <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-                
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Inicio" url="#"/>
-                    <p:menuitem value="Asientos" url="#"/>
-                    <p:menuitem value="Diarios" url="#"/>
-                    <p:submenu label="Plan de cuentas">
-                        <p:menuitem value="Grupo" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Subgrupos" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Cuentas" url="#" icon="pi pi-list" />
-                        <p:menuitem value="Subcuentas" url="#" icon="pi pi-list" />
-                    </p:submenu>
-                    <p:submenu label="Informes">
-                        <p:menuitem value="Balance General" url="#" icon="pi pi-book" />
-                        <p:menuitem value="Libro Mayor" url="#" icon="pi pi-bars" />
-                    </p:submenu>
-                </p:menubar>
-            </ui:define>
-        </ui:composition>
-    </body>
-</html>
+    <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
+
+    <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
+        <p:menuitem value="Tangibles"
+                    style="display: flex; align-items: center; text-decoration: none;"
+                    outcome="/View/activos_fijos/ActivosTangibles.xhtml" />
+        <p:menuitem value="Intangibles"
+                    style="display: flex; align-items: center; text-decoration: none;"
+                    outcome="/View/activos_fijos/ActivosIntangibles.xhtml" />
+        <p:menuitem value="Parametros"
+                    style="display: flex; align-items: center; text-decoration: none;"
+                    outcome="/View/activos_fijos/parametroFijoDepreciable.xhtml" />
+    </p:menubar>
+</ui:composition>

@@ -418,8 +418,8 @@ public class RolPagosDAO implements IDAO<RolPagos> {
                 sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("DIA-CPP-01").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
                         + ",\"documento\": \"ROL-" + rolPagos.getCodigo().split("-")[0] + "\",\"detalle\": \"Rol de pago: "
                         + rolPagos.getEmpleado().nombreCompleto() + "\",\"fechaCreacion\": \""
-                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy") + "\",\"fechaCierre\":\""
-                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy") + "\"}";
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-mm-dd") + "\",\"fechaCierre\":\""
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-mm-dd") + "\"}";
 
                 sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\""
                         + rolPagos.getValor() + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Pago\"},"
@@ -438,8 +438,8 @@ public class RolPagosDAO implements IDAO<RolPagos> {
                 sentencia = "{\"idDiario\": \"" + this.diarioDAO.obtenerDiarioByNombre("DIA-CPP-01").getIdDiario() + "\",\"total\": " + rolPagos.getValor()
                         + ",\"documento\": \"ROL-" + rolPagos.getCodigo().split("-")[0] + " R\",\"detalle\": \"Rol de pago: :"
                         + rolPagos.getEmpleado().nombreCompleto() + " R\",\"fechaCreacion\": \""
-                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy")  + "\",\"fechaCierre\":\""
-                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "dd-MM-yyyy") + "\"}";
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-mm-dd")  + "\",\"fechaCierre\":\""
+                        + DateFormatUtils.format(rolPagos.getFechaGenerado(), "yyyy-mm-dd") + "\"}";
 
                 sentencia1 = "[{\"idSubcuenta\":\"28\",\"debe\":\"0\",\"haber\":\""
                         + rolPagos.getValor() + "\",\"tipoMovimiento\":\"Pago\"},"

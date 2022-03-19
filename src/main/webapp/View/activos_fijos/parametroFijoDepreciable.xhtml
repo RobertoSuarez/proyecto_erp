@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">  
+
+    <h:body>
+        <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
+            <ui:define name="content">
+
+                <f:event type="preRenderView"
+                         listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
+                <ui:include src="menuActivosFijos.xhtml"/>
+
+                <h:form id="form" style="width: 100%;">
+                    <div class="card crud-demo">
+                        <p:growl id="messages" showDetail="true"/>
+                        <br/><br/><br/>
+                        <p:panel>
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <div class="products-table-header">
+                                        <span style="font-weight: bold; font-size: 25px;" > Parámetros de activos depreciables </span>
+                                    </div>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <f:facet name="header">
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{parametroView.abrirNuevo}" disabled="#{rolMB.rol()}"
+                                                 update=":form:manage-parametro-content" oncomplete="PF('manageParametroDialog').show()"
+                                                 class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" style="margin-right: .5rem">
+                                    <p:resetInput target=":form:manage-parametro-content"/>
+                                </p:commandButton>
+
+                            </f:facet>
+                            <p:dataTable id="dt-paramentros" widgetVar="dtParametros" 
+                                         var="parametro" value="#{parametroView.lista}"
+                                         reflow="true" size="small" liveResize="true" 
+                                         styleClass="paramentros-table"
+                                         rowKey="#{parametro.idParametro}" paginator="true"
+                                         rows="5" rowSelectMode="add" paginatorPosition="bottom">
+                                <p:column headerText="Activo depreciable" >
+                                    <h:outputText value="#{parametro.activoDepreciable.nombre}"/>
+                                </p:column>
+                                <p:column headerText="Años" style="text-align: center;">
+                                    <h:outputText value="#{parametro.anios}"/>
+                                </p:column>
+                                <p:column headerText="Porcentaje" style="text-align: center;">
+                                    <h:outputText value="#{parametro.porcentajeAnual}%"/>
+                                </p:column>
+                                <p:column exportable="false" width="10%">
+                                    <p:commandButton class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
+                                                     icon="pi pi-pencil" update=":form:manage-parametro-content"
+                                                     oncomplete="PF('manageParametroDialog').show()" disabled="#{rolMB.rol()}"
+                                                     process="@this">
+                                        <f:setPropertyActionListener value="#{paramentro}" 
+                                                                     target="#{parametroView.parametroActivoDepreciable}"/>
+                                        <p:resetInput target=":form:manage-parametro-content"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <p:dialog header="Parámentro de activo depreciable" showEffect="fade" modal="true"
+                                      widgetVar="manageParametroDialog" responsive="true">
+                                <p:outputPanel id="manage-parametro-content" class="ui-fluid">
+                                    <p:outputPanel rendered="#{not empty parametroView.parametroActivoDepreciable}">
+                                        <div class="card">
+                                            <div class="ui-fluid">
+                                                <div class="p-field">
+                                                    <h:outputLabel for="subCuentalist" style="font-weight: bold" value="Cuenta de activo depreciable: "/>
+                                                    <p:selectOneMenu id="subCuentalist" value="#{parametroView.parametroActivoDepreciable.activoDepreciable.id}"
+                                                                     required="true" requiredMessage="Debe seleccionar una cuenta de activo depreciable" label="Cuenta"
+                                                                     filter="true" filterMatchMode="startsWith">
+                                                        <f:selectItem itemLabel="Seleccione una cuenta de activo depreciable" 
+                                                                      itemValue="#{0}" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{parametroView.subCuentaList}" var="subCuenta"
+                                                                       itemLabel="#{subCuenta.nombre}" 
+                                                                       itemValue="#{subCuenta.id}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="p-field">
+                                                    <div class="p-grid">
+                                                        <div class="p-col-6">
+                                                            <p:outputLabel for="anios" style="font-weight: bold">Años:</p:outputLabel>
+                                                            <p:inputNumber id="anios" 
+                                                                         value="#{parametroView.parametroActivoDepreciable.anios}" 
+                                                                         required="true"  minValue="1" maxValue="100" 
+                                                                         requiredMessage="Campo requerido"/>
+                                                        </div>
+                                                        <div class="p-col-6">
+                                                            <p:outputLabel for="porcentaje" style="font-weight: bold">Procentaje anual</p:outputLabel>
+                                                            <p:inputNumber id="porcentaje" 
+                                                                         value="#{parametroView.parametroActivoDepreciable.porcentajeAnual}" 
+                                                                         required="true" dir="right" minValue="0.01" maxValue="100"  
+                                                                         requiredMessage="Campo requerido"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Guardar" icon="pi pi-check" 
+                                                     actionListener="#{parametroView.enviar}"
+                                                     update="messages manage-parametro-content"
+                                                     process="messages manage-parametro-content @this"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                     onclick="PF('manageParametroDialog').hide()"
+                                                     process="@none" class="ui-button-danger" 
+                                                     resetValues="true" />
+                                </f:facet>
+                            </p:dialog>
+                            <p:confirmDialog global="true" showEffect="fade" width="300">
+                                <p:commandButton value="Yes" type="button" 
+                                                 styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
+                                <p:commandButton value="No" type="button" 
+                                                 styleClass="ui-confirmdialog-no ui-button-secondary"
+                                                 icon="pi pi-times"/>
+                            </p:confirmDialog>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
