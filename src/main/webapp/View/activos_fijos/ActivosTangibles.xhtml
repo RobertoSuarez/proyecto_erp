@@ -10,13 +10,7 @@
             <ui:define name="content">
                 <f:event type="preRenderView" 
                          listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-                <p:menubar 
-                    autoDisplay="false"
-                    style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Tangibles" url="#"/>
-                    <p:menuitem value="Intangibles"
-                                url="./ActivosIntangibles.xhtml"/>
-                </p:menubar>
+                <ui:include src="menuActivosFijos.xhtml"/>
                 <p:panel>
                     <h1 style="text-align: center; color: black;">
                         Tangibles</h1>
@@ -92,7 +86,7 @@
                                                     headerText="% de Depreciación">
                                                     <h:outputText 
                                                         value="#{depreciable.porcentaje_depreciacion} %">
-                                                     
+
                                                     </h:outputText>
                                                 </p:column>
 
@@ -133,8 +127,8 @@
                                                 </p:column>
 
                                                 <p:column  width="14%"
-                                                    headerText="Acciones" 
-                                                    rendered="#{seguridadActvFijo.renderSoloGerente()}">
+                                                           headerText="Acciones" 
+                                                           rendered="#{seguridadActvFijo.renderSoloGerente()}">
                                                     <p:commandButton  
                                                         actionListener="#{activosFijosMB.obtenerDatosDepreciables(depreciable)}"
                                                         update="editarDepreciable"
@@ -696,7 +690,7 @@
                                             </div>
                                         </p:dialog> 
                                     </h:form>
-                                    
+
                                     <!-- INICIA EL EDITAR DEPRECIABLE -->
                                     <h:form id="siguienteDepreciacion">
                                         <p:dialog 
@@ -721,21 +715,21 @@
                                                 <p:panel>
                                                     <h:panelGrid columns="4" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-5,ui-grid-col-4"
                                                                  styleClass="ui-panelgrid-blank ui-fluid"
-                                                        style="border:0px none; background-color:transparent; width: 100%;">
+                                                                 style="border:0px none; background-color:transparent; width: 100%;">
                                                         <h:outputText value="Mes: " style="font-weight: bold;" />
                                                         <h:outputText value="Couta: " style="font-weight: bold;" />
                                                         <h:outputText value="Depreciación acumulada: " style="font-weight: bold;" />
                                                         <h:outputText value="Valor neto en libros: " style="font-weight: bold;" />
-                                                        
+
                                                         <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.mes}"/>
                                                         <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.listaDepreciable.cuota_depresiacion}">
-                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                            <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                         <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.depreciacion}">
-                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                            <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                         <h:outputText value="#{activosFijosMB.depreciacionActivosFijos.saldo}">
-                                                                <f:convertNumber currencySymbol="$" type="currency"/>
+                                                            <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                     </h:panelGrid>
                                                 </p:panel>
@@ -765,7 +759,7 @@
                                             </div>
                                         </p:dialog> 
                                     </h:form>
-                                    
+
                                     <!-- LISTAR DEPRECIACIONES -->
                                     <h:form id="ListaDepreciaciones" >
                                         <p:dialog 
@@ -793,13 +787,13 @@
                                                         </p:column>
                                                         <p:column headerText="Depreciación acumulada">
                                                             <h:outputText style="font-weight: 700"
-                                                                value="#{depreciacionActivoFijo.depreciacion}">
+                                                                          value="#{depreciacionActivoFijo.depreciacion}">
                                                                 <f:convertNumber currencySymbol="$" type="currency"/>
                                                             </h:outputText>
                                                         </p:column>
                                                         <p:column headerText="Valor neto en libros">
                                                             <h:outputText style="font-weight: 700"
-                                                                value="#{depreciacionActivoFijo.saldo}">
+                                                                          value="#{depreciacionActivoFijo.saldo}">
                                                                 <f:convertNumber currencySymbol="$" type="currency"/>
                                                             </h:outputText>
                                                         </p:column>

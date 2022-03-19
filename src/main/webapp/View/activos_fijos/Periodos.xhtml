@@ -6,19 +6,13 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <h:body>
-       <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ui:composition template="../../WEB-INF/InicioTemplate.xhtml">
             <ui:define name="content">
 
                 <f:event type="preRenderView" listener="#{seguridadActvFijo.verificarPermisoVista()}"/>
-
-                <p:menubar autoDisplay="false" style="position: fixed; z-index: 3; width: 100%">
-                    <p:menuitem value="Tangibles" url="./ActivosTangibles.xhtml"/>
-                    <p:menuitem value="Intangibles" url="./ActivosIntangibles.xhtml"/>
-                    <p:menuitem value="Reporte" url="#"/>
-                </p:menubar>
+                <ui:include src="menuActivosFijos.xhtml"/>
                 <h:form id="periodos">
                     <p:growl id="growl" showDetail="true" />
                     <p:panel>
