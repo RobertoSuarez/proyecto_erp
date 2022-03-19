@@ -200,4 +200,24 @@ public class RetencionDAO implements Serializable {
         //en estado Falso
         return -1;
     }
+    
+    public double obtainTaxBase(int idVenta){
+        double taxBase=0;
+        ResultSet rs;
+        String query="SELECT base12 FROM public.venta WHERE idventa="+String.valueOf(idVenta) +";";
+        try{
+            conex.conectar();
+            rs=conex.ejecutarSql(query);
+            while(rs.next()){
+                taxBase=rs.getDouble(1);
+            }
+        }catch(Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        finally{
+            conex.desconectar();
+        }
+        return taxBase;
+    }
+    
 }

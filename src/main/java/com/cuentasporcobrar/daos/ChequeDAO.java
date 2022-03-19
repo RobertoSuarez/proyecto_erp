@@ -131,5 +131,62 @@ public class ChequeDAO implements Serializable{
         
         return lista_cheques;
     }
+    
+    public List<Cheque> ObtenerTodosLosCheques(){
+        List<Cheque> lstCheq = new ArrayList<>();
+        String sentenciaSql ="SELECT * FROM public.cheques ch Inner join public.bancos b on b.codbanco=ch.codbanco ";
+        ResultSet rs;
+        Cheque cheq;
+        try{
+            conex.conectar();
+            rs=conex.ejecutarSql(sentenciaSql);
+            while(rs.next()){
+                cheq= new Cheque();
+                cheq.setIdCheque(rs.getInt(1));
+                cheq.setCodBanco(rs.getString(2));
+                cheq.setIdVenta(3);
+                cheq.setFecha(rs.getDate(4).toLocalDate());
+                cheq.setNumeroDeCuenta(rs.getString(5));
+                cheq.setEstadoCheque(rs.getString(6));
+                cheq.setValor_Cheque(rs.getDouble(7));
+                lstCheq.add(cheq);
+            }
+        }
+        catch(SQLException e){
+            System.out.println(e);
+        }
+        return lstCheq;
+    }
+    
+    public int ObtenerIdCliente(int idVenta){
+        int idcliente=0;
+        String sentenciaSql ="SELECT v.idcliente FROM public.cheques ch inner join public.venta v on ch.idventa=v.idventa where v.idventa="+ String.valueOf(idVenta)+" group by v.idcliente";
+        ResultSet rs;
+        try{
+            conex.conectar();
+            rs=conex.ejecutarSql(sentenciaSql);
+            while(rs.next()){
+                idcliente = rs.getInt(1);
+            }
+        }
+        catch(SQLException e){
+            System.out.println(e);
+        }
+        return idcliente;
+    }
+    
+    public void ModificarCheque(Cheque cheq){
+        String Sql="UPDATE public.cheques SET estadocheque='"+String.valueOf(cheq.getEstadoCheque())+"'WHERE idcheques="+String.valueOf(cheq.getIdCheque())+";";
+        try{
+            conex.conectar();
+            conex.ejecutarSql(Sql);
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        finally{
+            conex.desconectar();
+        }
+    }
 }
 
