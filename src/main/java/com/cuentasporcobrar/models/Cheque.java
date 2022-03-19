@@ -20,6 +20,7 @@ public class Cheque implements Serializable {
     private String nombreBanco;
     private String numeroDeCuenta;
     private String estadoCheque;
+    private double valor_Cheque;
     private LocalDate fecha=LocalDate.now();
     
     //Constructor vacio
@@ -109,5 +110,15 @@ public class Cheque implements Serializable {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     } 
+
+    public double getValor_Cheque() {
+        return valor_Cheque;
+    }
+
+    public void setValor_Cheque(double valor_Cheque) {
+        this.valor_Cheque = valor_Cheque;
+    }
+    
+    
 }
 
