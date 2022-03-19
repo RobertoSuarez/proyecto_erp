@@ -666,7 +666,10 @@ public class RolDePagoController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public double obtenerTotal(){
-        return Math.round(this.total * 100) / 100;
+    public double RedondearDosDecimales(){
+        if (this.total == 0) {
+            return 0.0;
+        }
+        return Math.round(this.total*100.0)/100.0;
     }
 }
