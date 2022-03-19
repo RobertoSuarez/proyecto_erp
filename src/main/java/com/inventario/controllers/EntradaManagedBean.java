@@ -71,8 +71,7 @@ public class EntradaManagedBean implements Serializable {
     public void setIdProveedor(int idProveedor) {
         this.idProveedor = idProveedor;
     }
-    
-    
+
     private Proveedor proveedor;
     private ProveedorDAO proveedorDAO;
     private String proveedordINum;
@@ -96,7 +95,7 @@ public class EntradaManagedBean implements Serializable {
     private ArticulosInventario producto;
     private int codigoProducto;
     private String nombreProducto;
-    private int precioProducto;
+    private float precioProducto;
     private double subTotalEntrada;
 
     private EntradaDetalleInventario detalleEntrada;
@@ -228,7 +227,7 @@ public class EntradaManagedBean implements Serializable {
 
             this.nombreProducto = this.producto.getDescripcion();
 
-            this.precioProducto = this.producto.getCosto();
+            this.precioProducto = this.producto.getCoast();
         }
     }
 
@@ -248,7 +247,7 @@ public class EntradaManagedBean implements Serializable {
             double descuento = 0.0f;
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(),  Math.round(inv.getCosto()*100.0)/100.0,Math.round(inv.getCosto() * inv.getCant()*100.0)/100.0 ));
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), Math.round(inv.getCosto() * 100.0) / 100.0, Math.round(inv.getCosto() * inv.getCant() * 100.0) / 100.0));
                     subtotal += inv.getCosto() * (double) inv.getCant();
                     ice += inv.getIce();
                     iva += inv.getIva();
@@ -337,11 +336,10 @@ public class EntradaManagedBean implements Serializable {
         }
     }
 
-    
     //Agregar producto a la lista de detalle
     @Asynchronous
     public void AgregarProductoLista() {
-        
+
         try {
             Proveedor prueba = this.proveedor;
             Bodega prueba2 = this.bodega;
@@ -356,153 +354,207 @@ public class EntradaManagedBean implements Serializable {
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ingrese un valor válido");
                     } else {
 
-                        
-                        double iceProducto, ivaProducto;
-                        iceProducto = this.producto.getCosto() *  this.cantidad * ( (double) this.producto.getIceproducto()/ 100);
-                        ivaProducto = this.producto.getCosto()*0.12 * this.cantidad;
-                        //Ingreso de valores al detalle de entrada
-                        EntradaDetalleInventario detalle = new EntradaDetalleInventario();
-                        detalle.setIdArticulo(this.producto.getId());
-                        detalle.setCant(this.cantidad);
-                        detalle.setIva(Precision.round(ivaProducto, 2) );
-                       
-                        detalle.setIce(Precision.round(iceProducto, 2) );
-                        detalle.setCosto(this.producto.getCosto());
-                        detalle.setSubtotal(this.producto.getCosto() * this.cantidad);
-                        detalle.setNombreProducto(nombreProducto);
-                        detalle.setNombreCategoria(nombreCategoria);
+                        if (!listaDetalle.isEmpty()) {
+                            int productoid = 0;
+                            for (EntradaDetalleInventario elemento : listaDetalle) {
+                                if (elemento.getIdArticulo() == producto.getId()) {
+                                    productoid = 1;
+                                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ya se agrego este producto en la lista");
+                                }
+                            }
 
-                        detalle.setArticuloInventario(producto);
-                        //Cálculo de los valores
-                        this.subTotalEntrada = this.subTotalEntrada + detalle.getSubtotal();
-                        this.listaDetalle.add(detalle);
-                        this.cantidad = 1;
-                        this.codigoProducto = 0;
-                        this.nombreProducto = "";
-                        double subtemp = (this.producto.getCosto() * detalle.getCant());
-                        if (this.producto.getIva() != 0) {
-                            this.subtotal12 += subtemp;
-                        } else {
-                            this.subtotal0 += subtemp;
+                            if (productoid == 0) {
+                                productoid = 0;
+                                double iceProducto, ivaProducto;
+                                iceProducto = this.producto.getCoast() * this.cantidad * ((double) this.producto.getIceproducto() / 100);
+                                ivaProducto = this.producto.getCoast() * 0.12 * this.cantidad;
+                                //Ingreso de valores al detalle de entrada
+                                EntradaDetalleInventario detalle = new EntradaDetalleInventario();
+                                detalle.setIdArticulo(this.producto.getId());
+                                detalle.setCant(this.cantidad);
+                                detalle.setIva(Precision.round(ivaProducto, 2));
+
+                                detalle.setIce(Precision.round(iceProducto, 2));
+                                detalle.setCosto(this.producto.getCoast());
+                                detalle.setSubtotal((double) this.producto.getCoast() * (double) this.cantidad);
+                                detalle.setNombreProducto(nombreProducto);
+                                detalle.setNombreCategoria(nombreCategoria);
+
+                                detalle.setArticuloInventario(producto);
+                                //Cálculo de los valores
+                                this.subTotalEntrada = this.subTotalEntrada + detalle.getSubtotal();
+                                this.listaDetalle.add(detalle);
+                                this.cantidad = 1;
+                                this.codigoProducto = 0;
+                                this.nombreProducto = "";
+                                double subtemp = (this.producto.getCosto() * detalle.getCant());
+                                if (this.producto.getIva() != 0) {
+                                    this.subtotal12 += subtemp;
+                                } else {
+                                    this.subtotal0 += subtemp;
+                                }
+
+                                this.iva += this.producto.getIva() * detalle.getCant() * detalle.getCosto();
+                                this.ice += this.producto.getIce() * detalle.getCant();
+
+                                this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
+
+                                this.nombreProducto = "XXXXXX";
+                                this.cantidad = 1;
+                                this.precioProducto = 0;
+
+                                this.producto = null;        
+                                 }
+                            } else {
+                                double iceProducto, ivaProducto;
+                                iceProducto = this.producto.getCoast() * this.cantidad * ((double) this.producto.getIceproducto() / 100);
+                                ivaProducto = this.producto.getCoast() * 0.12 * this.cantidad;
+                                //Ingreso de valores al detalle de entrada
+                                EntradaDetalleInventario detalle = new EntradaDetalleInventario();
+                                detalle.setIdArticulo(this.producto.getId());
+                                detalle.setCant(this.cantidad);
+                                detalle.setIva(Precision.round(ivaProducto, 2));
+
+                                detalle.setIce(Precision.round(iceProducto, 2));
+                                detalle.setCosto(this.producto.getCoast());
+                                detalle.setSubtotal((double) this.producto.getCoast() * (double) this.cantidad);
+                                detalle.setNombreProducto(nombreProducto);
+                                detalle.setNombreCategoria(nombreCategoria);
+
+                                detalle.setArticuloInventario(producto);
+                                //Cálculo de los valores
+                                this.subTotalEntrada = this.subTotalEntrada + detalle.getSubtotal();
+                                this.listaDetalle.add(detalle);
+                                this.cantidad = 1;
+                                this.codigoProducto = 0;
+                                this.nombreProducto = "";
+                                double subtemp = (this.producto.getCosto() * detalle.getCant());
+                                if (this.producto.getIva() != 0) {
+                                    this.subtotal12 += subtemp;
+                                } else {
+                                    this.subtotal0 += subtemp;
+                                }
+
+                                this.iva += this.producto.getIva() * detalle.getCant() * detalle.getCosto();
+                                this.ice += this.producto.getIce() * detalle.getCant();
+
+                                this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
+
+                                this.nombreProducto = "XXXXXX";
+                                this.cantidad = 1;
+                                this.precioProducto = 0;
+
+                                this.producto = null;
+
+                            }
                         }
-
-                        this.iva += this.producto.getIva() * detalle.getCant() * detalle.getCosto();
-                        this.ice += this.producto.getIce() * detalle.getCant();
-
-                        this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-
-                        this.nombreProducto = "XXXXXX";
-                        this.cantidad = 1;
-                        this.precioProducto = 0;
-
-                        this.producto = null;
                     }
-                }
-            } else {
+                }else {
                 System.out.println("No hay producto seleccionado");
             }
-        } catch (Exception e) {
+            }catch (Exception e) {
             addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
         }
 
-    }
-
-    
-    //Eliminar un producto de la lista
-    @Asynchronous
-    public void EliminarProducto(EntradaDetalleInventario detalle) {
-        try {
-            double subtemp = detalle.getArticuloInventario().getCosto() * detalle.getCant();
-            if (detalle.getArticuloInventario().getIva() != 0) {
-                this.subtotal12 -= subtemp;
-            } else {
-                this.subtotal0 -= subtemp;
-            }
-
-            this.iva -= (detalle.getArticuloInventario().getIva() * detalle.getCant() * detalle.getCosto());
-            this.ice -= (detalle.getArticuloInventario().getIce() * detalle.getCant());
-
-            this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
-            this.subTotalEntrada -= detalle.getSubtotal();
-
-            this.listaDetalle.remove(detalle);
-//Actualizar en xhtml
-            PrimeFaces.current().ajax().update("entradaForm");
-            System.out.println("Eliminado");
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
         }
-    }
 
-    @Asynchronous
-    public int RegistrarEntrada() {
+        //Eliminar un producto de la lista
+        @Asynchronous
+        public void EliminarProducto
+        (EntradaDetalleInventario detalle
+        
+            ) {
         try {
-            EntradaInventario entradaActual = new EntradaInventario();
-            int listSize = 0;
-            if (this.listaDetalle.isEmpty()) {
-                addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede  realizar una entrada nula");
-            } else {
-                if (this.proveedorNombre == null || this.proveedorNombre == "") {
-                    //Debe elegir un proveedor para la entrada
-                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", " ");
+                double subtemp = detalle.getArticuloInventario().getCosto() * detalle.getCant();
+                if (detalle.getArticuloInventario().getIva() != 0) {
+                    this.subtotal12 -= subtemp;
                 } else {
-                    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                    String currentDate = df.format(this.fechaComprobante);
-                    Date currentDate2 = new SimpleDateFormat("yyyy/MM/dd").parse(currentDate);
+                    this.subtotal0 -= subtemp;
+                }
 
-                    //Asignar valores a la entrada
-                    entradaActual.setProveedor(this.proveedor);
-                    entradaActual.setIdProveedor(this.proveedor.getIdProveedor());
-                    entradaActual.setIdBodega(this.bodega.getCod());
-                    entradaActual.setNumComprobante(this.numeroComprobante);
-                    entradaActual.setFecha(currentDate2);
+                this.iva -= (detalle.getArticuloInventario().getIva() * detalle.getCant() * detalle.getCosto());
+                this.ice -= (detalle.getArticuloInventario().getIce() * detalle.getCant());
 
-                    //Verificación en consola
-                    System.out.println(entradaActual.getProveedor().getNombre());
+                this.total = this.subtotal0 + this.subtotal12 + this.iva + this.ice;
+                this.subTotalEntrada -= detalle.getSubtotal();
 
-                    //Guardar la entrada desde DAO
-                    int entradaRealizada = this.entradaDAO.GuardarEntrada(entradaActual);
+                this.listaDetalle.remove(detalle);
+//Actualizar en xhtml
+                PrimeFaces.current().ajax().update("entradaForm");
+                System.out.println("Eliminado");
+            } catch (Exception e) {
+                addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
+            }
+        }
 
-                    //Verificar que se haya ingresado la entrada
-                    if (entradaRealizada == 0) {
-                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo realizar la entrada. Revise los datos ingresados");
+        @Asynchronous
+        public int RegistrarEntrada
+        
+            () {
+        try {
+                EntradaInventario entradaActual = new EntradaInventario();
+                int listSize = 0;
+                if (this.listaDetalle.isEmpty()) {
+                    addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No puede  realizar una entrada nula");
+                } else {
+                    if (this.proveedorNombre == null || this.proveedorNombre == "") {
+                        //Debe elegir un proveedor para la entrada
+                        addMessage(FacesMessage.SEVERITY_ERROR, "Error", " ");
                     } else {
-                        System.out.println("Entrada realizada con Factura #" + entradaRealizada);
+                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                        String currentDate = df.format(this.fechaComprobante);
+                        Date currentDate2 = new SimpleDateFormat("yyyy/MM/dd").parse(currentDate);
 
-                        EntradaDetalleDAO daoDetail = new EntradaDetalleDAO();
+                        //Asignar valores a la entrada
+                        entradaActual.setProveedor(this.proveedor);
+                        entradaActual.setIdProveedor(this.proveedor.getIdProveedor());
+                        entradaActual.setIdBodega(this.bodega.getCod());
+                        entradaActual.setNumComprobante(this.numeroComprobante);
+                        entradaActual.setFecha(currentDate2);
 
-                        //Registro de cada producto (detalle) de la entrada en la BD
-                        while (listSize < this.listaDetalle.size()) {
-                            int codProd = this.listaDetalle.get(listSize).getArticuloInventario().getId();
-                            double qty = this.listaDetalle.get(listSize).getCant();
+                        //Verificación en consola
+                        System.out.println(entradaActual.getProveedor().getNombre());
 
-                            
-                            double price = this.listaDetalle.get(listSize).getCosto();
-                            double iva = this.listaDetalle.get(listSize).getIva();
-                            double ice = this.listaDetalle.get(listSize).getIce();
+                        //Guardar la entrada desde DAO
+                        int entradaRealizada = this.entradaDAO.GuardarEntrada(entradaActual);
 
-                            System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
-                            System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
-                  //          daoDetail.GuardarEntrada(this.listaDetalle);
-                            daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice);
-                            listSize += 1;
+                        //Verificar que se haya ingresado la entrada
+                        if (entradaRealizada == 0) {
+                            addMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo realizar la entrada. Revise los datos ingresados");
+                        } else {
+                            System.out.println("Entrada realizada con Factura #" + entradaRealizada);
+
+                            EntradaDetalleDAO daoDetail = new EntradaDetalleDAO();
+
+                            //Registro de cada producto (detalle) de la entrada en la BD
+                            while (listSize < this.listaDetalle.size()) {
+                                int codProd = this.listaDetalle.get(listSize).getArticuloInventario().getId();
+                                double qty = this.listaDetalle.get(listSize).getCant();
+
+                                double price = this.listaDetalle.get(listSize).getCosto();
+                                double iva = this.listaDetalle.get(listSize).getIva();
+                                double ice = this.listaDetalle.get(listSize).getIce();
+
+                                System.out.println(this.listaDetalle.get(listSize).getArticuloInventario().getDescripcion());
+                                System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
+                                //          daoDetail.GuardarEntrada(this.listaDetalle);
+                                daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice, this.codBodega);
+                                listSize += 1;
+                            }
+
+                            addMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se guardo la entrada");
+                            return entradaRealizada;
                         }
-                        
-                        
-                        
-
-                        addMessage(FacesMessage.SEVERITY_INFO, "Exito", "Se guardo la entrada");
-                        return entradaRealizada;
                     }
                 }
+            } catch (Exception e) {
+                addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
             }
-        } catch (Exception e) {
-            addMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage().toString());
+            return 0;
         }
-        return 0;
-    }
 
     
+
     public void SeleccionarProveedor(Proveedor prov) {
         this.idProveedor = prov.getIdProveedor();
         this.proveedorNombre = prov.getNombre();
@@ -511,12 +563,11 @@ public class EntradaManagedBean implements Serializable {
 
     }
 
-    
     public void SeleccionarProducto(ArticulosInventario pr) {
         try {
             this.codigoProducto = pr.getId();
             this.nombreProducto = pr.getDescripcion();
-            this.precioProducto = pr.getCosto();
+            this.precioProducto = pr.getCoast();
             if (this.SiICE) {
                 this.ice = (int) (pr.getCosto() * 15 / 100);
             }
@@ -538,7 +589,6 @@ public class EntradaManagedBean implements Serializable {
         this.SiICE = false;
     }
 
-    
     public void SeleccionarBodega(Bodega bod) {
         this.codBodega = bod.getCod();
         this.nombreBodega = bod.getNomBodega();
@@ -692,11 +742,11 @@ public class EntradaManagedBean implements Serializable {
         this.nombreProducto = nombreProducto;
     }
 
-    public int getPrecioProducto() {
+    public float getPrecioProducto() {
         return precioProducto;
     }
 
-    public void setPrecioProducto(int precioProducto) {
+    public void setPrecioProducto(float precioProducto) {
         this.precioProducto = precioProducto;
     }
 
@@ -892,10 +942,10 @@ public class EntradaManagedBean implements Serializable {
     public void setListaEntradas(List<EntradaInventario> listaEntradas) {
         this.listaEntradas = listaEntradas;
     }
-    
-         public void aleatorioCod() {
-          String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
-          String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
-          this.numeroComprobante = ("ENT-" + uuid + uuid2 ).toUpperCase();
-     }
+
+    public void aleatorioCod() {
+        String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();
+        String uuid2 = java.util.UUID.randomUUID().toString().substring(4, 7);
+        this.numeroComprobante = ("ENT-" + uuid + uuid2).toUpperCase();
+    }
 }

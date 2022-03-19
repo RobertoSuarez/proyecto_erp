@@ -155,5 +155,48 @@ public class EntradaDetalleDAO {
             this.conexion.desconectar();
         }
     }
+    //Metodo nuevo para la entrada 
+        public void RegistrarProductos(int idVenta, int idProducto, double cantidad, double precio, double iva, double ice, int idBodega) {
+        try {
+            int idDetalle = 1;
+            ResultSet rs = null;
+            this.conexion.conectar();
+
+            //Recibir siguiente código de detalle entrada
+            String query = "select id_entrada_detalle from public.entrada_detalle order by id_entrada_detalle desc limit 1;";
+            rs = this.conexion.ejecutarSql(query);
+
+            while (rs.next()) {
+                idDetalle = rs.getInt(1) + 1;
+            }
+
+            //insertar detalle entrada
+            query = "insert into public.entrada_detalle(id_entrada_detalle, id_entrada, cod_articulo, cant, costo, iva, ice) values(" + idDetalle + "," + idVenta + ","
+                    + idProducto + "," + cantidad + "," + precio +", " + iva + ", " + ice + ")";
+            System.out.println(query);
+            this.conexion.ejecutarSql(query);
+
+            //Reducir stock
+            int cantidadActual = 0;
+            query = "select cant from public.articulo_bodega where id_articulo="+ idProducto + " and id_bodega ="+ idBodega + ";";
+            rs = this.conexion.ejecutarSql(query);
+            while (rs.next()) {
+                cantidadActual = rs.getInt(1);
+            }
+            query = "update public.articulo_bodega set cant = " + (cantidadActual + (int) cantidad) + " where id_articulo= " + idProducto + " and id_bodega =" + idBodega + ";";
+            this.conexion.ejecutarSql(query);
+
+            this.conexion.desconectar();
+        } catch (SQLException e) {
+            if (conexion.isEstado()) {
+                conexion.desconectar();
+            }
+            System.out.println(e.getMessage().toString());
+        } finally {
+            this.conexion.desconectar();
+        }
+    }
+    
+    
 
 }
