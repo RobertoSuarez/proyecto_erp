@@ -104,6 +104,7 @@ public class BuscarProvManagedBean implements Serializable {
         System.out.println("Nombre: " + msg2);
         System.out.println("Ruc: " + msg3);
         System.out.println("Vence: " + msg4);
+        this.factura.setNombre(msg2);
         setNom(msg2);
         setCod(msg3);
         setNvenc(msg4);

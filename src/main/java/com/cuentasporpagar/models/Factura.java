@@ -48,6 +48,8 @@ public class Factura {
     private double ivaDetalle;
 
     //Retenciones
+    private String ncomprobante;
+    private String nserie;
     private double valorRenta;
     private double valorIva;
     private String tipo;
@@ -56,6 +58,9 @@ public class Factura {
     private int id_impuestoI;
     private String des_impuesto;
     private double porcentaje;
+    private double porcentajeR;
+    private double porcentajeI;
+    private String ejercicio;
 
     public Factura() {
     }
@@ -443,6 +448,46 @@ public class Factura {
 
     public void setId_impuestoI(int id_impuestoI) {
         this.id_impuestoI = id_impuestoI;
+    }
+
+    public String getNcomprobante() {
+        return ncomprobante;
+    }
+
+    public void setNcomprobante(String ncomprobante) {
+        this.ncomprobante = ncomprobante;
+    }
+
+    public String getNserie() {
+        return nserie;
+    }
+
+    public void setNserie(String nserie) {
+        this.nserie = nserie;
+    }
+
+    public double getPorcentajeR() {
+        return porcentajeR;
+    }
+
+    public void setPorcentajeR(double porcentajeR) {
+        this.porcentajeR = porcentajeR;
+    }
+
+    public double getPorcentajeI() {
+        return porcentajeI;
+    }
+
+    public void setPorcentajeI(double porcentajeI) {
+        this.porcentajeI = porcentajeI;
+    }
+
+    public String getEjercicio() {
+        return ejercicio;
+    }
+
+    public void setEjercicio(String ejercicio) {
+        this.ejercicio = ejercicio;
     }
     
 
