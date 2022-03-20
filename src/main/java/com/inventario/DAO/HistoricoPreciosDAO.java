@@ -5,13 +5,11 @@
 package com.inventario.DAO;
 
 import com.global.config.Conexion;
-import com.inventario.models.Bodega;
 import com.inventario.models.HistoricoPrecios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import sun.jvm.hotspot.utilities.soql.SOQLException;
 
 /**
  *
@@ -65,5 +63,44 @@ public class HistoricoPreciosDAO {
         
         return ListaHistorico;
     }
+    
+        public int GuardarHistorico(HistoricoPrecios historico) {
+        try {
+            ResultSet rs = null;
+
+            this.conexion.conectar();
+            rs = this.conexion.ejecutarSql("select id from public.historico_precios order by cod desc limit 1;");
+            int codigo = 1;
+
+            //Asignar los valores al nuevo historico.
+            while (rs.next()) {
+                codigo = rs.getInt(1) + 1;
+            }
+            historico.setId(codigo);
+            System.out.println("Historico: " + historico.getId());
+
+            //Insertar en la base de datos
+            String query = "INSERT INTO public.historico_precios("
+                    + "id, fecha_inicio, costo, precioventa)"
+                    + "VALUES('" + historico.getId()+ ", '" + historico.getFechaInicio()+ "', " + historico.getCosto()+ ", " + historico.getPrecioVenta()+ ")";
+            System.out.println(query);
+            this.conexion.ejecutarSql(query);
+
+            this.conexion.desconectar();
+
+            System.out.println("Se ha registrado el historico");
+
+            return historico.getId();
+        } catch (SQLException e) {
+            if (conexion.isEstado()) {
+                conexion.desconectar();
+            }
+            System.out.println(e.getMessage().toString());
+        } finally {
+            this.conexion.desconectar();
+        }
+        return 0;
+    }
+    
 
 }
