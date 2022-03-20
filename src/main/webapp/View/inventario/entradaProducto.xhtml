@@ -82,7 +82,7 @@
                                                 </h:form>
                                             </div>
                                             <div class="p-col-2">
-                                                <p:outputLabel value="Codigo Producto *"></p:outputLabel>
+                                                <p:outputLabel value="Codigo *"></p:outputLabel>
                                                 <p:inputText id="codigoProductoSelect" disabled="true" value="#{EntradaMB.codigoProducto}"></p:inputText>
                                             </div>
                                             <div class="p-col-2">
@@ -90,12 +90,16 @@
                                                 <p:inputNumber id="cantidadProductoSelect" value="#{EntradaMB.cantidad}"></p:inputNumber>
                                             </div>
                                             <div class="p-col-2">
-                                                <p:outputLabel value="Stock Maximo:"></p:outputLabel>
+                                                <p:outputLabel value="Stock Max:"></p:outputLabel>
                                                 <p:inputText id="stockProductoSelect" disabled="true" value="#{EntradaMB.producto.max_stock}"></p:inputText>
                                             </div>
-                                            <div class="p-col-2">
+                                            <div class="p-col-1">
                                                 <p:outputLabel value="Costo:"></p:outputLabel>
                                                 <p:inputText id="costoProductoSelect" disabled="true" value="#{EntradaMB.precioProducto}"></p:inputText>
+                                            </div>
+                                            <div class="p-col-1">
+                                                <p:outputLabel value="P.Promedio"></p:outputLabel>
+                                                <p:inputText id="precioPromedio" disabled="true" value="#{EntradaMB.precioPromedio}"></p:inputText>
                                             </div>
                                         </div>
                                     </div>

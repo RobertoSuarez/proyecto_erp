@@ -8,6 +8,7 @@ import com.global.config.Conexion;
 import com.inventario.models.HistoricoPrecios;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class HistoricoPreciosDAO {
         return ListaHistorico;
     }
     
-        public int GuardarHistorico(HistoricoPrecios historico) {
+    public int GuardarHistorico(HistoricoPrecios historico) {
         try {
             ResultSet rs = null;
 
@@ -78,11 +79,11 @@ public class HistoricoPreciosDAO {
             }
             historico.setId(codigo);
             System.out.println("Historico: " + historico.getId());
-
+            String fechafin = "'12-31-" + LocalDateTime.now().getYear()+"'";
             //Insertar en la base de datos
             String query = "INSERT INTO public.historico_precios("
-                    + "id, fecha_inicio, costo, precioventa)"
-                    + "VALUES('" + historico.getId()+ ", '" + historico.getFechaInicio()+ "', " + historico.getCosto()+ ", " + historico.getPrecioVenta()+ ")";
+                    + "id, fecha_inicio,fecha_fin, costo, precioventa)"
+                    + "VALUES('" + historico.getId()+ ", '" + historico.getFechaInicio()+ "', " + fechafin  + "', " + historico.getCosto()+ ", " + historico.getPrecioVenta()+ ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 

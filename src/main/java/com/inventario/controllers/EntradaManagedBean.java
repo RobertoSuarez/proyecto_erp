@@ -14,10 +14,12 @@ import com.inventario.DAO.ArticulosInventarioDAO;
 import com.inventario.DAO.BodegaDAO;
 import com.inventario.DAO.EntradaDao;
 import com.inventario.DAO.EntradaDetalleDAO;
+import com.inventario.DAO.HistoricoPreciosDAO;
 import com.inventario.models.ArticulosInventario;
 import com.inventario.models.Bodega;
 import com.inventario.models.EntradaDetalleInventario;
 import com.inventario.models.EntradaInventario;
+import com.inventario.models.HistoricoPrecios;
 import com.inventario.report.ProductoReport;
 
 import javax.servlet.ServletOutputStream;
@@ -62,6 +64,9 @@ public class EntradaManagedBean implements Serializable {
 
     List<ProductoReport> productosReport;
 
+    private HistoricoPrecios historico;
+    private HistoricoPreciosDAO historicoDAO;
+    
     private int idProveedor;
 
     public int getIdProveedor() {
@@ -98,6 +103,14 @@ public class EntradaManagedBean implements Serializable {
     private float precioProducto;
     private double subTotalEntrada;
 
+    public double getPrecioPromedio() {
+        return precioPromedio;
+    }
+
+    public void setPrecioPromedio(double precioPromedio) {
+        this.precioPromedio = precioPromedio;
+    }
+    private double precioPromedio;
     private EntradaDetalleInventario detalleEntrada;
     private EntradaDetalleDAO detalleDAO;
     private List<EntradaDetalleInventario> listaDetalle;
@@ -128,7 +141,10 @@ public class EntradaManagedBean implements Serializable {
     public void EntradaManagedBean() {
 
         this.productosReport = daoReport.getArticulosReport();
-
+        this.precioPromedio = 0;
+        this.historico = new HistoricoPrecios();
+        this.historicoDAO = new HistoricoPreciosDAO();
+        
         this.idProveedor = 0;
         this.proveedor = new Proveedor();
         this.proveedorDAO = new ProveedorDAO();
@@ -176,6 +192,8 @@ public class EntradaManagedBean implements Serializable {
 
         this.SiICE = false;
         this.SiIVA = false;
+        
+        
 
         System.out.print(listaProveedores.get(0).getNombre());
     }
@@ -386,6 +404,7 @@ public class EntradaManagedBean implements Serializable {
                                 this.listaDetalle.add(detalle);
                                 this.cantidad = 1;
                                 this.codigoProducto = 0;
+                                this.precioPromedio = 0;
                                 this.nombreProducto = "";
                                 double subtemp = (this.producto.getCosto() * detalle.getCant());
                                 if (this.producto.getIva() != 0) {
@@ -539,6 +558,13 @@ public class EntradaManagedBean implements Serializable {
                                 System.out.println(entradaRealizada + "-" + codProd + "-" + qty + "-" + "-" + price);
                                 //          daoDetail.GuardarEntrada(this.listaDetalle);
                                 daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice, this.codBodega);
+                                
+                                // Registrar el historico
+                                this.historico.setCosto(price);
+                                this.historico.setFechaInicio(currentDate2);
+                                this.historico.setId(codProd);
+                                this.historicoDAO.GuardarHistorico(historico);
+                                
                                 listSize += 1;
                             }
 
@@ -568,6 +594,7 @@ public class EntradaManagedBean implements Serializable {
             this.codigoProducto = pr.getId();
             this.nombreProducto = pr.getDescripcion();
             this.precioProducto = pr.getCoast();
+            this.precioPromedio = productoDao.getPrecioPromedio(pr.getId());
             if (this.SiICE) {
                 this.ice = (int) (pr.getCosto() * 15 / 100);
             }

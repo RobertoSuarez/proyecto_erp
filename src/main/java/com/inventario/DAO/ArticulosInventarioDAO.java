@@ -12,6 +12,8 @@ import com.inventario.models.Categoria;
 import com.inventario.report.ProductoReport;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,7 +142,7 @@ public class ArticulosInventarioDAO {
                 articulo.setDescripcion(resultSet.getString("descripcion"));
                 articulo.setId_bodega(resultSet.getInt("id_bodega"));
                 articulo.setCantidad(resultSet.getInt("cantidad"));
-      
+
                 articulo.setCosto(resultSet.getInt("costo"));
                 articulo.setIva(resultSet.getInt("iva"));
                 articulo.setIce(resultSet.getInt("ice"));
@@ -182,8 +184,7 @@ public class ArticulosInventarioDAO {
                 articulo.setIceproducto(resultSet.getInt("ice"));
                 articulo.setMax_stock(resultSet.getInt("max_stock"));
                 ListaInv.add(articulo);
-                
-                
+
             }
 
         } catch (Exception e) {
@@ -192,6 +193,27 @@ public class ArticulosInventarioDAO {
             conexion.desconectar();
         }
         return ListaInv;
+    }
+
+    public double getPrecioPromedio(int idArticulo) {
+        double promedio = 0;
+        try {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+            String fecha = "'" + dtf.format(LocalDateTime.now()) + "'";
+            String sql = String.format("select avg(costo) from historico_precios where id_articulo = " + idArticulo + " and  (" + fecha + "<= fecha_fin ) and estado = true ");
+            
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                promedio = resultSet.getDouble(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return promedio;
     }
 
     public List<ArticulosInventario> getArticulos() {
@@ -619,7 +641,7 @@ public class ArticulosInventarioDAO {
                             resultSet.getString("nom_categoria"), resultSet.getString("tipo"), resultSet.getString("descripcion"),
                             resultSet.getString("nombre_bodega"), resultSet.getString("unidad_medida"), resultSet.getFloat("valor"),
                             resultSet.getString("porcentaje"), resultSet.getFloat("porcentaje"), resultSet.getString("impuesto"),
-                            resultSet.getInt("cant"), resultSet.getFloat("costo"),resultSet.getString("nombre")));
+                            resultSet.getInt("cant"), resultSet.getFloat("costo"), resultSet.getString("nombre")));
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
