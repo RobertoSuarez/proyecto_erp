@@ -22,9 +22,11 @@ public class ProductoVenta implements Serializable {
     private float precioUnitario;
     private boolean esServicio;
     private boolean stockeable;
+    private double costo;
 
     public ProductoVenta() {
         this.precioUnitario = 0;
+        this.costo = 0;
         this.nombre = "";
     }
 
@@ -138,6 +140,14 @@ public class ProductoVenta implements Serializable {
 
     public void setStockeable(boolean stockeable) {
         this.stockeable = stockeable;
+    }
+
+    public double getCosto() {
+        return costo;
+    }
+
+    public void setCosto(double costo) {
+        this.costo = costo;
     }
     
     

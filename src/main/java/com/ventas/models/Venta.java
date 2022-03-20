@@ -32,6 +32,8 @@ public class Venta {
     private int diasCredito;
     private String factura;
     
+    private double costo;
+    
     private ClienteVenta cliente;
     private DetalleVenta productoActual;
     private List<DetalleVenta> productos; 
@@ -41,7 +43,7 @@ public class Venta {
     }
 
     public Venta(int idVenta, int idCliente, int idEmpleado, int idFormaPago, int idDocumento, int sucursal, String fechaVenta, int puntoEmision, int secuencia, String autorizacion, 
-            String fechaEmision, String fechaAutorizacion, double base12, double base0, double iva, double ice, double totalFactura, ClienteVenta cliente, List<DetalleVenta> productos, int diasCred) {
+            String fechaEmision, String fechaAutorizacion, double base12, double base0, double iva, double ice, double totalFactura, ClienteVenta cliente, List<DetalleVenta> productos, int diasCred, double costo) {
         this.idVenta = idVenta;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
@@ -62,6 +64,7 @@ public class Venta {
         this.cliente = cliente;
         this.productos = productos;
         this.diasCredito = diasCred;
+        this.costo = costo;
     }
 
     public int getIdVenta() {
@@ -240,8 +243,14 @@ public class Venta {
 
     public void setFactura(String factura) {
         this.factura = factura;
+    }   
+
+    public double getCosto() {
+        return costo;
     }
-    
-    
+
+    public void setCosto(double costo) {
+        this.costo = costo;
+    }
     
 }

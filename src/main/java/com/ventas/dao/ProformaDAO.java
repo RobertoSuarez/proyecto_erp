@@ -221,6 +221,20 @@ public class ProformaDAO {
         }
     }
     
+    public void setProformaFacturada(int idProforma){
+        ResultSet rs;
+        String consulta, estado;
+        List<Proforma> listadocs = new ArrayList<>();
+        try {
+            consulta = "update public.proforma set estado = 'F' where idproforma = '" + idProforma + "';";
+            rs = con.ejecutarSql(consulta);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        } finally {
+            con.desconectar();
+        }
+    }
+    
     public void rechazarProforma(int idProforma){
         ResultSet rs;
         String consulta, estado;

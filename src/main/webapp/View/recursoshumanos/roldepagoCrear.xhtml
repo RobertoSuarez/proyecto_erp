@@ -129,8 +129,8 @@
                                             <p:ajax event="change" process="toltal @this" update="toltal"/>
                                         </p:selectBooleanCheckbox>
 
-                                        <h:outputText value="Amonestación: " style="font-weight: bold;" />
-                                        <p:selectBooleanCheckbox value="#{rolDePagoView.checkedAmonestacion}"
+                                        <h:outputText rendered="#{false}" value="Amonestación: " style="font-weight: bold;" />
+                                        <p:selectBooleanCheckbox rendered="#{false}" value="#{rolDePagoView.checkedAmonestacion}"
                                                                  itemLabel="  $ #{rolDePagoView.amonestacion.valor}">
                                             <p:ajax event="change" process="toltal @this" update="toltal"/>
                                         </p:selectBooleanCheckbox>

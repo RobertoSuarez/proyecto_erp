@@ -60,6 +60,10 @@ and open the template in the editor.
                                         <p:selectBooleanCheckbox style="display: block" value="#{formulaMBeans.formulaProduccion.estado}" itemLabel="Producción Detallada">
                                         </p:selectBooleanCheckbox>
                                     </div>
+                                    <div class="p-col-6">
+                                        <p:outputLabel value="MOD:"></p:outputLabel>
+                                        <p:inputNumber id="mod" value="#{formulaMBeans.formulaProduccion.MOD}" readonly="true"/>
+                                    </div>
 
                                     <div class="p-col-6">
                                         <p:outputLabel value="Rendimiento :"></p:outputLabel>
@@ -70,14 +74,11 @@ and open the template in the editor.
                                     </div>
 
 
-                                    <div class="p-col-6">
-                                        <p:outputLabel value="MOD:"></p:outputLabel>
-                                        <p:inputNumber id="mod" value="#{formulaMBeans.formulaProduccion.MOD}" readonly="true"/>
-                                    </div>
 
 
 
-                                    <div class="p-col-6">
+
+                                    <!-- comment <div class="p-col-6">
                                         <p:outputLabel value="Proceso Principal:"></p:outputLabel>
                                         <p:selectOneMenu
                                             value="#{formulaMBeans.formulaProduccion.codigo_proceso}"
@@ -89,7 +90,7 @@ and open the template in the editor.
                                                            itemLabel="#{proceso.nombre}"
                                                            itemValue="#{proceso.codigo_proceso}"/>
                                         </p:selectOneMenu>
-                                    </div>
+                                    </div>-->
 
                                     <div class="p-col-6">
                                         <p:outputLabel value="CIF:"></p:outputLabel>
@@ -99,9 +100,11 @@ and open the template in the editor.
 
 
                                     <div class="p-col-2">
-                                        <p:commandButton value="Tiempo centro de trabajo" icon="pi pi-plus" oncomplete="PF('tiempoCentro').show()"/>
+                                        <p:outputLabel value="." style="color: white"></p:outputLabel>
+                                        <p:commandButton value="Centro de trabajo" icon="pi pi-plus" oncomplete="PF('tiempoCentro').show()"/>
                                     </div>
                                     <div class="p-col-2">
+                                        <p:outputLabel value="." style="color: white"></p:outputLabel>
                                         <p:commandButton value="Materia Prima" icon="pi pi-plus" oncomplete="PF('materiaPrima').show()"/>
                                     </div>
                                 </div>
@@ -391,7 +394,7 @@ and open the template in the editor.
                                                     </p:column>
 
                                                     <p:column headerText="Descripción" filterStyle="display : none">
-                                                        <h:outputText value="#{TablaMateriaPrima.descripcion}"  />
+                                                        <h:outputText value="#{TablaMateriaPrima.descripcionProducto}"  />
                                                         <p:skeleton rendered="#"></p:skeleton>
                                                     </p:column>
                                                     <p:column headerText="Unidad Medida" filterStyle="display : none">

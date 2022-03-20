@@ -7,13 +7,18 @@ package com.ventas.dao;
 
 import com.global.config.Conexion;
 import com.ventas.models.DetalleVenta;
+import com.ventas.models.Proforma;
 import java.time.format.DateTimeFormatter;
 import com.ventas.models.Venta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 
 public class VentaDAO {
 
@@ -38,7 +43,7 @@ public class VentaDAO {
             rs = this.con.ejecutarSql("select idventa, secuencia from public.venta order by idventa desc limit 1;");
             int idVenta = 1;
             int secuenciaActual = 1;
-            
+
             //Asignar los valores de la siguiente venta y secuencia.
             while (rs.next()) {
                 idVenta = rs.getInt(1) + 1;
@@ -58,12 +63,15 @@ public class VentaDAO {
             System.out.println(query);
             this.con.ejecutarSql(query);
 
-            
             //Verificación de forma de pago a crédito
             if (ventaActual.getIdFormaPago() == 1) {
                 query = "select ingresar_plan_de_pago(" + ventaActual.getIdVenta() + ", " + ventaActual.getDiasCredito() + ", '" + ventaActual.getFechaVenta() + "', "
                         + ventaActual.getTotalFactura() + ", 0.1)";
                 System.out.println(query);
+                this.con.ejecutarSql(query);
+            } else {
+                query = "select ingresar_plan_de_pago_inmediato(" + ventaActual.getIdVenta() + ", " + String.valueOf(0) + ", '" + ventaActual.getFechaVenta() + "', "
+                        + ventaActual.getTotalFactura() + ")";
                 this.con.ejecutarSql(query);
             }
 
@@ -82,18 +90,109 @@ public class VentaDAO {
         }
         return 0;
     }
-    
+
+    public int facturarProforma(Proforma proformaActual, int formaPago, int diasCredito) {
+        try {
+            ResultSet rs = null;
+
+            this.con.conectar();
+            rs = this.con.ejecutarSql("select idventa, secuencia from public.venta order by idventa desc limit 1;");
+            int idVenta = 1;
+            int secuenciaActual = 1;
+
+            //Asignar los valores de la siguiente venta y secuencia.
+            while (rs.next()) {
+                idVenta = rs.getInt(1) + 1;
+                secuenciaActual = rs.getInt(2) + 1;
+            }
+            //ventaActual.setSecuencia(secuenciaActual);
+            //ventaActual.setIdVenta(idVenta);
+            //System.out.println("Venta: " + ventaActual.getIdVenta());
+
+            //Insertar nueva venta
+            String query = "INSERT INTO public.venta("
+                    + "idventa, idcliente, id_empleado, idformasdepago, idestadodocumento, id_sucursal, fechaventa, puntoemision, secuencia,"
+                    + "autorizacion, fechaemision, fechaautorizacion, base12, base0, baseexcentoiva, iva12, ice, totalfactura) "
+                    + "VALUES(" + idVenta + ", " + proformaActual.getId_cliente() + ", " + 1 + ", " + formaPago + ", 1, 1, '" + proformaActual.getFecha_autorizacion()
+                    + "', 1, " + secuenciaActual + ", " + generarAutorizacion(proformaActual.getId_cliente(), idVenta) + ", '" + proformaActual.getFecha_autorizacion() + "', '" + proformaActual.getFecha_autorizacion()
+                    + "', " + proformaActual.getBase12() + ", " + proformaActual.getBase0() + ", 0, " + proformaActual.getIva12() + ", " + proformaActual.getIce() + ", " + proformaActual.getTotalproforma() + ")";
+            System.out.println(query);
+            this.con.ejecutarSql(query);
+
+            //Verificación de forma de pago a crédito
+            if (formaPago == 1) {
+                query = "select ingresar_plan_de_pago(" + idVenta + ", " + diasCredito + ", '" + proformaActual.getFecha_autorizacion() + "', "
+                        + proformaActual.getTotalproforma() + ", 0.1)";
+                System.out.println(query);
+                this.con.ejecutarSql(query);
+            } else {
+                query = "select ingresar_plan_de_pago_inmediato(" + idVenta + ", " + String.valueOf(0) + ", '" + proformaActual.getFecha_autorizacion() + "', "
+                        + proformaActual.getTotalproforma() + ")";
+                this.con.ejecutarSql(query);
+            }
+
+            this.con.desconectar();
+
+            System.out.println("Venta Guardada exitosamente");
+
+            return idVenta;
+        } catch (Exception e) {
+            if (con.isEstado()) {
+                con.desconectar();
+            }
+            System.out.println(e.getMessage().toString());
+        } finally {
+            this.con.desconectar();
+        }
+        return 0;
+    }
+
+    private String generarAutorizacion(int idCliente, int idVenta)
+    {
+        try {
+            String autorizacion = "";
+            DateFormat df = new SimpleDateFormat("ddMMyyyy"); //Fecha
+            autorizacion += df.format(new Date()) + "01"; //Tipo comprobante (factura)
+            if (new ClienteVentaDao().BuscarClientePorId(idCliente).getIdentificacion().length() < 13) { //Ruc o identificaicon
+                autorizacion += new ClienteVentaDao().BuscarClientePorId(idCliente).getIdentificacion() + "001";
+            } else {
+                autorizacion += new ClienteVentaDao().BuscarClientePorId(idCliente).getIdentificacion();
+            }
+            autorizacion += "1001001"; //ambiente y serie
+            String secuencia = String.valueOf(idVenta); //Obtiene la secuencia de factura
+            for (int i = secuencia.length(); i < 10; i++) {
+                autorizacion += "0";
+            }
+            autorizacion += secuencia; //Secuencia de factura
+            String numerico = String.valueOf((int) ((Math.random() * (999999999 - 111111111)) + 111111111)); //Genera un numerico
+            autorizacion += numerico;
+            autorizacion += "1"; //Tipo de emision (normal)
+            autorizacion += modulo11(numerico); //Digito verificador
+
+            return autorizacion;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public String modulo11(String numerico) {
+        int base = 0;
+        for (int i = numerico.length(); i < 9; i++) {
+            base += Integer.valueOf(numerico.substring(i, i));
+        }
+        base = 11 - (base % 11);
+        return String.valueOf(base);
+    }
+
     //asiento contable
     public void insertasiento(Venta venta) {
-        if (con.isEstado())
-        {
-            try
-            {
+        if (con.isEstado()) {
+            try {
                 int iddiario = 0;
                 String cadena = "select iddiario from diariocontable where descripcion = 'Modulo cuentas por cobrar'";
                 result = con.ejecutarSql(cadena);
-                while (result.next())
-                {
+                while (result.next()) {
                     iddiario = result.getInt("iddiario");
                 }
                 //JSON asiento contable
@@ -101,7 +200,7 @@ public class VentaDAO {
                 sentencia = "{\"idDiario\": \"" + iddiario + "\",\"total\": " + venta.getTotalFactura()
                         + ",\"documento\": \"CPC-VNT-" + venta.getIdVenta() + "\",\"detalle\": "
                         + "\"Cuentas por cobrar cliente\",\"fechaCreacion\": \""
-                        + LocalDate.now().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) +"\",\"fechaCierre\":\""
+                        + LocalDate.now().format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\",\"fechaCierre\":\""
                         + LocalDate.now().plusDays(venta.getDiasCredito()).format(DateTimeFormatter.ofPattern("d/MM/uuuu")) + "\"}";
                 System.out.println(sentencia);
                 //JSON un solo movimiento
@@ -110,50 +209,78 @@ public class VentaDAO {
                 String tipomovimiento;
                 switch (venta.getIdFormaPago()) {
                     case 1:
-                        formaPago=77;
+                        formaPago = 77;
                         tipomovimiento = "Ventas con tarifa 12%";
                         break;
                     case 2:
-                        formaPago=1;
+                        formaPago = 1;
                         tipomovimiento = "Caja";
                         break;
                     default:
-                        formaPago=3;
+                        formaPago = 3;
                         tipomovimiento = "Banco";
                         break;
                 }
-                    
-                    sentencia1 = "[{\"idSubcuenta\":\"156\",\"debe\":\""+ venta.getTotalFactura() 
-                            + "\",\"haber\":\"0\",\"tipoMovimiento\":\"Factura de venta\"},"
-                            + "{\"idSubcuenta\":\""+formaPago+"\",\"debe\":\"0\",\"haber\":\""+ venta.getTotalFactura() 
-                            +"\",\"tipoMovimiento\":\""+tipomovimiento+"\"}]";
-                    System.out.println(sentencia1);
-                    
+
+                sentencia1 = "[{\"idSubcuenta\":\"160\",\n" +
+                                "\"debe\":\"" + venta.getTotalFactura() + "\",\n" +
+                                "\"haber\":\"0\",\n" +
+                                "\"tipoMovimiento\":\"Factura de venta\"},\n";
+                        
+                if(venta.getIva() != 0){
+                    sentencia1 += "{\"idSubcuenta\":\"162\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getIva() + "\",\n" +
+                                "\"tipoMovimiento\":\"Iva en ventas\"},\n";
+                }
+                if(venta.getIce() != 0){
+                    sentencia1 += "{\n" +
+                                "\"idSubcuenta\":\"164\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getIce() + "\",\n" +
+                                "\"tipoMovimiento\":\"ICE en ventas\"},\n";
+                }
+                if(venta.getBase12() != 0){
+                    sentencia1 += "{\"idSubcuenta\":\"77\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getBase12() + "\",\n" +
+                                "\"tipoMovimiento\":\"Ingreso de venta base 12%\"},\n";
+                }
+                if(venta.getBase0() != 0){
+                    sentencia1 += "{\"idSubcuenta\":\"78\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getBase0() + "\",\n" +
+                                "\"tipoMovimiento\":\"Ingreso de venta base 0%\"},\n";
+                }
+                sentencia1 +=   "{\"idSubcuenta\":\"17\",\n" +
+                                "\"debe\":\"0\",\n" +
+                                "\"haber\":\"" + venta.getCosto() + "\",\n" +
+                                "\"tipoMovimiento\":\"Reducción en inventario\"},\n" +
+                                "{\"idSubcuenta\":\"151\",\n" +
+                                "\"debe\":\"" + venta.getCosto() + "\",\n" +
+                                "\"haber\":\"0\",\n" +
+                                "\"tipoMovimiento\":\"Costo de venta\"}]";
+                System.out.println(sentencia1);
+
                 intJson(sentencia, sentencia1);
-            } catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
-            } finally
-            {
+            } finally {
                 con.desconectar();
             }
         }
     }
-    
-     public void intJson(String a, String b) {
-        if (con.isEstado())
-        {
-            try
-            {
+
+    public void intJson(String a, String b) {
+        if (con.isEstado()) {
+            try {
                 String cadena = "SELECT public.generateasientocotableexternal('"
                         + a + "','" + b + "')";
                 System.out.println(cadena);
                 result = con.ejecutarSql(cadena);
-            } catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
-            } finally
-            {
+            } finally {
                 con.desconectar();
             }
         }
@@ -187,7 +314,7 @@ public class VentaDAO {
             venta.setIva(rs.getDouble(16));
             venta.setIce(rs.getDouble(17));
             venta.setTotalFactura(rs.getFloat(18));
-            
+
             ClienteVentaDao tempDao = new ClienteVentaDao();
             venta.setCliente(tempDao.BuscarClientePorId(venta.getIdCliente()));
 
@@ -213,19 +340,19 @@ public class VentaDAO {
             venta.setFactura(fact);
 
             ventas.add(venta);
-            
+
         }
 
         this.con.desconectar();
 
         return ventas;
     }
-    
-    public int getSiguienteIdVenta(){
+
+    public int getSiguienteIdVenta() {
         try {
             int id = 0;
             this.result = con.ejecutarSql("select MAX(idventa) + 1 as id from public.venta;");
-            while(result.next()){
+            while (result.next()) {
                 id = result.getInt("id");
             }
             return id;

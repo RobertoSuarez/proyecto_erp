@@ -46,7 +46,7 @@
                             <p:commandButton icon="pi pi-eye" value="Ver" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
                                              style="margin-left: 20px;" update="datosFactura listaDeProforma" onclick="PF('DetalleProforma').show()" />
                             <p:commandButton icon="pi pi-book" value="Facturar" styleClass="rounded-button" process="@this" actionListener="#{ListaProformaMB.cargarDatosProforma(Lista)}"
-                                             style="margin-left: 20px;" update="datosFactura listaDeProforma" />
+                                             style="margin-left: 20px;" update="datosFactura listaDeProforma pagosForm" onclick="PF('RealizarPago').show();" />
                         </p:column>
                     </p:dataTable>
 
@@ -114,27 +114,42 @@
                     </h:form>
                 </p:dialog>
 
-                <p:dialog id="aceptarProformaFaltante" widgetVar="proformaFaltaProd">
-                    <h:form>
-                        <h2>Algunos items en esta proforma tienen un stock menor al solicitado. Elija una opción</h2>
-                        <p:dataTable value="#{ListaProformaMB.listaProductosFaltantes}" var="itemsFaltantes">
-                            <p:column headerText="Item">
-                                <h:outputText value="#{itemsFaltantes.producto.nombre}"/>
-                            </p:column>
-                            <p:column headerText="Cantidad solicitada">
-                                <h:outputText value="#{itemsFaltantes.cantidad}"/>
-                            </p:column>
-                            <p:column headerText="Stock disponible">
-                                <h:outputText value="#{itemsFaltantes.producto.stock}"/>
-                            </p:column>
-                        </p:dataTable>
-
-                    </h:form>
-                </p:dialog>
-
-                <p:dialog id="aceptarProformaCompleta" widgetVar="proformaCompleta">
-                    <h:form>
-
+                <p:dialog header="Metodo de pago" widgetVar="RealizarPago"
+                          minHeight="600" width="70%" showEffect="fade" id="Pagos" modal="true">
+                    <h:form id="pagosForm">
+                        <p:panel class="card">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Total a pagar: "/>
+                                <p:inputText value="#{ListaProformaMB.proformaActual.totalproforma}" disabled="true"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:accordionPanel>
+                            <p:tab title="Pago Inmediato">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Monto a pagar: "/>
+                                    <p:inputText value="#{ListaProformaMB.proformaActual.totalproforma}" disabled="true" /> 
+                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(1)}" style="margin-top: 20px" ajax="false" update="detalleTB"/>
+                                    <p:outputLabel value="Una vez facturada la compra, deberá realizar sus pagos en cuentas por cobrar"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="Pago a Crédito" >
+                                <h:panelGrid columns="5">
+                                    <p:outputLabel value="Cliente: "/>
+                                    <p:inputText value="#{ListaProformaMB.cliente.nombre}" disabled="true"/>
+                                    <p:outputLabel value="Días plazo" />
+                                    <p:selectOneMenu id="diasPago" value="#{ListaProformaMB.diasPago}" >
+                                        <f:selectItem itemLabel="15 Días" itemValue="15" />
+                                        <f:selectItem itemLabel="30 Días" itemValue="30" />
+                                        <f:selectItem itemLabel="60 Días" itemValue="60" />
+                                        <f:selectItem itemLabel="90 Días" itemValue="90" />
+                                        <f:selectItem itemLabel="180 Días" itemValue="180" />
+                                        <f:selectItem itemLabel="270 Días" itemValue="270" />
+                                        <f:selectItem itemLabel="360 Días" itemValue="360" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Facturar" action="#{ListaProformaMB.facturarProforma(2)}" style="margin-top: 20px" ajax="false" update="detalleTB"/>
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:accordionPanel>
                     </h:form>
                 </p:dialog>
 

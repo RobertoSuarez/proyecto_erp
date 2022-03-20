@@ -13,6 +13,7 @@ public class productosOrden {
 
     private boolean verifica;
     private int codigoProducto;
+    private int codigoFormula;
     private int codigoOrden;
     private String nombreProducto;
     private String descripcion;
@@ -31,7 +32,7 @@ public class productosOrden {
         this.tipoProducto = tipoProducto;
     }
 
-    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, float cantidad, float precio, String tipoProducto,String unidadMedida) {
+    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, float cantidad, float precio, String tipoProducto, String unidadMedida) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
@@ -40,6 +41,7 @@ public class productosOrden {
         this.tipoProducto = tipoProducto;
         this.unidadMedida = unidadMedida;
     }
+
     public productosOrden(int codigoProducto, int codigoOrden, String nombreProducto, float cantidad, String unidadMedida, String tipoProducto, char estado) {
         this.codigoProducto = codigoProducto;
         this.codigoOrden = codigoOrden;
@@ -59,16 +61,13 @@ public class productosOrden {
         this.estado = estado;
     }
 
-    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, String tipoProducto,String unidadMedida) {
+    public productosOrden(int codigoProducto, String nombreProducto, String descripcion, String tipoProducto, String unidadMedida) {
         this.codigoProducto = codigoProducto;
         this.nombreProducto = nombreProducto;
         this.descripcion = descripcion;
         this.tipoProducto = tipoProducto;
         this.unidadMedida = unidadMedida;
     }
-    
-    
-    
 
     public int getCodigoProducto() {
         return codigoProducto;
@@ -149,6 +148,13 @@ public class productosOrden {
     public void setVerifica(boolean verifica) {
         this.verifica = verifica;
     }
-    
+
+    public int getCodigoFormula() {
+        return codigoFormula;
+    }
+
+    public void setCodigoFormula(int codigoFormula) {
+        this.codigoFormula = codigoFormula;
+    }
 
 }

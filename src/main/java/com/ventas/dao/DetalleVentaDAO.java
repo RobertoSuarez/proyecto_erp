@@ -50,13 +50,7 @@ public class DetalleVentaDAO {
 
             
             //Reducir stock
-            int cantidadActual = 0;
-            query = "select cantidad from public.articulos where id = " + idProducto + ";";
-            rs = this.con.ejecutarSql(query);
-            while (rs.next()) {
-                cantidadActual = rs.getInt(1);
-            }
-            query = "update public.articulos set cantidad = " + (cantidadActual - cantidad) + " where id = " + idProducto + ";";
+            query = "select reducir_stock(" + String.valueOf(idProducto) + ", " + String.valueOf((int) cantidad) + ");;";
             this.con.ejecutarSql(query);
             
 

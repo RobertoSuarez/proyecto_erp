@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../../WEB-INF/InicioTemplate.xhtml">
+
+    <ui:define name="content">
+        <ui:include src="menuVentas.xhtml"/>
+        <br/><br/><br/>
+        <h:form id="form" style="padding-left: 30px; padding-right: 30px">
+            <h1>REPORTES</h1>
+            <p:tabView id="tabmain">
+                <p:tab title="Productos más vendidos">
+                    <p:panel header="Rango de fechas">
+                        <h:panelGrid columns="5" width="60%">
+                            <p:outputLabel value="Fecha inicial"/>
+                            <p:datePicker value="#{ReporteVentaMB.fechaInicio1}"/>
+                            <p:outputLabel value="Fecha final"/>
+                            <p:datePicker value="#{ReporteVentaMB.fechaFin1}"/>
+                            <p:commandButton value="Aplicar" actionListener="#{ReporteVentaMB.updateProductos()}" update="tblReporteProducto"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:dataTable id="tblReporteProducto" value="#{ReporteVentaMB.reporteProductos}" var="productos">
+                        <f:facet name="header">
+                            <h2>Productos</h2>
+                        </f:facet>
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{productos.dato1}"/>
+                        </p:column>
+                        <p:column headerText="Venta">
+                            <h:outputText value="#{productos.valor1}">
+                                <f:convertNumber pattern="$ #0.00"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                
+                <p:tab title="Mejores Clientes">
+                    <p:panel header="Rango de fechas">
+                        <h:panelGrid columns="5" width="60%">
+                            <p:outputLabel value="Fecha inicial"/>
+                            <p:datePicker value="#{ReporteVentaMB.fechaInicio2}"/>
+                            <p:outputLabel value="Fecha final"/>
+                            <p:datePicker value="#{ReporteVentaMB.fechaFin2}"/>
+                            <p:commandButton value="Aplicar" actionListener="#{ReporteVentaMB.updateClientes()}" update="tblReporteCliente"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:dataTable id="tblReporteCliente" value="#{ReporteVentaMB.reporteClientes}" var="clientes">
+                        <f:facet name="header">
+                            <h2>Productos</h2>
+                        </f:facet>
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{clientes.dato1}"/>
+                        </p:column>
+                        <p:column headerText="Venta">
+                            <h:outputText value="#{clientes.valor1}">
+                                <f:convertNumber pattern="$ #0.00"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                
+                <p:tab title="Categorías TOP">
+                    <p:panel header="Rango de fechas">
+                        <h:panelGrid columns="5" width="60%">
+                            <p:outputLabel value="Fecha inicial"/>
+                            <p:datePicker value="#{ReporteVentaMB.fechaInicio3}"/>
+                            <p:outputLabel value="Fecha final"/>
+                            <p:datePicker value="#{ReporteVentaMB.fechaFin3}"/>
+                            <p:commandButton value="Aplicar" actionListener="#{ReporteVentaMB.updateCategorias()}" update="tblReporteCategoria"/>
+                        </h:panelGrid>
+                    </p:panel>
+                    
+                    <p:dataTable id="tblReporteCategoria" value="#{ReporteVentaMB.reporteCategorias}" var="categorias">
+                        <f:facet name="header">
+                            <h2>Productos</h2>
+                        </f:facet>
+                        <p:column headerText="Producto">
+                            <h:outputText value="#{categorias.dato1}"/>
+                        </p:column>
+                        <p:column headerText="Venta">
+                            <h:outputText value="#{categorias.valor1}">
+                                <f:convertNumber pattern="$ #0.00"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

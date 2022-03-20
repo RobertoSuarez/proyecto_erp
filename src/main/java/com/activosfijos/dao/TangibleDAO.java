@@ -66,7 +66,7 @@ public class TangibleDAO {
                 + "	WHERE id_activo_fijo=%s;", li.getDepreciacion_meses(),
                 li.getPorcentaje_depreciacion(), li.getSubCuenta().getId(), li.getCuota_depresiacion(), li.getId_activo_fijo());
         conexion.ejecutarSql(consulta2);
-        System.out.println("update 1: " + consulta + "\n update 2: " + consulta2 + "\n funcion : " + consulta3);
+        //System.out.println("update 1: " + consulta + "\n update 2: " + consulta2 + "\n funcion : " + consulta3);
         return true;
         } catch (Exception e) {
             return false;

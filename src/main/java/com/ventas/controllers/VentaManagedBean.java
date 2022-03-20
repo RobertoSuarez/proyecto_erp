@@ -211,7 +211,7 @@ public class VentaManagedBean implements Serializable {
                         this.iva += convertTwoDecimal(this.productoActual.getIva() / 100 * detalle.getSubTotal());
                         this.ice += convertTwoDecimal(this.productoActual.getIce() * detalle.getCantidad());
                         this.total = convertTwoDecimal(this.subtotal0 + this.subtotal12 + this.iva + this.ice);
-
+                        
                         this.descuentoActual = 0;
                         descuento = descuentoGeneral + descuentoActual;
 
@@ -299,6 +299,10 @@ public class VentaManagedBean implements Serializable {
                 if (this.cliente.getNombre() == null || this.cliente.getNombre() == "") {
                     addMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe elegir un cliente para la venta");
                 } else {
+                    for(DetalleVenta det: listaDetalle){
+                        ventaActual.setCosto(ventaActual.getCosto() + (det.getProducto().getCosto() * det.getCantidad()));
+                    }
+                    
                     DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
                     String currentDate = df.format(new Date());
 

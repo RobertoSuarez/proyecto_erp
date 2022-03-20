@@ -114,7 +114,7 @@ public class ProductoVentaDAO {
                     temp.setIdCategoria(rs.getInt("id_categoria"));
                     temp.setIdTipo(rs.getInt("id_tipo"));
                     temp.setDescripcion(rs.getString("descripcion"));
-                    //temp.setIdBodega(rs.getInt("id_bodega"));
+                    temp.setCosto(rs.getDouble("costo"));
                     temp.setStock(rs.getInt("cantidad"));
                     temp.setIva(rs.getFloat("iva") * 100);
                     temp.setIce(rs.getFloat("ice"));

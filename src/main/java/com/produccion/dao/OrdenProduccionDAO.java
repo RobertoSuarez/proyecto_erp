@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.math3.util.Precision;
 
 public class OrdenProduccionDAO {
@@ -69,9 +70,9 @@ public class OrdenProduccionDAO {
 
     public List<OrdenTrabajo> getListaFormula(int codigo_producto) {
         List<OrdenTrabajo> ordenProducto = new ArrayList<>();
-        sentenciaSql = String.format("select f.codigo_formula,f.nombre_formula from formula as f \n"
-                + "	inner join articulos as a on f.codigo_producto=a.id\n"
-                + "	where f.codigo_producto=" + codigo_producto + ";");
+        sentenciaSql = String.format("	select f.codigo_formula,f.nombre_formula from registro_orden_produccion as rop\n"
+                + "	inner join formula as f on f.codigo_formula=rop.codigo_formula\n"
+                + "	where codigo_registro=" + codigo_producto + ";");
         try {
             //enviamos la sentencia
             resultSet = conexion.ejecutarSql(sentenciaSql);
@@ -127,19 +128,21 @@ public class OrdenProduccionDAO {
 
     public List<ArticuloFormula> getListaConsumoMateriales(int codigo, float cantidad) {
         List<ArticuloFormula> articulosFormula = new ArrayList<>();
-        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,a.id,a.nombre,a.descripcion, df.\"cantidadUnidad\"*" + cantidad + " as cantidadUnidad,t.tipo ,a.unidadmedida "
-                + ",a.costo from detalle_formula as df \n"
-                + "	inner join articulos as a on df.codigo_producto=a.id\n"
-                + "     inner join subcuenta as sc on sc.idsubcuenta=a.id_subcuenta\n"
-                + "	inner join tipo as t on t.cod=a.id_tipo\n"
-                + "	where df.codigo_formula=" + codigo + ";");
+        sentenciaSql = String.format(" select sc.idsubcuenta,sc.codigo,a.id,a.nombre,a.descripcion, df.\"cantidadUnidad\"*" + cantidad + " as cantidadUnidad,\n"
+                + "		 t.tipo ,um.unidad_medida \n"
+                + "		 ,a.costo from detalle_formula as df \n"
+                + "		 inner join articulos as a on df.codigo_producto=a.id\n"
+                + "		 inner join unidades_medidas as um on a.id_unidadmedida=um.id\n"
+                + "		 inner join subcuenta as sc on sc.idsubcuenta=a.id_subcuenta\n"
+                + "		 inner join tipo as t on t.cod=a.id_tipo\n"
+                + "		 where df.codigo_formula=" + codigo + ";");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
                 articulosFormula.add(new ArticuloFormula(resultSet.getInt("id"), resultSet.getString("nombre"),
                         resultSet.getString("descripcion"), resultSet.getString("tipo"),
-                        resultSet.getFloat("cantidadUnidad"), resultSet.getString("unidadmedida"), resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo")));
+                        resultSet.getFloat("cantidadUnidad"), resultSet.getString("unidad_medida"), resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo")));
             }
         } catch (SQLException e) {
         } finally {
@@ -167,15 +170,17 @@ public class OrdenProduccionDAO {
 
     public List<FormulaProduccion> getListaCosto(int codigo_formula, float unidad) {
         List<FormulaProduccion> costos = new ArrayList<>();
-        sentenciaSql = String.format("select nombre_formula, tiempo_unidad*" + unidad + " as tiempo,((tiempo_unidad*" + unidad + ")*modunidad) as MO,\n"
-                + "	((tiempo_unidad*" + unidad + ")*cifunidad) as CIF from formula\n"
-                + "	where codigo_formula=" + codigo_formula + ";");
+        sentenciaSql = String.format("select sp.nombre,(dfp.minutos_pieza*" + unidad + ")as pieza_minuto,(dfp.costo_minuto_directo*(dfp.minutos_pieza*" + unidad + "))as directo\n"
+                + ",(dfp.costo_minuto_indirecto*(dfp.minutos_pieza*" + unidad + ")) as indirecto\n"
+                + "from detalle_formula_subproceso as dfp\n"
+                + "inner join subproceso as sp on dfp.codigo_subproceso=sp.codigo_subproceso\n"
+                + "where codigo_formula=" + codigo_formula + ";");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                costos.add(new FormulaProduccion(resultSet.getString("nombre_formula"), resultSet.getFloat("tiempo"),
-                        Precision.round(resultSet.getFloat("mo"), 2), Precision.round(resultSet.getFloat("cif"), 2)));
+                costos.add(new FormulaProduccion(resultSet.getString("nombre"), formatearMinutosAHoraMinuto((int) resultSet.getFloat("pieza_minuto")),
+                        Precision.round(resultSet.getFloat("directo"), 2), Precision.round(resultSet.getFloat("indirecto"), 2)));
             }
         } catch (SQLException e) {
         } finally {
@@ -184,26 +189,33 @@ public class OrdenProduccionDAO {
         return costos;
     }
 
+    public String formatearMinutosAHoraMinuto(int minutos) {
+        String formato = "%02d:%02d";
+        long horasReales = TimeUnit.MINUTES.toHours(minutos);
+        long minutosReales = TimeUnit.MINUTES.toMinutes(minutos) - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(minutos));
+        return String.format(formato, horasReales, minutosReales);
+    }
+
     public List<FormulaProduccion> getListaCostos(int codigo_formula, int cod_registro, float unidad, String costo) {
         List<FormulaProduccion> costos = new ArrayList<>();
-        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,sc.nombre as nombrecuenta ,pp.nombre as nombreproceso,sum(dsp." + costo + "*" + unidad + ") as costo from orden_produccion as op \n"
-                + "	inner join registro_orden_produccion as rop \n"
-                + "	on op.codigo_orden=rop.codigo_orden\n"
-                + "	inner join articulos as a on a.id=rop.\"Codigo_producto\"\n"
-                + "	inner join formula as f on f.codigo_producto=a.id\n"
-                + "	inner join proceso_produccion as pp on f.codigo_proceso=pp.codigo_proceso\n"
-                + "	inner join detalle_proceso_p as dp on pp.codigo_proceso=dp.codigo_proceso\n"
-                + "	inner join subproceso as sp on sp.codigo_subproceso=dp.codigo_subproceso\n"
-                + "	inner join detalle_subproceso as dsp on dsp.codigo_subproceso=sp.codigo_subproceso\n"
-                + "	inner join subcuenta as sc on sc.idsubcuenta=dsp.idsubcuenta\n"
-                + "	where f.codigo_formula=" + codigo_formula + " and rop.codigo_registro=" + cod_registro + "" + " and (dsp." + costo + "*" + unidad + ")>0\n"
-                + "	group by sc.idsubcuenta,sc.codigo,sc.nombre,pp.nombre\n"
-                + "	order by sc.nombre asc");
+        sentenciaSql = String.format("select sc.idsubcuenta,sc.codigo,sc.nombre as nombrecuenta ,sum(dsp." + costo + "*" + unidad + ") as costo\n"
+                + "from orden_produccion as op \n"
+                + "inner join registro_orden_produccion as rop \n"
+                + "on op.codigo_orden=rop.codigo_orden\n"
+                + "inner join articulos as a on a.id=rop.\"Codigo_producto\"\n"
+                + "inner join formula as f on f.codigo_producto=a.id\n"
+                + "inner join detalle_formula_subproceso as dfs on dfs.codigo_formula=f.codigo_formula\n"
+                + "inner join subproceso as sp on sp.codigo_subproceso=dfs.codigo_subproceso\n"
+                + "inner join detalle_subproceso as dsp on dsp.codigo_subproceso=sp.codigo_subproceso\n"
+                + "where f.codigo_formula=" + codigo_formula + " and rop.codigo_registro= " + cod_registro + "\n"
+                + "and (dsp." + costo + "*" + unidad + ")>0\n"
+                + "group by sc.idsubcuenta,sc.codigo,sc.nombre\n"
+                + "order by sc.nombre asc");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                costos.add(new FormulaProduccion(resultSet.getString("nombreproceso"), resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo"), resultSet.getString("nombrecuenta")));
+                costos.add(new FormulaProduccion("Prueba 001", resultSet.getFloat("costo"), resultSet.getInt("idsubcuenta"), resultSet.getString("codigo"), resultSet.getString("nombrecuenta")));
             }
         } catch (SQLException e) {
         } finally {
@@ -214,9 +226,9 @@ public class OrdenProduccionDAO {
 
     public int registrarProduccion(OrdenTrabajo ordenTrabajo) {
         sentenciaSql = String.format("INSERT INTO public.detalleproceso(\n"
-                + "	codigo_formula, codigo_registro, codigo_centroc, tiempo_proceso, costos_generado, fecha_inicio, fecha_fin, descripcion, cantidad, costomateriaprima, costodirecto, costoindirecto, costounitario)\n"
+                + "	codigo_formula, codigo_registro, costos_generado, fecha_inicio, fecha_fin, descripcion, cantidad, costomateriaprima, costodirecto, costoindirecto, costounitario)\n"
                 + "	VALUES (" + ordenTrabajo.getCodigo_formula() + ", " + ordenTrabajo.getCodigo_registro()
-                + ", " + ordenTrabajo.getCodigo_centro_trabajo() + ", " + ordenTrabajo.getTiempo() + ", " + ordenTrabajo.getCostoTotal()
+                + ", " + ordenTrabajo.getCostoTotal()
                 + ",'" + ordenTrabajo.getFecha_inicio() + "', '" + ordenTrabajo.getFecha_fin() + "', '" + ordenTrabajo.getDescripcion() + "', "
                 + ordenTrabajo.getCantidad() + ", " + ordenTrabajo.getTotalMateria() + ", " + ordenTrabajo.getTotalMOD() + ", "
                 + ordenTrabajo.getTotalCIF() + ", " + ordenTrabajo.getCostoUnitario() + ");");
@@ -230,10 +242,29 @@ public class OrdenProduccionDAO {
 
     }
 
-    public int registrarDetalleProduccion(FormulaMateriales ordenTrabajo, int id_registro) {
+    public int registrarDetalleProduccion(float precio, float cantidad, int idProducto, int id_registro) {
         sentenciaSql = String.format("INSERT INTO public.detalle_produccion(\n"
                 + "	precio, cantidad, codigo_producto, codigo_registro)\n"
-                + "	VALUES (" + ordenTrabajo.getPrecio() + ", " + ordenTrabajo.getCantidad() + ", " + ordenTrabajo.getCodigoProducto() + ", " + id_registro + ");");
+                + "	VALUES (" + precio + ", " + cantidad + ", " + idProducto + ", " + id_registro + ");");
+        try {
+
+            if (conexion.insertar(sentenciaSql) > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
+
+    }
+
+    public int registrarDetalleCentro(CentroTrabajo centro, int idRegistro) {
+        sentenciaSql = String.format("INSERT INTO public.registro_orden_centro(\n"
+                + "	codigo_registro, codigo_subproceso, hora_inicio, hora_fin, tiempo_implementado, costo_directo, costo_indirecto)\n"
+                + "	VALUES (" + idRegistro + ", " + centro.getCodigoSubproceso() + ", '" + centro.getHoraInicio() + "', '" + centro.getHoraFin() + "', '" + centro.getTiempoMinutos() + "', " + centro.getTotalDirecto() + ", " + centro.getTotalIndirecto() + ");");
         try {
 
             if (conexion.insertar(sentenciaSql) > 0) {
@@ -261,6 +292,19 @@ public class OrdenProduccionDAO {
             conexion.desconectar();
         }
 
+    }
+
+    public int updateCantidad(float totalCantidad, int codigoRegistro) {
+        sentenciaSql = String.format("UPDATE public.registro_orden_produccion\n"
+                + "	SET cantidadtotal=" + totalCantidad + "\n"
+                + "	WHERE codigo_registro=" + codigoRegistro + ";");
+        try {
+            return conexion.insertar(sentenciaSql);
+        } catch (Exception e) {
+            return -1;
+        } finally {
+            conexion.desconectar();
+        }
     }
 
     public boolean verificaOrden(int orden) {
@@ -442,9 +486,15 @@ public class OrdenProduccionDAO {
 
     public List<FormulaProduccion> getArticulos() {
         List<FormulaProduccion> Materiales = new ArrayList<>();
-        String sqlSentencia = "select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,a.cantidad,a.max_stock,a.unidadmedida \n"
-                + "	from articulos as a	inner join categoria as c on a.id_categoria=c.cod\n"
-                + "	inner join tipo as t on t.cod=a.id_tipo where t.tipo='Producto SemiElaborado' or t.tipo='Materia Prima'";
+        String sqlSentencia = ""
+                + " select a.id,a.nombre, c.nom_categoria,a.descripcion,t.tipo,a.costo,\n"
+                + "		 ab.cant,a.max_stock,um.unidad_medida \n"
+                + "		 from articulos as a	\n"
+                + "		 inner join articulo_bodega as ab on ab.id_articulo=a.id\n"
+                + "		 inner join categoria as c on a.id_categoria=c.cod\n"
+                + "		 inner join tipo as t on t.cod=a.id_tipo \n"
+                + "		 inner join unidades_medidas as um on a.id_unidadmedida=um.id\n"
+                + "		 where t.tipo='Producto SemiElaborado' or t.tipo='Materia Prima'";
 
         try {
 
@@ -452,7 +502,7 @@ public class OrdenProduccionDAO {
             //Llena la lista de los datos
             while (resultSet.next()) {
                 Materiales.add(new FormulaProduccion(resultSet.getInt("id"), resultSet.getString("nombre"), resultSet.getString("nom_categoria"),
-                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cantidad"), resultSet.getFloat("max_stock"), resultSet.getString("unidadmedida")));
+                        resultSet.getString("descripcion"), resultSet.getString("tipo"), resultSet.getFloat("costo"), resultSet.getFloat("cant"), resultSet.getFloat("max_stock"), resultSet.getString("unidad_medida")));
 
             }
 
@@ -773,7 +823,7 @@ public class OrdenProduccionDAO {
         sentenciaSql = String.format("select sp.codigo_subproceso,sp.nombre,sp.costo_directo,sp.costo_indirecto from formula as f \n"
                 + "inner join detalle_formula_subproceso as dfs on f.codigo_formula=dfs.codigo_formula\n"
                 + "inner join subproceso as sp on sp.codigo_subproceso=dfs.codigo_subproceso\n"
-                + "where f.codigo_formula="+codigoFormula+";");
+                + "where f.codigo_formula=" + codigoFormula + ";");
         try {
             resultSet = conexion.ejecutarSql(sentenciaSql);
             //Llena la lista de los datos

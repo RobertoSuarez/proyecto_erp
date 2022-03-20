@@ -89,6 +89,7 @@ public class ParametroActivoDepreciableMB implements Serializable {
                 mostrarMensajeError("El parámetro no se pudo editar");
             }
         }
+        this.Lista = this.parametroActivoDepreciableDAO.Listar();
         PrimeFaces.current().executeScript("PF('manageParametroDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-paramentros");
     }

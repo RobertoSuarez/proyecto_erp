@@ -36,6 +36,11 @@ public class ejercicioContable {
         this.idPeriodo = idPeriodo;
     }
 
+    public ejercicioContable(int idPeriodo, String nombrePeriodo) {
+        this.idPeriodo = idPeriodo;
+        this.nombrePeriodo = nombrePeriodo;
+    }
+
     public String getEstadoString() {
         if (estado == false) {
             estadoString = "Cerrado";
