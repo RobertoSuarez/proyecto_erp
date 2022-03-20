@@ -38,7 +38,7 @@ public class ArticulosInventarioManagedBean implements Serializable {
     private ArticulosInventario articulosInventario;
     private ArticulosInventarioDAO articulosInventarioDAO = new ArticulosInventarioDAO();
     private List<ArticulosInventario> listaArticulos = new ArrayList<>();
-     private List<ArticulosInventario> listaServicios = new ArrayList<>();
+    private List<ArticulosInventario> listaServicios = new ArrayList<>();
     private List<ArticulosInventario> listaDatosArticulos;
     private Categoria categoria = new Categoria();
 
@@ -60,9 +60,14 @@ public class ArticulosInventarioManagedBean implements Serializable {
     private Bodega bodega = new Bodega();
     private List<Bodega> listaBodega = new ArrayList<>();
     private BodegaDAO bodegaDAO = new BodegaDAO();
+    
     private boolean visible;
     private boolean isIva;
     private boolean iStockeable;
+
+    private List<ArticulosInventario> listaIva = new ArrayList<>();
+    private List<ArticulosInventario> listaUnidades_medidas = new ArrayList<>();
+    private List<ArticulosInventario> listaIce = new ArrayList<>();
 
     public SubCuenta getSubCuenta() {
         return subCuenta;
@@ -96,6 +101,22 @@ public class ArticulosInventarioManagedBean implements Serializable {
         this.listaTipos = listaTipos;
     }
 
+    public List<ArticulosInventario> getListaIce() {
+        return listaIce;
+    }
+
+    public void setListaIce(List<ArticulosInventario> listaIce) {
+        this.listaIce = listaIce;
+    }
+
+    public List<ArticulosInventario> getListaUnidades_medidas() {
+        return listaUnidades_medidas;
+    }
+
+    public void setListaUnidades_medidas(List<ArticulosInventario> listaUnidades_medidas) {
+        this.listaUnidades_medidas = listaUnidades_medidas;
+    }
+
     public List<SubCuenta> getListaSubcuenta() {
         return listaSubcuenta;
     }
@@ -114,6 +135,14 @@ public class ArticulosInventarioManagedBean implements Serializable {
 
     public String getNomSubCuenta() {
         return nomSubCuenta;
+    }
+
+    public List<ArticulosInventario> getListaIva() {
+        return listaIva;
+    }
+
+    public void setListaIva(List<ArticulosInventario> listaIva) {
+        this.listaIva = listaIva;
     }
 
     public void setNomSubCuenta(String nomSubCuenta) {
@@ -157,7 +186,7 @@ public class ArticulosInventarioManagedBean implements Serializable {
         this.preparando = 0;
         System.out.println("PostConstruct");
         listaArticulos = articulosInventarioDAO.getArticulos();
-        listaServicios=articulosInventarioDAO.getServices();
+        listaServicios = articulosInventarioDAO.getServices();
         this.listaCategoria = categoriaDAO.getCategoria();
         this.categoria = new Categoria();
         this.codCategoria = 0;
@@ -168,9 +197,12 @@ public class ArticulosInventarioManagedBean implements Serializable {
         listaTipos = tipoDAO.getTipoArticulo();
         listaBodega = bodegaDAO.getBodega();
         isIva = true;
-        visible=false;
-        iStockeable=true;
-        listaDatosArticulos=new ArrayList<>();
+        visible = false;
+        iStockeable = true;
+        listaDatosArticulos = new ArrayList<>();
+        listaIva = articulosInventarioDAO.getPorcentajesIVA();
+        listaUnidades_medidas = articulosInventarioDAO.getUnidades_medida();
+        listaIce = articulosInventarioDAO.getimpuestos_ice();
 
     }
 
@@ -189,7 +221,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
     public void setListaDatosArticulos(List<ArticulosInventario> listaDatosArticulos) {
         this.listaDatosArticulos = listaDatosArticulos;
     }
-    
 
     public void insertararticulo() {
         int valor = preparando;
@@ -265,7 +296,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
     public void setListaCategoria(List<Categoria> listaCategoria) {
         this.listaCategoria = listaCategoria;
     }
-    
 
     public int getCodCategoria() {
         return codCategoria;
@@ -274,7 +304,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
     public boolean isIsIva() {
         return isIva;
     }
-    
 
     public void setIsIva(boolean isIva) {
         this.isIva = isIva;
@@ -295,8 +324,6 @@ public class ArticulosInventarioManagedBean implements Serializable {
     public void setiStockeable(boolean iStockeable) {
         this.iStockeable = iStockeable;
     }
-    
-    
 
     public void setCodCategoria(int codCategoria) {
         this.codCategoria = codCategoria;
@@ -333,52 +360,71 @@ public class ArticulosInventarioManagedBean implements Serializable {
     public void setListaServicios(List<ArticulosInventario> listaServicios) {
         this.listaServicios = listaServicios;
     }
-    
 
     public void insertarArticulos() {
 
-        if (isIva) {
-            try {
-                if (articulosInventario.getIdSubCuenta() < 1) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Seleccione una subcuenta"));
-                } else if ("".equals(articulosInventario.getNombre())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese el nombre del producto"));
-                } else if (articulosInventario.getCat_cod() < 1) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
-                } else if (articulosInventario.getId_tipo() < 1) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
-                } else if ("".equals(articulosInventario.getDescripcion())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
-                } else if (articulosInventario.getId_bodega() < 1) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));;
-                } else if ("".equals(articulosInventario.getUnidadMedida())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
-                } else if (articulosInventario.getCantidad() == 0) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
-                } else if (articulosInventario.getCoast() == 0.00) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
-                } else {
-                    this.articulosInventarioDAO.insertArticulosconIva(articulosInventario, true);
-
+        try {
+            if ("".equals(articulosInventario.getNombre())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese el nombre del producto"));
+            } else if (articulosInventario.getCat_cod() < 1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if (articulosInventario.getId_tipo() < 1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if ("".equals(articulosInventario.getDescripcion())) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if (articulosInventario.getId_bodega() < 1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));;
+            } else if (articulosInventario.getIdunidad()< 1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if (articulosInventario.getIdIva()< 1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if (articulosInventario.getIdice() < 1) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if (articulosInventario.getCantidad() == 0) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else if (articulosInventario.getCoast() == 0.00) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese todos los campos"));
+            } else {
+                if(articulosInventario.getId_tipo()==3){
+                    this.articulosInventarioDAO.insertMateriaPrima(articulosInventario);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
                     PrimeFaces.current().executeScript("PF('newProduct').hide()");
                     limpiarProductos();
                 }
-            } catch (Exception e) {
-                FacesContext.getCurrentInstance().
-                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-                                "Error al guardar"));
-            }
-        } else {
+                else if(articulosInventario.getId_tipo()==1){
+                    this.articulosInventarioDAO.insertProductoTerminado(articulosInventario);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+                    PrimeFaces.current().executeScript("PF('newProduct').hide()");
+                    limpiarProductos();
+                }
+                else if(articulosInventario.getId_tipo()==2){
+                    this.articulosInventarioDAO.insertProductoenProceso(articulosInventario);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+                    PrimeFaces.current().executeScript("PF('newProduct').hide()");
+                    limpiarProductos();
+                }
+                else if(articulosInventario.getId_tipo()==5){
+                    this.articulosInventarioDAO.insertSuministros(articulosInventario);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+                    PrimeFaces.current().executeScript("PF('newProduct').hide()");
+                    limpiarProductos();
+                }
+                else if(articulosInventario.getId_tipo()==6){
+                    this.articulosInventarioDAO.insertInsumos(articulosInventario);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
+                    PrimeFaces.current().executeScript("PF('newProduct').hide()");
+                    limpiarProductos();
+                }
 
-            this.articulosInventarioDAO.insertArticulosSinIva(articulosInventario);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Producto Agregado"));
-            PrimeFaces.current().executeScript("PF('newProduct').hide()");
-            limpiarProductos();
-            limpiarProductos();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().
+                    addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                            "Error al guardar"));
         }
+
     }
-    
+
     public void insertarServicioStockeable() {
 
         if (isIva) {
@@ -389,7 +435,7 @@ public class ArticulosInventarioManagedBean implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Ingrese el nombre del servicio"));
                 } else if ("".equals(articulosInventario.getDescripcion())) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese una descripción del servicio"));
-                }  else if (articulosInventario.getCantidad() == 0) {
+                } else if (articulosInventario.getCantidad() == 0) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese la cantidad limitada del servicio"));
                 } else if (articulosInventario.getCoast() == 0.00) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Advertencia", "Por favor ingrese el costo del servicio"));
@@ -414,6 +460,7 @@ public class ArticulosInventarioManagedBean implements Serializable {
             limpiarProductos();
         }
     }
+
     public void insertarServicionoStockeable() {
 
         if (isIva) {
@@ -447,35 +494,35 @@ public class ArticulosInventarioManagedBean implements Serializable {
             limpiarProductos();
         }
     }
-    
-    public void CargarInfoProducto(ArticulosInventario articulosInventario){
-        int cod=articulosInventario.getId();
+
+    public void CargarInfoProducto(ArticulosInventario articulosInventario) {
+        int cod = articulosInventario.getId();
         this.articulosInventario.setId(articulosInventario.getId());
         this.articulosInventario.setNombre(articulosInventario.getNombre());
+        this.articulosInventario.setNom_categoria(articulosInventario.getNom_categoria());
+        this.articulosInventario.setTipoP(articulosInventario.getTipoP());
+        this.articulosInventario.setDescripcion(articulosInventario.getDescripcion());
+        this.articulosInventario.setNomBodega(articulosInventario.getNomBodega());
+        this.articulosInventario.setUnidad_medida(articulosInventario.getUnidad_medida());
+        this.articulosInventario.setValor(articulosInventario.getValor());
+        this.articulosInventario.setPorcentaje_ice(articulosInventario.getPorcentaje_ice());
         this.articulosInventario.setCantidad(articulosInventario.getCantidad());
         this.articulosInventario.setCoast(articulosInventario.getCoast());
-        this.articulosInventario.setDescripcion(articulosInventario.getDescripcion());
-        this.articulosInventario.setIceproducto(articulosInventario.getIceproducto());
-        this.articulosInventario.setIva(articulosInventario.getIva());
-        this.articulosInventario.setNomBodega(articulosInventario.getNomBodega());
-        this.articulosInventario.setNom_categoria(articulosInventario.getNom_categoria());
         this.articulosInventario.setNom_subcuenta(articulosInventario.getNom_subcuenta());
-        this.articulosInventario.setUnidadMedida(articulosInventario.getUnidadMedida());
-        this.articulosInventario.setTipoP(articulosInventario.getTipoP());
-        listaDatosArticulos=articulosInventarioDAO.obtenerDatos(cod);
+        listaDatosArticulos = articulosInventarioDAO.obtenerDatos(cod);
     }
+
     public void reset() {
         PrimeFaces.current().resetInputs("articulos:productosnew");
-       listaArticulos.clear();
+        listaArticulos.clear();
     }
-    public void isStockeable(){
-        if(iStockeable){
-            visible=true;
-        }
-        else{
-            visible=false;
+
+    public void isStockeable() {
+        if (iStockeable) {
+            visible = true;
+        } else {
+            visible = false;
         }
     }
-    
 
 }

@@ -45,6 +45,162 @@ public class ArticulosInventario implements Serializable {
     private boolean stockeable;
 
     private List<FormulaMateriales> formulaMateriales;
+    
+      //modelo para el iva
+    private int idIva;
+    private float valor;
+    private String porcentaje;
+    
+    //modelo para la unidad de medida del articulo
+    private int idunidad;
+    private String unidad_medida;
+    private String descripcion_unidad;
+    
+    //modelo para impuesto ice
+    private int idice;
+    private String tipo_ice;
+    private float valor_ice;
+    private float porcentaje_ice;
+    private String impuesto_ice;
+    
+    
+
+    public int getIdIva() {
+        return idIva;
+    }
+
+    public void setIdIva(int idIva) {
+        this.idIva = idIva;
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        this.valor = valor;
+    }
+
+    
+
+    public String getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(String porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    public ArticulosInventario(int idunidad, String unidad_medida, String descripcion_unidad) {
+        this.idunidad = idunidad;
+        this.unidad_medida = unidad_medida;
+        this.descripcion_unidad = descripcion_unidad;
+    }
+
+    public int getIdunidad() {
+        return idunidad;
+    }
+
+    public void setIdunidad(int idunidad) {
+        this.idunidad = idunidad;
+    }
+
+    public String getUnidad_medida() {
+        return unidad_medida;
+    }
+
+    public void setUnidad_medida(String unidad_medida) {
+        this.unidad_medida = unidad_medida;
+    }
+
+    public String getDescripcion_unidad() {
+        return descripcion_unidad;
+    }
+
+    public void setDescripcion_unidad(String descripcion_unidad) {
+        this.descripcion_unidad = descripcion_unidad;
+    }
+
+    public int getIdice() {
+        return idice;
+    }
+
+    public void setIdice(int idice) {
+        this.idice = idice;
+    }
+
+    public String getTipo_ice() {
+        return tipo_ice;
+    }
+
+    public void setTipo_ice(String tipo_ice) {
+        this.tipo_ice = tipo_ice;
+    }
+
+    public float getValor_ice() {
+        return valor_ice;
+    }
+
+    public void setValor_ice(float valor_ice) {
+        this.valor_ice = valor_ice;
+    }
+
+    public float getPorcentaje_ice() {
+        return porcentaje_ice;
+    }
+
+    public void setPorcentaje_ice(float porcentaje_ice) {
+        this.porcentaje_ice = porcentaje_ice;
+    }
+
+    public String getImpuesto_ice() {
+        return impuesto_ice;
+    }
+
+    public void setImpuesto_ice(String impuesto_ice) {
+        this.impuesto_ice = impuesto_ice;
+    }
+
+    public ArticulosInventario(int idice, String tipo_ice, float valor_ice, String impuesto_ice) {
+        this.idice = idice;
+        this.tipo_ice = tipo_ice;
+        this.valor_ice = valor_ice;
+        this.impuesto_ice = impuesto_ice;
+    }
+
+    public ArticulosInventario(int idIva, float valor, String porcentaje) {
+        this.idIva = idIva;
+        this.valor = valor;
+        this.porcentaje = porcentaje;
+    }
+
+    public ArticulosInventario(int id, String nombre,String nom_categoria, String tipoP,String descripcion,
+            String nomBodega,String unidad_medida, float valor,String porcentaje, float porcentaje_ice,
+             String impuesto_ice,int cantidad, float coast, String nom_subcuenta ) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.nomBodega = nomBodega;
+        this.cantidad = cantidad;
+        this.coast = coast;
+        this.tipoP = tipoP;
+        this.nom_categoria = nom_categoria;
+        this.valor = valor;
+        this.porcentaje = porcentaje;
+        this.unidad_medida = unidad_medida;
+        this.porcentaje_ice = porcentaje_ice;
+        this.impuesto_ice = impuesto_ice;
+        this.nom_subcuenta=nom_subcuenta;
+    }
+
+    
+    
+    
+
+   
+    
+    
+    
 
     public ArticulosInventario() {
     }

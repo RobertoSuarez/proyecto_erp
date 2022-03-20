@@ -16,10 +16,10 @@
                         <p:toolbar>
                             <p:toolbarGroup id="nuewp">
                                 <p:outputPanel id="nuevoproducto" class="ui-fluid">
-                                            <p:commandButton value="Nuevo" icon="pi pi-plus"
-                                                             oncomplete="PF('newProduct').show()"   
-                                                             styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
-                                                             style="margin-right: .3rem"/> 
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                                     oncomplete="PF('newProduct').show()"   
+                                                     styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2" 
+                                                     style="margin-right: .3rem"/> 
                                 </p:outputPanel>
                                 <p:dialog header="Nuevo producto" showEffect="fade" 
                                           modal="true" widgetVar="newProduct" 
@@ -28,27 +28,14 @@
                                     <p:outputPanel id="productosnew" 
                                                    class="ui-fluid">
                                         <p:outputPanel> 
-                                            <div class="p-grid"> 
-                                                <div class="p-col-5">                                                  
-                                                    <p:outputLabel value="Subcuenta" for="subcuenta"/>
-                                                    <p:selectOneMenu id="subcuenta" value="#{articulosMB.articulosInventario.idSubCuenta}" editable="false" 
-                                                                     disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una subcuenta" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItems value="#{articulosMB.listaSubcuenta}" var="subcuenta" 
-                                                                       itemLabel="#{subcuenta.nombre}" 
-                                                                       itemValue="#{subcuenta.id}"></f:selectItems>
-                                                    </p:selectOneMenu>
-                                                </div>
+                                            <div class="p-grid">
 
                                                 <div class="p-col-4">
                                                     <p:outputLabel  for="nombre" value="Nombre del producto"/>
                                                     <p:inputText id="nombre"
                                                                  value="#{articulosMB.articulosInventario.nombre}"/>
                                                 </div>
-                                                <div class="p-col-12">
-                                                    <p:outputLabel value="Descripcion" for="@next"/>
-                                                    <p:inputText value="#{articulosMB.articulosInventario.descripcion}"/>
-                                                </div>
+
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Categoria" for="@next"/>
                                                     <p:selectOneMenu id="categoria" value="#{articulosMB.articulosInventario.cat_cod}" editable="false" 
@@ -69,6 +56,12 @@
                                                                        itemValue="#{tipo.id}"></f:selectItems>
                                                     </p:selectOneMenu>
                                                 </div>
+
+                                                <div class="p-col-12">
+                                                    <p:outputLabel value="Descripcion" for="@next"/>
+                                                    <p:inputText value="#{articulosMB.articulosInventario.descripcion}"/>
+                                                </div>
+
                                                 <div class="p-col-3">
                                                     <p:outputLabel value="Bodega" for="@next"/>
                                                     <p:selectOneMenu id="bodega" value="#{articulosMB.articulosInventario.id_bodega}" editable="false" 
@@ -81,15 +74,38 @@
                                                 </div>
 
                                                 <div class="p-col-3">
-                                                    <p:outputLabel value="Unidad de Medida" for="@next"/>
-                                                    <p:selectOneMenu id="medida" value="#{articulosMB.articulosInventario.unidadMedida}" editable="false" 
+                                                    <p:outputLabel value="Unidad de medida" for="@next"/>
+                                                    <p:selectOneMenu id="unidad" value="#{articulosMB.articulosInventario.idunidad}" editable="false" 
                                                                      disabled="#">
-                                                        <f:selectItem itemLabel="Seleccione una unidad" itemValue="" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Libras" itemValue="Libras" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Litros" itemValue="Litros" noSelectionOption="true"/>
-                                                        <f:selectItem itemLabel="Unidades" itemValue="Unidades" noSelectionOption="true"/>
+                                                        <f:selectItem itemLabel="Seleccione una medida" itemValue="" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{articulosMB.listaUnidades_medidas}" var="unidades" 
+                                                                       itemLabel="#{unidades.unidad_medida}" 
+                                                                       itemValue="#{unidades.idunidad}"></f:selectItems>
                                                     </p:selectOneMenu>
                                                 </div>
+
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Impuesto de IVA" for="@next"/>
+                                                    <p:selectOneMenu id="iva" value="#{articulosMB.articulosInventario.idIva}" editable="false" 
+                                                                     disabled="#">
+                                                        <f:selectItem itemLabel="Seleccione un  porcentaje" itemValue="" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{articulosMB.listaIva}" var="iva" 
+                                                                       itemLabel="#{iva.porcentaje}" 
+                                                                       itemValue="#{iva.idIva}"></f:selectItems>
+                                                    </p:selectOneMenu>
+                                                </div>
+
+                                                <div class="p-col-3">
+                                                    <p:outputLabel value="Impuesto de ICE" for="@next"/>
+                                                    <p:selectOneMenu id="ice" value="#{articulosMB.articulosInventario.idice}" editable="false" 
+                                                                     disabled="#">
+                                                        <f:selectItem itemLabel="Seleccione un impuesto" itemValue="" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{articulosMB.listaIce}" var="ice" 
+                                                                       itemLabel="#{ice.impuesto_ice}" 
+                                                                       itemValue="#{ice.idice}"></f:selectItems>
+                                                    </p:selectOneMenu>
+                                                </div>
+
                                                 <div class="p-col-2">
                                                     <p:outputLabel value="Cantidad" for="@next"/>
                                                     <p:inputNumber value="#{articulosMB.articulosInventario.cantidad}"/>
@@ -98,20 +114,8 @@
                                                     <p:outputLabel value="Costo" for="@next"/>
                                                     <p:inputText value="#{articulosMB.articulosInventario.coast}"/>
                                                 </div>
-                                                <br></br>
-                                                <div class="p-col-1">
-                                                    <br></br>
-                                                    <p:outputLabel value="IVA " for="@next"  style="font-size: 150%" />
-                                                    <p:selectBooleanCheckbox id="slcbtn" style="font-size: 100%"  
-                                                                             value="#{articulosMB.isIva}"
-                                                                             styleClass="ui-button-help p-mr-2 p-mb-2">                                    
-                                                    </p:selectBooleanCheckbox> 
-                                                </div>
 
-                                                <div class="p-col-1">
-                                                    <p:outputLabel value="ICE" for="@next"/>
-                                                    <p:inputText value="#{articulosMB.articulosInventario.ice}"/>
-                                                </div>
+
 
                                             </div>
 
@@ -126,11 +130,94 @@
                                                           />
                                         <p:commandButton value="Cancelar" icon="pi pi-times" actionListener="#{articulosMB.limpiarProductos()}"
                                                          styleClass="ui-button-danger" oncomplete="PF('newProduct').hide()"
-                                                          update=":articulos:msgs, :articulos:productosnew, :articulos:listaProductos"
+                                                         update=":articulos:msgs, :articulos:productosnew, :articulos:listaProductos"
                                                          />
                                     </f:facet>
                                 </p:dialog>
-                                
+
+
+
+                                <p:dialog header="Datos del producto" showEffect="fade" 
+                                          modal="true" widgetVar="datosProduct" 
+                                          responsive="true" 
+                                          height="300" width="70%">
+                                    <p:outputPanel id="productosdatos" 
+                                                   class="ui-fluid">
+                                        <p:outputPanel> 
+                                            <div class="p-grid">
+
+                                                <div class="p-col-4">
+                                                    <p:outputLabel  value="Nombre del producto"/>
+                                                    <p:inputText id="nombrep"
+                                                                 value="#{articulosMB.articulosInventario.nombre}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel   value="Categoria"/>
+                                                    <p:inputText id="categoriap"
+                                                                 value="#{articulosMB.articulosInventario.nom_categoria}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="Tipo"/>
+                                                    <p:inputText id="tipop"
+                                                                 value="#{articulosMB.articulosInventario.tipoP}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="Descripcion"/>
+                                                    <p:inputText id="descripcionp"
+                                                                 value="#{articulosMB.articulosInventario.descripcion}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="Bodega"/>
+                                                    <p:inputText id="bodegap"
+                                                                 value="#{articulosMB.articulosInventario.nomBodega}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel  value="Unidad de Medida"/>
+                                                    <p:inputText id="unidadmedida"
+                                                                 value="#{articulosMB.articulosInventario.unidad_medida}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="IVA"/>
+                                                    <p:inputText id="ivap"
+                                                                 value="#{articulosMB.articulosInventario.valor}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel value="ICE"/>
+                                                    <p:inputText id="icep"
+                                                                 value="#{articulosMB.articulosInventario.porcentaje_ice}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel  value="Cantidad"/>
+                                                    <p:inputText id="cantidp"
+                                                                 value="#{articulosMB.articulosInventario.cantidad}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel  value="Costo"/>
+                                                    <p:inputText id="ca"
+                                                                 value="#{articulosMB.articulosInventario.coast}"/>
+                                                </div>
+                                                <div class="p-col-4">
+                                                    <p:outputLabel  value="Subcuenta"/>
+                                                    <p:inputText id="subcunta"
+                                                                 value="#{articulosMB.articulosInventario.nom_subcuenta}"/>
+                                                </div>
+
+
+
+
+
+                                            </div>
+
+                                        </p:outputPanel>
+                                    </p:outputPanel>
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Cerrar" icon="pi pi-times" actionListener="#{articulosMB.limpiarProductos()}"
+                                                         styleClass="ui-button-danger" oncomplete="PF('newProduct').hide()"
+                                                         update=":articulos:msgs, :articulos:productosnew, :articulos:listaProductos"
+                                                         />
+                                    </f:facet>
+                                </p:dialog>
+
 
                                 <p:dataTable id="listaProductos" editable="true"
                                              reflow="true" rows="4" paginator="true"
@@ -149,21 +236,26 @@
                                     <p:column headerText="Descripción" >
                                         <h:outputText value="#{productos.descripcion}" />
                                     </p:column>
-                                    
+
                                     <p:column headerText="Bodega" >
                                         <h:outputText value="#{productos.nomBodega}" />
                                     </p:column>
                                     <p:column headerText="Unidad de Medida" >
                                         <h:outputText value="#{productos.unidadMedida}" />
                                     </p:column>
-                                    <p:column headerText="Cantidad" >
-                                        <h:outputText value="#{productos.cantidad}" />
-                                    </p:column>
+                                  
                                     <p:column headerText="Costo" >
                                         <h:outputText value="#{productos.coast}" />
                                     </p:column>
                                     <p:column headerText="Acciones">
                                         <p:column headerText="Acciones">
+                                            <p:commandButton icon="pi pi-eye" update=":articulos:productosdatos"
+                                                             oncomplete="PF('datosProduct').show()"
+                                                             styleClass="rounded-button ui-button-secondary ui-button-flat"
+                                                             action="#{articulosMB.CargarInfoProducto(productos)}"
+                                                             process="@this">
+
+                                            </p:commandButton>
                                             <p:commandButton icon="pi pi-trash"
                                                              styleClass="edit-button rounded-button ui-button-danger"
                                                              update=":articulos:listaProductos"

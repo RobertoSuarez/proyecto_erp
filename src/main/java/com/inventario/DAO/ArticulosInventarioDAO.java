@@ -94,7 +94,7 @@ public class ArticulosInventarioDAO {
         String sql = String.format("select a.id, a.nombre, a.id_categoria, a.id_tipo, a.descripcion, a.min_stock, a.max_stock, ab.cant, a.costo, a.ice  \n"
                 + " from articulos a inner join articulo_bodega ab on a.id = ab.id_articulo\n"
                 + "inner join bodega b on b.cod = ab.id_bodega \n"
-                + "where b.cod =  " + idBodega  +"\n"
+                + "where b.cod =  " + idBodega + "\n"
                 + "order by a.id");
         try {
             resultSet = conexion.ejecutarSql(sql);
@@ -395,15 +395,74 @@ public class ArticulosInventarioDAO {
         return ListaInv;
     }
 
-    public void insertArticulosconIva(ArticulosInventario a, boolean iva) {
+    public void insertMateriaPrima(ArticulosInventario a) {
+        float costoventa = (float) (a.getCoast() * 0.15);
         try {
 
             this.conexion.conectar();
-            String sentencia = "insert into articulos(nombre, id_categoria,id_tipo,descripcion,id_bodega,cantidad, costo,iva,\n"
-                    + "ice,max_stock,id_subcuenta,unidadmedida,precio_venta,es_servicio,stockeable)\n"
-                    + "values\n"
-                    + "('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + " ,'" + a.getDescripcion() + "'," + a.getId_bodega() + ""
-                    + "," + a.getCantidad() + ",'" + a.getCoast() + "',12,'" + a.getIce() + "',500," + a.getIdSubCuenta() + ",'" + a.getUnidadMedida() + "','" + a.getCoast() + "'," + false + "," + false + ")";
+
+            String sentencia = "select insertarticulo('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + ",'" + a.getDescripcion() + "','" + a.getCoast() + "','0',167,'" + a.getCoast() + "',false,false," + a.getIdIva() + "," + a.getIdunidad() + "," + a.getIdice() + "," + a.getId_bodega() + "," + a.getCantidad() + ");";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+
+    public void insertProductoTerminado(ArticulosInventario a) {
+        float costoventa = (float) (a.getCoast() * 0.15);
+        try {
+
+            this.conexion.conectar();
+
+            String sentencia = "select insertarticulo('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + ",'" + a.getDescripcion() + "','" + a.getCoast() + "','0',169,'" + a.getCoast() + "',false,false," + a.getIdIva() + "," + a.getIdunidad() + "," + a.getIdice() + "," + a.getId_bodega() + "," + a.getCantidad() + ");";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+
+    public void insertProductoenProceso(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+
+            String sentencia = "select insertarticulo('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + ",'" + a.getDescripcion() + "','" + a.getCoast() + "','0',171,'" + a.getCoast() + "',false,false," + a.getIdIva() + "," + a.getIdunidad() + "," + a.getIdice() + "," + a.getId_bodega() + "," + a.getCantidad() + ");";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+
+    public void insertInsumos(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+
+            String sentencia = "select insertarticulo('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + ",'" + a.getDescripcion() + "','" + a.getCoast() + "','0',170,'" + a.getCoast() + "',false,false," + a.getIdIva() + "," + a.getIdunidad() + "," + a.getIdice() + "," + a.getId_bodega() + "," + a.getCantidad() + ");";
+            conexion.ejecutarSql(sentencia);
+
+        } catch (Exception e) {
+        } finally {
+            this.conexion.desconectar();
+        }
+
+    }
+
+    public void insertSuministros(ArticulosInventario a) {
+        try {
+
+            this.conexion.conectar();
+
+            String sentencia = "select insertarticulo('" + a.getNombre() + "'," + a.getCat_cod() + "," + a.getId_tipo() + ",'" + a.getDescripcion() + "','" + a.getCoast() + "','0',168,'" + a.getCoast() + "',false,false," + a.getIdIva() + "," + a.getIdunidad() + "," + a.getIdice() + "," + a.getId_bodega() + "," + a.getCantidad() + ");";
             conexion.ejecutarSql(sentencia);
 
         } catch (Exception e) {
@@ -508,18 +567,20 @@ public class ArticulosInventarioDAO {
         List<ArticulosInventario> listDatosArticulos = new ArrayList<>();
         if (conexion.isEstado()) {
             try {
-                String consulta = "select a.id, s.nombre, a.nombre,a.descripcion,c.nom_categoria,t.tipo,b.nombre_bodega,a.unidadmedida,\n"
-                        + "a.cantidad,a.costo,a.iva,a.ice\n"
-                        + "from articulos a inner join categoria c on a.id_categoria=c.cod\n"
-                        + "inner join tipo t on a.id_tipo=t.cod inner join bodega b on a.id_bodega=b.cod\n"
-                        + "inner join subcuenta s on a.id_subcuenta=s.idsubcuenta where a.id=" + id;
+                String consulta = "select a.id,a.nombre,c.nom_categoria,t.tipo,a.descripcion,b.nombre_bodega,u.unidad_medida,\n"
+                        + "pi.valor,pi.porcentaje,ic.porcentaje,ic.impuesto,ab.cant,a.costo,s.nombre\n"
+                        + "from articulos a inner join categoria c on a.id_categoria=c.cod inner join tipo t on a.id_tipo=t.cod\n"
+                        + "inner join articulo_bodega ab on a.id=ab.id_articulo inner join bodega b on b.cod=ab.id_bodega\n"
+                        + "inner join subcuenta s on s.idsubcuenta=a.id_subcuenta inner join porcentajes_iva pi on pi.id=a.id_porcentajeiva\n"
+                        + "inner join impuestos_ice ic on ic.id=a.id_impuestoice inner join unidades_medidas u on u.id=a.id_unidadmedida\n"
+                        + "where a.id=" + id + ";";
                 resultSet = conexion.ejecutarSql(consulta);
                 while (resultSet.next()) {
                     listDatosArticulos.add(new ArticulosInventario(resultSet.getInt("id"), resultSet.getString("nombre"),
-                            resultSet.getString("descripcion"), resultSet.getString("nombre_bodega"),
-                            resultSet.getInt("cantidad"), resultSet.getFloat("costo"), resultSet.getInt("iva"),
-                            resultSet.getString("unidadmedida"), resultSet.getString("tipo"), resultSet.getString("nom_categoria"),
-                            resultSet.getString("nombre"), resultSet.getFloat("ice")));
+                            resultSet.getString("nom_categoria"), resultSet.getString("tipo"), resultSet.getString("descripcion"),
+                            resultSet.getString("nombre_bodega"), resultSet.getString("unidad_medida"), resultSet.getFloat("valor"),
+                            resultSet.getString("porcentaje"), resultSet.getFloat("porcentaje"), resultSet.getString("impuesto"),
+                            resultSet.getInt("cant"), resultSet.getFloat("costo"),resultSet.getString("nombre")));
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage() + " error en conectarse");
@@ -528,6 +589,67 @@ public class ArticulosInventarioDAO {
             }
         }
         return listDatosArticulos;
+    }
+
+    public List<ArticulosInventario> getPorcentajesIVA() {
+        List<ArticulosInventario> ListaPorcentajes = new ArrayList<>();
+        String sql = String.format("select *from porcentajes_iva where vigente=true");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaPorcentajes.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getFloat("valor"),
+                        resultSet.getString("porcentaje")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaPorcentajes;
+    }
+
+    public List<ArticulosInventario> getUnidades_medida() {
+        List<ArticulosInventario> ListaUnidades = new ArrayList<>();
+        String sql = String.format("select *from unidades_medidas");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaUnidades.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getString("unidad_medida"),
+                        resultSet.getString("descripcion")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaUnidades;
+    }
+
+    public List<ArticulosInventario> getimpuestos_ice() {
+        List<ArticulosInventario> Listaice = new ArrayList<>();
+        String sql = String.format("select *from impuestos_ice where tipo='porcentaje'");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                Listaice.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getString("tipo"),
+                        resultSet.getFloat("porcentaje"),
+                        resultSet.getString("impuesto")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return Listaice;
     }
 
 }
