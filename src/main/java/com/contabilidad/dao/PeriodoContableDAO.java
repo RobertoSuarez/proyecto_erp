@@ -7,6 +7,7 @@ package com.contabilidad.dao;
 import com.contabilidad.models.Periodo;
 import com.global.config.Conexion;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class PeriodoContableDAO {
     private ejercicioContableDAO ejercicioContableDAO;
 
     public void insertarPeriodo(List<Periodo> pr) {
+  SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Conexion cox = new Conexion();
         try {
             cox.conectar();
@@ -27,9 +29,10 @@ public class PeriodoContableDAO {
                         + "	VALUES ( '" + pr.get(i).getNombrePeriodo() + "',"
                         + "'" + pr.get(i).getFechaInicio() + "', "
                         + "'" + pr.get(i).getFechaFin() + "', "
-                        + "'" + pr.get(i).isEstado()+ "', "
-                        + "'" + pr.get(i).getForantIdPeriodo() + "');";
+                        + "'" + pr.get(i).isEstado() + "', "
+                        + "'5');";
                 cox.Ejecutar2(cadena);
+                System.out.println(cadena);
             }
         } catch (Exception e) {
             System.out.println(e);

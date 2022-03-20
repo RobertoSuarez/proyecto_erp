@@ -24,25 +24,9 @@
                 </h:form>
                 <h:form id="form2">
                     <div style="margin-top:3%" class="ui-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-12 p-md-2">
-                            <p:outputLabel for="@next" value="Ejercicio fiscal"/>
-                            <p:selectOneMenu id="option" value="#{periodoMB.idForant}"
-                                             >
-                           
-                                <f:selectItem itemLabel="Seleccione.." itemValue="#{0}" noSelectionOption="true"/>
-                                <f:selectItems value="#{periodoMB.ejercicioModel}" var="per" 
-                                               itemLabel="#{per.nombrePeriodo}" itemValue="#{per.idPeriodo}"/>                                     
-                            </p:selectOneMenu>
-                        </div>
+
                         <div class="p-field p-col-12 p-md-2" style="margin-top: 2%">
-                            <p:commandButton
-                                value="Agregar periodo" 
-                                class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"
-                                oncomplete="PF('dtdetail').addRow();"
-                                process="@this"
-                                action="#{periodoMB.addNewFila()}"
-                                >
-                            </p:commandButton>
+                         
                         </div>
                     </div>
                     <!-- tabla de datos -->
@@ -56,6 +40,15 @@
                             editable="true"
                             class="p-mt-3">
                             <f:facet name="header">
+                                <div class="p-field p-col-12 p-md-2">
+                                    <p:outputLabel for="@next" value="Ejercicio fiscal"/>
+                                    <p:selectOneMenu id="option" value="#{periodoMB.idForant}">
+
+                                        <f:selectItem itemLabel="Seleccione.." itemValue="#{0}" noSelectionOption="true"/>
+                                        <f:selectItems value="#{periodoMB.ejercicioModel}" var="per" 
+                                                       itemLabel="#{per.nombrePeriodo}" itemValue="#{per.idPeriodo}"/>                                     
+                                    </p:selectOneMenu>
+                                </div>
                                 <div class="p-d-flex p-jc-between p-ai-center">
                                     <span style="font-weight: bold">DETALLE</span>
 
@@ -119,7 +112,7 @@
                         <div>
                             <f:facet name="footer">                            
                                 <p:commandButton value="Guardar" styleClass="ui-button-success"
-                                                 actionListener="#{facturaMB.insertarfactura}"
+                                                 actionListener="#{periodoMB.insertPeriodo()}"
                                                  process="@this" update=":form:messages"/>
                                 <p:commandButton value="Cancelar" 
                                                  styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only p-mr-2 p-mb-2"

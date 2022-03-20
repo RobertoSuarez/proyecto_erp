@@ -34,8 +34,8 @@ public class Periodo {
         this.forantIdPeriodo = forantIdPeriodo;
     }
 
-    public Periodo(int idPeriodo, String nombrePeriodo, Date fechaInicio, Date fechaFin, boolean estado) {
-        this.idPeriodo = idPeriodo;
+    public Periodo(int forantIdPeriodo, String nombrePeriodo, Date fechaInicio, Date fechaFin, boolean estado) {
+        this.forantIdPeriodo = forantIdPeriodo;
         this.nombrePeriodo = nombrePeriodo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -85,8 +85,6 @@ public class Periodo {
         this.estado = estado;
     }
 
-    public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+ 
 
 }
