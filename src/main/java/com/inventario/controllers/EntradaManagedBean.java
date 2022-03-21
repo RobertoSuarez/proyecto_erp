@@ -560,10 +560,10 @@ public class EntradaManagedBean implements Serializable {
                                 daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice, this.codBodega);
                                 
                                 // Registrar el historico
-                                this.historico.setCosto(price);
-                                this.historico.setFechaInicio(currentDate2);
-                                this.historico.setId(codProd);
-                                this.historicoDAO.GuardarHistorico(historico);
+//                                this.historico.setCosto(price);
+//                                this.historico.setFechaInicio(currentDate2);
+//                                this.historico.setId(codProd);
+//                                this.historicoDAO.GuardarHistorico(historico);
                                 
                                 listSize += 1;
                             }

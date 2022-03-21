@@ -26,6 +26,7 @@
                             </p:toolbarGroup>
                         </p:toolbar>
   
+                        <!-- Taba del listado de salidas -->
                         <p:dataTable editable="true" reflow="true"
                                      editInitEvent="dblclick" editMode="cell"
                                      var="ListaSalidas" 
@@ -49,10 +50,10 @@
                             </p:column>
 
                             <p:column headerText="Bodega" >
-                                <h:outputText value="#{ListaSalidas.idBodega}" />
+                                <h:outputText value="#{ListaSalidas.nombreBodega}" />
                             </p:column>
                             <p:column headerText="Proveedor" >
-                                <h:outputText value="#{ListaSalidas.idProveedor}" />
+                                <h:outputText value="#{ListaSalidas.nombreProveedor}" />
                             </p:column>
                             <p:column headerText="Observacion" >
                                 <h:outputText value="#{ListaSalidas.observacion}" />
