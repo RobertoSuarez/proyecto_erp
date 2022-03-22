@@ -29,7 +29,39 @@ public class KardexEntradasSalidas implements Serializable{
     
     private double saldoSalidas;
     
+    private double saldo;
+    
     private double costo;
+
+    public KardexEntradasSalidas() {
+    }
+
+  
+    
+    
+    public KardexEntradasSalidas(int cod, Date fecha, String observacion, double entradas, double salidas, double saldoUnidades, double saldoIngresos, double saldoSalidas, double saldo, double costo) {
+        this.cod = cod;
+        this.fecha = fecha;
+        this.observacion = observacion;
+        this.entradas = entradas;
+        this.salidas = salidas;
+        this.saldoUnidades = saldoUnidades;
+        this.saldoIngresos = saldoIngresos;
+        this.saldoSalidas = saldoSalidas;
+        this.saldo = saldo;
+        this.costo = costo;
+    }
+    
+    
+        public KardexEntradasSalidas(int cod, Date fecha, String observacion, double entradas, double salidas, double costo) {
+        this.cod = cod;
+        this.fecha = fecha;
+        this.observacion = observacion;
+        this.entradas = entradas;
+        this.salidas = salidas;
+        this.costo = costo;
+    }
+    
     
     
 
@@ -73,6 +105,38 @@ public class KardexEntradasSalidas implements Serializable{
         this.salidas = salidas;
     }
 
+    public double getSaldoUnidades() {
+        return saldoUnidades;
+    }
+
+    public void setSaldoUnidades(double saldoUnidades) {
+        this.saldoUnidades = saldoUnidades;
+    }
+
+    public double getSaldoIngresos() {
+        return saldoIngresos;
+    }
+
+    public void setSaldoIngresos(double saldoIngresos) {
+        this.saldoIngresos = saldoIngresos;
+    }
+
+    public double getSaldoSalidas() {
+        return saldoSalidas;
+    }
+
+    public void setSaldoSalidas(double saldoSalidas) {
+        this.saldoSalidas = saldoSalidas;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
     public double getCosto() {
         return costo;
     }
@@ -80,7 +144,9 @@ public class KardexEntradasSalidas implements Serializable{
     public void setCosto(double costo) {
         this.costo = costo;
     }
+
     
+ 
     
     
 }

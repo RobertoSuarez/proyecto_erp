@@ -294,6 +294,23 @@ public class ArticulosInventario implements Serializable {
         this.coast = costo;
         this.iceproducto = ice;
     }
+        
+        // unitilizado para filtrar las entradas y salidas en kardex
+        
+        public ArticulosInventario(int id, String nombre, 
+            int id_categoria, int id_tipo, String descripcion, 
+            int min_stock, int max_stock,  
+            float costo, float ice) {
+        this.id = id;
+        this.nombre = nombre;
+        this.id_categoria = id_categoria;
+        this.id_tipo = id_tipo;
+        this.descripcion = descripcion;
+        this.min_stock = min_stock;
+        this.max_stock = max_stock;
+        this.coast = costo;
+        this.iceproducto = ice;
+    }
     
             public ArticulosInventario(int id, String nombre, 
             int id_categoria, int id_tipo, String descripcion, 
