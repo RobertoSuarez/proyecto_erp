@@ -507,9 +507,7 @@ public class EntradaManagedBean implements Serializable {
         }
 
         @Asynchronous
-        public int RegistrarEntrada
-        
-            () {
+        public int RegistrarEntrada () {
         try {
                 EntradaInventario entradaActual = new EntradaInventario();
                 int listSize = 0;
@@ -531,6 +529,7 @@ public class EntradaManagedBean implements Serializable {
                         entradaActual.setNumComprobante(this.numeroComprobante);
                         entradaActual.setFecha(currentDate2);
 
+                        
                         //Verificación en consola
                         System.out.println(entradaActual.getProveedor().getNombre());
 
@@ -559,11 +558,12 @@ public class EntradaManagedBean implements Serializable {
                                 //          daoDetail.GuardarEntrada(this.listaDetalle);
                                 daoDetail.RegistrarProductos(entradaRealizada, codProd, qty, price, iva, ice, this.codBodega);
                                 
-                                // Registrar el historico
-//                                this.historico.setCosto(price);
-//                                this.historico.setFechaInicio(currentDate2);
-//                                this.historico.setId(codProd);
-//                                this.historicoDAO.GuardarHistorico(historico);
+                              //   Registrar el historico
+                                this.historico.setCosto(price);
+                                this.historico.setFechaInicio(currentDate2);
+                                this.historico.setId_articulo(codProd);
+                                this.historico.setPrecioVenta(this.productoDao.getPrecioVenta(codProd));
+                                this.historicoDAO.GuardarHistorico(historico);
                                 
                                 listSize += 1;
                             }

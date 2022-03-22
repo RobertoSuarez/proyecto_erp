@@ -70,7 +70,7 @@ public class HistoricoPreciosDAO {
             ResultSet rs = null;
 
             this.conexion.conectar();
-            rs = this.conexion.ejecutarSql("select id from public.historico_precios order by cod desc limit 1;");
+            rs = this.conexion.ejecutarSql("select id from public.historico_precios order by id desc limit 1;");
             int codigo = 1;
 
             //Asignar los valores al nuevo historico.
@@ -82,8 +82,8 @@ public class HistoricoPreciosDAO {
             String fechafin = "'12-31-" + LocalDateTime.now().getYear()+"'";
             //Insertar en la base de datos
             String query = "INSERT INTO public.historico_precios("
-                    + "id, fecha_inicio,fecha_fin, costo, precioventa)"
-                    + "VALUES('" + historico.getId()+ ", '" + historico.getFechaInicio()+ "', " + fechafin  + "', " + historico.getCosto()+ ", " + historico.getPrecioVenta()+ ")";
+                    + "fecha_inicio, fecha_fin, id_articulo, costo, precioventa)"
+                    + "VALUES( '" + historico.getFechaInicio()+ "', " + fechafin  + ", " + historico.getId_articulo() + ", " + historico.getCosto()+ ", " + historico.getPrecioVenta()+ ")";
             System.out.println(query);
             this.conexion.ejecutarSql(query);
 
