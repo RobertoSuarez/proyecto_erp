@@ -122,6 +122,36 @@ public class ArticulosInventarioDAO {
         return ListaInv;
     }
 
+    public List<ArticulosInventario> getArticulosEntradasSalidas() {
+        List<ArticulosInventario> ListaInv = new ArrayList<>();
+        String sql = String.format("select distinct a.id, a.nombre, a.id_categoria, a.id_tipo, a.descripcion, a.min_stock, a.max_stock, a.costo, a.ice\n"
+                + "from articulos a inner join articulo_bodega ab on a.id = ab.id_articulo\n"
+                + "inner join bodega b on b.cod = ab.id_bodega\n"
+                + "inner join entrada_detalle ed on ed.cod_articulo = a.id\n"
+                + "inner join salida_detalle sd on sd.cod_articulo = a.id");
+        try {
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                ListaInv.add(new ArticulosInventario(resultSet.getInt("id"),
+                        resultSet.getString("nombre"),
+                        resultSet.getInt("id_categoria"),
+                        resultSet.getInt("id_tipo"),
+                        resultSet.getString("descripcion"),
+                        resultSet.getInt("min_stock"),
+                        resultSet.getInt("max_stock"),
+                        resultSet.getFloat("costo"),
+                        resultSet.getFloat("ice")));
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return ListaInv;
+    }
+
     public List<ArticulosInventario> getArticulos(int idProveedor, String numeroComprobante) {
         List<ArticulosInventario> ListaInv = new ArrayList<>();
         String sql = String.format("select distinct "
@@ -201,7 +231,26 @@ public class ArticulosInventarioDAO {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
             String fecha = "'" + dtf.format(LocalDateTime.now()) + "'";
             String sql = String.format("select avg(costo) from historico_precios where id_articulo = " + idArticulo + " and  (" + fecha + "<= fecha_fin ) and estado = true ");
-            
+
+            resultSet = conexion.ejecutarSql(sql);
+            //LLenar la lista de datos
+            while (resultSet.next()) {
+                promedio = resultSet.getDouble(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            conexion.desconectar();
+        }
+        return promedio;
+    }
+
+    public double getPrecioVenta(int idArticulo) {
+        double promedio = 0;
+        try {
+            String sql = String.format("select precio_venta from articulos where id = " + idArticulo);
+
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
