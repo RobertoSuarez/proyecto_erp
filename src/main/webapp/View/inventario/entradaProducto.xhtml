@@ -138,16 +138,16 @@
                                                         <h:outputText converter="javax.faces.Integer" value="#{ListaItems.cant}"/>
                                                     </p:column>
                                                     <p:column headerText="Costo" width="12%">
-                                                        <h:outputText value="#{ListaItems.costo}"/>
+                                                        <h:outputText value="#{ListaItems.costo}" > <f:convertNumber pattern="0.00"/> </h:outputText>
                                                     </p:column>
                                                     <p:column headerText="IVA" width="4%">
-                                                        <h:outputText value="#{ListaItems.iva}"/>
+                                                        <h:outputText value="#{ListaItems.iva}"> <f:convertNumber pattern="0.00"/> </h:outputText>
                                                     </p:column>
                                                     <p:column headerText="ICE" width="4%">
-                                                        <h:outputText value="#{ListaItems.ice}"/>
+                                                        <h:outputText value="#{ListaItems.ice}"> <f:convertNumber pattern="0.00"/> </h:outputText>
                                                     </p:column>
                                                     <p:column headerText="SubTotal" width="4%">
-                                                        <h:outputText value="#{ListaItems.subtotal}"/>
+                                                        <h:outputText value="#{ListaItems.subtotal}"> <f:convertNumber pattern="0.00"/> </h:outputText>
                                                     </p:column>
 
                                                     <p:column exportable="false" width="9%">
