@@ -39,13 +39,13 @@ public class EntradaDao {
         List<EntradaInventario> ListEntrada = new ArrayList<>();
         String sql = "";
         if (idEntrada > 0) {
-            sql = "Select entrada.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+            sql = "Select entrada.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega, observacion\n"
                     + "FROM entrada\n"
                     + "inner join proveedor on id_proveedor = idproveedor \n"
                     + "inner join bodega on id_bodega = bodega.cod"
                     + " WHERE entrada.cod=" + idEntrada;
         } else {
-            sql = "Select entrada.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega\n"
+            sql = "Select entrada.cod, num_comprobante, fecha, id_proveedor, id_bodega, proveedor.nombre as proveedor, nombre_bodega, observacion\n"
                     + "FROM entrada\n"
                     + "inner join proveedor on id_proveedor = idproveedor \n"
                     + "inner join bodega on id_bodega = bodega.cod";
@@ -55,13 +55,20 @@ public class EntradaDao {
             resultSet = conexion.ejecutarSql(sql);
             //LLenar la lista de datos
             while (resultSet.next()) {
-                ListEntrada.add(new EntradaInventario(resultSet.getInt("cod"),
-                        resultSet.getString("num_comprobante"),
-                        resultSet.getDate("fecha"),
-                        resultSet.getInt("id_bodega"),
-                        resultSet.getInt("id_proveedor"),
-                        resultSet.getString("proveedor"),
-                        resultSet.getString("nombre_bodega")));
+                EntradaInventario  entradaInventario = new EntradaInventario();
+                
+                entradaInventario.setCod(resultSet.getInt("cod"));
+                entradaInventario.setNumComprobante(resultSet.getString("num_comprobante"));
+                entradaInventario.setFecha(resultSet.getDate("fecha"));
+                entradaInventario.setIdBodega(resultSet.getInt("id_bodega"));
+                
+                entradaInventario.setIdProveedor(resultSet.getInt("id_proveedor"));
+                entradaInventario.setNombreProveedor(resultSet.getString("proveedor"));
+                entradaInventario.setNombreBodega(resultSet.getString("nombre_bodega"));
+                entradaInventario.setObservacion(resultSet.getString("observacion"));
+                
+                ListEntrada.add(entradaInventario);
+
             }
 
         } catch (SQLException e) {

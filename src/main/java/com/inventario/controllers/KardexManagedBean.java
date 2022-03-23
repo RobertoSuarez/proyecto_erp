@@ -154,7 +154,7 @@ public class KardexManagedBean implements Serializable {
     @PostConstruct
     public void KardexManagedBean() {
 
-        this.productosReport = daoReport.getArticulosReport();
+ //       this.productosReport = daoReport.getArticulosReport();
         this.precioPromedio = 0;
         this.historico = new HistoricoPrecios();
         this.historicoDAO = new HistoricoPreciosDAO();
@@ -252,7 +252,7 @@ public class KardexManagedBean implements Serializable {
             double descuento = 0.0f;
             if (this.listaKardex.size() > 0) {
                 for (KardexEntradasSalidas inv : this.listaKardex) {
-                    dataset.add(new KardexReport(String.valueOf(inv.getCod()), String.valueOf(inv.getFecha()), inv.getObservacion(),
+                    dataset.add(new KardexReport(String.valueOf(inv.getCodigo()), String.valueOf(inv.getFecha()), inv.getObservacion(),
                             String.valueOf( (int) inv.getEntradas()), String.valueOf( (int) inv.getSalidas()), String.valueOf( (int) inv.getSaldoUnidades()), String.format("%.2f", inv.getSaldoIngresos()),
                             String.format("%.2f", inv.getSaldoSalidas()), String.format("%.2f", inv.getSaldo()), String.format("%.2f", inv.getCosto()) ));
                             

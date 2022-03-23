@@ -477,33 +477,33 @@ public class ArticulosInventarioDAO {
         }
     }
 
-    public List<ProductoReport> getArticulosReport() {
-        List<ProductoReport> ListaInv = new ArrayList<>();
-        String sql = String.format("select entradas.cod, ar.nombre, cantidad, ar.costo, (cantidad * ar.costo) as total from(\n"
-                + "select * from entrada_detalle ed inner join entrada e on ed.id_entrada = e.cod) as entradas\n"
-                + "inner join proveedor p on p.idproveedor = entradas.id_proveedor inner join articulos ar\n"
-                + "on entradas.cod_articulo = ar.id");
-        try {
-            resultSet = conexion.ejecutarSql(sql);
-            //LLenar la lista de datos
-            while (resultSet.next()) {
-                ProductoReport articulo = new ProductoReport();
-                articulo.setCodigo(resultSet.getString("cod"));
-                articulo.setProducto(resultSet.getString("nombre"));
-                articulo.setCosto(resultSet.getInt("cantidad"));
-                articulo.setCantidad(resultSet.getInt("costo"));
-                articulo.setTotal(resultSet.getInt("total"));
-
-                ListaInv.add(articulo);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            conexion.desconectar();
-        }
-        return ListaInv;
-    }
+//    public List<ProductoReport> getArticulosReport() {
+//        List<ProductoReport> ListaInv = new ArrayList<>();
+//        String sql = String.format("select entradas.cod, ar.nombre, cantidad, ar.costo, (cantidad * ar.costo) as total from(\n"
+//                + "select * from entrada_detalle ed inner join entrada e on ed.id_entrada = e.cod) as entradas\n"
+//                + "inner join proveedor p on p.idproveedor = entradas.id_proveedor inner join articulos ar\n"
+//                + "on entradas.cod_articulo = ar.id");
+//        try {
+//            resultSet = conexion.ejecutarSql(sql);
+//            //LLenar la lista de datos
+//            while (resultSet.next()) {
+//                ProductoReport articulo = new ProductoReport();
+//                articulo.setCodigo(resultSet.getString("cod"));
+//                articulo.setProducto(resultSet.getString("nombre"));
+//                articulo.setCosto(resultSet.getInt("cantidad"));
+//                articulo.setCantidad(resultSet.getString("costo"));
+//                articulo.setTotal(resultSet.getInt("total"));
+//
+//                ListaInv.add(articulo);
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        } finally {
+//            conexion.desconectar();
+//        }
+//        return ListaInv;
+//    }
 
     public void insertMateriaPrima(ArticulosInventario a) {
         float costoventa = (float) (a.getCoast() * 0.15);

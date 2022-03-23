@@ -7,6 +7,7 @@ package com.inventario.models;
 import com.cuentasporpagar.models.Proveedor;
 import java.io.Serializable;
 import java.util.Date;
+import org.joda.time.DateTime;
 
 
 
@@ -34,6 +35,8 @@ public class EntradaInventario implements Serializable{
     private String nombreBodega;
     
     private String Observacion;
+    
+    private DateTime fechaHora;
 
     
     public EntradaInventario() {
@@ -135,6 +138,14 @@ public class EntradaInventario implements Serializable{
 
     public void setObservacion(String Observacion) {
         this.Observacion = Observacion;
+    }
+
+    public DateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(DateTime fechaHora) {
+        this.fechaHora = fechaHora;
     }
 
     

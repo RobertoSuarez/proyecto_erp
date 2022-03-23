@@ -12,7 +12,9 @@ import java.util.Date;
  * @author angul
  */
 public class KardexEntradasSalidas implements Serializable{
-    
+
+    private String codigo;
+            
     private int cod;
     
     private Date fecha;
@@ -145,8 +147,13 @@ public class KardexEntradasSalidas implements Serializable{
         this.costo = costo;
     }
 
-    
- 
-    
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     
 }

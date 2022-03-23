@@ -81,13 +81,13 @@ public class KardexEntradaSalidaDAO {
         List<KardexEntradasSalidas> ListaKardex = new ArrayList<>();
 
         String sql = String.format("select * from (\n"
-                + "select e.cod, e.fecha, e.observacion, ed.cant as entradas , 0 as salidas, a.costo,"
+                + "select 'ENT-' || e.cod::text as cod, e.fecha, e.observacion, ed.cant as entradas , 0 as salidas, a.costo,"
                 + "ed.costo * ed.cant as saldoEntradas , 0 as saldoSalidas"
                 + " from articulos a inner join entrada_detalle ed on a.id = ed.cod_articulo\n"
                 + "full join entrada e on e.cod = ed.id_entrada \n"
                 + "where a.id = " + idArticulo + " and fecha between '" + fechaInicial + "' and '" + fechaFinal + "'\n"
                 + "union\n"
-                + "select s.cod, s.fecha, s.observacion, 0 as entradas, sd.cant as cantidad, a.costo,"
+                + "select 'SAL-' || s.cod::text, s.fecha, s.observacion, 0 as entradas, sd.cant as cantidad, a.costo,"
                 + "0 as saldoEntradas , sd.costo * sd.cant as saldoSalidas"
                 + " from articulos a inner join salida_detalle sd on a.id = sd.cod_articulo\n"
                 + "full join salida s on s.cod = sd.id_salida\n"
@@ -97,7 +97,7 @@ public class KardexEntradaSalidaDAO {
             resultSet = conexion.ejecutarSql(sql);
             while (resultSet.next()) {
                 KardexEntradasSalidas kardexES = new KardexEntradasSalidas();
-                kardexES.setCod(resultSet.getInt("cod"));
+                kardexES.setCodigo(resultSet.getString("cod"));
                 kardexES.setFecha(resultSet.getDate("fecha"));
                 kardexES.setObservacion(resultSet.getString("observacion"));
                 kardexES.setEntradas(resultSet.getDouble("entradas"));

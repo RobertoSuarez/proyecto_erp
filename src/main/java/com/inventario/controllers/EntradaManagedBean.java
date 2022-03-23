@@ -142,7 +142,7 @@ public class EntradaManagedBean implements Serializable {
     @PostConstruct
     public void EntradaManagedBean() {
 
-        this.productosReport = daoReport.getArticulosReport();
+    //    this.productosReport = daoReport.getArticulosReport();
         this.precioPromedio = 0;
         this.historico = new HistoricoPrecios();
         this.historicoDAO = new HistoricoPreciosDAO();
@@ -269,7 +269,7 @@ public class EntradaManagedBean implements Serializable {
             double descuento = 0.0f;
             if (detalleEntradas.size() > 0) {
                 for (EntradaDetalleInventario inv : detalleEntradas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), Math.round(inv.getCosto() * 100.0) / 100.0, Math.round(inv.getCosto() * inv.getCant() * 100.0) / 100.0));
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), String.format("%.2f",inv.getCosto()), String.format("%.2f",inv.getCosto() * inv.getCant())));
                     subtotal += inv.getCosto() * (double) inv.getCant();
                     ice += inv.getIce();
                     iva += inv.getIva();
@@ -300,6 +300,7 @@ public class EntradaManagedBean implements Serializable {
             parametros.put("NOMBREBODEGA", bod.getNomBodega());
             parametros.put("RUCPROVEEDOR", pro.getRuc());
             parametros.put("NOMBREPROVEEDOR", pro.getNombre());
+            parametros.put("OBSERVACION", entrada.getObservacion());
 
             parametros.put("SUBTOTAL", String.format("%.2f", subtotal));
             parametros.put("DESCUENTO", String.format("%.2f", descuento));
@@ -522,16 +523,16 @@ public class EntradaManagedBean implements Serializable {
                         //Debe elegir un proveedor para la entrada
                         addMessage(FacesMessage.SEVERITY_ERROR, "Error", " ");
                     } else {
-                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                        DateFormat df = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
                         String currentDate = df.format(this.fechaComprobante);
-                        Date currentDate2 = new SimpleDateFormat("yyyy/MM/dd").parse(currentDate);
+                        Date currentDate2 = df.parse(currentDate);
 
                         //Asignar valores a la entrada
                         entradaActual.setProveedor(this.proveedor);
                         entradaActual.setIdProveedor(this.proveedor.getIdProveedor());
                         entradaActual.setIdBodega(this.bodega.getCod());
                         entradaActual.setNumComprobante(this.numeroComprobante);
-                        entradaActual.setFecha(currentDate2);
+                        entradaActual.setFecha(new Date());
                         entradaActual.setObservacion(this.observacion);
                        
 

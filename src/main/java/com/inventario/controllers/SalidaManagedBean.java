@@ -139,7 +139,7 @@ public class SalidaManagedBean implements Serializable {
     @PostConstruct
     public void SalidaManagedBean() {
 
-        this.productosReport = daoReport.getArticulosReport();
+   //     this.productosReport = daoReport.getArticulosReport();
 
         this.idProveedor = 0;
         this.proveedor = new Proveedor();
@@ -279,7 +279,7 @@ public class SalidaManagedBean implements Serializable {
             double descuento = 0.0f;
             if (detalleSalidas.size() > 0) {
                 for (SalidaDetalleInventario inv : detalleSalidas) {
-                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), inv.getCosto(), inv.getCosto() * inv.getCant()));
+                    dataset.add(new ProductoReport(String.valueOf(inv.getIdArticulo()), inv.getNombreProducto(), (int) inv.getCant(), String.format("%.2f",inv.getCosto()), String.format("%.2f",inv.getCosto() * inv.getCant())));
                     subtotal += inv.getCosto() * (double) inv.getCant();
                     ice += inv.getIce();
                     iva += inv.getIva();
@@ -538,7 +538,7 @@ public class SalidaManagedBean implements Serializable {
                     salidaActual.setIdBodega(this.entrada.getIdBodega());
                     salidaActual.setNumComprobante(this.numeroComprobante);
                     salidaActual.setObservacion(this.salida.getObservacion());
-                    salidaActual.setFecha(currentDate2);
+                    salidaActual.setFecha(new Date());
 
                     //Verificación en consola
                     System.out.println(salidaActual.getProveedor().getNombre());
