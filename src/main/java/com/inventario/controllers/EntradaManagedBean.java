@@ -91,6 +91,8 @@ public class EntradaManagedBean implements Serializable {
     private String ciudadBodega;
     private String numeroComprobante;
     private Date fechaComprobante;
+    
+    private String observacion;
 
     private EntradaDetalleInventario productoSeleccionado;
     private Proveedor proveedorSeleccionado;
@@ -152,6 +154,8 @@ public class EntradaManagedBean implements Serializable {
         this.numeroComprobante = "";
         aleatorioCod();
         this.fechaComprobante = new Date();
+        this.observacion = "";
+        
         this.bodega = new Bodega();
         this.bodegaDAO = new BodegaDAO();
 
@@ -390,9 +394,9 @@ public class EntradaManagedBean implements Serializable {
                                 EntradaDetalleInventario detalle = new EntradaDetalleInventario();
                                 detalle.setIdArticulo(this.producto.getId());
                                 detalle.setCant(this.cantidad);
-                                detalle.setIva(Precision.round(ivaProducto, 2));
+                                detalle.setIva(ivaProducto);
 
-                                detalle.setIce(Precision.round(iceProducto, 2));
+                                detalle.setIce(iceProducto);
                                 detalle.setCosto(this.producto.getCoast());
                                 detalle.setSubtotal((double) this.producto.getCoast() * (double) this.cantidad);
                                 detalle.setNombreProducto(nombreProducto);
@@ -432,9 +436,9 @@ public class EntradaManagedBean implements Serializable {
                                 EntradaDetalleInventario detalle = new EntradaDetalleInventario();
                                 detalle.setIdArticulo(this.producto.getId());
                                 detalle.setCant(this.cantidad);
-                                detalle.setIva(Precision.round(ivaProducto, 2));
+                                detalle.setIva(ivaProducto);
 
-                                detalle.setIce(Precision.round(iceProducto, 2));
+                                detalle.setIce(iceProducto);
                                 detalle.setCosto(this.producto.getCoast());
                                 detalle.setSubtotal((double) this.producto.getCoast() * (double) this.cantidad);
                                 detalle.setNombreProducto(nombreProducto);
@@ -528,6 +532,8 @@ public class EntradaManagedBean implements Serializable {
                         entradaActual.setIdBodega(this.bodega.getCod());
                         entradaActual.setNumComprobante(this.numeroComprobante);
                         entradaActual.setFecha(currentDate2);
+                        entradaActual.setObservacion(this.observacion);
+                       
 
                         
                         //Verificación en consola
@@ -969,6 +975,16 @@ public class EntradaManagedBean implements Serializable {
     public void setListaEntradas(List<EntradaInventario> listaEntradas) {
         this.listaEntradas = listaEntradas;
     }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+    
+    
 
     public void aleatorioCod() {
         String uuid = java.util.UUID.randomUUID().toString().substring(4, 7).toUpperCase();

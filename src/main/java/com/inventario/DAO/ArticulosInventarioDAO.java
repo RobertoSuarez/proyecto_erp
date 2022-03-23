@@ -210,8 +210,8 @@ public class ArticulosInventarioDAO {
                 articulo.setId_bodega(resultSet.getInt("id_bodega"));
                 articulo.setCantidad(resultSet.getInt("cant"));
                 articulo.setCantidadFacturada(resultSet.getInt("cantidadF"));
-                articulo.setCosto(resultSet.getInt("costo"));
-                articulo.setIceproducto(resultSet.getInt("ice"));
+                articulo.setCoast(resultSet.getFloat("costo"));
+                articulo.setIceproducto(resultSet.getFloat("ice"));
                 articulo.setMax_stock(resultSet.getInt("max_stock"));
                 ListaInv.add(articulo);
 

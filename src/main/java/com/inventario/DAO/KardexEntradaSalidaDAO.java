@@ -96,15 +96,15 @@ public class KardexEntradaSalidaDAO {
         try {
             resultSet = conexion.ejecutarSql(sql);
             while (resultSet.next()) {
-                 KardexEntradasSalidas kardexES = new KardexEntradasSalidas();
-                 kardexES.setCod(resultSet.getInt("cod"));
-                 kardexES.setFecha(resultSet.getDate("fecha"));
-                 kardexES.setObservacion(resultSet.getString("observacion"));
-                 kardexES.setEntradas(resultSet.getDouble("entradas"));
-                 kardexES.setSalidas(resultSet.getDouble("salidas"));
-                 kardexES.setCosto(resultSet.getDouble("costo"));
-                 kardexES.setSaldoIngresos(resultSet.getDouble("saldoEntradas"));
-                 kardexES.setSaldoSalidas(resultSet.getDouble("saldoSalidas"));
+                KardexEntradasSalidas kardexES = new KardexEntradasSalidas();
+                kardexES.setCod(resultSet.getInt("cod"));
+                kardexES.setFecha(resultSet.getDate("fecha"));
+                kardexES.setObservacion(resultSet.getString("observacion"));
+                kardexES.setEntradas(resultSet.getDouble("entradas"));
+                kardexES.setSalidas(resultSet.getDouble("salidas"));
+                kardexES.setCosto(resultSet.getDouble("costo"));
+                kardexES.setSaldoIngresos(resultSet.getDouble("saldoEntradas"));
+                kardexES.setSaldoSalidas(resultSet.getDouble("saldoSalidas"));
                 ListaKardex.add(kardexES);
             }
 
@@ -124,12 +124,9 @@ public class KardexEntradaSalidaDAO {
                     kardex.setSaldoUnidades(saldosUnidades);
                 }
                 saldo = saldo + kardex.getSaldoIngresos() - kardex.getSaldoSalidas();
-                
-                if (costoUnitario == 0) {
-                    costoUnitario = kardex.getCosto();
-                } else {
-                    costoUnitario = saldo / saldosUnidades;
-                }
+
+                costoUnitario = saldo / saldosUnidades;
+
                 kardex.setCosto(costoUnitario);
                 kardex.setSaldo(saldo);
             }

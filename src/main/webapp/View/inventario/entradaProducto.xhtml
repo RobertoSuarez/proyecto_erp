@@ -99,10 +99,22 @@
                                             </div>
                                             <div class="p-col-1">
                                                 <p:outputLabel value="P.Promedio"></p:outputLabel>
-                                                <p:inputText id="precioPromedio" disabled="true" value="#{EntradaMB.precioPromedio}"></p:inputText>
+                                                <p:inputText id="precioPromedio" disabled="true" value="#{EntradaMB.precioPromedio}"> <f:convertNumber pattern="0.00"/> </p:inputText>
                                             </div>
+                                            
+                                                                                 <div class="p-col-5">
+                                        <p:outputLabel value="Resumen de Entrada: *"></p:outputLabel>
+                                        <p:inputText value="#{EntradaMB.observacion}" 
+
+                                                    disabled="">
+                                        </p:inputText>
                                         </div>
+                                        
+
                                     </div>
+                                    </div>
+
+
                                     <div class="p-col-11">
                                         <div class="p-grid">
                                             <div class="p-col-2">

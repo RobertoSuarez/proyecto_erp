@@ -32,6 +32,8 @@ public class EntradaInventario implements Serializable{
     private String nombreProveedor;
     
     private String nombreBodega;
+    
+    private String Observacion;
 
     
     public EntradaInventario() {
@@ -58,6 +60,9 @@ public class EntradaInventario implements Serializable{
         this.nombreProveedor = nombreProveedor;
         this.nombreBodega = nombreBodega;
        }
+        
+        
+        
 
 
     public int getCod() {
@@ -122,6 +127,14 @@ public class EntradaInventario implements Serializable{
 
     public void setNombreBodega(String nombreBodega) {
         this.nombreBodega = nombreBodega;
+    }
+
+    public String getObservacion() {
+        return Observacion;
+    }
+
+    public void setObservacion(String Observacion) {
+        this.Observacion = Observacion;
     }
 
     

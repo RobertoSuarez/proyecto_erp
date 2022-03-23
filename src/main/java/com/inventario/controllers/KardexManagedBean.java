@@ -253,8 +253,8 @@ public class KardexManagedBean implements Serializable {
             if (this.listaKardex.size() > 0) {
                 for (KardexEntradasSalidas inv : this.listaKardex) {
                     dataset.add(new KardexReport(String.valueOf(inv.getCod()), String.valueOf(inv.getFecha()), inv.getObservacion(),
-                            String.valueOf( (int) inv.getEntradas()), String.valueOf( (int) inv.getSalidas()), String.valueOf( (int) inv.getSaldoUnidades()), String.valueOf(Precision.round(inv.getSaldoIngresos(),2)),
-                            String.valueOf(Precision.round(inv.getSaldoSalidas(),2)), String.valueOf( Precision.round(inv.getSaldo(), 2) ), String.valueOf(Precision.round(inv.getCosto(),2) )));
+                            String.valueOf( (int) inv.getEntradas()), String.valueOf( (int) inv.getSalidas()), String.valueOf( (int) inv.getSaldoUnidades()), String.format("%.2f", inv.getSaldoIngresos()),
+                            String.format("%.2f", inv.getSaldoSalidas()), String.format("%.2f", inv.getSaldo()), String.format("%.2f", inv.getCosto()) ));
                             
 //                    subtotal += inv.getCosto() * (double) inv.getCant();
 //                    ice += inv.getIce();
