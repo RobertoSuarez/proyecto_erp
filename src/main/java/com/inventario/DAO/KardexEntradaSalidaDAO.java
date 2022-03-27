@@ -115,18 +115,21 @@ public class KardexEntradaSalidaDAO {
             double costoUnitario = 0;
             double saldo = 0;
             for (KardexEntradasSalidas kardex : ListaKardex) {
+
+                if (kardex.getSalidas() != 0) {
+                    saldosUnidades -= kardex.getSalidas();
+                    kardex.setSaldoUnidades(saldosUnidades);
+                    kardex.setSaldoSalidas(costoUnitario * kardex.getSalidas());
+                }      
+                
+                saldo += kardex.getSaldoIngresos() - kardex.getSaldoSalidas();
+                
                 if (kardex.getEntradas() != 0) {
                     saldosUnidades += kardex.getEntradas();
                     kardex.setSaldoUnidades(saldosUnidades);
+                    costoUnitario = saldo / saldosUnidades;
                 }
-                if (kardex.getSaldoSalidas() != 0) {
-                    saldosUnidades -= kardex.getSalidas();
-                    kardex.setSaldoUnidades(saldosUnidades);
-                }
-                saldo = saldo + kardex.getSaldoIngresos() - kardex.getSaldoSalidas();
-
-                costoUnitario = saldo / saldosUnidades;
-
+                
                 kardex.setCosto(costoUnitario);
                 kardex.setSaldo(saldo);
             }

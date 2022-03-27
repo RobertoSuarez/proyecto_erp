@@ -63,13 +63,7 @@ import org.apache.commons.math3.util.Precision;
 @ViewScoped
 public class KardexManagedBean implements Serializable {
 
-    ArticulosInventarioDAO daoReport = new ArticulosInventarioDAO();
 
-    List<ProductoReport> productosReport;
-
-    private HistoricoPrecios historico;
-    private HistoricoPreciosDAO historicoDAO;
-    
     
     private int idProveedor;
 
@@ -154,10 +148,7 @@ public class KardexManagedBean implements Serializable {
     @PostConstruct
     public void KardexManagedBean() {
 
- //       this.productosReport = daoReport.getArticulosReport();
         this.precioPromedio = 0;
-        this.historico = new HistoricoPrecios();
-        this.historicoDAO = new HistoricoPreciosDAO();
         
         this.idProveedor = 0;
         this.proveedor = new Proveedor();

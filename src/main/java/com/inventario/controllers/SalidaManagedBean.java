@@ -86,6 +86,7 @@ public class SalidaManagedBean implements Serializable {
 
     private EntradaDetalleInventario detalleEntrada;
     private EntradaDetalleDAO entradaDetalleDAO;
+    private List<EntradaDetalleInventario> listaDetalleEntrada;
     
     private EntradaDetalleInventario productoSeleccionado;
     private Proveedor proveedorSeleccionado;
@@ -180,6 +181,7 @@ public class SalidaManagedBean implements Serializable {
 
         this.detalleEntrada = new EntradaDetalleInventario();
         this.entradaDetalleDAO = new EntradaDetalleDAO();
+        this.listaDetalleEntrada = new ArrayList<>();
         
         this.productoSeleccionado = null;
         this.proveedorSeleccionado = null;
@@ -396,19 +398,21 @@ public class SalidaManagedBean implements Serializable {
                             }
                             System.out.println("insertar los valores");
 
+
+                            
                             if (productoid == 0) {
                                 productoid = 0;
                                 double iceProducto, ivaProducto;
-                                iceProducto = this.producto.getCoast()* this.cantidadReportada * ((double) this.producto.getIceproducto() / 100);
-                                ivaProducto = this.producto.getCoast()* 0.12 * this.cantidadReportada;
+                                iceProducto = this.precioProducto* this.cantidadReportada * ((double) this.precioProducto / 100);
+                                ivaProducto = this.precioProducto  * 0.12 * this.cantidadReportada;
                                 //Ingreso de valores al detalle de entrada
                                 SalidaDetalleInventario detalle = new SalidaDetalleInventario();
                                 detalle.setIdArticulo(this.producto.getId());
                                 detalle.setCant(this.cantidadReportada);
                                 detalle.setIva(ivaProducto);
                                 detalle.setIce(iceProducto);
-                                detalle.setCosto(this.producto.getCoast());
-                                detalle.setSubtotal( (double) this.producto.getCoast()* (double) this.cantidadReportada);
+                                detalle.setCosto(this.precioProducto);
+                                detalle.setSubtotal( (double) this.precioProducto* (double) this.cantidadReportada);
                                 detalle.setNombreProducto(nombreProducto);
                                 detalle.setNombreCategoria(nombreCategoria);
                                 detalle.setArticuloInventario(producto);
@@ -418,7 +422,7 @@ public class SalidaManagedBean implements Serializable {
                                 this.cantidadReportada = 1;
                                 this.codigoProducto = 0;
                                 this.nombreProducto = "";
-                                double subtemp = (this.producto.getCoast()* detalle.getCant());
+                                double subtemp = (this.precioProducto * detalle.getCant());
                                 if (this.producto.getIva() != 0) {
                                     this.subtotal12 += subtemp;
                                 } else {
@@ -440,16 +444,16 @@ public class SalidaManagedBean implements Serializable {
                         } else {
 
                             double iceProducto, ivaProducto;
-                            iceProducto = this.producto.getCoast()* this.cantidadReportada * ((double) this.producto.getIceproducto() / 100);
-                            ivaProducto = this.producto.getCoast()* 0.12 * this.cantidadReportada;
+                            iceProducto = this.precioProducto * this.cantidadReportada * ((double) this.producto.getIceproducto() / 100);
+                            ivaProducto = this.precioProducto* 0.12 * this.cantidadReportada;
                             //Ingreso de valores al detalle de entrada
                             SalidaDetalleInventario detalle = new SalidaDetalleInventario();
                             detalle.setIdArticulo(this.producto.getId());
                             detalle.setCant(this.cantidadReportada);
                             detalle.setIva(ivaProducto);
                             detalle.setIce(iceProducto);
-                            detalle.setCosto(this.producto.getCoast());
-                            detalle.setSubtotal(this.producto.getCoast() * this.cantidadReportada);
+                            detalle.setCosto(this.precioProducto);
+                            detalle.setSubtotal(this.precioProducto * this.cantidadReportada);
                             detalle.setNombreProducto(nombreProducto);
                             detalle.setNombreCategoria(nombreCategoria);
 
@@ -589,6 +593,7 @@ public class SalidaManagedBean implements Serializable {
 
         this.listaProductos = productoDao.getArticulos(entrada.getIdProveedor(), numeroComprobante, entrada.getIdBodega());
         this.entrada = entrada;
+        this.listaDetalleEntrada = this.entradaDetalleDAO.getEntradasDetalle(this.entrada.getCod());
 
     }
 
@@ -613,7 +618,11 @@ public class SalidaManagedBean implements Serializable {
             this.precioProducto = pr.getCoast();
             this.cantidadFacturada = pr.getCantidadFacturada();
             
-            
+      for (EntradaDetalleInventario elemento : listaDetalleEntrada) {
+                                if (elemento.getIdArticulo() == this.codigoProducto) {
+                                        this.precioProducto = (float) elemento.getCosto();
+                           }                              
+       }
 
 
             this.producto = pr;
